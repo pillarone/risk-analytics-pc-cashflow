@@ -21,7 +21,7 @@ grails.project.dependency.resolution = {
         runtime ":spring-security-core:1.1.2"
         runtime ":tomcat:1.3.7"
 
-        test ":code-coverage:1.1.7"
+        test ":code-coverage:1.2.2"
 
         if (appName == "risk-analytics-pc-cashflow") {
             runtime "org.pillarone:risk-analytics-core:1.4-ALPHA-1.8"

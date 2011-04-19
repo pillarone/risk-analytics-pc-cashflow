@@ -58,7 +58,8 @@ environments {
                     'org.pillarone.riskanalytics.core.parameterization'
 
             debug 'org.pillarone.modelling.output',
-                    'org.pillarone.riskanalytics.domain.life.reinsurance.UnitLinkedLifeReinsuranceContractPacket'
+                    'org.pillarone.riskanalytics.domain.life.reinsurance.UnitLinkedLifeReinsuranceContractPacket',
+                    'org.pillarone.riskanalytics.domain.pc.cf'
 
             warn()
         }
@@ -81,6 +82,19 @@ environments {
                 'tvar': [99, 99.5],
                 'pdf': 200
         ]
+        log4j = {
+            appenders {
+                console name: 'stdout', layout: pattern(conversionPattern: '[%d] %-5p %c{1} %m%n')
+                file name: 'file', file: 'RiskAnalytics.log', layout: pattern(conversionPattern: '[%d] %-5p %c{1} %m%n')
+            }
+            root {
+                error 'stdout', 'file'
+                additivity = false
+            }
+            info()
+            debug 'org.pillarone.riskanalytics.domain.pc.cf'
+            warn()
+        }
     }
     mysql {
         resultBulkInsert = MysqlBulkInsert
@@ -111,8 +125,9 @@ environments {
 
             debug 'org.pillarone.riskAnalytics.output',
                     'org.pillarone.riskanalytics.core.simulation.engine.actions',
+                    'org.pillarone.riskanalytics.domain.pc.cf'
 
-                    warn()
+            warn()
         }
         keyFiguresToCalculate = [
                 'stdev': true,
@@ -147,8 +162,8 @@ log4j = {
             'org.pillarone.modelling.ui.util.ExceptionSafe',
             'org.pillarone.riskanalytics.core.wiring',
             'org.pillarone.modelling.domain',
-            'org.pillarone.modelling.util'
+            'org.pillarone.modelling.util',
     info()
-    debug()
+    debug 'org.pillarone.riskanalytics.domain.pc.cf'
     warn()
 }
