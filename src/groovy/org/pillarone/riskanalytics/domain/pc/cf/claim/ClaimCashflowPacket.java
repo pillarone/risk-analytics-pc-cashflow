@@ -17,7 +17,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     private static Log LOG = LogFactory.getLog(ClaimCashflowPacket.class);
 
-    private final ClaimRoot baseClaim;
+    // todo(sku): ask msp, should be final but setting it final is not possible with default c'tor
+    private ClaimRoot baseClaim;
 
     private double paidIncremental;
     private double paidCumulated;
@@ -31,9 +32,16 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     private boolean first;
 
+    // c'tor required for DefaultResultStructureBuilder L124
+    public ClaimCashflowPacket() {
+    }
 
-    private ClaimCashflowPacket(ClaimRoot baseClaim) {
+    /** todo(sku): safer c'tor required, currently used for ultimate modelling */
+    public ClaimCashflowPacket(ClaimRoot baseClaim) {
         this.baseClaim = baseClaim;
+        updateDate = baseClaim.getOccurrenceDate();
+        setDate(updateDate);
+        first = true;
     }
 
     public ClaimCashflowPacket(ClaimRoot baseClaim, double paidIncremental, double paidCumulated,
@@ -143,7 +151,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     @Override
     public Map<String, Number> getValuesToSave() throws IllegalAccessException {
         Map<String, Number> valuesToSave = new HashMap<String, Number>();
-        valuesToSave.put(ULTIMATE, baseClaim.getUltimate());
+        valuesToSave.put(ULTIMATE, baseClaim.getUltimate());    // todo(sku): leads to failure during result tree building
         if (!baseClaim.hasTrivialPayout()) {
             valuesToSave.put(PAID, paidIncremental);
             valuesToSave.put(RESERVES, reserved());

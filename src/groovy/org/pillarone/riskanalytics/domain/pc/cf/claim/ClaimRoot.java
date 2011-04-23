@@ -120,7 +120,8 @@ public final class ClaimRoot {
             }
         }
         else {
-            throw new NotImplementedException();
+            ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this);
+            currentPeriodClaims.add(cashflowPacket);
         }
         return currentPeriodClaims;
     }
@@ -170,7 +171,12 @@ public final class ClaimRoot {
      */
     public boolean hasSynchronizedPatterns() {
         if (synchronizedPatterns == null) {
-            synchronizedPatterns = reportingPattern.hasSameCumulativePeriods(payoutPattern);
+            if (reportingPattern == null || payoutPattern == null) {
+                synchronizedPatterns = false;
+            }
+            else {
+                synchronizedPatterns = reportingPattern.hasSameCumulativePeriods(payoutPattern);
+            }
         }
         return synchronizedPatterns;
     }
