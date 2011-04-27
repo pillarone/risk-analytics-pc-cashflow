@@ -15,12 +15,11 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-// todo(sku): ask msp how we could define default values only once: prefered place are the *Type.groovy classes
 public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorStrategy  {
 
-    private ExposureBase claimsSizeBase;// = ExposureBase.ABSOLUTE;
-    private RandomDistribution claimsSizeDistribution;// = (RandomDistribution) ClaimsGeneratorType.getDefault().getParameters().get(CLAIMS_SIZE_DISTRIBUTION);
-    private DistributionModified claimsSizeModification;// = DistributionModifier.getStrategy(DistributionModifier.NONE, Collections.emptyMap());
+    protected ExposureBase claimsSizeBase;
+    protected RandomDistribution claimsSizeDistribution;
+    protected DistributionModified claimsSizeModification;
 
     public IParameterObjectClassifier getType() {
         return ClaimsGeneratorType.ATTRITIONAL;

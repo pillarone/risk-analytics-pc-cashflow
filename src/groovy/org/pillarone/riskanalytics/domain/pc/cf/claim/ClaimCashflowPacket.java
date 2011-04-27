@@ -18,7 +18,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private static Log LOG = LogFactory.getLog(ClaimCashflowPacket.class);
 
     // todo(sku): ask msp, should be final but setting it final is not possible with default c'tor
-    private ClaimRoot baseClaim;
+    private IClaim baseClaim;
 
     private double paidIncremental;
     private double paidCumulated;
@@ -37,14 +37,14 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     }
 
     /** todo(sku): safer c'tor required, currently used for ultimate modelling */
-    public ClaimCashflowPacket(ClaimRoot baseClaim) {
+    public ClaimCashflowPacket(IClaim baseClaim) {
         this.baseClaim = baseClaim;
         updateDate = baseClaim.getOccurrenceDate();
         setDate(updateDate);
         first = true;
     }
 
-    public ClaimCashflowPacket(ClaimRoot baseClaim, double paidIncremental, double paidCumulated,
+    public ClaimCashflowPacket(IClaim baseClaim, double paidIncremental, double paidCumulated,
                                double reportedIncremental, double reportedCumulated, double reserves,
                                DateTime updateDate, IPeriodCounter periodCounter, int number) {
         this(baseClaim);
@@ -61,20 +61,12 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     /**
      * Used to modify the packet date property according the persistence date. 
-     * @param claim
      * @param persistenceDate
      */
-    // todo(sku): ask msp about copy/clone constructor
-    // todo(sku): fix!
-    private ClaimCashflowPacket(ClaimCashflowPacket claim, DateTime persistenceDate) {
-        this(claim.baseClaim);
-        paidIncremental = claim.paidIncremental;
-        paidCumulated = claim.paidCumulated;
-        reportedCumulated = claim.reportedCumulated;
-        reportedIncremental = claim.reportedIncremental;
-        reserves = claim.reserves;
-        updateDate = claim.updateDate;
-        setDate(persistenceDate);
+    public ClaimCashflowPacket withDate(DateTime persistenceDate) {
+        ClaimCashflowPacket packet = (ClaimCashflowPacket) super.clone();
+        packet.setDate(persistenceDate);
+        return packet;
     }
 
     public double ibnr() {
@@ -125,7 +117,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      * @return
      */
     public ClaimCashflowPacket getClaimUnderwritingPeriod() {
-        return new ClaimCashflowPacket(this, baseClaim.getOccurrenceDate());
+        return withDate(baseClaim.getOccurrenceDate());
     }
 
     public double getPaidIncremental() {

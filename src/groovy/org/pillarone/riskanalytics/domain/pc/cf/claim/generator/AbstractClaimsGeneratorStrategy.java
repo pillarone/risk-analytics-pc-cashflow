@@ -26,13 +26,17 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     }
 
     protected List<ClaimRoot> generateClaims(double scaleFactor, int claimNumber, ClaimType claimType, PeriodScope periodScope) {
+        return ClaimsGeneratorUtils.generateClaims(claimSizeGenerator, dateGenerator, claimNumber, claimType, periodScope);
+    }
+
+    protected List<ClaimRoot> getClaims(List<Double> claimValues, ClaimType claimType, PeriodScope periodScope) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
-        for (int i = 0; i < claimNumber; i++) {
+        for (int i = 0; i < claimValues.size(); i++) {
             double fractionOfPeriod = (Double) dateGenerator.nextValue();
             DateTime occurrenceDate = DateTimeUtilities.getDate(periodScope, fractionOfPeriod);
             // todo(sku): replace with information from underwriting
             DateTime exposureStartDate = occurrenceDate;
-            baseClaims.add(new ClaimRoot((Double) claimSizeGenerator.nextValue() * -1, claimType, exposureStartDate, occurrenceDate));
+            baseClaims.add(new ClaimRoot(claimValues.get(i) * -1, claimType, exposureStartDate, occurrenceDate));
         }
         return baseClaims;
     }
@@ -45,6 +49,14 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
             claimSizeGenerator = RandomNumberGeneratorFactory.getGenerator(distribution, modifier);
             cachedClaimSizeGenerators.put(key, claimSizeGenerator);
         }
+    }
+
+    protected void setGenerator(RandomDistribution distribution) {
+        setGenerator(distribution, DistributionModifier.getStrategy(DistributionModifier.NONE, null));
+    }
+
+    protected void setDateGenerator(RandomDistribution distribution) {
+        dateGenerator = RandomNumberGeneratorFactory.getGenerator(distribution);
     }
 
     protected String key(RandomDistribution distribution, DistributionModified modifier) {
@@ -62,4 +74,8 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     protected final static String CLAIMS_SIZE_BASE = "claimsSizeBase";
     protected final static String CLAIMS_SIZE_DISTRIBUTION = "claimsSizeDistribution";
     protected final static String CLAIMS_SIZE_MODIFICATION = "claimsSizeModification";
+    protected final static String FREQUENCY_BASE = "frequencyBase";
+    protected final static String FREQUENCY_DISTRIBUTION = "frequencyDistribution";
+    protected final static String FREQUENCY_MODIFICATION = "frequencyModification";
+    protected final static String OCCURRENCE_DISTRIBUTION = "occurrenceDistribution";
 }

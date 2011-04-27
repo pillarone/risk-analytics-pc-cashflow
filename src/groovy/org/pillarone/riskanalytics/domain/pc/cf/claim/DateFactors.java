@@ -30,4 +30,17 @@ public class DateFactors {
     public double getFactorCumulated() {
         return factorCumulated;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append(date);
+        result.append(SEPRATOR);
+        result.append(factorIncremental);
+        result.append(SEPRATOR);
+        result.append(factorCumulated);
+        return result.toString();
+    }
+
+    private static final String SEPRATOR = ", ";
 }

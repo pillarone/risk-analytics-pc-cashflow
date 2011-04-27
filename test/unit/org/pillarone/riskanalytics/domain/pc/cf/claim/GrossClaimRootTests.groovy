@@ -9,7 +9,7 @@ import org.pillarone.riskanalytics.core.simulation.TestPeriodCounterUtilities
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class ClaimRootTests extends GroovyTestCase {
+class GrossClaimRootTests extends GroovyTestCase {
 
     Pattern annualReportingPattern = PatternTests.getPattern([0, 12, 24, 36, 48], [0.0d, 0.7d, 0.8d, 0.95d, 1.0d])
     Pattern annualPayoutPattern = PatternTests.getPattern([0, 12, 24, 36, 48], [0d, 0.4d, 0.7d, 0.85d, 1.0d])
@@ -22,11 +22,11 @@ class ClaimRootTests extends GroovyTestCase {
 
 
     void testHasSynchronizedPatterns() {
-        ClaimRoot claimRoot = new ClaimRoot(1000, ClaimType.AGGREGATED,
+        GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, payoutPattern, annualReportingPattern)
         assertFalse 'different patterns', claimRoot.hasSynchronizedPatterns()
 
-        claimRoot = new ClaimRoot(1000, ClaimType.AGGREGATED,
+        claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, payoutPattern, payoutPattern)
         assertTrue 'same pattern (same instance)', claimRoot.hasSynchronizedPatterns()
     }
@@ -34,7 +34,7 @@ class ClaimRootTests extends GroovyTestCase {
     void testGetClaimCashflowPackets() {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
 
-        ClaimRoot claimRoot = new ClaimRoot(1000, ClaimType.AGGREGATED,
+        GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, annualPayoutPattern, annualReportingPattern)
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
         println claims

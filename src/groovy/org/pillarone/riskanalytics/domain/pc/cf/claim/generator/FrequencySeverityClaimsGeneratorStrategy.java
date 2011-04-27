@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase;
 import org.pillarone.riskanalytics.domain.utils.DistributionModified;
@@ -17,23 +18,22 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-// todo(sku): ask msp how we could define default values only once: prefered place are the *Type.groovy classes
 public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStrategy  {
 
     private FrequencyBase frequencyBase;
     private RandomDistribution frequencyDistribution;
     private DistributionModified frequencyModification;
-    private ExposureBase claimsSizeBase;// = ExposureBase.ABSOLUTE;
-    private RandomDistribution claimsSizeDistribution;// = (RandomDistribution) ClaimsGeneratorType.getDefault().getParameters().get(CLAIMS_SIZE_DISTRIBUTION);
-    private DistributionModified claimsSizeModification;// = DistributionModifier.getStrategy(DistributionModifier.NONE, Collections.emptyMap());
-    private FrequencySeverityClaimType produceClaim; // = FrequencySeverityClaimType.SINGLE;
+    private ExposureBase claimsSizeBase;
+    private RandomDistribution claimsSizeDistribution;
+    private DistributionModified claimsSizeModification;
+    private FrequencySeverityClaimType produceClaim;
 
     public IParameterObjectClassifier getType() {
         return ClaimsGeneratorType.FREQUENCY_SEVERITY;
     }
 
     public Map getParameters() {
-        Map<String, Object> parameters = new HashMap<String, Object>(3);
+        Map<String, Object> parameters = new HashMap<String, Object>(7);
         parameters.put(CLAIMS_SIZE_BASE, claimsSizeBase);
         parameters.put(CLAIMS_SIZE_DISTRIBUTION, claimsSizeDistribution);
         parameters.put(CLAIMS_SIZE_MODIFICATION, claimsSizeModification);

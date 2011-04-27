@@ -6,10 +6,7 @@ import org.pillarone.riskanalytics.core.model.Model;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IPerilMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 
 import java.util.ArrayList;
@@ -24,7 +21,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
     private SimulationScope simulationScope;
 
     // attritional, frequency average attritional, ...
-    private IClaimsGeneratorStrategy parmClaimsModel = ClaimsGeneratorType.getStrategy(ClaimsGeneratorType.ATTRITIONAL, new HashMap());
+    private IClaimsGeneratorStrategy parmClaimsModel = ClaimsGeneratorType.getDefault();
 
     private PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
 
@@ -35,12 +32,12 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
 //    private IRandomNumberGenerator dateGenerator = RandomNumberGeneratorFactory.getUniformGenerator();
 
     protected void doCalculation() {
-
         List<ClaimRoot> baseClaims = parmClaimsModel.generateClaims(simulationScope.getIterationScope().getPeriodScope());
         IPeriodCounter periodCounter = simulationScope.getIterationScope().getPeriodScope().getPeriodCounter();
         List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
         for (ClaimRoot baseClaim : baseClaims) {
-            claims.addAll(baseClaim.getClaimCashflowPackets(periodCounter, null, true));
+            GrossClaimRoot grossClaimRoot = new GrossClaimRoot(baseClaim, null, null);
+            claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, null));
         }
 //        outClaims.addAll(parmAssociateExposureInfo.getAllocatedClaims(claims, outUnderwritingInfo));
         outClaims.addAll(claims);

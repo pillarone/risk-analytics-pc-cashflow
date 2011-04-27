@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.utils.*;
 
 import java.util.HashMap;
@@ -32,8 +33,10 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
         }
     }
 
+    protected void setClaimNumberGenerator(RandomDistribution distribution) {
+        setGenerator(distribution, DistributionModifier.getStrategy(DistributionModifier.NONE, null));
+    }
+
     protected final static String PRODUCE_CLAIM = "produceClaim";
-    protected final static String FREQUENCY_BASE = "frequencyBase";
-    protected final static String FREQUENCY_DISTRIBUTION = "frequencyDistribution";
-    protected final static String FREQUENCY_MODIFICATION = "frequencyModification";
+
 }

@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.pattern;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
@@ -7,9 +9,7 @@ import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.DateFactors;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -18,16 +18,13 @@ public class Pattern {
 
     private static Log LOG = LogFactory.getLog(Pattern.class);
 
-    private List<Double> cumulativeValues;
-    private List<Period> cumulativePeriods;
+    protected List<Double> cumulativeValues;
+    protected List<Period> cumulativePeriods;
+
+
+    public static final Pattern PATTERN_TRIVIAL = new TrivialPattern();
 
     public Pattern() {
-    }
-
-    // todo(msp): how to handle constant/final instances?
-    public Pattern(boolean trivial) {
-        cumulativePeriods = Arrays.asList(Period.days(0));
-        cumulativeValues = Arrays.asList(1d);
     }
 
     public Pattern(IPatternStrategy strategy) {
@@ -61,6 +58,7 @@ public class Pattern {
         return 0d;
     }
 
+    // todo(sku): cache result as function is used quite often
     public boolean hasSameCumulativePeriods(Pattern other) {
         boolean synchronous = true;
         synchronous = size() == other.size();
@@ -70,26 +68,7 @@ public class Pattern {
         return synchronous;
     }
 
-    public List<DateFactors> getDateFactors(DateTime occurrenceDate, IPeriodCounter periodCounter) {
-        List<DateFactors> dateFactors = new ArrayList<DateFactors>();
-//      todo(sku): avoid looping through complete pattern
-        for (int devPeriod = 0; devPeriod < cumulativeValues.size(); devPeriod++) {
-            DateTime date = occurrenceDate.plus(cumulativePeriods.get(devPeriod));
-//                todo(sku): extend core plugin
-//                if (periodCounter.belongsToCurrentPeriod(date)) {
-            if (!occurrenceDate.isBefore(periodCounter.getCurrentPeriodStart())
-                    && occurrenceDate.isBefore(periodCounter.getNextPeriodStart())) {
-                dateFactors.add(new DateFactors(date, incrementFactor(devPeriod), cumulativeValues.get(devPeriod)));
-            }
-        }
-        return dateFactors;
-    }
-
-    public List<DateFactors> getDateFactors(DateTime occurrenceDate, IPeriodCounter periodCounter, boolean currentPeriodOnly) {
-        if (!currentPeriodOnly) {
-            return getDateFactors(occurrenceDate, periodCounter);
-        }
-        else {
+    public List<DateFactors> getDateFactorsForCurrentPeriod(DateTime occurrenceDate, IPeriodCounter periodCounter) {
             List<DateFactors> dateFactors = new ArrayList<DateFactors>();
     //      todo(sku): avoid looping through complete pattern
             for (int devPeriod = 0; devPeriod < cumulativeValues.size(); devPeriod++) {
@@ -102,7 +81,6 @@ public class Pattern {
                 }
             }
             return dateFactors;
-        }
     }
 
     /**
@@ -172,5 +150,14 @@ public class Pattern {
 
     public Period getCumulativePeriod(int developmentPeriod) {
         return cumulativePeriods.get(developmentPeriod);
+    }
+
+    private static final class TrivialPattern extends Pattern {
+
+        private TrivialPattern() {
+            // todo(sku): use immutable lists
+            cumulativePeriods = Arrays.asList(Period.days(0));
+            cumulativeValues = Arrays.asList(1d);
+        }
     }
 }
