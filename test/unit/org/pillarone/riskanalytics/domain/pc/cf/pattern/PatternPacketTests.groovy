@@ -5,15 +5,15 @@ import org.joda.time.Period
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class PatternTests extends GroovyTestCase {
+class PatternPacketTests extends GroovyTestCase {
 
     static double EPSILON = 1E-10
 
-    Pattern pattern
+    PatternPacket pattern
 
 
-    static Pattern getPattern(List<Integer> periods, List<Double> cumulativeValues) {
-        Pattern pattern0 = new Pattern()
+    static PatternPacket getPattern(List<Integer> periods, List<Double> cumulativeValues) {
+        PatternPacket pattern0 = new PatternPacket()
         pattern0.cumulativePeriods = []
         periods.each { period -> pattern0.cumulativePeriods.add(Period.months(period)) }
         pattern0.cumulativeValues = cumulativeValues

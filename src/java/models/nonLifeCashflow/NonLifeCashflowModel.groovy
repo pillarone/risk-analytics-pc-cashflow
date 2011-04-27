@@ -6,18 +6,22 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.core.simulation.LimitedContinuousPeriodCounter
 import org.joda.time.Period
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.Patterns
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 class NonLifeCashflowModel extends StochasticModel {
 
+    Patterns patterns
     DynamicClaimsGenerator claimsGenerators
+
     @Override
     void initComponents() {
+        patterns = new Patterns()
         claimsGenerators = new DynamicClaimsGenerator()
 
-        addStartComponent claimsGenerators
+        addStartComponent patterns
     }
 
     @Override

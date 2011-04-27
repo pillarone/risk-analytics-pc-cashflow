@@ -1,3 +1,6 @@
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternTableConstraints
+import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
+
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
     def version = "0.1"
@@ -34,7 +37,7 @@ Brief description of the plugin.
     }
 
     def doWithApplicationContext = { applicationContext ->
-        // TODO Implement post initialization spring config (optional)
+        ConstraintsFactory.registerConstraint(new PatternTableConstraints())
     }
 
     def onChange = { event ->

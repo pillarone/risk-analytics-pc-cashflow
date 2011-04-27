@@ -7,7 +7,7 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.Pattern;
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +28,8 @@ public final class GrossClaimRoot implements IClaim {
     private ClaimRoot claimRoot;
 
     // todo(sku): move to a derive GrossClaimRoot class
-    private Pattern payoutPattern;
-    private Pattern reportingPattern;
+    private PatternPacket payoutPattern;
+    private PatternPacket reportingPattern;
 
     private Boolean synchronizedPatterns;
 
@@ -40,30 +40,30 @@ public final class GrossClaimRoot implements IClaim {
     /** counts the currently existing ClaimCashflowPacket referencing this instance */
     private int childCounter;
 
-    public GrossClaimRoot(ClaimRoot claimRoot, Pattern payoutPattern, Pattern reportingPattern) {
+    public GrossClaimRoot(ClaimRoot claimRoot, PatternPacket payoutPattern, PatternPacket reportingPattern) {
         this(payoutPattern, reportingPattern);
         this.claimRoot = claimRoot;
     }
 
     public GrossClaimRoot(double ultimate, EventPacket event, ClaimType claimType, ExposureInfo exposureInfo,
-                          DateTime occurrenceDate, Pattern payoutPattern, Pattern reportingPattern) {
+                          DateTime occurrenceDate, PatternPacket payoutPattern, PatternPacket reportingPattern) {
         this(payoutPattern, reportingPattern);
         claimRoot = new ClaimRoot(ultimate, event, claimType, exposureInfo, occurrenceDate);
     }
 
     public GrossClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate,
-                          Pattern payoutPattern, Pattern reportingPattern) {
+                          PatternPacket payoutPattern, PatternPacket reportingPattern) {
         this(payoutPattern, reportingPattern);
         claimRoot = new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate);
     }
 
     public GrossClaimRoot(double ultimate, EventPacket event, ClaimType claimType, DateTime exposureStartDate,
-                          DateTime occurrenceDate, Pattern payoutPattern, Pattern reportingPattern) {
+                          DateTime occurrenceDate, PatternPacket payoutPattern, PatternPacket reportingPattern) {
         this(payoutPattern, reportingPattern);
         claimRoot = new ClaimRoot(ultimate, event, claimType, exposureStartDate, occurrenceDate);
     }
 
-    public GrossClaimRoot(Pattern payoutPattern, Pattern reportingPattern) {
+    public GrossClaimRoot(PatternPacket payoutPattern, PatternPacket reportingPattern) {
         this.payoutPattern = payoutPattern;
         this.reportingPattern = reportingPattern;
     }
