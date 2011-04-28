@@ -7,7 +7,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public interface IClaim {
+public interface IClaimRoot {
 
     public double getUltimate();
     public boolean hasEvent();

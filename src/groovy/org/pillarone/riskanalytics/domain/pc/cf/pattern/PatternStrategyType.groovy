@@ -13,15 +13,18 @@ class PatternStrategyType extends AbstractParameterObjectClassifier {
 
     public static final PatternStrategyType NONE = new PatternStrategyType('none', 'NONE', [:])
     public static final PatternStrategyType INCREMENTAL = new PatternStrategyType("incremental", "INCREMENTAL", [
-            incrementalPattern :  new ConstrainedMultiDimensionalParameter([[0],[1d]], ['Months','Increments'],
+            incrementalPattern :  new ConstrainedMultiDimensionalParameter([[0],[1d]], [PatternTableConstraints.MONTHS,INCREMENTS],
                     ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER)),
     ])
     public static final PatternStrategyType CUMULATIVE = new PatternStrategyType("cumulative", "CUMULATIVE", [
-            cumulativePattern :  new ConstrainedMultiDimensionalParameter([[0],[1d]], ['Months','Cumulative'],
+            cumulativePattern :  new ConstrainedMultiDimensionalParameter([[0],[1d]], [PatternTableConstraints.MONTHS,CUMULATED],
                     ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER)),
     ])
 
     public static final all = [NONE, INCREMENTAL, CUMULATIVE]
+
+    public static final String INCREMENTS = "Increments";
+    public static final String CUMULATED = "Cumulated";
 
     protected static Map types = [:]
     static {

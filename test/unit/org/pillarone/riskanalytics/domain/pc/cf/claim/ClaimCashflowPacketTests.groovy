@@ -31,7 +31,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, trivialPattern, trivialPattern)
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
 
         assertEquals "one claim only", 1, claims.size()
         assertEquals "correct ultimate", 1000, claims[0].ultimate()
@@ -60,7 +60,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
 
         int period = 0
         int claimNumber = 0
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, null)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, null, true)
         
         assertEquals "#collected fields", 7, claims[claimNumber].valuesToSave.size()
         
@@ -77,7 +77,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         period++
         claimNumber++
         periodCounter.next()
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, null))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, null, false))
 
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
@@ -92,7 +92,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         period++
         claimNumber++
         periodCounter.next()
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, null))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, null, false))
 
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
@@ -107,7 +107,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         period++
         claimNumber++
         periodCounter.next()
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, null))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, null, false))
 
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
@@ -122,7 +122,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         period++
         claimNumber++
         periodCounter.next()
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
         
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
@@ -148,7 +148,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
 
         int period = 0
         int claimNumber = 0
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
         
         assertEquals "P$period ultimate", 1000, claims[claimNumber].ultimate()
         assertEquals "P$period developed result", 0, claims[claimNumber].developmentResult()
@@ -163,7 +163,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         period++
         claimNumber++
         periodCounter.next()
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
         
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
@@ -178,7 +178,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         period++
         claimNumber++
         periodCounter.next()
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
         
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
@@ -193,7 +193,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         period++
         claimNumber++
         periodCounter.next()
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
         
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
@@ -208,7 +208,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         period++
         claimNumber++
         periodCounter.next()
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
         
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
@@ -236,7 +236,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
 
         int period = 0
         int claimNumber = 0
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, factors)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
         assertEquals "P$period.0 ultimate", 1000, claims[claimNumber].ultimate()
         assertEquals "P$period.0 developed result", 50, claims[claimNumber].developmentResult()
         assertEquals "P$period.0 developed ultimate", 1050, claims[claimNumber].developedUltimate()
@@ -245,7 +245,6 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period.0 reserves", 1039.5, claims[claimNumber].reserved()
         assertEquals "P$period.0 outstanding", 724.5, claims[claimNumber].outstanding()
         assertEquals "P$period.0 IBNR", 315, claims[claimNumber].ibnr()
-//        claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
         // as the first pattern step is of lenght 3 months only, two claims fall in the same period
         claimNumber++
         assertEquals "P$period.1 ultimate", 0, claims[claimNumber].ultimate()
@@ -261,7 +260,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         period++    // 1
         periodCounter.next()
         factors.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(2)), 1.60)
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, factors))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, factors, false))
 
         claimNumber++
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
@@ -277,7 +276,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         period++    // 2
         periodCounter.next()
         factors.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(3)), 1.77)
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, factors))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, factors, false))
 
         claimNumber++
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
@@ -295,7 +294,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         periodCounter.next()
         periodCounter.next()
         factors.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(4)), 1.95)
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, factors))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, factors, false))
 
         claimNumber++
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()

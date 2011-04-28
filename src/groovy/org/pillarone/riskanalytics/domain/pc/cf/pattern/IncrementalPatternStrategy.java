@@ -14,7 +14,6 @@ import java.util.Map;
  */
 public class IncrementalPatternStrategy extends AbstractPatternStrategy {
 
-    public static final String INCREMENTAL = "Incremental";
     public static final String INCREMENTAL_PATTERN = "incrementalPattern";
 
     private ConstrainedMultiDimensionalParameter incrementalPattern;
@@ -34,7 +33,7 @@ public class IncrementalPatternStrategy extends AbstractPatternStrategy {
         if (pattern == null) {
             int columnMonthIndex = incrementalPattern.getColumnIndex(PatternTableConstraints.MONTHS);
             List<Double> incrementalValues = getPatternValues(incrementalPattern, columnMonthIndex,
-                    incrementalPattern.getColumnIndex(INCREMENTAL));
+                    incrementalPattern.getColumnIndex(PatternStrategyType.INCREMENTS));
             List<Double> cumulativeValues = getCumulativePatternValues(incrementalValues);
             List<Period> cumulativePeriods = getCumulativePeriods(incrementalPattern, columnMonthIndex);
             pattern = new  PatternPacket(cumulativeValues, cumulativePeriods);

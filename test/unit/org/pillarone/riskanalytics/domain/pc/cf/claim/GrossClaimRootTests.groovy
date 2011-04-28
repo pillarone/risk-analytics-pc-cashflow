@@ -36,7 +36,6 @@ class GrossClaimRootTests extends GroovyTestCase {
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, annualPayoutPattern, annualReportingPattern)
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
-        println claims
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
     }
 }

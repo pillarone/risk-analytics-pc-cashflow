@@ -10,24 +10,24 @@ import org.pillarone.riskanalytics.core.wiring.WiringUtils
  */
 class Patterns extends ComposedComponent {
 
-    PacketList<PatternPacket> outPattern = new PacketList<PatternPacket>(PatternPacket)
+    PacketList<PatternPacket> outPatterns = new PacketList<PatternPacket>(PatternPacket)
 
     PayoutPatterns subPayoutPatterns = new PayoutPatterns()
     ReportingPatterns subReportingPatterns = new ReportingPatterns()
     RecoveryPatterns subRecoveryPatterns = new RecoveryPatterns()
 
     @Override protected void doCalculation() {
-        subPayoutPatterns.doCalculation()
-        subReportingPatterns.doCalculation()
-        subRecoveryPatterns.doCalculation()
+        subPayoutPatterns.start()
+        subReportingPatterns.start()
+        subRecoveryPatterns.start()
     }
 
     @Override
     void wire() {
         WiringUtils.use(PortReplicatorCategory) {
-            this.outPattern = subPayoutPatterns.outPattern
-            this.outPattern = subReportingPatterns.outPattern
-            this.outPattern = subRecoveryPatterns.outPattern
+            this.outPatterns = subPayoutPatterns.outPattern
+            this.outPatterns = subReportingPatterns.outPattern
+            this.outPatterns = subRecoveryPatterns.outPattern
         }
     }
 }

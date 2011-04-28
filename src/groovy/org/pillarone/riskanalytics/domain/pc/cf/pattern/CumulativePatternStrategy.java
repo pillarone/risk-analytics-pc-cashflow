@@ -13,8 +13,8 @@ import java.util.Map;
  */
 public class CumulativePatternStrategy extends AbstractPatternStrategy {
 
-    public static final String CUMULATIVE = "Cumulative";
     public static final String CUMULATIVE_PATTERN = "cumulativePattern";
+
 
     private ConstrainedMultiDimensionalParameter cumulativePattern;
     private PatternPacket pattern;
@@ -33,7 +33,7 @@ public class CumulativePatternStrategy extends AbstractPatternStrategy {
         if (pattern == null) {
             int columnMonthIndex = cumulativePattern.getColumnIndex(PatternTableConstraints.MONTHS);
             List<Double> cumulativeValues = getPatternValues(cumulativePattern, columnMonthIndex,
-                    cumulativePattern.getColumnIndex(CUMULATIVE));
+                    cumulativePattern.getColumnIndex(PatternStrategyType.CUMULATED));
             List<Period> cumulativePeriods = getCumulativePeriods(cumulativePattern, columnMonthIndex);
             pattern = new  PatternPacket(cumulativeValues, cumulativePeriods);
         }

@@ -18,7 +18,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
 // todo(sku): implement payout only
 // todo(sku): implement pattern shifts
 // todo(sku): clarify index application order and effect on reported
-public final class ClaimRoot implements IClaim {
+public final class ClaimRoot implements IClaimRoot {
 
     private static Log LOG = LogFactory.getLog(ClaimRoot.class);
 

@@ -18,7 +18,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private static Log LOG = LogFactory.getLog(ClaimCashflowPacket.class);
 
     // todo(sku): ask msp, should be final but setting it final is not possible with default c'tor
-    private IClaim baseClaim;
+    private IClaimRoot baseClaim;
 
     private double paidIncremental;
     private double paidCumulated;
@@ -30,23 +30,23 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private DateTime updateDate;
     private Integer updatePeriod;
 
-    private boolean first;
+    private boolean hasUltimate;
 
     // c'tor required for DefaultResultStructureBuilder L124
     public ClaimCashflowPacket() {
     }
 
     /** todo(sku): safer c'tor required, currently used for ultimate modelling */
-    public ClaimCashflowPacket(IClaim baseClaim) {
+    public ClaimCashflowPacket(IClaimRoot baseClaim) {
         this.baseClaim = baseClaim;
         updateDate = baseClaim.getOccurrenceDate();
         setDate(updateDate);
-        first = true;
+        hasUltimate = true;
     }
 
-    public ClaimCashflowPacket(IClaim baseClaim, double paidIncremental, double paidCumulated,
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double paidIncremental, double paidCumulated,
                                double reportedIncremental, double reportedCumulated, double reserves,
-                               DateTime updateDate, IPeriodCounter periodCounter, int number) {
+                               DateTime updateDate, IPeriodCounter periodCounter, boolean hasUltimate) {
         this(baseClaim);
         this.paidCumulated = paidCumulated;
         this.paidIncremental = paidIncremental;
@@ -56,7 +56,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.updateDate = updateDate;
         updatePeriod(periodCounter);
         setDate(updateDate);
-        first = number == 1;
+        this.hasUltimate = hasUltimate;
     }
 
     /**
@@ -89,7 +89,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     }
 
     public double  developmentResult() {
-        return developedUltimate() - baseClaim.getUltimate();
+        return baseClaim.hasTrivialPayout() ? 0 : developedUltimate() - baseClaim.getUltimate();
     }
 
     /**
@@ -132,7 +132,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      * @return 0 except for the occurrence period, nominal ultimate without any index applied
      */
     public double ultimate() {
-        return first ? baseClaim.getUltimate() : 0d;
+        return hasUltimate ? baseClaim.getUltimate() : 0d;
     }
 
     /**
@@ -143,7 +143,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     @Override
     public Map<String, Number> getValuesToSave() throws IllegalAccessException {
         Map<String, Number> valuesToSave = new HashMap<String, Number>();
-        valuesToSave.put(ULTIMATE, baseClaim.getUltimate());    // todo(sku): leads to failure during result tree building
+        valuesToSave.put(ULTIMATE, ultimate());    // todo(sku): leads to failure during result tree building
         if (!baseClaim.hasTrivialPayout()) {
             valuesToSave.put(PAID, paidIncremental);
             valuesToSave.put(RESERVES, reserved());

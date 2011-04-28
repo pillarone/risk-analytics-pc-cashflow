@@ -34,7 +34,7 @@ public class AttritionalClaimsGenerator extends Component implements IPerilMarke
         List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
         for (ClaimRoot baseClaim : baseClaims) {
             GrossClaimRoot grossClaimRoot = new GrossClaimRoot(baseClaim, null, null);
-            claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, null));
+            claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, null, true));
         }
         outClaims.addAll(claims);
     }

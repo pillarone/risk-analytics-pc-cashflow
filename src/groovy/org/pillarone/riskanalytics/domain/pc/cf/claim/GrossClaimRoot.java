@@ -21,7 +21,7 @@ import java.util.List;
 // todo(sku): implement payout only
 // todo(sku): implement pattern shifts
 // todo(sku): clarify index application order and effect on reported
-public final class GrossClaimRoot implements IClaim {
+public final class GrossClaimRoot implements IClaimRoot {
 
     private static Log LOG = LogFactory.getLog(GrossClaimRoot.class);
 
@@ -73,12 +73,13 @@ public final class GrossClaimRoot implements IClaim {
      * @param periodCounter
      * @return
      */
-    public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter) {
-        return getClaimCashflowPackets(periodCounter, null);
+    public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter, boolean hasUltimate) {
+        return getClaimCashflowPackets(periodCounter, null, hasUltimate);
     }
 
-    public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter, Factors factors) {
+    public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter, Factors factors, boolean hasUltimate) {
         List<ClaimCashflowPacket> currentPeriodClaims = new ArrayList<ClaimCashflowPacket>();
+        // todo(sku): refactor to avoid code duplication
         if (hasSynchronizedPatterns()) {
             List<DateFactors> payouts = payoutPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter);
             List<DateFactors> reports = reportingPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter);
@@ -89,8 +90,9 @@ public final class GrossClaimRoot implements IClaim {
                 double payoutCumulatedFactor = payouts.get(i).getFactorCumulated();
                 double reportsIncrementalFactor = reports.get(i).getFactorIncremental();
                 double reportsCumulatedFactor = reports.get(i).getFactorCumulated();
-
                 double ultimate = claimRoot.getUltimate();
+                double reserves = ultimate * (1 - payoutCumulatedFactor) * factor;
+
                 double paidIncremental = ultimate * payoutIncrementalFactor * factor;
                 double paidCumulated = paidCumulatedIncludingAppliedFactors + paidIncremental;
                 paidCumulatedIncludingAppliedFactors = paidCumulated;
@@ -98,11 +100,32 @@ public final class GrossClaimRoot implements IClaim {
                 double outstanding = ultimate * (reportsCumulatedFactor - payoutCumulatedFactor) * factor;
                 double reportedCumulated = outstanding + paidCumulated;
                 reportedCumulatedIncludingAppliedFactors = reportedCumulated;
+
+                childCounter++;
+                ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, paidIncremental, paidCumulated,
+                        reportedIncremental, reportedCumulated, reserves, payoutDate, periodCounter, hasUltimate);
+                hasUltimate = false;    // a period may contain several payouts and only the first should contain the ultimate
+                checkCorrectDevelopment(cashflowPacket);
+                currentPeriodClaims.add(cashflowPacket);
+            }
+        }
+        else if (!hasTrivialPayout() && !hasIBNR()) {
+            List<DateFactors> payouts = payoutPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter);
+            for (int i = 0; i < payouts.size(); i++) {
+                DateTime payoutDate = payouts.get(i).getDate();
+                double factor = manageFactor(factors, payoutDate);
+                double payoutIncrementalFactor = payouts.get(i).getFactorIncremental();
+                double payoutCumulatedFactor = payouts.get(i).getFactorCumulated();
+
+                double ultimate = claimRoot.getUltimate();
+                double paidIncremental = ultimate * payoutIncrementalFactor * factor;
+                double paidCumulated = paidCumulatedIncludingAppliedFactors + paidIncremental;
+                paidCumulatedIncludingAppliedFactors = paidCumulated;
                 double reserves = ultimate * (1 - payoutCumulatedFactor) * factor;
 
                 childCounter++;
                 ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, paidIncremental, paidCumulated,
-                        reportedIncremental, reportedCumulated, reserves, payoutDate, periodCounter, childCounter);
+                        0, 0, reserves, payoutDate, periodCounter, hasUltimate);
                 checkCorrectDevelopment(cashflowPacket);
                 currentPeriodClaims.add(cashflowPacket);
             }
@@ -195,17 +218,17 @@ public final class GrossClaimRoot implements IClaim {
      */
     private void checkCorrectDevelopment(ClaimCashflowPacket cashflowPacket) {
         // todo(msp): why is log level not working correctly?
-//        if (LOG.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
 //            developedUltimate = cashflowPacket.developedUltimate();
 //            cumulatedPaid += cashflowPacket.getPaidIncremental();
             if (childCounter == payoutPattern.size()) {
-//                LOG.debug("developed ultimate: " + cashflowPacket.developedUltimate());
-//                LOG.debug("paid cumulated: " + paidCumulatedIncludingAppliedFactors);
-                System.out.println("developed ultimate: " + cashflowPacket.developedUltimate());
-                System.out.println("paid cumulated: " + paidCumulatedIncludingAppliedFactors);
-                System.out.println("reported cumulated: " + reportedCumulatedIncludingAppliedFactors);
+                LOG.debug("developed ultimate: " + cashflowPacket.developedUltimate());
+                LOG.debug("paid cumulated: " + paidCumulatedIncludingAppliedFactors);
+//                System.out.println("   developed ultimate: " + cashflowPacket.developedUltimate());
+//                System.out.println("   paid cumulated: " + paidCumulatedIncludingAppliedFactors);
+//                System.out.println("   reported cumulated: " + reportedCumulatedIncludingAppliedFactors);
 
             }
-//        }
+        }
     }
 }

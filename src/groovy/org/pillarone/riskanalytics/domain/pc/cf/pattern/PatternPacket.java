@@ -148,6 +148,10 @@ public class PatternPacket extends Packet {
         return cumulativePeriods;
     }
 
+    public Period getLastCumulativePeriod() {
+        return cumulativePeriods.get(size() - 1);
+    }
+
     public Period getCumulativePeriod(int developmentPeriod) {
         return cumulativePeriods.get(developmentPeriod);
     }

@@ -8,7 +8,7 @@ import java.util.Collections;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class Pattern extends Component {
+public class Pattern extends Component {
 
     private PacketList<PatternPacket> outPattern = new PacketList<PatternPacket>(PatternPacket.class);
     private IPatternStrategy parmPattern = PatternStrategyType.getStrategy(PatternStrategyType.NONE, Collections.emptyMap());

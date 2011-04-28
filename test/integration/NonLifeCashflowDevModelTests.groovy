@@ -4,7 +4,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.ModelTest
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class NonLifeCashflowModelTests extends ModelTest {
+class NonLifeCashflowDevModelTests extends ModelTest {
 
     Class getModelClass() {
         NonLifeCashflowModel
@@ -21,11 +21,11 @@ class NonLifeCashflowModelTests extends ModelTest {
 
     @Override
     String getParameterFileName() {
-        'NonLifeCashflowParameters'
+        'NonLifeCashflowDevParameters'
     }
 
     String getParameterDisplayName() {
-        'Claims'
+        'Developed Claims'
     }
 
     protected boolean shouldCompareResults() {
