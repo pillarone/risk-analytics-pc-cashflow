@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
+// todo(sku): think! merge with FactorsPacket
 public class DateFactors {
 
     private DateTime date;

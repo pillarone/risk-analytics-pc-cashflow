@@ -1,5 +1,6 @@
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternTableConstraints
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.AnnualIndexTableConstraints
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -37,6 +38,7 @@ Brief description of the plugin.
     }
 
     def doWithApplicationContext = { applicationContext ->
+        ConstraintsFactory.registerConstraint(new AnnualIndexTableConstraints())
         ConstraintsFactory.registerConstraint(new PatternTableConstraints())
     }
 

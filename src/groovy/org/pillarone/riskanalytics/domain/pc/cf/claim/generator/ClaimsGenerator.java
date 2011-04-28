@@ -7,6 +7,9 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ISeverityIndexMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
@@ -24,13 +27,15 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
     private PeriodStore periodStore;
     private boolean globalGenerateNewClaimsInFirstPeriodOnly = true;
 
+    private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     private PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket.class);
     private PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
 
     // attritional, frequency average attritional, ...
-    private IClaimsGeneratorStrategy parmClaimsModel = ClaimsGeneratorType.getDefault();
     private ConstrainedString parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker.class, "");
     private ConstrainedString parmReportingPattern = new ConstrainedString(IReportingPatternMarker.class, "");
+    private ConstrainedString parmSeverityIndex = new ConstrainedString(ISeverityIndexMarker.class, "");
+    private IClaimsGeneratorStrategy parmClaimsModel = ClaimsGeneratorType.getDefault();
 
     // period store key
     private static final String GROSS_CLAIMS = "gross claims root";
@@ -53,6 +58,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
 
             PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern);
             PatternPacket reportingPattern = PatternUtils.filterPattern(inPatterns, parmReportingPattern);
+            FactorsPacket factors = IndexUtils.filterFactors(inFactors, parmSeverityIndex);
             List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
             for (ClaimRoot baseClaim : baseClaims) {
                 GrossClaimRoot grossClaimRoot = new GrossClaimRoot(baseClaim, payoutPattern, reportingPattern);
@@ -60,7 +66,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
                     // add claim only to period store if development is required
                     grossClaimRoots.add(grossClaimRoot);
                 }
-                claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, null, true));
+                claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, true));
             }
             periodStore.put(GROSS_CLAIMS, grossClaimRoots);
         }
@@ -69,13 +75,14 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
     private void developClaimsOfFormerPeriods(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter) {
         if (!periodScope.isFirstPeriod()) {
             int currentPeriod = periodScope.getCurrentPeriod();
+            FactorsPacket factors = IndexUtils.filterFactors(inFactors, parmSeverityIndex);
             // todo(sku): optimize using globalGenerateNewClaimsInFirstPeriodOnly
             for (int period = 0; period < currentPeriod; period++) {
                 int periodOffset = currentPeriod - period;
                 List<GrossClaimRoot> grossClaimRoots = (List<GrossClaimRoot>) periodStore.get(GROSS_CLAIMS, -periodOffset);
                 if (grossClaimRoots != null) {
                     for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
-                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, null, false));
+                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, false));
                     }
                 }
             }
@@ -149,5 +156,21 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
 
     public void setGlobalGenerateNewClaimsInFirstPeriodOnly(boolean globalGenerateNewClaimsInFirstPeriodOnly) {
         this.globalGenerateNewClaimsInFirstPeriodOnly = globalGenerateNewClaimsInFirstPeriodOnly;
+    }
+
+    public PacketList<FactorsPacket> getInFactors() {
+        return inFactors;
+    }
+
+    public void setInFactors(PacketList<FactorsPacket> inFactors) {
+        this.inFactors = inFactors;
+    }
+
+    public ConstrainedString getParmSeverityIndex() {
+        return parmSeverityIndex;
+    }
+
+    public void setParmSeverityIndex(ConstrainedString parmSeverityIndex) {
+        this.parmSeverityIndex = parmSeverityIndex;
     }
 }

@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.domain.utils.DistributionType
 import org.pillarone.riskanalytics.domain.utils.DistributionModifier
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -20,9 +21,10 @@ class DynamicClaimsGenerator extends DynamicComposedComponent {
 //    /** needs to be connected only ...    */
 //    PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
 
-    PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket);
+    PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
+    PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket)
 
-    PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
 
     public ClaimsGenerator createDefaultSubComponent() {
         ClaimsGenerator newComponent = new ClaimsGenerator(
@@ -38,6 +40,7 @@ class DynamicClaimsGenerator extends DynamicComposedComponent {
 //        replicateInChannels this, 'inUnderwritingInfo'
 //        replicateInChannels this, 'inUnderwritingInfo'
 //        replicateInChannels this, 'inProbabilities'
+        replicateInChannels this, 'inFactors'
         replicateInChannels this, 'inPatterns'
         replicateOutChannels this, 'outClaims'
     }

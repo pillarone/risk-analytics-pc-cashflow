@@ -6,7 +6,7 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     private Boolean synchronizedPatterns;
 
-    private Factors factors = new Factors();
+    private FactorsPacket factors = new FactorsPacket();
     private double paidCumulatedIncludingAppliedFactors = 0d;
     private double reportedCumulatedIncludingAppliedFactors = 0d;
 
@@ -77,7 +77,7 @@ public final class GrossClaimRoot implements IClaimRoot {
         return getClaimCashflowPackets(periodCounter, null, hasUltimate);
     }
 
-    public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter, Factors factors, boolean hasUltimate) {
+    public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter, FactorsPacket factors, boolean hasUltimate) {
         List<ClaimCashflowPacket> currentPeriodClaims = new ArrayList<ClaimCashflowPacket>();
         // todo(sku): refactor to avoid code duplication
         if (hasSynchronizedPatterns()) {
@@ -137,9 +137,9 @@ public final class GrossClaimRoot implements IClaimRoot {
         return currentPeriodClaims;
     }
 
-    private double manageFactor(Factors factors, DateTime payoutDate) {
+    private double manageFactor(FactorsPacket factors, DateTime payoutDate) {
         if (factors == null) return 1d;
-        Double factor = factors.getFactorAtDate(payoutDate);
+        Double factor = factors.getFactorFloor(payoutDate);
         if (factor == null) {
             return 1d;
         }
@@ -217,17 +217,10 @@ public final class GrossClaimRoot implements IClaimRoot {
      * @param cashflowPacket
      */
     private void checkCorrectDevelopment(ClaimCashflowPacket cashflowPacket) {
-        // todo(msp): why is log level not working correctly?
         if (LOG.isDebugEnabled()) {
-//            developedUltimate = cashflowPacket.developedUltimate();
-//            cumulatedPaid += cashflowPacket.getPaidIncremental();
-            if (childCounter == payoutPattern.size()) {
+            if (childCounter == payoutPattern.size() & cashflowPacket.developedUltimate() != paidCumulatedIncludingAppliedFactors) {
                 LOG.debug("developed ultimate: " + cashflowPacket.developedUltimate());
                 LOG.debug("paid cumulated: " + paidCumulatedIncludingAppliedFactors);
-//                System.out.println("   developed ultimate: " + cashflowPacket.developedUltimate());
-//                System.out.println("   paid cumulated: " + paidCumulatedIncludingAppliedFactors);
-//                System.out.println("   reported cumulated: " + reportedCumulatedIncludingAppliedFactors);
-
             }
         }
     }

@@ -5,7 +5,7 @@ import org.joda.time.DateTime
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class FactorsTests extends GroovyTestCase {
+class FactorsPacketTests extends GroovyTestCase {
 
     public static final Double EPSILON = 1E-6
 
@@ -21,10 +21,10 @@ class FactorsTests extends GroovyTestCase {
     DateTime date20090427 = new DateTime(2009,4,27,0,0,0,0)
     DateTime date20100101 = new DateTime(2010,1,1,0,0,0,0)
 
-    Factors factors
+    FactorsPacket factors
 
     void setUp() {
-        factors = new Factors()
+        factors = new FactorsPacket()
         factors.add(date20010101, 100)
         factors.add(date20020101, 103)
         factors.add(date20030222, 104.51)

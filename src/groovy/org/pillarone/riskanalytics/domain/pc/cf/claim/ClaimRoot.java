@@ -30,7 +30,7 @@ public final class ClaimRoot implements IClaimRoot {
     private DateTime occurrenceDate;
 
 
-//    private Factors factors = new Factors();
+//    private FactorsPacket factors = new FactorsPacket();
 
     /** counts the currently existing ClaimCashflowPacket referencing this instance */
     private int childCounter;

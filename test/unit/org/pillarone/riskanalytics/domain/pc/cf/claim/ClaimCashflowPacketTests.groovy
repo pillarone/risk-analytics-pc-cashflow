@@ -5,7 +5,7 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -230,7 +230,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         DateTime occurrenceDate = date20110701
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
                 date20110418, occurrenceDate, payoutPattern, reportingPattern)
-        Factors factors = new Factors()
+        FactorsPacket factors = new FactorsPacket()
         factors.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(0)), 1.05)
         factors.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(1)), 1.15)
 

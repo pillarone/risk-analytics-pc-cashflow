@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.DynamicClaimsGen
 import org.pillarone.riskanalytics.domain.pc.cf.global.GlobalParameters
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.Pattern
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.Patterns
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Indices
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -17,20 +18,24 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.Patterns
 class NonLifeCashflowModel extends StochasticModel {
 
     GlobalParameters globalParameters
+    Indices indices
     Patterns patterns
     DynamicClaimsGenerator claimsGenerators
 
     @Override
     void initComponents() {
         globalParameters = new GlobalParameters()
+        indices = new Indices()
         patterns = new Patterns()
         claimsGenerators = new DynamicClaimsGenerator()
 
+        addStartComponent indices
         addStartComponent patterns
     }
 
     @Override
     void wireComponents() {
+        claimsGenerators.inFactors = indices.outFactors
         claimsGenerators.inPatterns = patterns.outPatterns
     }
 
@@ -52,9 +57,13 @@ class NonLifeCashflowModel extends StochasticModel {
         if (!patternLengths.isEmpty()) {
             for (ClaimsGenerator generator: claimsGenerators.componentList) {
                 Period period = patternLengths.get(generator.parmPayoutPattern?.stringValue)
-                maxPeriods = Period.months(Math.max(maxPeriods.months, period.months))
+                if (period != null) {
+                    maxPeriods = Period.months(Math.max(maxPeriods.months, period.months))
+                }
                 period = patternLengths.get(generator.parmReportingPattern?.stringValue)
-                maxPeriods = Period.months(Math.max(maxPeriods.months, period.months))
+                if (period != null) {
+                    maxPeriods = Period.months(Math.max(maxPeriods.months, period.months))
+                }
             }
         }
         return maxPeriods
