@@ -15,8 +15,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-// todo(sku): implement payout only
-// todo(sku): implement pattern shifts
 // todo(sku): clarify index application order and effect on reported
 public final class ClaimRoot implements IClaimRoot {
 
@@ -29,9 +27,6 @@ public final class ClaimRoot implements IClaimRoot {
     private DateTime exposureStartDate;
     private DateTime occurrenceDate;
 
-
-//    private FactorsPacket factors = new FactorsPacket();
-
     /** counts the currently existing ClaimCashflowPacket referencing this instance */
     private int childCounter;
 
@@ -39,20 +34,6 @@ public final class ClaimRoot implements IClaimRoot {
     private ISegmentMarker segment;
     private IReinsuranceContractMarker reinsuranceContract;
     private ILegalEntityMarker legalEntity;
-
-
-
-    public ClaimRoot(double ultimate, EventPacket event, ClaimType claimType, ExposureInfo exposureInfo,
-                     DateTime occurrenceDate) {
-        this(ultimate, event, claimType, exposureInfo.getDate(), occurrenceDate);
-        this.exposureInfo = exposureInfo;
-    }
-
-    public ClaimRoot(double ultimate, EventPacket event, ClaimType claimType, DateTime exposureStartDate,
-                     DateTime occurrenceDate) {
-        this(ultimate, claimType, exposureStartDate, occurrenceDate);
-        this.event = event;
-    }
 
     public ClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate) {
         this.ultimate = ultimate;

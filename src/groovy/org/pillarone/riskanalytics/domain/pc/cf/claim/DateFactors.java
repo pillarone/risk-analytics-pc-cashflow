@@ -3,11 +3,10 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 import org.joda.time.DateTime;
 
 /**
- * Helper class
+ * Helper class for PatternPacket users
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-// todo(sku): think! merge with FactorsPacket
 public class DateFactors {
 
     private DateTime date;
@@ -36,12 +35,12 @@ public class DateFactors {
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append(date);
-        result.append(SEPRATOR);
+        result.append(SEPARATOR);
         result.append(factorIncremental);
-        result.append(SEPRATOR);
+        result.append(SEPARATOR);
         result.append(factorCumulated);
         return result.toString();
     }
 
-    private static final String SEPRATOR = ", ";
+    private static final String SEPARATOR = ", ";
 }

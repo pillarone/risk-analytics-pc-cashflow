@@ -13,12 +13,12 @@ import java.util.*;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
+// todo(sku): implement pattern shifts (asynchron patterns)
 public class ClaimCashflowPacket extends MultiValuePacket {
 
     private static Log LOG = LogFactory.getLog(ClaimCashflowPacket.class);
 
-    // todo(sku): ask msp, should be final but setting it final is not possible with default c'tor
-    private IClaimRoot baseClaim;
+    private final IClaimRoot baseClaim;
 
     private double paidIncremental;
     private double paidCumulated;
@@ -30,11 +30,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private DateTime updateDate;
     private Integer updatePeriod;
 
+    /** true only if this packet belongs to the occurrence period of the claim */
     private boolean hasUltimate;
-
-    // c'tor required for DefaultResultStructureBuilder L124
-    public ClaimCashflowPacket() {
-    }
 
     /** todo(sku): safer c'tor required, currently used for ultimate modelling */
     public ClaimCashflowPacket(IClaimRoot baseClaim) {
@@ -60,10 +57,10 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     }
 
     /**
-     * Used to modify the packet date property according the persistence date. 
+     * Used to modify the packet date property according the persistence date on a cloned instance.
      * @param persistenceDate
      */
-    public ClaimCashflowPacket withDate(DateTime persistenceDate) {
+    private ClaimCashflowPacket withDate(DateTime persistenceDate) {
         ClaimCashflowPacket packet = (ClaimCashflowPacket) super.clone();
         packet.setDate(persistenceDate);
         return packet;
@@ -108,13 +105,9 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return updatePeriod;
     }
 
-    public ClaimCashflowPacket getClaimCashflow() {
-        return this;
-    }
-
     /**
      * Helper method to fill underwriting period channels
-     * @return
+     * @return a clone of the current instance with the date equal to the occurrence date
      */
     public ClaimCashflowPacket getClaimUnderwritingPeriod() {
         return withDate(baseClaim.getOccurrenceDate());
@@ -143,7 +136,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     @Override
     public Map<String, Number> getValuesToSave() throws IllegalAccessException {
         Map<String, Number> valuesToSave = new HashMap<String, Number>();
-        valuesToSave.put(ULTIMATE, ultimate());    // todo(sku): leads to failure during result tree building
+        valuesToSave.put(ULTIMATE, ultimate());    // this and missing default c'tor (final!) leads to failure during result tree building
         if (!baseClaim.hasTrivialPayout()) {
             valuesToSave.put(PAID, paidIncremental);
             valuesToSave.put(RESERVES, reserved());

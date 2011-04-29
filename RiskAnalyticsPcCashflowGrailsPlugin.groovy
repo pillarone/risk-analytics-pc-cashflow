@@ -14,16 +14,17 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
             "grails-app/views/error.gsp"
     ]
 
-    // TODO Fill in these fields
-    def author = "Your name"
-    def authorEmail = ""
-    def title = "Plugin summary/headline"
+    def author = "Intuitive Collaboration AG"
+    def authorEmail = "info (at) intuitive-collaboration (dot) com"
+    def title = "Property Casualty Library for Cashflow Models"
     def description = '''\\
-Brief description of the plugin.
 '''
 
     // URL to the plugin's documentation
-    def documentation = "http://grails.org/plugin/risk-analytics-pc-cashflow"
+    def documentation = "http://www.pillarone.org"
+
+    def groupId = "org.pillarone"
+
 
     def doWithWebDescriptor = { xml ->
         // TODO Implement additions to web.xml (optional), this event occurs before 

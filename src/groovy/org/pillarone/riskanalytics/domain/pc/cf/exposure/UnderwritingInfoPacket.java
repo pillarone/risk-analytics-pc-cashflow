@@ -26,15 +26,6 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
         super();
     }
 
-    public UnderwritingInfoPacket(double premium, double numberOfPolicies, double sumInsured, double maxSumInsured,
-                                  ExposureInfo exposure) {
-        this.premium = premium;
-        this.numberOfPolicies = numberOfPolicies;
-        this.sumInsured = sumInsured;
-        this.maxSumInsured = maxSumInsured;
-        this.exposure = exposure;
-    }
-
     /**
      * 
      * @param policyFactor

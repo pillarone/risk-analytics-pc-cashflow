@@ -4,6 +4,7 @@ import org.joda.time.DateTime
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
+import org.pillarone.riskanalytics.core.util.MathUtils
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -27,6 +28,8 @@ class IndexTests extends GroovyTestCase {
     }
 
     void testStochasticIndex() {
+        MathUtils.initRandomStreamBase(123)
+
         Index index = new Index(parmIndices: IndexStrategyType.getStrategy(IndexStrategyType.STOCHASTIC,
                         [startDate : date20110101, mean : 0.03, stDev: 0.2]))
         index.periodScope = TestPeriodScopeUtilities.getPeriodScope(date20110101, 5)
@@ -40,19 +43,19 @@ class IndexTests extends GroovyTestCase {
         index.doCalculation()
 
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2012-01-01", 1.033194119723, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1)), EPSILON
+        assertEquals "factor for 2012-01-01", 1.000028716181532, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1)), EPSILON
 
         index.reset()
         index.periodScope.prepareNextPeriod()
         index.doCalculation()
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2013-01-01", 1.1044607912822526, index.outFactors[0].getFactorAtDate(date20110101.plusYears(2)), EPSILON
+        assertEquals "factor for 2013-01-01", 1.1039751667482924, index.outFactors[0].getFactorAtDate(date20110101.plusYears(2)), EPSILON
 
         index.reset()
         index.periodScope.prepareNextPeriod()
         index.doCalculation()
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2014-01-01", 1.137382111927821, index.outFactors[0].getFactorAtDate(date20110101.plusYears(3)), EPSILON
+        assertEquals "factor for 2014-01-01", 1.1049224089826477, index.outFactors[0].getFactorAtDate(date20110101.plusYears(3)), EPSILON
     }
 
     void testDeterministicAnnualChange() {

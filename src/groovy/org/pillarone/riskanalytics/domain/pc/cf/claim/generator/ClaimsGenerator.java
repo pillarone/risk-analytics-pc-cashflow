@@ -56,10 +56,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
         developClaimsOfFormerPeriods(claims, periodCounter);
 
         outClaims.addAll(claims);
-        // todo(sku): replace with new SVP c'tor and inline adding and packet creation
-        SingleValuePacket numberOfClaims = new SingleValuePacket();
-        numberOfClaims.setValue(number);
-        outClaimNumber.add(numberOfClaims);
+        outClaimNumber.add(new SingleValuePacket(number));
     }
 
     /**
@@ -97,8 +94,8 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
         if (!periodScope.isFirstPeriod()) {
             int currentPeriod = periodScope.getCurrentPeriod();
             FactorsPacket factors = IndexUtils.filterFactors(inFactors, parmSeverityIndex);
-            // todo(sku): optimize using globalGenerateNewClaimsInFirstPeriodOnly
-            for (int period = 0; period < currentPeriod; period++) {
+            int latestFormerPeriodWithNewClaims = globalGenerateNewClaimsInFirstPeriodOnly ? 0 : currentPeriod - 1;
+            for (int period = 0; period <= latestFormerPeriodWithNewClaims; period++) {
                 int periodOffset = currentPeriod - period;
                 List<GrossClaimRoot> grossClaimRoots = (List<GrossClaimRoot>) periodStore.get(GROSS_CLAIMS, -periodOffset);
                 if (grossClaimRoots != null) {

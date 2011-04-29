@@ -55,7 +55,7 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
         setClaimsSizeGenerator(periodScope);
         setClaimNumberGenerator(periodScope);
         ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
-        return generateClaims(1, 1, claimType, periodScope);
+        return generateClaims(claimType, periodScope);
     }
 
     private void setClaimsSizeGenerator(PeriodScope periodScope) {

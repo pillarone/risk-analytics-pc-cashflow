@@ -58,10 +58,8 @@ public class PatternPacket extends Packet {
         return 0d;
     }
 
-    // todo(sku): cache result as function is used quite often
     public boolean hasSameCumulativePeriods(PatternPacket other) {
-        boolean synchronous = true;
-        synchronous = size() == other.size();
+        boolean synchronous = size() == other.size();
         for (int developmentPeriod = 0; synchronous && developmentPeriod < size(); developmentPeriod++) {
             synchronous = incrementMonths(developmentPeriod).equals(other.incrementMonths(developmentPeriod));
         }
@@ -69,18 +67,14 @@ public class PatternPacket extends Packet {
     }
 
     public List<DateFactors> getDateFactorsForCurrentPeriod(DateTime occurrenceDate, IPeriodCounter periodCounter) {
-            List<DateFactors> dateFactors = new ArrayList<DateFactors>();
-    //      todo(sku): avoid looping through complete pattern
-            for (int devPeriod = 0; devPeriod < cumulativeValues.size(); devPeriod++) {
-                DateTime date = occurrenceDate.plus(cumulativePeriods.get(devPeriod));
-    //                todo(sku): extend core plugin
-    //                if (periodCounter.belongsToCurrentPeriod(date)) {
-                if (!date.isBefore(periodCounter.getCurrentPeriodStart())
-                        && date.isBefore(periodCounter.getNextPeriodStart())) {
-                    dateFactors.add(new DateFactors(date, incrementFactor(devPeriod), cumulativeValues.get(devPeriod)));
-                }
+        List<DateFactors> dateFactors = new ArrayList<DateFactors>();       //      todo(sku): avoid looping through complete pattern
+        for (int devPeriod = 0; devPeriod < cumulativeValues.size(); devPeriod++) {
+            DateTime date = occurrenceDate.plus(cumulativePeriods.get(devPeriod));
+            if (periodCounter.belongsToCurrentPeriod(date)) {
+                dateFactors.add(new DateFactors(date, incrementFactor(devPeriod), cumulativeValues.get(devPeriod)));
             }
-            return dateFactors;
+        }
+        return dateFactors;
     }
 
     /**

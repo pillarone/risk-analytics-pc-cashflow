@@ -36,6 +36,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "one claim only", 1, claims.size()
         assertEquals "correct ultimate", 1000, claims[0].ultimate()
         assertEquals "#collected fields", 2, claims[0].valuesToSave.size()
+        println claims[0].toString()
     }
 
 //    NotImplementedException

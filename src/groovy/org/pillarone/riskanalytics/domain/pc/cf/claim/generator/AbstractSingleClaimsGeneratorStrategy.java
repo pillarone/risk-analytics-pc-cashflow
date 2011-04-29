@@ -30,6 +30,11 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
         return generateClaims(severityScalingFactor, numberOfClaims, claimType, periodScope);
     }
 
+    public List<ClaimRoot> generateClaims(ClaimType claimType, PeriodScope periodScope) {
+        int numberOfClaims = claimNumberGenerator.nextValue().intValue();
+        return generateClaims(1, numberOfClaims, claimType, periodScope);
+    }
+
     protected void setClaimNumberGenerator(RandomDistribution distribution, DistributionModified modifier) {
         String key = key(distribution, modifier);
         if (cachedClaimNumberGenerators.containsKey(key)) {
@@ -41,7 +46,7 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
     }
 
     protected void setClaimNumberGenerator(RandomDistribution distribution) {
-        setGenerator(distribution, DistributionModifier.getStrategy(DistributionModifier.NONE, null));
+        setClaimNumberGenerator(distribution, DistributionModifier.getStrategy(DistributionModifier.NONE, null));
     }
 
     protected final static String PRODUCE_CLAIM = "produceClaim";
