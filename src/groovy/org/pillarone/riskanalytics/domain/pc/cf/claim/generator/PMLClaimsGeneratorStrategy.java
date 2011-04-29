@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.*;
 import org.pillarone.riskanalytics.domain.utils.constraints.DoubleConstraints;
 
@@ -44,11 +45,17 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
         return parameters;
     }
 
-    public List<ClaimRoot> generateClaims(PeriodScope periodScope) {
+    /**
+     * @param uwInfos is ignored
+     * @param uwInfosFilterCriteria is ignored
+     * @param periodScope
+     * @return
+     */
+    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria, PeriodScope periodScope) {
         setClaimsSizeGenerator(periodScope);
         setClaimNumberGenerator(periodScope);
         ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
-        return generateClaims(1, claimType, periodScope);
+        return generateClaims(1, 1, claimType, periodScope);
     }
 
     private void setClaimsSizeGenerator(PeriodScope periodScope) {
@@ -88,7 +95,7 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
                 }
             }
 
-            // todo: refactor, makes no sense to introduce a TMDP, fill distributions directly
+            // todo(jwa): refactor, makes no sense to introduce a TMDP, fill distributions directly
             Map<String, TableMultiDimensionalParameter> parameters = new HashMap<String, TableMultiDimensionalParameter>();
             TableMultiDimensionalParameter table = new TableMultiDimensionalParameter(
                     Arrays.asList(observations, cumProbabilities),

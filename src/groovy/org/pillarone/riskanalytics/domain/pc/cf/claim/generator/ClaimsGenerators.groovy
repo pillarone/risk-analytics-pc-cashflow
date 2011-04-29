@@ -1,26 +1,27 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator
 
 import org.pillarone.riskanalytics.core.components.DynamicComposedComponent
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.core.packets.PacketList
-import org.pillarone.riskanalytics.domain.utils.DistributionType
-import org.pillarone.riskanalytics.domain.utils.DistributionModifier
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
+import org.pillarone.riskanalytics.domain.utils.DistributionModifier
+import org.pillarone.riskanalytics.domain.utils.DistributionType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class DynamicClaimsGenerator extends DynamicComposedComponent {
+class ClaimsGenerators extends DynamicComposedComponent {
 
-//    /** needs to be connected only if a none absolute base is selected    */
-//    PacketList<UnderwritingInfo> inUnderwritingInfo = new PacketList<UnderwritingInfo>(UnderwritingInfo.class);
 //    /** needs to be connected only if the claims generator was selected as target in a copula    */
 //    PacketList<DependenceStream> inProbabilities = new PacketList<DependenceStream>(DependenceStream.class);
 //    /** needs to be connected only ...    */
 //    PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
 
+    /** needs to be connected only if a none absolute base is selected    */
+    PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
     PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket)
 
@@ -37,9 +38,8 @@ class DynamicClaimsGenerator extends DynamicComposedComponent {
 
 
     public void wire() {
-//        replicateInChannels this, 'inUnderwritingInfo'
-//        replicateInChannels this, 'inUnderwritingInfo'
 //        replicateInChannels this, 'inProbabilities'
+        replicateInChannels this, 'inUnderwritingInfo'
         replicateInChannels this, 'inFactors'
         replicateInChannels this, 'inPatterns'
         replicateOutChannels this, 'outClaims'

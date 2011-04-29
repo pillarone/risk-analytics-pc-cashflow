@@ -6,6 +6,12 @@ components {
 	claimsGenerators {
 		subsubcomponents {
 			outClaims = "SINGLE"
+            outClaimNumber ="AGGREGATED"
+		}
+	}
+	underwritingSegments {
+		subsubcomponents {
+			outUnderwritingInfo = "AGGREGATED"
 		}
 	}
 }

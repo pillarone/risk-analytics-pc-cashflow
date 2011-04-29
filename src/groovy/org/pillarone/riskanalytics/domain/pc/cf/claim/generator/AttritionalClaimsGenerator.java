@@ -28,7 +28,7 @@ public class AttritionalClaimsGenerator extends Component implements IPerilMarke
 
     protected void doCalculation() {
         PeriodScope periodScope = simulationScope.getIterationScope().getPeriodScope();
-        List<ClaimRoot> baseClaims = ClaimsGeneratorUtils.generateClaims(parmDistribution, parmModification,
+        List<ClaimRoot> baseClaims = ClaimsGeneratorUtils.generateClaims(1, parmDistribution, parmModification,
                 ClaimType.ATTRITIONAL, periodScope);
         IPeriodCounter periodCounter = periodScope.getPeriodCounter();
         List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();

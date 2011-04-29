@@ -7,13 +7,13 @@ import org.pillarone.riskanalytics.core.packets.PacketList
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class SeverityIndices extends DynamicComposedComponent {
+class PolicyIndices extends DynamicComposedComponent {
 
     PacketList<FactorsPacket> outFactors = new PacketList<FactorsPacket>(FactorsPacket)
 
     @Override
     Component createDefaultSubComponent() {
-        SeverityIndex index = new SeverityIndex(parmIndices : IndexStrategyType.getDefault());
+        PolicyIndex index = new PolicyIndex(parmIndices : IndexStrategyType.getDefault());
         return index
     }
 

@@ -6,11 +6,12 @@ import org.pillarone.riskanalytics.core.model.StochasticModel
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.LimitedContinuousPeriodCounter
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.DynamicClaimsGenerator
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerators
 import org.pillarone.riskanalytics.domain.pc.cf.global.GlobalParameters
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.Pattern
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.Patterns
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Indices
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingSegments
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -20,14 +21,16 @@ class NonLifeCashflowModel extends StochasticModel {
     GlobalParameters globalParameters
     Indices indices
     Patterns patterns
-    DynamicClaimsGenerator claimsGenerators
+    UnderwritingSegments underwritingSegments
+    ClaimsGenerators claimsGenerators
 
     @Override
     void initComponents() {
         globalParameters = new GlobalParameters()
+        underwritingSegments = new UnderwritingSegments()
         indices = new Indices()
         patterns = new Patterns()
-        claimsGenerators = new DynamicClaimsGenerator()
+        claimsGenerators = new ClaimsGenerators()
 
         addStartComponent indices
         addStartComponent patterns
@@ -35,15 +38,17 @@ class NonLifeCashflowModel extends StochasticModel {
 
     @Override
     void wireComponents() {
+        underwritingSegments.inFactors = indices.outFactors
         claimsGenerators.inFactors = indices.outFactors
         claimsGenerators.inPatterns = patterns.outPatterns
+        claimsGenerators.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
     }
 
     @Override
     IPeriodCounter createPeriodCounter(DateTime beginOfFirstPeriod) {
         Period developmentPeriod = lastPatternPeriod()
         int numberOfYears = Math.max(1, Math.ceil(developmentPeriod.months / 12d) + 1)
-        return new LimitedContinuousPeriodCounter(new DateTime(2011,1,1,0,0,0,0), Period.years(1), numberOfYears)
+        return new LimitedContinuousPeriodCounter(globalParameters.parmProjectionStartDate, Period.years(1), numberOfYears)
     }
 
     private Period lastPatternPeriod() {

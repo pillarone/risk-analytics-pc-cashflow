@@ -3,7 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.RandomDistribution;
 
 import java.util.List;
@@ -27,9 +27,9 @@ public class OccurrenceFrequencySeverityClaimsGeneratorStrategy extends Frequenc
     }
 
 
-    public List<ClaimRoot> generateClaims(PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria, PeriodScope periodScope) {
         setDateGenerator(occurrenceDistribution);
-        return super.generateClaims(periodScope);
+        return super.generateClaims(uwInfos, uwInfosFilterCriteria, periodScope);
     }
 
 }

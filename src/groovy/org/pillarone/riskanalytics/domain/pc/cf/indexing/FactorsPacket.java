@@ -2,10 +2,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.indexing;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.packets.Packet;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 

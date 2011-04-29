@@ -5,6 +5,9 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.utils.*;
 
 import java.util.ArrayList;
@@ -21,12 +24,15 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     private IRandomNumberGenerator claimSizeGenerator;
     protected IRandomNumberGenerator dateGenerator = RandomNumberGeneratorFactory.getUniformGenerator();
 
-    public List<ClaimRoot> generateClaims(double scaleFactor, ClaimType claimType, PeriodScope periodScope) {
-        return generateClaims(scaleFactor, claimType, periodScope);
+    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                          ExposureBase severityBase, ClaimType claimType, PeriodScope periodScope) {
+        double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
+        return generateClaims(severityScalingFactor, 1, claimType, periodScope);
     }
 
     protected List<ClaimRoot> generateClaims(double scaleFactor, int claimNumber, ClaimType claimType, PeriodScope periodScope) {
-        return ClaimsGeneratorUtils.generateClaims(claimSizeGenerator, dateGenerator, claimNumber, claimType, periodScope);
+        return ClaimsGeneratorUtils.generateClaims(scaleFactor, claimSizeGenerator, dateGenerator, claimNumber,
+                claimType, periodScope);
     }
 
     protected List<ClaimRoot> getClaims(List<Double> claimValues, ClaimType claimType, PeriodScope periodScope) {
@@ -63,13 +69,6 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
         return String.valueOf(distribution.hashCode()) + String.valueOf(modifier.hashCode());
     }
 
-//    public List<ClaimRoot> generateClaims(double scaleFactor, List<EventPacket> events) {
-//        return null;  //To change body of implemented methods use File | Settings | File Templates.
-//    }
-
-//    public double calculateScaleFactor(List<UnderwritingInfo> underwritingInfos, ExposureBase scales) {
-//
-//    }
 
     protected final static String CLAIMS_SIZE_BASE = "claimsSizeBase";
     protected final static String CLAIMS_SIZE_DISTRIBUTION = "claimsSizeDistribution";

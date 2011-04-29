@@ -3,10 +3,14 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.packets.SingleValuePacket;
+import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.IUnderwritingInfoMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.ISeverityIndexMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
@@ -16,6 +20,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,32 +34,46 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
 
     private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     private PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket.class);
+    private PacketList<UnderwritingInfoPacket> inUnderwritingInfo
+            = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+
     private PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    private PacketList<SingleValuePacket> outClaimNumber = new PacketList<SingleValuePacket>(SingleValuePacket.class);
 
     // attritional, frequency average attritional, ...
     private ConstrainedString parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker.class, "");
     private ConstrainedString parmReportingPattern = new ConstrainedString(IReportingPatternMarker.class, "");
     private ConstrainedString parmSeverityIndex = new ConstrainedString(ISeverityIndexMarker.class, "");
+    private ComboBoxTableMultiDimensionalParameter parmUnderwritingInformation = new ComboBoxTableMultiDimensionalParameter(
+            Arrays.asList(""), Arrays.asList("Underwriting Information"), IUnderwritingInfoMarker.class);
     private IClaimsGeneratorStrategy parmClaimsModel = ClaimsGeneratorType.getDefault();
-
-    // period store key
-    private static final String GROSS_CLAIMS = "gross claims root";
-
 
     protected void doCalculation() {
         List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
         IPeriodCounter periodCounter = periodScope.getPeriodCounter();
 
-        generateClaimsOfCurrentPeriod(claims, periodCounter);
+        int number = generateClaimsOfCurrentPeriod(claims, periodCounter);
         developClaimsOfFormerPeriods(claims, periodCounter);
 
         outClaims.addAll(claims);
+        // todo(sku): replace with new SVP c'tor and inline adding and packet creation
+        SingleValuePacket numberOfClaims = new SingleValuePacket();
+        numberOfClaims.setValue(number);
+        outClaimNumber.add(numberOfClaims);
     }
 
-    private void generateClaimsOfCurrentPeriod(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter) {
-        if (globalGenerateNewClaimsInFirstPeriodOnly && periodScope.isFirstPeriod()
-            || !globalGenerateNewClaimsInFirstPeriodOnly) {
-            List<ClaimRoot> baseClaims = parmClaimsModel.generateClaims(periodScope);
+    /**
+     * @param claims
+     * @param periodCounter
+     * @return  number of claims
+     */
+    private int generateClaimsOfCurrentPeriod(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter) {
+        if (globalGenerateNewClaimsInFirstPeriodOnly
+                && periodScope.isFirstPeriod()
+                || !globalGenerateNewClaimsInFirstPeriodOnly) {
+            List uwFilterCriteria = parmUnderwritingInformation.getValuesAsObjects();
+            // a nominal ultimate is generated, therefore no factors are applied
+            List<ClaimRoot> baseClaims = parmClaimsModel.generateClaims(inUnderwritingInfo, uwFilterCriteria, periodScope);
 
             PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern);
             PatternPacket reportingPattern = PatternUtils.filterPattern(inPatterns, parmReportingPattern);
@@ -69,7 +88,9 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
                 claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, true));
             }
             periodStore.put(GROSS_CLAIMS, grossClaimRoots);
+            return grossClaimRoots.size();
         }
+        return 0;
     }
 
     private void developClaimsOfFormerPeriods(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter) {
@@ -88,6 +109,9 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
             }
         }
     }
+
+    // period store key
+    private static final String GROSS_CLAIMS = "gross claims root";
 
 
     public IClaimsGeneratorStrategy getParmClaimsModel() {
@@ -172,5 +196,29 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
 
     public void setParmSeverityIndex(ConstrainedString parmSeverityIndex) {
         this.parmSeverityIndex = parmSeverityIndex;
+    }
+
+    public PacketList<UnderwritingInfoPacket> getInUnderwritingInfo() {
+        return inUnderwritingInfo;
+    }
+
+    public void setInUnderwritingInfo(PacketList<UnderwritingInfoPacket> inUnderwritingInfo) {
+        this.inUnderwritingInfo = inUnderwritingInfo;
+    }
+
+    public ComboBoxTableMultiDimensionalParameter getParmUnderwritingInformation() {
+        return parmUnderwritingInformation;
+    }
+
+    public void setParmUnderwritingInformation(ComboBoxTableMultiDimensionalParameter parmUnderwritingInformation) {
+        this.parmUnderwritingInformation = parmUnderwritingInformation;
+    }
+
+    public PacketList<SingleValuePacket> getOutClaimNumber() {
+        return outClaimNumber;
+    }
+
+    public void setOutClaimNumber(PacketList<SingleValuePacket> outClaimNumber) {
+        this.outClaimNumber = outClaimNumber;
     }
 }

@@ -5,10 +5,24 @@ package models.nonLifeCashflow
  */
 model = NonLifeCashflowModel
 displayName = "Claims"
-language = "en"
 
 mappings = {
     NonLifeCashflow {
+        "grossClaims" {
+            "[%claimsGenerator%]" {
+                "ultimate" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:ultimate"
+                "reported" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:reportedIncremental"
+                "paid" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:paidIncremental"
+                "outstanding" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:outstanding"
+                "IBNR" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:IBNR"
+                "reserves" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:reserves"
+                "developedResult" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:developedResult"
+                "numberOfClaims" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaimNumber:value"
+            }
+        }
+        "grossUnderwriting" {
+            "[%underwritingSegment%]" "NonLifeCashflow:underwritingSegments:[%underwritingSegment%]:outUnderwritingInfo:premium"
+        }
         "claims" {
             "ultimate" "NonLifeCashflow:claimsGenerators:outClaims:ultimate", {
                 "[%claimsGenerator%]" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:ultimate"
@@ -31,17 +45,10 @@ mappings = {
             "developedResult" "NonLifeCashflow:claimsGenerators:outClaims:developedResult", {
                 "[%claimsGenerator%]" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:developedResult"
             }
-        }
-        "gross claims" {
-            "[%claimsGenerator%]" {
-                "ultimate" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:ultimate"
-                "reported" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:reportedIncremental"
-                "paid" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:paidIncremental"
-                "outstanding" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:outstanding"
-                "IBNR" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:IBNR"
-                "reserves" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:reserves"
-                "developedResult" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:developedResult"
+            "numberOfClaims" {
+                "[%claimsGenerator%]" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaimNumber:value"
             }
         }
+
     }
 }

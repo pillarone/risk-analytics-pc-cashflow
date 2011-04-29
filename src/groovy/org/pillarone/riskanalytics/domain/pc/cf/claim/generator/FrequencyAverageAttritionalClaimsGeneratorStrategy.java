@@ -5,7 +5,12 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase;
-import org.pillarone.riskanalytics.domain.utils.*;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.utils.DistributionModified;
+import org.pillarone.riskanalytics.domain.utils.IRandomNumberGenerator;
+import org.pillarone.riskanalytics.domain.utils.RandomDistribution;
+import org.pillarone.riskanalytics.domain.utils.RandomNumberGeneratorFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,16 +38,18 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
     }
 
 
-    public List<ClaimRoot> generateClaims(PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria, PeriodScope periodScope) {
+        double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, claimsSizeBase, uwInfosFilterCriteria);
+        double frequencyFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, frequencyBase, uwInfosFilterCriteria);
         IRandomNumberGenerator frequencyGenerator = RandomNumberGeneratorFactory.getGenerator(frequencyDistribution, frequencyModification);
         IRandomNumberGenerator claimsSizeGenerator = RandomNumberGeneratorFactory.getGenerator(claimsSizeDistribution, claimsSizeModification);
-        int numberOfClaims = frequencyGenerator.nextValue().intValue();
+        int numberOfClaims = (int) (frequencyGenerator.nextValue().intValue() * frequencyFactor);
         double claimValue = 0;
         for (int i = 0; i < numberOfClaims; i++) {
             claimValue += claimsSizeGenerator.nextValue().doubleValue();
         }
         List<Double> claimValues = new ArrayList<Double>();
-        claimValues.add(claimValue);
+        claimValues.add(claimValue * severityScalingFactor);
         return getClaims(claimValues, ClaimType.ATTRITIONAL, periodScope);
     }
 

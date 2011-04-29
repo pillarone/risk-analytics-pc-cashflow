@@ -3,7 +3,10 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.utils.*;
 
 import java.util.HashMap;
@@ -18,9 +21,13 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
     private Map<String, IRandomNumberGenerator> cachedClaimNumberGenerators = new HashMap<String, IRandomNumberGenerator>();
     private IRandomNumberGenerator claimNumberGenerator;
 
-    public List<ClaimRoot> generateClaims(double scaleFactor, ClaimType claimType, PeriodScope periodScope) {
-        int numberOfClaims = claimNumberGenerator.nextValue().intValue();
-        return generateClaims(scaleFactor, numberOfClaims, claimType, periodScope);
+    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                          ExposureBase severityBase, FrequencyBase frequencyBase, ClaimType claimType,
+                                          PeriodScope periodScope) {
+        double frequencyScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, frequencyBase, uwInfosFilterCriteria);
+        int numberOfClaims = (int) (claimNumberGenerator.nextValue().intValue() * frequencyScalingFactor);
+        double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
+        return generateClaims(severityScalingFactor, numberOfClaims, claimType, periodScope);
     }
 
     protected void setClaimNumberGenerator(RandomDistribution distribution, DistributionModified modifier) {

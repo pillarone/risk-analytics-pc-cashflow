@@ -5,9 +5,9 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.DistributionModified;
 import org.pillarone.riskanalytics.domain.utils.RandomDistribution;
 
@@ -45,11 +45,11 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
     }
 
 
-    public List<ClaimRoot> generateClaims(PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria, PeriodScope periodScope) {
         setGenerator(claimsSizeDistribution, claimsSizeModification);
         setClaimNumberGenerator(frequencyDistribution, frequencyModification);
         ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
-        return generateClaims(1, claimType, periodScope);
+        return generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, frequencyBase, claimType, periodScope);
     }
 
 }
