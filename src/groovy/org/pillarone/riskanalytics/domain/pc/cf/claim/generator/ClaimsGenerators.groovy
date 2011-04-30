@@ -7,8 +7,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
-import org.pillarone.riskanalytics.domain.utils.DistributionModifier
-import org.pillarone.riskanalytics.domain.utils.DistributionType
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

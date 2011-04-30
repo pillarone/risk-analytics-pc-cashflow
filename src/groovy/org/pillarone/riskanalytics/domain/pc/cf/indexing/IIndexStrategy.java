@@ -1,6 +1,5 @@
 package org.pillarone.riskanalytics.domain.pc.cf.indexing;
 
-import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 

@@ -1,6 +1,5 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator
 
-
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.core.components.PeriodStore
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
@@ -9,10 +8,13 @@ import org.pillarone.riskanalytics.core.parameterization.TableMultiDimensionalPa
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.pillarone.riskanalytics.core.util.MathUtils
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType
-import org.pillarone.riskanalytics.domain.utils.constraints.DoubleConstraints
-import org.pillarone.riskanalytics.domain.utils.randomnumbers.UniformDoubleList
+import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution
 import umontreal.iro.lecuyer.rng.RandomStreamBase
-import org.pillarone.riskanalytics.domain.utils.*
+import org.pillarone.riskanalytics.domain.utils.math.randomnumber.UniformDoubleList
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -43,7 +45,7 @@ class PMLClaimsGeneratorStrategyTests extends GroovyTestCase {
         MathUtils.initRandomStreamBase(1531)
         RandomStreamBase referenceStream = MathUtils.getRandomStream(MathUtils.getRandomStreamBase(), 0).clone()
         List<Double> randomNumbers = UniformDoubleList.getDoubles((int) 300, false, referenceStream);
-        RandomDistribution poissonDist = (RandomDistribution) FrequencyDistributionType.getStrategy(FrequencyDistributionType.POISSON,
+        RandomDistribution poissonDist = (RandomDistribution) DistributionType.getStrategy(DistributionType.POISSON,
                 new HashMap<String, Double>() {
                     {
                         put("lambda", 10);
@@ -82,7 +84,7 @@ class PMLClaimsGeneratorStrategyTests extends GroovyTestCase {
         MathUtils.initRandomStreamBase(1731)
         RandomStreamBase referenceStream = MathUtils.getRandomStream(MathUtils.getRandomStreamBase(), 0).clone()
         List<Double> randomNumbers = UniformDoubleList.getDoubles((int) 300, false, referenceStream);
-        RandomDistribution poissonDist = (RandomDistribution) FrequencyDistributionType.getStrategy(FrequencyDistributionType.POISSON,
+        RandomDistribution poissonDist = (RandomDistribution) DistributionType.getStrategy(DistributionType.POISSON,
                 new HashMap<String, Double>() {
                     {put("lambda", 10);}
                 });
@@ -120,7 +122,7 @@ class PMLClaimsGeneratorStrategyTests extends GroovyTestCase {
         MathUtils.initRandomStreamBase(1031)
         RandomStreamBase referenceStream = MathUtils.getRandomStream(MathUtils.getRandomStreamBase(), 0).clone()
         List<Double> randomNumbers = UniformDoubleList.getDoubles((int) 300, false, referenceStream);
-        RandomDistribution poissonDist = (RandomDistribution) FrequencyDistributionType.getStrategy(FrequencyDistributionType.POISSON,
+        RandomDistribution poissonDist = (RandomDistribution) DistributionType.getStrategy(DistributionType.POISSON,
                 new HashMap<String, Double>() {
                     {
                         put("lambda", 1 / 0.1d);
@@ -163,7 +165,7 @@ class PMLClaimsGeneratorStrategyTests extends GroovyTestCase {
         MathUtils.initRandomStreamBase(5031)
         RandomStreamBase referenceStream = MathUtils.getRandomStream(MathUtils.getRandomStreamBase(), 0).clone()
         List<Double> randomNumbers = UniformDoubleList.getDoubles((int) 300, false, referenceStream);
-        RandomDistribution poissonDist = (RandomDistribution) FrequencyDistributionType.getStrategy(FrequencyDistributionType.POISSON,
+        RandomDistribution poissonDist = (RandomDistribution) DistributionType.getStrategy(DistributionType.POISSON,
                 new HashMap<String, Double>() {
                     {
                         put("lambda", 1 / 0.1d - 1 / 1.5);
@@ -207,7 +209,7 @@ class PMLClaimsGeneratorStrategyTests extends GroovyTestCase {
         MathUtils.initRandomStreamBase(1037)
         RandomStreamBase referenceStream = MathUtils.getRandomStream(MathUtils.getRandomStreamBase(), 0).clone()
         List<Double> randomNumbers = UniformDoubleList.getDoubles((int) 300, false, referenceStream);
-        RandomDistribution poissonDist = (RandomDistribution) FrequencyDistributionType.getStrategy(FrequencyDistributionType.POISSON,
+        RandomDistribution poissonDist = (RandomDistribution) DistributionType.getStrategy(DistributionType.POISSON,
                 new HashMap<String, Double>() {
                     {
                         put("lambda", 1 / 0.01d);
@@ -248,7 +250,7 @@ class PMLClaimsGeneratorStrategyTests extends GroovyTestCase {
         MathUtils.initRandomStreamBase(10037)
         RandomStreamBase referenceStream = MathUtils.getRandomStream(MathUtils.getRandomStreamBase(), 0).clone()
         List<Double> randomNumbers = UniformDoubleList.getDoubles((int) 300, false, referenceStream);
-        RandomDistribution poissonDist = (RandomDistribution) FrequencyDistributionType.getStrategy(FrequencyDistributionType.POISSON,
+        RandomDistribution poissonDist = (RandomDistribution) DistributionType.getStrategy(DistributionType.POISSON,
                 new HashMap<String, Double>() {
                     {
                         put("lambda", 1 / 0.01d);
@@ -288,7 +290,7 @@ class PMLClaimsGeneratorStrategyTests extends GroovyTestCase {
         MathUtils.initRandomStreamBase(81031)
         RandomStreamBase referenceStream = MathUtils.getRandomStream(MathUtils.getRandomStreamBase(), 0).clone()
         List<Double> randomNumbers = UniformDoubleList.getDoubles((int) 300, false, referenceStream);
-        RandomDistribution poissonDist = (RandomDistribution) FrequencyDistributionType.getStrategy(FrequencyDistributionType.POISSON,
+        RandomDistribution poissonDist = (RandomDistribution) DistributionType.getStrategy(DistributionType.POISSON,
                 new HashMap<String, Double>() {
                     {put("lambda", 1 / 0.1d);}
                 });

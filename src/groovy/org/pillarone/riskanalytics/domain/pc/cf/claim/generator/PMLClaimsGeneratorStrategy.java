@@ -11,7 +11,11 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.*;
-import org.pillarone.riskanalytics.domain.utils.constraints.DoubleConstraints;
+import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
 
 import java.util.*;
 
@@ -133,7 +137,7 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
             }
             Map<String, Double> lambdaParam = new HashMap<String, Double>();
             lambdaParam.put("lambda", lambda);
-            frequencyDistribution.put(currentPeriod, FrequencyDistributionType.getStrategy(FrequencyDistributionType.POISSON, lambdaParam));
+            frequencyDistribution.put(currentPeriod, DistributionType.getStrategy(DistributionType.POISSON, lambdaParam));
         }
     }
 }

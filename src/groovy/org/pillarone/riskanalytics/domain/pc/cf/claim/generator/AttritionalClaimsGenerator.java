@@ -7,7 +7,10 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
-import org.pillarone.riskanalytics.domain.utils.*;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +23,7 @@ public class AttritionalClaimsGenerator extends Component implements IPerilMarke
 
     private SimulationScope simulationScope;
 
-    private RandomDistribution parmDistribution = DistributionType.getStrategy(ClaimSizeDistributionType.CONSTANT,
+    private RandomDistribution parmDistribution = DistributionType.getStrategy(DistributionType.CONSTANT,
             ArrayUtils.toMap(new Object[][]{{"constant", 0d}}));
     private DistributionModified parmModification = DistributionModifier.getStrategy(DistributionModifier.NONE, new HashMap());
 

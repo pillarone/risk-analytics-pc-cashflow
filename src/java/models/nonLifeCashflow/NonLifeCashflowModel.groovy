@@ -7,11 +7,11 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.LimitedContinuousPeriodCounter
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerators
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingSegments
 import org.pillarone.riskanalytics.domain.pc.cf.global.GlobalParameters
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Indices
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.Pattern
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.Patterns
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.Indices
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingSegments
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

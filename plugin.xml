@@ -1,0 +1,16 @@
+<plugin name='risk-analytics-pc-cashflow' version='0.1' grailsVersion='1.3.7 &gt; *'>
+  <author>Intuitive Collaboration AG</author>
+  <authorEmail>info (at) intuitive-collaboration (dot) com</authorEmail>
+  <title>Property Casualty Library for Cashflow Models</title>
+  <description>\
+</description>
+  <documentation>http://www.pillarone.org</documentation>
+  <resources>
+    <resource>BuildConfig</resource>
+    <resource>Config</resource>
+    <resource>DataSource</resource>
+    <resource>UrlMappings</resource>
+  </resources>
+  <dependencies />
+  <behavior />
+</plugin>

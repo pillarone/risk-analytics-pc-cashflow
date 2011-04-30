@@ -8,8 +8,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.utils.DistributionModified;
-import org.pillarone.riskanalytics.domain.utils.RandomDistribution;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
 
 import java.util.HashMap;
 import java.util.List;

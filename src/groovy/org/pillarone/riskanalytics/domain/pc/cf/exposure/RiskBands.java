@@ -15,7 +15,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.IPolicyIndexMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IPremiumIndexMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
-import org.pillarone.riskanalytics.domain.utils.constraints.DoubleConstraints;
+import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints;
 
 import java.util.ArrayList;
 import java.util.Arrays;

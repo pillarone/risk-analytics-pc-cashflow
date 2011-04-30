@@ -3,20 +3,16 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObjectClassifier
-import org.pillarone.riskanalytics.core.parameterization.IParameterObject
-import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
-import org.pillarone.riskanalytics.domain.utils.DistributionModified
-import org.pillarone.riskanalytics.domain.utils.DistributionModifier
-import org.pillarone.riskanalytics.domain.utils.DistributionType
-import org.pillarone.riskanalytics.domain.utils.RandomDistribution
 
+import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase
-import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType
-import org.pillarone.riskanalytics.domain.utils.constraints.DoubleConstraints
-import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
-import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
+import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution
+import org.pillarone.riskanalytics.core.parameterization.*
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

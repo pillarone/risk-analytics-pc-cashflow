@@ -1,6 +1,5 @@
 package org.pillarone.riskanalytics.domain.pc.cf.indexing;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Period;

@@ -7,10 +7,11 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
-import org.pillarone.riskanalytics.domain.utils.DistributionModified;
-import org.pillarone.riskanalytics.domain.utils.IRandomNumberGenerator;
-import org.pillarone.riskanalytics.domain.utils.RandomDistribution;
-import org.pillarone.riskanalytics.domain.utils.RandomNumberGeneratorFactory;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
+import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
+import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
+
 
 import java.util.ArrayList;
 import java.util.List;
