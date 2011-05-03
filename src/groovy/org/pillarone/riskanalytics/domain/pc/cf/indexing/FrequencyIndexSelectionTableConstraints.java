@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.indexing;
 
+import org.joda.time.DateTime;
+
 import java.util.Arrays;
 
 /**
@@ -14,17 +16,13 @@ public class FrequencyIndexSelectionTableConstraints extends IndexSelectionTable
     }
 
     public Class getColumnType(int column) {
-        return Arrays.asList(IFrequencyIndexMarker.class, IndexMode.class, BaseDateMode.class).get(column);
+        return Arrays.asList(IFrequencyIndexMarker.class, IndexMode.class, BaseDateMode.class, DateTime.class).get(column);
     }
 
     public Integer getColumnIndex(Class marker) {
         if (IFrequencyIndexMarker.class.isAssignableFrom(marker)) {
             return 0;
-        } else if (IndexMode.class.isAssignableFrom(marker)) {
-            return 1;
-        } else if (BaseDateMode.class.isAssignableFrom(marker)) {
-            return 2;
         }
-        return null;
+        return super.getColumnIndex(marker);
     }
 }

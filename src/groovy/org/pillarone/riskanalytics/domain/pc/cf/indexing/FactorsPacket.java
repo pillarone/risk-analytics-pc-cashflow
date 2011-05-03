@@ -50,10 +50,10 @@ public class FactorsPacket extends Packet {
             return floorEntry.getValue();
         } else if (ceilingEntry == null) {
             ceilingEntry = floorEntry;
-            floorEntry = factorsPerDate.floorEntry(date.minusDays(1));
+            floorEntry = factorsPerDate.floorEntry(floorEntry.getKey().minusDays(1));
         } else if (floorEntry == null) {
             floorEntry = ceilingEntry;
-            ceilingEntry = factorsPerDate.higherEntry(date);
+            ceilingEntry = factorsPerDate.ceilingEntry(floorEntry.getKey().plusDays(1));
         }
         double elapsedTime = Days.daysBetween(floorEntry.getKey(), date).getDays();
         double keyDifference = Days.daysBetween(floorEntry.getKey(), ceilingEntry.getKey()).getDays();
