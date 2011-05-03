@@ -18,10 +18,18 @@ mappings = {
                 "reserves" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:reserves"
                 "developedResult" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:developedResult"
                 "numberOfClaims" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaimNumber:value"
+                "severityIndices" {
+                    "continuous" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outSeverityIndexApplied:continuous"
+                    "stepwise, previous" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outSeverityIndexApplied:stepwisePrevious"
+                    "stepwise, next" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outSeverityIndexApplied:stepwiseNext"
+                }
             }
         }
-        "grossUnderwriting" {
-            "[%underwritingSegment%]" "NonLifeCashflow:underwritingSegments:[%underwritingSegment%]:outUnderwritingInfo:premium"
+        "grossUnderwritingPremium" "NonLifeCashflow:underwritingSegments:outUnderwritingInfo:premium", {
+            "[%underwritingSegment%]" "NonLifeCashflow:underwritingSegments:[%underwritingSegment%]:outUnderwritingInfo:premium", {
+                "policyIndex" "NonLifeCashflow:underwritingSegments:[%underwritingSegment%]:outPolicyIndexApplied:value"
+                "premiumIndex" "NonLifeCashflow:underwritingSegments:[%underwritingSegment%]:outPremiumIndexApplied:value"
+            }
         }
         "claims" {
             "ultimate" "NonLifeCashflow:claimsGenerators:outClaims:ultimate", {
