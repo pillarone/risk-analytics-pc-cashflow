@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -14,12 +15,17 @@ public class Index extends Component {
     private PeriodScope periodScope;
 
     private PacketList<FactorsPacket> outFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
+    private PacketList<IndexPacket> outIndices = new PacketList<IndexPacket>(IndexPacket.class);
 
     private IIndexStrategy parmIndices = IndexStrategyType.getStrategy(IndexStrategyType.TRIVIAL, Collections.emptyMap());
     
     @Override
     protected void doCalculation() {
-        outFactors.addAll(parmIndices.getFactors(periodScope, this));
+        List<FactorsPacket> factors = parmIndices.getFactors(periodScope, this);
+        outFactors.addAll(factors);
+        if (this.isSenderWired(outIndices)) {
+            outIndices.add(new IndexPacket(factors, periodScope.getCurrentPeriodStartDate()));
+        }
     }
 
     public PeriodScope getPeriodScope() {
@@ -44,5 +50,13 @@ public class Index extends Component {
 
     public void setParmIndices(IIndexStrategy parmIndices) {
         this.parmIndices = parmIndices;
+    }
+
+    public PacketList<IndexPacket> getOutIndices() {
+        return outIndices;
+    }
+
+    public void setOutIndices(PacketList<IndexPacket> outIndices) {
+        this.outIndices = outIndices;
     }
 }

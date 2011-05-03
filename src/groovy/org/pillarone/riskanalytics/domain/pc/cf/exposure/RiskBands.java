@@ -4,21 +4,20 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.IterationStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.packets.SingleValuePacket;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.parameterization.TableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.IPolicyIndexMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.IPremiumIndexMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,9 +40,16 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
     private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfo
             = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    private PacketList<SingleValuePacket> outPolicyIndexApplied = new PacketList<SingleValuePacket>(SingleValuePacket.class);
+    private PacketList<SingleValuePacket> outPremiumIndexApplied = new PacketList<SingleValuePacket>(SingleValuePacket.class);
 
-    private ConstrainedString parmPolicyIndex = new ConstrainedString(IPolicyIndexMarker.class, "");
-    private ConstrainedString parmPremiumIndex = new ConstrainedString(IPremiumIndexMarker.class, "");
+    private ConstrainedMultiDimensionalParameter parmPoliciesIndices = new ConstrainedMultiDimensionalParameter(
+            Collections.emptyList(), PolicyIndexSelectionTableConstraints.COLUMN_TITLES,
+            ConstraintsFactory.getConstraints(PolicyIndexSelectionTableConstraints.IDENTIFIER));
+    private ConstrainedMultiDimensionalParameter parmPremiumIndices = new ConstrainedMultiDimensionalParameter(
+            Collections.emptyList(), PremiumIndexSelectionTableConstraints.COLUMN_TITLES,
+            ConstraintsFactory.getConstraints(PremiumIndexSelectionTableConstraints.IDENTIFIER));
+
     private TableMultiDimensionalParameter parmUnderwritingInformation = new ConstrainedMultiDimensionalParameter(
             GroovyUtils.convertToListOfList(new Object[]{0d, 0d, 0d, 0d}), TABLE_COLUMN_TITLES,
             ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER));
@@ -56,17 +62,23 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
         List<UnderwritingInfoPacket> underwritingInfos = (List<UnderwritingInfoPacket>) iterationStore.get(UNDERWRITING_INFOS);
 
         DateTime currentPeriodStartDate = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
-        FactorsPacket policyFactors = IndexUtils.filterFactors(inFactors, parmPolicyIndex);
-        FactorsPacket premiumFactors = IndexUtils.filterFactors(inFactors, parmPremiumIndex);
+        List<Factors> policyFactors = IndexUtils.filterFactors(inFactors, parmPoliciesIndices);
+        List<Factors> premiumFactors = IndexUtils.filterFactors(inFactors, parmPremiumIndices);
         if (policyFactors == null && premiumFactors == null) {
             outUnderwritingInfo.addAll(underwritingInfos);
         }
         else {
-            Double policyFactor = factor(currentPeriodStartDate, policyFactors);
-            Double premiumFactor = factor(currentPeriodStartDate, premiumFactors);
+            Double policyFactor = IndexUtils.aggregateFactor(policyFactors, currentPeriodStartDate);
+            Double premiumFactor = IndexUtils.aggregateFactor(premiumFactors, currentPeriodStartDate);
             for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
                 UnderwritingInfoPacket modifiedUnderwritingInfo = underwritingInfo.withFactorsApplied(policyFactor, premiumFactor);
                 outUnderwritingInfo.add(modifiedUnderwritingInfo);
+            }
+            if (isSenderWired(outPolicyIndexApplied)) {
+                outPolicyIndexApplied.add(new SingleValuePacket(policyFactor));
+            }
+            if (isSenderWired(outPremiumIndexApplied)) {
+                outPremiumIndexApplied.add(new SingleValuePacket(premiumFactor));
             }
         }
     }
@@ -96,18 +108,6 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
         }
     }
 
-
-    /**
-     * @param date
-     * @param factors
-     * @return the floor factor corresponding to the date or 1 if non is found
-     */
-    private Double factor(DateTime date, FactorsPacket factors) {
-        Double policyFactor = factors != null ? factors.getFactorFloor(date) : 1d;
-        policyFactor = policyFactor == null ? 1d : policyFactor;
-        return policyFactor;
-    }
-
     public static final String UNDERWRITING_INFOS = "underwriting infos";
     public static final String MAXIMUM_SUM_INSURED = "maximum sum insured";
     public static final String AVERAGE_SUM_INSURED = "average sum insured";
@@ -133,22 +133,6 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
         this.outUnderwritingInfo = outUnderwritingInfo;
     }
 
-    public ConstrainedString getParmPolicyIndex() {
-        return parmPolicyIndex;
-    }
-
-    public void setParmPolicyIndex(ConstrainedString parmPolicyIndex) {
-        this.parmPolicyIndex = parmPolicyIndex;
-    }
-
-    public ConstrainedString getParmPremiumIndex() {
-        return parmPremiumIndex;
-    }
-
-    public void setParmPremiumIndex(ConstrainedString parmPremiumIndex) {
-        this.parmPremiumIndex = parmPremiumIndex;
-    }
-
     public TableMultiDimensionalParameter getParmUnderwritingInformation() {
         return parmUnderwritingInformation;
     }
@@ -171,5 +155,37 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
 
     public void setIterationStore(IterationStore iterationStore) {
         this.iterationStore = iterationStore;
+    }
+
+    public ConstrainedMultiDimensionalParameter getParmPoliciesIndices() {
+        return parmPoliciesIndices;
+    }
+
+    public void setParmPoliciesIndices(ConstrainedMultiDimensionalParameter parmPoliciesIndices) {
+        this.parmPoliciesIndices = parmPoliciesIndices;
+    }
+
+    public ConstrainedMultiDimensionalParameter getParmPremiumIndices() {
+        return parmPremiumIndices;
+    }
+
+    public void setParmPremiumIndices(ConstrainedMultiDimensionalParameter parmPremiumIndices) {
+        this.parmPremiumIndices = parmPremiumIndices;
+    }
+
+    public PacketList<SingleValuePacket> getOutPolicyIndexApplied() {
+        return outPolicyIndexApplied;
+    }
+
+    public void setOutPolicyIndexApplied(PacketList<SingleValuePacket> outPolicyIndexApplied) {
+        this.outPolicyIndexApplied = outPolicyIndexApplied;
+    }
+
+    public PacketList<SingleValuePacket> getOutPremiumIndexApplied() {
+        return outPremiumIndexApplied;
+    }
+
+    public void setOutPremiumIndexApplied(PacketList<SingleValuePacket> outPremiumIndexApplied) {
+        this.outPremiumIndexApplied = outPremiumIndexApplied;
     }
 }

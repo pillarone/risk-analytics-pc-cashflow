@@ -5,15 +5,15 @@ import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.packets.SingleValuePacket;
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
+import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.IUnderwritingInfoMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.ISeverityIndexMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
@@ -21,6 +21,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,11 +40,14 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
 
     private PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<SingleValuePacket> outClaimNumber = new PacketList<SingleValuePacket>(SingleValuePacket.class);
+    private PacketList<IndexPacket> outSeverityIndexApplied = new PacketList<IndexPacket>(IndexPacket.class);
 
     // attritional, frequency average attritional, ...
     private ConstrainedString parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker.class, "");
     private ConstrainedString parmReportingPattern = new ConstrainedString(IReportingPatternMarker.class, "");
-    private ConstrainedString parmSeverityIndex = new ConstrainedString(ISeverityIndexMarker.class, "");
+    private ConstrainedMultiDimensionalParameter parmSeveritiesIndices = new ConstrainedMultiDimensionalParameter(
+            Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
+            ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER));
     private ComboBoxTableMultiDimensionalParameter parmUnderwritingInformation = new ComboBoxTableMultiDimensionalParameter(
             Arrays.asList(""), Arrays.asList("Underwriting Information"), IUnderwritingInfoMarker.class);
     private IClaimsGeneratorStrategy parmClaimsModel = ClaimsGeneratorType.getDefault();
@@ -52,11 +56,15 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
         List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
         IPeriodCounter periodCounter = periodScope.getPeriodCounter();
 
-        int number = generateClaimsOfCurrentPeriod(claims, periodCounter);
-        developClaimsOfFormerPeriods(claims, periodCounter);
+        List<Factors> factors = IndexUtils.filterFactors(inFactors, parmSeveritiesIndices);
+        int number = generateClaimsOfCurrentPeriod(claims, periodCounter, factors);
+        developClaimsOfFormerPeriods(claims, periodCounter, factors);
 
         outClaims.addAll(claims);
         outClaimNumber.add(new SingleValuePacket(number));
+        if (this.isSenderWired(outSeverityIndexApplied)) {
+            outSeverityIndexApplied.add(IndexUtils.aggregate(factors, periodScope.getCurrentPeriodStartDate()));
+        }
     }
 
     /**
@@ -64,7 +72,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
      * @param periodCounter
      * @return  number of claims
      */
-    private int generateClaimsOfCurrentPeriod(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter) {
+    private int generateClaimsOfCurrentPeriod(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter, List<Factors> factors) {
         if (globalGenerateNewClaimsInFirstPeriodOnly
                 && periodScope.isFirstPeriod()
                 || !globalGenerateNewClaimsInFirstPeriodOnly) {
@@ -74,7 +82,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
 
             PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern);
             PatternPacket reportingPattern = PatternUtils.filterPattern(inPatterns, parmReportingPattern);
-            FactorsPacket factors = IndexUtils.filterFactors(inFactors, parmSeverityIndex);
+
             List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
             for (ClaimRoot baseClaim : baseClaims) {
                 GrossClaimRoot grossClaimRoot = new GrossClaimRoot(baseClaim, payoutPattern, reportingPattern);
@@ -90,10 +98,9 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
         return 0;
     }
 
-    private void developClaimsOfFormerPeriods(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter) {
+    private void developClaimsOfFormerPeriods(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter, List<Factors> factors) {
         if (!periodScope.isFirstPeriod()) {
             int currentPeriod = periodScope.getCurrentPeriod();
-            FactorsPacket factors = IndexUtils.filterFactors(inFactors, parmSeverityIndex);
             int latestFormerPeriodWithNewClaims = globalGenerateNewClaimsInFirstPeriodOnly ? 0 : currentPeriod - 1;
             for (int period = 0; period <= latestFormerPeriodWithNewClaims; period++) {
                 int periodOffset = currentPeriod - period;
@@ -187,14 +194,6 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
         this.inFactors = inFactors;
     }
 
-    public ConstrainedString getParmSeverityIndex() {
-        return parmSeverityIndex;
-    }
-
-    public void setParmSeverityIndex(ConstrainedString parmSeverityIndex) {
-        this.parmSeverityIndex = parmSeverityIndex;
-    }
-
     public PacketList<UnderwritingInfoPacket> getInUnderwritingInfo() {
         return inUnderwritingInfo;
     }
@@ -217,5 +216,23 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
 
     public void setOutClaimNumber(PacketList<SingleValuePacket> outClaimNumber) {
         this.outClaimNumber = outClaimNumber;
+    }
+
+    public ConstrainedMultiDimensionalParameter getParmSeveritiesIndices() {
+        return parmSeveritiesIndices;
+    }
+
+    public void setParmSeveritiesIndices(ConstrainedMultiDimensionalParameter parmSeveritiesIndices) {
+        this.parmSeveritiesIndices = parmSeveritiesIndices;
+    }
+
+    /** Indices applied to single claims may be different depending on the selected mode as interpolation is done
+     *  by occurrence date of claim. */
+    public PacketList<IndexPacket> getOutSeverityIndexApplied() {
+        return outSeverityIndexApplied;
+    }
+
+    public void setOutSeverityIndexApplied(PacketList<IndexPacket> outSeverityIndexApplied) {
+        this.outSeverityIndexApplied = outSeverityIndexApplied;
     }
 }

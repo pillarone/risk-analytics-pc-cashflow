@@ -6,6 +6,9 @@ import org.joda.time.DateTime
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexMode
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.BaseDateMode
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -231,13 +234,14 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         DateTime occurrenceDate = date20110701
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
                 date20110418, occurrenceDate, payoutPattern, reportingPattern)
-        FactorsPacket factors = new FactorsPacket()
-        factors.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(0)), 1.05)
-        factors.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(1)), 1.15)
+        FactorsPacket factorsPacket = new FactorsPacket()
+        factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(0)), 1.05)
+        factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(1)), 1.15)
+        Factors factors = new Factors(factorsPacket, BaseDateMode.DATE_OF_LOSS, IndexMode.STEPWISE_PREVIOUS)
 
         int period = 0
         int claimNumber = 0
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, [factors], true)
         assertEquals "P$period.0 ultimate", 1000, claims[claimNumber].ultimate()
         assertEquals "P$period.0 developed result", 50, claims[claimNumber].developmentResult()
         assertEquals "P$period.0 developed ultimate", 1050, claims[claimNumber].developedUltimate()
@@ -260,8 +264,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         
         period++    // 1
         periodCounter.next()
-        factors.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(2)), 1.60)
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, factors, false))
+        factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(2)), 1.60)
+        factors = new Factors(factorsPacket, BaseDateMode.DATE_OF_LOSS, IndexMode.STEPWISE_PREVIOUS)
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, [factors], false))
 
         claimNumber++
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
@@ -276,8 +281,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
 
         period++    // 2
         periodCounter.next()
-        factors.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(3)), 1.77)
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, factors, false))
+        factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(3)), 1.77)
+        factors = new Factors(factorsPacket, BaseDateMode.DATE_OF_LOSS, IndexMode.STEPWISE_PREVIOUS)
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, [factors], false))
 
         claimNumber++
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
@@ -294,8 +300,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         period++    // 4 as there is no payout in year 2014
         periodCounter.next()
         periodCounter.next()
-        factors.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(4)), 1.95)
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, factors, false))
+        factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(4)), 1.95)
+        factors = new Factors(factorsPacket, BaseDateMode.DATE_OF_LOSS, IndexMode.STEPWISE_PREVIOUS)
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, [factors], false))
 
         claimNumber++
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
