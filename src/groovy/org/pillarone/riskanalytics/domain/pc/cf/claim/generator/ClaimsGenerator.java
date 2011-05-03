@@ -78,7 +78,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
                 || !globalGenerateNewClaimsInFirstPeriodOnly) {
             List uwFilterCriteria = parmUnderwritingInformation.getValuesAsObjects();
             // a nominal ultimate is generated, therefore no factors are applied
-            List<ClaimRoot> baseClaims = parmClaimsModel.generateClaims(inUnderwritingInfo, uwFilterCriteria, periodScope);
+            List<ClaimRoot> baseClaims = parmClaimsModel.generateClaims(inUnderwritingInfo, uwFilterCriteria, inFactors, periodScope);
 
             PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern);
             PatternPacket reportingPattern = PatternUtils.filterPattern(inPatterns, parmReportingPattern);

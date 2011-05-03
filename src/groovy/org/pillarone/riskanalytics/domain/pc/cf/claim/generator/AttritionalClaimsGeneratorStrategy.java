@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
 
@@ -34,9 +35,17 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
         return parameters;
     }
 
-    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria, PeriodScope periodScope) {
+    /**
+     * @param uwInfos
+     * @param uwInfosFilterCriteria
+     * @param factorsPackets is ignored for attritional claims
+     * @param periodScope
+     * @return
+     */
+    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
         setGenerator(claimsSizeDistribution, claimsSizeModification);
-        return generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, ClaimType.ATTRITIONAL, periodScope);
+        return generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, ClaimType.ATTRITIONAL, null, periodScope);
     }
 
 }
