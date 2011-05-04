@@ -11,9 +11,11 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
+// todo(sku): think! should we head for a similar design as for claims (.. root ..)
 public class UnderwritingInfoPacket extends MultiValuePacket {
     
-    private double premium;
+    private double premiumWritten;
+    private double premiumPaid;
     private double numberOfPolicies;
     private double sumInsured;
     private double maxSumInsured;
@@ -30,13 +32,24 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
      * 
      * @param policyFactor
      * @param premiumFactor
-     * @return creates a cloned instance with numberOfPolicies and premium according to parameters
+     * @return creates a cloned instance with numberOfPolicies and premiumWritten according to parameters
      */
     public UnderwritingInfoPacket withFactorsApplied(double policyFactor, double premiumFactor) {
         UnderwritingInfoPacket modified = (UnderwritingInfoPacket) this.clone();
         modified.numberOfPolicies *= policyFactor;
-        modified.premium *= premiumFactor;
+        modified.premiumWritten *= premiumFactor;
+        modified.premiumPaid *= premiumFactor;
         return modified;
+    }
+
+    /**
+     * Has to be applied after withFactorsApplied() to avoid overwritting premiumPaid wrongly.
+     * @param positiveWrittenValue
+     * @param paidShare
+     */
+    public void applyPattern(boolean positiveWrittenValue, double paidShare) {
+        premiumPaid = premiumWritten * paidShare;
+        premiumWritten = positiveWrittenValue ? premiumWritten : 0;
     }
 
     /**
@@ -48,7 +61,7 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
             case ABSOLUTE:
                 return 1d;
             case PREMIUM_WRITTEN:
-                return premium;
+                return premiumWritten;
             case NUMBER_OF_POLICIES:
                 return numberOfPolicies;
         }
@@ -74,12 +87,14 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
                 && numberOfPolicies == other.getNumberOfPolicies()
                 && sumInsured == other.getSumInsured()
                 && maxSumInsured == other.getMaxSumInsured()
-                && premium == other.getPremium())
+                && premiumWritten == other.getPremiumWritten()
+                && premiumPaid == other.getPremiumPaid())
                 && (exposure == null && other.getExposure() == null
                    || exposure.equals(other.getExposure()));
     }
 
-    private static final String PREMIUM = "premium";
+    private static final String PREMIUM_WRITTEN = "premiumWritten";
+    private static final String PREMIUM_PAID = "premiumPaid";
     /**
      * Warning: if the number or names of values is modified, UnderwritingBatchInsertDBCollector
      * has to be corrected accordingly.
@@ -90,11 +105,12 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
     @Override
     public Map<String, Number> getValuesToSave() throws IllegalAccessException {
         Map<String, Number> map = new HashMap<String, Number>();
-        map.put(PREMIUM, premium);
+        map.put(PREMIUM_WRITTEN, premiumWritten);
+        map.put(PREMIUM_PAID, premiumPaid);
         return map;
     }
 
-    public final static List<String> FIELD_NAMES = Arrays.asList(PREMIUM);
+    public final static List<String> FIELD_NAMES = Arrays.asList(PREMIUM_WRITTEN, PREMIUM_PAID);
 
     @Override
     public List<String> getFieldNames() {
@@ -105,18 +121,20 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
     public String toString() {
         String separator = ", ";
         StringBuilder result = new StringBuilder();
-        result.append(premium);
+        result.append(premiumWritten);
+        result.append(separator);
+        result.append(premiumPaid);
         result.append(separator);
         result.append(numberOfPolicies);
         return result.toString();
     }
 
-    public double getPremium() {
-        return premium;
+    public double getPremiumWritten() {
+        return premiumWritten;
     }
 
-    public void setPremium(double premium) {
-        this.premium = premium;
+    public void setPremiumWritten(double premiumWritten) {
+        this.premiumWritten = premiumWritten;
     }
 
     public double getNumberOfPolicies() {
@@ -157,5 +175,13 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
 
     public void setOriginal(UnderwritingInfoPacket original) {
         this.original = original;
+    }
+
+    public double getPremiumPaid() {
+        return premiumPaid;
+    }
+
+    public void setPremiumPaid(double premiumPaid) {
+        this.premiumPaid = premiumPaid;
     }
 }
