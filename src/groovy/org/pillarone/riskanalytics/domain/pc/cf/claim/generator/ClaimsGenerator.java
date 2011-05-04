@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.IUnderwritingInfoMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
@@ -18,6 +19,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
+import org.pillarone.riskanalytics.domain.utils.math.copula.ICorrelationMarker;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +28,7 @@ import java.util.List;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class ClaimsGenerator extends Component implements IPerilMarker {
+public class ClaimsGenerator extends Component implements IPerilMarker, ICorrelationMarker{
 
     private PeriodScope periodScope;
     private PeriodStore periodStore;
@@ -36,6 +38,10 @@ public class ClaimsGenerator extends Component implements IPerilMarker {
     private PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket.class);
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo
             = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    /**
+     * needs to be connected only if the claims generator was selected as target in a copula
+     */
+    private PacketList<DependenceStream> inProbabilities = new PacketList<DependenceStream>(DependenceStream.class);
 
     private PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<SingleValuePacket> outClaimNumber = new PacketList<SingleValuePacket>(SingleValuePacket.class);

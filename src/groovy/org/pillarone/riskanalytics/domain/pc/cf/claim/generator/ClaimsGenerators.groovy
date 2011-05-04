@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -24,6 +25,7 @@ class ClaimsGenerators extends DynamicComposedComponent {
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
     PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket)
+    PacketList<DependenceStream> inProbabilities = new PacketList<DependenceStream>(DependenceStream)
 
     PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
 
@@ -43,5 +45,6 @@ class ClaimsGenerators extends DynamicComposedComponent {
         replicateInChannels this, 'inFactors'
         replicateInChannels this, 'inPatterns'
         replicateOutChannels this, 'outClaims'
+        replicateInChannels this, 'inProbabilities'
     }
 }
