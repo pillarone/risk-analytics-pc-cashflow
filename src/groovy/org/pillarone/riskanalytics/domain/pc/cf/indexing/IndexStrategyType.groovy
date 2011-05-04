@@ -6,6 +6,8 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -20,7 +22,8 @@ class IndexStrategyType extends AbstractParameterObjectClassifier {
                     AnnualIndexTableConstraints.COLUMN_TITLES,
                     ConstraintsFactory.getConstraints(AnnualIndexTableConstraints.IDENTIFIER))])
     public static final IndexStrategyType STOCHASTIC = new IndexStrategyType("stochastic", "STOCHASTIC", [
-            startDate: new DateTime(2011,1,1,0,0,0,0), mean: 0.0, stDev: 0.2])
+            startDate: new DateTime(2011,1,1,0,0,0,0),
+            distribution: DistributionType.getStrategy(DistributionType.NORMAL, [mean: 0d, stDev: 1d])])
 
     public static final all = [TRIVIAL, DETERMINISTICANNUALCHANGE, STOCHASTIC]
 
@@ -65,8 +68,7 @@ class IndexStrategyType extends AbstractParameterObjectClassifier {
             case IndexStrategyType.STOCHASTIC:
                 indexStrategy = new StochasticIndexStrategy(
                         startDate : (DateTime) parameters[StochasticIndexStrategy.START_DATE],
-                        mean : (Double) parameters[StochasticIndexStrategy.MEAN],
-                        stDev : (Double) parameters[StochasticIndexStrategy.STDEV],
+                        distribution : (RandomDistribution) parameters[StochasticIndexStrategy.DISTRIBUTION],
                 )
         }
         return indexStrategy

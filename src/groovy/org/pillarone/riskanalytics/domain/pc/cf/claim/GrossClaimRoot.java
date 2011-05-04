@@ -6,7 +6,9 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 
 import java.util.ArrayList;
@@ -63,7 +65,7 @@ public final class GrossClaimRoot implements IClaimRoot {
         return getClaimCashflowPackets(periodCounter, null, hasUltimate);
     }
 
-    public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter, FactorsPacket factors, boolean hasUltimate) {
+    public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter, List<Factors> factors, boolean hasUltimate) {
         List<ClaimCashflowPacket> currentPeriodClaims = new ArrayList<ClaimCashflowPacket>();
         if (!hasTrivialPayout()) {
             List<DateFactors> payouts = payoutPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter);
@@ -118,16 +120,10 @@ public final class GrossClaimRoot implements IClaimRoot {
         return 0;
     }
 
-    private double manageFactor(FactorsPacket factors, DateTime payoutDate) {
-        if (factors == null) return 1d;
-        Double factor = factors.getFactorFloor(payoutDate);
-        if (factor == null) {
-            return 1d;
-        }
-        else {
-            this.factors.add(payoutDate, factor);
-            return factor;
-        }
+    private double manageFactor(List<Factors> factors, DateTime payoutDate) {
+        Double productFactor = IndexUtils.aggregateFactor(factors, payoutDate);
+        this.factors.add(payoutDate, productFactor);
+        return productFactor;
     }
 
     public double getUltimate() {

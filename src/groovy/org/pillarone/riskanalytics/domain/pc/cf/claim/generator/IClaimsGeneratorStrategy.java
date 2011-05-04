@@ -4,6 +4,7 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObject;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 
 import java.util.List;
 
@@ -12,5 +13,13 @@ import java.util.List;
  */
 public interface IClaimsGeneratorStrategy extends IParameterObject {
 
-    List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria, PeriodScope periodScope);
+    /**
+     * @param uwInfos
+     * @param uwInfosFilterCriteria
+     * @param factorsPackets is used only for frequency based strategies in order to apply indices on frequency
+     * @param periodScope
+     * @return
+     */
+    List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                   List<FactorsPacket> factorsPackets, PeriodScope periodScope);
 }

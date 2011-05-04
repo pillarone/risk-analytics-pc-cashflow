@@ -4,7 +4,6 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
@@ -15,19 +14,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Generates an index value for the period start date using a lognormal distribution and the strategy parameters
+ * Generates an index value for the period start date using a distribution and the strategy parameters
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
+// todo(sku): use startDate param in the factor calculation, currently its ignored and time serie starts with projection start date
 public class StochasticIndexStrategy extends AbstractParameterObject implements IIndexStrategy {
 
     public static final String START_DATE = "startDate";
-    public static final String MEAN = "mean";
-    public static final String STDEV = "stDev";
+    public static final String DISTRIBUTION = "distribution";
 
     private DateTime startDate;
-    private Double mean;
-    private Double stDev;
+    private RandomDistribution distribution;
 
     private IRandomNumberGenerator indexGenerator;
 
@@ -38,10 +36,9 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
     }
 
     public Map getParameters() {
-        Map params = new HashMap(3);
+        Map params = new HashMap(2);
         params.put(START_DATE, startDate);
-        params.put(MEAN, mean);
-        params.put(STDEV, stDev);
+        params.put(DISTRIBUTION, distribution);
         return params;
     }
 
@@ -58,7 +55,6 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
 
     private void lazyInitGenerator() {
         if (indexGenerator == null) {
-            RandomDistribution distribution = DistributionType.getStrategy(DistributionType.LOGNORMAL, getParameters());
             indexGenerator = RandomNumberGeneratorFactory.getGenerator(distribution);
         }
     }

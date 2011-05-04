@@ -51,8 +51,8 @@ class FactorsPacketTests extends GroovyTestCase {
         assertEquals "no interpolation required for 1.1.2001", 100, factors.getFactorAtDate(date20010101)
         assertEquals "no interpolation required for 1.1.2001 (diff instance)", 100, factors.getFactorAtDate(new DateTime(date20010101))
         assertEquals "no interpolation required for 1.1.2002", 103, factors.getFactorAtDate(date20020101)
-        assertNull "interpolation required for 1.7.2001", factors.getFactorAtDate(new DateTime(2001,7,1,0,0,0,0))
-        assertNull "interpolation required for 1.1.2003", factors.getFactorAtDate(new DateTime(2003,1,1,0,0,0,0))
+        assertEquals "default value for 1.7.2001", 1, factors.getFactorAtDate(new DateTime(2001,7,1,0,0,0,0))
+        assertEquals "default value for 1.1.2003", 1, factors.getFactorAtDate(new DateTime(2003,1,1,0,0,0,0))
         assertEquals "no interpolation required for 22.2.2003", 104.51, factors.getFactorAtDate(new DateTime(2003,2,22,0,0,0,0)), EPSILON
     }
 

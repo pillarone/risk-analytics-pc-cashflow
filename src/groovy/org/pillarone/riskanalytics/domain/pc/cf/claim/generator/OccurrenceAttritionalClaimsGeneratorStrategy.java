@@ -4,6 +4,7 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
 
 import java.util.List;
@@ -27,9 +28,10 @@ public class OccurrenceAttritionalClaimsGeneratorStrategy extends AttritionalCla
     }
 
 
-    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria, PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
         setDateGenerator(occurrenceDistribution);
-        return super.generateClaims(uwInfos, uwInfosFilterCriteria, periodScope);
+        return super.generateClaims(uwInfos, uwInfosFilterCriteria, factorsPackets, periodScope);
     }
 
 }

@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
@@ -30,7 +31,8 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     protected IRandomNumberGenerator dateGenerator = RandomNumberGeneratorFactory.getUniformGenerator();
 
     public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                          ExposureBase severityBase, ClaimType claimType, PeriodScope periodScope) {
+                                          ExposureBase severityBase, ClaimType claimType,
+                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
         return generateClaims(severityScalingFactor, 1, claimType, periodScope);
     }

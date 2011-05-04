@@ -1,10 +1,14 @@
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternTableConstraints
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.AnnualIndexTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FrequencyIndexSelectionTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.PremiumIndexSelectionTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.PolicyIndexSelectionTableConstraints
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.1"
+    def version = "0.1.1"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -40,6 +44,10 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
 
     def doWithApplicationContext = { applicationContext ->
         ConstraintsFactory.registerConstraint(new AnnualIndexTableConstraints())
+        ConstraintsFactory.registerConstraint(new PolicyIndexSelectionTableConstraints())
+        ConstraintsFactory.registerConstraint(new PremiumIndexSelectionTableConstraints())
+        ConstraintsFactory.registerConstraint(new FrequencyIndexSelectionTableConstraints())
+        ConstraintsFactory.registerConstraint(new SeverityIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new PatternTableConstraints())
     }
 

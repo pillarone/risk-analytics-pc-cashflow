@@ -13,6 +13,7 @@ import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionMo
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution
 import org.pillarone.riskanalytics.core.parameterization.*
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FrequencyIndexSelectionTableConstraints
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -41,6 +42,9 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
             claimsSizeDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
             claimsSizeModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:])])
     public static final ClaimsGeneratorType FREQUENCY_SEVERITY = new ClaimsGeneratorType("frequency severity", "FREQUENCY_SEVERITY", [
+            frequencyIndices : new ConstrainedMultiDimensionalParameter(
+                Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
+                ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
             frequencyBase: FrequencyBase.ABSOLUTE,
             frequencyDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
             frequencyModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
@@ -127,6 +131,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                 break;
             case ClaimsGeneratorType.FREQUENCY_SEVERITY:
                 claimsGenerator = new FrequencySeverityClaimsGeneratorStrategy(
+                        frequencyIndices: (ConstrainedMultiDimensionalParameter) parameters.get("frequencyIndices"),
                         frequencyBase: (FrequencyBase) parameters.get("frequencyBase"),
                         frequencyDistribution: (RandomDistribution) parameters.get("frequencyDistribution"),
                         frequencyModification: (DistributionModified) parameters.get("frequencyModification"),

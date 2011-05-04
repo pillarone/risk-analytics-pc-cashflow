@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.util.MathUtils
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -31,7 +32,8 @@ class IndexTests extends GroovyTestCase {
         MathUtils.initRandomStreamBase(123)
 
         Index index = new Index(parmIndices: IndexStrategyType.getStrategy(IndexStrategyType.STOCHASTIC,
-                        [startDate : date20110101, mean : 0.03, stDev: 0.2]))
+                        [startDate : date20110101,
+                         distribution : DistributionType.getStrategy(DistributionType.LOGNORMAL, ['mean' : 0.03, 'stDev' : 0.2])]))
         index.periodScope = TestPeriodScopeUtilities.getPeriodScope(date20110101, 5)
         index.doCalculation()
 

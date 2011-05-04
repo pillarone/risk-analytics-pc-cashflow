@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.*;
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
@@ -52,14 +53,16 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
     /**
      * @param uwInfos is ignored
      * @param uwInfosFilterCriteria is ignored
+     * @param factorsPackets is ignored
      * @param periodScope
      * @return
      */
-    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria, PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
         setClaimsSizeGenerator(periodScope);
         setClaimNumberGenerator(periodScope);
         ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
-        return generateClaims(claimType, periodScope);
+        return generateClaims(claimType, null, periodScope);
     }
 
     private void setClaimsSizeGenerator(PeriodScope periodScope) {

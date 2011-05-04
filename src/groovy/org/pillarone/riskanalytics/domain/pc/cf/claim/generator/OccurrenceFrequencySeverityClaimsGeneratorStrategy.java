@@ -29,7 +29,7 @@ public class OccurrenceFrequencySeverityClaimsGeneratorStrategy extends Frequenc
 
     public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria, PeriodScope periodScope) {
         setDateGenerator(occurrenceDistribution);
-        return super.generateClaims(uwInfos, uwInfosFilterCriteria, periodScope);
+        return super.generateClaims(uwInfos, uwInfosFilterCriteria, null, periodScope);
     }
 
 }
