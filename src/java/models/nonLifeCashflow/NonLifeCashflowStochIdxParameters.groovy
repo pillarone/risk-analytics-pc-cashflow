@@ -11,7 +11,7 @@ components {
 			parmClaimsModel[0]=org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorType.ATTRITIONAL, ["claimsSizeDistribution":org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType.getStrategy(org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType.CONSTANT, [constant:1000.0]),"claimsSizeModification":org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier.getStrategy(org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier.NONE, [:]),"claimsSizeBase":org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase.ABSOLUTE,])
 			parmPayoutPattern[0]=new org.pillarone.riskanalytics.core.parameterization.ConstrainedString(org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker, 'sub5y')
 			parmReportingPattern[0]=new org.pillarone.riskanalytics.core.parameterization.ConstrainedString(org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker, '')
-			parmSeveritiesIndices[0]=new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([[], [], [], []]),["Index","Mode","Base Date Mode","Date"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('SEVERITY_INDEX_SELECTION'))
+			parmSeveritiesIndices[0]=new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([["inflation"], ["CONTINUOUS"], ["DATE_OF_LOSS"], [new org.joda.time.DateTime(2011,5,4,0,0,0,0)]]),["Index","Mode","Base Date Mode","Date"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('SEVERITY_INDEX_SELECTION'))
 			parmUnderwritingInformation[0]=new org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([[""]]),["Underwriting Information"], org.pillarone.riskanalytics.domain.pc.cf.exposure.IUnderwritingInfoMarker)
 		}
 		subMarineNext {
@@ -48,4 +48,4 @@ components {
 		}
 	}
 }
-comments=["""[path:'NonLifeCashflow:claimsGenerators:subMarineContinuous', period:-1, lastChange:new org.joda.time.DateTime(1304457359424),user:null, comment: \"\"\"interpolation is not yet working for stochastic indices\"\"\", tags:(['todo'] as Set)]""","""[path:'NonLifeCashflow', period:-1, lastChange:new org.joda.time.DateTime(1304457860808),user:null, comment: \"\"\"Currently runnable only with Result Template 'Aggregate Gross Claims without Index Collection'\"\"\", tags:(['todo'] as Set)]"""]
+comments=[]
