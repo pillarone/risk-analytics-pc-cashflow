@@ -17,7 +17,8 @@ class RiskBandTests extends GroovyTestCase {
                 numberOfPolicies: 1000d,
                 sumInsured: 80d,
                 maxSumInsured: 100d,
-                premium: 5000d)
+                premiumWritten: 5000d,
+                premiumPaid: 5000d)
     }
     // second band: ceded = (200-100)/200 = 0.5
     static UnderwritingInfoPacket getUnderwritingInfo1() {
@@ -25,7 +26,8 @@ class RiskBandTests extends GroovyTestCase {
                 numberOfPolicies: 100d,
                 sumInsured: 200d,
                 maxSumInsured: 400d,
-                premium: 2000d)
+                premiumWritten: 2000d,
+                premiumPaid: 2000d)
     }
     // third band: ceded = (400-100)/500 = 0.6
     static UnderwritingInfoPacket getUnderwritingInfo2() {
@@ -33,7 +35,8 @@ class RiskBandTests extends GroovyTestCase {
                 numberOfPolicies: 50d,
                 sumInsured: 500d,
                 maxSumInsured: 800d,
-                premium: 4000d)
+                premiumWritten: 4000d,
+                premiumPaid: 4000d)
     }
 
     static List<UnderwritingInfoPacket> getUnderwritingInfos() {

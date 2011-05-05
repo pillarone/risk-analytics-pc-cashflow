@@ -47,6 +47,7 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
         double factor = 1 + indexGenerator.nextValue().doubleValue();
         List<FactorsPacket> packets = new ArrayList<FactorsPacket>(1);
         FactorsPacket packet = new FactorsPacket(periodScope.getCurrentPeriodStartDate(), previousPeriodFactor);
+        packet.add(periodScope.getNextPeriodStartDate(), factor);
         packet.origin = origin;
         packets.add(packet);
         previousPeriodFactor *= factor;

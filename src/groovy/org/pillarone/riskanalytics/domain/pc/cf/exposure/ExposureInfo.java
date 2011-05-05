@@ -7,9 +7,14 @@ import org.joda.time.DateTime;
  */
 public class ExposureInfo {
 
-    private DateTime exposureStartDate;
+    private DateTime inceptionDate;
 
-    public DateTime getDate() {
-        return exposureStartDate;
+    public ExposureInfo(DateTime inceptionDate) {
+
+        this.inceptionDate = inceptionDate;
+    }
+
+    public DateTime getInceptionDate() {
+        return inceptionDate;
     }
 }

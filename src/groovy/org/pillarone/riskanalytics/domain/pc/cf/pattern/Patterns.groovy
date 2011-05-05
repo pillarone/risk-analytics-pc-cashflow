@@ -15,11 +15,13 @@ class Patterns extends ComposedComponent {
     PayoutPatterns subPayoutPatterns = new PayoutPatterns()
     ReportingPatterns subReportingPatterns = new ReportingPatterns()
     RecoveryPatterns subRecoveryPatterns = new RecoveryPatterns()
+    PremiumPatterns subPremiumPatterns = new PremiumPatterns()
 
     @Override protected void doCalculation() {
         subPayoutPatterns.start()
         subReportingPatterns.start()
         subRecoveryPatterns.start()
+        subPremiumPatterns.start()
     }
 
     @Override
@@ -28,6 +30,7 @@ class Patterns extends ComposedComponent {
             this.outPatterns = subPayoutPatterns.outPattern
             this.outPatterns = subReportingPatterns.outPattern
             this.outPatterns = subRecoveryPatterns.outPattern
+            this.outPatterns = subPremiumPatterns.outPattern
         }
     }
 }

@@ -25,8 +25,12 @@ mappings = {
                 }
             }
         }
-        "grossUnderwritingPremium" "NonLifeCashflow:underwritingSegments:outUnderwritingInfo:premium", {
-            "[%underwritingSegment%]" "NonLifeCashflow:underwritingSegments:[%underwritingSegment%]:outUnderwritingInfo:premium", {
+        "grossUnderwritingWritten" "NonLifeCashflow:underwritingSegments:outUnderwritingInfo:premiumWritten"
+        "grossUnderwritingPaid" "NonLifeCashflow:underwritingSegments:outUnderwritingInfo:premiumPaid"
+        "grossUnderwritingBySegment" {
+            "[%underwritingSegment%]" {
+                "premiumWritten" "NonLifeCashflow:underwritingSegments:[%underwritingSegment%]:outUnderwritingInfo:premiumWritten"
+                "premiumPaid" "NonLifeCashflow:underwritingSegments:[%underwritingSegment%]:outUnderwritingInfo:premiumPaid"
                 "policyIndex" "NonLifeCashflow:underwritingSegments:[%underwritingSegment%]:outPolicyIndexApplied:value"
                 "premiumIndex" "NonLifeCashflow:underwritingSegments:[%underwritingSegment%]:outPremiumIndexApplied:value"
             }

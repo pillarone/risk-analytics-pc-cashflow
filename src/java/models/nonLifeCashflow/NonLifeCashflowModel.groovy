@@ -47,6 +47,7 @@ class NonLifeCashflowModel extends StochasticModel {
     @Override
     void wireComponents() {
         underwritingSegments.inFactors = indices.outFactors
+        underwritingSegments.inPatterns = patterns.outPatterns
         claimsGenerators.inFactors = indices.outFactors
         claimsGenerators.inPatterns = patterns.outPatterns
         claimsGenerators.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
@@ -83,5 +84,9 @@ class NonLifeCashflowModel extends StochasticModel {
             }
         }
         return maxPeriods
+    }
+
+    public int maxNumberOfFullyDistinctPeriods() {
+        1
     }
 }

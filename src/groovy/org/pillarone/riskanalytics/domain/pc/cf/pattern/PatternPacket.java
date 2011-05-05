@@ -77,6 +77,10 @@ public class PatternPacket extends Packet {
         return dateFactors;
     }
 
+    public List<DateFactors> getDateFactorsForCurrentPeriod(IPeriodCounter periodCounter) {
+        return getDateFactorsForCurrentPeriod(periodCounter.getCurrentPeriodStart(), periodCounter);
+    }
+
     /**
      * @param elapsedMonths
      * @return nearest pattern index with month value lower elapsedMonths or null if elapsedMonths is after last period
