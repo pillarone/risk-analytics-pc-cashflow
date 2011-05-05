@@ -14,9 +14,7 @@ public class Dependencies extends DynamicComposedComponent {
     PacketList<DependenceStream> outProbabilities = new PacketList<DependenceStream>(DependenceStream)
 
     public Copula createDefaultSubComponent() {
-        return new Copula(
-                parmCopulaStrategy: CopulaType.getStrategy(CopulaType.INDEPENDENT,
-                        ["targets": new ComboBoxTableMultiDimensionalParameter([''], ['targets'], ICorrelationMarker)]))
+        return new Copula(parmCopulaStrategy: CopulaType.getDefault())
     }
 
     protected void doCalculation() {

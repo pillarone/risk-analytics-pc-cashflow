@@ -5,16 +5,16 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.*;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
+import umontreal.iro.lecuyer.probdist.Distribution;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,10 +29,12 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     private Map<String, IRandomNumberGenerator> cachedClaimSizeGenerators = new HashMap<String, IRandomNumberGenerator>();
     private IRandomNumberGenerator claimSizeGenerator;
     protected IRandomNumberGenerator dateGenerator = RandomNumberGeneratorFactory.getUniformGenerator();
+    protected Distribution modifiedClaimsSizeDistribution;
+    protected double shift;
 
-    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                          ExposureBase severityBase, ClaimType claimType,
-                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaim(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                         ExposureBase severityBase, ClaimType claimType,
+                                         List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
         return generateClaims(severityScalingFactor, 1, claimType, periodScope);
     }
@@ -41,6 +43,20 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
         return ClaimsGeneratorUtils.generateClaims(scaleFactor, claimSizeGenerator, dateGenerator, claimNumber,
                 claimType, periodScope);
     }
+
+    public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                           ExposureBase severityBase, ClaimType claimType, PeriodScope periodScope,
+                                           List<Double> probabilities, List<EventPacket> events) {
+        double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
+        return calculateClaims(severityScalingFactor, claimType, periodScope, probabilities, events);
+    }
+
+    protected List<ClaimRoot> calculateClaims(double scaleFactor, ClaimType claimType, PeriodScope periodScope,
+                                              List<Double> probabilities, List<EventPacket> events) {
+        return ClaimsGeneratorUtils.calculateClaims(scaleFactor, modifiedClaimsSizeDistribution, dateGenerator,
+                claimType, periodScope, probabilities, events, shift);
+    }
+    
 
     protected List<ClaimRoot> getClaims(List<Double> claimValues, ClaimType claimType, PeriodScope periodScope) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
@@ -84,4 +100,40 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     protected final static String FREQUENCY_DISTRIBUTION = "frequencyDistribution";
     protected final static String FREQUENCY_MODIFICATION = "frequencyModification";
     protected final static String OCCURRENCE_DISTRIBUTION = "occurrenceDistribution";
+
+    public Distribution getModifiedClaimsSizeDistribution() {
+        return modifiedClaimsSizeDistribution;
+    }
+
+    public void setModifiedClaimsSizeDistribution(Distribution modifiedClaimsSizeDistribution) {
+        this.modifiedClaimsSizeDistribution = modifiedClaimsSizeDistribution;
+    }
+
+    public void setModifiedDistribution(RandomDistribution distribution, DistributionModified modifier) {
+        Distribution dist = distribution.getDistribution();
+        if (modifier.getType().equals(DistributionModifier.CENSORED) || modifier.getType().equals(DistributionModifier.CENSOREDSHIFT)) {
+            modifiedClaimsSizeDistribution = new CensoredDistribution(dist,(Double) modifier.getParameters().get("min"),
+                    (Double) modifier.getParameters().get("max"));
+        } else if (modifier.getType().equals(DistributionModifier.TRUNCATED) || modifier.getType().equals(DistributionModifier.TRUNCATEDSHIFT)) {
+            Double leftBoundary = (Double) modifier.getParameters().get("min");
+            Double rightBoundary = (Double) modifier.getParameters().get("max");
+            modifiedClaimsSizeDistribution = new TruncatedDistribution(dist, leftBoundary, rightBoundary);
+        }
+        else if (modifier.getType().equals(DistributionModifier.LEFTTRUNCATEDRIGHTCENSOREDSHIFT)) {
+            Double leftBoundary = (Double) modifier.getParameters().get("min");
+            Double rightBoundary = (Double) modifier.getParameters().get("max");
+            modifiedClaimsSizeDistribution = new CensoredDistribution(new TruncatedDistribution(dist,
+                                        leftBoundary, Double.POSITIVE_INFINITY),
+                                     Double.NEGATIVE_INFINITY, rightBoundary);
+        }
+        shift = modifier.getParameters().get("shift") == null ? 0 : (Double) modifier.getParameters().get("shift");
+    }
+
+    public double getShift() {
+        return shift;
+    }
+
+    public void setShift(double shift) {
+        this.shift = shift;
+    }
 }

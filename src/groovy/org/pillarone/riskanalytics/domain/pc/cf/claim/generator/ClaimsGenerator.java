@@ -12,6 +12,8 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.IUnderwritingInfoMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
@@ -29,7 +31,7 @@ import java.util.List;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class ClaimsGenerator extends Component implements IPerilMarker, ICorrelationMarker{
+public class ClaimsGenerator extends Component implements IPerilMarker, ICorrelationMarker {
 
     private PeriodScope periodScope;
     private PeriodStore periodStore;
@@ -39,10 +41,9 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     private PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket.class);
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo
             = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    /**
-     * needs to be connected only if the claims generator was selected as target in a copula
-     */
     private PacketList<DependenceStream> inProbabilities = new PacketList<DependenceStream>(DependenceStream.class);
+    private PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
+    private PacketList<SystematicFrequencyPacket> inEventFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket.class);
 
     private PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<SingleValuePacket> outClaimNumber = new PacketList<SingleValuePacket>(SingleValuePacket.class);
@@ -76,7 +77,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     /**
      * @param claims
      * @param periodCounter
-     * @return  number of claims
+     * @return number of claims
      */
     private int generateClaimsOfCurrentPeriod(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter, List<Factors> factors) {
         if (globalGenerateNewClaimsInFirstPeriodOnly
@@ -84,7 +85,9 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
                 || !globalGenerateNewClaimsInFirstPeriodOnly) {
             List uwFilterCriteria = parmUnderwritingInformation.getValuesAsObjects();
             // a nominal ultimate is generated, therefore no factors are applied
-            List<ClaimRoot> baseClaims = parmClaimsModel.generateClaims(inUnderwritingInfo, uwFilterCriteria, inFactors, periodScope);
+            List<ClaimRoot> baseClaims = parmClaimsModel.calculateClaims(inUnderwritingInfo, uwFilterCriteria,
+                    inProbabilities, inEventSeverities, this, periodScope);
+            baseClaims = parmClaimsModel.generateClaims(baseClaims, inUnderwritingInfo, uwFilterCriteria, inFactors, periodScope, inEventFrequencies, this);
 
             PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern);
             PatternPacket reportingPattern = PatternUtils.filterPattern(inPatterns, parmReportingPattern);
@@ -183,7 +186,9 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
         this.periodStore = periodStore;
     }
 
-    /** this property is overwritten by the value set in GlobalParameters */
+    /**
+     * this property is overwritten by the value set in GlobalParameters
+     */
     public boolean isGlobalGenerateNewClaimsInFirstPeriodOnly() {
         return globalGenerateNewClaimsInFirstPeriodOnly;
     }
@@ -232,13 +237,42 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
         this.parmSeveritiesIndices = parmSeveritiesIndices;
     }
 
-    /** Indices applied to single claims may be different depending on the selected mode as interpolation is done
-     *  by occurrence date of claim. */
+    /**
+     * Indices applied to single claims may be different depending on the selected mode as interpolation is done
+     * by occurrence date of claim.
+     */
     public PacketList<IndexPacket> getOutSeverityIndexApplied() {
         return outSeverityIndexApplied;
     }
 
     public void setOutSeverityIndexApplied(PacketList<IndexPacket> outSeverityIndexApplied) {
         this.outSeverityIndexApplied = outSeverityIndexApplied;
+    }
+
+    /**
+     * needs to be connected only if the claims generator was selected as target in a copula
+     */
+    public PacketList<DependenceStream> getInProbabilities() {
+        return inProbabilities;
+    }
+
+    public void setInProbabilities(PacketList<DependenceStream> inProbabilities) {
+        this.inProbabilities = inProbabilities;
+    }
+
+    public PacketList<EventDependenceStream> getInEventSeverities() {
+        return inEventSeverities;
+    }
+
+    public void setInEventSeverities(PacketList<EventDependenceStream> inEventSeverities) {
+        this.inEventSeverities = inEventSeverities;
+    }
+
+    public PacketList<SystematicFrequencyPacket> getInEventFrequencies() {
+        return inEventFrequencies;
+    }
+
+    public void setInEventFrequencies(PacketList<SystematicFrequencyPacket> inEventFrequencies) {
+        this.inEventFrequencies = inEventFrequencies;
     }
 }

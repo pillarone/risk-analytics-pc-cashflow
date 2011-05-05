@@ -13,6 +13,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.Indices
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.Pattern
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.Patterns
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.Dependencies
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.MultipleDependencies
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -25,6 +26,7 @@ class NonLifeCashflowModel extends StochasticModel {
     UnderwritingSegments underwritingSegments
     ClaimsGenerators claimsGenerators
     Dependencies dependencies
+    MultipleDependencies multipleDependencies
 
     @Override
     void initComponents() {
@@ -34,10 +36,12 @@ class NonLifeCashflowModel extends StochasticModel {
         patterns = new Patterns()
         claimsGenerators = new ClaimsGenerators()
         dependencies = new Dependencies()
+        multipleDependencies = new MultipleDependencies()
 
         addStartComponent indices
         addStartComponent patterns
         addStartComponent dependencies
+        addStartComponent multipleDependencies
     }
 
     @Override
@@ -47,6 +51,8 @@ class NonLifeCashflowModel extends StochasticModel {
         claimsGenerators.inPatterns = patterns.outPatterns
         claimsGenerators.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
         claimsGenerators.inProbabilities = dependencies.outProbabilities
+        claimsGenerators.inEventSeverities = multipleDependencies.outEventSeverities
+        claimsGenerators.inEventFrequencies = multipleDependencies.outEventFrequencies
     }
 
     @Override

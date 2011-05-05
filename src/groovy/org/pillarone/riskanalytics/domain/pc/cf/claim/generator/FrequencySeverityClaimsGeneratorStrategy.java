@@ -8,6 +8,12 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IPerilMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -15,8 +21,10 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionUtils;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +32,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStrategy  {
+public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStrategy {
 
     private ConstrainedMultiDimensionalParameter frequencyIndices;
     private FrequencyBase frequencyBase;
@@ -53,12 +61,28 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
     }
 
 
-    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                          List<FactorsPacket> factorPackets, PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
+                                          List uwInfosFilterCriteria, List<FactorsPacket> factorPackets,
+                                          PeriodScope periodScope, List<SystematicFrequencyPacket> systematicFrequencies,
+                                          IPerilMarker filterCriteria) {
+
         setGenerator(claimsSizeDistribution, claimsSizeModification);
-        setClaimNumberGenerator(frequencyDistribution, frequencyModification);
+        RandomDistribution systematicFrequencyDistribution = ClaimsGeneratorUtils.extractDistribution(systematicFrequencies, filterCriteria);
+        setClaimNumberGenerator(DistributionUtils.getIdiosyncraticPart(frequencyDistribution, systematicFrequencyDistribution),
+                frequencyModification);
         ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
         List<Factors> factors = IndexUtils.filterFactors(factorPackets, frequencyIndices);
-        return generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, frequencyBase, claimType, factors, periodScope);
+        baseClaims.addAll(generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, frequencyBase, claimType, factors, periodScope));
+        return baseClaims;
+    }
+
+    public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                           List<DependenceStream> streams, List<EventDependenceStream> eventStreams,
+                                           IPerilMarker filterCriteria, PeriodScope periodScope) {
+        setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
+        ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
+        List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(eventStreams, filterCriteria);
+        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, claimType, periodScope,
+                ClaimsGeneratorUtils.extractSeverities(eventSeverities), ClaimsGeneratorUtils.extractEvents(eventSeverities));
     }
 }

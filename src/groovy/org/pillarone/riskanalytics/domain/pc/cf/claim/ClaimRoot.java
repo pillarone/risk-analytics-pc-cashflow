@@ -42,6 +42,14 @@ public final class ClaimRoot implements IClaimRoot {
         this.occurrenceDate = occurrenceDate;
     }
 
+    public ClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate, EventPacket event){
+        this.ultimate = ultimate;
+        this.claimType = claimType;
+        this.exposureStartDate = exposureStartDate;
+        this.occurrenceDate = occurrenceDate;
+        this.event = event;
+    }
+
     public double getUltimate() {
         return ultimate;
     }

@@ -3,7 +3,10 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IPerilMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
 
 import java.util.List;
@@ -26,10 +29,12 @@ public class OccurrenceFrequencySeverityClaimsGeneratorStrategy extends Frequenc
         return parameters;
     }
 
-
-    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria, PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
+                                          List uwInfosFilterCriteria, List<FactorsPacket> factorPackets,
+                                          PeriodScope periodScope, List<SystematicFrequencyPacket> systematicFrequencies,
+                                          IPerilMarker filterCriteria) {
         setDateGenerator(occurrenceDistribution);
-        return super.generateClaims(uwInfos, uwInfosFilterCriteria, null, periodScope);
+        return super.generateClaims(baseClaims,uwInfos, uwInfosFilterCriteria, null, periodScope, systematicFrequencies, filterCriteria);
     }
 
 }

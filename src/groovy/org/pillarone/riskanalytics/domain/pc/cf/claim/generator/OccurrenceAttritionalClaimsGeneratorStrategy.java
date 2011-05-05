@@ -3,6 +3,10 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IPerilMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
@@ -28,10 +32,19 @@ public class OccurrenceAttritionalClaimsGeneratorStrategy extends AttritionalCla
     }
 
 
-    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope,
+                                          List<SystematicFrequencyPacket> systematicFrequencies,
+                                          IPerilMarker filterCriteria) {
         setDateGenerator(occurrenceDistribution);
-        return super.generateClaims(uwInfos, uwInfosFilterCriteria, factorsPackets, periodScope);
+        return super.generateClaims(baseClaims, uwInfos, uwInfosFilterCriteria, factorsPackets, periodScope, systematicFrequencies, filterCriteria);
+    }
+
+    public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                           List<DependenceStream> streams, List<EventDependenceStream> eventStreams,
+                                           IPerilMarker filterCriteria, PeriodScope periodScope) {
+        setDateGenerator(occurrenceDistribution);
+        return super.calculateClaims(uwInfos, uwInfosFilterCriteria, streams, eventStreams, filterCriteria, periodScope);
     }
 
 }

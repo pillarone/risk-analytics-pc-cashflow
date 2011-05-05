@@ -4,6 +4,11 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IPerilMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
@@ -17,7 +22,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorStrategy  {
+public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorStrategy {
 
     protected ExposureBase claimsSizeBase;
     protected RandomDistribution claimsSizeDistribution;
@@ -38,14 +43,26 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
     /**
      * @param uwInfos
      * @param uwInfosFilterCriteria
-     * @param factorsPackets is ignored for attritional claims
+     * @param factorsPackets        is ignored for attritional claims
      * @param periodScope
      * @return
      */
-    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope,
+                                          List<SystematicFrequencyPacket> systematicFrequencies, IPerilMarker filterCriteria) {
+        if (baseClaims.size() == 1) {
+            return baseClaims;
+        }
         setGenerator(claimsSizeDistribution, claimsSizeModification);
-        return generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, ClaimType.ATTRITIONAL, null, periodScope);
+        return generateClaim(uwInfos, uwInfosFilterCriteria, claimsSizeBase, ClaimType.ATTRITIONAL, null, periodScope);
+    }
+
+    public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                           List<DependenceStream> streams, List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria,
+                                           PeriodScope periodScope) {
+        setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
+        List<Double> probabilities = ClaimsGeneratorUtils.filterProbabilities(streams, filterCriteria);
+        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, ClaimType.ATTRITIONAL, periodScope, probabilities, null);
     }
 
 }

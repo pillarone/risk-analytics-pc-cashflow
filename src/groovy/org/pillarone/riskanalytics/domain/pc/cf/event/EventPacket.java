@@ -1,12 +1,17 @@
 package org.pillarone.riskanalytics.domain.pc.cf.event;
 
 
+import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.packets.Packet;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class EventPacket extends Packet {
+
+    public EventPacket(DateTime date){
+        setDate(date);
+    }
 
     @Override
     public String toString() {

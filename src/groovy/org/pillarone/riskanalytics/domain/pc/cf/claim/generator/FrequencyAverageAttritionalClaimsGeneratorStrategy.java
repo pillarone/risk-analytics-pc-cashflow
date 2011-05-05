@@ -4,10 +4,18 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IPerilMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionUtils;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
@@ -20,7 +28,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends AttritionalClaimsGeneratorStrategy  {
+public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends AttritionalClaimsGeneratorStrategy {
 
     private FrequencyBase frequencyBase;
     private RandomDistribution frequencyDistribution;
@@ -38,16 +46,37 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
         return parameters;
     }
 
+    public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
+                                          List uwInfosFilterCriteria, List<FactorsPacket> factorsPackets,
+                                          PeriodScope periodScope, List<SystematicFrequencyPacket> systematicFrequencies,
+                                          IPerilMarker filterCriteria) {
 
-    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria, PeriodScope periodScope) {
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, claimsSizeBase, uwInfosFilterCriteria);
         double frequencyFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, frequencyBase, uwInfosFilterCriteria);
-        IRandomNumberGenerator frequencyGenerator = RandomNumberGeneratorFactory.getGenerator(frequencyDistribution, frequencyModification);
+        RandomDistribution systematicFrequencyDistribution = ClaimsGeneratorUtils.extractDistribution(systematicFrequencies, filterCriteria);
+        IRandomNumberGenerator frequencyGenerator = RandomNumberGeneratorFactory.getGenerator(
+                DistributionUtils.getIdiosyncraticPart(frequencyDistribution, systematicFrequencyDistribution), frequencyModification);
         IRandomNumberGenerator claimsSizeGenerator = RandomNumberGeneratorFactory.getGenerator(claimsSizeDistribution, claimsSizeModification);
         int numberOfClaims = (int) (frequencyGenerator.nextValue().intValue() * frequencyFactor);
-        double claimValue = 0;
+        double claimValue = baseClaims.get(0).getUltimate();
         for (int i = 0; i < numberOfClaims; i++) {
             claimValue += claimsSizeGenerator.nextValue().doubleValue();
+        }
+        List<Double> claimValues = new ArrayList<Double>();
+        claimValues.add(claimValue * severityScalingFactor);
+        return getClaims(claimValues, ClaimType.ATTRITIONAL, periodScope);
+    }
+
+    public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                           List<DependenceStream> streams, List<EventDependenceStream> eventStreams,
+                                           IPerilMarker filterCriteria, PeriodScope periodScope) {
+        setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
+        List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(eventStreams, filterCriteria);
+        List<Double> severities = ClaimsGeneratorUtils.extractSeverities(eventSeverities);
+        double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, claimsSizeBase, uwInfosFilterCriteria);
+        double claimValue = 0;
+        for (int i = 0; i < severities.size(); i++) {
+            claimValue += -(modifiedClaimsSizeDistribution.inverseF(severities.get(i)) + shift);
         }
         List<Double> claimValues = new ArrayList<Double>();
         claimValues.add(claimValue * severityScalingFactor);

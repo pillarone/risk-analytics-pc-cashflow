@@ -9,6 +9,10 @@ import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IPerilMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.*;
@@ -51,14 +55,15 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
     }
 
     /**
-     * @param uwInfos is ignored
+     * @param uwInfos               is ignored
      * @param uwInfosFilterCriteria is ignored
-     * @param factorsPackets is ignored
+     * @param factorsPackets        is ignored
      * @param periodScope
      * @return
      */
-    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope,
+                                          List<SystematicFrequencyPacket> systematicFrequencies, IPerilMarker filterCriteria) {
         setClaimsSizeGenerator(periodScope);
         setClaimNumberGenerator(periodScope);
         ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
@@ -142,5 +147,11 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
             lambdaParam.put("lambda", lambda);
             frequencyDistribution.put(currentPeriod, DistributionType.getStrategy(DistributionType.POISSON, lambdaParam));
         }
+    }
+
+    public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                           List<DependenceStream> streams, List<EventDependenceStream> eventStreams,
+                                           IPerilMarker filterCriteria, PeriodScope periodScope) {
+        return new ArrayList<ClaimRoot>();
     }
 }
