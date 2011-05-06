@@ -40,11 +40,4 @@ public class OccurrenceAttritionalClaimsGeneratorStrategy extends AttritionalCla
         return super.generateClaims(baseClaims, uwInfos, uwInfosFilterCriteria, factorsPackets, periodScope, systematicFrequencies, filterCriteria);
     }
 
-    public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                           List<DependenceStream> streams, List<EventDependenceStream> eventStreams,
-                                           IPerilMarker filterCriteria, PeriodScope periodScope) {
-        setDateGenerator(occurrenceDistribution);
-        return super.calculateClaims(uwInfos, uwInfosFilterCriteria, streams, eventStreams, filterCriteria, periodScope);
-    }
-
 }

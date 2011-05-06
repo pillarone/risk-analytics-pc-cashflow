@@ -31,17 +31,14 @@ public class ClaimsGeneratorUtils {
                                                  IRandomNumberGenerator dateGenerator, int claimNumber,
                                                  ClaimType claimType, PeriodScope periodScope) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
-        List<EventPacket> events = new ArrayList<EventPacket>();
-        if (claimType.equals(ClaimType.EVENT) || claimType.equals(ClaimType.AGGREGATED_EVENT)) {
-            events = generateEvents(claimNumber, periodScope);
-        }
+        List<EventPacket> events = generateEvents(claimNumber, periodScope, dateGenerator);
         for (int i = 0; i < claimNumber; i++) {
-            double fractionOfPeriod = (Double) dateGenerator.nextValue();
-            DateTime occurrenceDate = DateTimeUtilities.getDate(periodScope, fractionOfPeriod);
+            DateTime occurrenceDate = events.get(i).getDate();
             // todo(sku): replace with information from underwriting
-            DateTime exposureStartDate = occurrenceDate;
+            DateTime exposureStartDate = periodScope.getPeriodCounter().getCurrentPeriodStart();
+            EventPacket event = claimType.equals(ClaimType.EVENT) || claimType.equals(ClaimType.AGGREGATED_EVENT) ? events.get(i) : null;
             baseClaims.add(new ClaimRoot((Double) claimSizeGenerator.nextValue() * -severityScaleFactor, claimType,
-                    exposureStartDate, occurrenceDate, events.size() == 0 ? null : events.get(i)));
+                    exposureStartDate, occurrenceDate, event));
         }
         return baseClaims;
     }
@@ -53,21 +50,17 @@ public class ClaimsGeneratorUtils {
         return generateClaims(severityScaleFactor, claimSizeGenerator, dateGenerator, 1, claimType, periodScope);
     }
 
-    public static List<ClaimRoot> calculateClaims(double severityScaleFactor, Distribution distribution,
-                                                  IRandomNumberGenerator dateGenerator, ClaimType claimType,
-                                                  PeriodScope periodScope, List<Double> probabilities,
+    public static List<ClaimRoot> calculateClaims(double severityScaleFactor, Distribution claimsSizeDistribution, ClaimType claimType,
+                                                  PeriodScope periodScope, List<Double> severities,
                                                   List<EventPacket> events, double shift) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
-        if (!(claimType.equals(ClaimType.EVENT) || claimType.equals(ClaimType.AGGREGATED_EVENT))) {
-            events = new ArrayList<EventPacket>();
-        }
-        for (int i = 0; i < probabilities.size(); i++) {
-            double fractionOfPeriod = (Double) dateGenerator.nextValue();
-            DateTime occurrenceDate = DateTimeUtilities.getDate(periodScope, fractionOfPeriod);
+        for (int i = 0; i < severities.size(); i++) {
+            DateTime occurrenceDate = events.get(i).getDate();
             // todo(sku): replace with information from underwriting
-            DateTime exposureStartDate = occurrenceDate;
-            baseClaims.add(new ClaimRoot((distribution.inverseF(probabilities.get(i)) + shift) * -severityScaleFactor, claimType,
-                    exposureStartDate, occurrenceDate, events.size() == 0 ? null : events.get(i)));
+            DateTime exposureStartDate = periodScope.getPeriodCounter().getCurrentPeriodStart();
+            EventPacket event = claimType.equals(ClaimType.EVENT) || claimType.equals(ClaimType.AGGREGATED_EVENT) ? events.get(i) : null;
+            baseClaims.add(new ClaimRoot((claimsSizeDistribution.inverseF(severities.get(i)) + shift) * -severityScaleFactor, claimType,
+                    exposureStartDate, occurrenceDate, event));
         }
         return baseClaims;
     }
@@ -122,6 +115,16 @@ public class ClaimsGeneratorUtils {
         return events;
     }
 
+    public static List<EventPacket> generateEvents(int number, PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
+        // dateGenerator uses fraction of period, i.e., must have states in unity interval
+        List<EventPacket> events = new ArrayList<EventPacket>(number);
+        for (int i = 0; i < number; i++) {
+            DateTime date = DateTimeUtilities.getDate(periodScope, dateGenerator.nextValue().doubleValue());
+            events.add(new EventPacket(date));
+        }
+        return events;
+    }
+
     public static RandomDistribution extractDistribution(List<SystematicFrequencyPacket> distributions, IPerilMarker filterCriteria) {
         RandomDistribution filteredDistribution = new RandomDistribution();
         int count = 0;
@@ -132,7 +135,7 @@ public class ClaimsGeneratorUtils {
             }
         }
         if (count > 1) {
-            throw new IllegalArgumentException("['ClaimsGenerator.IllegalDependencies','"+ filterCriteria.getNormalizedName() + "']");
+            throw new IllegalArgumentException("['ClaimsGenerator.SeveralDependencies','" + filterCriteria.getNormalizedName() + "']");
         }
         return filteredDistribution;
     }

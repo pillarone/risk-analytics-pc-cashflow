@@ -46,26 +46,26 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            ExposureBase severityBase, ClaimType claimType, PeriodScope periodScope,
-                                           List<Double> probabilities, List<EventPacket> events) {
+                                           List<Double> severities, List<EventPacket> events) {
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return calculateClaims(severityScalingFactor, claimType, periodScope, probabilities, events);
+        return calculateClaims(severityScalingFactor, claimType, periodScope, severities, events);
     }
 
     protected List<ClaimRoot> calculateClaims(double scaleFactor, ClaimType claimType, PeriodScope periodScope,
-                                              List<Double> probabilities, List<EventPacket> events) {
-        return ClaimsGeneratorUtils.calculateClaims(scaleFactor, modifiedClaimsSizeDistribution, dateGenerator,
-                claimType, periodScope, probabilities, events, shift);
+                                              List<Double> severities, List<EventPacket> events) {
+        return ClaimsGeneratorUtils.calculateClaims(scaleFactor, modifiedClaimsSizeDistribution, claimType, periodScope,
+                severities, events, shift);
     }
-    
 
     protected List<ClaimRoot> getClaims(List<Double> claimValues, ClaimType claimType, PeriodScope periodScope) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
+        List<EventPacket> events = ClaimsGeneratorUtils.generateEvents(claimValues.size(), periodScope, dateGenerator);
         for (int i = 0; i < claimValues.size(); i++) {
-            double fractionOfPeriod = (Double) dateGenerator.nextValue();
-            DateTime occurrenceDate = DateTimeUtilities.getDate(periodScope, fractionOfPeriod);
+            DateTime occurrenceDate = events.get(i).getDate();
             // todo(sku): replace with information from underwriting
-            DateTime exposureStartDate = occurrenceDate;
-            baseClaims.add(new ClaimRoot(claimValues.get(i) * -1, claimType, exposureStartDate, occurrenceDate));
+            DateTime exposureStartDate = periodScope.getCurrentPeriodStartDate();
+            EventPacket event = claimType.equals(ClaimType.EVENT) || claimType.equals(ClaimType.AGGREGATED_EVENT) ? events.get(i) : null;
+            baseClaims.add(new ClaimRoot(claimValues.get(i) * -1, claimType, exposureStartDate, occurrenceDate, event));
         }
         return baseClaims;
     }
@@ -74,7 +74,8 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
         String key = key(distribution, modifier);
         if (cachedClaimSizeGenerators.containsKey(key)) {
             claimSizeGenerator = cachedClaimSizeGenerators.get(key);
-        } else {
+        }
+        else {
             claimSizeGenerator = RandomNumberGeneratorFactory.getGenerator(distribution, modifier);
             cachedClaimSizeGenerators.put(key, claimSizeGenerator);
         }
@@ -112,9 +113,10 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     public void setModifiedDistribution(RandomDistribution distribution, DistributionModified modifier) {
         Distribution dist = distribution.getDistribution();
         if (modifier.getType().equals(DistributionModifier.CENSORED) || modifier.getType().equals(DistributionModifier.CENSOREDSHIFT)) {
-            modifiedClaimsSizeDistribution = new CensoredDistribution(dist,(Double) modifier.getParameters().get("min"),
+            modifiedClaimsSizeDistribution = new CensoredDistribution(dist, (Double) modifier.getParameters().get("min"),
                     (Double) modifier.getParameters().get("max"));
-        } else if (modifier.getType().equals(DistributionModifier.TRUNCATED) || modifier.getType().equals(DistributionModifier.TRUNCATEDSHIFT)) {
+        }
+        else if (modifier.getType().equals(DistributionModifier.TRUNCATED) || modifier.getType().equals(DistributionModifier.TRUNCATEDSHIFT)) {
             Double leftBoundary = (Double) modifier.getParameters().get("min");
             Double rightBoundary = (Double) modifier.getParameters().get("max");
             modifiedClaimsSizeDistribution = new TruncatedDistribution(dist, leftBoundary, rightBoundary);
@@ -123,8 +125,8 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
             Double leftBoundary = (Double) modifier.getParameters().get("min");
             Double rightBoundary = (Double) modifier.getParameters().get("max");
             modifiedClaimsSizeDistribution = new CensoredDistribution(new TruncatedDistribution(dist,
-                                        leftBoundary, Double.POSITIVE_INFINITY),
-                                     Double.NEGATIVE_INFINITY, rightBoundary);
+                    leftBoundary, Double.POSITIVE_INFINITY),
+                    Double.NEGATIVE_INFINITY, rightBoundary);
         }
         shift = modifier.getParameters().get("shift") == null ? 0 : (Double) modifier.getParameters().get("shift");
     }

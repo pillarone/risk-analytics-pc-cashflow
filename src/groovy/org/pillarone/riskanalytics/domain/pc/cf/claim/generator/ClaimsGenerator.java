@@ -41,7 +41,6 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     private PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket.class);
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo
             = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<DependenceStream> inProbabilities = new PacketList<DependenceStream>(DependenceStream.class);
     private PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
     private PacketList<SystematicFrequencyPacket> inEventFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket.class);
 
@@ -86,7 +85,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
             List uwFilterCriteria = parmUnderwritingInformation.getValuesAsObjects();
             // a nominal ultimate is generated, therefore no factors are applied
             List<ClaimRoot> baseClaims = parmClaimsModel.calculateClaims(inUnderwritingInfo, uwFilterCriteria,
-                    inProbabilities, inEventSeverities, this, periodScope);
+                    inEventSeverities, this, periodScope);
             baseClaims = parmClaimsModel.generateClaims(baseClaims, inUnderwritingInfo, uwFilterCriteria, inFactors, periodScope, inEventFrequencies, this);
 
             PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern);
@@ -249,16 +248,6 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
         this.outSeverityIndexApplied = outSeverityIndexApplied;
     }
 
-    /**
-     * needs to be connected only if the claims generator was selected as target in a copula
-     */
-    public PacketList<DependenceStream> getInProbabilities() {
-        return inProbabilities;
-    }
-
-    public void setInProbabilities(PacketList<DependenceStream> inProbabilities) {
-        this.inProbabilities = inProbabilities;
-    }
 
     public PacketList<EventDependenceStream> getInEventSeverities() {
         return inEventSeverities;

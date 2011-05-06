@@ -150,7 +150,7 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
     }
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                           List<DependenceStream> streams, List<EventDependenceStream> eventStreams,
+                                           List<EventDependenceStream> eventStreams,
                                            IPerilMarker filterCriteria, PeriodScope periodScope) {
         return new ArrayList<ClaimRoot>();
     }

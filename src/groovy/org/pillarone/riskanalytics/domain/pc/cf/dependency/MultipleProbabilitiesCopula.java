@@ -1,9 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.dependency;
 
-import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.pillarone.riskanalytics.core.packets.PacketList;
-import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.GeneratorCachingComponent;
@@ -13,7 +10,6 @@ import org.pillarone.riskanalytics.domain.utils.math.copula.CopulaType;
 import org.pillarone.riskanalytics.domain.utils.math.copula.ICopulaStrategy;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.*;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
-import org.pillarone.riskanalytics.domain.utils.math.randomnumber.UniformIntList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +45,7 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
         List<EventPacket> events = ClaimsGeneratorUtils.generateEvents(frequency, periodScope);
         for (int i = 0; i < frequency; i++) {
             outEventSeverities.add(new EventDependenceStream(parmCopulaStrategy.getTargetNames(),
-                    buildEventSeverity(events.get(i))));
+                    buildEventSeverities(events.get(i))));
         }
     }
 
@@ -60,7 +56,7 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
         outEventFrequencies.add(packet);
     }
 
-    private List<EventSeverity> buildEventSeverity(EventPacket event) {
+    private List<EventSeverity> buildEventSeverities(EventPacket event) {
         List<EventSeverity> eventSeverities = new ArrayList<EventSeverity>();
         List<Number> probabilities = parmCopulaStrategy.getRandomVector();
         for (int i = 0; i < probabilities.size(); i++) {

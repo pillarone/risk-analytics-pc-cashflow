@@ -77,12 +77,13 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
     }
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                           List<DependenceStream> streams, List<EventDependenceStream> eventStreams,
-                                           IPerilMarker filterCriteria, PeriodScope periodScope) {
+                                           List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria,
+                                           PeriodScope periodScope) {
         setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
         ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
         List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(eventStreams, filterCriteria);
-        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, claimType, periodScope,
-                ClaimsGeneratorUtils.extractSeverities(eventSeverities), ClaimsGeneratorUtils.extractEvents(eventSeverities));
+        List<Double> severities = ClaimsGeneratorUtils.extractSeverities(eventSeverities);
+        List<EventPacket> events = ClaimsGeneratorUtils.extractEvents(eventSeverities);
+        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, claimType, periodScope, severities, events);
     }
 }

@@ -51,7 +51,7 @@ class NonLifeCashflowModel extends StochasticModel {
         claimsGenerators.inFactors = indices.outFactors
         claimsGenerators.inPatterns = patterns.outPatterns
         claimsGenerators.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
-        claimsGenerators.inProbabilities = dependencies.outProbabilities
+        claimsGenerators.inEventSeverities = dependencies.outEventSeverities
         claimsGenerators.inEventSeverities = multipleDependencies.outEventSeverities
         claimsGenerators.inEventFrequencies = multipleDependencies.outEventFrequencies
     }

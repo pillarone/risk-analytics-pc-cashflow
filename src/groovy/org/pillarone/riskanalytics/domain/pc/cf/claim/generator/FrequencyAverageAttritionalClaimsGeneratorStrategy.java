@@ -68,8 +68,8 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
     }
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                           List<DependenceStream> streams, List<EventDependenceStream> eventStreams,
-                                           IPerilMarker filterCriteria, PeriodScope periodScope) {
+                                           List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria,
+                                           PeriodScope periodScope) {
         setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
         List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(eventStreams, filterCriteria);
         List<Double> severities = ClaimsGeneratorUtils.extractSeverities(eventSeverities);

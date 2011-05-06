@@ -11,7 +11,7 @@ import org.pillarone.riskanalytics.domain.utils.math.copula.ICorrelationMarker
  */
 public class Dependencies extends DynamicComposedComponent {
 
-    PacketList<DependenceStream> outProbabilities = new PacketList<DependenceStream>(DependenceStream)
+    PacketList<EventDependenceStream> outEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream)
 
     public Copula createDefaultSubComponent() {
         return new Copula(parmCopulaStrategy: CopulaType.getDefault())
@@ -24,14 +24,7 @@ public class Dependencies extends DynamicComposedComponent {
     }
 
     public void wire() {
-        replicateOutChannels this, 'outProbabilities'
+        replicateOutChannels this, 'outEventSeverities'
     }
 
-    public void setOutProbabilities(PacketList<DependenceStream> outProbabilities) {
-        this.outProbabilities = outProbabilities;
-    }
-
-    public PacketList<DependenceStream> getOutProbabilities() {
-        return outProbabilities;
-    }
 }

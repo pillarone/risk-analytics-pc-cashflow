@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
@@ -58,11 +59,13 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
     }
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                           List<DependenceStream> streams, List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria,
+                                           List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria,
                                            PeriodScope periodScope) {
         setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
-        List<Double> probabilities = ClaimsGeneratorUtils.filterProbabilities(streams, filterCriteria);
-        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, ClaimType.ATTRITIONAL, periodScope, probabilities, null);
+        List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(eventStreams, filterCriteria);
+        List<Double> severities = ClaimsGeneratorUtils.extractSeverities(eventSeverities);
+        List<EventPacket> events = ClaimsGeneratorUtils.extractEvents(eventSeverities);
+        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, ClaimType.ATTRITIONAL, periodScope, severities, events);
     }
 
 }

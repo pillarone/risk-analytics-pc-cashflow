@@ -19,15 +19,12 @@ import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
 class ClaimsGenerators extends DynamicComposedComponent {
 
 //    /** needs to be connected only if the claims generator was selected as target in a copula    */
-//    PacketList<DependenceStream> inProbabilities = new PacketList<DependenceStream>(DependenceStream.class);
-//    /** needs to be connected only ...    */
 //    PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
 
-    /** needs to be connected only if a none absolute base is selected     */
+    /** needs to be connected only if a none absolute base is selected       */
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
     PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket)
-    PacketList<DependenceStream> inProbabilities = new PacketList<DependenceStream>(DependenceStream)
     PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream)
     PacketList<SystematicFrequencyPacket> inEventFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket)
 
@@ -42,13 +39,11 @@ class ClaimsGenerators extends DynamicComposedComponent {
         return newComponent
     }
 
-
     public void wire() {
         replicateInChannels this, 'inUnderwritingInfo'
         replicateInChannels this, 'inFactors'
         replicateInChannels this, 'inPatterns'
         replicateOutChannels this, 'outClaims'
-        replicateInChannels this, 'inProbabilities'
         replicateInChannels this, 'inEventSeverities'
         replicateInChannels this, 'inEventFrequencies'
     }

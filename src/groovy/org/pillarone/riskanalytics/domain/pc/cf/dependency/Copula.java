@@ -2,9 +2,14 @@ package org.pillarone.riskanalytics.domain.pc.cf.dependency;
 
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.utils.math.copula.CopulaType;
 import org.pillarone.riskanalytics.domain.utils.math.copula.ICopulaStrategy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,50 +17,35 @@ import java.util.List;
  */
 public class Copula extends Component {
 
-    private PacketList<Frequency> inNumber = new PacketList<Frequency>(Frequency.class);
-    private PacketList<DependenceStream> outProbabilities = new PacketList<DependenceStream>(DependenceStream.class);
+    private PacketList<EventDependenceStream> outEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
 
     private ICopulaStrategy parmCopulaStrategy = CopulaType.getDefault();
+    private PeriodScope periodScope;
 
     public void doCalculation() {
-        if (isReceiverWired(inNumber) || inNumber.size() > 0) {
-            for (Frequency frequency : inNumber) {
-                for (int i = 0; i < frequency.value; i++) {
-                    outProbabilities.add(buildDependenceStream());
-                }
-            }
-        }
-        else {
-            outProbabilities.add(buildDependenceStream());
-        }
+
+        List<EventPacket> events = ClaimsGeneratorUtils.generateEvents(1, getPeriodScope());
+        outEventSeverities.add(buildEventDependenceStream(events.get(0)));
     }
 
-    private DependenceStream buildDependenceStream() {
-        return new DependenceStream(getTargetNames(), getRandomVector());
-    }
-
-    protected List<Number> getRandomVector() {
-        return getParmCopulaStrategy().getRandomVector();
+    private EventDependenceStream buildEventDependenceStream(EventPacket event) {
+        return new EventDependenceStream(getTargetNames(), buildEventSeverities(event));
     }
 
     protected List<String> getTargetNames() {
-        return getParmCopulaStrategy().getTargetNames();
+        return parmCopulaStrategy.getTargetNames();
     }
 
-    public PacketList<Frequency> getInNumber() {
-        return inNumber;
-    }
-
-    public void setInNumber(PacketList<Frequency> inNumber) {
-        this.inNumber = inNumber;
-    }
-
-    public PacketList<DependenceStream> getOutProbabilities() {
-        return outProbabilities;
-    }
-
-    public void setOutProbabilities(PacketList<DependenceStream> outProbabilities) {
-        this.outProbabilities = outProbabilities;
+    private List<EventSeverity> buildEventSeverities(EventPacket event) {
+        List<EventSeverity> eventSeverities = new ArrayList<EventSeverity>();
+        List<Number> probabilities = parmCopulaStrategy.getRandomVector();
+        for (int i = 0; i < probabilities.size(); i++) {
+            EventSeverity eventSeverity = new EventSeverity();
+            eventSeverity.setValue((Double) probabilities.get(i));
+            eventSeverity.setEvent(event);
+            eventSeverities.add(eventSeverity);
+        }
+        return eventSeverities;
     }
 
     public ICopulaStrategy getParmCopulaStrategy() {
@@ -64,5 +54,21 @@ public class Copula extends Component {
 
     public void setParmCopulaStrategy(ICopulaStrategy parmCopulaStrategy) {
         this.parmCopulaStrategy = parmCopulaStrategy;
+    }
+
+    public PeriodScope getPeriodScope() {
+        return periodScope;
+    }
+
+    public void setPeriodScope(PeriodScope periodScope) {
+        this.periodScope = periodScope;
+    }
+
+    public PacketList<EventDependenceStream> getOutEventSeverities() {
+        return outEventSeverities;
+    }
+
+    public void setOutEventSeverities(PacketList<EventDependenceStream> outEventSeverities) {
+        this.outEventSeverities = outEventSeverities;
     }
 }
