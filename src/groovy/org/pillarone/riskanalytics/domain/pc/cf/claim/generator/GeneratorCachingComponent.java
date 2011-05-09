@@ -12,6 +12,7 @@ import java.util.Map;
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
  */
+// todo(sku): test if really necessary. Try to remove!
 public abstract class GeneratorCachingComponent extends Component {
 
     private Map<String, IRandomNumberGenerator> generators = new HashMap<String, IRandomNumberGenerator>();

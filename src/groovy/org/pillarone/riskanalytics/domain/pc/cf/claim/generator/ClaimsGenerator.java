@@ -11,7 +11,6 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.IUnderwritingInfoMarker;

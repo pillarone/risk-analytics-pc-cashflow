@@ -6,7 +6,6 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IPerilMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
@@ -63,19 +62,6 @@ public class ClaimsGeneratorUtils {
                     exposureStartDate, occurrenceDate, event));
         }
         return baseClaims;
-    }
-
-    public static List<Double> filterProbabilities(List<DependenceStream> streams, IPerilMarker filterCriteria) {
-        List<Double> probabilities = new ArrayList<Double>();
-        for (DependenceStream stream : streams) {
-            if (stream.getDependenceStream().containsKey(filterCriteria.getNormalizedName())) {
-                probabilities.add((Double) stream.getDependenceStream().get(filterCriteria.getNormalizedName()));
-            }
-        }
-        if (probabilities.size() > 1) {
-            throw new IllegalArgumentException("['ClaimsGenerator.attritionalClaims','" + filterCriteria.getNormalizedName() + "']");
-        }
-        return probabilities;
     }
 
     public static List<EventSeverity> filterEventSeverities(List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria) {

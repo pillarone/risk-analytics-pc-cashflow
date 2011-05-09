@@ -31,12 +31,4 @@ class MultipleDependencies extends DynamicComposedComponent {
         replicateOutChannels this, 'outEventSeverities'
         replicateOutChannels this, 'outEventFrequencies'
     }
-
-    public void setOutEventSeverities(PacketList<EventDependenceStream> outEventSeverities) {
-        this.outEventSeverities = outEventSeverities;
-    }
-
-    public PacketList<EventDependenceStream> getOutEventSeverities() {
-        return outEventSeverities;
-    }
 }

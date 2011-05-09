@@ -1,15 +1,12 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
-import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
-import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IPerilMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
@@ -24,7 +21,6 @@ import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionMo
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionUtils;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -29,6 +29,7 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
     private PacketList<EventDependenceStream> outEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
     private PacketList<SystematicFrequencyPacket> outEventFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket.class);
 
+    // todo(jwa): old stuff, replace with new validation concept if the error still occurs
     public void validateParameterization() {
         if (parmFrequencyDistribution == null) {
             throw new IllegalStateException("MultipleProbabilitiesCopula.missingDistribution");
@@ -43,14 +44,15 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
         int frequency = getGenerator().nextValue().intValue();
 
         List<EventPacket> events = ClaimsGeneratorUtils.generateEvents(frequency, periodScope);
-        for (int i = 0; i < frequency; i++) {
+        for (EventPacket event : events) {
             outEventSeverities.add(new EventDependenceStream(parmCopulaStrategy.getTargetNames(),
-                    buildEventSeverities(events.get(i))));
+                    buildEventSeverities(event)));
         }
     }
 
     private void buildEventFrequencyPacket() {
-       SystematicFrequencyPacket packet = new SystematicFrequencyPacket();
+        // todo(jwa): cache packet as always the same content is produced!
+        SystematicFrequencyPacket packet = new SystematicFrequencyPacket();
         packet.setFrequencyDistribution(parmFrequencyDistribution);
         packet.setTargets(parmCopulaStrategy.getTargetNames());
         outEventFrequencies.add(packet);
@@ -59,9 +61,9 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
     private List<EventSeverity> buildEventSeverities(EventPacket event) {
         List<EventSeverity> eventSeverities = new ArrayList<EventSeverity>();
         List<Number> probabilities = parmCopulaStrategy.getRandomVector();
-        for (int i = 0; i < probabilities.size(); i++) {
+        for (Number probability : probabilities) {
             EventSeverity eventSeverity = new EventSeverity();
-            eventSeverity.setValue((Double) probabilities.get(i));
+            eventSeverity.setValue((Double) probability);
             eventSeverity.setEvent(event);
             eventSeverities.add(eventSeverity);
         }
