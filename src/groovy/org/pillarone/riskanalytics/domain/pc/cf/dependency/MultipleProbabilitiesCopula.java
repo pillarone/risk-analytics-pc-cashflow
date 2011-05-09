@@ -37,7 +37,7 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
     }
 
     public void doCalculation() {
-
+        // todo: lazyInitialization()
         buildEventFrequencyPacket();
         setGenerator(getCachedGenerator(parmFrequencyDistribution, modifier));
         int frequency = getGenerator().nextValue().intValue();
@@ -50,7 +50,7 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
     }
 
     private void buildEventFrequencyPacket() {
-       SystematicFrequencyPacket packet = new SystematicFrequencyPacket();
+        SystematicFrequencyPacket packet = new SystematicFrequencyPacket();
         packet.setFrequencyDistribution(parmFrequencyDistribution);
         packet.setTargets(parmCopulaStrategy.getTargetNames());
         outEventFrequencies.add(packet);
@@ -59,9 +59,9 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
     private List<EventSeverity> buildEventSeverities(EventPacket event) {
         List<EventSeverity> eventSeverities = new ArrayList<EventSeverity>();
         List<Number> probabilities = parmCopulaStrategy.getRandomVector();
-        for (int i = 0; i < probabilities.size(); i++) {
+        for (Number probabiity : probabilities) {
             EventSeverity eventSeverity = new EventSeverity();
-            eventSeverity.setValue((Double) probabilities.get(i));
+            eventSeverity.setValue((Double) probabiity);
             eventSeverity.setEvent(event);
             eventSeverities.add(eventSeverity);
         }

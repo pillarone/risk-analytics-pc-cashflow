@@ -55,7 +55,7 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
         double frequencyFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, frequencyBase, uwInfosFilterCriteria);
         RandomDistribution systematicFrequencyDistribution = ClaimsGeneratorUtils.extractDistribution(systematicFrequencies, filterCriteria);
         IRandomNumberGenerator frequencyGenerator = RandomNumberGeneratorFactory.getGenerator(
-                DistributionUtils.getIdiosyncraticPart(frequencyDistribution, systematicFrequencyDistribution), frequencyModification);
+                DistributionUtils.getIdiosyncraticDistribution(frequencyDistribution, systematicFrequencyDistribution), frequencyModification);
         IRandomNumberGenerator claimsSizeGenerator = RandomNumberGeneratorFactory.getGenerator(claimsSizeDistribution, claimsSizeModification);
         int numberOfClaims = (int) (frequencyGenerator.nextValue().intValue() * frequencyFactor);
         double claimValue = baseClaims.get(0).getUltimate();

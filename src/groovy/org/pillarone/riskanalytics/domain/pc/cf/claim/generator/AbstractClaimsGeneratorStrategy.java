@@ -128,6 +128,9 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
                     leftBoundary, Double.POSITIVE_INFINITY),
                     Double.NEGATIVE_INFINITY, rightBoundary);
         }
+        else {
+            modifiedClaimsSizeDistribution = dist;
+        }
         shift = modifier.getParameters().get("shift") == null ? 0 : (Double) modifier.getParameters().get("shift");
     }
 

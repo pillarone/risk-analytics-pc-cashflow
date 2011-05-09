@@ -68,7 +68,7 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
 
         setGenerator(claimsSizeDistribution, claimsSizeModification);
         RandomDistribution systematicFrequencyDistribution = ClaimsGeneratorUtils.extractDistribution(systematicFrequencies, filterCriteria);
-        setClaimNumberGenerator(DistributionUtils.getIdiosyncraticPart(frequencyDistribution, systematicFrequencyDistribution),
+        setClaimNumberGenerator(DistributionUtils.getIdiosyncraticDistribution(frequencyDistribution, systematicFrequencyDistribution),
                 frequencyModification);
         ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
         List<Factors> factors = IndexUtils.filterFactors(factorPackets, frequencyIndices);
