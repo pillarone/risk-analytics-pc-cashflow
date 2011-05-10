@@ -1,6 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.exposure;
 
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
 import org.pillarone.riskanalytics.domain.utils.PacketUtilities;
 
 import java.util.Arrays;
@@ -23,6 +25,9 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
     private ExposureInfo exposure;
 
     private UnderwritingInfoPacket original;
+
+    private ISegmentMarker segment;
+    private IReinsuranceContractMarker reinsuranceContract;
 
     public UnderwritingInfoPacket() {
         super();
@@ -80,6 +85,29 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
                 return numberOfPolicies;
         }
         return 1;
+    }
+
+    /**
+     * Adds additive UnderwritingInfo fields (premium) as well as combining ExposureInfo fields.
+     * averageSumInsured is not adjusted!
+     *
+     * @param other
+     * @return UnderwritingInfo packet with resulting fields
+     */
+    public UnderwritingInfoPacket plus(UnderwritingInfoPacket other) {
+        if (other == null) return this;
+        sumInsured = (numberOfPolicies * sumInsured + other.numberOfPolicies * other.sumInsured);
+        numberOfPolicies += other.numberOfPolicies;
+        if (numberOfPolicies > 0) {
+            sumInsured = sumInsured / numberOfPolicies;
+        }
+        maxSumInsured = Math.max(maxSumInsured, other.maxSumInsured);
+        if (exposure != other.exposure) {
+            exposure = null;
+        }
+        premiumPaid += other.premiumPaid;
+        premiumWritten += other.premiumWritten;
+        return this;
     }
 
     public boolean sameContent(UnderwritingInfoPacket other) {
@@ -183,5 +211,21 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
 
     public void setPremiumPaid(double premiumPaid) {
         this.premiumPaid = premiumPaid;
+    }
+
+    public ISegmentMarker getSegment() {
+        return segment;
+    }
+
+    public void setSegment(ISegmentMarker segment) {
+        this.segment = segment;
+    }
+
+    public IReinsuranceContractMarker getReinsuranceContract() {
+        return reinsuranceContract;
+    }
+
+    public void setReinsuranceContract(IReinsuranceContractMarker reinsuranceContract) {
+        this.reinsuranceContract = reinsuranceContract;
     }
 }

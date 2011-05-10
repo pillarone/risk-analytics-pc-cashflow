@@ -1,0 +1,61 @@
+package org.pillarone.riskanalytics.domain.pc.cf.reinsurance;
+
+import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
+
+/**
+ * @author stefan.kunz (at) intuitive-collaboration (dot) com
+ */
+public class ContractFinancialsPacket extends MultiValuePacket {
+    private double result;
+    private double cededPremium;
+    private double cededClaim;
+    private double cededCommission;
+    private double cededLossRatio;
+
+    public double getCededPremium() {
+        return cededPremium;
+    }
+
+    public void setCededPremium(double cededPremium) {
+        this.cededPremium = cededPremium;
+        setResultingCosts();
+    }
+
+    public double getCededClaim() {
+        return cededClaim;
+    }
+
+    public void setCededClaim(double cededClaim) {
+        this.cededClaim = cededClaim;
+        setResultingCosts();
+    }
+
+    public double getResult() {
+        result = cededPremium + cededClaim + cededCommission;
+        return result;
+    }
+
+    private void setResultingCosts() {
+        result = cededPremium + cededClaim + cededCommission;
+    }
+    public void setResult(double result) {
+        this.result = result;
+    }
+
+    public double getCededCommission() {
+        return cededCommission;
+    }
+
+    public void setCededCommission(double cededCommission) {
+        this.cededCommission = cededCommission;
+        setResultingCosts();
+    }
+
+    public double getCededLossRatio() {
+        return cededLossRatio;
+    }
+
+    public void setCededLossRatio(double cededLossRatio) {
+        this.cededLossRatio = cededLossRatio;
+    }
+}

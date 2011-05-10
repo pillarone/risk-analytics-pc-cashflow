@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
@@ -10,6 +11,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,6 +157,10 @@ public final class GrossClaimRoot implements IClaimRoot {
         return claimRoot.getOccurrenceDate();
     }
 
+    public Integer getOccurrencePeriod(IPeriodCounter periodCounter) {
+        return claimRoot.getOccurrencePeriod(periodCounter);
+    }
+
     /**
      * @return payout and reported pattern have the same period entries. True even if one of them is null
      */
@@ -175,6 +182,18 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     public boolean hasIBNR() {
         return reportingPattern != null && !reportingPattern.isTrivial();
+    }
+
+    public IPerilMarker peril() { return claimRoot.peril(); }
+    public ISegmentMarker segment() { return claimRoot.segment(); }
+    public IReinsuranceContractMarker reinsuranceContract() { return claimRoot.reinsuranceContract(); }
+
+    public ClaimRoot withScale(double scaleFactor, IReinsuranceContractMarker reinsuranceContract) {
+        return claimRoot.withScale(scaleFactor, reinsuranceContract);
+    }
+
+    public ClaimRoot withScale(double scaleFactor) {
+        return claimRoot.withScale(scaleFactor);
     }
 
     @Override
