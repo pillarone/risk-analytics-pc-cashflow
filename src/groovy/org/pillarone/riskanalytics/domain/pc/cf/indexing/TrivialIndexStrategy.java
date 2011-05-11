@@ -15,7 +15,7 @@ import java.util.Map;
 public class TrivialIndexStrategy extends AbstractParameterObject implements IIndexStrategy {
 
     public IParameterObjectClassifier getType() {
-        return IndexStrategyType.TRIVIAL;
+        return IndexStrategyType.NONE;
     }
 
     public Map getParameters() {

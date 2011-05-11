@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObject implements IIndexStrategy {
+public class DeterministicIndexStrategy extends AbstractParameterObject implements IIndexStrategy {
 
     public static final String INDICES = "indices";
 
@@ -43,24 +43,16 @@ public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObj
     protected void lazyInitFactors(Index origin) {
         if (factors == null) {
             factors = new ArrayList<FactorsPacket>();
-            int dateColumnIndex = indices.getColumnIndex(AnnualIndexTableConstraints.DATE);
-            int changeColumnIndex = indices.getColumnIndex(AnnualIndexTableConstraints.ANNUAL_CHANGE);
+            int dateColumnIndex = indices.getColumnIndex(DeterministicIndexTableConstraints.DATE);
+            int indexColumnIndex = indices.getColumnIndex(DeterministicIndexTableConstraints.INDEX);
             FactorsPacket factor = new FactorsPacket();
             if (indices.getValues().size() > 0) {
-                double factorProduct = 1d;
-                DateTime formerDate = null;
-                double formerChange = 0d;
                 for (int row = indices.getTitleRowCount(); row < indices.getRowCount(); row++) {
-                    DateTime date = (DateTime) indices.getValueAt(row, dateColumnIndex);
-                    double change = InputFormatConverter.getDouble(indices.getValueAt(row, changeColumnIndex));
-                    factorProduct *= incrementalFactor(formerDate, formerChange, date);
-                    factor.add(date, factorProduct);
-                    formerDate = date;
-                    formerChange = change;
+                    DateTime indexDate = (DateTime) indices.getValueAt(row, dateColumnIndex);
+                    double index = InputFormatConverter.getDouble(indices.getValueAt(row, indexColumnIndex));
+                    factor.add(indexDate, index);
+                    factor.origin = origin;
                 }
-                DateTime nextDate = formerDate.plus(Period.years(1));
-                factor.add(nextDate, factorProduct * incrementalFactor(formerDate, formerChange, nextDate));
-                factor.origin = origin;
             }
             else {
                 return; // in the trivial case the returned list has to be void
@@ -68,13 +60,4 @@ public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObj
             factors.add(factor);
         }
     }
-
-    private double incrementalFactor(DateTime formerDate, double formerChange, DateTime date) {
-        if (formerDate != null) {
-            double elapsedTime = Days.daysBetween(formerDate, date).getDays() / 365.2425;
-            return Math.pow(1 + formerChange, elapsedTime);
-        }
-        return 1d;
-    }
-
 }

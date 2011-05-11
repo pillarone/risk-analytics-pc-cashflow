@@ -9,13 +9,13 @@ import java.util.List;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AnnualIndexTableConstraints implements IMultiDimensionalConstraints {
+public class DeterministicIndexTableConstraints implements IMultiDimensionalConstraints {
 
     public static final String IDENTIFIER = "INDEX";
     public static final String DATE = "Date";
-    public static final String ANNUAL_CHANGE = "Annual Change";
+    public static final String INDEX = "INDEX";
 
-    public static final List<String> COLUMN_TITLES = Arrays.asList(AnnualIndexTableConstraints.DATE, AnnualIndexTableConstraints.ANNUAL_CHANGE);
+    public static final List<String> COLUMN_TITLES = Arrays.asList(DeterministicIndexTableConstraints.DATE, DeterministicIndexTableConstraints.INDEX);
 
     public boolean matches(int row, int column, Object value) {
         if (column == 0) {

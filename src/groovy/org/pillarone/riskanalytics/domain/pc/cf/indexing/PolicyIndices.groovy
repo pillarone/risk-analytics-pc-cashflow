@@ -13,7 +13,7 @@ class PolicyIndices extends DynamicComposedComponent {
 
     @Override
     Component createDefaultSubComponent() {
-        PolicyIndex index = new PolicyIndex(parmIndices : IndexStrategyType.getDefault());
+        PolicyIndex index = new PolicyIndex(parmIndex : IndexStrategyType.getDefault());
         return index
     }
 

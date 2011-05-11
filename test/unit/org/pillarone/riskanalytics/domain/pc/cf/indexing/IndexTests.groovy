@@ -23,7 +23,7 @@ class IndexTests extends GroovyTestCase {
     DateTime date20110101 = new DateTime(2011,1,1,0,0,0,0)
 
     void testTrivialIndex() {
-        Index index = new Index(parmIndices: IndexStrategyType.getStrategy(IndexStrategyType.TRIVIAL, [:]))
+        Index index = new Index(parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.NONE, [:]))
         index.doCalculation()
         assertEquals "no factor", 0, index.outFactors.size()
     }
@@ -31,7 +31,7 @@ class IndexTests extends GroovyTestCase {
     void testStochasticIndex() {
         MathUtils.initRandomStreamBase(123)
 
-        Index index = new Index(parmIndices: IndexStrategyType.getStrategy(IndexStrategyType.STOCHASTIC,
+        Index index = new Index(parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.STOCHASTIC,
                         [startDate : date20110101,
                          distribution : DistributionType.getStrategy(DistributionType.LOGNORMAL, ['mean' : 0.03, 'stDev' : 0.2])]))
         index.periodScope = TestPeriodScopeUtilities.getPeriodScope(date20110101, 5)
@@ -61,11 +61,11 @@ class IndexTests extends GroovyTestCase {
     }
 
     void testDeterministicAnnualChange() {
-        Index index = new Index(parmIndices: IndexStrategyType.getStrategy(IndexStrategyType.DETERMINISTICANNUALCHANGE,
+        Index index = new Index(parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.DETERMINISTICANNUALCHANGE,
                         [indices: new ConstrainedMultiDimensionalParameter(
                                 [[date20010101, date20020101, date20030222, date20030316, date20041212, date20050421],
                                  [0.0222, 0d, 0.0094, 0.0188, 0.0267, 0.0155]],
-                        [AnnualIndexTableConstraints.DATE, AnnualIndexTableConstraints.CHANGE],
+                        [AnnualIndexTableConstraints.DATE, AnnualIndexTableConstraints.ANNUAL_CHANGE],
                         ConstraintsFactory.getConstraints(AnnualIndexTableConstraints.IDENTIFIER))]))
         index.doCalculation()
 
