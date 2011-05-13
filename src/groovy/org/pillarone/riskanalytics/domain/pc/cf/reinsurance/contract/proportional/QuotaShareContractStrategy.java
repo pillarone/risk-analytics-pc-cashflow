@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.Reinsurance
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.AalLimitStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.ILimitStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.NoneLimitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ public class QuotaShareContractStrategy extends AbstractParameterObject implemen
 
     private double quotaShare;
     private ILimitStrategy limit;
+    private ICommissionStrategy commission;
 
 
     public ReinsuranceContractType getType() {
@@ -31,15 +33,16 @@ public class QuotaShareContractStrategy extends AbstractParameterObject implemen
         Map params = new HashMap(2);
         params.put(QUOTASHARE, quotaShare);
         params.put(LIMIT, limit);
+        params.put(COMMISSION, commission);
         return params;
     }
 
     public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets) {
         if (limit instanceof NoneLimitStrategy) {
-            return new QuotaShareContract(quotaShare);
+            return new QuotaShareContract(quotaShare, commission.getCalculator());
         }
         else if (limit instanceof AalLimitStrategy) {
-            return new QuotaShareContractAAL(quotaShare, ((AalLimitStrategy) limit).getAAL());
+            return new QuotaShareContractAAL(quotaShare, commission.getCalculator(), (AalLimitStrategy) limit);
         }
         else {
             throw new NotImplementedException(limit + " not implemented.");
@@ -48,4 +51,5 @@ public class QuotaShareContractStrategy extends AbstractParameterObject implemen
 
     public static final String QUOTASHARE = "quotaShare";
     public static final String LIMIT = "limit";
+    public static final String COMMISSION = "commission";
 }

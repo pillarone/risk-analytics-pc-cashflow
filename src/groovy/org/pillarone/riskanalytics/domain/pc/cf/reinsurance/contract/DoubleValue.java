@@ -19,5 +19,5 @@ public class DoubleValue {
     public String toString() {
         return String.valueOf(value);
     }
-    
+
 }

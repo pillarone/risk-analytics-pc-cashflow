@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexMode
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.BaseDateMode
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -28,6 +29,16 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
     DateTime date20110101 = new DateTime(2011,1,1,0,0,0,0)
     DateTime date20110418 = new DateTime(2011,4,18,0,0,0,0)
     DateTime date20110701 = new DateTime(2011,7,1,0,0,0,0)
+
+    static ClaimCashflowPacket getClaimCashflowPacket(double ultimate, double incrementalPaid, IReinsuranceContractMarker contract) {
+        ClaimRoot baseClaim = new ClaimRoot(ultimate, ClaimType.ATTRITIONAL, null, null)
+        baseClaim.reinsuranceContract = contract
+        DateTime updateDate = new DateTime(2011,1,1,0,0,0,0)
+        IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(updateDate, 1)
+        ClaimCashflowPacket claim = new ClaimCashflowPacket(baseClaim, incrementalPaid, 0, 0, 0, 0, updateDate, periodCounter, false)
+        return claim
+    }
+
 
     void testTrivialPayout() {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)

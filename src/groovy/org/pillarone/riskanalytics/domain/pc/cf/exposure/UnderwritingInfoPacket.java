@@ -16,18 +16,18 @@ import java.util.Map;
 // todo(sku): think! should we head for a similar design as for claims (.. root ..)
 public class UnderwritingInfoPacket extends MultiValuePacket {
     
-    private double premiumWritten;
-    private double premiumPaid;
-    private double numberOfPolicies;
-    private double sumInsured;
-    private double maxSumInsured;
+    protected double premiumWritten;
+    protected double premiumPaid;
+    protected double numberOfPolicies;
+    protected double sumInsured;
+    protected double maxSumInsured;
 
-    private ExposureInfo exposure;
+    protected ExposureInfo exposure;
+    protected Integer inceptionPeriod;
 
-    private UnderwritingInfoPacket original;
-
-    private ISegmentMarker segment;
-    private IReinsuranceContractMarker reinsuranceContract;
+    protected UnderwritingInfoPacket original;
+    protected ISegmentMarker segment;
+    protected IReinsuranceContractMarker reinsuranceContract;
 
     public UnderwritingInfoPacket() {
         super();

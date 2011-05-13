@@ -15,6 +15,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.
 import org.pillarone.riskanalytics.core.parameterization.AbstractMultiDimensionalParameter
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.StopLossPremiumBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.TrivialContractStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -95,7 +96,8 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
             case ReinsuranceContractType.QUOTASHARE:
                 return new QuotaShareContractStrategy(
                         quotaShare: (double) parameters[QuotaShareContractStrategy.QUOTASHARE],
-                        limit: (ILimitStrategy) parameters[QuotaShareContractStrategy.LIMIT])
+                        limit: (ILimitStrategy) parameters[QuotaShareContractStrategy.LIMIT],
+                        commission: (ICommissionStrategy) parameters[QuotaShareContractStrategy.COMMISSION])
                 break
             case ReinsuranceContractType.WXL:
                 return new WXLConstractStrategy(

@@ -2,12 +2,10 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportion
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.CommissionPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
-
-import java.util.List;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.AalLimitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -19,15 +17,12 @@ public class QuotaShareContractAAL extends QuotaShareContract {
     private DoubleValue annualAggregateLimitReported = new DoubleValue();
 
 
-    public QuotaShareContractAAL(double quotaShare, double annualAggregateLimit) {
-        super(quotaShare);
+    public QuotaShareContractAAL(double quotaShare, ICommission commission, AalLimitStrategy limit) {
+        super(quotaShare, commission);
+        double annualAggregateLimit = limit.getAAL();
         annualAggregateLimitUltimate.value = annualAggregateLimit;
         annualAggregateLimitPaid.value = annualAggregateLimit;
         annualAggregateLimitReported.value = annualAggregateLimit;
-    }
-
-    public void initBookkeepingFigures(List<ClaimCashflowPacket> grossClaims) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
@@ -42,29 +37,23 @@ public class QuotaShareContractAAL extends QuotaShareContract {
 
         double quotaShareReported = adjustedQuote(grossClaim.getReportedIncremental(), annualAggregateLimitReported);
         double quotaSharePaid = adjustedQuote(grossClaim.getPaidIncremental(), annualAggregateLimitPaid);
-
-        return grossClaim.withBaseClaimAndShare(cededBaseClaim, quotaShareReported, quotaSharePaid, grossClaim.ultimate() != 0);
+        ClaimCashflowPacket cededClaim = grossClaim.withBaseClaimAndShare(cededBaseClaim, quotaShareReported,
+                quotaSharePaid, grossClaim.ultimate() != 0);
+        add(grossClaim, cededClaim);
+        return cededClaim;
     }
 
     /**
      *
      * @param claimProperty
      * @param annualAggregateLimit
-     * @return has a negative sign as claimProperty is negati
+     * @return has a negative sign as claimProperty is negative
      */
     private double adjustedQuote(double claimProperty, DoubleValue annualAggregateLimit) {
         if (claimProperty == 0) return 1;
         Double cededClaimProperty = Math.min(claimProperty * -quotaShare, annualAggregateLimit.value);
         annualAggregateLimit.minus(cededClaimProperty);
         return (cededClaimProperty / claimProperty);
-    }
-
-    public UnderwritingInfoPacket calculateUnderwritingInfoCeded(UnderwritingInfoPacket grossInfo) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public CommissionPacket calculateCommission(List<ClaimCashflowPacket> cededClaims, List<UnderwritingInfoPacket> cededUnderwritingInfo) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

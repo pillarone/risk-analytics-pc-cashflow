@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
 import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -35,7 +36,8 @@ class ReinsuranceContractTests extends GroovyTestCase {
         return new ReinsuranceContract(
                 parmContractStrategy : ReinsuranceContractType.getStrategy(ReinsuranceContractType.QUOTASHARE, [
                         'quotaShare': quotaShare,
-                        'limit': LimitStrategyType.getDefault()
+                        'limit': LimitStrategyType.getDefault(),
+                        'commission': CommissionStrategyType.getNoCommission()
                 ]),
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0])

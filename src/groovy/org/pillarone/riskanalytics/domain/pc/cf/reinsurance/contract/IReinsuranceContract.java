@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 
 import java.util.List;
@@ -13,14 +14,24 @@ import java.util.List;
  */
 public interface IReinsuranceContract {
 
-    void initBookkeepingFigures(List<ClaimCashflowPacket> grossClaims);
+    void add(UnderwritingInfoPacket grossUnderwritingInfo);
 
     /**
      *  Calculates the claim covered of the loss net after contracts with
      *  a smaller inuring priority or preceding contracts in the net.
+     *  @param grossClaim
+     *  @param storage
+     *  @return
      */
     ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage);
 
-    UnderwritingInfoPacket calculateUnderwritingInfoCeded(UnderwritingInfoPacket grossInfo);
+
+    /**
+     * @param cededUnderwritingInfos
+     * @param netUnderwritingInfos
+     * @param fillNet if true the second list is filled too
+     */
+    void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
+                                   List<UnderwritingInfoPacket> netUnderwritingInfos, boolean fillNet);
 
 }

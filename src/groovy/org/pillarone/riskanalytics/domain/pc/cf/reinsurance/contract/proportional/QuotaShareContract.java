@@ -2,46 +2,45 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportion
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.CommissionPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
-
-import java.util.List;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class QuotaShareContract implements IPropReinsuranceContract {
+public class QuotaShareContract extends AbstractProportionalReinsuranceContract {
 
-    // todo(sku): should probably be part of an abstract super class
-    protected IReinsuranceContractMarker contractMarker;
+
     protected double quotaShare = 0;
 
-    public QuotaShareContract(double quotaShare) {
+    public QuotaShareContract(double quotaShare, ICommission commission) {
         this.quotaShare = quotaShare;
-    }
-
-    public void initBookkeepingFigures(List<ClaimCashflowPacket> grossClaims) {
+        this.commission = commission;
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
         IClaimRoot cededBaseClaim = storage.getCededClaimRoot(-quotaShare, contractMarker);
-        return grossClaim.withBaseClaimAndShare(cededBaseClaim, -quotaShare, -quotaShare, grossClaim.ultimate() != 0);
+        ClaimCashflowPacket cededClaim = grossClaim.withBaseClaimAndShare(cededBaseClaim, -quotaShare, -quotaShare, grossClaim.ultimate() != 0);
+        add(grossClaim, cededClaim);
+        return cededClaim;
     }
 
-    public UnderwritingInfoPacket calculateUnderwritingInfoCeded(UnderwritingInfoPacket grossInfo) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public void calculatePremium() {
+        for (UnderwritingInfoPacket grossUnderwritingInfo : grossUwInfos) {
+            CededUnderwritingInfoPacket cededUnderwritingInfo = CededUnderwritingInfoPacket.scale(grossUnderwritingInfo, contractMarker, 1, quotaShare, 1);
+            cededUwInfos.add(cededUnderwritingInfo);
+        }
     }
 
-    public CommissionPacket calculateCommission(List<ClaimCashflowPacket> cededClaims, List<UnderwritingInfoPacket> cededUnderwritingInfo) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 
      @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append(quotaShare);
+        buffer.append(", ");
+        buffer.append(commission.toString());
         return buffer.toString();
     }
 }

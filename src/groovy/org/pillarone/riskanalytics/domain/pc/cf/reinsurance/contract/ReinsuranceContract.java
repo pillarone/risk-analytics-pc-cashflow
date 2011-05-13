@@ -11,10 +11,12 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.INonPropReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.CommissionPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ICoverAttributeStrategy;
@@ -39,7 +41,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<UnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
+            = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
     private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
     private PacketList<CommissionPacket> outCommission = new PacketList<CommissionPacket>(CommissionPacket.class);
 
@@ -60,12 +63,14 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         // check cover
         filterInChannels();
         updateContractParameters();
-        fillGrossClaims();
+        Set<IReinsuranceContract> contracts = fillGrossClaims();
+//        fillGrossUnderwritingInfo(contracts);
         calculateCededClaims();
-        calculateCededPremium();
-        calculateCommission();
+        processUnderwritingInfo(contracts);
         discountClaims();
     }
+
+
 
     /**
      * filter according to covered period and covered claims generators, segments and companies
@@ -86,6 +91,14 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             }
         }
         inClaims.removeAll(uncoveredClaims);
+
+        List<UnderwritingInfoPacket> uncoveredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
+        for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
+            if (!parmCoveredPeriod.isCovered(underwritingInfo.getExposure().getInceptionDate())) {
+                uncoveredUnderwritingInfo.add(underwritingInfo);
+            }
+        }
+        inUnderwritingInfo.removeAll(uncoveredUnderwritingInfo);
     }
 
     /**
@@ -118,20 +131,22 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         Map<IClaimRoot, ClaimStorage> claimsHistories =
                 (HashMap<IClaimRoot, ClaimStorage>) periodStore.getFirstPeriod(CLAIM_HISTORY);
         List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = new ArrayList<ClaimHistoryAndApplicableContract>();
+        int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
         if (claimsHistories == null) {
             claimsHistories = new HashMap<IClaimRoot, ClaimStorage>();
             periodStore.put(CLAIM_HISTORY, claimsHistories);
             for (ClaimCashflowPacket claim : inClaims) {
                 int occurrencePeriod = claim.occurrencePeriod(periodCounter);
-                contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, claimsHistories, currentPeriodGrossClaims));
+                contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, currentPeriod, claimsHistories,
+                        currentPeriodGrossClaims));
             }
         }
         else {
             for (ClaimCashflowPacket claim : inClaims) {
                 int occurrencePeriod = claim.occurrencePeriod(periodCounter);
-                int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
                 if (currentPeriod == occurrencePeriod) {
-                    contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, claimsHistories, currentPeriodGrossClaims));
+                    contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, currentPeriod, claimsHistories,
+                            currentPeriodGrossClaims));
                 }
                 else {
                     ClaimStorage claimStorage = claimsHistories.get(claim.getBaseClaim());
@@ -148,9 +163,9 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     }
 
     private IReinsuranceContract newClaimOccurredInCurrentPeriod(ClaimCashflowPacket claim, int occurrencePeriod,
-                            Map<IClaimRoot, ClaimStorage> claimsHistories,
+                            int currentPeriod, Map<IClaimRoot, ClaimStorage> claimsHistories,
                             List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims) {
-        IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, occurrencePeriod);
+        IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, occurrencePeriod - currentPeriod);
         ClaimStorage claimStorage = new ClaimStorage(claim);
         claimsHistories.put(claim.getBaseClaim(), claimStorage);
         ClaimHistoryAndApplicableContract claimWithHistory = new ClaimHistoryAndApplicableContract(claim, claimStorage, contract);
@@ -158,6 +173,10 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         return contract;
     }
 
+    /**
+     * This has to be done on a claims by claims level and not by contract to consider paid dates and parameters shared
+     * among several periods correctly.
+     */
     private void calculateCededClaims() {
         List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
         for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
@@ -167,12 +186,18 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         }
     }
 
-    private void calculateCededPremium() {
-
-    }
-
-    private void calculateCommission() {
-
+    private void processUnderwritingInfo(Set<IReinsuranceContract> contracts) {
+        if (contracts == null || contracts.size() == 0) return;
+        int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
+        // map underwriting info to corresponding contracts
+        for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
+            int inceptionPeriod = underwritingInfo.getExposure().getInceptionPeriod();
+            IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, inceptionPeriod - currentPeriod);
+            contract.add(underwritingInfo);
+        }
+        for (IReinsuranceContract contract : contracts) {
+            contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, isSenderWired(outUnderwritingInfoNet));
+        }
     }
 
     private void discountClaims() {
@@ -254,11 +279,11 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         this.outUnderwritingInfoNet = outUnderwritingInfoNet;
     }
 
-    public PacketList<UnderwritingInfoPacket> getOutUnderwritingInfoCeded() {
+    public PacketList<CededUnderwritingInfoPacket> getOutUnderwritingInfoCeded() {
         return outUnderwritingInfoCeded;
     }
 
-    public void setOutUnderwritingInfoCeded(PacketList<UnderwritingInfoPacket> outUnderwritingInfoCeded) {
+    public void setOutUnderwritingInfoCeded(PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded) {
         this.outUnderwritingInfoCeded = outUnderwritingInfoCeded;
     }
 
