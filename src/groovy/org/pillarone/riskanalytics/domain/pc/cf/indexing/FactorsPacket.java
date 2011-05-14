@@ -35,12 +35,12 @@ public class FactorsPacket extends Packet {
 
     public Double getFactorFloor(DateTime date) {
         Map.Entry<DateTime, Double> dateTimeDoubleEntry = factorsPerDate.floorEntry(date);
-        return dateTimeDoubleEntry == null ? 1 : dateTimeDoubleEntry.getValue();
+        return dateTimeDoubleEntry == null ? factorsPerDate.firstEntry().getValue() : dateTimeDoubleEntry.getValue();
     }
 
     public Double getFactorCeiling(DateTime date) {
         Map.Entry<DateTime, Double> dateTimeDoubleEntry = factorsPerDate.ceilingEntry(date);
-        return dateTimeDoubleEntry == null ? 1 : dateTimeDoubleEntry.getValue();
+        return dateTimeDoubleEntry == null ? factorsPerDate.lastEntry().getValue() : dateTimeDoubleEntry.getValue();
     }
 
     public Double getFactorInterpolated(DateTime date) {

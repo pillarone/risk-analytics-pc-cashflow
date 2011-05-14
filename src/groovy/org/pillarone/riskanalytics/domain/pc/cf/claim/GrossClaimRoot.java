@@ -5,6 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
@@ -77,7 +78,7 @@ public final class GrossClaimRoot implements IClaimRoot {
                     : null;
             for (int i = 0; i < payouts.size(); i++) {
                 DateTime payoutDate = payouts.get(i).getDate();
-                double factor = manageFactor(factors, payoutDate);
+                double factor = manageFactor(factors, payoutDate, periodCounter, claimRoot.getOccurrenceDate());
                 double payoutIncrementalFactor = payouts.get(i).getFactorIncremental();
                 double payoutCumulatedFactor = payouts.get(i).getFactorCumulated();
                 double ultimate = claimRoot.getUltimate();
@@ -123,8 +124,8 @@ public final class GrossClaimRoot implements IClaimRoot {
         return 0;
     }
 
-    private double manageFactor(List<Factors> factors, DateTime payoutDate) {
-        Double productFactor = IndexUtils.aggregateFactor(factors, payoutDate);
+    private double manageFactor(List<Factors> factors, DateTime payoutDate, IPeriodCounter periodCounter, DateTime dateOfLoss) {
+        Double productFactor = IndexUtils.aggregateFactor(factors, periodCounter, dateOfLoss);
         this.factors.add(payoutDate, productFactor);
         return productFactor;
     }
