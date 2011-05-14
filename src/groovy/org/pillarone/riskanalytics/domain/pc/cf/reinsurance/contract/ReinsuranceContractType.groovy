@@ -16,6 +16,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractMultiDimensiona
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.StopLossPremiumBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.TrivialContractStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -23,7 +24,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportiona
 class ReinsuranceContractType extends AbstractParameterObjectClassifier {
 
     public static final ReinsuranceContractType QUOTASHARE = new ReinsuranceContractType("quota share", "QUOTASHARE",
-            ["quotaShare": 0d, "limit": LimitStrategyType.getDefault()])
+            ["quotaShare": 0d, "limit": LimitStrategyType.getDefault(), 'commission': CommissionStrategyType.getNoCommission()])
     public static final ReinsuranceContractType SURPLUS = new ReinsuranceContractType("surplus", "SURPLUS",
             ["retention": 0d, "lines": 0d, "defaultCededLossShare": 0d])
     public static final ReinsuranceContractType WXL = new ReinsuranceContractType("wxl", "WXL", [

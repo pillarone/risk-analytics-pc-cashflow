@@ -4,9 +4,7 @@ import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimen
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
-import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IPerilMarker
-import org.pillarone.riskanalytics.domain.pc.cf.legalentity.ILegalEntityMarker
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -44,6 +42,10 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
 
     public IParameterObject getParameterObject(Map parameters) {
         return getStrategy(this, parameters)
+    }
+
+    public static ICoverAttributeStrategy getDefault() {
+        return new AllCoverAttributeStrategy(reserves : IncludeType.NOTINCLUDED)
     }
 
     public static ICoverAttributeStrategy getStrategy(CoverAttributeStrategyType type, Map parameters) {

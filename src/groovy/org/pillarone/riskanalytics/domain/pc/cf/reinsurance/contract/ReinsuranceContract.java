@@ -1,6 +1,5 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
@@ -16,11 +15,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.INonPropReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.CommissionPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ICoverAttributeStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.IncludeType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.IPeriodStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType;
 
@@ -50,8 +47,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private ConstrainedMultiDimensionalParameter parmReinsurers = new ConstrainedMultiDimensionalParameter(
             Collections.emptyList(), LegalEntityPortionConstraints.COLUMN_TITLES,
             ConstraintsFactory.getConstraints(LegalEntityPortionConstraints.IDENTIFIER));
-    private ICoverAttributeStrategy parmCover = CoverAttributeStrategyType.getStrategy(
-            CoverAttributeStrategyType.ALL, ArrayUtils.toMap(new Object[][]{{"reserves", IncludeType.NOTINCLUDED}}));
+    private ICoverAttributeStrategy parmCover = CoverAttributeStrategyType.getDefault();
     private IPeriodStrategy parmCoveredPeriod = PeriodStrategyType.getDefault();
 
     private IReinsuranceContractStrategy parmContractStrategy = ReinsuranceContractType.getDefault();

@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class CustomPeriodStrategy extends AbstractPeriodStrategy {
+public class CustomPeriodStrategy extends AbstractPeriodStrategy {
 
     public static final String STARTDATE = "Start Date";
     public static final String ENDDATE = "End Date";

@@ -12,8 +12,7 @@ import java.util.*;
  */
 public class PerilsCoverAttributeStrategy extends AbstractParameterObject implements ICoverAttributeStrategy {
 
-    private ComboBoxTableMultiDimensionalParameter perils
-            = new ComboBoxTableMultiDimensionalParameter(Collections.emptyList(), Arrays.asList("Covered Perils"), IPerilMarker.class);
+    private ComboBoxTableMultiDimensionalParameter perils;
 
     public IParameterObjectClassifier getType() {
         return CoverAttributeStrategyType.PERILS;
