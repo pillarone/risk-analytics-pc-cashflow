@@ -44,9 +44,28 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     // todo(sku): safer c'tor required, currently used for ultimate modelling
     public ClaimCashflowPacket(IClaimRoot baseClaim) {
         this.baseClaim = baseClaim;
+        hasUltimate = true;
+        this.paidCumulated = ultimate();
+        this.paidIncremental = ultimate();
+        this.reportedCumulated = ultimate();
+        this.reportedIncremental = ultimate();
+        this.reserves = 0;
         updateDate = baseClaim.getOccurrenceDate();
         setDate(updateDate);
-        hasUltimate = true;
+    }
+
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double paidIncremental, double paidCumulated, double reserves,
+                               DateTime updateDate, IPeriodCounter periodCounter, boolean hasUltimate) {
+        this(baseClaim);
+        this.hasUltimate = hasUltimate;
+        this.paidCumulated = paidCumulated;
+        this.paidIncremental = paidIncremental;
+        this.reportedCumulated = baseClaim.getUltimate();
+        this.reportedIncremental = ultimate();
+        this.reserves = reserves;
+        this.updateDate = updateDate;
+        updatePeriod(periodCounter);
+        setDate(updateDate);
     }
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, double paidIncremental, double paidCumulated,
