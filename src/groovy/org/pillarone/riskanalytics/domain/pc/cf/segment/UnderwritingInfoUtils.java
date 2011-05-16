@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.segment;
 
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
 
 import java.util.List;
@@ -33,5 +34,21 @@ public class UnderwritingInfoUtils {
                 }
             }
         }
+    }
+
+    public static double sumPremiumWritten(List<UnderwritingInfoPacket> underwritingInfos) {
+        double premiumWritten = 0;
+        for (UnderwritingInfoPacket packet : underwritingInfos) {
+            premiumWritten += packet.getPremiumWritten();
+        }
+        return premiumWritten;
+    }
+
+    public static double sumNumberOfPolicies(List<UnderwritingInfoPacket> underwritingInfos) {
+        double policies = 0;
+        for (UnderwritingInfoPacket packet : underwritingInfos) {
+            policies += packet.getNumberOfPolicies();
+        }
+        return policies;
     }
 }

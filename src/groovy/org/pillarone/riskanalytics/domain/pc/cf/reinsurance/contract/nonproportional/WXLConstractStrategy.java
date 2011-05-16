@@ -2,13 +2,13 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproport
 
 import org.pillarone.riskanalytics.core.parameterization.AbstractMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
-import org.pillarone.riskanalytics.core.parameterization.TableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IPremiumAllocationStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.PremiumBase;
+import org.pillarone.riskanalytics.domain.pc.cf.segment.UnderwritingInfoUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +53,24 @@ public class WXLConstractStrategy extends AbstractParameterObject implements IRe
     }
 
     public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        double cededPremiumFixed = 0;
+        switch (premiumBase) {
+            case ABSOLUTE:
+                cededPremiumFixed = premium;
+                break;
+            case GNPI:
+                cededPremiumFixed = premium * UnderwritingInfoUtils.sumPremiumWritten(underwritingInfoPackets);
+                break;
+            case RATE_ON_LINE:
+                cededPremiumFixed = premium * limit;
+                break;
+            case NUMBER_OF_POLICIES:
+                cededPremiumFixed = premium * UnderwritingInfoUtils.sumNumberOfPolicies(underwritingInfoPackets);
+                break;
+        }
+        List<Double> reinstatementPremiumFactors = reinstatementPremiums.getValues();
+        return new WXLContract(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit,
+                reinstatementPremiumFactors, premiumAllocation);
     }
 
     public static final String PREMIUM_BASE = "premiumBase";

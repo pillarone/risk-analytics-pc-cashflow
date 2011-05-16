@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
+import org.apache.commons.lang.NotImplementedException;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 
@@ -27,13 +29,51 @@ public class ClaimStorage {
         inrementalReporteds.add(claim.getReportedIncremental());
     }
 
+    public double getCumulatedCeded(BasedOnClaimProperty claimProperty) {
+        switch (claimProperty) {
+            case ULTIMATE:
+                return 0;
+            case REPORTED:
+                return cumulatedReportedCeded;
+            case PAID:
+                return cumulatedPaidCeded;
+        }
+        throw new NotImplementedException(claimProperty.toString());
+    }
+
+    /**
+     * @param cumulatedPaidCeded
+     * @return incrementalPaidCeded
+     */
+    public double updatePaid(double cumulatedPaidCeded) {
+        double incrementalPaid = cumulatedPaidCeded - this.cumulatedPaidCeded;
+        this.cumulatedPaidCeded = cumulatedPaidCeded;
+        inrementalPaids.add(incrementalPaid);
+        return incrementalPaid;
+    }
+
+    /**
+     * @param cumulatedReportedCeded
+     * @return incrementalReportedCeded
+     */
+    public double updateReported(double cumulatedReportedCeded) {
+        double incrementalReported = cumulatedReportedCeded - this.cumulatedReportedCeded;
+        this.cumulatedReportedCeded = cumulatedReportedCeded;
+        inrementalReporteds.add(incrementalReported);
+        return incrementalReported;
+    }
+
     /**
      * @param cededShare should be negative
      * @param contractMarker
      * @return
      */
-    public IClaimRoot getCededClaimRoot(double cededShare, IReinsuranceContractMarker contractMarker) {
+    public IClaimRoot lazyInitCededClaimRoot(double cededShare, IReinsuranceContractMarker contractMarker) {
         referenceCeded = referenceCeded == null ? reference.withScale(cededShare, contractMarker) : referenceCeded;
+        return referenceCeded;
+    }
+
+    public IClaimRoot getCededClaimRoot() {
         return referenceCeded;
     }
 

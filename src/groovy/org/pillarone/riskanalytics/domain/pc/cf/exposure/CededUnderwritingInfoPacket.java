@@ -62,6 +62,24 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
         return cededPacket;
     }
 
+    public static CededUnderwritingInfoPacket deriveCededPacketForNonPropContract(UnderwritingInfoPacket packet,
+                 IReinsuranceContractMarker contract, double premium, double premiumFixed, double premiumVariable) {
+        CededUnderwritingInfoPacket cededPacket = new CededUnderwritingInfoPacket();
+        cededPacket.premiumWritten = premium;
+        cededPacket.premiumPaid = premium;
+        cededPacket.premiumPaidFixed = premiumFixed;
+        cededPacket.premiumPaidVariable = premiumVariable;
+        cededPacket.numberOfPolicies = packet.numberOfPolicies;
+        cededPacket.sumInsured = 0;
+        cededPacket.maxSumInsured = 0;
+        cededPacket.exposure = packet.exposure;
+        cededPacket.original = packet;
+        cededPacket.segment = packet.segment;
+        cededPacket.reinsuranceContract = contract;
+        cededPacket.original = packet;
+        return cededPacket;
+    }
+
     public static CededUnderwritingInfoPacket scale(UnderwritingInfoPacket packet, IReinsuranceContractMarker contract,
                                                     double policyFactor, double premiumFactor, double commissionFactor) {
         CededUnderwritingInfoPacket cededPacket = deriveCededPacket(packet, contract);
