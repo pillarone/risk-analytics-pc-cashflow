@@ -35,6 +35,16 @@ mappings = {
                 "premiumIndex" "NonLifeCashflow:underwritingSegments:[%underwritingSegment%]:outPremiumIndexApplied:value"
             }
         }
+        "reinsurance" {
+            "[%contract%]" {
+                "ultimateCeded" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:ultimate"
+                "reportedCeded" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:reportedIncremental"
+                "paidCeded" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:paidIncremental"
+                "ultimateGross" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaims:ultimate"
+                "reportedGross" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaims:reportedIncremental"
+                "paidGross" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaims:paidIncremental"
+            }
+        }
         "claims" {
             "ultimate" "NonLifeCashflow:claimsGenerators:outClaims:ultimate", {
                 "[%claimsGenerator%]" "NonLifeCashflow:claimsGenerators:[%claimsGenerator%]:outClaims:ultimate"

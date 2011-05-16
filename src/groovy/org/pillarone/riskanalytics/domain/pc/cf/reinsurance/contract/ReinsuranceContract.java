@@ -60,12 +60,10 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         filterInChannels();
         updateContractParameters();
         Set<IReinsuranceContract> contracts = fillGrossClaims();
-//        fillGrossUnderwritingInfo(contracts);
         calculateCededClaims();
         processUnderwritingInfo(contracts);
         discountClaims();
     }
-
 
 
     /**
