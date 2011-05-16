@@ -44,7 +44,7 @@ public class SlidingCommission extends AbstractCommission {
                                     boolean isFirstPeriod, boolean isAdditive) {
         double totalClaims = sumClaims(claims);
         double totalPremium = sumPremiumPaid(underwritingInfos);
-        double totalLossRatio = totalClaims / -totalPremium;
+        double totalLossRatio = totalPremium == 0 ? 0 : totalClaims / -totalPremium;
         double commissionRate;
         double fixedCommissionRate = commissionRatePerLossRatio.lastEntry().getValue();
         if (totalLossRatio < commissionRatePerLossRatio.firstKey()) {

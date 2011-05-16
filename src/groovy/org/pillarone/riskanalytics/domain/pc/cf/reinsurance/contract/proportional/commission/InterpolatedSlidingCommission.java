@@ -22,11 +22,12 @@ public class InterpolatedSlidingCommission extends AbstractCommission {
         super.useClaims = useClaims;
     }
 
+    // todo(sku): add proper handling of Div/0 and corresponding test cases
     public void calculateCommission(List<ClaimCashflowPacket> claims, List<CededUnderwritingInfoPacket> underwritingInfos,
                                     boolean isFirstPeriod, boolean isAdditive) {
         double summedClaims = sumClaims(claims);
         double summedPremiumPaid = sumPremiumPaid(underwritingInfos);
-        double totalLossRatio = summedClaims / -summedPremiumPaid;
+        double totalLossRatio = summedPremiumPaid == 0 ? 0 : summedClaims / -summedPremiumPaid;
         double commissionRate;
         double lowestEnteredLossRatio = commissionRatesPerLossRatio.firstKey();
         double highestEnteredLossRatio = commissionRatesPerLossRatio.lastKey();

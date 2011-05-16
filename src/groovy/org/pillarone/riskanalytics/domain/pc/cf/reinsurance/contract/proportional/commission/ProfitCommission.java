@@ -47,9 +47,14 @@ public class ProfitCommission extends AbstractCommission {
         double totalCommission = fixedCommission + variableCommission;
         lossCarriedForward = lossCarriedForwardEnabled ? Math.max(0d, lossCarriedForward - currentProfit) : 0d;
 
-        double commissionRate = totalCommission / -totalPremiumPaid ;
-        double fixedCommissionRate = fixedCommission / -totalPremiumPaid;
-        double variableCommissionRate = variableCommission / -totalPremiumPaid;
-        adjustCommissionProperties(underwritingInfos, isAdditive, commissionRate, fixedCommissionRate, variableCommissionRate);
+        if (totalPremiumPaid == 0) {
+            adjustCommissionProperties(underwritingInfos, isAdditive, 0, 0, 0);
+        }
+        else {
+            double commissionRate = totalCommission / -totalPremiumPaid ;
+            double fixedCommissionRate = fixedCommission / -totalPremiumPaid;
+            double variableCommissionRate = variableCommission / -totalPremiumPaid;
+            adjustCommissionProperties(underwritingInfos, isAdditive, commissionRate, fixedCommissionRate, variableCommissionRate);
+        }
     }
 }
