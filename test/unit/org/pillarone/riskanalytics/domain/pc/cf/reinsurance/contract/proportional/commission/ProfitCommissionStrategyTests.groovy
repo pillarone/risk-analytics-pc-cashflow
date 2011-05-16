@@ -5,7 +5,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacketTests
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionBasedOnClaims
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty
 
 /**
  * @author ben.ginsberg (at) intuitive-collaboration (dot) com
@@ -25,7 +25,7 @@ class ProfitCommissionStrategyTests extends GroovyTestCase {
                 lossCarriedForwardEnabled: lossCarriedForwardEnabled,
                 initialLossCarriedForward: initialLossCarriedForward,
                 commissionRatio: commissionRatio,
-                useClaims: CommissionBasedOnClaims.PAID
+                useClaims: BasedOnClaimProperty.PAID
         ])
     }
 

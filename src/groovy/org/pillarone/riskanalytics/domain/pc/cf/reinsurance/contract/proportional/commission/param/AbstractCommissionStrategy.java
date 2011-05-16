@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param;
 
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -16,7 +17,7 @@ abstract public class AbstractCommissionStrategy extends AbstractParameterObject
 
     private static final String USE_CLAIMS = "useClaims";
 
-    protected CommissionBasedOnClaims useClaims = CommissionBasedOnClaims.REPORTED;
+    protected BasedOnClaimProperty useClaims = BasedOnClaimProperty.REPORTED;
 
     public Map getParameters() {
         Map<String, Object> map = new HashMap<String, Object>(1);
@@ -34,17 +35,17 @@ abstract public class AbstractCommissionStrategy extends AbstractParameterObject
 
     protected double sumClaims(List<ClaimCashflowPacket> claims) {
         double totalClaims = 0;
-        if (useClaims.equals(CommissionBasedOnClaims.ULTIMATE)) {
+        if (useClaims.equals(BasedOnClaimProperty.ULTIMATE)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.ultimate();
             }
         }
-        else if (useClaims.equals(CommissionBasedOnClaims.PAID)) {
+        else if (useClaims.equals(BasedOnClaimProperty.PAID)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.getPaidIncremental();
             }
         }
-        else if (useClaims.equals(CommissionBasedOnClaims.REPORTED)) {
+        else if (useClaims.equals(BasedOnClaimProperty.REPORTED)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.getReportedIncremental();
             }

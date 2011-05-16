@@ -1,11 +1,13 @@
-package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param;
+package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
 import java.util.Map;
 
 /**
+ * Used for commission and limit/deductible updating.
+ *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public enum CommissionBasedOnClaims {
+public enum BasedOnClaimProperty {
     ULTIMATE, REPORTED, PAID;
 
     public Object getConstructionString(Map parameters) {

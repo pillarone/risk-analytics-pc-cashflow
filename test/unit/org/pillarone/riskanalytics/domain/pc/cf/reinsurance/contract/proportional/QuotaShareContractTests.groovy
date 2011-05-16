@@ -13,7 +13,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.Reinsurance
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.LimitStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionBasedOnClaims
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
@@ -51,7 +51,7 @@ class QuotaShareContractTests extends GroovyTestCase {
                         'commission': CommissionStrategyType.getStrategy(CommissionStrategyType.PROFITCOMMISSION, [
                                     'profitCommissionRatio' : 0.2d, 'commissionRatio' : 0.1d, 'costRatio' : 0.1d,
                                     'lossCarriedForwardEnabled' : false, 'initialLossCarriedForward' : 0d,
-                                    'useClaims': CommissionBasedOnClaims.REPORTED])]),
+                                    'useClaims': BasedOnClaimProperty.REPORTED])]),
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0])
     }

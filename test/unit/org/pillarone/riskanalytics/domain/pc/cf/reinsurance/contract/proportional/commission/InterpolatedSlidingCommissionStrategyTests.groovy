@@ -9,7 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportiona
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionBasedOnClaims
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacketTests
 
 /**
@@ -31,7 +31,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
                         [lossRatios, commissionRates],
                         [InterpolatedSlidingCommissionStrategy.LOSS_RATIO, InterpolatedSlidingCommissionStrategy.COMMISSION],
                         ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
-                 'useClaims': CommissionBasedOnClaims.PAID])
+                 'useClaims': BasedOnClaimProperty.PAID])
         return commissionStrategy
     }
 

@@ -1,8 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission;
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionBasedOnClaims;
 
 import java.util.List;
 import java.util.TreeMap;
@@ -35,7 +35,7 @@ public class SlidingCommission extends AbstractCommission {
     private TreeMap<Double, Double> commissionRatePerLossRatio;
 
     // todo(sku): replace argument with an object
-    public SlidingCommission(TreeMap<Double, Double> commissionRatePerLossRatio, CommissionBasedOnClaims useClaims) {
+    public SlidingCommission(TreeMap<Double, Double> commissionRatePerLossRatio, BasedOnClaimProperty useClaims) {
         this.commissionRatePerLossRatio = commissionRatePerLossRatio;
         super.useClaims = useClaims;
     }

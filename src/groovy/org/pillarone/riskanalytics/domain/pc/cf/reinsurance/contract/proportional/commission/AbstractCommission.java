@@ -1,9 +1,9 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission;
 
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionBasedOnClaims;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 abstract public class AbstractCommission implements ICommission {
 
-    protected CommissionBasedOnClaims useClaims;
+    protected BasedOnClaimProperty useClaims;
 
     protected double sumPremiumPaid(List<CededUnderwritingInfoPacket> underwritingInfos) {
         double totalPremium = 0;
@@ -24,17 +24,17 @@ abstract public class AbstractCommission implements ICommission {
 
     protected double sumClaims(List<ClaimCashflowPacket> claims) {
         double totalClaims = 0;
-        if (useClaims.equals(CommissionBasedOnClaims.ULTIMATE)) {
+        if (useClaims.equals(BasedOnClaimProperty.ULTIMATE)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.ultimate();
             }
         }
-        else if (useClaims.equals(CommissionBasedOnClaims.PAID)) {
+        else if (useClaims.equals(BasedOnClaimProperty.PAID)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.getPaidIncremental();
             }
         }
-        else if (useClaims.equals(CommissionBasedOnClaims.REPORTED)) {
+        else if (useClaims.equals(BasedOnClaimProperty.REPORTED)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.getReportedIncremental();
             }

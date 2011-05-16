@@ -8,7 +8,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.SlidingCommissionStrategy
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionBasedOnClaims
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacketTests
 
 /**
@@ -41,7 +41,7 @@ class SlidingCommissionStrategyTests extends GroovyTestCase {
                         [LossRatios, Commissions],
                         [SlidingCommissionStrategy.LOSS_RATIO, SlidingCommissionStrategy.COMMISSION],
                         ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
-                'useClaims': CommissionBasedOnClaims.PAID])
+                'useClaims': BasedOnClaimProperty.PAID])
         return commissionStrategy
     }
 
@@ -196,7 +196,7 @@ class SlidingCommissionStrategyTests extends GroovyTestCase {
                         [[0d, 0.0d, 0.1d, 0.1d, 0.1d, 0.2d, 0.2d], [0.7d, 0.6d, 0.6d, 0.5d, 0.4d, 0.35d, 0.3d]],
                         [SlidingCommissionStrategy.LOSS_RATIO, SlidingCommissionStrategy.COMMISSION],
                         ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
-                 useClaims: CommissionBasedOnClaims.PAID ])
+                 useClaims: BasedOnClaimProperty.PAID ])
 
         CededUnderwritingInfoPacket UnderwritingInfoPacket200 = new CededUnderwritingInfoPacket(premiumPaid: -200, 
                 commission: 50, commissionFixed: 20, commissionVariable: 30)

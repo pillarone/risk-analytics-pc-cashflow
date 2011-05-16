@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObjectClassifier
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -19,18 +20,18 @@ class CommissionStrategyType extends AbstractParameterObjectClassifier {
                         [[0d], [0d]],
                         [SlidingCommissionStrategy.LOSS_RATIO, SlidingCommissionStrategy.COMMISSION],
                         ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
-            'useClaims': CommissionBasedOnClaims.PAID])
+            'useClaims': BasedOnClaimProperty.PAID])
     public static final CommissionStrategyType INTERPOLATEDSLIDINGCOMMISSION = new CommissionStrategyType(
             "interpolated sliding commission", "INTERPOLATEDSLIDINGCOMMISSION",
            ['commissionBands': new ConstrainedMultiDimensionalParameter(
                         [[0d], [0d]],
                         [SlidingCommissionStrategy.LOSS_RATIO, SlidingCommissionStrategy.COMMISSION],
                         ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
-            'useClaims': CommissionBasedOnClaims.PAID])
+            'useClaims': BasedOnClaimProperty.PAID])
     public static final CommissionStrategyType PROFITCOMMISSION = new CommissionStrategyType("profit commission", "PROFITCOMMISSION",
             ['profitCommissionRatio':0d, 'commissionRatio':0d, 'costRatio':0d, 'lossCarriedForwardEnabled':true,
                     'initialLossCarriedForward':0d,
-            'useClaims': CommissionBasedOnClaims.PAID])
+            'useClaims': BasedOnClaimProperty.PAID])
 
     public static final all = [NOCOMMISSION, FIXEDCOMMISSION, SLIDINGCOMMISSION, INTERPOLATEDSLIDINGCOMMISSION, PROFITCOMMISSION]
 
@@ -79,17 +80,17 @@ class CommissionStrategyType extends AbstractParameterObjectClassifier {
                         costRatio : (Double) parameters['costRatio'],
                         lossCarriedForwardEnabled : (Boolean) parameters['lossCarriedForwardEnabled'],
                         initialLossCarriedForward : (Double) parameters['initialLossCarriedForward'],
-                        useClaims : (CommissionBasedOnClaims) parameters['useClaims'])
+                        useClaims : (BasedOnClaimProperty) parameters['useClaims'])
                 break;
             case CommissionStrategyType.SLIDINGCOMMISSION:
                 commissionStrategy = new SlidingCommissionStrategy(
                         commissionBands: (ConstrainedMultiDimensionalParameter) parameters['commissionBands'],
-                        useClaims : (CommissionBasedOnClaims) parameters['useClaims'])
+                        useClaims : (BasedOnClaimProperty) parameters['useClaims'])
                 break;
             case CommissionStrategyType.INTERPOLATEDSLIDINGCOMMISSION:
                 commissionStrategy = new InterpolatedSlidingCommissionStrategy(
                         commissionBands: (ConstrainedMultiDimensionalParameter) parameters['commissionBands'],
-                        useClaims : (CommissionBasedOnClaims) parameters['useClaims'])
+                        useClaims : (BasedOnClaimProperty) parameters['useClaims'])
                 break;
         }
         return commissionStrategy;

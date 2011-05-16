@@ -14,12 +14,12 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPa
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
+
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
 import org.pillarone.riskanalytics.core.simulation.TestVoidModel
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacketTests
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionBasedOnClaims
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty
 
 /**
  * @author shartmann (at) munichre (dot) com, ben.ginsberg (at) intuitive-collaboration (dot) com
@@ -188,7 +188,7 @@ class CommissionTests extends GroovyTestCase {
                     CommissionStrategyType.PROFITCOMMISSION,
                         [commissionRatio: 0d, profitCommissionRatio: 0.03d, costRatio: 0.2d,
                          lossCarriedForwardEnabled: true, initialLossCarriedForward: 20d,
-                         useClaims: CommissionBasedOnClaims.PAID]),
+                         useClaims: BasedOnClaimProperty.PAID]),
                 parmApplicableStrategy :
                     ApplicableStrategyType.getStrategy(
                     ApplicableStrategyType.ALL, [:])
@@ -250,7 +250,7 @@ class CommissionTests extends GroovyTestCase {
             parmCommissionStrategy : CommissionStrategyType.getStrategy(CommissionStrategyType.PROFITCOMMISSION,
                 [commissionRatio: 0d, profitCommissionRatio: 0.03d, costRatio: 0.2d, lossCarriedForwardEnabled: true,
                         initialLossCarriedForward: 20d,
-                 useClaims: CommissionBasedOnClaims.PAID]),
+                 useClaims: BasedOnClaimProperty.PAID]),
             parmApplicableStrategy : ApplicableStrategyType.getStrategy(ApplicableStrategyType.CONTRACT,
                     [applicableContracts: applicableContracts]),
             simulationScope : simulationScope
@@ -291,7 +291,7 @@ class CommissionTests extends GroovyTestCase {
         Commission commission = new Commission(
             parmCommissionStrategy : CommissionStrategyType.getStrategy(CommissionStrategyType.PROFITCOMMISSION,
                 [commissionRatio: 0d, profitCommissionRatio: 0.3d, costRatio: 0.1d, lossCarriedForwardEnabled: true,
-                        initialLossCarriedForward: 5d, useClaims: CommissionBasedOnClaims.PAID]),
+                        initialLossCarriedForward: 5d, useClaims: BasedOnClaimProperty.PAID]),
             parmApplicableStrategy : ApplicableStrategyType.getStrategy(ApplicableStrategyType.CONTRACT,
                     [applicableContracts: applicableContracts]),
             simulationScope : simulationScope

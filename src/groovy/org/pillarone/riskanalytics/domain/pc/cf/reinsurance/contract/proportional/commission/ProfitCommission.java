@@ -2,7 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportion
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionBasedOnClaims;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class ProfitCommission extends AbstractCommission {
 
     public ProfitCommission(double profitCommissionRatio, double commissionRatio, double costRatio,
                             boolean lossCarriedForwardEnabled, double initialLossCarriedForward,
-                            CommissionBasedOnClaims useClaims) {
+                            BasedOnClaimProperty useClaims) {
         this.profitCommissionRatio = profitCommissionRatio;
         this.commissionRatio = commissionRatio;
         this.costRatio = costRatio;

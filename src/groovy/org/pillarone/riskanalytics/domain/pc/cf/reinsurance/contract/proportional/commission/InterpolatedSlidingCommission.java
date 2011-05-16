@@ -1,8 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission;
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionBasedOnClaims;
 
 import java.util.List;
 import java.util.TreeMap;
@@ -17,7 +17,7 @@ public class InterpolatedSlidingCommission extends AbstractCommission {
 
     // todo(sku): replace argument with an object
     public InterpolatedSlidingCommission(TreeMap<Double, List<Double>> commissionRatesPerLossRatio,
-                                         CommissionBasedOnClaims useClaims) {
+                                         BasedOnClaimProperty useClaims) {
         this.commissionRatesPerLossRatio = commissionRatesPerLossRatio;
         super.useClaims = useClaims;
     }
