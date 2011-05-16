@@ -16,7 +16,7 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
     public static final CoverAttributeStrategyType NONE = new CoverAttributeStrategyType("none", "NONE", [:])
     public static final CoverAttributeStrategyType PERILS = new CoverAttributeStrategyType(
             'perils', 'PERILS',
-            ['perils':new ComboBoxTableMultiDimensionalParameter([], ['Covered Perils'], IPerilMarker.class)])
+            ['perils':new ComboBoxTableMultiDimensionalParameter([], ['Covered Perils'], IPerilMarker)])
 
     public static final all = [ALL, NONE, PERILS]
 

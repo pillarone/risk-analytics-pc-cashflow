@@ -28,11 +28,11 @@ public class QuotaShareContractAAL extends QuotaShareContract {
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
         IClaimRoot cededBaseClaim;
         if (storage.hasReferenceCeded()) {
-            cededBaseClaim = storage.getCededClaimRoot(quotaShare, contractMarker);
+            cededBaseClaim = storage.getCededClaimRoot();
         }
         else {
             double quotaShareUltimate = adjustedQuote(grossClaim.ultimate(), annualAggregateLimitUltimate);
-            cededBaseClaim = storage.getCededClaimRoot(quotaShareUltimate, contractMarker);
+            cededBaseClaim = storage.lazyInitCededClaimRoot(quotaShareUltimate, contractMarker);
         }
 
         double quotaShareReported = adjustedQuote(grossClaim.getReportedIncremental(), annualAggregateLimitReported);

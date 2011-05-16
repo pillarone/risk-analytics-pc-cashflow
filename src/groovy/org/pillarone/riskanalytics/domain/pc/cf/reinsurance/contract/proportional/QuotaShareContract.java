@@ -21,7 +21,7 @@ public class QuotaShareContract extends AbstractProportionalReinsuranceContract 
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
-        IClaimRoot cededBaseClaim = storage.getCededClaimRoot(-quotaShare, contractMarker);
+        IClaimRoot cededBaseClaim = storage.lazyInitCededClaimRoot(-quotaShare, contractMarker);
         ClaimCashflowPacket cededClaim = grossClaim.withBaseClaimAndShare(cededBaseClaim, -quotaShare, -quotaShare, grossClaim.ultimate() != 0);
         add(grossClaim, cededClaim);
         return cededClaim;
