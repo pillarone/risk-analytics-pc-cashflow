@@ -14,8 +14,8 @@ import java.util.Map;
  */
 public class MonthPeriodStrategy extends AbstractPeriodStrategy {
 
-    private DateTime startCover = new DateTime(2011,1,1,0,0,0,0);
-    private Integer numberOfMonths = 12;
+    private DateTime startCover;
+    private Integer numberOfMonths;
 
 
     public IParameterObjectClassifier getType() {
@@ -25,7 +25,7 @@ public class MonthPeriodStrategy extends AbstractPeriodStrategy {
     public Map getParameters() {
         Map<String, Object> parameters = new HashMap<String, Object>(2);
         parameters.put("startCover", startCover);
-        parameters.put("numberOfYears", numberOfMonths);
+        parameters.put("numberOfMonths", numberOfMonths);
         return parameters;
     }
 

@@ -57,7 +57,7 @@ class PeriodStrategyType extends AbstractParameterObjectClassifier {
         switch (type) {
             case PeriodStrategyType.MONTHS:
                 strategy = new MonthPeriodStrategy(startCover: (DateTime) parameters['startCover'],
-                                                    numberOfMonths: (Integer) parameters['numberOfMonths'])
+                                                   numberOfMonths: (Integer) parameters['numberOfMonths'])
                 break
             case PeriodStrategyType.CUSTOM:
                 strategy = new CustomPeriodStrategy(periods : (ConstrainedMultiDimensionalParameter) parameters['periods'])
