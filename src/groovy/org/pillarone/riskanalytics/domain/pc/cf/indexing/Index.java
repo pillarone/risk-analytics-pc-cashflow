@@ -21,8 +21,10 @@ public class Index extends Component {
     
     @Override
     protected void doCalculation() {
-        List<FactorsPacket> factors = parmIndex.getFactors(periodScope, this);
-        outFactors.addAll(factors);
+        FactorsPacket factors = parmIndex.getFactors(periodScope, this);
+        if (factors != null && factors.factorsPerDate.size() > 0) {
+            outFactors.add(factors);
+        }
         if (this.isSenderWired(outIndices)) {
             outIndices.add(new IndexPacket(factors, periodScope.getCurrentPeriodStartDate()));
         }

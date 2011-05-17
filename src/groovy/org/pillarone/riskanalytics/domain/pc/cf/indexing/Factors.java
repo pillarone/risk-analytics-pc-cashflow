@@ -2,7 +2,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.indexing;
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -40,8 +39,11 @@ public class Factors {
      * @param dateOfLoss
      * @return
      */
-    public Double getFactor(IPeriodCounter periodCounter, DateTime dateOfLoss) {
-        return getFactor(evaluateBaseDate(periodCounter, dateOfLoss));
+    public Double getFactor(IPeriodCounter periodCounter, DateTime dateOfLoss, DateTime updateDate) {
+        DateTime baseDate = evaluateBaseDate(periodCounter, dateOfLoss);
+        double factorAtBaseDate = getFactor(baseDate);
+        double factorAtUpdateDate = getFactor(updateDate);
+        return factorAtUpdateDate / factorAtBaseDate;
     }
 
     public IndexPacket getIndices(DateTime date) {

@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface IIndexStrategy extends IParameterObject {
 
-    List<FactorsPacket> getFactors(PeriodScope periodScope, Index origin);
+    FactorsPacket getFactors(PeriodScope periodScope, Index origin);
 }

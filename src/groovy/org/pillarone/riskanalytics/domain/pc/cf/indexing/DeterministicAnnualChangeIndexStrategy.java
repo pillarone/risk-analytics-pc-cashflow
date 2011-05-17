@@ -22,7 +22,7 @@ public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObj
     public static final String INDICES = "indices";
 
     private ConstrainedMultiDimensionalParameter indices;
-    private List<FactorsPacket> factors;
+    private FactorsPacket factors;
 
 
     public IParameterObjectClassifier getType() {
@@ -35,17 +35,16 @@ public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObj
         return params;
     }
 
-    public List<FactorsPacket> getFactors(PeriodScope periodScope, Index origin) {
+    public FactorsPacket getFactors(PeriodScope periodScope, Index origin) {
         lazyInitFactors(origin);
         return factors;
     }
 
     protected void lazyInitFactors(Index origin) {
         if (factors == null) {
-            factors = new ArrayList<FactorsPacket>();
+            factors = new FactorsPacket();
             int dateColumnIndex = indices.getColumnIndex(AnnualIndexTableConstraints.DATE);
             int changeColumnIndex = indices.getColumnIndex(AnnualIndexTableConstraints.ANNUAL_CHANGE);
-            FactorsPacket factor = new FactorsPacket();
             if (indices.getValues().size() > 0) {
                 double factorProduct = 1d;
                 DateTime formerDate = null;
@@ -54,18 +53,17 @@ public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObj
                     DateTime date = (DateTime) indices.getValueAt(row, dateColumnIndex);
                     double change = InputFormatConverter.getDouble(indices.getValueAt(row, changeColumnIndex));
                     factorProduct *= incrementalFactor(formerDate, formerChange, date);
-                    factor.add(date, factorProduct);
+                    factors.add(date, factorProduct);
                     formerDate = date;
                     formerChange = change;
                 }
                 DateTime nextDate = formerDate.plus(Period.years(1));
-                factor.add(nextDate, factorProduct * incrementalFactor(formerDate, formerChange, nextDate));
-                factor.origin = origin;
+                factors.add(nextDate, factorProduct * incrementalFactor(formerDate, formerChange, nextDate));
+                factors.origin = origin;
             }
             else {
                 return; // in the trivial case the returned list has to be void
             }
-            factors.add(factor);
         }
     }
 

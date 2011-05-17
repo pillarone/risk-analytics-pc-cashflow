@@ -77,11 +77,11 @@ public class IndexUtils {
      * @param dateOfLoss
      * @return aggregate factors by evaluating each index series according its baseDate property
      */
-    public static Double aggregateFactor(List<Factors> factors, IPeriodCounter periodCounter, DateTime dateOfLoss) {
+    public static Double aggregateFactor(List<Factors> factors, DateTime updateDate, IPeriodCounter periodCounter, DateTime dateOfLoss) {
         if (factors == null) return 1d;
         Double productFactor = 1d;
         for (Factors factor : factors) {
-            productFactor *= factor.getFactor(periodCounter, dateOfLoss);
+            productFactor *= factor.getFactor(periodCounter, dateOfLoss, updateDate);
         }
         return productFactor;
     }

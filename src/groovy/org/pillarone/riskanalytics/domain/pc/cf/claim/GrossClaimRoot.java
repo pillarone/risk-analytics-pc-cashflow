@@ -130,7 +130,7 @@ public final class GrossClaimRoot implements IClaimRoot {
     }
 
     private double manageFactor(List<Factors> factors, DateTime payoutDate, IPeriodCounter periodCounter, DateTime dateOfLoss) {
-        Double productFactor = IndexUtils.aggregateFactor(factors, periodCounter, dateOfLoss);
+        Double productFactor = IndexUtils.aggregateFactor(factors, payoutDate, periodCounter, dateOfLoss);
         this.factors.add(payoutDate, productFactor);
         return productFactor;
     }

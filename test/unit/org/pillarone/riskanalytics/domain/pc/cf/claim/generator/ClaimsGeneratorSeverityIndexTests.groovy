@@ -28,15 +28,20 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
     private static final double EPSILON = 1E-10
 
     static DateTime date20100101 = new DateTime(2010,1,1,0,0,0,0)
+    static DateTime date20100701 = new DateTime(2010,7,1,0,0,0,0)
     static DateTime date20110101 = new DateTime(2011,1,1,0,0,0,0)
     static DateTime date20120101 = new DateTime(2012,1,1,0,0,0,0)
+    static DateTime date20130101 = new DateTime(2013,1,1,0,0,0,0)
+    static DateTime date20140101 = new DateTime(2014,1,1,0,0,0,0)
+    static DateTime date20150101 = new DateTime(2015,1,1,0,0,0,0)
+    static DateTime date20160101 = new DateTime(2016,1,1,0,0,0,0)
 
     static ClaimsGenerator getGenerator(SeverityIndex index, List<FactorsPacket> factors, PayoutPattern pattern,
-                                        List<PatternPacket> patterns, DateTime fixedIndexDate,
+                                        List<PatternPacket> patterns, DateTime fixedIndexDate, DateTime projectionStart,
                                         IndexMode indexMode, BaseDateMode baseDateMode) {
         ConstraintsFactory.registerConstraint(new SeverityIndexSelectionTableConstraints())
         ClaimsGenerator generator = new ClaimsGenerator()
-        generator.periodScope = TestPeriodScopeUtilities.getPeriodScope(date20110101, 5)
+        generator.periodScope = TestPeriodScopeUtilities.getPeriodScope(projectionStart, 5)
         generator.periodStore = new PeriodStore(generator.periodScope)
         generator.inFactors.addAll(factors)
         generator.inPatterns.addAll(patterns)
@@ -47,11 +52,28 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
                 ["Index","Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('SEVERITY_INDEX_SELECTION'))
         generator.parmSeverityIndices.comboBoxValues.put(0, ['inflation': index])
         generator.setParmClaimsModel(ClaimsGeneratorType.getStrategy(
-                ClaimsGeneratorType.ATTRITIONAL, [
+                ClaimsGeneratorType.ATTRITIONAL_WITH_DATE, [
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 100]),
-                        "claimsSizeModification": DistributionModifier.getDefault()]))
+                        "claimsSizeModification": DistributionModifier.getDefault(),
+                        'occurrenceDistribution': DistributionType.getStrategy(DistributionType.CONSTANT, ['constant': 0.49789d])]))
         return generator
+    }
+
+    static ClaimsGenerator getGenerator(DateTime fixedIndexDate, IndexMode indexMode, BaseDateMode baseDateMode) {
+        return getGenerator(fixedIndexDate, date20110101, indexMode, baseDateMode)
+    }
+
+    static ClaimsGenerator getGenerator(DateTime fixedIndexDate, DateTime projectionStart, IndexMode indexMode, BaseDateMode baseDateMode) {
+        SeverityIndex inflation = getSeverityIndex('inflation')
+        List<FactorsPacket> factors = [getFactorsPacket(
+                [date20100101, date20100701, date20110101, date20120101, date20130101, date20140101],
+                [1, 1.02, 1.03, 1.06, 1.07, 1.1], inflation)]
+        PatternPacket pattern = new PatternPacket([0.5d, 0.8d, 1.0d], [Period.months(0), Period.months(12), Period.months(24)])
+        PayoutPattern payoutPattern = getPayoutPattern('5y')
+        pattern.origin = payoutPattern
+        List<PatternPacket> patterns = [pattern]
+        return getGenerator(inflation, factors, payoutPattern, patterns, fixedIndexDate, projectionStart, indexMode, baseDateMode)
     }
 
     static SeverityIndex getSeverityIndex(String indexName) {
@@ -62,7 +84,7 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         return new PayoutPattern(name: patternName)
     }
 
-    FactorsPacket getFactorsPacket(List<DateTime> dates, List<Double> factors, ISeverityIndexMarker origin) {
+    static FactorsPacket getFactorsPacket(List<DateTime> dates, List<Double> factors, ISeverityIndexMarker origin) {
         FactorsPacket factorsPacket = new FactorsPacket()
         for (int i = 0; i < dates.size(); i++) {
             factorsPacket.add(dates[i], factors[i])
@@ -72,111 +94,143 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
     }
 
     /** IndexMode.CONTINUOUS, BaseDateMode.DATE_OF_LOSS */
-    void testUsage() {
-        SeverityIndex inflation = getSeverityIndex('inflation')
-        List<FactorsPacket> factors = [getFactorsPacket([date20100101, date20110101, date20120101], [1, 1.02, 1.04], inflation)]
-        PatternPacket pattern = new PatternPacket([0.5d, 0.8d, 1.0d], [Period.months(0), Period.months(12), Period.months(24)])
-        PayoutPattern payoutPattern = getPayoutPattern('5y')
-        pattern.origin = payoutPattern
-        List<PatternPacket> patterns = [pattern]
-        ClaimsGenerator claimsGenerator = getGenerator(inflation, factors, payoutPattern, patterns, null,
-                IndexMode.CONTINUOUS, BaseDateMode.DATE_OF_LOSS)
+    void testUsageContinuousDoL() {
+        ClaimsGenerator claimsGenerator = getGenerator(null, IndexMode.CONTINUOUS, BaseDateMode.DATE_OF_LOSS)
 
         claimsGenerator.doCalculation()
-        double appliedIndex =  claimsGenerator.outClaims[0].paidIncremental / 50d
-        assertTrue "P0, index effect on paid claim", -50 > claimsGenerator.outClaims[0].paidIncremental
+        assertTrue "P0, index effect on paid claim", -50 == claimsGenerator.outClaims[0].paidIncremental
 
-        doCalculationNextPeriod(claimsGenerator, factors, patterns)
+        doCalculationNextPeriod(claimsGenerator)
         println claimsGenerator.outClaims[0].paidIncremental
-        assertTrue "P1, index effect on paid claim", -30 > claimsGenerator.outClaims[0].paidIncremental
-        assertEquals "same index applied for P1 as P0", appliedIndex, (claimsGenerator.outClaims[0].paidIncremental / 30d), EPSILON
+        assertEquals "P1, index effect on paid claim", 1.0193266424, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
 
-        doCalculationNextPeriod(claimsGenerator, factors, patterns)
+        doCalculationNextPeriod(claimsGenerator)
         println claimsGenerator.outClaims[0].paidIncremental
-        assertTrue "P2, index effect on paid claim", -20 > claimsGenerator.outClaims[0].paidIncremental
-        assertEquals "same index applied for P2 as P0", appliedIndex, (claimsGenerator.outClaims[0].paidIncremental / 20d), EPSILON
+        assertEquals "P2, index effect on paid claim", 1.0382897717, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
     }
 
     /** IndexMode.STEPWISE_PREVIOUS, BaseDateMode.DATE_OF_LOSS */
-    void testUsagePrevious() {
-        SeverityIndex inflation = getSeverityIndex('inflation')
-        List<FactorsPacket> factors = [getFactorsPacket([date20100101, date20110101, date20120101], [1, 1.02, 1.04], inflation)]
-        PatternPacket pattern = new PatternPacket([0.5d, 0.8d, 1.0d], [Period.months(0), Period.months(12), Period.months(24)])
-        PayoutPattern payoutPattern = getPayoutPattern('5y')
-        pattern.origin = payoutPattern
-        List<PatternPacket> patterns = [pattern]
-        ClaimsGenerator claimsGenerator = getGenerator(inflation, factors, payoutPattern, patterns, null,
-                IndexMode.STEPWISE_PREVIOUS, BaseDateMode.DATE_OF_LOSS)
+    void testUsagePreviousDoL() {
+        ClaimsGenerator claimsGenerator = getGenerator(null, IndexMode.STEPWISE_PREVIOUS, BaseDateMode.DATE_OF_LOSS)
 
         claimsGenerator.doCalculation()
-        double appliedIndex =  claimsGenerator.outClaims[0].paidIncremental / 50d
-        assertEquals "P0 applied index", -1.02, appliedIndex
-        assertTrue "P0, index effect on paid claim", -50 > claimsGenerator.outClaims[0].paidIncremental
+        assertTrue "P0, index effect on paid claim", -50 == claimsGenerator.outClaims[0].paidIncremental
 
-        doCalculationNextPeriod(claimsGenerator, factors, patterns)
-        assertTrue "P1, index effect on paid claim", -30 > claimsGenerator.outClaims[0].paidIncremental
-        assertEquals "same index applied for P1 as P0", appliedIndex, (claimsGenerator.outClaims[0].paidIncremental / 30d), EPSILON
+        doCalculationNextPeriod(claimsGenerator)
+        assertEquals "P1, index effect on paid claim", 1.0291262136, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
 
-        doCalculationNextPeriod(claimsGenerator, factors, patterns)
-        assertTrue "P2, index effect on paid claim", -20 > claimsGenerator.outClaims[0].paidIncremental
-        assertEquals "same index applied for P2 as P0", appliedIndex, (claimsGenerator.outClaims[0].paidIncremental / 20d), EPSILON
-    }
-
-    /** IndexMode.STEPWISE_PREVIOUS, BaseDateMode.DATE_OF_LOSS */
-    void testUsagePreviousBeforeProjection() {
-        SeverityIndex inflation = getSeverityIndex('inflation')
-        List<FactorsPacket> factors = [getFactorsPacket([date20100101, date20110101, date20120101], [1, 1.02, 1.04], inflation)]
-        PatternPacket pattern = new PatternPacket([0.5d, 0.8d, 1.0d], [Period.months(0), Period.months(12), Period.months(24)])
-        PayoutPattern payoutPattern = getPayoutPattern('5y')
-        pattern.origin = payoutPattern
-        List<PatternPacket> patterns = [pattern]
-        ClaimsGenerator claimsGenerator = getGenerator(inflation, factors, payoutPattern, patterns, null,
-                IndexMode.STEPWISE_PREVIOUS, BaseDateMode.DAY_BEFORE_FIRST_PERIOD)
-
-        claimsGenerator.doCalculation()
-        double appliedIndex =  claimsGenerator.outClaims[0].paidIncremental / 50d
-        assertEquals "P0 applied index", -1.0, appliedIndex
-        assertEquals "P0, index effect on paid claim", -50, claimsGenerator.outClaims[0].paidIncremental
-
-        doCalculationNextPeriod(claimsGenerator, factors, patterns)
-        assertEquals "P1, index effect on paid claim", -30, claimsGenerator.outClaims[0].paidIncremental, EPSILON
-        assertEquals "same index applied for P1 as P0", appliedIndex, (claimsGenerator.outClaims[0].paidIncremental / 30d), EPSILON
-
-        doCalculationNextPeriod(claimsGenerator, factors, patterns)
-        assertEquals "P2, index effect on paid claim", -20, claimsGenerator.outClaims[0].paidIncremental, EPSILON
-        assertEquals "same index applied for P2 as P0", appliedIndex, (claimsGenerator.outClaims[0].paidIncremental / 20d), EPSILON
+        doCalculationNextPeriod(claimsGenerator)
+        assertEquals "P2, index effect on paid claim", 1.0388349515, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
     }
 
     /** IndexMode.STEPWISE_NEXT, BaseDateMode.DATE_OF_LOSS */
-    void testUsageNext() {
-        SeverityIndex inflation = getSeverityIndex('inflation')
-        List<FactorsPacket> factors = [getFactorsPacket([date20100101, date20110101, date20120101], [1, 1.02, 1.04], inflation)]
-        PatternPacket pattern = new PatternPacket([0.5d, 0.8d, 1.0d], [Period.months(0), Period.months(12), Period.months(24)])
-        PayoutPattern payoutPattern = getPayoutPattern('5y')
-        pattern.origin = payoutPattern
-        List<PatternPacket> patterns = [pattern]
-        ClaimsGenerator claimsGenerator = getGenerator(inflation, factors, payoutPattern, patterns, null,
-                IndexMode.STEPWISE_NEXT, BaseDateMode.DATE_OF_LOSS)
+    void testUsageNextDoL() {
+        ClaimsGenerator claimsGenerator = getGenerator(null, IndexMode.STEPWISE_NEXT, BaseDateMode.DATE_OF_LOSS)
 
         claimsGenerator.doCalculation()
-        double appliedIndex =  claimsGenerator.outClaims[0].paidIncremental / 50d
-        assertEquals "P0 applied index", -1.04, appliedIndex
-        assertTrue "P0, index effect on paid claim", -50 > claimsGenerator.outClaims[0].paidIncremental
+        assertTrue "P0, index effect on paid claim", -50 == claimsGenerator.outClaims[0].paidIncremental
 
-        doCalculationNextPeriod(claimsGenerator, factors, patterns)
-        assertTrue "P1, index effect on paid claim", -30 > claimsGenerator.outClaims[0].paidIncremental
-        assertEquals "same index applied for P1 as P0", appliedIndex, (claimsGenerator.outClaims[0].paidIncremental / 30d), EPSILON
+        doCalculationNextPeriod(claimsGenerator)
+        assertEquals "P1, index effect on paid claim", 1.0094339623, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
 
-        doCalculationNextPeriod(claimsGenerator, factors, patterns)
-        assertTrue "P2, index effect on paid claim", -20 > claimsGenerator.outClaims[0].paidIncremental
-        assertEquals "same index applied for P2 as P0", appliedIndex, (claimsGenerator.outClaims[0].paidIncremental / 20d), EPSILON
+        doCalculationNextPeriod(claimsGenerator)
+        assertEquals "P2, index effect on paid claim", 1.0377358491, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
     }
 
-    private void doCalculationNextPeriod(ClaimsGenerator claimsGenerator, List<FactorsPacket> factors, List<PatternPacket> patterns) {
-        claimsGenerator.reset()
+    /** IndexMode.CONTINUOUS, BaseDateMode.START_OF_PROJECTION */
+    void testUsageContinuousStartOfProjection() {
+        ClaimsGenerator claimsGenerator = getGenerator(null, date20100101, IndexMode.CONTINUOUS, BaseDateMode.START_OF_PROJECTION)
+
+        claimsGenerator.doCalculation()
+        assertEquals "P0, index effect on paid claim", 1.02, claimsGenerator.outClaims[0].paidIncremental / -50, EPSILON
+
+        doCalculationNextPeriod(claimsGenerator)
+        println claimsGenerator.outClaims[0].paidIncremental
+        assertEquals "P1, index effect on paid claim", 1.0447690628, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+
+        doCalculationNextPeriod(claimsGenerator)
+        println claimsGenerator.outClaims[0].paidIncremental
+        assertEquals "P2, index effect on paid claim", 1.0649609409, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+    }
+
+    /** IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION */
+    void testUsagePreviousStartOfProjection() {
+        ClaimsGenerator claimsGenerator = getGenerator(null, date20100101, IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION)
+
+        claimsGenerator.doCalculation()
+        assertEquals "P0, index effect on paid claim", 1.02, claimsGenerator.outClaims[0].paidIncremental / -50, EPSILON
+
+        doCalculationNextPeriod(claimsGenerator)
+        assertEquals "P1, index effect on paid claim", 1.03, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+
+        doCalculationNextPeriod(claimsGenerator)
+        assertEquals "P2, index effect on paid claim", 1.06, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+    }
+
+    /** IndexMode.STEPWISE_NEXT, BaseDateMode.START_OF_PROJECTION */
+    void testUsageNextStartOfProjection() {
+        ClaimsGenerator claimsGenerator = getGenerator(null, date20100101, IndexMode.STEPWISE_NEXT, BaseDateMode.START_OF_PROJECTION)
+
+        claimsGenerator.doCalculation()
+        // not 1.03 as the payout date is exactly at an index date
+        assertEquals "P0, index effect on paid claim", 1.02, claimsGenerator.outClaims[0].paidIncremental / -50, EPSILON
+
+        doCalculationNextPeriod(claimsGenerator)
+        assertEquals "P1, index effect on paid claim", 1.06, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+
+        doCalculationNextPeriod(claimsGenerator)
+        assertEquals "P2, index effect on paid claim", 1.07, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+    }
+
+    /** IndexMode.CONTINUOUS, BaseDateMode.FIXED_DATE */
+    void testUsageContinuousFixedDate() {
+        ClaimsGenerator claimsGenerator = getGenerator(date20100701, IndexMode.CONTINUOUS, BaseDateMode.FIXED_DATE)
+
+        claimsGenerator.doCalculation()
+        assertEquals "P0, index effect on paid claim", 1.0242833949, claimsGenerator.outClaims[0].paidIncremental / -50, EPSILON
+
+        doCalculationNextPeriod(claimsGenerator)
+        println claimsGenerator.outClaims[0].paidIncremental
+        assertEquals "P1, index effect on paid claim", 1.0440793538, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+
+        doCalculationNextPeriod(claimsGenerator)
+        println claimsGenerator.outClaims[0].paidIncremental
+        assertEquals "P2, index effect on paid claim", 1.0635029722, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+    }
+
+    /** IndexMode.STEPWISE_PREVIOUS, BaseDateMode.FIXED_DATE */
+    void testUsagePreviousFixedDate() {
+        ClaimsGenerator claimsGenerator = getGenerator(date20100701, IndexMode.STEPWISE_PREVIOUS, BaseDateMode.FIXED_DATE)
+
+        claimsGenerator.doCalculation()
+        assertEquals "P0, index effect on paid claim", 1.0098039216, claimsGenerator.outClaims[0].paidIncremental / -50, EPSILON
+
+        doCalculationNextPeriod(claimsGenerator)
+        assertEquals "P1, index effect on paid claim", 1.0392156863, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+
+        doCalculationNextPeriod(claimsGenerator)
+        assertEquals "P2, index effect on paid claim", 1.0490196078, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+    }
+
+    /** IndexMode.STEPWISE_NEXT, BaseDateMode.FIXED_DATE */
+    void testUsageNextFixedDate() {
+        ClaimsGenerator claimsGenerator = getGenerator(date20100701, IndexMode.STEPWISE_NEXT, BaseDateMode.FIXED_DATE)
+
+        claimsGenerator.doCalculation()
+        assertEquals "P0, index effect on paid claim", 1.0392156863, claimsGenerator.outClaims[0].paidIncremental / -50, EPSILON
+
+        doCalculationNextPeriod(claimsGenerator)
+        assertEquals "P1, index effect on paid claim", 1.0490196078, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+
+        doCalculationNextPeriod(claimsGenerator)
+        assertEquals "P2, index effect on paid claim", 1.0784313725, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+    }
+
+
+
+    private void doCalculationNextPeriod(ClaimsGenerator claimsGenerator) {
+        claimsGenerator.resetOutChannels()      // in order to keep factors and patterns added for the first period
         claimsGenerator.periodScope.prepareNextPeriod()
-        claimsGenerator.inFactors.addAll(factors)
-        claimsGenerator.inPatterns.addAll(patterns)
         claimsGenerator.doCalculation()
     }
 }

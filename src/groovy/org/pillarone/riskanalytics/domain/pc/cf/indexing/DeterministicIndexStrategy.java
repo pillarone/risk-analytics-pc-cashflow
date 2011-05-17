@@ -22,7 +22,7 @@ public class DeterministicIndexStrategy extends AbstractParameterObject implemen
     public static final String INDICES = "indices";
 
     private ConstrainedMultiDimensionalParameter indices;
-    private List<FactorsPacket> factors;
+    private FactorsPacket factors;
 
 
     public IParameterObjectClassifier getType() {
@@ -35,29 +35,27 @@ public class DeterministicIndexStrategy extends AbstractParameterObject implemen
         return params;
     }
 
-    public List<FactorsPacket> getFactors(PeriodScope periodScope, Index origin) {
+    public FactorsPacket getFactors(PeriodScope periodScope, Index origin) {
         lazyInitFactors(origin);
         return factors;
     }
 
     protected void lazyInitFactors(Index origin) {
         if (factors == null) {
-            factors = new ArrayList<FactorsPacket>();
+            factors = new FactorsPacket();
             int dateColumnIndex = indices.getColumnIndex(DeterministicIndexTableConstraints.DATE);
             int indexColumnIndex = indices.getColumnIndex(DeterministicIndexTableConstraints.INDEX);
-            FactorsPacket factor = new FactorsPacket();
             if (indices.getValues().size() > 0) {
                 for (int row = indices.getTitleRowCount(); row < indices.getRowCount(); row++) {
                     DateTime indexDate = (DateTime) indices.getValueAt(row, dateColumnIndex);
                     double index = InputFormatConverter.getDouble(indices.getValueAt(row, indexColumnIndex));
-                    factor.add(indexDate, index);
-                    factor.origin = origin;
+                    factors.add(indexDate, index);
+                    factors.origin = origin;
                 }
             }
             else {
                 return; // in the trivial case the returned list has to be void
             }
-            factors.add(factor);
         }
     }
 }

@@ -4,9 +4,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,7 +20,7 @@ public class TrivialIndexStrategy extends AbstractParameterObject implements IIn
         return Collections.emptyMap();
     }
 
-    public List<FactorsPacket> getFactors(PeriodScope periodScope, Index origin) {
-        return new ArrayList<FactorsPacket>();
+    public FactorsPacket getFactors(PeriodScope periodScope, Index origin) {
+        return null;
     }
 }
