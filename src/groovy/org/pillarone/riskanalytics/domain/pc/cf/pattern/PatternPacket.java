@@ -66,6 +66,17 @@ public class PatternPacket extends Packet {
         return synchronous;
     }
 
+    public static boolean hasSameCumulativePeriods(PatternPacket payout, PatternPacket reporting, boolean payoutPatternMaybeLonger) {
+        boolean sameSizeOrPayoutLonger = payout.size() >= reporting.size();
+        boolean samePeriods = sameSizeOrPayoutLonger;
+        if (sameSizeOrPayoutLonger) {
+            for (int developmentPeriod = 0; samePeriods && developmentPeriod < reporting.size(); developmentPeriod++) {
+                samePeriods = payout.incrementMonths(developmentPeriod).equals(reporting.incrementMonths(developmentPeriod));
+            }
+        }
+        return samePeriods;
+    }
+
     public List<DateFactors> getDateFactorsForCurrentPeriod(DateTime occurrenceDate, IPeriodCounter periodCounter) {
         List<DateFactors> dateFactors = new ArrayList<DateFactors>();       //      todo(sku): avoid looping through complete pattern
         for (int devPeriod = 0; devPeriod < cumulativeValues.size(); devPeriod++) {

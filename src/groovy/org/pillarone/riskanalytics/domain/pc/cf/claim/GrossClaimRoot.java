@@ -25,7 +25,6 @@ import java.util.List;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 // todo(sku): implement pattern shifts
-// todo(sku): clarify index application order and effect on reported
 public final class GrossClaimRoot implements IClaimRoot {
 
     private static Log LOG = LogFactory.getLog(GrossClaimRoot.class);
@@ -113,7 +112,8 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     private double reportedIncremental(double ultimate, double factor, List<DateFactors> reports, int idx) {
         if (hasSynchronizedPatterns()) {
-            double reportsIncrementalFactor = reports.get(idx).getFactorIncremental();
+            // set reportsIncrementalFactor = 0 if payout pattern is longer than reported pattern
+            double reportsIncrementalFactor = idx < reports.size() ? reports.get(idx).getFactorIncremental() : 0d;
             return ultimate * reportsIncrementalFactor * factor;
         }
         return 0;
@@ -122,7 +122,8 @@ public final class GrossClaimRoot implements IClaimRoot {
     private double reportedCumulated(double ultimate, double paidCumulated, double factor, double payoutCumulatedFactor,
                                      List<DateFactors> reports, int idx) {
         if (hasSynchronizedPatterns()) {
-            double reportsCumulatedFactor = reports.get(idx).getFactorCumulated();
+            // set reportsCumulatedFactor = 1 if payout pattern is longer than reported pattern
+            double reportsCumulatedFactor = idx < reports.size() ? reports.get(idx).getFactorCumulated() : 1d;
             double outstanding = ultimate * (reportsCumulatedFactor - payoutCumulatedFactor) * factor;
             return outstanding + paidCumulated;
         }
@@ -176,7 +177,7 @@ public final class GrossClaimRoot implements IClaimRoot {
                 synchronizedPatterns = false;
             }
             else {
-                synchronizedPatterns = reportingPattern.hasSameCumulativePeriods(payoutPattern);
+                synchronizedPatterns = PatternPacket.hasSameCumulativePeriods(payoutPattern, reportingPattern, true);
             }
         }
         return synchronizedPatterns;
