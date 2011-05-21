@@ -18,7 +18,9 @@ public class ClaimStorage {
     private List<Double> inrementalReporteds = new ArrayList<Double>();
     private List<Double> inrementalPaids = new ArrayList<Double>();
     private double cumulatedReportedCeded;
+    private double incrementalReportedCeded;
     private double cumulatedPaidCeded;
+    private double incrementalPaidCeded;
 
     public ClaimStorage(ClaimCashflowPacket claim) {
         reference = claim.getBaseClaim();
@@ -44,19 +46,47 @@ public class ClaimStorage {
     /**
      * @param cumulatedPaidCeded
      * @return incrementalPaidCeded
+     * @deprecated as results are not correct for 'truncated' (AAL) cumulatedPaidCeded values
      */
+    @Deprecated
     public double updatePaid(double cumulatedPaidCeded) {
+        if (cumulatedPaidCeded == 0) return 0;
         double incrementalPaid = cumulatedPaidCeded - this.cumulatedPaidCeded;
         this.cumulatedPaidCeded = cumulatedPaidCeded;
         inrementalPaids.add(incrementalPaid);
         return incrementalPaid;
     }
 
+    public void update(double incrementalCeded, BasedOnClaimProperty claimProperty) {
+        switch (claimProperty) {
+            case PAID:
+                incrementalPaidCeded = incrementalCeded;
+                inrementalPaids.add(incrementalCeded);
+                cumulatedPaidCeded += incrementalCeded;
+                break;
+            case REPORTED:
+                incrementalReportedCeded = incrementalCeded;
+                inrementalReporteds.add(incrementalCeded);
+                cumulatedReportedCeded += incrementalCeded;
+                break;
+        }
+    }
+
+    public double getIncrementalPaidCeded() {
+        return incrementalPaidCeded;
+    }
+
+    public double getIncrementalReportedCeded() {
+        return incrementalReportedCeded;
+    }
+
     /**
      * @param cumulatedReportedCeded
      * @return incrementalReportedCeded
      */
+    @Deprecated
     public double updateReported(double cumulatedReportedCeded) {
+        if (cumulatedReportedCeded == 0) return 0;
         double incrementalReported = cumulatedReportedCeded - this.cumulatedReportedCeded;
         this.cumulatedReportedCeded = cumulatedReportedCeded;
         inrementalReporteds.add(incrementalReported);

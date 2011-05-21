@@ -12,11 +12,19 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.
 import java.util.List;
 
 /**
+ * <ul>
+ *     <li>Reinstatements are calculated on a paid base and cover is refilled permanently.</li>
+ *     <li>order of application: (1) attachment point, limit, (2) aggregate deductible, (3) aggregate limit</li>
+ *     <li>aggregate deductibles are re-init for every period</li>
+ * </ul>
+ *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class XLContract extends AbstractReinsuranceContract implements INonPropReinsuranceContract {
 
     private double cededPremiumFixed;
+    /** used to make sure that fixed premium is paid only in first period */
+    private boolean isStartCoverPeriod = true;
 
     /** Strategy to allocate the ceded premium to the different lines of business  */
     // todo: business object instead of parameter
@@ -50,6 +58,15 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
         reinstatements = new ReinstatementsAndLimitStore(periodLimit, limit, reinstatementPremiumFactors);
     }
 
+    /**
+     * reintialization of the deductibles is required as calculations are base on cumulated values in XL contracts
+     */
+    @Override
+    public void initPeriod() {
+        super.initPeriod();
+        periodDeductible.init();
+    }
+
     public void initCededPremiumAllocation(List<ClaimCashflowPacket> cededClaims, List<UnderwritingInfoPacket> grossUnderwritingInfos) {
         premiumAllocation.initSegmentShares(cededClaims, grossUnderwritingInfos);
     }
@@ -57,25 +74,17 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
         IClaimRoot cededBaseClaim = storage.getCededClaimRoot();
         if (cededBaseClaim == null) {
-            // first time this gross claim is treated by the contract
-            double cededUltimate = cumulatedCededValue(grossClaim.ultimate(), BasedOnClaimProperty.ULTIMATE,
-                    storage, periodDeductible, periodLimit);
-            periodLimit.plus(-cededUltimate, BasedOnClaimProperty.ULTIMATE);
-            double cededFactorUltimate = grossClaim.ultimate() == 0 ? 0 : cededUltimate / grossClaim.ultimate();
+            // first time this gross claim is treated by this contract
+            double cededFactorUltimate = cededFactor(grossClaim.ultimate(), grossClaim.ultimate(),
+                                                     BasedOnClaimProperty.ULTIMATE, storage);
             cededBaseClaim = storage.lazyInitCededClaimRoot(cededFactorUltimate, contractMarker);
         }
 
-        double cededReportedCumulated = cumulatedCededValue(grossClaim.getReportedCumulated(),
-                BasedOnClaimProperty.REPORTED, storage, periodDeductible, periodLimit);
-        double cededReportedIncremental = storage.updateReported(cededReportedCumulated);
-        double cededFactorReported = grossClaim.getReportedIncremental() == 0 ? 0 : cededReportedIncremental / grossClaim.getReportedIncremental();
-        periodLimit.plus(-cededReportedIncremental, BasedOnClaimProperty.REPORTED);
+        double cededFactorReported = cededFactor(grossClaim.getReportedCumulated(), grossClaim.getReportedIncremental(),
+                BasedOnClaimProperty.REPORTED, storage);
 
-        double cededPaidCumulated = cumulatedCededValue(grossClaim.getPaidCumulated(), BasedOnClaimProperty.PAID, storage,
-                periodDeductible, periodLimit);
-        double cededPaidIncremental = storage.updatePaid(cededPaidCumulated);
-        double cededFactorPaid = grossClaim.getPaidIncremental() == 0 ? 0 : cededPaidIncremental / grossClaim.getPaidIncremental();
-        periodLimit.plus(-cededPaidIncremental, BasedOnClaimProperty.PAID);
+        double cededFactorPaid = cededFactor(grossClaim.getPaidCumulated(), grossClaim.getPaidIncremental(),
+                BasedOnClaimProperty.PAID, storage);
 
         ClaimCashflowPacket cededClaim = grossClaim.withBaseClaimAndShare(cededBaseClaim, cededFactorReported,
                 cededFactorPaid, grossClaim.ultimate() != 0);
@@ -83,34 +92,41 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
         return cededClaim;
     }
 
-    private double cumulatedCededValue(double claimProperty, BasedOnClaimProperty claimPropertyBase, ClaimStorage storage,
-                                       ThresholdStore aggregateDeductible, ThresholdStore aggregateLimit) {
-        double aggregateLimitValue = aggregateLimit.get(claimPropertyBase);
+    private double cededFactor(double claimPropertyCumulated, double claimPropertyIncremental,
+                               BasedOnClaimProperty claimPropertyBase, ClaimStorage storage) {
+        double aggregateLimitValue = periodLimit.get(claimPropertyBase);
         if (aggregateLimitValue > 0) {
-            double ceded = Math.min(Math.max(-claimProperty - attachmentPoint, 0), limit);
-            double cededAfterAAD = Math.max(0, ceded - aggregateDeductible.get(claimPropertyBase));
-            double incrementalCeded = ceded - storage.getCumulatedCeded(claimPropertyBase);
-            aggregateDeductible.set(Math.max(0, aggregateDeductible.get(claimPropertyBase) - incrementalCeded), claimPropertyBase);
-            double cededAfterAAL = aggregateLimitValue > cededAfterAAD ? cededAfterAAD : aggregateLimitValue;
-            return cededAfterAAL;
+            double ceded = Math.min(Math.max(-claimPropertyCumulated - attachmentPoint, 0), limit);
+            double cededAfterAAD = Math.max(0, ceded - periodDeductible.get(claimPropertyBase));
+            double reduceAAD = ceded - cededAfterAAD;
+            periodDeductible.set(Math.max(0, periodDeductible.get(claimPropertyBase) - reduceAAD), claimPropertyBase);
+            double incrementalCeded = Math.max(0, cededAfterAAD - storage.getCumulatedCeded(claimPropertyBase));
+            double cededAfterAAL = aggregateLimitValue > incrementalCeded ? incrementalCeded : aggregateLimitValue;
+            storage.update(cededAfterAAL, claimPropertyBase);
+            periodLimit.plus(-cededAfterAAL, claimPropertyBase);
+            return claimPropertyIncremental == 0 ? 0 : cededAfterAAL / claimPropertyIncremental;
         }
         else {
+            storage.update(0, claimPropertyBase);
             return 0;
         }
     }
 
-    public void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos, List<UnderwritingInfoPacket> netUnderwritingInfos, boolean fillNet) {
+    public void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
+                                          List<UnderwritingInfoPacket> netUnderwritingInfos, boolean fillNet) {
         initCededPremiumAllocation(cededClaims, grossUwInfos);
         for (UnderwritingInfoPacket grossUnderwritingInfo : grossUwInfos) {
             double cededPremiumFixedShare = cededPremiumFixed * premiumAllocation.getShare(grossUnderwritingInfo);
             double cededPremiumVariable = cededPremiumFixedShare * reinstatements.calculateReinstatementPremiumFactor();
-            double cededPremium = cededPremiumFixedShare + cededPremiumVariable;
+            double cededPremium = isStartCoverPeriod ? cededPremiumFixedShare + cededPremiumVariable : cededPremiumVariable;
 
             CededUnderwritingInfoPacket cededUnderwritingInfo = CededUnderwritingInfoPacket.deriveCededPacketForNonPropContract(
-                    grossUnderwritingInfo, contractMarker, -cededPremium, -cededPremiumFixed, -cededPremiumVariable);
+                    grossUnderwritingInfo, contractMarker, -cededPremium, isStartCoverPeriod ? -cededPremiumFixed : 0,
+                    -cededPremiumVariable);
             cededUwInfos.add(cededUnderwritingInfo);
             cededUnderwritingInfos.add(cededUnderwritingInfo);
         }
+        isStartCoverPeriod = false;
     }
 
     @Override

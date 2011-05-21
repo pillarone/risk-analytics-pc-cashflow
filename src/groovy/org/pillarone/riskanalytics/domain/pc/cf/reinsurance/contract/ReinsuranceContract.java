@@ -26,6 +26,9 @@ import java.util.*;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
+// todo(sku): uw info is not yet calculated if run within the model
+// todo(sku): correct outstanding, IBNR, reserves values
+// todo(sku): correct net values
 public class ReinsuranceContract extends Component implements IReinsuranceContractMarker {
 
     private IterationScope iterationScope;
@@ -35,8 +38,10 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket.class);
 
+    private PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    private PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
@@ -60,7 +65,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         filterInChannels();
         updateContractParameters();
         Set<IReinsuranceContract> contracts = fillGrossClaims();
-        calculateCededClaims();
+        initContracts(contracts);
+        calculateCededClaims(iterationScope.getPeriodScope().getPeriodCounter());
         processUnderwritingInfo(contracts);
         discountClaims();
     }
@@ -167,16 +173,28 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         return contract;
     }
 
+    private void initContracts(Set<IReinsuranceContract> contracts) {
+        for (IReinsuranceContract contract : contracts) {
+            contract.initPeriod();
+        }
+    }
+
     /**
      * This has to be done on a claims by claims level and not by contract to consider paid dates and parameters shared
      * among several periods correctly.
      */
-    private void calculateCededClaims() {
+    private void calculateCededClaims(IPeriodCounter periodCounter) {
         List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
         for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
             ClaimCashflowPacket cededClaim = grossClaim.getCededClaim();
 //            cededClaim.scale(coveredByReinsurer);
             outClaimsCeded.add(cededClaim);
+            if (isSenderWired(outClaimsGross)) {
+                outClaimsGross.add(grossClaim.getGrossClaim());
+            }
+            if (isSenderWired(outClaimsNet)) {
+                outClaimsNet.add(grossClaim.getGrossClaim().getNetClaim(cededClaim, periodCounter));
+            }
         }
     }
 
@@ -188,6 +206,9 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             int inceptionPeriod = underwritingInfo.getExposure().getInceptionPeriod();
             IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, inceptionPeriod - currentPeriod);
             contract.add(underwritingInfo);
+        }
+        if (isSenderWired(outUnderwritingInfoGross)) {
+            outUnderwritingInfoGross.addAll(inUnderwritingInfo);
         }
         for (IReinsuranceContract contract : contracts) {
             contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, isSenderWired(outUnderwritingInfoNet));
@@ -330,5 +351,21 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     public void setParmCoveredPeriod(IPeriodStrategy parmCoveredPeriod) {
         this.parmCoveredPeriod = parmCoveredPeriod;
+    }
+
+    public PacketList<ClaimCashflowPacket> getOutClaimsGross() {
+        return outClaimsGross;
+    }
+
+    public void setOutClaimsGross(PacketList<ClaimCashflowPacket> outClaimsGross) {
+        this.outClaimsGross = outClaimsGross;
+    }
+
+    public PacketList<UnderwritingInfoPacket> getOutUnderwritingInfoGross() {
+        return outUnderwritingInfoGross;
+    }
+
+    public void setOutUnderwritingInfoGross(PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross) {
+        this.outUnderwritingInfoGross = outUnderwritingInfoGross;
     }
 }

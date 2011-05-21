@@ -25,6 +25,10 @@ public class ClaimHistoryAndApplicableContract {
         return claim.getUpdateDate();
     }
 
+    public ClaimCashflowPacket getGrossClaim() {
+        return claim;
+    }
+
     public ClaimCashflowPacket getCededClaim() {
         return contract.calculateClaimCeded(claim, storage);
     }

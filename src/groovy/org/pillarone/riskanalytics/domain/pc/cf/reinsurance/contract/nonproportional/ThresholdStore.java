@@ -69,4 +69,16 @@ public class ThresholdStore {
 
     public double threshold() { return threshold; }
 
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("ultimate: ");
+        buffer.append(thresholdUltimate);
+        buffer.append(", reported: ");
+        buffer.append(thresholdReported);
+        buffer.append(", paid: ");
+        buffer.append(thresholdPaid);
+        return buffer.toString();
+    }
 }

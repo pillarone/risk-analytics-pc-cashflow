@@ -83,12 +83,6 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.hasUltimate = hasUltimate;
     }
 
-//    public ClaimCashflowPacket withScale(double scaleFactor, IReinsuranceContractMarker reinsuranceContract) {
-//        ClaimCashflowPacket packet = withScale(scaleFactor);
-//        packet.reinsuranceContract = reinsuranceContract;
-//        return packet;
-//    }
-
     public ClaimCashflowPacket withBaseClaimAndShare(IClaimRoot baseClaim, double scaleFactorReported, double scaleFactorPaid, boolean hasUltimate) {
         ClaimCashflowPacket packet = new ClaimCashflowPacket(baseClaim);
         packet.paidCumulated = paidCumulated * scaleFactorPaid;
@@ -100,7 +94,15 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         packet.updatePeriod = updatePeriod;
         packet.setDate(getDate());
         packet.hasUltimate = hasUltimate;
+        packet.avoidNegativeZero();
         return packet;
+    }
+
+    private void avoidNegativeZero() {
+        paidCumulated = paidCumulated == -0 ? 0 : paidCumulated;
+        paidIncremental = paidIncremental == -0 ? 0 : paidIncremental;
+        reportedCumulated = reportedCumulated == -0 ? 0 : reportedCumulated;
+        reportedIncremental = reportedIncremental == -0 ? 0 : reportedIncremental;
     }
 
     public ClaimCashflowPacket withScale(double scaleFactor) {
@@ -291,5 +293,24 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     public double getReportedCumulated() {
         return reportedCumulated;
+    }
+
+    /**
+     * todo(sku): needs proper testing especially for calculated properties, furthermore a simpler CCP c'tor would be fine
+     * @param cededClaim
+     * @return
+     */
+    public ClaimCashflowPacket getNetClaim(ClaimCashflowPacket cededClaim, IPeriodCounter periodCounter) {
+        ClaimCashflowPacket netClaim = new ClaimCashflowPacket(
+                cededClaim.baseClaim,
+                paidIncremental - cededClaim.paidIncremental,
+                paidCumulated - cededClaim.paidCumulated,
+                reportedIncremental - cededClaim.reportedIncremental,
+                reportedCumulated - cededClaim.reportedCumulated,
+                reserves - cededClaim.reserves,
+                updateDate,
+                periodCounter,
+                hasUltimate);
+        return netClaim;
     }
 }

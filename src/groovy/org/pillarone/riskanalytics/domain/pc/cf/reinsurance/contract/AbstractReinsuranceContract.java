@@ -21,11 +21,7 @@ abstract public class AbstractReinsuranceContract implements IReinsuranceContrac
     protected List<UnderwritingInfoPacket> grossUwInfos = new ArrayList<UnderwritingInfoPacket>();
     protected List<CededUnderwritingInfoPacket> cededUwInfos = new ArrayList<CededUnderwritingInfoPacket>();
 
-    protected void initPeriod() {
-        grossClaims.clear();
-        cededClaims.clear();
-        grossUwInfos.clear();
-        cededUwInfos.clear();
+    public void initPeriod() {
     }
 
     protected void add(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim) {
