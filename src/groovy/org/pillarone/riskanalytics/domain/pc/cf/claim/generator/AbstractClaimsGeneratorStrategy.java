@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.*;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
@@ -58,13 +59,13 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
 
     protected List<ClaimRoot> getClaims(List<Double> claimValues, ClaimType claimType, PeriodScope periodScope) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
-        // todo(jwa): produce EventPacket only if required! In all other cases generate simple dates
-        List<EventPacket> events = ClaimsGeneratorUtils.generateEvents(claimValues.size(), periodScope, dateGenerator);
+        List<EventPacket> events = ClaimsGeneratorUtils.generateEvents(claimType, claimValues.size(), periodScope, dateGenerator);
         for (int i = 0; i < claimValues.size(); i++) {
-            DateTime occurrenceDate = events.get(i).getDate();
+            DateTime occurrenceDate = events == null ?
+                    DateTimeUtilities.getDate(periodScope, dateGenerator.nextValue().doubleValue()) : events.get(i).getDate();
             // todo(sku): replace with information from underwriting
             DateTime exposureStartDate = periodScope.getCurrentPeriodStartDate();
-            EventPacket event = claimType.equals(ClaimType.EVENT) || claimType.equals(ClaimType.AGGREGATED_EVENT) ? events.get(i) : null;
+            EventPacket event = events == null ? null : events.get(i);
             baseClaims.add(new ClaimRoot(claimValues.get(i) * -1, claimType, exposureStartDate, occurrenceDate, event));
         }
         return baseClaims;

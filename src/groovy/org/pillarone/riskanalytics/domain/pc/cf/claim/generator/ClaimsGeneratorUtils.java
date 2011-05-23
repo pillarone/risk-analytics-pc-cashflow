@@ -30,12 +30,13 @@ public class ClaimsGeneratorUtils {
                                                  IRandomNumberGenerator dateGenerator, int claimNumber,
                                                  ClaimType claimType, PeriodScope periodScope) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
-        List<EventPacket> events = generateEvents(claimNumber, periodScope, dateGenerator);
+        List<EventPacket> events = generateEvents(claimType, claimNumber, periodScope, dateGenerator);
         for (int i = 0; i < claimNumber; i++) {
-            DateTime occurrenceDate = events.get(i).getDate();
+            DateTime occurrenceDate = events == null ?
+                    DateTimeUtilities.getDate(periodScope, dateGenerator.nextValue().doubleValue()) : events.get(i).getDate();
             // todo(sku): replace with information from underwriting
             DateTime exposureStartDate = periodScope.getPeriodCounter().getCurrentPeriodStart();
-            EventPacket event = claimType.equals(ClaimType.EVENT) || claimType.equals(ClaimType.AGGREGATED_EVENT) ? events.get(i) : null;
+            EventPacket event = events == null ? null: events.get(i);
             baseClaims.add(new ClaimRoot((Double) claimSizeGenerator.nextValue() * -severityScaleFactor, claimType,
                     exposureStartDate, occurrenceDate, event));
         }
@@ -101,8 +102,11 @@ public class ClaimsGeneratorUtils {
         return events;
     }
 
-    public static List<EventPacket> generateEvents(int number, PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
+    public static List<EventPacket> generateEvents(ClaimType claimType, int number, PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
         // dateGenerator uses fraction of period, i.e., must have states in unity interval
+        if (!(claimType.equals(ClaimType.EVENT) || claimType.equals(ClaimType.AGGREGATED_EVENT))) {
+            return null;
+        }
         List<EventPacket> events = new ArrayList<EventPacket>(number);
         for (int i = 0; i < number; i++) {
             DateTime date = DateTimeUtilities.getDate(periodScope, dateGenerator.nextValue().doubleValue());
