@@ -5,10 +5,12 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionT
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FrequencyIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.PremiumIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.PolicyIndexSelectionTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.segment.SegmentPortion
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.1.1"
+    def version = "0.1.2"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -48,7 +50,9 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new PremiumIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new FrequencyIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new SeverityIndexSelectionTableConstraints())
+        ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
         ConstraintsFactory.registerConstraint(new PatternTableConstraints())
+        ConstraintsFactory.registerConstraint(new SegmentPortion())
     }
 
     def onChange = { event ->

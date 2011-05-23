@@ -6,6 +6,8 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
 
 
 import java.util.*;
@@ -14,6 +16,7 @@ import java.util.*;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 // todo(sku): implement pattern shifts (asynchron patterns)
+// todo(sku): correct paid, reserved, reported, ... values even if no patterns are used
 public class ClaimCashflowPacket extends MultiValuePacket {
 
     private static Log LOG = LogFactory.getLog(ClaimCashflowPacket.class);
@@ -26,19 +29,43 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private double reportedCumulated;
     private double reserves;
 
-    /** the updateDate might be the incurred, paidIncremental, reportedIncremental date, depending on the updated double properties above */
     private DateTime updateDate;
     private Integer updatePeriod;
 
-    /** true only if this packet belongs to the occurrence period of the claim */
+    /**
+     * true only if this packet belongs to the occurrence period of the claim
+     */
     private boolean hasUltimate;
 
-    /** todo(sku): safer c'tor required, currently used for ultimate modelling */
+    public ClaimCashflowPacket() {
+        this(new ClaimRoot(0, ClaimType.ATTRITIONAL, null, null));
+    }
+
+    // todo(sku): safer c'tor required, currently used for ultimate modelling
     public ClaimCashflowPacket(IClaimRoot baseClaim) {
         this.baseClaim = baseClaim;
+        hasUltimate = true;
+        this.paidCumulated = ultimate();
+        this.paidIncremental = ultimate();
+        this.reportedCumulated = ultimate();
+        this.reportedIncremental = ultimate();
+        this.reserves = 0;
         updateDate = baseClaim.getOccurrenceDate();
         setDate(updateDate);
-        hasUltimate = true;
+    }
+
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double paidIncremental, double paidCumulated, double reserves,
+                               DateTime updateDate, IPeriodCounter periodCounter, boolean hasUltimate) {
+        this(baseClaim);
+        this.hasUltimate = hasUltimate;
+        this.paidCumulated = paidCumulated;
+        this.paidIncremental = paidIncremental;
+        this.reportedCumulated = baseClaim.getUltimate();
+        this.reportedIncremental = ultimate();
+        this.reserves = reserves;
+        this.updateDate = updateDate;
+        updatePeriod(periodCounter);
+        setDate(updateDate);
     }
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, double paidIncremental, double paidCumulated,
@@ -56,8 +83,41 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.hasUltimate = hasUltimate;
     }
 
+    public ClaimCashflowPacket withBaseClaimAndShare(IClaimRoot baseClaim, double scaleFactorReported, double scaleFactorPaid, boolean hasUltimate) {
+        ClaimCashflowPacket packet = new ClaimCashflowPacket(baseClaim);
+        packet.paidCumulated = paidCumulated * scaleFactorPaid;
+        packet.paidIncremental = paidIncremental * scaleFactorPaid;
+        packet.reportedCumulated = reportedCumulated * scaleFactorReported;
+        packet.reportedIncremental = reportedIncremental * scaleFactorReported;
+        packet.reserves = baseClaim.getUltimate() - packet.getPaidCumulated();
+        packet.updateDate = updateDate;
+        packet.updatePeriod = updatePeriod;
+        packet.setDate(getDate());
+        packet.hasUltimate = hasUltimate;
+        packet.avoidNegativeZero();
+        return packet;
+    }
+
+    private void avoidNegativeZero() {
+        paidCumulated = paidCumulated == -0 ? 0 : paidCumulated;
+        paidIncremental = paidIncremental == -0 ? 0 : paidIncremental;
+        reportedCumulated = reportedCumulated == -0 ? 0 : reportedCumulated;
+        reportedIncremental = reportedIncremental == -0 ? 0 : reportedIncremental;
+    }
+
+    public ClaimCashflowPacket withScale(double scaleFactor) {
+        ClaimCashflowPacket packet = (ClaimCashflowPacket) super.clone();
+        packet.paidCumulated = paidCumulated * scaleFactor;
+        packet.paidIncremental = paidIncremental * scaleFactor;
+        packet.reportedCumulated = reportedCumulated * scaleFactor;
+        packet.reportedIncremental = reportedIncremental * scaleFactor;
+        packet.reserves = reserves * scaleFactor;
+        return packet;
+    }
+
     /**
      * Used to modify the packet date property according the persistence date on a cloned instance.
+     *
      * @param persistenceDate
      */
     private ClaimCashflowPacket withDate(DateTime persistenceDate) {
@@ -66,14 +126,25 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return packet;
     }
 
+    /**
+     * @return reserves - outstanding
+     */
     public double ibnr() {
         return reserves - outstanding();
     }
 
+    /** reported = cumulated paid + outstanding */
+
+    /**
+     * @return reported cumulated - paid cumulated
+     */
     public double outstanding() {
         return reportedCumulated - paidCumulated;
     }
 
+    /**
+     * @return ultimate * (1 - cumulated payout factor)
+     */
     public double reserved() {
         return reserves;
     }
@@ -85,7 +156,14 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return reserved() + paidCumulated;
     }
 
-    public double  developmentResult() {
+    /**
+     * @return 0 except for the occurrence period, nominal ultimate without any index applied
+     */
+    public double ultimate() {
+        return hasUltimate ? baseClaim.getUltimate() : 0d;
+    }
+
+    public double developmentResult() {
         return baseClaim.hasTrivialPayout() ? 0 : developedUltimate() - baseClaim.getUltimate();
     }
 
@@ -97,16 +175,20 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         if (updatePeriod == null) {
             try {
                 updatePeriod = periodCounter.belongsToPeriod(updateDate);
-            }
-            catch (NotInProjectionHorizon ex) {
+            } catch (NotInProjectionHorizon ex) {
                 LOG.debug(updateDate + " is not in projection horizon");
             }
         }
         return updatePeriod;
     }
 
+    public int occurrencePeriod(IPeriodCounter periodCounter) {
+        return baseClaim.getOccurrencePeriod(periodCounter);
+    }
+
     /**
      * Helper method to fill underwriting period channels
+     *
      * @return a clone of the current instance with the date equal to the occurrence date
      */
     public ClaimCashflowPacket getClaimUnderwritingPeriod() {
@@ -121,15 +203,22 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return reportedIncremental;
     }
 
-    /**
-     * @return 0 except for the occurrence period, nominal ultimate without any index applied
-     */
-    public double ultimate() {
-        return hasUltimate ? baseClaim.getUltimate() : 0d;
+    public IPerilMarker peril() {
+        return baseClaim.peril();
     }
+
+    public ISegmentMarker segment() {
+        return baseClaim.segment();
+    }
+
+    public IReinsuranceContractMarker reinsuranceContract() {
+        return baseClaim.reinsuranceContract();
+    }
+
 
     /**
      * Add 'properties' calculated on the fly
+     *
      * @return
      * @throws IllegalAccessException
      */
@@ -137,34 +226,23 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public Map<String, Number> getValuesToSave() throws IllegalAccessException {
         Map<String, Number> valuesToSave = new HashMap<String, Number>();
         valuesToSave.put(ULTIMATE, ultimate());    // this and missing default c'tor (final!) leads to failure during result tree building
-        if (!baseClaim.hasTrivialPayout()) {
-            valuesToSave.put(PAID, paidIncremental);
-            valuesToSave.put(RESERVES, reserved());
-            if (baseClaim.hasIBNR()) {
-                valuesToSave.put(REPORTED, reportedIncremental);
-                valuesToSave.put(IBNR, ibnr());
-                valuesToSave.put(OUTSTANDING, outstanding());
-            }
-        }
+        valuesToSave.put(PAID, paidIncremental);
+        valuesToSave.put(RESERVES, reserved());
+        valuesToSave.put(REPORTED, reportedIncremental);
+        valuesToSave.put(IBNR, ibnr());
+        valuesToSave.put(OUTSTANDING, outstanding());
         valuesToSave.put(DEVELOPED_RESULT, developmentResult());
         return valuesToSave;
     }
 
     /**
      * Add 'properties' calculated on the fly
+     *
      * @return
      */
     @Override
     public List<String> getFieldNames() {
-        if (baseClaim.hasTrivialPayout()) {
-            return TRIVIAL_PAYOUT;
-        }
-        else if (baseClaim.hasIBNR()) {
-            return NON_TRIVIAL_PAYOUT_IBNR;
-        }
-        else {
-            return NON_TRIVIAL_PAYOUT;
-        }
+        return NON_TRIVIAL_PAYOUT_IBNR;
     }
 
     @Override
@@ -190,7 +268,49 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public final static String DEVELOPED_ULTIMATE = "developedUltimate";
     public final static String DEVELOPED_RESULT = "developedResult";
 
-    public final static List<String> TRIVIAL_PAYOUT = Arrays.asList(ULTIMATE, DEVELOPED_RESULT);
-    public final static List<String> NON_TRIVIAL_PAYOUT = Arrays.asList(ULTIMATE, PAID, RESERVES, DEVELOPED_RESULT);
     public final static List<String> NON_TRIVIAL_PAYOUT_IBNR = Arrays.asList(ULTIMATE, PAID, RESERVES, REPORTED, IBNR, OUTSTANDING, DEVELOPED_RESULT);
+
+    public IClaimRoot getBaseClaim() {
+        return baseClaim;
+    }
+
+    /**
+     * the updateDate might be the incurred, paidIncremental, reportedIncremental date, depending on the updated double properties above
+     *
+     * @return
+     */
+    public DateTime getUpdateDate() {
+        return updateDate;
+    }
+
+    public DateTime getOccurrenceDate() {
+        return baseClaim.getOccurrenceDate();
+    }
+
+    public double getPaidCumulated() {
+        return paidCumulated;
+    }
+
+    public double getReportedCumulated() {
+        return reportedCumulated;
+    }
+
+    /**
+     * todo(sku): needs proper testing especially for calculated properties, furthermore a simpler CCP c'tor would be fine
+     * @param cededClaim
+     * @return
+     */
+    public ClaimCashflowPacket getNetClaim(ClaimCashflowPacket cededClaim, IPeriodCounter periodCounter) {
+        ClaimCashflowPacket netClaim = new ClaimCashflowPacket(
+                cededClaim.baseClaim,
+                paidIncremental - cededClaim.paidIncremental,
+                paidCumulated - cededClaim.paidCumulated,
+                reportedIncremental - cededClaim.reportedIncremental,
+                reportedCumulated - cededClaim.reportedCumulated,
+                reserves - cededClaim.reserves,
+                updateDate,
+                periodCounter,
+                hasUltimate);
+        return netClaim;
+    }
 }

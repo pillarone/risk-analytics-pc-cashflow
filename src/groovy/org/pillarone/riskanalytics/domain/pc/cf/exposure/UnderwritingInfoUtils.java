@@ -1,5 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.exposure;
 
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,5 +56,40 @@ public class UnderwritingInfoUtils {
     public static double scalingFactor(List<UnderwritingInfoPacket> underwritingInfos, FrequencyBase base, List coverCriteria) {
         if (underwritingInfos.isEmpty() || coverCriteria.isEmpty()) return 1d;
         return scalingFactor(filterUnderwritingInfo(underwritingInfos, coverCriteria), base);
+    }
+    
+    static public UnderwritingInfoPacket aggregate(List<UnderwritingInfoPacket> underwritingInfos) {
+        if (underwritingInfos == null || underwritingInfos.size() == 0) {
+            return null;
+        }
+        UnderwritingInfoPacket summedUnderwritingInfo = new UnderwritingInfoPacket();
+        for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
+            summedUnderwritingInfo.plus(underwritingInfo);
+            summedUnderwritingInfo.setExposure(underwritingInfo.getExposure());
+        }
+        return correctMetaProperties(summedUnderwritingInfo, underwritingInfos);
+    }
+    
+    static public UnderwritingInfoPacket correctMetaProperties(UnderwritingInfoPacket result, List<UnderwritingInfoPacket> underwritingInfos) {
+        UnderwritingInfoPacket verifiedResult = (UnderwritingInfoPacket) result.clone();
+        ISegmentMarker lob = verifiedResult.getSegment();
+        IReinsuranceContractMarker reinsuranceContract = verifiedResult.getReinsuranceContract();
+        boolean underwritingInfosOfDifferentLobs = lob == null;
+        boolean underwritingInfosOfDifferentContracts = reinsuranceContract == null;
+        for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
+            if (!underwritingInfosOfDifferentLobs && !lob.equals(underwritingInfo.getSegment())) {
+                underwritingInfosOfDifferentLobs = true;
+            }
+            if (!underwritingInfosOfDifferentContracts && !reinsuranceContract.equals(underwritingInfo.getReinsuranceContract())) {
+                underwritingInfosOfDifferentContracts = true;
+            }
+        }
+        if (underwritingInfosOfDifferentLobs) {
+            verifiedResult.setSegment(null);
+        }
+        if (underwritingInfosOfDifferentContracts) {
+            verifiedResult.setReinsuranceContract(null);
+        }
+        return verifiedResult;
     }
 }

@@ -35,26 +35,30 @@ public class FactorsPacket extends Packet {
 
     public Double getFactorFloor(DateTime date) {
         Map.Entry<DateTime, Double> dateTimeDoubleEntry = factorsPerDate.floorEntry(date);
-        return dateTimeDoubleEntry == null ? 1 : dateTimeDoubleEntry.getValue();
+        return dateTimeDoubleEntry == null ? factorsPerDate.firstEntry().getValue() : dateTimeDoubleEntry.getValue();
     }
 
     public Double getFactorCeiling(DateTime date) {
         Map.Entry<DateTime, Double> dateTimeDoubleEntry = factorsPerDate.ceilingEntry(date);
-        return dateTimeDoubleEntry == null ? 1 : dateTimeDoubleEntry.getValue();
+        return dateTimeDoubleEntry == null ? factorsPerDate.lastEntry().getValue() : dateTimeDoubleEntry.getValue();
     }
 
     public Double getFactorInterpolated(DateTime date) {
         Map.Entry<DateTime, Double> floorEntry = factorsPerDate.floorEntry(date);
         Map.Entry<DateTime, Double> ceilingEntry = factorsPerDate.ceilingEntry(date);
-        if (floorEntry.equals(ceilingEntry)) {
-            return floorEntry.getValue();
-        } else if (ceilingEntry == null) {
+
+        if (ceilingEntry == null) {
             ceilingEntry = floorEntry;
             floorEntry = factorsPerDate.floorEntry(floorEntry.getKey().minusDays(1));
-        } else if (floorEntry == null) {
+        }
+        else if (floorEntry == null) {
             floorEntry = ceilingEntry;
             ceilingEntry = factorsPerDate.ceilingEntry(floorEntry.getKey().plusDays(1));
         }
+        else if (floorEntry.equals(ceilingEntry)) {
+            return floorEntry.getValue();
+        }
+        
         double elapsedTime = Days.daysBetween(floorEntry.getKey(), date).getDays();
         double keyDifference = Days.daysBetween(floorEntry.getKey(), ceilingEntry.getKey()).getDays();
         double factorRatio = ceilingEntry.getValue() / floorEntry.getValue();

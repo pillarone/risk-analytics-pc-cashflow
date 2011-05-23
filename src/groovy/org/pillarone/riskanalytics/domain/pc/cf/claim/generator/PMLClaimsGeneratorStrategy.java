@@ -10,7 +10,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IPerilMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;

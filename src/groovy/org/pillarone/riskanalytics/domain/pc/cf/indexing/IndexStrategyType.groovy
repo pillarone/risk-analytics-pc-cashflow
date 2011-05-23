@@ -14,18 +14,23 @@ import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribu
  */
 class IndexStrategyType extends AbstractParameterObjectClassifier {
 
-    public static final IndexStrategyType TRIVIAL = new IndexStrategyType(
-            'trivial', 'TRIVIAL', [:])
+    public static final IndexStrategyType NONE = new IndexStrategyType(
+            'trivial', 'NONE', [:])
     public static final IndexStrategyType DETERMINISTICANNUALCHANGE = new IndexStrategyType(
             'deterministic annual change', 'DETERMINISTICANNUALCHANGE',
             [indices: new ConstrainedMultiDimensionalParameter([[],[]],
                     AnnualIndexTableConstraints.COLUMN_TITLES,
                     ConstraintsFactory.getConstraints(AnnualIndexTableConstraints.IDENTIFIER))])
+    public static final IndexStrategyType DETERMINISTICINDEXSERIES = new IndexStrategyType(
+            'deterministic index series', 'DETERMINISTICINDEXSERIES',
+            [indices: new ConstrainedMultiDimensionalParameter([[],[]],
+                    DeterministicIndexTableConstraints.COLUMN_TITLES,
+                    ConstraintsFactory.getConstraints(DeterministicIndexTableConstraints.IDENTIFIER))])
     public static final IndexStrategyType STOCHASTIC = new IndexStrategyType("stochastic", "STOCHASTIC", [
             startDate: new DateTime(2011,1,1,0,0,0,0),
             distribution: DistributionType.getStrategy(DistributionType.NORMAL, [mean: 0d, stDev: 1d])])
 
-    public static final all = [TRIVIAL, DETERMINISTICANNUALCHANGE, STOCHASTIC]
+    public static final all = [NONE, DETERMINISTICANNUALCHANGE, DETERMINISTICINDEXSERIES, STOCHASTIC]
 
     protected static Map types = [:]
     static {
@@ -58,11 +63,15 @@ class IndexStrategyType extends AbstractParameterObjectClassifier {
     static IIndexStrategy getStrategy(IndexStrategyType type, Map parameters) {
         IIndexStrategy indexStrategy;
         switch (type) {
-            case IndexStrategyType.TRIVIAL:
+            case IndexStrategyType.NONE:
                 indexStrategy = new TrivialIndexStrategy()
                 break
             case IndexStrategyType.DETERMINISTICANNUALCHANGE:
                 indexStrategy = new DeterministicAnnualChangeIndexStrategy(
+                        indices : (ConstrainedMultiDimensionalParameter) parameters['indices'])
+                break;
+            case IndexStrategyType.DETERMINISTICINDEXSERIES:
+                indexStrategy = new DeterministicIndexStrategy(
                         indices : (ConstrainedMultiDimensionalParameter) parameters['indices'])
                 break;
             case IndexStrategyType.STOCHASTIC:

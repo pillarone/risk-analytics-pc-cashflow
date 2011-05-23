@@ -17,12 +17,14 @@ public class Index extends Component {
     private PacketList<FactorsPacket> outFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     private PacketList<IndexPacket> outIndices = new PacketList<IndexPacket>(IndexPacket.class);
 
-    private IIndexStrategy parmIndices = IndexStrategyType.getStrategy(IndexStrategyType.TRIVIAL, Collections.emptyMap());
+    private IIndexStrategy parmIndex = IndexStrategyType.getStrategy(IndexStrategyType.NONE, Collections.emptyMap());
     
     @Override
     protected void doCalculation() {
-        List<FactorsPacket> factors = parmIndices.getFactors(periodScope, this);
-        outFactors.addAll(factors);
+        FactorsPacket factors = parmIndex.getFactors(periodScope, this);
+        if (factors != null && factors.factorsPerDate.size() > 0) {
+            outFactors.add(factors);
+        }
         if (this.isSenderWired(outIndices)) {
             outIndices.add(new IndexPacket(factors, periodScope.getCurrentPeriodStartDate()));
         }
@@ -44,12 +46,12 @@ public class Index extends Component {
         this.outFactors = outFactors;
     }
 
-    public IIndexStrategy getParmIndices() {
-        return parmIndices;
+    public IIndexStrategy getParmIndex() {
+        return parmIndex;
     }
 
-    public void setParmIndices(IIndexStrategy parmIndices) {
-        this.parmIndices = parmIndices;
+    public void setParmIndex(IIndexStrategy parmIndex) {
+        this.parmIndex = parmIndex;
     }
 
     public PacketList<IndexPacket> getOutIndices() {

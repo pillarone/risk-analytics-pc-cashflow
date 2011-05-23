@@ -13,7 +13,7 @@ class FrequencyIndices extends DynamicComposedComponent {
 
     @Override
     Component createDefaultSubComponent() {
-        FrequencyIndex index = new FrequencyIndex(parmIndices : IndexStrategyType.getDefault());
+        FrequencyIndex index = new FrequencyIndex(parmIndex : IndexStrategyType.getDefault());
         return index
     }
 

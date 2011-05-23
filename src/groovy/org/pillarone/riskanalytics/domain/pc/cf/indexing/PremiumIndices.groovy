@@ -13,7 +13,7 @@ class PremiumIndices extends DynamicComposedComponent {
 
     @Override
     Component createDefaultSubComponent() {
-        PremiumIndex index = new PremiumIndex(parmIndices : IndexStrategyType.getDefault());
+        PremiumIndex index = new PremiumIndex(parmIndex : IndexStrategyType.getDefault());
         return index
     }
 

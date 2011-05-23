@@ -3,10 +3,12 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.ILegalEntityMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.IReinsuranceContractMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
 
 /**
@@ -16,7 +18,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 // todo(sku): clarify index application order and effect on reported
-public final class ClaimRoot implements IClaimRoot {
+public final class ClaimRoot implements IClaimRoot, Cloneable {
 
     private static Log LOG = LogFactory.getLog(ClaimRoot.class);
 
@@ -26,6 +28,7 @@ public final class ClaimRoot implements IClaimRoot {
     private ExposureInfo exposureInfo;
     private DateTime exposureStartDate;
     private DateTime occurrenceDate;
+    private Integer occurrencePeriod;
 
     /** counts the currently existing ClaimCashflowPacket referencing this instance */
     private int childCounter;
@@ -43,11 +46,20 @@ public final class ClaimRoot implements IClaimRoot {
     }
 
     public ClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate, EventPacket event){
-        this.ultimate = ultimate;
-        this.claimType = claimType;
-        this.exposureStartDate = exposureStartDate;
-        this.occurrenceDate = occurrenceDate;
+        this(ultimate, claimType, exposureStartDate, occurrenceDate);
         this.event = event;
+    }
+
+    public ClaimRoot withScale(double scaleFactor, IReinsuranceContractMarker reinsuranceContract) {
+        ClaimRoot packet = withScale(scaleFactor);
+        packet.reinsuranceContract = reinsuranceContract;
+        return packet;
+    }
+
+    public ClaimRoot withScale(double scaleFactor) {
+        ClaimRoot packet = (ClaimRoot) clone();
+        packet.ultimate = ultimate * scaleFactor;
+        return packet;
     }
 
     public double getUltimate() {
@@ -78,6 +90,22 @@ public final class ClaimRoot implements IClaimRoot {
         return occurrenceDate;
     }
 
+    /**
+     * @param periodCounter
+     * @return occurrence period in the context of the simulation engine
+     */
+    public Integer getOccurrencePeriod(IPeriodCounter periodCounter) {
+        if (occurrencePeriod == null) {
+            try {
+                occurrencePeriod = periodCounter.belongsToPeriod(occurrenceDate);
+            }
+            catch (NotInProjectionHorizon ex) {
+                LOG.debug(occurrenceDate + " is not in projection horizon");
+            }
+        }
+        return occurrencePeriod;
+    }
+
     public boolean hasSynchronizedPatterns() {
         return false;
     }
@@ -88,6 +116,20 @@ public final class ClaimRoot implements IClaimRoot {
 
     public boolean hasIBNR() {
         return false;
+    }
+
+    public IPerilMarker peril() { return peril; }
+    public ISegmentMarker segment() { return segment; }
+    public IReinsuranceContractMarker reinsuranceContract() { return reinsuranceContract; }
+
+    @Override
+    public ClaimRoot clone() {
+        try {
+            return (ClaimRoot) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

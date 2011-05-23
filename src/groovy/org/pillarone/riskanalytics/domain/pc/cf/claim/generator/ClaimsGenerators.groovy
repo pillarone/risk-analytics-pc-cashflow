@@ -9,7 +9,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
 
@@ -18,10 +17,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
  */
 class ClaimsGenerators extends DynamicComposedComponent {
 
-//    /** needs to be connected only if the claims generator was selected as target in a copula    */
-//    PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
-
-    /** needs to be connected only if a none absolute base is selected       */
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
     PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket)
@@ -43,8 +38,8 @@ class ClaimsGenerators extends DynamicComposedComponent {
         replicateInChannels this, 'inUnderwritingInfo'
         replicateInChannels this, 'inFactors'
         replicateInChannels this, 'inPatterns'
-        replicateOutChannels this, 'outClaims'
         replicateInChannels this, 'inEventSeverities'
         replicateInChannels this, 'inEventFrequencies'
+        replicateOutChannels this, 'outClaims'
     }
 }

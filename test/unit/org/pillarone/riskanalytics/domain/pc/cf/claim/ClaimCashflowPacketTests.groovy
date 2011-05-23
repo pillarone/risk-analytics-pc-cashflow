@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexMode
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.BaseDateMode
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -28,6 +29,17 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
     DateTime date20110101 = new DateTime(2011,1,1,0,0,0,0)
     DateTime date20110418 = new DateTime(2011,4,18,0,0,0,0)
     DateTime date20110701 = new DateTime(2011,7,1,0,0,0,0)
+    DateTime date20111001 = new DateTime(2011,10,1,0,0,0,0)
+
+    static ClaimCashflowPacket getClaimCashflowPacket(double ultimate, double incrementalPaid, IReinsuranceContractMarker contract) {
+        ClaimRoot baseClaim = new ClaimRoot(ultimate, ClaimType.ATTRITIONAL, null, null)
+        baseClaim.reinsuranceContract = contract
+        DateTime updateDate = new DateTime(2011,1,1,0,0,0,0)
+        IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(updateDate, 1)
+        ClaimCashflowPacket claim = new ClaimCashflowPacket(baseClaim, incrementalPaid, 0, 0, 0, 0, updateDate, periodCounter, false)
+        return claim
+    }
+
 
     void testTrivialPayout() {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
@@ -37,24 +49,106 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
 
         assertEquals "one claim only", 1, claims.size()
-        assertEquals "correct ultimate", 1000, claims[0].ultimate()
-        assertEquals "#collected fields", 2, claims[0].valuesToSave.size()
-        println claims[0].toString()
+        assertEquals "ultimate", 1000, claims[0].ultimate()
+        assertEquals "developed ultimate", 1000, claims[0].developedUltimate()
+        assertEquals "developed result", 0, claims[0].developmentResult()
+        assertEquals "reported incremental", 1000, claims[0].reportedIncremental
+        assertEquals "reported cumulated", 1000, claims[0].reportedCumulated
+        assertEquals "paid incremental", 1000, claims[0].paidIncremental
+        assertEquals "paid cumulated", 1000, claims[0].paidCumulated
+        assertEquals "outstanding", 0, claims[0].outstanding()
+        assertEquals "reserved", 0, claims[0].reserved()
+        assertEquals "ibnr", 0, claims[0].ibnr()
     }
 
-//    NotImplementedException
-//    void testPayoutPattern() {
-//        IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
-//
-//        ClaimRoot claimRoot = new ClaimRoot(1000, ClaimType.AGGREGATED,
-//                date20110418, date20110701, annualPayoutPattern, trivialPattern)
-//        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
-//
-//        assertEquals "number of claims corresponds to pattern length", annualPayoutPattern.size(), claims.size()
-////        println claims[0].valuesToSave
-//        assertEquals "correct ultimate", 1000, claims[0].ultimate()
-//        assertEquals "#collected fields", 2, claims[0].valuesToSave.size()
-//    }
+    void testPayoutPattern() {
+        IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
+
+        GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
+                date20110418, date20110701, annualReportingPatternInclFirst, trivialPattern)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
+
+        int period = 0
+        int claimNumber = 0
+        assertEquals "P$period correct ultimate", 1000, claims[claimNumber].ultimate()
+        assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
+        assertEquals "P$period developed result", 0, claims[claimNumber].developmentResult()
+        assertEquals "P$period reported incremental", 1000, claims[claimNumber].reportedIncremental
+        assertEquals "P$period reported cumulated", 1000, claims[claimNumber].reportedCumulated
+        assertEquals "P$period paid incremental", 300, claims[claimNumber].paidIncremental
+        assertEquals "P$period paid cumulated", 300, claims[claimNumber].paidCumulated
+        assertEquals "P$period outstanding", 700, claims[claimNumber].outstanding()
+        assertEquals "P$period reserved", 700, claims[claimNumber].reserved()
+        assertEquals "P$period ibnr", 0, claims[claimNumber].ibnr()
+
+
+        period++
+        claimNumber++
+        periodCounter.next()
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, null, false))
+
+        assertEquals "P$period correct ultimate", 0, claims[claimNumber].ultimate()
+        assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
+        assertEquals "P$period developed result", 0, claims[claimNumber].developmentResult()
+        assertEquals "P$period reported incremental", 0, claims[claimNumber].reportedIncremental
+        assertEquals "P$period reported cumulated", 1000, claims[claimNumber].reportedCumulated
+        assertEquals "P$period paid incremental", 300, claims[claimNumber].paidIncremental
+        assertEquals "P$period paid cumulated", 600, claims[claimNumber].paidCumulated
+        assertEquals "P$period outstanding", 400, claims[claimNumber].outstanding()
+        assertEquals "P$period reserved", 400, claims[claimNumber].reserved()
+        assertEquals "P$period ibnr", 0, claims[claimNumber].ibnr()
+
+
+        period++
+        claimNumber++
+        periodCounter.next()
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, null, false))
+
+        assertEquals "P$period correct ultimate", 0, claims[claimNumber].ultimate()
+        assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
+        assertEquals "P$period developed result", 0, claims[claimNumber].developmentResult()
+        assertEquals "P$period reported incremental", 0, claims[claimNumber].reportedIncremental
+        assertEquals "P$period reported cumulated", 1000, claims[claimNumber].reportedCumulated
+        assertEquals "P$period paid incremental", 200, claims[claimNumber].paidIncremental, EPSILON
+        assertEquals "P$period paid cumulated", 800, claims[claimNumber].paidCumulated
+        assertEquals "P$period outstanding", 200, claims[claimNumber].outstanding()
+        assertEquals "P$period reserved", 200, claims[claimNumber].reserved(), EPSILON
+        assertEquals "P$period ibnr", 0, claims[claimNumber].ibnr(), EPSILON
+
+
+        period++
+        claimNumber++
+        periodCounter.next()
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, null, false))
+
+        assertEquals "P$period correct ultimate", 0, claims[claimNumber].ultimate()
+        assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
+        assertEquals "P$period developed result", 0, claims[claimNumber].developmentResult()
+        assertEquals "P$period reported incremental", 0, claims[claimNumber].reportedIncremental
+        assertEquals "P$period reported cumulated", 1000, claims[claimNumber].reportedCumulated
+        assertEquals "P$period paid incremental", 180, claims[claimNumber].paidIncremental, EPSILON
+        assertEquals "P$period paid cumulated", 980, claims[claimNumber].paidCumulated
+        assertEquals "P$period outstanding", 20, claims[claimNumber].outstanding()
+        assertEquals "P$period reserved", 20, claims[claimNumber].reserved(), EPSILON
+        assertEquals "P$period ibnr", 0, claims[claimNumber].ibnr(), EPSILON
+
+
+        period++
+        claimNumber++
+        periodCounter.next()
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, null, false))
+
+        assertEquals "P$period correct ultimate", 0, claims[claimNumber].ultimate()
+        assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
+        assertEquals "P$period developed result", 0, claims[claimNumber].developmentResult()
+        assertEquals "P$period reported incremental", 0, claims[claimNumber].reportedIncremental
+        assertEquals "P$period reported cumulated", 1000, claims[claimNumber].reportedCumulated
+        assertEquals "P$period paid incremental", 20, claims[claimNumber].paidIncremental, EPSILON
+        assertEquals "P$period paid cumulated", 1000, claims[claimNumber].paidCumulated
+        assertEquals "P$period outstanding", 0, claims[claimNumber].outstanding()
+        assertEquals "P$period reserved", 0, claims[claimNumber].reserved()
+        assertEquals "P$period ibnr", 0, claims[claimNumber].ibnr()
+    }
 
     void testWithIBNR() {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
@@ -235,9 +329,10 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
                 date20110418, occurrenceDate, payoutPattern, reportingPattern)
         FactorsPacket factorsPacket = new FactorsPacket()
+        factorsPacket.add(date20110101, 1.0)
         factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(0)), 1.05)
         factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(1)), 1.15)
-        Factors factors = new Factors(factorsPacket, BaseDateMode.DATE_OF_LOSS, IndexMode.STEPWISE_PREVIOUS)
+        Factors factors = new Factors(factorsPacket, BaseDateMode.START_OF_PROJECTION, IndexMode.STEPWISE_PREVIOUS, null)
 
         int period = 0
         int claimNumber = 0
@@ -261,11 +356,11 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period.1 outstanding", 805, claims[claimNumber].outstanding(), EPSILON
         assertEquals "P$period.1 IBNR", 230, claims[claimNumber].ibnr(), EPSILON
 
-        
+
         period++    // 1
         periodCounter.next()
         factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(2)), 1.60)
-        factors = new Factors(factorsPacket, BaseDateMode.DATE_OF_LOSS, IndexMode.STEPWISE_PREVIOUS)
+        factors = new Factors(factorsPacket, BaseDateMode.START_OF_PROJECTION, IndexMode.STEPWISE_PREVIOUS, null)
         claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, [factors], false))
 
         claimNumber++
@@ -282,7 +377,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         period++    // 2
         periodCounter.next()
         factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(3)), 1.77)
-        factors = new Factors(factorsPacket, BaseDateMode.DATE_OF_LOSS, IndexMode.STEPWISE_PREVIOUS)
+        factors = new Factors(factorsPacket, BaseDateMode.START_OF_PROJECTION, IndexMode.STEPWISE_PREVIOUS, null)
         claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, [factors], false))
 
         claimNumber++
@@ -301,7 +396,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         periodCounter.next()
         periodCounter.next()
         factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(4)), 1.95)
-        factors = new Factors(factorsPacket, BaseDateMode.DATE_OF_LOSS, IndexMode.STEPWISE_PREVIOUS)
+        factors = new Factors(factorsPacket, BaseDateMode.START_OF_PROJECTION, IndexMode.STEPWISE_PREVIOUS, null)
         claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, [factors], false))
 
         claimNumber++

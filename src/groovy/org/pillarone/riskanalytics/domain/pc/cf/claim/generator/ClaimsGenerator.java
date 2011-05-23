@@ -11,7 +11,6 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.DependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.IUnderwritingInfoMarker;
@@ -51,7 +50,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     // attritional, frequency average attritional, ...
     private ConstrainedString parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker.class, "");
     private ConstrainedString parmReportingPattern = new ConstrainedString(IReportingPatternMarker.class, "");
-    private ConstrainedMultiDimensionalParameter parmSeveritiesIndices = new ConstrainedMultiDimensionalParameter(
+    private ConstrainedMultiDimensionalParameter parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
             Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
             ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER));
     private ComboBoxTableMultiDimensionalParameter parmUnderwritingInformation = new ComboBoxTableMultiDimensionalParameter(
@@ -62,7 +61,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
         List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
         IPeriodCounter periodCounter = periodScope.getPeriodCounter();
 
-        List<Factors> factors = IndexUtils.filterFactors(inFactors, parmSeveritiesIndices);
+        List<Factors> factors = IndexUtils.filterFactors(inFactors, parmSeverityIndices);
         int number = generateClaimsOfCurrentPeriod(claims, periodCounter, factors);
         developClaimsOfFormerPeriods(claims, periodCounter, factors);
 
@@ -228,12 +227,12 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
         this.outClaimNumber = outClaimNumber;
     }
 
-    public ConstrainedMultiDimensionalParameter getParmSeveritiesIndices() {
-        return parmSeveritiesIndices;
+    public ConstrainedMultiDimensionalParameter getParmSeverityIndices() {
+        return parmSeverityIndices;
     }
 
-    public void setParmSeveritiesIndices(ConstrainedMultiDimensionalParameter parmSeveritiesIndices) {
-        this.parmSeveritiesIndices = parmSeveritiesIndices;
+    public void setParmSeverityIndices(ConstrainedMultiDimensionalParameter parmSeverityIndices) {
+        this.parmSeverityIndices = parmSeverityIndices;
     }
 
     /**

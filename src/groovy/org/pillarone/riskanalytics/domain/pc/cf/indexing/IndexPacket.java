@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Contains the different index mode values. Should be filled with values from period start date
@@ -29,12 +30,10 @@ public class IndexPacket extends MultiValuePacket {
      * @param factorsPackets
      * @param evaluationDate typically begin of period
      */
-    public IndexPacket(List<FactorsPacket> factorsPackets, DateTime evaluationDate) {
-        for (FactorsPacket factorsPacket : factorsPackets) {
-            continuous *= factorsPacket.getFactorInterpolated(evaluationDate);
-            stepwisePrevious *= factorsPacket.getFactorFloor(evaluationDate);
-            stepwiseNext *= factorsPacket.getFactorCeiling(evaluationDate);
-        }
+    public IndexPacket(FactorsPacket factorsPackets, DateTime evaluationDate) {
+        continuous *= factorsPackets.getFactorInterpolated(evaluationDate);
+        stepwisePrevious *= factorsPackets.getFactorFloor(evaluationDate);
+        stepwiseNext *= factorsPackets.getFactorCeiling(evaluationDate);
     }
 
     public void multiply(IndexPacket other) {

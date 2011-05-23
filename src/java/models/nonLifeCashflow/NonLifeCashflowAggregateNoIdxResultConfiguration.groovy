@@ -9,6 +9,18 @@ components {
 			outClaims = "AGGREGATED"
 		}
 	}
+	reinsuranceContracts {
+		subsubcomponents {
+			outClaimsCeded = "AGGREGATED"
+			outClaimsGross = "AGGREGATED"
+			outClaimsNet = "AGGREGATED"
+			outCommission = "AGGREGATED"
+			outContractFinancials = "AGGREGATED"
+			outUnderwritingInfoCeded = "AGGREGATED"
+			outUnderwritingInfoGross = "AGGREGATED"
+			outUnderwritingInfoNet = "AGGREGATED"
+		}
+	}
 	underwritingSegments {
 		subsubcomponents {
 			outUnderwritingInfo = "AGGREGATED"

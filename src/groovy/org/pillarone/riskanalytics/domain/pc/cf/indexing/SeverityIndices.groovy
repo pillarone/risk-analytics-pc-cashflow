@@ -13,7 +13,7 @@ class SeverityIndices extends DynamicComposedComponent {
 
     @Override
     Component createDefaultSubComponent() {
-        SeverityIndex index = new SeverityIndex(parmIndices : IndexStrategyType.getDefault());
+        SeverityIndex index = new SeverityIndex(parmIndex : IndexStrategyType.getDefault());
         return index
     }
 

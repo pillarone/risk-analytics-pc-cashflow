@@ -9,6 +9,7 @@ class FactorsPacketTests extends GroovyTestCase {
 
     public static final Double EPSILON = 1E-6
 
+    DateTime date20000101 = new DateTime(2000,1,1,0,0,0,0)
     DateTime date20010101 = new DateTime(2001,1,1,0,0,0,0)
     DateTime date20020101 = new DateTime(2002,1,1,0,0,0,0)
     DateTime date20030222 = new DateTime(2003,2,22,0,0,0,0)
@@ -20,6 +21,7 @@ class FactorsPacketTests extends GroovyTestCase {
     DateTime date20081013 = new DateTime(2008,10,13,0,0,0,0)
     DateTime date20090427 = new DateTime(2009,4,27,0,0,0,0)
     DateTime date20100101 = new DateTime(2010,1,1,0,0,0,0)
+    DateTime date20110101 = new DateTime(2011,1,1,0,0,0,0)
 
     FactorsPacket factors
 
@@ -72,5 +74,15 @@ class FactorsPacketTests extends GroovyTestCase {
         assertEquals "1.1.2001 for 1.7.2001", 100, factors.getFactorFloor(new DateTime(2001,7,1,0,0,0,0)), EPSILON
         assertEquals "1.1.2002 for 1.1.2003", 103, factors.getFactorFloor(new DateTime(2003,1,1,0,0,0,0)), EPSILON
         assertEquals "no interpolation required for 22.2.2003", 104.51, factors.getFactorFloor(new DateTime(2003,2,22,0,0,0,0)), EPSILON
+    }
+
+    void testBelowDefinition() {
+        assertEquals "first factor, previous", 100, factors.getFactorFloor(date20000101)
+        assertEquals "first factor, next", 100, factors.getFactorCeiling(date20000101)
+    }
+
+    void testAboveDefinition() {
+        assertEquals "first factor, previous", 115.76, factors.getFactorFloor(date20110101)
+        assertEquals "first factor, next", 115.76, factors.getFactorCeiling(date20110101)
     }
 }

@@ -1,15 +1,19 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +25,6 @@ import java.util.List;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 // todo(sku): implement pattern shifts
-// todo(sku): clarify index application order and effect on reported
 public final class GrossClaimRoot implements IClaimRoot {
 
     private static Log LOG = LogFactory.getLog(GrossClaimRoot.class);
@@ -74,7 +77,7 @@ public final class GrossClaimRoot implements IClaimRoot {
                     : null;
             for (int i = 0; i < payouts.size(); i++) {
                 DateTime payoutDate = payouts.get(i).getDate();
-                double factor = manageFactor(factors, payoutDate);
+                double factor = manageFactor(factors, payoutDate, periodCounter, claimRoot.getOccurrenceDate());
                 double payoutIncrementalFactor = payouts.get(i).getFactorIncremental();
                 double payoutCumulatedFactor = payouts.get(i).getFactorCumulated();
                 double ultimate = claimRoot.getUltimate();
@@ -82,14 +85,19 @@ public final class GrossClaimRoot implements IClaimRoot {
                 double paidIncremental = ultimate * payoutIncrementalFactor * factor;
                 double paidCumulated = paidCumulatedIncludingAppliedFactors + paidIncremental;
                 paidCumulatedIncludingAppliedFactors = paidCumulated;
-
-                double reportedIncremental = reportedIncremental(ultimate, factor, reports, i);
-                double reportedCumulated = reportedCumulated(ultimate, paidCumulated, factor, payoutCumulatedFactor, reports, i);
-                reportedCumulatedIncludingAppliedFactors = reportedCumulated;
-
+                ClaimCashflowPacket cashflowPacket;
+                if (!hasIBNR()) {
+                    cashflowPacket = new ClaimCashflowPacket(this, paidIncremental, paidCumulated,
+                            reserves, payoutDate, periodCounter, hasUltimate);
+                }
+                else {
+                    double reportedIncremental = reportedIncremental(ultimate, factor, reports, i);
+                    double reportedCumulated = reportedCumulated(ultimate, paidCumulated, factor, payoutCumulatedFactor, reports, i);
+                    reportedCumulatedIncludingAppliedFactors = reportedCumulated;
+                    cashflowPacket = new ClaimCashflowPacket(this, paidIncremental, paidCumulated,
+                            reportedIncremental, reportedCumulated, reserves, payoutDate, periodCounter, hasUltimate);
+                }
                 childCounter++;
-                ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, paidIncremental, paidCumulated,
-                        reportedIncremental, reportedCumulated, reserves, payoutDate, periodCounter, hasUltimate);
                 hasUltimate = false;    // a period may contain several payouts and only the first should contain the ultimate
                 checkCorrectDevelopment(cashflowPacket);
                 currentPeriodClaims.add(cashflowPacket);
@@ -104,7 +112,8 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     private double reportedIncremental(double ultimate, double factor, List<DateFactors> reports, int idx) {
         if (hasSynchronizedPatterns()) {
-            double reportsIncrementalFactor = reports.get(idx).getFactorIncremental();
+            // set reportsIncrementalFactor = 0 if payout pattern is longer than reported pattern
+            double reportsIncrementalFactor = idx < reports.size() ? reports.get(idx).getFactorIncremental() : 0d;
             return ultimate * reportsIncrementalFactor * factor;
         }
         return 0;
@@ -113,15 +122,16 @@ public final class GrossClaimRoot implements IClaimRoot {
     private double reportedCumulated(double ultimate, double paidCumulated, double factor, double payoutCumulatedFactor,
                                      List<DateFactors> reports, int idx) {
         if (hasSynchronizedPatterns()) {
-            double reportsCumulatedFactor = reports.get(idx).getFactorCumulated();
+            // set reportsCumulatedFactor = 1 if payout pattern is longer than reported pattern
+            double reportsCumulatedFactor = idx < reports.size() ? reports.get(idx).getFactorCumulated() : 1d;
             double outstanding = ultimate * (reportsCumulatedFactor - payoutCumulatedFactor) * factor;
             return outstanding + paidCumulated;
         }
         return 0;
     }
 
-    private double manageFactor(List<Factors> factors, DateTime payoutDate) {
-        Double productFactor = IndexUtils.aggregateFactor(factors, payoutDate);
+    private double manageFactor(List<Factors> factors, DateTime payoutDate, IPeriodCounter periodCounter, DateTime dateOfLoss) {
+        Double productFactor = IndexUtils.aggregateFactor(factors, payoutDate, periodCounter, dateOfLoss);
         this.factors.add(payoutDate, productFactor);
         return productFactor;
     }
@@ -154,6 +164,10 @@ public final class GrossClaimRoot implements IClaimRoot {
         return claimRoot.getOccurrenceDate();
     }
 
+    public Integer getOccurrencePeriod(IPeriodCounter periodCounter) {
+        return claimRoot.getOccurrencePeriod(periodCounter);
+    }
+
     /**
      * @return payout and reported pattern have the same period entries. True even if one of them is null
      */
@@ -163,7 +177,7 @@ public final class GrossClaimRoot implements IClaimRoot {
                 synchronizedPatterns = false;
             }
             else {
-                synchronizedPatterns = reportingPattern.hasSameCumulativePeriods(payoutPattern);
+                synchronizedPatterns = PatternPacket.hasSameCumulativePeriods(payoutPattern, reportingPattern, true);
             }
         }
         return synchronizedPatterns;
@@ -175,6 +189,18 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     public boolean hasIBNR() {
         return reportingPattern != null && !reportingPattern.isTrivial();
+    }
+
+    public IPerilMarker peril() { return claimRoot.peril(); }
+    public ISegmentMarker segment() { return claimRoot.segment(); }
+    public IReinsuranceContractMarker reinsuranceContract() { return claimRoot.reinsuranceContract(); }
+
+    public ClaimRoot withScale(double scaleFactor, IReinsuranceContractMarker reinsuranceContract) {
+        return claimRoot.withScale(scaleFactor, reinsuranceContract);
+    }
+
+    public ClaimRoot withScale(double scaleFactor) {
+        return claimRoot.withScale(scaleFactor);
     }
 
     @Override

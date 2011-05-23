@@ -1,4 +1,4 @@
-package org.pillarone.riskanalytics.domain.pc.cf.reinsurance;
+package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
 import org.pillarone.riskanalytics.core.components.IComponentMarker;
 

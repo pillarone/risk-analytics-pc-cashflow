@@ -13,9 +13,9 @@ public class AnnualIndexTableConstraints implements IMultiDimensionalConstraints
 
     public static final String IDENTIFIER = "INDEX";
     public static final String DATE = "Date";
-    public static final String CHANGE = "Change";
+    public static final String ANNUAL_CHANGE = "Annual Change";
 
-    public static final List<String> COLUMN_TITLES = Arrays.asList(AnnualIndexTableConstraints.DATE, AnnualIndexTableConstraints.CHANGE);
+    public static final List<String> COLUMN_TITLES = Arrays.asList(AnnualIndexTableConstraints.DATE, AnnualIndexTableConstraints.ANNUAL_CHANGE);
 
     public boolean matches(int row, int column, Object value) {
         if (column == 0) {

@@ -29,11 +29,13 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
 
     private IRandomNumberGenerator indexGenerator;
 
-    private double previousPeriodFactor = 1d;
+    private double previousPeriodFactor;
 
     public IParameterObjectClassifier getType() {
         return IndexStrategyType.STOCHASTIC;
     }
+
+    private FactorsPacket factors;
 
     public Map getParameters() {
         Map params = new HashMap(2);
@@ -42,19 +44,20 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
         return params;
     }
 
-    public List<FactorsPacket> getFactors(PeriodScope periodScope, Index origin) {
-        lazyInitGenerator();
-        double factor = 1 + indexGenerator.nextValue().doubleValue();
-        List<FactorsPacket> packets = new ArrayList<FactorsPacket>(1);
-        FactorsPacket packet = new FactorsPacket(periodScope.getCurrentPeriodStartDate(), previousPeriodFactor);
-        packet.add(periodScope.getNextPeriodStartDate(), factor);
-        packet.origin = origin;
-        packets.add(packet);
-        previousPeriodFactor *= factor;
-        return packets;
+    public FactorsPacket getFactors(PeriodScope periodScope, Index origin) {
+        lazyInitGenerator(periodScope);
+        double factor = previousPeriodFactor * (1 + indexGenerator.nextValue().doubleValue());
+        previousPeriodFactor = factor;
+        factors.add(periodScope.getNextPeriodStartDate(), factor);
+        factors.origin = origin;
+        return factors;
     }
 
-    private void lazyInitGenerator() {
+    private void lazyInitGenerator(PeriodScope periodScope) {
+        if (periodScope.isFirstPeriod()) {
+            previousPeriodFactor = 1d;
+            factors = new FactorsPacket(periodScope.getCurrentPeriodStartDate(), 1);
+        }
         if (indexGenerator == null) {
             indexGenerator = RandomNumberGeneratorFactory.getGenerator(distribution);
         }

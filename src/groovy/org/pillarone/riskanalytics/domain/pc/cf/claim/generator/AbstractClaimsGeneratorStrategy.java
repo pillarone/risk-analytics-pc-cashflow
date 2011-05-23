@@ -10,7 +10,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
-import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.*;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
@@ -59,6 +58,7 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
 
     protected List<ClaimRoot> getClaims(List<Double> claimValues, ClaimType claimType, PeriodScope periodScope) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
+        // todo(jwa): produce EventPacket only if required! In all other cases generate simple dates
         List<EventPacket> events = ClaimsGeneratorUtils.generateEvents(claimValues.size(), periodScope, dateGenerator);
         for (int i = 0; i < claimValues.size(); i++) {
             DateTime occurrenceDate = events.get(i).getDate();
