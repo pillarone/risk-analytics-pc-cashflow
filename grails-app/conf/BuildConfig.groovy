@@ -25,7 +25,7 @@ grails.project.dependency.resolution = {
 
         if (appName == "risk-analytics-pc-cashflow") {
             runtime "org.pillarone:risk-analytics-core:1.4-ALPHA-2.9.3"
-        //    runtime("org.pillarone:risk-analytics-commons:0.1.2") { transitive = false }
+            runtime("org.pillarone:risk-analytics-commons:0.1.2") { transitive = false }
         }
     }
 }
@@ -46,4 +46,4 @@ grails.project.dependency.distribution = {
     }
 }
 
-grails.plugin.location.'risk-analytics-commons' = "../risk-analytics-commons"
+//grails.plugin.location.'risk-analytics-commons' = "../risk-analytics-commons"
