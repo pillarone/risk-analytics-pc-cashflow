@@ -22,7 +22,7 @@ components {
 	indices {
 		subSeverityIndices {
 			subInflationRally {
-				parmIndex[0]=org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.DETERMINISTICANNUALCHANGE, ["indices":new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([[new org.joda.time.DateTime(2011,1,1,0,0,0,0), new org.joda.time.DateTime(2012,1,1,0,0,0,0), new org.joda.time.DateTime(2013,1,1,0,0,0,0), new org.joda.time.DateTime(2014,1,1,0,0,0,0), new org.joda.time.DateTime(2015,1,1,0,0,0,0)], [0.04, 0.02, 0.05, 0.03, 0.1]]),["Date","Annual Change"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('INDEX')),])
+				parmIndex[0]=org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.DETERMINISTICANNUALCHANGE, ["changes":new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([[new org.joda.time.DateTime(2011,1,1,0,0,0,0), new org.joda.time.DateTime(2012,1,1,0,0,0,0), new org.joda.time.DateTime(2013,1,1,0,0,0,0), new org.joda.time.DateTime(2014,1,1,0,0,0,0), new org.joda.time.DateTime(2015,1,1,0,0,0,0)], [0.04, 0.02, 0.05, 0.03, 0.1]]),["Date","Annual Change"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('ANNUALINDEXCHANGE')),])
 			}
 		}
 	}

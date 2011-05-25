@@ -410,7 +410,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period IBNR", 0, claims[claimNumber].ibnr()
 
         println "paid incrementals summed up ${claims.paidIncremental.sum()}"
-        // todo(sku): discuss, is currently lower as indices are applied earlier than for paids
+        // todo(sku): discuss, is currently lower as changes are applied earlier than for paids
         println "paid reported summed up ${claims.reportedIncremental.sum()}"
         println "developed ultimate ${claims[-1].developedUltimate()}"
     }

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class DeterministicIndexTableConstraints implements IMultiDimensionalConstraints {
 
-    public static final String IDENTIFIER = "INDEX";
+    public static final String IDENTIFIER = "DETERMINISTICINDEX";
     public static final String DATE = "Date";
     public static final String INDEX = "INDEX";
 
