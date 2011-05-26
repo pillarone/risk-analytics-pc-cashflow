@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class OccurrenceFrequencySeverityClaimsGeneratorStrategy extends FrequencySeverityClaimsGeneratorStrategy  {
+public class OccurrenceFrequencySeverityClaimsGeneratorStrategy extends FrequencySeverityClaimsGeneratorStrategy {
 
     private RandomDistribution occurrenceDistribution;
 
@@ -34,7 +34,7 @@ public class OccurrenceFrequencySeverityClaimsGeneratorStrategy extends Frequenc
                                           PeriodScope periodScope, List<SystematicFrequencyPacket> systematicFrequencies,
                                           IPerilMarker filterCriteria) {
         setDateGenerator(occurrenceDistribution);
-        return super.generateClaims(baseClaims,uwInfos, uwInfosFilterCriteria, null, periodScope, systematicFrequencies, filterCriteria);
+        return super.generateClaims(baseClaims, uwInfos, uwInfosFilterCriteria, factorPackets, periodScope, systematicFrequencies, filterCriteria);
     }
 
 }
