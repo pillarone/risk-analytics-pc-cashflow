@@ -7,6 +7,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.PremiumIndexSelectionTa
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.PolicyIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.segment.SegmentPortion
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.PMLClaimsGeneratorStrategyValidator
+import org.pillarone.riskanalytics.core.parameterization.validation.ValidatorRegistry
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -53,6 +55,8 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
         ConstraintsFactory.registerConstraint(new PatternTableConstraints())
         ConstraintsFactory.registerConstraint(new SegmentPortion())
+
+        ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
     }
 
     def onChange = { event ->
