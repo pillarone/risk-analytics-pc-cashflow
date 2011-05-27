@@ -52,7 +52,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
         ComboBoxTableMultiDimensionalParameter uwInfoComboBox = new ComboBoxTableMultiDimensionalParameter(
                 ["motor hull"], ["Underwriting Information"], IUnderwritingInfoMarker)
         uwInfoComboBox.comboBoxValues.put('motor hull', riskBands)
-        claimsGenerator.setParmUnderwritingInformation(uwInfoComboBox)
+        claimsGenerator.setParmUnderwritingSegments(uwInfoComboBox)
         claimsGenerator.setParmClaimsModel(ClaimsGeneratorType.getStrategy(
                 ClaimsGeneratorType.ATTRITIONAL, [
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
@@ -99,7 +99,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
         // no cover criteria
         ComboBoxTableMultiDimensionalParameter uwInfoComboBox = new ComboBoxTableMultiDimensionalParameter(
                 [""], ["Underwriting Information"], IUnderwritingInfoMarker)
-        claimsGenerator.setParmUnderwritingInformation(uwInfoComboBox)
+        claimsGenerator.setParmUnderwritingSegments(uwInfoComboBox)
 
         claimsGenerator.reset()
         underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000, numberOfPolicies: 20, origin: riskBands)
@@ -114,7 +114,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
         uwInfoComboBox = new ComboBoxTableMultiDimensionalParameter(
                 ["motor hull"], ["Underwriting Information"], IUnderwritingInfoMarker)
         uwInfoComboBox.comboBoxValues.put('motor hull', riskBands)
-        claimsGenerator.setParmUnderwritingInformation(uwInfoComboBox)
+        claimsGenerator.setParmUnderwritingSegments(uwInfoComboBox)
         claimsGenerator.setParmClaimsModel(ClaimsGeneratorType.getStrategy(
                 ClaimsGeneratorType.ATTRITIONAL, [
                         "claimsSizeBase": ExposureBase.SUM_INSURED,

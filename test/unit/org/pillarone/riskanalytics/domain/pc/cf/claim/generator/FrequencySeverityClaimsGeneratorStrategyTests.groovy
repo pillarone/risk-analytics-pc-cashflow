@@ -53,7 +53,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
         ComboBoxTableMultiDimensionalParameter uwInfoComboBox = new ComboBoxTableMultiDimensionalParameter(
                 ["motor hull"], ["Underwriting Information"], IUnderwritingInfoMarker)
         uwInfoComboBox.comboBoxValues.put('motor hull', riskBands)
-        claimsGenerator.setParmUnderwritingInformation(uwInfoComboBox)
+        claimsGenerator.setParmUnderwritingSegments(uwInfoComboBox)
         claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
                 ClaimsGeneratorType.FREQUENCY_SEVERITY, [
                         "frequencyIndices": new ConstrainedMultiDimensionalParameter(
