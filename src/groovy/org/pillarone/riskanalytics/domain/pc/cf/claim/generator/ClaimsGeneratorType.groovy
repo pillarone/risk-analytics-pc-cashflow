@@ -42,9 +42,9 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
             claimsSizeDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
             claimsSizeModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:])])
     public static final ClaimsGeneratorType FREQUENCY_SEVERITY = new ClaimsGeneratorType("frequency severity", "FREQUENCY_SEVERITY", [
-            frequencyIndices : new ConstrainedMultiDimensionalParameter(
-                Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
-                ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
+            frequencyIndices: new ConstrainedMultiDimensionalParameter(
+                    Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
+                    ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
             frequencyBase: FrequencyBase.ABSOLUTE,
             frequencyDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
             frequencyModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
@@ -53,6 +53,9 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
             claimsSizeModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
             produceClaim: FrequencySeverityClaimType.SINGLE])
     public static final ClaimsGeneratorType OCCURRENCE_AND_SEVERITY = new ClaimsGeneratorType("occurrence and severity", "OCCURRENCE_AND_SEVERITY", [
+            frequencyIndices: new ConstrainedMultiDimensionalParameter(
+                    Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
+                    ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
             frequencyBase: FrequencyBase.ABSOLUTE,
             frequencyDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
             frequencyModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
@@ -142,6 +145,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                 break;
             case ClaimsGeneratorType.OCCURRENCE_AND_SEVERITY:
                 claimsGenerator = new OccurrenceFrequencySeverityClaimsGeneratorStrategy(
+                        frequencyIndices: (ConstrainedMultiDimensionalParameter) parameters.get("frequencyIndices"),
                         frequencyBase: (FrequencyBase) parameters.get("frequencyBase"),
                         frequencyDistribution: (RandomDistribution) parameters.get("frequencyDistribution"),
                         frequencyModification: (DistributionModified) parameters.get("frequencyModification"),
@@ -161,7 +165,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                 claimsGenerator = new PMLClaimsGeneratorStrategy(
                         pmlData: (ConstrainedMultiDimensionalParameter) parameters.get("pmlData"),
                         claimsSizeModification: (DistributionModified) parameters.get("claimsSizeModification"),
-                        produceClaim : (FrequencySeverityClaimType) parameters.get("produceClaim"))
+                        produceClaim: (FrequencySeverityClaimType) parameters.get("produceClaim"))
         }
         return claimsGenerator;
     }

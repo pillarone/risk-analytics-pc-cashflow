@@ -58,10 +58,10 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
         int numberOfClaims = (int) (frequencyGenerator.nextValue().intValue() * frequencyFactor);
         double claimValue = baseClaims.get(0).getUltimate();
         for (int i = 0; i < numberOfClaims; i++) {
-            claimValue += claimsSizeGenerator.nextValue().doubleValue();
+            claimValue += claimsSizeGenerator.nextValue().doubleValue() * severityScalingFactor;
         }
         List<Double> claimValues = new ArrayList<Double>();
-        claimValues.add(claimValue * severityScalingFactor);
+        claimValues.add(claimValue);
         return getClaims(claimValues, ClaimType.ATTRITIONAL, periodScope);
     }
 

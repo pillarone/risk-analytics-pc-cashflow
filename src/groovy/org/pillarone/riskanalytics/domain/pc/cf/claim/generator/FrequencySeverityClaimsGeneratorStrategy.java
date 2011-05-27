@@ -30,14 +30,14 @@ import java.util.Map;
  */
 public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStrategy {
 
-    private ConstrainedMultiDimensionalParameter frequencyIndices;
-    private FrequencyBase frequencyBase;
-    private RandomDistribution frequencyDistribution;
-    private DistributionModified frequencyModification;
-    private ExposureBase claimsSizeBase;
-    private RandomDistribution claimsSizeDistribution;
-    private DistributionModified claimsSizeModification;
-    private FrequencySeverityClaimType produceClaim;
+    protected ConstrainedMultiDimensionalParameter frequencyIndices;
+    protected FrequencyBase frequencyBase;
+    protected RandomDistribution frequencyDistribution;
+    protected DistributionModified frequencyModification;
+    protected ExposureBase claimsSizeBase;
+    protected RandomDistribution claimsSizeDistribution;
+    protected DistributionModified claimsSizeModification;
+    protected FrequencySeverityClaimType produceClaim;
 
     public IParameterObjectClassifier getType() {
         return ClaimsGeneratorType.FREQUENCY_SEVERITY;
