@@ -49,7 +49,6 @@ class NonLifeCashflowModel extends StochasticModel {
         multipleDependencies = new MultipleDependencies()
         reinsuranceContracts = new ReinsuranceContracts()
 
-        addStartComponent indices
         addStartComponent patterns
         addStartComponent dependencies
         addStartComponent multipleDependencies
@@ -67,6 +66,7 @@ class NonLifeCashflowModel extends StochasticModel {
         claimsGenerators.inEventFrequencies = multipleDependencies.outEventFrequencies
         reinsuranceContracts.inClaims = claimsGenerators.outClaims
         reinsuranceContracts.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
+        indices.inEventSeverities = dependencies.outEventSeverities
     }
 
     @Override
