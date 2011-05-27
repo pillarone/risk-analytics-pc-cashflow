@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**

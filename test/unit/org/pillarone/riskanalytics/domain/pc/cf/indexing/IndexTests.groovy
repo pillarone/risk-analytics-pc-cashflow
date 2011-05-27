@@ -6,6 +6,9 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.util.MathUtils
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -14,13 +17,27 @@ class IndexTests extends GroovyTestCase {
 
     public static final Double EPSILON = 1E-10
 
-    DateTime date20010101 = new DateTime(2001,1,1,0,0,0,0)
-    DateTime date20020101 = new DateTime(2002,1,1,0,0,0,0)
-    DateTime date20030222 = new DateTime(2003,2,22,0,0,0,0)
-    DateTime date20030316 = new DateTime(2003,3,16,0,0,0,0)
-    DateTime date20041212 = new DateTime(2004,12,12,0,0,0,0)
-    DateTime date20050421 = new DateTime(2005,4,21,0,0,0,0)
-    DateTime date20110101 = new DateTime(2011,1,1,0,0,0,0)
+    DateTime date20010101 = new DateTime(2001, 1, 1, 0, 0, 0, 0)
+    DateTime date20020101 = new DateTime(2002, 1, 1, 0, 0, 0, 0)
+    DateTime date20030222 = new DateTime(2003, 2, 22, 0, 0, 0, 0)
+    DateTime date20030316 = new DateTime(2003, 3, 16, 0, 0, 0, 0)
+    DateTime date20041212 = new DateTime(2004, 12, 12, 0, 0, 0, 0)
+    DateTime date20050421 = new DateTime(2005, 4, 21, 0, 0, 0, 0)
+    DateTime date20110101 = new DateTime(2011, 1, 1, 0, 0, 0, 0)
+
+    EventSeverity severity1
+    EventSeverity severity2
+    EventSeverity severity3
+    List<String> targets
+    List<EventSeverity> severities
+
+    void setUp() {
+        severity1 = new EventSeverity(value: 0.8, event: new EventPacket(new DateTime(2011, 1, 2, 0, 0, 0, 0)))
+        severity2 = new EventSeverity(value: 0.9, event: new EventPacket(new DateTime(2011, 2, 2, 0, 0, 0, 0)))
+        severity3 = new EventSeverity(value: 0.95, event: new EventPacket(new DateTime(2011, 3, 2, 0, 0, 0, 0)))
+        targets = new ArrayList<String>(["motor hull", "hail", "index"])
+        severities = new ArrayList<EventSeverity>([severity1, severity2, severity3])
+    }
 
     void testTrivialIndex() {
         Index index = new Index(parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.NONE, [:]))
@@ -32,8 +49,8 @@ class IndexTests extends GroovyTestCase {
         MathUtils.initRandomStreamBase(123)
 
         Index index = new Index(parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.STOCHASTIC,
-                        [startDate : date20110101,
-                         distribution : DistributionType.getStrategy(DistributionType.LOGNORMAL, ['mean' : 0.03, 'stDev' : 0.2])]))
+                [startDate: date20110101,
+                        distribution: DistributionType.getStrategy(DistributionType.LOGNORMAL, ['mean': 0.03, 'stDev': 0.2])]))
         index.periodScope = TestPeriodScopeUtilities.getPeriodScope(date20110101, 5)
         index.doCalculation()
 
@@ -60,11 +77,28 @@ class IndexTests extends GroovyTestCase {
         assertEquals "factor for 2014-01-01", 1.1049224089826477, index.outFactors[0].getFactorAtDate(date20110101.plusYears(3)), EPSILON
     }
 
+    void testStochasticIndexSystematicSeverities() {
+
+        Index index = new Index(name: "index", parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.STOCHASTIC,
+                [startDate: date20110101,
+                        distribution: DistributionType.getStrategy(DistributionType.UNIFORM, [a: 0, b: 4.5])]))
+        index.periodScope = TestPeriodScopeUtilities.getPeriodScope(date20110101, 5)
+
+        EventDependenceStream stream1 = new EventDependenceStream(targets, severities)
+        index.inEventSeverities << stream1
+        index.doCalculation()
+
+        assertEquals "one factor only", 1, index.outFactors.size()
+        assertEquals "factor for 2012-01-01", 1, index.outFactors[0].getFactorAtDate(date20110101)
+        assertEquals "factor for 2012-01-01", 1+4.5 * 0.95d, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1))
+
+    }
+
     void testDeterministicAnnualChange() {
         Index index = new Index(parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.DETERMINISTICANNUALCHANGE,
-                        [changes: new ConstrainedMultiDimensionalParameter(
-                                [[date20010101, date20020101, date20030222, date20030316, date20041212, date20050421],
-                                 [0.0222, 0d, 0.0094, 0.0188, 0.0267, 0.0155]],
+                [changes: new ConstrainedMultiDimensionalParameter(
+                        [[date20010101, date20020101, date20030222, date20030316, date20041212, date20050421],
+                                [0.0222, 0d, 0.0094, 0.0188, 0.0267, 0.0155]],
                         [AnnualIndexTableConstraints.DATE, AnnualIndexTableConstraints.ANNUAL_CHANGE],
                         ConstraintsFactory.getConstraints(AnnualIndexTableConstraints.IDENTIFIER))]))
         index.doCalculation()
