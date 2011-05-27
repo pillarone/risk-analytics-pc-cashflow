@@ -12,9 +12,9 @@ import java.util.List;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 // todo(sku): read complete column instead of every single row
-public abstract class AbstractPatternStrategy extends AbstractParameterObject implements IPatternStrategy {
+public abstract class AbstractPatternStrategy extends AbstractParameterObject {
 
-    protected List<Double> getPatternValues(ConstrainedMultiDimensionalParameter pattern, int monthColumnIndex, int patternColumnIndex) {
+    protected static List<Double> getPatternValues(ConstrainedMultiDimensionalParameter pattern, int monthColumnIndex, int patternColumnIndex) {
         if (pattern.getValues().size() > 0 && pattern.getValues().get(0) instanceof List) {
            int cumulatedMonths = InputFormatConverter.getInt(pattern.getValueAt(pattern.getTitleRowCount(), monthColumnIndex));
            List<Double> patternValues = new ArrayList<Double>();
@@ -29,7 +29,7 @@ public abstract class AbstractPatternStrategy extends AbstractParameterObject im
        return pattern.getValues();
     }
 
-    protected List<Period> getCumulativePeriods(ConstrainedMultiDimensionalParameter pattern, int monthColumnIndex) {
+    protected static List<Period> getCumulativePeriods(ConstrainedMultiDimensionalParameter pattern, int monthColumnIndex) {
         List<Period> periods = new ArrayList<Period>();
         boolean firstPeriod = true;
         for (int row = pattern.getTitleRowCount(); row < pattern.getRowCount(); row++) {
@@ -40,5 +40,33 @@ public abstract class AbstractPatternStrategy extends AbstractParameterObject im
         }
         return periods;
     }
-}
 
+    protected static PatternPacket getCumulativePattern(ConstrainedMultiDimensionalParameter cumulativePattern,
+                                                 String columnName, Class<? extends IPatternMarker> patternMarker) {
+        int columnMonthIndex = cumulativePattern.getColumnIndex(PatternTableConstraints.MONTHS);
+        List<Double> cumulativeValues = getPatternValues(cumulativePattern, columnMonthIndex,
+                cumulativePattern.getColumnIndex(columnName));
+        List<Period> cumulativePeriods = getCumulativePeriods(cumulativePattern, columnMonthIndex);
+        return new  PatternPacket(patternMarker, cumulativeValues, cumulativePeriods);
+    }
+
+    protected static PatternPacket getIncrementalPattern(ConstrainedMultiDimensionalParameter incrementalPattern,
+                                                       String columnName, Class<? extends IPatternMarker> patternMarker) {
+        int columnMonthIndex = incrementalPattern.getColumnIndex(PatternTableConstraints.MONTHS);
+        List<Double> incrementalValues = getPatternValues(incrementalPattern, columnMonthIndex,
+                incrementalPattern.getColumnIndex(columnName));
+        List<Double> cumulativeValues = getCumulativePatternValues(incrementalValues);
+        List<Period> cumulativePeriods = getCumulativePeriods(incrementalPattern, columnMonthIndex);
+        return new PatternPacket(IRecoveryPatternMarker.class, cumulativeValues, cumulativePeriods);
+    }
+
+    protected static List<Double> getCumulativePatternValues(List<Double> incrementalValues) {
+        List<Double> cumulativeValues = new ArrayList<Double>(incrementalValues.size());
+        double cumulative = 0d;
+        for (Double increment : incrementalValues) {
+            cumulative += increment;
+            cumulativeValues.add(cumulative);
+        }
+        return cumulativeValues;
+    }
+}

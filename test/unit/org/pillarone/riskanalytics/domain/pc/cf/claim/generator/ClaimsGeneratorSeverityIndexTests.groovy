@@ -49,7 +49,7 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         generator.parmPayoutPattern.selectedComponent = pattern
         generator.parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
                 [[index.name], [indexMode.toString()], [baseDateMode.toString()], [fixedIndexDate]],
-                ["Index","Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('SEVERITY_INDEX_SELECTION'))
+                ["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('SEVERITY_INDEX_SELECTION'))
         generator.parmSeverityIndices.comboBoxValues.put(0, ['inflation': index])
         generator.setParmClaimsModel(ClaimsGeneratorType.getStrategy(
                 ClaimsGeneratorType.ATTRITIONAL_WITH_DATE, [
@@ -69,7 +69,8 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         List<FactorsPacket> factors = [getFactorsPacket(
                 [date20100101, date20100701, date20110101, date20120101, date20130101, date20140101],
                 [1, 1.02, 1.03, 1.06, 1.07, 1.1], inflation)]
-        PatternPacket pattern = new PatternPacket([0.5d, 0.8d, 1.0d], [Period.months(0), Period.months(12), Period.months(24)])
+        PatternPacket pattern = new PatternPacket(IPayoutPatternMarker.class, [0.5d, 0.8d, 1.0d],
+                                                  [Period.months(0), Period.months(12), Period.months(24)])
         PayoutPattern payoutPattern = getPayoutPattern('5y')
         pattern.origin = payoutPattern
         List<PatternPacket> patterns = [pattern]

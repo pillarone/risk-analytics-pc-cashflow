@@ -20,14 +20,14 @@ public class PatternPacket extends Packet {
     protected List<Double> cumulativeValues;
     protected List<Period> cumulativePeriods;
 
-
-    public static final PatternPacket PATTERN_TRIVIAL = new TrivialPattern();
+    /** this field is required to enable different kinds of pattern within one mdp @see PayoutReportingPatternCombined */
+    private Class<? extends IPatternMarker> patternMarker;
 
     public PatternPacket() {
     }
 
-
-    public PatternPacket(List<Double> cumulativeValues, List<Period> cumulativePeriods) {
+    public PatternPacket(Class<? extends IPatternMarker> patternMarker, List<Double> cumulativeValues, List<Period> cumulativePeriods) {
+        this.patternMarker = patternMarker;
         this.cumulativeValues = cumulativeValues;
         this.cumulativePeriods = cumulativePeriods;
     }
@@ -165,12 +165,27 @@ public class PatternPacket extends Packet {
         return cumulativePeriods.get(developmentPeriod);
     }
 
-    private static final class TrivialPattern extends PatternPacket {
+    public boolean isPayoutPattern() {
+        return patternMarker == IPayoutPatternMarker.class;
+    }
 
-        private TrivialPattern() {
+    public boolean isReportingPattern() {
+        return patternMarker == IReportingPatternMarker.class;
+    }
+
+    public boolean isRecoveryPattern() {
+        return patternMarker == IRecoveryPatternMarker.class;
+    }
+
+    public boolean isPremiumPattern() {
+        return patternMarker == IPremiumPatternMarker.class;
+    }
+
+    public static final class TrivialPattern extends PatternPacket {
+
+        public TrivialPattern(Class<? extends IPatternMarker> patternMarker) {
             // todo(sku): use immutable lists
-            cumulativePeriods = Arrays.asList(Period.days(0));
-            cumulativeValues = Arrays.asList(1d);
+            super(patternMarker, Arrays.asList(1d), Arrays.asList(Period.days(0)));
         }
     }
 }

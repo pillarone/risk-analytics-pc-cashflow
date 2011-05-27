@@ -8,7 +8,7 @@ import java.util.Collections;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class Pattern extends Component {
+abstract public class Pattern extends Component {
 
     private PacketList<PatternPacket> outPattern = new PacketList<PatternPacket>(PatternPacket.class);
     private IPatternStrategy parmPattern = PatternStrategyType.getStrategy(PatternStrategyType.NONE, Collections.emptyMap());
@@ -22,10 +22,12 @@ public class Pattern extends Component {
 
     private void initSimulation() {
         if (pattern == null) {
-            pattern = parmPattern.getPattern();
+            pattern = parmPattern.getPattern(getPatternMarker());
             pattern.setOrigin(this);
         }
     }
+
+    abstract protected Class<? extends IPatternMarker> getPatternMarker();
 
     public PacketList<PatternPacket> getOutPattern() {
         return outPattern;

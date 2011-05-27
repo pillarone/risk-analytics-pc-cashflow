@@ -4,7 +4,6 @@ import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class IncrementalPatternStrategy extends AbstractPatternStrategy {
+public class IncrementalPatternStrategy extends AbstractPatternStrategy implements IPatternStrategy {
 
     public static final String INCREMENTAL_PATTERN = "incrementalPattern";
 
@@ -29,25 +28,15 @@ public class IncrementalPatternStrategy extends AbstractPatternStrategy {
         return params;
     }
 
-    public PatternPacket getPattern() {
+    public PatternPacket getPattern(Class<? extends IPatternMarker> patternMarker) {
         if (pattern == null) {
             int columnMonthIndex = incrementalPattern.getColumnIndex(PatternTableConstraints.MONTHS);
             List<Double> incrementalValues = getPatternValues(incrementalPattern, columnMonthIndex,
                     incrementalPattern.getColumnIndex(PatternStrategyType.INCREMENTS));
             List<Double> cumulativeValues = getCumulativePatternValues(incrementalValues);
             List<Period> cumulativePeriods = getCumulativePeriods(incrementalPattern, columnMonthIndex);
-            pattern = new  PatternPacket(cumulativeValues, cumulativePeriods);
+            pattern = new  PatternPacket(patternMarker, cumulativeValues, cumulativePeriods);
         }
         return pattern;
-    }
-
-    private List<Double> getCumulativePatternValues(List<Double> incrementalValues) {
-        List<Double> cumulativeValues = new ArrayList<Double>(incrementalValues.size());
-        double cumulative = 0d;
-        for (Double increment : incrementalValues) {
-            cumulative += increment;
-            cumulativeValues.add(cumulative);
-        }
-        return cumulativeValues;
     }
 }

@@ -18,6 +18,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
 import org.apache.commons.logging.LogFactory
 import org.apache.commons.logging.Log
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ReinsuranceContracts
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPremiumPatternMarker
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -77,8 +80,13 @@ class NonLifeCashflowModel extends StochasticModel {
         Period maxPeriods = Period.months(0);
 
         Map<String, Period> claimsGeneratorPatternLengths = new HashMap<String, Period>()
-        for (Pattern pattern: patterns.subPayoutPatterns.componentList + patterns.subReportingPatterns.componentList) {
-            Period period = pattern.parmPattern.pattern.getLastCumulativePeriod()
+        for (Pattern pattern: patterns.subPayoutPatterns.componentList) {
+            Period period = pattern.parmPattern.getPattern(IPayoutPatternMarker.class).getLastCumulativePeriod()
+            LOG.debug("payout/reporting pattern $pattern.name $period.months")
+            claimsGeneratorPatternLengths.put(pattern.name, period)
+        }
+        for (Pattern pattern: patterns.subReportingPatterns.componentList) {
+            Period period = pattern.parmPattern.getPattern(IReportingPatternMarker.class).getLastCumulativePeriod()
             LOG.debug("payout/reporting pattern $pattern.name $period.months")
             claimsGeneratorPatternLengths.put(pattern.name, period)
         }
@@ -98,7 +106,7 @@ class NonLifeCashflowModel extends StochasticModel {
 
         Map<String, Period> premiumPatternLengths = new HashMap<String, Period>()
         for (Pattern pattern: patterns.subPremiumPatterns.componentList) {
-            Period period = pattern.parmPattern.pattern.getLastCumulativePeriod()
+            Period period = pattern.parmPattern.getPattern(IPremiumPatternMarker.class).getLastCumulativePeriod()
             LOG.debug("premium pattern $pattern.name $period.months")
             premiumPatternLengths.put(pattern.name, period)
         }
