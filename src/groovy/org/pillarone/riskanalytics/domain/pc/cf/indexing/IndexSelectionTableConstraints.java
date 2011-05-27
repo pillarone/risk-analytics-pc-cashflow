@@ -14,7 +14,7 @@ public class IndexSelectionTableConstraints implements IMultiDimensionalConstrai
 
     public static final String IDENTIFIER = "INDEX_SELECTION";
     public static final String INDEX = "Index";
-    public static final String MODE = "Mode";
+    public static final String MODE = "Index Mode";
     public static final String BASEDATEMODE = "Base Date Mode";
     public static final String DATE = "Date";
 

@@ -55,7 +55,7 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
 
     private boolean globalGenerateNewClaimsInFirstPeriodOnly = true;
     private ConstrainedString parmPremiumPattern = new ConstrainedString(IPremiumPatternMarker.class, "");
-    private ConstrainedMultiDimensionalParameter parmPoliciesIndices = new ConstrainedMultiDimensionalParameter(
+    private ConstrainedMultiDimensionalParameter parmPolicyIndices = new ConstrainedMultiDimensionalParameter(
             Collections.emptyList(), PolicyIndexSelectionTableConstraints.COLUMN_TITLES,
             ConstraintsFactory.getConstraints(PolicyIndexSelectionTableConstraints.IDENTIFIER));
     private ConstrainedMultiDimensionalParameter parmPremiumIndices = new ConstrainedMultiDimensionalParameter(
@@ -90,7 +90,7 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
                 && iterationScope.getPeriodScope().isFirstPeriod()
                 || !globalGenerateNewClaimsInFirstPeriodOnly) {
             List<DateFactors> dateFactorsList = premiumPattern.getDateFactorsForCurrentPeriod(periodScope.getPeriodCounter());
-            List<Factors> policyFactors = IndexUtils.filterFactors(inFactors, parmPoliciesIndices);
+            List<Factors> policyFactors = IndexUtils.filterFactors(inFactors, parmPolicyIndices);
             List<Factors> premiumFactors = IndexUtils.filterFactors(inFactors, parmPremiumIndices);
             boolean positiveWrittenAmount = true;
             ExposureInfo exposure = new ExposureInfo(periodScope.getCurrentPeriodStartDate(), periodScope.getPeriodCounter());
@@ -130,7 +130,7 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
                 && iterationScope.getPeriodScope().isFirstPeriod()
                 || !globalGenerateNewClaimsInFirstPeriodOnly) {
             DateTime currentPeriodStartDate = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
-            List<Factors> policyFactors = IndexUtils.filterFactors(inFactors, parmPoliciesIndices);
+            List<Factors> policyFactors = IndexUtils.filterFactors(inFactors, parmPolicyIndices);
             List<Factors> premiumFactors = IndexUtils.filterFactors(inFactors, parmPremiumIndices);
             if (policyFactors == null && premiumFactors == null) {
                 outUnderwritingInfo.addAll(underwritingInfos);
@@ -250,12 +250,12 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
         this.iterationStore = iterationStore;
     }
 
-    public ConstrainedMultiDimensionalParameter getParmPoliciesIndices() {
-        return parmPoliciesIndices;
+    public ConstrainedMultiDimensionalParameter getParmPolicyIndices() {
+        return parmPolicyIndices;
     }
 
-    public void setParmPoliciesIndices(ConstrainedMultiDimensionalParameter parmPoliciesIndices) {
-        this.parmPoliciesIndices = parmPoliciesIndices;
+    public void setParmPolicyIndices(ConstrainedMultiDimensionalParameter parmPolicyIndices) {
+        this.parmPolicyIndices = parmPolicyIndices;
     }
 
     public ConstrainedMultiDimensionalParameter getParmPremiumIndices() {
