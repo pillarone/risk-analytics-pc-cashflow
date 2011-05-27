@@ -53,7 +53,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     private ConstrainedMultiDimensionalParameter parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
             Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
             ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER));
-    private ComboBoxTableMultiDimensionalParameter parmUnderwritingInformation = new ComboBoxTableMultiDimensionalParameter(
+    private ComboBoxTableMultiDimensionalParameter parmUnderwritingSegments = new ComboBoxTableMultiDimensionalParameter(
             Arrays.asList(""), Arrays.asList("Underwriting Information"), IUnderwritingInfoMarker.class);
     private IClaimsGeneratorStrategy parmClaimsModel = ClaimsGeneratorType.getDefault();
 
@@ -81,7 +81,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
         if (globalGenerateNewClaimsInFirstPeriodOnly
                 && periodScope.isFirstPeriod()
                 || !globalGenerateNewClaimsInFirstPeriodOnly) {
-            List uwFilterCriteria = parmUnderwritingInformation.getValuesAsObjects();
+            List uwFilterCriteria = parmUnderwritingSegments.getValuesAsObjects();
             // a nominal ultimate is generated, therefore no factors are applied
             List<ClaimRoot> baseClaims = parmClaimsModel.calculateClaims(inUnderwritingInfo, uwFilterCriteria,
                     inEventSeverities, this, periodScope);
@@ -211,12 +211,12 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
         this.inUnderwritingInfo = inUnderwritingInfo;
     }
 
-    public ComboBoxTableMultiDimensionalParameter getParmUnderwritingInformation() {
-        return parmUnderwritingInformation;
+    public ComboBoxTableMultiDimensionalParameter getParmUnderwritingSegments() {
+        return parmUnderwritingSegments;
     }
 
-    public void setParmUnderwritingInformation(ComboBoxTableMultiDimensionalParameter parmUnderwritingInformation) {
-        this.parmUnderwritingInformation = parmUnderwritingInformation;
+    public void setParmUnderwritingSegments(ComboBoxTableMultiDimensionalParameter parmUnderwritingSegments) {
+        this.parmUnderwritingSegments = parmUnderwritingSegments;
     }
 
     public PacketList<SingleValuePacket> getOutClaimNumber() {

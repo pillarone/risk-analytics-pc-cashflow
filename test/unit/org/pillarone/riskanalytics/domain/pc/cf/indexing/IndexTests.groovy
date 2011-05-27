@@ -62,7 +62,7 @@ class IndexTests extends GroovyTestCase {
 
     void testDeterministicAnnualChange() {
         Index index = new Index(parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.DETERMINISTICANNUALCHANGE,
-                        [indices: new ConstrainedMultiDimensionalParameter(
+                        [changes: new ConstrainedMultiDimensionalParameter(
                                 [[date20010101, date20020101, date20030222, date20030316, date20041212, date20050421],
                                  [0.0222, 0d, 0.0094, 0.0188, 0.0267, 0.0155]],
                         [AnnualIndexTableConstraints.DATE, AnnualIndexTableConstraints.ANNUAL_CHANGE],

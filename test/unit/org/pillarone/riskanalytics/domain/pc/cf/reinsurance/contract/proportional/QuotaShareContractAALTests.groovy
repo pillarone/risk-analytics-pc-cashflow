@@ -13,6 +13,8 @@ import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -27,7 +29,8 @@ class QuotaShareContractAALTests extends GroovyTestCase {
 
     PatternPacket payoutPattern = PatternPacketTests.getPattern([0, 3, 12, 24, 48], [0.01d, 0.1d, 0.6d, 0.7d, 1d])
     PatternPacket reportingPattern = PatternPacketTests.getPattern([0, 3, 12, 24, 48], [0.7d, 0.8d, 0.9d, 1d, 1d])
-    PatternPacket trivialPattern = PatternPacket.PATTERN_TRIVIAL;
+    PatternPacket trivialReportingPattern = new PatternPacket.TrivialPattern(IReportingPatternMarker.class);
+    PatternPacket trivialPayoutPattern = new PatternPacket.TrivialPattern(IPayoutPatternMarker.class);
 
     DateTime date20110101 = new DateTime(2011,1,1,0,0,0,0)
     DateTime date20110418 = new DateTime(2011,4,18,0,0,0,0)
@@ -56,17 +59,17 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
 
         GrossClaimRoot claimRoot800 = new GrossClaimRoot(-800, ClaimType.AGGREGATED,
-                date20110418, date20110418, trivialPattern, trivialPattern)
+                date20110418, date20110418, trivialPayoutPattern, trivialReportingPattern)
         List<ClaimCashflowPacket> claims800 = claimRoot800.getClaimCashflowPackets(periodCounter, true)
         quotaShare20.inClaims.addAll(claims800)
 
         GrossClaimRoot claimRoot1000 = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
-                date20110418, date20110701, trivialPattern, trivialPattern)
+                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
         List<ClaimCashflowPacket> claims1000 = claimRoot1000.getClaimCashflowPackets(periodCounter, true)
         quotaShare20.inClaims.addAll(claims1000)
 
         GrossClaimRoot claimRoot1200 = new GrossClaimRoot(-1200, ClaimType.AGGREGATED,
-                date20110418, date20110701, trivialPattern, trivialPattern)
+                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
         List<ClaimCashflowPacket> claims1200 = claimRoot1200.getClaimCashflowPackets(periodCounter, true)
         quotaShare20.inClaims.addAll(claims1200)
 

@@ -10,9 +10,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,9 +18,9 @@ import java.util.Map;
  */
 public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObject implements IIndexStrategy {
 
-    public static final String INDICES = "indices";
+    public static final String CHANGES = "changes";
 
-    private ConstrainedMultiDimensionalParameter indices;
+    private ConstrainedMultiDimensionalParameter changes;
     private FactorsPacket factors;
 
 
@@ -32,7 +30,7 @@ public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObj
 
     public Map getParameters() {
         Map params = new HashMap(1);
-        params.put(INDICES, indices);
+        params.put(CHANGES, changes);
         return params;
     }
 
@@ -44,15 +42,15 @@ public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObj
     protected void lazyInitFactors(Index origin) {
         if (factors == null) {
             factors = new FactorsPacket();
-            int dateColumnIndex = indices.getColumnIndex(AnnualIndexTableConstraints.DATE);
-            int changeColumnIndex = indices.getColumnIndex(AnnualIndexTableConstraints.ANNUAL_CHANGE);
-            if (indices.getValues().size() > 0) {
+            int dateColumnIndex = changes.getColumnIndex(AnnualIndexTableConstraints.DATE);
+            int changeColumnIndex = changes.getColumnIndex(AnnualIndexTableConstraints.ANNUAL_CHANGE);
+            if (changes.getValues().size() > 0) {
                 double factorProduct = 1d;
                 DateTime formerDate = null;
                 double formerChange = 0d;
-                for (int row = indices.getTitleRowCount(); row < indices.getRowCount(); row++) {
-                    DateTime date = (DateTime) indices.getValueAt(row, dateColumnIndex);
-                    double change = InputFormatConverter.getDouble(indices.getValueAt(row, changeColumnIndex));
+                for (int row = changes.getTitleRowCount(); row < changes.getRowCount(); row++) {
+                    DateTime date = (DateTime) changes.getValueAt(row, dateColumnIndex);
+                    double change = InputFormatConverter.getDouble(changes.getValueAt(row, changeColumnIndex));
                     factorProduct *= incrementalFactor(formerDate, formerChange, date);
                     factors.add(date, factorProduct);
                     formerDate = date;

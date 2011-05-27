@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class AnnualIndexTableConstraints implements IMultiDimensionalConstraints {
 
-    public static final String IDENTIFIER = "INDEX";
+    public static final String IDENTIFIER = "ANNUALINDEXCHANGE";
     public static final String DATE = "Date";
     public static final String ANNUAL_CHANGE = "Annual Change";
 

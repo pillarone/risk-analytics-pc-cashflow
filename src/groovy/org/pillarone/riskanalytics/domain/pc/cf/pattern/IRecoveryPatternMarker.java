@@ -5,5 +5,5 @@ import org.pillarone.riskanalytics.core.components.IComponentMarker;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public interface IRecoveryPatternMarker extends IComponentMarker {
+public interface IRecoveryPatternMarker extends IPatternMarker {
 }

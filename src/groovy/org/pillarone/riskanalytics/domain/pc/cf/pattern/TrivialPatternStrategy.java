@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class TrivialPatternStrategy extends AbstractPatternStrategy {
+public class TrivialPatternStrategy extends AbstractPatternStrategy implements IPatternStrategy {
 
     public IParameterObjectClassifier getType() {
         return PatternStrategyType.NONE;
@@ -18,7 +18,7 @@ public class TrivialPatternStrategy extends AbstractPatternStrategy {
         return Collections.emptyMap();
     }
 
-    public PatternPacket getPattern() {
-        return PatternPacket.PATTERN_TRIVIAL;
+    public PatternPacket getPattern(Class<? extends IPatternMarker> patternMarker) {
+        return new PatternPacket.TrivialPattern(patternMarker);
     }
 }

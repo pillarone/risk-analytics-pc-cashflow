@@ -7,6 +7,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.PremiumIndexSelectionTa
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.PolicyIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.segment.SegmentPortion
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.DeterministicIndexTableConstraints
+
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.PMLClaimsGeneratorStrategyValidator
 import org.pillarone.riskanalytics.core.parameterization.validation.ValidatorRegistry
 
@@ -48,6 +50,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
 
     def doWithApplicationContext = { applicationContext ->
         ConstraintsFactory.registerConstraint(new AnnualIndexTableConstraints())
+        ConstraintsFactory.registerConstraint(new DeterministicIndexTableConstraints())
         ConstraintsFactory.registerConstraint(new PolicyIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new PremiumIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new FrequencyIndexSelectionTableConstraints())

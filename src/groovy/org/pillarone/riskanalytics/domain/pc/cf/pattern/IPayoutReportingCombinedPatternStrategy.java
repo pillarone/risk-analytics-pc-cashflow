@@ -5,7 +5,8 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObject;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public interface IPatternStrategy extends IParameterObject {
+public interface IPayoutReportingCombinedPatternStrategy extends IParameterObject {
 
-    PatternPacket getPattern(Class<? extends IPatternMarker> patternMarker);
+    PatternPacket getReportingPattern();
+    PatternPacket getPayoutPattern();
 }

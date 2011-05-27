@@ -10,6 +10,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexMode
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.BaseDateMode
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -24,7 +26,8 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
 
     PatternPacket payoutPattern = PatternPacketTests.getPattern([0, 3, 12, 24, 48], [0.01d, 0.1d, 0.6d, 0.7d, 1d])
     PatternPacket reportingPattern = PatternPacketTests.getPattern([0, 3, 12, 24, 48], [0.7d, 0.8d, 0.9d, 1d, 1d])
-    PatternPacket trivialPattern = PatternPacket.PATTERN_TRIVIAL;
+    PatternPacket trivialReportingPattern = new PatternPacket.TrivialPattern(IReportingPatternMarker.class);
+    PatternPacket trivialPayoutPattern = new PatternPacket.TrivialPattern(IPayoutPatternMarker.class);
 
     DateTime date20110101 = new DateTime(2011,1,1,0,0,0,0)
     DateTime date20110418 = new DateTime(2011,4,18,0,0,0,0)
@@ -45,7 +48,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110418, date20110701, trivialPattern, trivialPattern)
+                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
 
         assertEquals "one claim only", 1, claims.size()
@@ -65,7 +68,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110418, date20110701, annualReportingPatternInclFirst, trivialPattern)
+                date20110418, date20110701, annualReportingPatternInclFirst, trivialReportingPattern)
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
 
         int period = 0
@@ -410,7 +413,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period IBNR", 0, claims[claimNumber].ibnr()
 
         println "paid incrementals summed up ${claims.paidIncremental.sum()}"
-        // todo(sku): discuss, is currently lower as indices are applied earlier than for paids
+        // todo(sku): discuss, is currently lower as changes are applied earlier than for paids
         println "paid reported summed up ${claims.reportedIncremental.sum()}"
         println "developed ultimate ${claims[-1].developedUltimate()}"
     }

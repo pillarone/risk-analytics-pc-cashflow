@@ -17,14 +17,14 @@ class PatternStrategyType extends AbstractParameterObjectClassifier {
                     ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER)),
     ])
     public static final PatternStrategyType CUMULATIVE = new PatternStrategyType("cumulative", "CUMULATIVE", [
-            cumulativePattern :  new ConstrainedMultiDimensionalParameter([[0],[1d]], [PatternTableConstraints.MONTHS,CUMULATED],
+            cumulativePattern :  new ConstrainedMultiDimensionalParameter([[0],[1d]], [PatternTableConstraints.MONTHS,CUMULATIVE2],
                     ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER)),
     ])
 
     public static final all = [NONE, INCREMENTAL, CUMULATIVE]
 
     public static final String INCREMENTS = "Increments";
-    public static final String CUMULATED = "Cumulated";
+    public static final String CUMULATIVE2 = "Cumulative";
 
     protected static Map types = [:]
     static {

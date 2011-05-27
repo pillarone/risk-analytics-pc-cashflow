@@ -33,7 +33,7 @@ components {
 			parmReportingPattern[0]=new ConstrainedString(IReportingPatternMarker, 'subMarine')
 		}
 		subMotorSingle {
-			parmClaimsModel[0]=ClaimsGeneratorType.getStrategy(ClaimsGeneratorType.FREQUENCY_SEVERITY, ["frequencyBase":FrequencyBase.ABSOLUTE,"frequencyModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"frequencyDistribution":DistributionType.getStrategy(DistributionType.POISSON, [lambda:5.0]),"produceClaim":FrequencySeverityClaimType.SINGLE,"claimsSizeModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"claimsSizeBase":ExposureBase.ABSOLUTE,"claimsSizeDistribution":DistributionType.getStrategy(DistributionType.PARETO, [alpha:2.5, beta:50000.0]),"frequencyIndices":new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([["growth"], ["CONTINUOUS"], ["START_OF_PROJECTION"],[new DateTime(2011,1,1,0,0,0,0)]]),["Index","Mode","Base Date Mode","Date"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('FREQUENCY_INDEX_SELECTION')),])
+			parmClaimsModel[0]=ClaimsGeneratorType.getStrategy(ClaimsGeneratorType.FREQUENCY_SEVERITY, ["frequencyBase":FrequencyBase.ABSOLUTE,"frequencyModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"frequencyDistribution":DistributionType.getStrategy(DistributionType.POISSON, [lambda:5.0]),"produceClaim":FrequencySeverityClaimType.SINGLE,"claimsSizeModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"claimsSizeBase":ExposureBase.ABSOLUTE,"claimsSizeDistribution":DistributionType.getStrategy(DistributionType.PARETO, [alpha:2.5, beta:50000.0]),"frequencyIndices":new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([["growth"], ["CONTINUOUS"], ["START_OF_PROJECTION"],[new DateTime(2011,1,1,0,0,0,0)]]),["Index","Index Mode","Base Date Mode","Date"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('FREQUENCY_INDEX_SELECTION')),])
 			parmPayoutPattern[0]=new ConstrainedString(IPayoutPatternMarker, 'subMotorShort')
 			parmReportingPattern[0]=new ConstrainedString(IReportingPatternMarker, 'subMotorShort')
 		}
@@ -55,7 +55,7 @@ components {
 			}
 			subMarine {
 				parmPattern[0]=PatternStrategyType.getStrategy(PatternStrategyType.CUMULATIVE,
-                        ["cumulativePattern":new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[0, 12, 24, 36, 48], [0.1, 0.7, 0.9, 0.98, 1.0]]),["Months","Cumulated"],
+                        ["cumulativePattern":new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[0, 12, 24, 36, 48], [0.1, 0.7, 0.9, 0.98, 1.0]]),["Months","Cumulative"],
                                 ConstraintsFactory.getConstraints('PATTERN')),])
 			}
 			subMotorShort {
@@ -67,7 +67,7 @@ components {
 		}
 		subReportingPatterns {
 			subMarine {
-				parmPattern[0]=PatternStrategyType.getStrategy(PatternStrategyType.CUMULATIVE, ["cumulativePattern":new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[0, 12, 24, 36, 48], [0.5, 0.8, 0.9, 1.0, 1.0]]),["Months","Cumulated"], ConstraintsFactory.getConstraints('PATTERN')),])
+				parmPattern[0]=PatternStrategyType.getStrategy(PatternStrategyType.CUMULATIVE, ["cumulativePattern":new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[0, 12, 24, 36, 48], [0.5, 0.8, 0.9, 1.0, 1.0]]),["Months","Cumulative"], ConstraintsFactory.getConstraints('PATTERN')),])
 			}
 			subMotorShort {
 				parmPattern[0]=PatternStrategyType.getStrategy(PatternStrategyType.INCREMENTAL, ["incrementalPattern":new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[0, 12, 24], [0.4, 0.5, 0.1]]),["Months","Increments"], ConstraintsFactory.getConstraints('PATTERN')),])

@@ -1,8 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.indexing;
 
 import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
@@ -10,9 +8,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,7 +23,7 @@ public class DeterministicIndexStrategy extends AbstractParameterObject implemen
 
 
     public IParameterObjectClassifier getType() {
-        return IndexStrategyType.DETERMINISTICANNUALCHANGE;
+        return IndexStrategyType.DETERMINISTICINDEXSERIES;
     }
 
     public Map getParameters() {
