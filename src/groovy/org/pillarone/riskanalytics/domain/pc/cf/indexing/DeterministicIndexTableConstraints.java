@@ -13,7 +13,7 @@ public class DeterministicIndexTableConstraints implements IMultiDimensionalCons
 
     public static final String IDENTIFIER = "DETERMINISTICINDEX";
     public static final String DATE = "Date";
-    public static final String INDEX = "INDEX";
+    public static final String INDEX = "Index Level";
 
     public static final List<String> COLUMN_TITLES = Arrays.asList(DeterministicIndexTableConstraints.DATE, DeterministicIndexTableConstraints.INDEX);
 

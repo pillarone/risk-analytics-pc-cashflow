@@ -17,7 +17,7 @@ class IndexStrategyType extends AbstractParameterObjectClassifier {
     public static final IndexStrategyType NONE = new IndexStrategyType(
             'trivial', 'NONE', [:])
     public static final IndexStrategyType DETERMINISTICANNUALCHANGE = new IndexStrategyType(
-            'deterministic annual change', 'DETERMINISTICANNUALCHANGE',
+            'deterministic annual changes', 'DETERMINISTICANNUALCHANGE',
             [changes: new ConstrainedMultiDimensionalParameter([[],[]],
                     AnnualIndexTableConstraints.COLUMN_TITLES,
                     ConstraintsFactory.getConstraints(AnnualIndexTableConstraints.IDENTIFIER))])
