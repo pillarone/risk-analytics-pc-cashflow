@@ -3,8 +3,10 @@ package org.pillarone.riskanalytics.domain.pc.cf.indexing;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,7 +22,7 @@ public class TrivialIndexStrategy extends AbstractParameterObject implements IIn
         return Collections.emptyMap();
     }
 
-    public FactorsPacket getFactors(PeriodScope periodScope, Index origin) {
+    public FactorsPacket getFactors(PeriodScope periodScope, Index origin, List<EventDependenceStream> eventStreams) {
         return null;
     }
 }

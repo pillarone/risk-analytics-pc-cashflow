@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObj
         return params;
     }
 
-    public FactorsPacket getFactors(PeriodScope periodScope, Index origin) {
+    public FactorsPacket getFactors(PeriodScope periodScope, Index origin, List<EventDependenceStream> eventStreams) {
         lazyInitFactors(origin);
         return factors;
     }

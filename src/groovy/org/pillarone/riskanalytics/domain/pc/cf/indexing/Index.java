@@ -3,6 +3,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.indexing;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
+import org.pillarone.riskanalytics.domain.utils.math.copula.ICorrelationMarker;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,10 +12,11 @@ import java.util.List;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class Index extends Component {
+public class Index extends Component implements ICorrelationMarker {
 
     private PeriodScope periodScope;
 
+    private PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
     private PacketList<FactorsPacket> outFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     private PacketList<IndexPacket> outIndices = new PacketList<IndexPacket>(IndexPacket.class);
 
@@ -21,7 +24,7 @@ public class Index extends Component {
     
     @Override
     protected void doCalculation() {
-        FactorsPacket factors = parmIndex.getFactors(periodScope, this);
+        FactorsPacket factors = parmIndex.getFactors(periodScope, this, inEventSeverities);
         if (factors != null && factors.factorsPerDate.size() > 0) {
             outFactors.add(factors);
         }
@@ -60,5 +63,13 @@ public class Index extends Component {
 
     public void setOutIndices(PacketList<IndexPacket> outIndices) {
         this.outIndices = outIndices;
+    }
+
+    public PacketList<EventDependenceStream> getInEventSeverities() {
+        return inEventSeverities;
+    }
+
+    public void setInEventSeverities(PacketList<EventDependenceStream> inEventSeverities) {
+        this.inEventSeverities = inEventSeverities;
     }
 }

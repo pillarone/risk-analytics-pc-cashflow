@@ -4,6 +4,8 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
@@ -44,9 +46,12 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
         return params;
     }
 
-    public FactorsPacket getFactors(PeriodScope periodScope, Index origin) {
+    public FactorsPacket getFactors(PeriodScope periodScope, Index origin, List<EventDependenceStream> eventStreams) {
         lazyInitGenerator(periodScope);
-        double factor = previousPeriodFactor * (1 + indexGenerator.nextValue().doubleValue());
+        Double filteredSeverity = filterSeverity(origin, eventStreams);
+        // note: indexGenerator.getDistribution() yields the unmodified distribution; hence this is only correct if there is no DistributionModifier
+        double factor = filteredSeverity == null ? previousPeriodFactor * (1 + indexGenerator.nextValue().doubleValue()) :
+                previousPeriodFactor * (1 + indexGenerator.getDistribution().inverseF(filteredSeverity));
         previousPeriodFactor = factor;
         factors.add(periodScope.getNextPeriodStartDate(), factor);
         factors.origin = origin;
@@ -61,5 +66,18 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
         if (indexGenerator == null) {
             indexGenerator = RandomNumberGeneratorFactory.getGenerator(distribution);
         }
+    }
+
+    private static Double filterSeverity(Index filterCriteria, List<EventDependenceStream> eventStreams) {
+        List<EventSeverity> filteredEventSeverities = new ArrayList<EventSeverity>();
+        for (EventDependenceStream eventStream : eventStreams) {
+            if (eventStream.getEventDependenceStream().containsKey(filterCriteria.getNormalizedName())) {
+                filteredEventSeverities.add(eventStream.getEventDependenceStream().get(filterCriteria.getNormalizedName()));
+            }
+        }
+        if (filteredEventSeverities.size() > 1) {
+            throw new IllegalArgumentException("Index has more than one dependency");
+        }
+        return filteredEventSeverities.size() == 1 ? filteredEventSeverities.get(0).getValue() : null;
     }
 }

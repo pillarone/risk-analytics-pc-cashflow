@@ -4,6 +4,7 @@ import org.pillarone.riskanalytics.core.components.ComposedComponent
 import org.pillarone.riskanalytics.core.packets.PacketList
 import org.pillarone.riskanalytics.core.wiring.PortReplicatorCategory
 import org.pillarone.riskanalytics.core.wiring.WiringUtils
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -11,18 +12,12 @@ import org.pillarone.riskanalytics.core.wiring.WiringUtils
 class Indices extends ComposedComponent {
 
     PacketList<FactorsPacket> outFactors = new PacketList<FactorsPacket>(FactorsPacket)
+    PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream)
 
     SeverityIndices subSeverityIndices = new SeverityIndices()
     FrequencyIndices subFrequencyIndices = new FrequencyIndices()
     PolicyIndices subPolicyIndices = new PolicyIndices()
     PremiumIndices subPremiumIndices = new PremiumIndices()
-
-    @Override protected void doCalculation() {
-        subSeverityIndices.start()
-        subFrequencyIndices.start()
-        subPolicyIndices.start()
-        subPremiumIndices.start()
-    }
 
     @Override
     void wire() {
@@ -31,6 +26,11 @@ class Indices extends ComposedComponent {
             this.outFactors = subFrequencyIndices.outFactors
             this.outFactors = subPolicyIndices.outFactors
             this.outFactors = subPremiumIndices.outFactors
+            subSeverityIndices.inEventSeverities = this.inEventSeverities
+            subFrequencyIndices.inEventSeverities = this.inEventSeverities
+            subPolicyIndices.inEventSeverities = this.inEventSeverities
+            subPremiumIndices.inEventSeverities = this.inEventSeverities
+
         }
     }
 }
