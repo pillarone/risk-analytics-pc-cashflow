@@ -11,6 +11,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.DeterministicIndexTable
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.PMLClaimsGeneratorStrategyValidator
 import org.pillarone.riskanalytics.core.parameterization.validation.ValidatorRegistry
+import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
+import org.pillarone.riskanalytics.domain.utils.constraint.DateTimeConstraints
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -58,6 +60,8 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
         ConstraintsFactory.registerConstraint(new PatternTableConstraints())
         ConstraintsFactory.registerConstraint(new SegmentPortion())
+        ConstraintsFactory.registerConstraint(new DoubleConstraints())
+        ConstraintsFactory.registerConstraint(new DateTimeConstraints())
 
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
     }

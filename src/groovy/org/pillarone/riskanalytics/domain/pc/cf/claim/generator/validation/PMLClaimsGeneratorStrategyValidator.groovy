@@ -10,7 +10,6 @@ import org.pillarone.riskanalytics.core.simulation.item.parameter.ParameterHolde
 import org.pillarone.riskanalytics.core.simulation.item.parameter.ParameterObjectParameterHolder
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorType
-import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter
 import org.pillarone.riskanalytics.core.parameterization.validation.ValidationType
 

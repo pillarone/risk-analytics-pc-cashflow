@@ -9,7 +9,7 @@ import org.pillarone.riskanalytics.domain.utils.math.copula.CopulaType
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
  */
-class MultipleDependencies extends DynamicComposedComponent {
+class EventGenerators extends DynamicComposedComponent {
 
     PacketList<EventDependenceStream> outEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream);
     PacketList<SystematicFrequencyPacket> outEventFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket);
