@@ -11,10 +11,13 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.IRiskAllocatorStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.RiskAllocatorType;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.IUnderwritingInfoMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
@@ -22,10 +25,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.utils.math.copula.ICorrelationMarker;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -56,6 +56,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     private ComboBoxTableMultiDimensionalParameter parmUnderwritingSegments = new ComboBoxTableMultiDimensionalParameter(
             Arrays.asList(""), Arrays.asList("Underwriting Information"), IUnderwritingInfoMarker.class);
     private IClaimsGeneratorStrategy parmClaimsModel = ClaimsGeneratorType.getDefault();
+    private IRiskAllocatorStrategy parmAssociateExposureInfo = RiskAllocatorType.getStrategy(RiskAllocatorType.NONE, new HashMap());
 
     protected void doCalculation() {
         List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
@@ -86,6 +87,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
             List<ClaimRoot> baseClaims = parmClaimsModel.calculateClaims(inUnderwritingInfo, uwFilterCriteria,
                     inEventSeverities, this, periodScope);
             baseClaims = parmClaimsModel.generateClaims(baseClaims, inUnderwritingInfo, uwFilterCriteria, inFactors, periodScope, inEventFrequencies, this);
+            baseClaims = parmAssociateExposureInfo.getAllocatedClaims(baseClaims, UnderwritingInfoUtils.filterUnderwritingInfo(inUnderwritingInfo, uwFilterCriteria));
 
             PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern);
             PatternPacket reportingPattern = PatternUtils.filterPattern(inPatterns, parmReportingPattern);
@@ -262,5 +264,13 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
 
     public void setInEventFrequencies(PacketList<SystematicFrequencyPacket> inEventFrequencies) {
         this.inEventFrequencies = inEventFrequencies;
+    }
+
+    public IRiskAllocatorStrategy getParmAssociateExposureInfo() {
+        return parmAssociateExposureInfo;
+    }
+
+    public void setParmAssociateExposureInfo(IRiskAllocatorStrategy parmAssociateExposureInfo) {
+        this.parmAssociateExposureInfo = parmAssociateExposureInfo;
     }
 }

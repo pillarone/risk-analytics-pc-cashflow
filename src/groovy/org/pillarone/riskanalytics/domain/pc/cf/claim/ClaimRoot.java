@@ -25,7 +25,7 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
     private double ultimate;
     private EventPacket event;
     private ClaimType claimType;
-    private ExposureInfo exposureInfo;
+    private ExposureInfo exposure;
     private DateTime exposureStartDate;
     private DateTime occurrenceDate;
     private Integer occurrencePeriod;
@@ -62,6 +62,12 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
         return packet;
     }
 
+    public ClaimRoot withExposure(ExposureInfo exposure){
+        ClaimRoot packet = (ClaimRoot) clone();
+        packet.exposure = exposure;
+        return packet;
+    }
+
     public double getUltimate() {
         return ultimate;
     }
@@ -78,8 +84,8 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
         return claimType;
     }
 
-    public ExposureInfo getExposureInfo() {
-        return exposureInfo;
+    public ExposureInfo getExposure() {
+        return exposure;
     }
 
     public DateTime getExposureStartDate() {
@@ -142,5 +148,9 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
         result.append(separator);
         result.append(occurrenceDate);
         return result.toString();
+    }
+
+    public  boolean hasExposureInfo() {
+        return this.exposure != null;
     }
 }

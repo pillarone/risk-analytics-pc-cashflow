@@ -17,6 +17,10 @@ public class ExposureInfo {
     private DateTime inceptionDate;
     private Integer inceptionPeriod;
 
+    private double sumInsured;
+    private double maxSumInsured;
+    private ExposureBase exposureDefinition;
+
     public ExposureInfo(DateTime inceptionDate, IPeriodCounter periodCounter) {
         this.inceptionDate = inceptionDate;
         try {
@@ -37,5 +41,29 @@ public class ExposureInfo {
 
     public Integer getInceptionPeriod() {
         return inceptionPeriod;
+    }
+
+    public double getSumInsured() {
+        return sumInsured;
+    }
+
+    public void setSumInsured(double sumInsured) {
+        this.sumInsured = sumInsured;
+    }
+
+    public double getMaxSumInsured() {
+        return maxSumInsured;
+    }
+
+    public void setMaxSumInsured(double maxSumInsured) {
+        this.maxSumInsured = maxSumInsured;
+    }
+
+    public ExposureBase getExposureDefinition() {
+        return exposureDefinition;
+    }
+
+    public void setExposureDefinition(ExposureBase exposureDefinition) {
+        this.exposureDefinition = exposureDefinition;
     }
 }

@@ -18,7 +18,7 @@ public class UnderwritingInfoUtils {
      *         originalUnderwritingInfo references an element of the cover criteria. If it didn't match or
      *         originalUnderwritingInfo property is null, the origin property is evaluated.
      */
-    private static List<UnderwritingInfoPacket> filterUnderwritingInfo(List<UnderwritingInfoPacket> underwritingInfos, List coverCriteria) {
+    public static List<UnderwritingInfoPacket> filterUnderwritingInfo(List<UnderwritingInfoPacket> underwritingInfos, List coverCriteria) {
         List<UnderwritingInfoPacket> filterUnderwritingInfos = new ArrayList<UnderwritingInfoPacket>(underwritingInfos.size());
         if (coverCriteria != null) {
             for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {

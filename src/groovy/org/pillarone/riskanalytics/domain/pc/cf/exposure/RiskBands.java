@@ -93,7 +93,6 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
             List<Factors> policyFactors = IndexUtils.filterFactors(inFactors, parmPolicyIndices);
             List<Factors> premiumFactors = IndexUtils.filterFactors(inFactors, parmPremiumIndices);
             boolean positiveWrittenAmount = true;
-            ExposureInfo exposure = new ExposureInfo(periodScope.getCurrentPeriodStartDate(), periodScope.getPeriodCounter());
             List<UnderwritingInfoPacket> modifiedUnderwritingInfoPackets = new ArrayList<UnderwritingInfoPacket>();
             for (DateFactors dateFactors : dateFactorsList) {
                 if (policyFactors == null && premiumFactors == null) {
@@ -105,7 +104,6 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
                     for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
                         UnderwritingInfoPacket modifiedUnderwritingInfo = underwritingInfo.withFactorsApplied(policyFactor, premiumFactor);
                         modifiedUnderwritingInfo.applyPattern(positiveWrittenAmount, dateFactors.getFactorIncremental());
-                        modifiedUnderwritingInfo.setExposure(exposure);
                         modifiedUnderwritingInfoPackets.add(modifiedUnderwritingInfo);
                     }
 
@@ -138,10 +136,8 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
             else {
                 Double policyFactor = IndexUtils.aggregateFactor(policyFactors, currentPeriodStartDate);
                 Double premiumFactor = IndexUtils.aggregateFactor(premiumFactors, currentPeriodStartDate);
-                ExposureInfo exposure = new ExposureInfo(periodScope);
                 for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
                     UnderwritingInfoPacket modifiedUnderwritingInfo = underwritingInfo.withFactorsApplied(policyFactor, premiumFactor);
-                    modifiedUnderwritingInfo.setExposure(exposure);
                     outUnderwritingInfo.add(modifiedUnderwritingInfo);
                 }
                 if (isSenderWired(outPolicyIndexApplied)) {
@@ -195,6 +191,11 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
                 underwritingInfo.setNumberOfPolicies(InputFormatConverter.getDouble(
                         parmUnderwritingInformation.getValueAt(i, columnIndexNumberOfPolicies)));
                 underwritingInfo.origin = this;
+                ExposureInfo exposure = new ExposureInfo(iterationScope.getPeriodScope().getCurrentPeriodStartDate(),
+                        iterationScope.getPeriodScope().getPeriodCounter());
+                exposure.setSumInsured(underwritingInfo.getSumInsured());
+                exposure.setMaxSumInsured(underwritingInfo.getMaxSumInsured());
+                underwritingInfo.setExposure(exposure);
                 underwritingInfos.add(underwritingInfo);
             }
             iterationStore.put(UNDERWRITING_INFOS, underwritingInfos);

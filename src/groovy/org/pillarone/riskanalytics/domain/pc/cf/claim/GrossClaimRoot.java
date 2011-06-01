@@ -1,11 +1,9 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
@@ -152,8 +150,8 @@ public final class GrossClaimRoot implements IClaimRoot {
         return claimRoot.getClaimType();
     }
 
-    public ExposureInfo getExposureInfo() {
-        return claimRoot.getExposureInfo();
+    public ExposureInfo getExposure() {
+        return claimRoot.getExposure();
     }
 
     public DateTime getExposureStartDate() {

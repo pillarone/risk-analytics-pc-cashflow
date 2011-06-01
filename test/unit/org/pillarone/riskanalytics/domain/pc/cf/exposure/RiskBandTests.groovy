@@ -6,6 +6,8 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
+import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
+import org.joda.time.DateTime
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -53,6 +55,7 @@ class RiskBandTests extends GroovyTestCase {
                 RiskBands.TABLE_COLUMN_TITLES, ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER))
 
         IterationScope iterationScope = new IterationScope(periodScope: new PeriodScope())
+        iterationScope.periodScope = TestPeriodScopeUtilities.getPeriodScope(new DateTime(2010,1,1,0,0,0,0), 5)
         iterationScope.prepareNextIteration()
         RiskBands bands = new RiskBands(
                 parmUnderwritingInformation: UnderwritingInfoPacketrmation1,
@@ -64,7 +67,13 @@ class RiskBandTests extends GroovyTestCase {
         bands.outUnderwritingInfo.eachWithIndex {UnderwritingInfoPacket underwritingInfo, idx ->
             UnderwritingInfoPacket uwInfo = underwritingInfos[idx]
             uwInfo.origin = bands
-            assertTrue "max sum insured info$idx", underwritingInfo.sameContent(uwInfo)
+           // assertTrue "max sum insured info$idx", underwritingInfo.sameContent(uwInfo)
+            assertTrue " sum insured info$idx", underwritingInfo.sumInsured == uwInfo.sumInsured
+            assertTrue "premium written  info$idx", underwritingInfo.premiumWritten == uwInfo.premiumWritten
+            assertTrue "premium paid info$idx", underwritingInfo.premiumPaid == uwInfo.premiumPaid
+            assertTrue "number of policies info$idx", underwritingInfo.numberOfPolicies == uwInfo.numberOfPolicies
+            assertTrue "max sum insured info$idx", underwritingInfo.maxSumInsured == uwInfo.maxSumInsured
+
         }
 
     }
