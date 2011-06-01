@@ -38,49 +38,49 @@ mappings = {
         "reinsurance" {
             "[%contract%]" {
                 "claimsNet" {
-//                    "ultimate" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:ultimate"
-//                    "reported" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:reportedIncremental"
-//                    "paid" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:paidIncremental"
-//                    "outstanding" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:outstanding"
-//                    "IBNR" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:IBNR"
-//                    "reserves" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:reserves"
-//                    "developedResult" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:developedResult"
+                    "ultimate" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:ultimate"
+                    "reported" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:reportedIncremental"
+                    "paid" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:paidIncremental"
+                    "outstanding" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:outstanding"
+                    "IBNR" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:IBNR"
+                    "reserves" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:reserves"
+                    "developedResult" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsNet:developedResult"
                     "claimsGross" {
                         "ultimate" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsGross:ultimate"
                         "reported" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsGross:reportedIncremental"
                         "paid" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsGross:paidIncremental"
-//                        "outstanding" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaims:outstanding"
-//                        "IBNR" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaims:IBNR"
-//                        "reserves" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaims:reserves"
-//                        "developedResult" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaims:developedResult"
+                        "outstanding" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsGross:outstanding"
+                        "IBNR" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsGross:IBNR"
+                        "reserves" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsGross:reserves"
+                        "developedResult" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsGross:developedResult"
                     }
                     "claimsCeded" {
                         "ultimate" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:ultimate"
                         "reported" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:reportedIncremental"
                         "paid" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:paidIncremental"
-//                        "outstanding" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:outstanding"
-//                        "IBNR" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:IBNR"
-//                        "reserves" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:reserves"
-//                        "developedResult" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:developedResult"
+                        "outstanding" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:outstanding"
+                        "IBNR" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:IBNR"
+                        "reserves" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:reserves"
+                        "developedResult" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outClaimsCeded:developedResult"
                     }
                 }
-                "premium" {
-                    "premiumWrittenNet" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoNet:premiumWritten", {
-                        "gross" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoGross:premiumWritten"
-                        "ceded" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:premiumWritten"
-                    }
-                    "premiumPaidNet" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoNet:premiumPaid", {
-                        "gross" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoGross:premiumPaid"
-                        "ceded" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:premiumPaid", {
-                            "fixed" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:premiumPaidFixed"
-                            "variable" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:premiumPaidVariable"
-                        }
-                    }
-                }
-                "commission" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commission", {
-                        "fixed" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionFixed"
-                        "variable" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionVariable"
-                }
+//                "premium" {
+//                    "premiumWrittenNet" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoNet:premiumWritten", {
+//                        "gross" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoGross:premiumWritten"
+//                        "ceded" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:premiumWritten"
+//                    }
+//                    "premiumPaidNet" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoNet:premiumPaid", {
+//                        "gross" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoGross:premiumPaid"
+//                        "ceded" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:premiumPaid", {
+//                            "fixed" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:premiumPaidFixed"
+//                            "variable" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:premiumPaidVariable"
+//                        }
+//                    }
+//                }
+//                "commission" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commission", {
+//                        "fixed" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionFixed"
+//                        "variable" "NonLifeCashflow:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionVariable"
+//                }
             }
         }
         "claims" {
