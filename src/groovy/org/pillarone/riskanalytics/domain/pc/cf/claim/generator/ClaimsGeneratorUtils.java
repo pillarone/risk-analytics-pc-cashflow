@@ -12,6 +12,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionUtils;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
@@ -36,7 +37,7 @@ public class ClaimsGeneratorUtils {
                     DateTimeUtilities.getDate(periodScope, dateGenerator.nextValue().doubleValue()) : events.get(i).getDate();
             // todo(sku): replace with information from underwriting
             DateTime exposureStartDate = periodScope.getPeriodCounter().getCurrentPeriodStart();
-            EventPacket event = events == null ? null: events.get(i);
+            EventPacket event = events == null ? null : events.get(i);
             baseClaims.add(new ClaimRoot((Double) claimSizeGenerator.nextValue() * -severityScaleFactor, claimType,
                     exposureStartDate, occurrenceDate, event));
         }
@@ -116,18 +117,18 @@ public class ClaimsGeneratorUtils {
     }
 
     public static RandomDistribution extractDistribution(List<SystematicFrequencyPacket> distributions, IPerilMarker filterCriteria) {
-        RandomDistribution filteredDistribution = new RandomDistribution();
-        int count = 0;
+        List<RandomDistribution> filteredDistributions = new ArrayList<RandomDistribution>();
         for (SystematicFrequencyPacket distribution : distributions) {
             if (distribution.getTargets().contains(filterCriteria.getNormalizedName())) {
-                filteredDistribution = distribution.getFrequencyDistribution();
-                count++;
+                filteredDistributions.add(distribution.getFrequencyDistribution());
             }
         }
-        if (count > 1) {
-            throw new IllegalArgumentException("['ClaimsGenerator.SeveralDependencies','" + filterCriteria.getNormalizedName() + "']");
+        if (filteredDistributions.size() == 0) return null;
+        RandomDistribution distribution = filteredDistributions.get(0);
+        for (int i = 1; i < filteredDistributions.size(); i++) {
+            distribution = DistributionUtils.getSumOfDistributions(distribution, filteredDistributions.get(i));
         }
-        return filteredDistribution;
+        return distribution;
     }
 
 }
