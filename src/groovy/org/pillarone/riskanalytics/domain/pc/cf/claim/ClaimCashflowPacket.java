@@ -301,13 +301,17 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      * @return
      */
     public ClaimCashflowPacket getNetClaim(ClaimCashflowPacket cededClaim, IPeriodCounter periodCounter) {
+        // todo(sku) refactor by adding a safe ultimate setter method
+        ClaimRoot netRootClaim = new ClaimRoot(ultimate() + cededClaim.ultimate(), getBaseClaim().getClaimType(),
+                getBaseClaim().getExposureStartDate(), getBaseClaim().getOccurrenceDate(), getBaseClaim().getEvent());
+        IClaimRoot netBaseClaim = new GrossClaimRoot(netRootClaim, null, null);
         ClaimCashflowPacket netClaim = new ClaimCashflowPacket(
-                cededClaim.baseClaim,
-                paidIncremental - cededClaim.paidIncremental,
-                paidCumulated - cededClaim.paidCumulated,
-                reportedIncremental - cededClaim.reportedIncremental,
-                reportedCumulated - cededClaim.reportedCumulated,
-                reserves - cededClaim.reserves,
+                netBaseClaim,
+                paidIncremental + cededClaim.paidIncremental,
+                paidCumulated + cededClaim.paidCumulated,
+                reportedIncremental + cededClaim.reportedIncremental,
+                reportedCumulated + cededClaim.reportedCumulated,
+                reserves + cededClaim.reserves,
                 updateDate,
                 periodCounter,
                 hasUltimate);
