@@ -13,6 +13,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.PMLCl
 import org.pillarone.riskanalytics.core.parameterization.validation.ValidatorRegistry
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
 import org.pillarone.riskanalytics.domain.utils.constraint.DateTimeConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.PatternStrategyValidator
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.RecoveryPatternStrategyValidator
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -64,6 +66,8 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new DateTimeConstraints())
 
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
+        ValidatorRegistry.addValidator(new PatternStrategyValidator())
+        ValidatorRegistry.addValidator(new RecoveryPatternStrategyValidator())
     }
 
     def onChange = { event ->
