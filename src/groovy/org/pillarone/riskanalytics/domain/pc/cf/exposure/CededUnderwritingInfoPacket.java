@@ -157,7 +157,7 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
     private static final String PREMIUM_WRITTEN = "premiumWritten";
     private static final String PREMIUM_PAID = "premiumPaid";
     private static final String PREMIUM_PAID_FIXED = "premiumPaidFixed";
-    private static final String PREMIUM_PAID_VARIABLE = "premiumPaidWariable";
+    private static final String PREMIUM_PAID_VARIABLE = "premiumPaidVariable";
     private static final String COMMISSION = "commission";
     private static final String COMMISSION_FIXED = "commissionFixed";
     private static final String COMMISSION_VARIABLE = "commissionVariable";

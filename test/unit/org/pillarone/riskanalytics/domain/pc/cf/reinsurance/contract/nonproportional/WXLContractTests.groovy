@@ -85,8 +85,8 @@ class WXLContractTests extends GroovyTestCase {
         assertEquals 'P0.0 ceded premium fixed', -100, wxl.outUnderwritingInfoCeded[0].premiumPaidFixed
         assertEquals 'P0.0 ceded premium variable', 0, wxl.outUnderwritingInfoCeded[0].premiumPaidVariable, EPSILON
         assertEquals 'P0.0 ceded commission', 0, wxl.outUnderwritingInfoCeded[0].commission, EPSILON
-        assertEquals 'P0.0 ceded premium fixed', 0, wxl.outUnderwritingInfoCeded[0].commissionFixed
-        assertEquals 'P0.0 ceded premium variable', 0, wxl.outUnderwritingInfoCeded[0].commissionVariable, EPSILON
+        assertEquals 'P0.0 ceded commission fixed', 0, wxl.outUnderwritingInfoCeded[0].commissionFixed
+        assertEquals 'P0.0 ceded commission variable', 0, wxl.outUnderwritingInfoCeded[0].commissionVariable, EPSILON
 
         wxl.reset()
         wxl.iterationScope.periodScope.prepareNextPeriod()
@@ -188,8 +188,8 @@ class WXLContractTests extends GroovyTestCase {
         assertEquals 'P0.0 ceded premium fixed', -800, wxl.outUnderwritingInfoCeded[0].premiumPaidFixed
         assertEquals 'P0.0 ceded premium variable', 0.0, wxl.outUnderwritingInfoCeded[0].premiumPaidVariable, EPSILON
         assertEquals 'P0.0 ceded commission', 0, wxl.outUnderwritingInfoCeded[0].commission, EPSILON
-        assertEquals 'P0.0 ceded premium fixed', 0, wxl.outUnderwritingInfoCeded[0].commissionFixed
-        assertEquals 'P0.0 ceded premium variable', 0, wxl.outUnderwritingInfoCeded[0].commissionVariable, EPSILON
+        assertEquals 'P0.0 ceded commission fixed', 0, wxl.outUnderwritingInfoCeded[0].commissionFixed
+        assertEquals 'P0.0 ceded commission variable', 0, wxl.outUnderwritingInfoCeded[0].commissionVariable, EPSILON
 
 
         wxl.reset()

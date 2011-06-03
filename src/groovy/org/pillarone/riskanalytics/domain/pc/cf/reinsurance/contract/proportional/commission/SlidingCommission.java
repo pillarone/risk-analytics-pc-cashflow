@@ -33,6 +33,7 @@ import java.util.TreeMap;
 public class SlidingCommission extends AbstractCommission {
 
     private TreeMap<Double, Double> commissionRatePerLossRatio;
+    private boolean isStartCoverPeriod = true;
 
     // todo(sku): replace argument with an object
     public SlidingCommission(TreeMap<Double, Double> commissionRatePerLossRatio, BasedOnClaimProperty useClaims) {
@@ -42,6 +43,8 @@ public class SlidingCommission extends AbstractCommission {
 
     public void calculateCommission(List<ClaimCashflowPacket> claims, List<CededUnderwritingInfoPacket> underwritingInfos,
                                     boolean isFirstPeriod, boolean isAdditive) {
+        if (!isStartCoverPeriod) return;
+        isStartCoverPeriod = false;
         double totalClaims = sumClaims(claims);
         double totalPremium = sumPremiumPaid(underwritingInfos);
         double totalLossRatio = totalPremium == 0 ? 0 : totalClaims / -totalPremium;

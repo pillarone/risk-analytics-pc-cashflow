@@ -211,6 +211,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             outUnderwritingInfoGross.addAll(inUnderwritingInfo);
         }
         for (IReinsuranceContract contract : contracts) {
+            // todo(sku): how time consuming are isSenderWired() calls? Might be necessary to cache this information.
             contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, isSenderWired(outUnderwritingInfoNet));
         }
     }

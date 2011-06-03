@@ -14,6 +14,7 @@ import java.util.TreeMap;
 public class InterpolatedSlidingCommission extends AbstractCommission {
 
     private TreeMap<Double, List<Double>> commissionRatesPerLossRatio;
+    private boolean isStartCoverPeriod = true;
 
     // todo(sku): replace argument with an object
     public InterpolatedSlidingCommission(TreeMap<Double, List<Double>> commissionRatesPerLossRatio,
@@ -25,6 +26,8 @@ public class InterpolatedSlidingCommission extends AbstractCommission {
     // todo(sku): add proper handling of Div/0 and corresponding test cases
     public void calculateCommission(List<ClaimCashflowPacket> claims, List<CededUnderwritingInfoPacket> underwritingInfos,
                                     boolean isFirstPeriod, boolean isAdditive) {
+        if (!isStartCoverPeriod) return;
+        isStartCoverPeriod = false;
         double summedClaims = sumClaims(claims);
         double summedPremiumPaid = sumPremiumPaid(underwritingInfos);
         double totalLossRatio = summedPremiumPaid == 0 ? 0 : summedClaims / -summedPremiumPaid;

@@ -67,6 +67,7 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
         periodDeductible.init();
     }
 
+    // todo(sku): try to call this function only if isStartCoverPeriod
     public void initCededPremiumAllocation(List<ClaimCashflowPacket> cededClaims, List<UnderwritingInfoPacket> grossUnderwritingInfos) {
         premiumAllocation.initSegmentShares(cededClaims, grossUnderwritingInfos);
     }
@@ -114,17 +115,22 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
 
     public void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
                                           List<UnderwritingInfoPacket> netUnderwritingInfos, boolean fillNet) {
-        initCededPremiumAllocation(cededClaims, grossUwInfos);
+        if (isStartCoverPeriod) {
+            initCededPremiumAllocation(cededClaims, grossUwInfos);
+        }
         for (UnderwritingInfoPacket grossUnderwritingInfo : grossUwInfos) {
             double cededPremiumFixedShare = cededPremiumFixed * premiumAllocation.getShare(grossUnderwritingInfo);
             double cededPremiumVariable = cededPremiumFixedShare * reinstatements.calculateReinstatementPremiumFactor();
             double cededPremium = isStartCoverPeriod ? cededPremiumFixedShare + cededPremiumVariable : cededPremiumVariable;
 
             CededUnderwritingInfoPacket cededUnderwritingInfo = CededUnderwritingInfoPacket.deriveCededPacketForNonPropContract(
-                    grossUnderwritingInfo, contractMarker, -cededPremium, isStartCoverPeriod ? -cededPremiumFixed : 0,
+                    grossUnderwritingInfo, contractMarker, -cededPremium, isStartCoverPeriod ? -cededPremiumFixedShare : 0,
                     -cededPremiumVariable);
             cededUwInfos.add(cededUnderwritingInfo);
             cededUnderwritingInfos.add(cededUnderwritingInfo);
+            if (fillNet && isStartCoverPeriod) {
+                netUnderwritingInfos.add(grossUnderwritingInfo.getNet(cededUnderwritingInfo, false));
+            }
         }
         isStartCoverPeriod = false;
     }

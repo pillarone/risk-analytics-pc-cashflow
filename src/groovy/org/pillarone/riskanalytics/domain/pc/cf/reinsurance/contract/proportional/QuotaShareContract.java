@@ -7,11 +7,12 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
 
+import java.util.List;
+
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class QuotaShareContract extends AbstractProportionalReinsuranceContract {
-
 
     protected double quotaShare = 0;
 
@@ -27,10 +28,11 @@ public class QuotaShareContract extends AbstractProportionalReinsuranceContract 
         return cededClaim;
     }
 
-    public void calculatePremium() {
+    public void calculatePremium(List<UnderwritingInfoPacket> netUnderwritingInfos, boolean fillNet) {
         for (UnderwritingInfoPacket grossUnderwritingInfo : grossUwInfos) {
             CededUnderwritingInfoPacket cededUnderwritingInfo = CededUnderwritingInfoPacket.scale(grossUnderwritingInfo, contractMarker, 1, quotaShare, 1);
             cededUwInfos.add(cededUnderwritingInfo);
+            netUnderwritingInfos.add(grossUnderwritingInfo.getNet(cededUnderwritingInfo, true));
         }
     }
 
