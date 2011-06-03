@@ -36,9 +36,6 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
     RiskBands riskBands = new RiskBands()
     RiskBands riskBands2 = new RiskBands()
 
-    EventSeverity severity1
-    EventSeverity severity2
-    EventSeverity severity3
     List<String> targets
     List<EventSeverity> severities1
     List<EventSeverity> severities2
@@ -68,9 +65,9 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                         "produceClaim": FrequencySeverityClaimType.SINGLE,])
         ConstraintsFactory.registerConstraint(new DoubleConstraints())
 
-        severity1 = new EventSeverity(value: 0.8, event: new EventPacket(new DateTime(2011, 1, 2, 0, 0, 0, 0)))
-        severity2 = new EventSeverity(value: 0.9, event: new EventPacket(new DateTime(2011, 2, 2, 0, 0, 0, 0)))
-        severity3 = new EventSeverity(value: 0.95, event: new EventPacket(new DateTime(2011, 3, 2, 0, 0, 0, 0)))
+        EventSeverity severity1 = new EventSeverity(value: 0.8, event: new EventPacket(new DateTime(2011, 1, 2, 0, 0, 0, 0)))
+        EventSeverity severity2 = new EventSeverity(value: 0.9, event: new EventPacket(new DateTime(2011, 2, 2, 0, 0, 0, 0)))
+        EventSeverity severity3 = new EventSeverity(value: 0.95, event: new EventPacket(new DateTime(2011, 3, 2, 0, 0, 0, 0)))
         targets = new ArrayList<String>(["motor hull", "hail"])
         severities1 = new ArrayList<EventSeverity>([severity1, severity2])
         severities2 = new ArrayList<EventSeverity>([severity3, severity2])

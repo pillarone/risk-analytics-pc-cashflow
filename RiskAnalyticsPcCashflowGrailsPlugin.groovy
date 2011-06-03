@@ -15,6 +15,7 @@ import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
 import org.pillarone.riskanalytics.domain.utils.constraint.DateTimeConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.PatternStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.RecoveryPatternStrategyValidator
+import org.pillarone.riskanalytics.core.util.ResourceBundleRegistry
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -68,6 +69,11 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
         ValidatorRegistry.addValidator(new PatternStrategyValidator())
         ValidatorRegistry.addValidator(new RecoveryPatternStrategyValidator())
+
+        ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.pMLClaimsGeneratorStrategyValidator")
+        ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.patternStrategyValidator")
+        ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.recoveryPatternStrategyValidator")
+
     }
 
     def onChange = { event ->
