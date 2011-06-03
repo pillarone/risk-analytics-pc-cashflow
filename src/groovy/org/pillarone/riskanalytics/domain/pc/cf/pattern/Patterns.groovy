@@ -12,12 +12,14 @@ class Patterns extends ComposedComponent {
 
     PacketList<PatternPacket> outPatterns = new PacketList<PatternPacket>(PatternPacket)
 
+    PayoutReportingCombinedPatterns subPayoutAndReportingPatterns = new PayoutReportingCombinedPatterns()
     PayoutPatterns subPayoutPatterns = new PayoutPatterns()
     ReportingPatterns subReportingPatterns = new ReportingPatterns()
     RecoveryPatterns subRecoveryPatterns = new RecoveryPatterns()
     PremiumPatterns subPremiumPatterns = new PremiumPatterns()
 
     @Override protected void doCalculation() {
+        subPayoutAndReportingPatterns.start()
         subPayoutPatterns.start()
         subReportingPatterns.start()
         subRecoveryPatterns.start()
@@ -27,6 +29,7 @@ class Patterns extends ComposedComponent {
     @Override
     void wire() {
         WiringUtils.use(PortReplicatorCategory) {
+            this.outPatterns = subPayoutAndReportingPatterns.outPattern
             this.outPatterns = subPayoutPatterns.outPattern
             this.outPatterns = subReportingPatterns.outPattern
             this.outPatterns = subRecoveryPatterns.outPattern

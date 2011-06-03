@@ -57,7 +57,7 @@ public abstract class AbstractPatternStrategy extends AbstractParameterObject {
                 incrementalPattern.getColumnIndex(columnName));
         List<Double> cumulativeValues = getCumulativePatternValues(incrementalValues);
         List<Period> cumulativePeriods = getCumulativePeriods(incrementalPattern, columnMonthIndex);
-        return new PatternPacket(IRecoveryPatternMarker.class, cumulativeValues, cumulativePeriods);
+        return new PatternPacket(patternMarker, cumulativeValues, cumulativePeriods);
     }
 
     protected static List<Double> getCumulativePatternValues(List<Double> incrementalValues) {

@@ -20,7 +20,7 @@ public class PatternPacket extends Packet {
     protected List<Double> cumulativeValues;
     protected List<Period> cumulativePeriods;
 
-    /** this field is required to enable different kinds of pattern within one mdp @see PayoutReportingPatternCombined */
+    /** this field is required to enable different kinds of pattern within one mdp @see PayoutReportingCombinedPattern */
     private Class<? extends IPatternMarker> patternMarker;
 
     public PatternPacket() {
@@ -179,6 +179,10 @@ public class PatternPacket extends Packet {
 
     public boolean isPremiumPattern() {
         return patternMarker == IPremiumPatternMarker.class;
+    }
+
+    public boolean samePatternType(Class<? extends IPatternMarker> other) {
+        return patternMarker.equals(other);
     }
 
     public static final class TrivialPattern extends PatternPacket {

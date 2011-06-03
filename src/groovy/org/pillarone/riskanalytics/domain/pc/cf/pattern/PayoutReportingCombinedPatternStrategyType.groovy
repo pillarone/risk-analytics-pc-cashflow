@@ -54,24 +54,19 @@ class PayoutReportingCombinedPatternStrategyType extends AbstractParameterObject
     }
 
     static IPayoutReportingCombinedPatternStrategy getDefault() {
-        return new TrivialPatternStrategy();
+        new PayoutReportingCombinedTrivialPatternStrategy();
     }
 
     static IPayoutReportingCombinedPatternStrategy getStrategy(PayoutReportingCombinedPatternStrategyType type, Map parameters) {
-        IPayoutReportingCombinedPatternStrategy pattern;
         switch (type) {
             case PayoutReportingCombinedPatternStrategyType.NONE:
-                pattern = new TrivialPatternStrategy()
-                break
+                return new PayoutReportingCombinedTrivialPatternStrategy()
             case PayoutReportingCombinedPatternStrategyType.INCREMENTAL:
-                pattern = new IncrementalPatternStrategy(
+                return new PayoutReportingCombinedIncrementalPatternStrategy(
                         incrementalPattern : (ConstrainedMultiDimensionalParameter) parameters['incrementalPattern'])
-                break;
             case PayoutReportingCombinedPatternStrategyType.CUMULATIVE:
-                pattern = new CumulativePatternStrategy(
+                return new PayoutReportingCombinedCumulativePatternStrategy(
                         cumulativePattern : (ConstrainedMultiDimensionalParameter) parameters['cumulativePattern'])
-                break
         }
-        return pattern
     }
 }

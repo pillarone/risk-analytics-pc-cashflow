@@ -21,6 +21,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ReinsuranceContracts
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPremiumPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PayoutReportingCombinedPattern
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -82,12 +83,17 @@ class NonLifeCashflowModel extends StochasticModel {
         Map<String, Period> claimsGeneratorPatternLengths = new HashMap<String, Period>()
         for (Pattern pattern: patterns.subPayoutPatterns.componentList) {
             Period period = pattern.parmPattern.getPattern(IPayoutPatternMarker.class).getLastCumulativePeriod()
-            LOG.debug("payout/reporting pattern $pattern.name $period.months")
+            LOG.debug("payout pattern $pattern.name $period.months")
             claimsGeneratorPatternLengths.put(pattern.name, period)
         }
         for (Pattern pattern: patterns.subReportingPatterns.componentList) {
             Period period = pattern.parmPattern.getPattern(IReportingPatternMarker.class).getLastCumulativePeriod()
-            LOG.debug("payout/reporting pattern $pattern.name $period.months")
+            LOG.debug("reporting pattern $pattern.name $period.months")
+            claimsGeneratorPatternLengths.put(pattern.name, period)
+        }
+        for (PayoutReportingCombinedPattern pattern: patterns.subPayoutAndReportingPatterns.componentList) {
+            Period period = pattern.parmPattern.getPayoutPattern().getLastCumulativePeriod()
+            LOG.debug("combined payout reporting pattern $pattern.name $period.months")
             claimsGeneratorPatternLengths.put(pattern.name, period)
         }
 

@@ -73,7 +73,7 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
     public void doCalculation() {
         fillIterationStore();
         List<UnderwritingInfoPacket> underwritingInfos = (List<UnderwritingInfoPacket>) iterationStore.get(UNDERWRITING_INFOS);
-        PatternPacket premiumPattern = PatternUtils.filterPattern(inPatterns, parmPremiumPattern);
+        PatternPacket premiumPattern = PatternUtils.filterPattern(inPatterns, parmPremiumPattern, IPremiumPatternMarker.class);
         PeriodScope periodScope = iterationScope.getPeriodScope();
 
         if (premiumPattern == null || premiumPattern.isTrivial()) {

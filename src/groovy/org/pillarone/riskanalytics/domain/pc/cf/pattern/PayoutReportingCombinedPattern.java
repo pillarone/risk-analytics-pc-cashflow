@@ -8,7 +8,7 @@ import java.util.Collections;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class PayoutReportingPatternCombined extends Component implements IPayoutPatternMarker, IReportingPatternMarker {
+public class PayoutReportingCombinedPattern extends Component implements IPayoutPatternMarker, IReportingPatternMarker {
 
     private PacketList<PatternPacket> outPattern = new PacketList<PatternPacket>(PatternPacket.class);
     private IPayoutReportingCombinedPatternStrategy parmPattern = PayoutReportingCombinedPatternStrategyType.getStrategy(

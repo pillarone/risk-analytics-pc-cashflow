@@ -9,9 +9,11 @@ import java.util.List;
  */
 public class PatternUtils {
 
-    public static PatternPacket filterPattern(List<PatternPacket> patterns, ConstrainedString criteria) {
+    public static PatternPacket filterPattern(List<PatternPacket> patterns, ConstrainedString criteria,
+                                              Class<? extends IPatternMarker> patternMarker) {
         for (PatternPacket pattern : patterns) {
-            if (pattern.getOrigin().equals(criteria.getSelectedComponent())) {
+            if (pattern.getOrigin().equals(criteria.getSelectedComponent())
+                && pattern.samePatternType(patternMarker)) {
                 return pattern;
             }
         }
