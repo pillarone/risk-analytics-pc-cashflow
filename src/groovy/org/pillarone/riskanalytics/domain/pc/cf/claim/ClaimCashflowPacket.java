@@ -3,9 +3,11 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
 
@@ -16,7 +18,6 @@ import java.util.*;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 // todo(sku): implement pattern shifts (asynchron patterns)
-// todo(sku): correct paid, reserved, reported, ... values even if no patterns are used
 public class ClaimCashflowPacket extends MultiValuePacket {
 
     private static Log LOG = LogFactory.getLog(ClaimCashflowPacket.class);
@@ -37,6 +38,11 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      */
     private boolean hasUltimate;
 
+    private IPerilMarker peril;
+    private ISegmentMarker segment;
+    private IReinsuranceContractMarker reinsuranceContract;
+    private ILegalEntityMarker legalEntity;
+
     public ClaimCashflowPacket() {
         this(new ClaimRoot(0, ClaimType.ATTRITIONAL, null, null));
     }
@@ -52,6 +58,13 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.reserves = 0;
         updateDate = baseClaim.getOccurrenceDate();
         setDate(updateDate);
+    }
+
+
+    // todo(sku): safer c'tor required, currently used for ultimate modelling
+    public ClaimCashflowPacket(IClaimRoot baseClaim, IPeriodCounter periodCounter) {
+        this(baseClaim);
+        updatePeriod(periodCounter);
     }
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, double paidIncremental, double paidCumulated, double reserves,
@@ -79,6 +92,21 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.reserves = reserves;
         this.updateDate = updateDate;
         updatePeriod(periodCounter);
+        setDate(updateDate);
+        this.hasUltimate = hasUltimate;
+    }
+
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double paidIncremental, double paidCumulated,
+                               double reportedIncremental, double reportedCumulated, double reserves,
+                               DateTime updateDate, int updatePeriod, boolean hasUltimate) {
+        this(baseClaim);
+        this.paidCumulated = paidCumulated;
+        this.paidIncremental = paidIncremental;
+        this.reportedCumulated = reportedCumulated;
+        this.reportedIncremental = reportedIncremental;
+        this.reserves = reserves;
+        this.updateDate = updateDate;
+        this.updatePeriod = updatePeriod;
         setDate(updateDate);
         this.hasUltimate = hasUltimate;
     }
@@ -203,18 +231,26 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return reportedIncremental;
     }
 
-    public IPerilMarker peril() {
-        return baseClaim.peril();
-    }
+    public IPerilMarker peril() { return peril; }
+    public ISegmentMarker segment() { return segment; }
+    public IReinsuranceContractMarker reinsuranceContract() { return reinsuranceContract; }
+    public ILegalEntityMarker legalEntity() { return legalEntity; }
 
-    public ISegmentMarker segment() {
-        return baseClaim.segment();
+    public void setMarker(IComponentMarker marker) {
+        if (marker == null) return;
+        if (IPerilMarker.class.isAssignableFrom(marker.getClass())) {
+            peril = (IPerilMarker) marker;
+        }
+        else if (ISegmentMarker.class.isAssignableFrom(marker.getClass())) {
+            segment = (ISegmentMarker) marker;
+        }
+        else if (IReinsuranceContractMarker.class.isAssignableFrom(marker.getClass())) {
+            reinsuranceContract = (IReinsuranceContractMarker) marker;
+        }
+        else if (ILegalEntityMarker.class.isAssignableFrom(marker.getClass())) {
+            legalEntity = (ILegalEntityMarker) marker;
+        }
     }
-
-    public IReinsuranceContractMarker reinsuranceContract() {
-        return baseClaim.reinsuranceContract();
-    }
-
 
     /**
      * Add 'properties' calculated on the fly
@@ -300,21 +336,36 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      * @param cededClaim
      * @return
      */
-    public ClaimCashflowPacket getNetClaim(ClaimCashflowPacket cededClaim, IPeriodCounter periodCounter) {
+    public ClaimCashflowPacket getNetClaim(ClaimCashflowPacket cededClaim) {
         // todo(sku) refactor by adding a safe ultimate setter method
         ClaimRoot netRootClaim = new ClaimRoot(ultimate() + cededClaim.ultimate(), getBaseClaim().getClaimType(),
                 getBaseClaim().getExposureStartDate(), getBaseClaim().getOccurrenceDate(), getBaseClaim().getEvent());
         IClaimRoot netBaseClaim = new GrossClaimRoot(netRootClaim, null, null);
-        ClaimCashflowPacket netClaim = new ClaimCashflowPacket(
-                netBaseClaim,
-                paidIncremental + cededClaim.paidIncremental,
-                paidCumulated + cededClaim.paidCumulated,
-                reportedIncremental + cededClaim.reportedIncremental,
-                reportedCumulated + cededClaim.reportedCumulated,
-                reserves + cededClaim.reserves,
-                updateDate,
-                periodCounter,
-                hasUltimate);
+        ClaimCashflowPacket netClaim = new ClaimCashflowPacket(netBaseClaim, this, cededClaim);
+        ClaimUtils.applyMarkers(cededClaim, netClaim);
         return netClaim;
+    }
+
+    /**
+     * Used in order to construct a net claim based on a gross and ceded claim.
+     * @param baseClaim
+     * @param grossClaim
+     * @param cededClaim
+     */
+    public ClaimCashflowPacket(IClaimRoot baseClaim, ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim) {
+        this(baseClaim);
+        paidIncremental = grossClaim.paidIncremental + cededClaim.paidIncremental;
+        paidCumulated = grossClaim.paidCumulated + cededClaim.paidCumulated;
+        reportedIncremental = grossClaim.reportedIncremental + cededClaim.reportedIncremental;
+        reportedCumulated = grossClaim.reportedCumulated + cededClaim.reportedCumulated;
+        reserves = grossClaim.reserves + cededClaim.reserves;
+        updateDate = cededClaim.updateDate;
+        updatePeriod = cededClaim.updatePeriod;
+        setDate(updateDate);
+        hasUltimate = grossClaim.hasUltimate;
+    }
+
+    public Integer getUpdatePeriod() {
+        return updatePeriod;
     }
 }

@@ -4,8 +4,6 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -26,13 +24,6 @@ public interface IClaimRoot {
     public boolean hasSynchronizedPatterns();
     public boolean hasTrivialPayout();
     public boolean hasIBNR();
-
-    public IPerilMarker peril();
-    public ISegmentMarker segment();
-    public IReinsuranceContractMarker reinsuranceContract();
-
-    public ClaimRoot withScale(double scaleFactor, IReinsuranceContractMarker reinsuranceContract);
-
 
     public ClaimRoot withScale(double scaleFactor);
 }

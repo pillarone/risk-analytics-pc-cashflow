@@ -7,9 +7,6 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
-import org.pillarone.riskanalytics.domain.pc.cf.legalentity.ILegalEntityMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
 
 /**
  * Doc: https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1540
@@ -33,11 +30,6 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
     /** counts the currently existing ClaimCashflowPacket referencing this instance */
     private int childCounter;
 
-    private IPerilMarker peril;
-    private ISegmentMarker segment;
-    private IReinsuranceContractMarker reinsuranceContract;
-    private ILegalEntityMarker legalEntity;
-
     public ClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate) {
         this.ultimate = ultimate;
         this.claimType = claimType;
@@ -50,10 +42,13 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
         this.event = event;
     }
 
-    public ClaimRoot withScale(double scaleFactor, IReinsuranceContractMarker reinsuranceContract) {
-        ClaimRoot packet = withScale(scaleFactor);
-        packet.reinsuranceContract = reinsuranceContract;
-        return packet;
+    /**
+     * Helper c'tor in order to get a derived ClaimRoot object with a modified ultimate value
+     * @param ultimate
+     * @param claimRoot
+     */
+    public ClaimRoot(double ultimate, IClaimRoot claimRoot) {
+        this(ultimate, claimRoot.getClaimType(), claimRoot.getExposureStartDate(), claimRoot.getOccurrenceDate(), claimRoot.getEvent());
     }
 
     public ClaimRoot withScale(double scaleFactor) {
@@ -123,10 +118,6 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
     public boolean hasIBNR() {
         return false;
     }
-
-    public IPerilMarker peril() { return peril; }
-    public ISegmentMarker segment() { return segment; }
-    public IReinsuranceContractMarker reinsuranceContract() { return reinsuranceContract; }
 
     @Override
     public ClaimRoot clone() {

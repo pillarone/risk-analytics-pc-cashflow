@@ -10,8 +10,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +100,7 @@ public final class GrossClaimRoot implements IClaimRoot {
             }
         }
         else {
-            ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this);
+            ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, periodCounter);
             currentPeriodClaims.add(cashflowPacket);
         }
         return currentPeriodClaims;
@@ -187,14 +185,6 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     public boolean hasIBNR() {
         return reportingPattern != null && !reportingPattern.isTrivial();
-    }
-
-    public IPerilMarker peril() { return claimRoot.peril(); }
-    public ISegmentMarker segment() { return claimRoot.segment(); }
-    public IReinsuranceContractMarker reinsuranceContract() { return claimRoot.reinsuranceContract(); }
-
-    public ClaimRoot withScale(double scaleFactor, IReinsuranceContractMarker reinsuranceContract) {
-        return claimRoot.withScale(scaleFactor, reinsuranceContract);
     }
 
     public ClaimRoot withScale(double scaleFactor) {
