@@ -22,15 +22,16 @@ public class QuotaShareContract extends AbstractProportionalReinsuranceContract 
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
-        IClaimRoot cededBaseClaim = storage.lazyInitCededClaimRoot(-quotaShare, contractMarker);
+        IClaimRoot cededBaseClaim = storage.lazyInitCededClaimRoot(-quotaShare);
         ClaimCashflowPacket cededClaim = grossClaim.withBaseClaimAndShare(cededBaseClaim, -quotaShare, -quotaShare, grossClaim.ultimate() != 0);
         add(grossClaim, cededClaim);
         return cededClaim;
     }
 
-    public void calculatePremium(List<UnderwritingInfoPacket> netUnderwritingInfos, boolean fillNet) {
+    public void calculatePremium(List<UnderwritingInfoPacket> netUnderwritingInfos, double coveredByReinsurers, boolean fillNet) {
         for (UnderwritingInfoPacket grossUnderwritingInfo : grossUwInfos) {
-            CededUnderwritingInfoPacket cededUnderwritingInfo = CededUnderwritingInfoPacket.scale(grossUnderwritingInfo, contractMarker, 1, quotaShare, 1);
+            CededUnderwritingInfoPacket cededUnderwritingInfo = CededUnderwritingInfoPacket.scale(grossUnderwritingInfo,
+                    contractMarker, 1, quotaShare * coveredByReinsurers, 1);
             cededUwInfos.add(cededUnderwritingInfo);
             netUnderwritingInfos.add(grossUnderwritingInfo.getNet(cededUnderwritingInfo, true));
         }

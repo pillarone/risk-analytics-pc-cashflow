@@ -20,7 +20,9 @@ public class TrivialContract extends AbstractReinsuranceContract {
         return grossClaim;
     }
 
-    public void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos, List<UnderwritingInfoPacket> netUnderwritingInfos, boolean fillNet) {
+    public void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
+                                          List<UnderwritingInfoPacket> netUnderwritingInfos,
+                                          double coveredByReinsurers, boolean fillNet) {
     }
 
 }

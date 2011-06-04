@@ -36,6 +36,7 @@ public interface IReinsuranceContract {
      * @param fillNet if true the second list is filled too
      */
     void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
-                                   List<UnderwritingInfoPacket> netUnderwritingInfos, boolean fillNet);
+                                   List<UnderwritingInfoPacket> netUnderwritingInfos, double coveredByReinsurers,
+                                   boolean fillNet);
 
 }

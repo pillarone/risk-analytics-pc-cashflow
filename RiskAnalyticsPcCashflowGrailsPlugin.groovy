@@ -13,6 +13,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.PMLCl
 import org.pillarone.riskanalytics.core.parameterization.validation.ValidatorRegistry
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
 import org.pillarone.riskanalytics.domain.utils.constraint.DateTimeConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.claim.PerilPortion
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingPortion
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -60,6 +62,8 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
         ConstraintsFactory.registerConstraint(new PatternTableConstraints())
         ConstraintsFactory.registerConstraint(new SegmentPortion())
+        ConstraintsFactory.registerConstraint(new PerilPortion())
+        ConstraintsFactory.registerConstraint(new UnderwritingPortion())
         ConstraintsFactory.registerConstraint(new DoubleConstraints())
         ConstraintsFactory.registerConstraint(new DateTimeConstraints())
 

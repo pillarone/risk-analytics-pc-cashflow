@@ -32,7 +32,7 @@ public class QuotaShareContractAAL extends QuotaShareContract {
         }
         else {
             double quotaShareUltimate = adjustedQuote(grossClaim.ultimate(), annualAggregateLimitUltimate);
-            cededBaseClaim = storage.lazyInitCededClaimRoot(quotaShareUltimate, contractMarker);
+            cededBaseClaim = storage.lazyInitCededClaimRoot(quotaShareUltimate);
         }
 
         double quotaShareReported = adjustedQuote(grossClaim.getReportedIncremental(), annualAggregateLimitReported);

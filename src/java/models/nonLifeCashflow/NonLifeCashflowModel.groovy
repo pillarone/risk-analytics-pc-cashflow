@@ -22,6 +22,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPremiumPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PayoutReportingCombinedPattern
+import org.pillarone.riskanalytics.domain.pc.cf.segment.Segments
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -37,6 +38,7 @@ class NonLifeCashflowModel extends StochasticModel {
     ClaimsGenerators claimsGenerators
     Dependencies dependencies
     EventGenerators eventGenerators
+    Segments segments
     ReinsuranceContracts reinsuranceContracts
 
     @Override
@@ -48,6 +50,7 @@ class NonLifeCashflowModel extends StochasticModel {
         claimsGenerators = new ClaimsGenerators()
         dependencies = new Dependencies()
         eventGenerators = new EventGenerators()
+        segments = new Segments()
         reinsuranceContracts = new ReinsuranceContracts()
 
         addStartComponent patterns
@@ -65,9 +68,19 @@ class NonLifeCashflowModel extends StochasticModel {
         claimsGenerators.inEventSeverities = dependencies.outEventSeverities
         claimsGenerators.inEventSeverities = eventGenerators.outEventSeverities
         claimsGenerators.inEventFrequencies = eventGenerators.outEventFrequencies
-        reinsuranceContracts.inClaims = claimsGenerators.outClaims
-        reinsuranceContracts.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
         indices.inEventSeverities = dependencies.outEventSeverities
+        if (segments.subComponentCount() == 0) {
+            reinsuranceContracts.inClaims = claimsGenerators.outClaims
+            reinsuranceContracts.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
+        }
+        else {
+            segments.inClaims = claimsGenerators.outClaims
+            segments.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
+            reinsuranceContracts.inClaims = segments.outClaimsGross
+            reinsuranceContracts.inUnderwritingInfo = segments.outUnderwritingInfoGross
+            segments.inClaimsCeded = reinsuranceContracts.outClaimsCeded
+            segments.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
+        }
     }
 
     @Override

@@ -24,17 +24,19 @@ abstract public class AbstractProportionalReinsuranceContract extends AbstractRe
      */
     // todo(sku): commission paid over several periods? This would require a different approach than isStartCoverPeriod
     public void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
-                                          List<UnderwritingInfoPacket> netUnderwritingInfos, boolean fillNet) {
+                                          List<UnderwritingInfoPacket> netUnderwritingInfos, double coveredByReinsurers,
+                                          boolean fillNet) {
         if (!isStartCoverPeriod) return;
         isStartCoverPeriod = false;
-        calculatePremium(netUnderwritingInfos, fillNet);
+        calculatePremium(netUnderwritingInfos, coveredByReinsurers, fillNet);
         calculateCommission();
         cededUnderwritingInfos.addAll(cededUwInfos);
     }
 
-    abstract public void calculatePremium(List<UnderwritingInfoPacket> netUnderwritingInfos, boolean fillNet);
+    abstract public void calculatePremium(List<UnderwritingInfoPacket> netUnderwritingInfos, double coveredByReinsurers, boolean fillNet);
 
     public void calculateCommission() {
+        // todo(sku): check whether all is fine regarding coveredByReinsurers and commissions
         commission.calculateCommission(cededClaims, cededUwInfos, false, false);
     }
 

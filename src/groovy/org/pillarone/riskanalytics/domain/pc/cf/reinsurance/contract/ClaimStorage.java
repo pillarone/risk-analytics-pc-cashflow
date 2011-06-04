@@ -95,11 +95,10 @@ public class ClaimStorage {
 
     /**
      * @param cededShare should be negative
-     * @param contractMarker
      * @return
      */
-    public IClaimRoot lazyInitCededClaimRoot(double cededShare, IReinsuranceContractMarker contractMarker) {
-        referenceCeded = referenceCeded == null ? reference.withScale(cededShare, contractMarker) : referenceCeded;
+    public IClaimRoot lazyInitCededClaimRoot(double cededShare) {
+        referenceCeded = referenceCeded == null ? reference.withScale(cededShare) : referenceCeded;
         return referenceCeded;
     }
 

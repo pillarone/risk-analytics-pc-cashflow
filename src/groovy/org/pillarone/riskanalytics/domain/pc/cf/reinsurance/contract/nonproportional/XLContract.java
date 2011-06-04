@@ -78,7 +78,7 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
             // first time this gross claim is treated by this contract
             double cededFactorUltimate = cededFactor(grossClaim.ultimate(), grossClaim.ultimate(),
                                                      BasedOnClaimProperty.ULTIMATE, storage);
-            cededBaseClaim = storage.lazyInitCededClaimRoot(cededFactorUltimate, contractMarker);
+            cededBaseClaim = storage.lazyInitCededClaimRoot(cededFactorUltimate);
         }
 
         double cededFactorReported = cededFactor(grossClaim.getReportedCumulated(), grossClaim.getReportedIncremental(),
@@ -114,13 +114,16 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
     }
 
     public void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
-                                          List<UnderwritingInfoPacket> netUnderwritingInfos, boolean fillNet) {
+                                          List<UnderwritingInfoPacket> netUnderwritingInfos,
+                                          double coveredByReinsurers, boolean fillNet) {
         if (isStartCoverPeriod) {
             initCededPremiumAllocation(cededClaims, grossUwInfos);
         }
         for (UnderwritingInfoPacket grossUnderwritingInfo : grossUwInfos) {
             double cededPremiumFixedShare = cededPremiumFixed * premiumAllocation.getShare(grossUnderwritingInfo);
+            cededPremiumFixedShare *= coveredByReinsurers;
             double cededPremiumVariable = cededPremiumFixedShare * reinstatements.calculateReinstatementPremiumFactor();
+            cededPremiumVariable *= coveredByReinsurers;
             double cededPremium = isStartCoverPeriod ? cededPremiumFixedShare + cededPremiumVariable : cededPremiumVariable;
 
             CededUnderwritingInfoPacket cededUnderwritingInfo = CededUnderwritingInfoPacket.deriveCededPacketForNonPropContract(

@@ -1,13 +1,14 @@
-package org.pillarone.riskanalytics.domain.pc.cf.segment;
+package org.pillarone.riskanalytics.domain.pc.cf.claim;
+
 
 import org.pillarone.riskanalytics.core.parameterization.IMultiDimensionalConstraints;
 
 /**
- * @author stefan (dot) kunz (at) intuitive-collaboration (dot) com
+ * @author fouad.jaada@intuitive-collaboration.com
  */
-public class SegmentPortion implements IMultiDimensionalConstraints {
+public class PerilPortion implements IMultiDimensionalConstraints {
 
-    public static final String IDENTIFIER = "SEGMENT_PORTION";
+    public static final String IDENTIFIER = "PERIL_PORTION";
 
     public boolean matches(int row, int column, Object value) {
         if (column == 0) {
@@ -23,11 +24,11 @@ public class SegmentPortion implements IMultiDimensionalConstraints {
     }
 
     public Class getColumnType(int column) {
-        return column == 0 ? ISegmentMarker.class : Double.class;
+        return column == 0 ? IPerilMarker.class : Double.class;
     }
 
     public Integer getColumnIndex(Class marker) {
-        if (ISegmentMarker.class.isAssignableFrom(marker)) {
+        if (IPerilMarker.class.isAssignableFrom(marker)) {
             return 0;
         }
         else if (Double.class.isAssignableFrom(marker)) {
@@ -35,4 +36,5 @@ public class SegmentPortion implements IMultiDimensionalConstraints {
         }
         return null;
     }
+
 }

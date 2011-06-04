@@ -65,7 +65,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
         List<Factors> factors = IndexUtils.filterFactors(inFactors, parmSeverityIndices);
         int number = generateClaimsOfCurrentPeriod(claims, periodCounter, factors);
         developClaimsOfFormerPeriods(claims, periodCounter, factors);
-
+        setTechnicalProperties(claims);
         outClaims.addAll(claims);
         outClaimNumber.add(new SingleValuePacket(number));
         if (this.isSenderWired(outSeverityIndexApplied)) {
@@ -126,6 +126,12 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     // period store key
     private static final String GROSS_CLAIMS = "gross claims root";
 
+    private void setTechnicalProperties(List<ClaimCashflowPacket> claims) {
+        for (ClaimCashflowPacket claim : claims) {
+            claim.setMarker(this);
+            claim.origin = this;
+        }
+    }
 
     public IClaimsGeneratorStrategy getParmClaimsModel() {
         return parmClaimsModel;

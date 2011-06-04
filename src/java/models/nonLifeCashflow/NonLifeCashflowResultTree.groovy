@@ -35,6 +35,54 @@ mappings = {
                 "premiumIndex" "NonLifeCashflow:underwritingSegments:[%underwritingSegment%]:outPremiumIndexApplied:value"
             }
         }
+        "segments" {
+            "[%segment%]" {
+                "claimsNet" {
+                    "ultimate" "NonLifeCashflow:segments:[%segment%]:outClaimsNet:ultimate"
+                    "reported" "NonLifeCashflow:segments:[%segment%]:outClaimsNet:reportedIncremental"
+                    "paid" "NonLifeCashflow:segments:[%segment%]:outClaimsNet:paidIncremental"
+                    "outstanding" "NonLifeCashflow:segments:[%segment%]:outClaimsNet:outstanding"
+                    "IBNR" "NonLifeCashflow:segments:[%segment%]:outClaimsNet:IBNR"
+                    "reserves" "NonLifeCashflow:segments:[%segment%]:outClaimsNet:reserves"
+                    "developedResult" "NonLifeCashflow:segments:[%segment%]:outClaimsNet:developedResult"
+                    "claimsGross" {
+                        "ultimate" "NonLifeCashflow:segments:[%segment%]:outClaimsGross:ultimate"
+                        "reported" "NonLifeCashflow:segments:[%segment%]:outClaimsGross:reportedIncremental"
+                        "paid" "NonLifeCashflow:segments:[%segment%]:outClaimsGross:paidIncremental"
+                        "outstanding" "NonLifeCashflow:segments:[%segment%]:outClaimsGross:outstanding"
+                        "IBNR" "NonLifeCashflow:segments:[%segment%]:outClaimsGross:IBNR"
+                        "reserves" "NonLifeCashflow:segments:[%segment%]:outClaimsGross:reserves"
+                        "developedResult" "NonLifeCashflow:segments:[%segment%]:outClaimsGross:developedResult"
+                    }
+                    "claimsCeded" {
+                        "ultimate" "NonLifeCashflow:segments:[%segment%]:outClaimsCeded:ultimate"
+                        "reported" "NonLifeCashflow:segments:[%segment%]:outClaimsCeded:reportedIncremental"
+                        "paid" "NonLifeCashflow:segments:[%segment%]:outClaimsCeded:paidIncremental"
+                        "outstanding" "NonLifeCashflow:segments:[%segment%]:outClaimsCeded:outstanding"
+                        "IBNR" "NonLifeCashflow:segments:[%segment%]:outClaimsCeded:IBNR"
+                        "reserves" "NonLifeCashflow:segments:[%segment%]:outClaimsCeded:reserves"
+                        "developedResult" "NonLifeCashflow:segments:[%segment%]:outClaimsCeded:developedResult"
+                    }
+                }
+                "premium" {
+                    "premiumWrittenNet" "NonLifeCashflow:segments:[%segment%]:outUnderwritingInfoNet:premiumWritten", {
+                        "gross" "NonLifeCashflow:segments:[%segment%]:outUnderwritingInfoGross:premiumWritten"
+                        "ceded" "NonLifeCashflow:segments:[%segment%]:outUnderwritingInfoCeded:premiumWritten"
+                    }
+                    "premiumPaidNet" "NonLifeCashflow:segments:[%segment%]:outUnderwritingInfoNet:premiumPaid", {
+                        "gross" "NonLifeCashflow:segments:[%segment%]:outUnderwritingInfoGross:premiumPaid"
+                        "ceded" "NonLifeCashflow:segments:[%segment%]:outUnderwritingInfoCeded:premiumPaid", {
+                            "fixed" "NonLifeCashflow:segments:[%segment%]:outUnderwritingInfoCeded:premiumPaidFixed"
+                         "variable" "NonLifeCashflow:segments:[%segment%]:outUnderwritingInfoCeded:premiumPaidVariable"
+                        }
+                    }
+                }
+                "commission" "NonLifeCashflow:segments:[%segment%]:outUnderwritingInfoCeded:commission", {
+                        "fixed" "NonLifeCashflow:segments:[%segment%]:outUnderwritingInfoCeded:commissionFixed"
+                        "variable" "NonLifeCashflow:segments:[%segment%]:outUnderwritingInfoCeded:commissionVariable"
+                }
+            }
+        }
         "reinsurance" {
             "[%contract%]" {
                 "claimsNet" {

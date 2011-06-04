@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -52,6 +53,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private ConstrainedMultiDimensionalParameter parmReinsurers = new ConstrainedMultiDimensionalParameter(
             Collections.emptyList(), LegalEntityPortionConstraints.COLUMN_TITLES,
             ConstraintsFactory.getConstraints(LegalEntityPortionConstraints.IDENTIFIER));
+    private double parmCoveredByReinsurers = 1d;
     private ICoverAttributeStrategy parmCover = CoverAttributeStrategyType.getDefault();
     private IPeriodStrategy parmCoveredPeriod = PeriodStrategyType.getDefault();
 
@@ -187,13 +189,15 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
         for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
             ClaimCashflowPacket cededClaim = grossClaim.getCededClaim();
-//            cededClaim.scale(coveredByReinsurer);
+            cededClaim = ClaimUtils.scale(cededClaim, parmCoveredByReinsurers);
+            ClaimUtils.applyMarkers(grossClaim.getGrossClaim(), cededClaim);
+            cededClaim.setMarker(this);
             outClaimsCeded.add(cededClaim);
             if (isSenderWired(outClaimsGross)) {
                 outClaimsGross.add(grossClaim.getGrossClaim());
             }
             if (isSenderWired(outClaimsNet)) {
-                outClaimsNet.add(grossClaim.getGrossClaim().getNetClaim(cededClaim, periodCounter));
+                outClaimsNet.add(grossClaim.getGrossClaim().getNetClaim(cededClaim));
             }
         }
     }
@@ -212,7 +216,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         }
         for (IReinsuranceContract contract : contracts) {
             // todo(sku): how time consuming are isSenderWired() calls? Might be necessary to cache this information.
-            contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, isSenderWired(outUnderwritingInfoNet));
+            contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, parmCoveredByReinsurers,
+                    isSenderWired(outUnderwritingInfoNet));
         }
     }
 
