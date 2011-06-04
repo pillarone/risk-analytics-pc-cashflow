@@ -31,14 +31,14 @@ abstract public class AbstractPremiumAllocation extends AbstractParameterObject 
             for (UnderwritingInfoPacket underwritingInfo : grossUnderwritingInfoPackets) {
                 Double aggregatedPremium = segmentPremium.get(underwritingInfo.getSegment());
                 if (aggregatedPremium == null) {
-                    segmentPremium.put(underwritingInfo.getSegment(), underwritingInfo.getPremiumPaid());
+                    segmentPremium.put(underwritingInfo.getSegment(), underwritingInfo.getPremiumWritten());
                 }
                 else {
-                    segmentPremium.put(underwritingInfo.getSegment(), underwritingInfo.getPremiumPaid() + aggregatedPremium);
+                    segmentPremium.put(underwritingInfo.getSegment(), underwritingInfo.getPremiumWritten() + aggregatedPremium);
                 }
             }
             for (UnderwritingInfoPacket underwritingInfo : grossUnderwritingInfoPackets) {
-                double premiumShareInSegment = underwritingInfo.getPremiumPaid() / segmentPremium.get(underwritingInfo.getSegment());
+                double premiumShareInSegment = underwritingInfo.getPremiumWritten() / segmentPremium.get(underwritingInfo.getSegment());
                 Double segmentShare = segmentShares.get(underwritingInfo.getSegment());
                 cededPremiumSharePerGrossUnderwritingInfo.put(underwritingInfo, premiumShareInSegment * (segmentShare == null ? 1 : segmentShare));
             }
@@ -48,7 +48,7 @@ abstract public class AbstractPremiumAllocation extends AbstractParameterObject 
     protected void proportionalAllocation(List<UnderwritingInfoPacket> grossUnderwritingInfos) {
         cededPremiumSharePerGrossUnderwritingInfo = new HashMap<UnderwritingInfoPacket, Double>();
         if (grossUnderwritingInfos.size() > 0) {
-            double totalPremium = UnderwritingInfoUtils.aggregate(grossUnderwritingInfos).getPremiumPaid();
+            double totalPremium = UnderwritingInfoUtils.aggregate(grossUnderwritingInfos).getPremiumWritten();
             if (totalPremium == 0) {
                 for (UnderwritingInfoPacket underwritingInfo: grossUnderwritingInfos) {
                     cededPremiumSharePerGrossUnderwritingInfo.put(underwritingInfo, 0d);
@@ -56,7 +56,7 @@ abstract public class AbstractPremiumAllocation extends AbstractParameterObject 
             }
             else {
                 for (UnderwritingInfoPacket underwritingInfo: grossUnderwritingInfos) {
-                    cededPremiumSharePerGrossUnderwritingInfo.put(underwritingInfo, underwritingInfo.getPremiumPaid() / totalPremium);
+                    cededPremiumSharePerGrossUnderwritingInfo.put(underwritingInfo, underwritingInfo.getPremiumWritten() / totalPremium);
                 }
             }
         }
