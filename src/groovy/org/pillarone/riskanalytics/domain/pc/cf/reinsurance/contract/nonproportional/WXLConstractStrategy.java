@@ -3,12 +3,12 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproport
 import org.pillarone.riskanalytics.core.parameterization.AbstractMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IPremiumAllocationStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.PremiumBase;
-import org.pillarone.riskanalytics.domain.pc.cf.segment.UnderwritingInfoUtils;
 
 import java.util.HashMap;
 import java.util.List;
