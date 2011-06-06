@@ -58,8 +58,8 @@ class RecoveryPatternStrategyValidator implements IParameterizationValidator {
                 return [ValidationType.ERROR, "incremental.pattern.error.incremental.values.empty", values]
             }
             for (int i = 0; i < values.length; i++) {
-                if (values[i] < 0) {
-                    return [ValidationType.ERROR, "incremental.pattern.error.incremental.values.not.non.negative", i + 1, values[i]]
+                if (values[i] < 0 || values[i] > 1) {
+                    return [ValidationType.ERROR, "incremental.pattern.error.incremental.values.not.in.unity.interval", i + 1, values[i]]
                 }
             }
             return true
@@ -72,6 +72,15 @@ class RecoveryPatternStrategyValidator implements IParameterizationValidator {
             }
             if (values[0] < 0) {
                 return [ValidationType.ERROR, "cumulative.pattern.error.cumulative.values.negative", values[0]]
+            }
+            return true
+        }
+
+        validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
+            double[] values = type.cumulativePattern.getColumnByName(PatternStrategyType.CUMULATIVE2)
+
+            if (values[values.size() - 1] > 1) {
+                return [ValidationType.ERROR, "cumulative.pattern.error.cumulative.values.greater.than.one", values[values.size() - 1]]
             }
             return true
         }
