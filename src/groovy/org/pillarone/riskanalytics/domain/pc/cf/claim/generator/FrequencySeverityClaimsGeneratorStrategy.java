@@ -18,8 +18,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionUtils;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionUtils;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomFrequencyDistribution;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +33,7 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
 
     protected ConstrainedMultiDimensionalParameter frequencyIndices;
     protected FrequencyBase frequencyBase;
-    protected RandomDistribution frequencyDistribution;
+    protected RandomFrequencyDistribution frequencyDistribution;
     protected DistributionModified frequencyModification;
     protected ExposureBase claimsSizeBase;
     protected RandomDistribution claimsSizeDistribution;
@@ -63,8 +64,8 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
                                           IPerilMarker filterCriteria) {
 
         setGenerator(claimsSizeDistribution, claimsSizeModification);
-        RandomDistribution systematicFrequencyDistribution = ClaimsGeneratorUtils.extractDistribution(systematicFrequencies, filterCriteria);
-        setClaimNumberGenerator(DistributionUtils.getIdiosyncraticDistribution(frequencyDistribution, systematicFrequencyDistribution),
+        RandomFrequencyDistribution systematicFrequencyDistribution = ClaimsGeneratorUtils.extractFrequencyDistribution(systematicFrequencies, filterCriteria);
+        setClaimNumberGenerator(FrequencyDistributionUtils.getIdiosyncraticDistribution(frequencyDistribution, systematicFrequencyDistribution),
                 frequencyModification);
         ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
         List<Factors> factors = IndexUtils.filterFactors(factorPackets, frequencyIndices);

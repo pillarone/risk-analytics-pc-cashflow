@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.dependency;
 import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomFrequencyDistribution;
 
 import java.util.List;
 
@@ -11,15 +12,15 @@ import java.util.List;
  */
 public class SystematicFrequencyPacket extends Packet {
 
-    private RandomDistribution frequencyDistribution;
+    private RandomFrequencyDistribution frequencyDistribution;
     private DistributionModified frequencyModifier;
     private List<String> targets;
 
-    public RandomDistribution getFrequencyDistribution() {
+    public RandomFrequencyDistribution getFrequencyDistribution() {
         return frequencyDistribution;
     }
 
-    public void setFrequencyDistribution(RandomDistribution frequencyDistribution) {
+    public void setFrequencyDistribution(RandomFrequencyDistribution frequencyDistribution) {
         this.frequencyDistribution = frequencyDistribution;
     }
 

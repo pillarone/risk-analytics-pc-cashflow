@@ -22,6 +22,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution
 import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionType
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomFrequencyDistribution
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -37,8 +38,8 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
     List<String> targets
     List<EventSeverity> severities1
     List<EventSeverity> severities2
-    RandomDistribution systematicFrequency1
-    RandomDistribution systematicFrequency2
+    RandomFrequencyDistribution systematicFrequency1
+    RandomFrequencyDistribution systematicFrequency2
 
     void setUp() {
 
@@ -312,7 +313,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
         claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
                 ClaimsGeneratorType.FREQUENCY_AVERAGE_ATTRITIONAL, [
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 3]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 3]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
@@ -329,7 +330,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
         claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
                 ClaimsGeneratorType.FREQUENCY_AVERAGE_ATTRITIONAL, [
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 3]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 3]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
@@ -345,7 +346,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
         claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
                 ClaimsGeneratorType.FREQUENCY_AVERAGE_ATTRITIONAL, [
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 3]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 3]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.NUMBER_OF_POLICIES,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
@@ -368,7 +369,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
         claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
                 ClaimsGeneratorType.FREQUENCY_AVERAGE_ATTRITIONAL, [
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2d]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2d]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.UNIFORM, [a: 0, b: 1]),
@@ -386,7 +387,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
         claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
                 ClaimsGeneratorType.FREQUENCY_AVERAGE_ATTRITIONAL, [
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 5d]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 5d]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 120]),
@@ -406,7 +407,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
         claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
                 ClaimsGeneratorType.FREQUENCY_AVERAGE_ATTRITIONAL, [
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2d]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2d]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.UNIFORM, [a:0, b:7.5]),
@@ -427,7 +428,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
         claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
                 ClaimsGeneratorType.FREQUENCY_AVERAGE_ATTRITIONAL, [
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 5d]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 5d]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 120]),

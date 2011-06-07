@@ -9,9 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.*;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 
@@ -48,7 +46,7 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
         return numberOfClaims;
     }
 
-    protected void setClaimNumberGenerator(RandomDistribution distribution, DistributionModified modifier) {
+    protected void setClaimNumberGenerator(IRandomDistribution distribution, DistributionModified modifier) {
         String key = key(distribution, modifier);
         if (cachedClaimNumberGenerators.containsKey(key)) {
             claimNumberGenerator = cachedClaimNumberGenerators.get(key);
@@ -58,7 +56,7 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
         }
     }
 
-    protected void setClaimNumberGenerator(RandomDistribution distribution) {
+    protected void setClaimNumberGenerator(IRandomDistribution distribution) {
         setClaimNumberGenerator(distribution, DistributionModifier.getStrategy(DistributionModifier.NONE, null));
     }
 

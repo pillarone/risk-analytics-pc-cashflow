@@ -25,6 +25,7 @@ import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistr
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomFrequencyDistribution
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -39,8 +40,8 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
     List<String> targets
     List<EventSeverity> severities1
     List<EventSeverity> severities2
-    RandomDistribution systematicFrequency1
-    RandomDistribution systematicFrequency2
+    RandomFrequencyDistribution systematicFrequency1
+    RandomFrequencyDistribution systematicFrequency2
 
     void setUp() {
 
@@ -57,7 +58,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
@@ -94,7 +95,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
@@ -124,7 +125,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.NUMBER_OF_POLICIES,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
@@ -149,7 +150,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.NUMBER_OF_POLICIES,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2d]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2d]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.NUMBER_OF_POLICIES,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
@@ -181,7 +182,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2d]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2d]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.UNIFORM, [a: 0, b: 12]),
@@ -207,7 +208,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 4d]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 4d]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 120]),
@@ -240,7 +241,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2d]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2d]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.UNIFORM, [a: 0, b: 7.5]),
@@ -270,7 +271,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 3d]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 3d]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 120]),
@@ -303,7 +304,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
@@ -328,7 +329,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
@@ -363,7 +364,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.NUMBER_OF_POLICIES,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
                         "occurrenceDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957]),
@@ -393,7 +394,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.NUMBER_OF_POLICIES,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.NUMBER_OF_POLICIES,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
@@ -434,7 +435,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2d]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2d]),
                         "occurrenceDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957d]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
@@ -461,7 +462,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 4d]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 4d]),
                         "occurrenceDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957d]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
@@ -501,7 +502,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 2d]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2d]),
                         "occurrenceDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957d]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
@@ -532,7 +533,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                                 Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                                 ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
                         "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 3d]),
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 3d]),
                         "occurrenceDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957d]),
                         "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,

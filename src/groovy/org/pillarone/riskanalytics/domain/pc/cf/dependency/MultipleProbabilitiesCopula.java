@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
 
-    private RandomDistribution parmFrequencyDistribution = FrequencyDistributionType.getDefault();
+    private RandomFrequencyDistribution parmFrequencyDistribution = FrequencyDistributionType.getDefault();
     private ICopulaStrategy parmCopulaStrategy = CopulaType.getDefault();
 
     private DistributionModified modifier = DistributionModifier.getDefault();
@@ -78,11 +78,11 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
         this.modifier = modifier;
     }
 
-    public RandomDistribution getParmFrequencyDistribution() {
+    public RandomFrequencyDistribution getParmFrequencyDistribution() {
         return parmFrequencyDistribution;
     }
 
-    public void setParmFrequencyDistribution(RandomDistribution parmDistribution) {
+    public void setParmFrequencyDistribution(RandomFrequencyDistribution parmDistribution) {
         this.parmFrequencyDistribution = parmDistribution;
     }
 

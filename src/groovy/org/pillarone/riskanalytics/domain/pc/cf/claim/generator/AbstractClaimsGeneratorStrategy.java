@@ -90,7 +90,7 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
         dateGenerator = RandomNumberGeneratorFactory.getGenerator(distribution);
     }
 
-    protected String key(RandomDistribution distribution, DistributionModified modifier) {
+    protected String key(IRandomDistribution distribution, DistributionModified modifier) {
         return String.valueOf(distribution.hashCode()) + String.valueOf(modifier.hashCode());
     }
 

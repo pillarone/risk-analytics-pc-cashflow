@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPa
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomFrequencyDistribution;
 
 import java.util.List;
 import java.util.Map;

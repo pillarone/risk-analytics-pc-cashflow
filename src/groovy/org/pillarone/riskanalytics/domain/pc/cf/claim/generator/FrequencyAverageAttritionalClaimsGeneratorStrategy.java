@@ -13,8 +13,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionUtils;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionUtils;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomFrequencyDistribution;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 
@@ -29,7 +29,7 @@ import java.util.Map;
 public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends AttritionalClaimsGeneratorStrategy {
 
     private FrequencyBase frequencyBase;
-    private RandomDistribution frequencyDistribution;
+    private RandomFrequencyDistribution frequencyDistribution;
     private DistributionModified frequencyModification;
 
     public IParameterObjectClassifier getType() {
@@ -51,9 +51,9 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
 
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, claimsSizeBase, uwInfosFilterCriteria);
         double frequencyFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, frequencyBase, uwInfosFilterCriteria);
-        RandomDistribution systematicFrequencyDistribution = ClaimsGeneratorUtils.extractDistribution(systematicFrequencies, filterCriteria);
+        RandomFrequencyDistribution systematicFrequencyDistribution = ClaimsGeneratorUtils.extractFrequencyDistribution(systematicFrequencies, filterCriteria);
         IRandomNumberGenerator frequencyGenerator = RandomNumberGeneratorFactory.getGenerator(
-                DistributionUtils.getIdiosyncraticDistribution(frequencyDistribution, systematicFrequencyDistribution), frequencyModification);
+                FrequencyDistributionUtils.getIdiosyncraticDistribution(frequencyDistribution, systematicFrequencyDistribution), frequencyModification);
         IRandomNumberGenerator claimsSizeGenerator = RandomNumberGeneratorFactory.getGenerator(claimsSizeDistribution, claimsSizeModification);
         int numberOfClaims = (int) (frequencyGenerator.nextValue().intValue() * frequencyFactor);
         double claimValue = baseClaims.get(0).getUltimate();
