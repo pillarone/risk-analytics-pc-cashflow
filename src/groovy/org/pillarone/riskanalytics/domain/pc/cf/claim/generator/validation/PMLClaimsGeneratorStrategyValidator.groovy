@@ -39,9 +39,15 @@ class PMLClaimsGeneratorStrategyValidator implements IParameterizationValidator 
                     if (LOG.isDebugEnabled()) {
                         LOG.debug "validating ${parameter.path}"
                     }
-                    def currentErrors = validationService.validate(classifier, parameter.getParameterMap())
-                    currentErrors*.path = parameter.path
-                    errors.addAll(currentErrors)
+                    try {
+                        def currentErrors = validationService.validate(classifier, parameter.getParameterMap())
+                        currentErrors*.path = parameter.path
+                        errors.addAll(currentErrors)
+                    }
+                    catch (IllegalArgumentException ex) {
+                        // https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1619
+                        LOG.debug("call parameter.getBusinessObject() failed " + ex.toString())
+                    }
                 }
                 errors.addAll(validate(parameter.classifierParameters.values().toList()))
             }
@@ -53,7 +59,7 @@ class PMLClaimsGeneratorStrategyValidator implements IParameterizationValidator 
     private void registerConstraints() {
 
         validationService.register(ClaimsGeneratorType.PML) {Map type ->
-            double[] returnPeriods = new double[type.pmlData.getRowCount()-1];
+            double[] returnPeriods = new double[type.pmlData.getRowCount() - 1];
             int index = type.pmlData.getColumnIndex('return period')
 
             for (int i = 1; i < type.pmlData.getRowCount(); i++) {
@@ -70,7 +76,7 @@ class PMLClaimsGeneratorStrategyValidator implements IParameterizationValidator 
             return true
         }
         validationService.register(ClaimsGeneratorType.PML) {Map type ->
-            double[] claims = new double[type.pmlData.getRowCount()-1];
+            double[] claims = new double[type.pmlData.getRowCount() - 1];
             int index = type.pmlData.getColumnIndex('maximum claim')
 
             for (int i = 1; i < type.pmlData.getRowCount(); i++) {
