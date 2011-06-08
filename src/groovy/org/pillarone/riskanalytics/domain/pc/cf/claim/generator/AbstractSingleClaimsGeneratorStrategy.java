@@ -46,7 +46,7 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
         return numberOfClaims;
     }
 
-    protected void setClaimNumberGenerator(IRandomDistribution distribution, DistributionModified modifier) {
+    protected void setClaimNumberGenerator(AbstractRandomDistribution distribution, DistributionModified modifier) {
         String key = key(distribution, modifier);
         if (cachedClaimNumberGenerators.containsKey(key)) {
             claimNumberGenerator = cachedClaimNumberGenerators.get(key);
@@ -56,7 +56,7 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
         }
     }
 
-    protected void setClaimNumberGenerator(IRandomDistribution distribution) {
+    protected void setClaimNumberGenerator(AbstractRandomDistribution distribution) {
         setClaimNumberGenerator(distribution, DistributionModifier.getStrategy(DistributionModifier.NONE, null));
     }
 
