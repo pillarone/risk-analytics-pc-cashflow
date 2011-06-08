@@ -29,6 +29,7 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
     private PacketList<EventDependenceStream> outEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
     private PacketList<SystematicFrequencyPacket> outEventFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket.class);
 
+    private SystematicFrequencyPacket cachedSystematicFrequencyPacket;
     // todo(jwa): old stuff, replace with new validation concept if the error still occurs
     public void validateParameterization() {
         if (parmFrequencyDistribution == null) {
@@ -39,7 +40,8 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
 
     public void doCalculation() {
 
-        buildEventFrequencyPacket();
+        lazyInitFrequencyPacket();
+        outEventFrequencies.add(cachedSystematicFrequencyPacket);
         setGenerator(getCachedGenerator(parmFrequencyDistribution, modifier));
         int frequency = getGenerator().nextValue().intValue();
 
@@ -50,12 +52,12 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
         }
     }
 
-    private void buildEventFrequencyPacket() {
-        // todo(jwa): cache packet as always the same content is produced!
-        SystematicFrequencyPacket packet = new SystematicFrequencyPacket();
-        packet.setFrequencyDistribution(parmFrequencyDistribution);
-        packet.setTargets(parmCopulaStrategy.getTargetNames());
-        outEventFrequencies.add(packet);
+    private void lazyInitFrequencyPacket(){
+        if (cachedSystematicFrequencyPacket == null){
+            cachedSystematicFrequencyPacket = new SystematicFrequencyPacket();
+            cachedSystematicFrequencyPacket.setFrequencyDistribution(parmFrequencyDistribution);
+            cachedSystematicFrequencyPacket.setTargets(parmCopulaStrategy.getTargetNames());
+        }
     }
 
     private List<EventSeverity> buildEventSeverities(EventPacket event) {

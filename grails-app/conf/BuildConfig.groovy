@@ -26,7 +26,7 @@ grails.project.dependency.resolution = {
         if (appName == "risk-analytics-pc-cashflow") {
 
             runtime "org.pillarone:risk-analytics-core:1.4-ALPHA-2.9.3"
-            runtime("org.pillarone:risk-analytics-commons:0.1.8") { transitive = false }
+            runtime("org.pillarone:risk-analytics-commons:0.1.9") { transitive = false }
 
         }
     }
@@ -41,7 +41,8 @@ grails.project.dependency.distribution = {
 
         passPhrase = properties.get("passPhrase")
         scpUrl = properties.get("url")
-    } catch (Throwable t) {
+    }
+    catch (Throwable t) {
     }
     remoteRepository(id: "pillarone", url: scpUrl) {
         authentication username: 'root', privateKey: "${userHome.absolutePath}/.ssh/id_rsa", passphrase: passPhrase
