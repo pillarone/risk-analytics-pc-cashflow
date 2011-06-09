@@ -6,8 +6,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorU
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.GeneratorCachingComponent;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
-import org.pillarone.riskanalytics.domain.utils.math.copula.CopulaType;
 import org.pillarone.riskanalytics.domain.utils.math.copula.ICopulaStrategy;
+import org.pillarone.riskanalytics.domain.utils.math.copula.PerilCopulaType;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.*;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 
@@ -20,7 +20,7 @@ import java.util.List;
 public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
 
     private RandomFrequencyDistribution parmFrequencyDistribution = FrequencyDistributionType.getDefault();
-    private ICopulaStrategy parmCopulaStrategy = CopulaType.getDefault();
+    private ICopulaStrategy parmCopulaStrategy = PerilCopulaType.getDefault();
 
     private DistributionModified modifier = DistributionModifier.getDefault();
     private IRandomNumberGenerator generator;

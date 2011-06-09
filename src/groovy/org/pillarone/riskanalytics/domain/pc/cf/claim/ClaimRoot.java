@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
+import org.pillarone.riskanalytics.domain.utils.math.copula.IPerilMarker;
 
 /**
  * Doc: https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1540

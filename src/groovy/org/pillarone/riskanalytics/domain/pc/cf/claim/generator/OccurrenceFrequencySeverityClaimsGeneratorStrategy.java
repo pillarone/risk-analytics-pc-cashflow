@@ -3,12 +3,11 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IPerilMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.utils.math.copula.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomFrequencyDistribution;
 
 import java.util.List;
 import java.util.Map;

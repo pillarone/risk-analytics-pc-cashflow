@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
+import org.pillarone.riskanalytics.domain.utils.math.copula.IPerilMarker;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

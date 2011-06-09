@@ -3,8 +3,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.dependency
 import org.pillarone.riskanalytics.core.packets.PacketList
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier
 import org.pillarone.riskanalytics.core.components.DynamicComposedComponent
-import org.pillarone.riskanalytics.domain.utils.math.copula.CopulaType
 import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionType
+import org.pillarone.riskanalytics.domain.utils.math.copula.PerilCopulaType
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -17,7 +17,7 @@ class EventGenerators extends DynamicComposedComponent {
     public MultipleProbabilitiesCopula createDefaultSubComponent() {
         MultipleProbabilitiesCopula newComponent = new MultipleProbabilitiesCopula(
                 modifier: DistributionModifier.getDefault(), parmFrequencyDistribution: FrequencyDistributionType.getDefault(),
-                parmCopulaStrategy: CopulaType.getDefault())
+                parmCopulaStrategy: PerilCopulaType.getDefault())
         return newComponent
     }
 
