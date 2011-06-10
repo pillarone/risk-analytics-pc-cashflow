@@ -35,17 +35,17 @@ class CopulaValidator implements IParameterizationValidator {
 
         List<ParameterValidation> errors = []
 
-        /** key: path                     */
+        /** key: path                             */
         Map<String, List<Component>> targetComponentsPerCopula = [:]
-        /** key: path                     */
+        /** key: path                             */
         Map<String, IndexStrategyType> strategyPerIndexName = [:]
-        /** key: path                     */
+        /** key: path                             */
         Map<String, ClaimsGeneratorType> strategyPerClaimsGeneratorName = [:]
 
         for (ParameterHolder parameter in parameters) {
             if (parameter instanceof ParameterObjectParameterHolder) {
                 IParameterObjectClassifier classifier = parameter.getClassifier()
-                if (classifier instanceof CopulaType) {
+                if (classifier instanceof CopulaType && parameter.path.contains('dependencies:sub')) {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug "validating ${parameter.path}"
                     }
@@ -60,7 +60,19 @@ class CopulaValidator implements IParameterizationValidator {
                     }
                 }
                 else if (classifier instanceof IndexStrategyType) {
-                    strategyPerIndexName[parameter.path[-19..-1] - ':parmIndex'] = classifier
+                    if (parameter.path.contains('indices:subFrequencyIndices:')) {
+                        strategyPerIndexName[parameter.path - 'indices:subFrequencyIndices:' - ':parmIndex'] = classifier
+                    }
+                    else if (parameter.path.contains('indices:subSeverityIndices:')) {
+                        strategyPerIndexName[parameter.path - 'indices:subSeverityIndices:' - ':parmIndex'] = classifier
+                    }
+
+                    else if (parameter.path.contains('indices:subPolicyIndices:')) {
+                        strategyPerIndexName[parameter.path - 'indices:subPolicyIndices:' - ':parmIndex'] = classifier
+                    }
+                    else if (parameter.path.contains('indices:subPremiumIndices:')) {
+                        strategyPerIndexName[parameter.path - 'indices:subPremiumyIndices:' - ':parmIndex'] = classifier
+                    }
                 }
                 else if (classifier instanceof ClaimsGeneratorType) {
                     strategyPerClaimsGeneratorName[parameter.path - 'claimsGenerators:' - ':parmClaimsModel'] = classifier
@@ -71,6 +83,7 @@ class CopulaValidator implements IParameterizationValidator {
 
 
         }
+
         List<String> listOfCopulaPaths = targetComponentsPerCopula.keySet().toList()
         for (int i = 0; i < listOfCopulaPaths.size() - 1; i++) {
             for (int j = i; j < listOfCopulaPaths; j++) {
@@ -80,7 +93,7 @@ class CopulaValidator implements IParameterizationValidator {
                     for (Component targetToCompare: targetsToCompare) {
                         if (!target.equals(targetToCompare)) continue
                         ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
-                                'copula.targets.same.targets.in.different.copulas', [target.getNormalizedName()])
+                                'dependencies.copula.same.targets.in.different.copulas', [target.getNormalizedName()])
                         error.path = listOfCopulaPaths[j + 1]
                         errors << error
                     }
@@ -96,7 +109,8 @@ class CopulaValidator implements IParameterizationValidator {
                         (claimsGeneratorStrategy == null || claimsGeneratorStrategy.equals(ClaimsGeneratorType.ATTRITIONAL) ||
                                 claimsGeneratorStrategy.equals(ClaimsGeneratorType.ATTRITIONAL_WITH_DATE))) continue
                 ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
-                        'copula.targets.invalid.strategy', [indexStrategy == null ? claimsGeneratorStrategy : indexStrategy])
+                        'dependencies.copula.targets.invalid.strategy',
+                        [indexStrategy == null ? claimsGeneratorStrategy.toString() : indexStrategy.toString()])
                 error.path = copulaPath
                 errors << error
             }
@@ -111,9 +125,10 @@ class CopulaValidator implements IParameterizationValidator {
             for (int i = 0; i < type.size() - 1; i++) {
                 for (int j = i; j < type.size() - 1; j++) {
                     if (type[i].equals(type[j + 1])) return true
-                    [ValidationType.ERROR, "copula.targets.duplicate.reference", type[i]]
+                    [ValidationType.ERROR, "dependencies.copula.targets.duplicate.reference", type[i].getNormalizedName()]
                 }
             }
         }
     }
+
 }

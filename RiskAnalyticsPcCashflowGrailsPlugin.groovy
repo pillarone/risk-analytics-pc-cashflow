@@ -17,6 +17,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.PatternStrate
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.RecoveryPatternStrategyValidator
 import org.pillarone.riskanalytics.core.util.ResourceBundleRegistry
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.validation.CopulaValidator
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.validation.MultipleProbabilitiesCopulaValidator
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -70,7 +71,8 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
         ValidatorRegistry.addValidator(new PatternStrategyValidator())
         ValidatorRegistry.addValidator(new RecoveryPatternStrategyValidator())
-      //  ValidatorRegistry.addValidator(new CopulaValidator())
+       // ValidatorRegistry.addValidator(new CopulaValidator())
+       // ValidatorRegistry.addValidator(new MultipleProbabilitiesCopulaValidator())
 
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.pMLClaimsGeneratorStrategyValidator")
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.patternStrategyValidator")
