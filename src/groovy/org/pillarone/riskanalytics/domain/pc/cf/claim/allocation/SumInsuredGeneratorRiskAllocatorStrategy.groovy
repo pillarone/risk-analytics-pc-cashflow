@@ -56,7 +56,7 @@ class SumInsuredGeneratorRiskAllocatorStrategy extends AbstractParameterObject i
             ExposureInfo exposure = underwritingInfos[-1].getExposure();  // new ExposureInfo(PeriodScope periodScope) what is periodScope?
             exposure.setExposureDefinition(ExposureBase.ABSOLUTE);
             exposure.setMaxSumInsured(maxSumInsuredUWI);
-            exposure.setSumInsured(claim.ultimate + generator.nextValue() * (maxSumInsuredUWI - claim.ultimate));
+            exposure.setSumInsured(claim.ultimate + (Double) generator.nextValue() * (maxSumInsuredUWI - claim.ultimate));
             ClaimRoot copy = claim.withExposure(exposure);
             /*UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket()
             underwritingInfo.exposureDefinition = Exposure.ABSOLUTE
