@@ -2,7 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.AbstractRandomDistribution;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 
@@ -17,7 +17,7 @@ public abstract class GeneratorCachingComponent extends Component {
 
     private Map<String, IRandomNumberGenerator> generators = new HashMap<String, IRandomNumberGenerator>();
 
-    protected IRandomNumberGenerator getCachedGenerator(RandomDistribution distribution, DistributionModified modifier) {
+    protected IRandomNumberGenerator getCachedGenerator(AbstractRandomDistribution distribution, DistributionModified modifier) {
         String key = key(distribution, modifier);
         IRandomNumberGenerator generator;
 
@@ -36,7 +36,7 @@ public abstract class GeneratorCachingComponent extends Component {
         return generator;
     }
 
-    private String key(RandomDistribution distribution, DistributionModified modifier) {
+    private String key(AbstractRandomDistribution distribution, DistributionModified modifier) {
         return String.valueOf(distribution.hashCode()) + String.valueOf(modifier.hashCode());
     }
 

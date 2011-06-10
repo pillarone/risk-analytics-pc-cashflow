@@ -14,6 +14,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternStrategyType
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
 import org.joda.time.DateTime
+import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionType
 
 model=models.nonLifeCashflow.NonLifeCashflowModel
 periodCount=1
@@ -33,7 +34,7 @@ components {
 			parmReportingPattern[0]=new ConstrainedString(IReportingPatternMarker, 'subMarine')
 		}
 		subMotorSingle {
-			parmClaimsModel[0]=ClaimsGeneratorType.getStrategy(ClaimsGeneratorType.FREQUENCY_SEVERITY, ["frequencyBase":FrequencyBase.ABSOLUTE,"frequencyModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"frequencyDistribution":DistributionType.getStrategy(DistributionType.POISSON, [lambda:5.0]),"produceClaim":FrequencySeverityClaimType.SINGLE,"claimsSizeModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"claimsSizeBase":ExposureBase.ABSOLUTE,"claimsSizeDistribution":DistributionType.getStrategy(DistributionType.PARETO, [alpha:2.5, beta:50000.0]),"frequencyIndices":new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([["growth"], ["CONTINUOUS"], ["START_OF_PROJECTION"],[new DateTime(2011,1,1,0,0,0,0)]]),["Index","Index Mode","Base Date Mode","Date"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('FREQUENCY_INDEX_SELECTION')),])
+			parmClaimsModel[0]=ClaimsGeneratorType.getStrategy(ClaimsGeneratorType.FREQUENCY_SEVERITY, ["frequencyBase":FrequencyBase.ABSOLUTE,"frequencyModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"frequencyDistribution":FrequencyDistributionType.getStrategy(FrequencyDistributionType.POISSON, [lambda:5.0]),"produceClaim":FrequencySeverityClaimType.SINGLE,"claimsSizeModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"claimsSizeBase":ExposureBase.ABSOLUTE,"claimsSizeDistribution":DistributionType.getStrategy(DistributionType.PARETO, [alpha:2.5, beta:50000.0]),"frequencyIndices":new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([["growth"], ["CONTINUOUS"], ["START_OF_PROJECTION"],[new DateTime(2011,1,1,0,0,0,0)]]),["Index","Index Mode","Base Date Mode","Date"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('FREQUENCY_INDEX_SELECTION')),])
 			parmPayoutPattern[0]=new ConstrainedString(IPayoutPatternMarker, 'subMotorShort')
 			parmReportingPattern[0]=new ConstrainedString(IReportingPatternMarker, 'subMotorShort')
 		}

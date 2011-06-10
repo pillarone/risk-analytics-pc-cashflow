@@ -76,7 +76,7 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
             }
         }
         if (filteredEventSeverities.size() > 1) {
-            throw new IllegalArgumentException("Index has more than one dependency");
+            throw new IllegalArgumentException("StochasticIndexStrategy.invalidDependencies");
         }
         return filteredEventSeverities.size() == 1 ? filteredEventSeverities.get(0).getValue() : null;
     }

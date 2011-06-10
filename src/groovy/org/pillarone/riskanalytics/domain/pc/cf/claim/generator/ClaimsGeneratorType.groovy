@@ -14,6 +14,8 @@ import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionTy
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution
 import org.pillarone.riskanalytics.core.parameterization.*
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FrequencyIndexSelectionTableConstraints
+import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionType
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomFrequencyDistribution
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -36,7 +38,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
 //            produceClaim: FrequencySeverityClaimType.AGGREGATED_EVENT])
     public static final ClaimsGeneratorType FREQUENCY_AVERAGE_ATTRITIONAL = new ClaimsGeneratorType("frequency average attritional", "FREQUENCY_AVERAGE_ATTRITIONAL", [
             frequencyBase: FrequencyBase.ABSOLUTE,
-            frequencyDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
+            frequencyDistribution: FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, ["constant": 0d]),
             frequencyModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
             claimsSizeBase: ExposureBase.ABSOLUTE,
             claimsSizeDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
@@ -46,7 +48,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                     Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                     ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
             frequencyBase: FrequencyBase.ABSOLUTE,
-            frequencyDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
+            frequencyDistribution: FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, ["constant": 0d]),
             frequencyModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
             claimsSizeBase: ExposureBase.ABSOLUTE,
             claimsSizeDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
@@ -57,7 +59,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                     Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                     ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
             frequencyBase: FrequencyBase.ABSOLUTE,
-            frequencyDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
+            frequencyDistribution: FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, ["constant": 0d]),
             frequencyModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
             claimsSizeBase: ExposureBase.ABSOLUTE,
             claimsSizeDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
@@ -126,7 +128,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
             case ClaimsGeneratorType.FREQUENCY_AVERAGE_ATTRITIONAL:
                 claimsGenerator = new FrequencyAverageAttritionalClaimsGeneratorStrategy(
                         frequencyBase: (FrequencyBase) parameters.get("frequencyBase"),
-                        frequencyDistribution: (RandomDistribution) parameters.get("frequencyDistribution"),
+                        frequencyDistribution: (RandomFrequencyDistribution) parameters.get("frequencyDistribution"),
                         frequencyModification: (DistributionModified) parameters.get("frequencyModification"),
                         claimsSizeBase: (ExposureBase) parameters.get("claimsSizeBase"),
                         claimsSizeDistribution: (RandomDistribution) parameters.get("claimsSizeDistribution"),
@@ -136,7 +138,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                 claimsGenerator = new FrequencySeverityClaimsGeneratorStrategy(
                         frequencyIndices: (ConstrainedMultiDimensionalParameter) parameters.get("frequencyIndices"),
                         frequencyBase: (FrequencyBase) parameters.get("frequencyBase"),
-                        frequencyDistribution: (RandomDistribution) parameters.get("frequencyDistribution"),
+                        frequencyDistribution: (RandomFrequencyDistribution) parameters.get("frequencyDistribution"),
                         frequencyModification: (DistributionModified) parameters.get("frequencyModification"),
                         claimsSizeBase: (ExposureBase) parameters.get("claimsSizeBase"),
                         claimsSizeDistribution: (RandomDistribution) parameters.get("claimsSizeDistribution"),
@@ -147,7 +149,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                 claimsGenerator = new OccurrenceFrequencySeverityClaimsGeneratorStrategy(
                         frequencyIndices: (ConstrainedMultiDimensionalParameter) parameters.get("frequencyIndices"),
                         frequencyBase: (FrequencyBase) parameters.get("frequencyBase"),
-                        frequencyDistribution: (RandomDistribution) parameters.get("frequencyDistribution"),
+                        frequencyDistribution: (RandomFrequencyDistribution) parameters.get("frequencyDistribution"),
                         frequencyModification: (DistributionModified) parameters.get("frequencyModification"),
                         claimsSizeBase: (ExposureBase) parameters.get("claimsSizeBase"),
                         claimsSizeDistribution: (RandomDistribution) parameters.get("claimsSizeDistribution"),

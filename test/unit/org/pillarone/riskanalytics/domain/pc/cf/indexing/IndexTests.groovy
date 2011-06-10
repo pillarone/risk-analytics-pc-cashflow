@@ -25,20 +25,6 @@ class IndexTests extends GroovyTestCase {
     DateTime date20050421 = new DateTime(2005, 4, 21, 0, 0, 0, 0)
     DateTime date20110101 = new DateTime(2011, 1, 1, 0, 0, 0, 0)
 
-    EventSeverity severity1
-    EventSeverity severity2
-    EventSeverity severity3
-    List<String> targets
-    List<EventSeverity> severities
-
-    void setUp() {
-        severity1 = new EventSeverity(value: 0.8, event: new EventPacket(new DateTime(2011, 1, 2, 0, 0, 0, 0)))
-        severity2 = new EventSeverity(value: 0.9, event: new EventPacket(new DateTime(2011, 2, 2, 0, 0, 0, 0)))
-        severity3 = new EventSeverity(value: 0.95, event: new EventPacket(new DateTime(2011, 3, 2, 0, 0, 0, 0)))
-        targets = new ArrayList<String>(["motor hull", "hail", "index"])
-        severities = new ArrayList<EventSeverity>([severity1, severity2, severity3])
-    }
-
     void testTrivialIndex() {
         Index index = new Index(parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.NONE, [:]))
         index.doCalculation()
@@ -78,6 +64,12 @@ class IndexTests extends GroovyTestCase {
     }
 
     void testStochasticIndexSystematicSeverities() {
+
+        EventSeverity severity1 = new EventSeverity(value: 0.8, event: new EventPacket(new DateTime(2011, 1, 2, 0, 0, 0, 0)))
+        EventSeverity severity2 = new EventSeverity(value: 0.9, event: new EventPacket(new DateTime(2011, 2, 2, 0, 0, 0, 0)))
+        EventSeverity severity3 = new EventSeverity(value: 0.95, event: new EventPacket(new DateTime(2011, 3, 2, 0, 0, 0, 0)))
+        List<String> targets = new ArrayList<String>(["motor hull", "hail", "index"])
+        List<EventSeverity> severities = new ArrayList<EventSeverity>([severity1, severity2, severity3])
 
         Index index = new Index(name: "index", parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.STOCHASTIC,
                 [startDate: date20110101,

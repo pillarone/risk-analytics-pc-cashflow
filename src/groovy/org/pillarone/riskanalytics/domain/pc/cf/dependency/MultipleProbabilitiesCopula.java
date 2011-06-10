@@ -6,8 +6,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorU
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.GeneratorCachingComponent;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
-import org.pillarone.riskanalytics.domain.utils.math.copula.CopulaType;
 import org.pillarone.riskanalytics.domain.utils.math.copula.ICopulaStrategy;
+import org.pillarone.riskanalytics.domain.utils.math.copula.PerilCopulaType;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.*;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 
@@ -19,8 +19,8 @@ import java.util.List;
  */
 public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
 
-    private RandomDistribution parmFrequencyDistribution = FrequencyDistributionType.getDefault();
-    private ICopulaStrategy parmCopulaStrategy = CopulaType.getDefault();
+    private RandomFrequencyDistribution parmFrequencyDistribution = FrequencyDistributionType.getDefault();
+    private ICopulaStrategy parmCopulaStrategy = PerilCopulaType.getDefault();
 
     private DistributionModified modifier = DistributionModifier.getDefault();
     private IRandomNumberGenerator generator;
@@ -29,6 +29,7 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
     private PacketList<EventDependenceStream> outEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
     private PacketList<SystematicFrequencyPacket> outEventFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket.class);
 
+    private SystematicFrequencyPacket cachedSystematicFrequencyPacket;
     // todo(jwa): old stuff, replace with new validation concept if the error still occurs
     public void validateParameterization() {
         if (parmFrequencyDistribution == null) {
@@ -39,7 +40,8 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
 
     public void doCalculation() {
 
-        buildEventFrequencyPacket();
+        lazyInitFrequencyPacket();
+        outEventFrequencies.add(cachedSystematicFrequencyPacket);
         setGenerator(getCachedGenerator(parmFrequencyDistribution, modifier));
         int frequency = getGenerator().nextValue().intValue();
 
@@ -50,12 +52,12 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
         }
     }
 
-    private void buildEventFrequencyPacket() {
-        // todo(jwa): cache packet as always the same content is produced!
-        SystematicFrequencyPacket packet = new SystematicFrequencyPacket();
-        packet.setFrequencyDistribution(parmFrequencyDistribution);
-        packet.setTargets(parmCopulaStrategy.getTargetNames());
-        outEventFrequencies.add(packet);
+    private void lazyInitFrequencyPacket(){
+        if (cachedSystematicFrequencyPacket == null){
+            cachedSystematicFrequencyPacket = new SystematicFrequencyPacket();
+            cachedSystematicFrequencyPacket.setFrequencyDistribution(parmFrequencyDistribution);
+            cachedSystematicFrequencyPacket.setTargets(parmCopulaStrategy.getTargetNames());
+        }
     }
 
     private List<EventSeverity> buildEventSeverities(EventPacket event) {
@@ -78,11 +80,11 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
         this.modifier = modifier;
     }
 
-    public RandomDistribution getParmFrequencyDistribution() {
+    public RandomFrequencyDistribution getParmFrequencyDistribution() {
         return parmFrequencyDistribution;
     }
 
-    public void setParmFrequencyDistribution(RandomDistribution parmDistribution) {
+    public void setParmFrequencyDistribution(RandomFrequencyDistribution parmDistribution) {
         this.parmFrequencyDistribution = parmDistribution;
     }
 

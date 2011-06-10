@@ -24,6 +24,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.utils.math.copula.ICorrelationMarker;
+import org.pillarone.riskanalytics.domain.utils.math.copula.IPerilMarker;
 
 import java.util.*;
 

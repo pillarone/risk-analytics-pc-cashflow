@@ -5,15 +5,16 @@ import org.joda.time.Days;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IPerilMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
+import org.pillarone.riskanalytics.domain.utils.math.copula.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionUtils;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionUtils;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomFrequencyDistribution;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 import org.pillarone.riskanalytics.domain.utils.math.randomnumber.UniformIntList;
@@ -116,17 +117,17 @@ public class ClaimsGeneratorUtils {
         return events;
     }
 
-    public static RandomDistribution extractDistribution(List<SystematicFrequencyPacket> distributions, IPerilMarker filterCriteria) {
-        List<RandomDistribution> filteredDistributions = new ArrayList<RandomDistribution>();
+    public static RandomFrequencyDistribution extractFrequencyDistribution(List<SystematicFrequencyPacket> distributions, IPerilMarker filterCriteria) {
+        List<RandomFrequencyDistribution> filteredDistributions = new ArrayList<RandomFrequencyDistribution>();
         for (SystematicFrequencyPacket distribution : distributions) {
             if (distribution.getTargets().contains(filterCriteria.getNormalizedName())) {
                 filteredDistributions.add(distribution.getFrequencyDistribution());
             }
         }
         if (filteredDistributions.size() == 0) return null;
-        RandomDistribution distribution = filteredDistributions.get(0);
+        RandomFrequencyDistribution distribution = filteredDistributions.get(0);
         for (int i = 1; i < filteredDistributions.size(); i++) {
-            distribution = DistributionUtils.getSumOfDistributions(distribution, filteredDistributions.get(i));
+            distribution = FrequencyDistributionUtils.getSumOfDistributions(distribution, filteredDistributions.get(i));
         }
         return distribution;
     }
