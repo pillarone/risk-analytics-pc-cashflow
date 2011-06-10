@@ -16,6 +16,8 @@ import org.pillarone.riskanalytics.domain.utils.constraint.DateTimeConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.claim.PerilPortion
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingPortion
 import org.pillarone.riskanalytics.core.util.ResourceBundleRegistry
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.RecoveryPatternStrategyValidator
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.PatternStrategyValidator
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version

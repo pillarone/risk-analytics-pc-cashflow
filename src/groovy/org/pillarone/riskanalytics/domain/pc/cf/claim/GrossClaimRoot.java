@@ -100,7 +100,7 @@ public final class GrossClaimRoot implements IClaimRoot {
             }
         }
         else {
-            ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this);
+            ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, periodCounter);
             currentPeriodClaims.add(cashflowPacket);
         }
         return currentPeriodClaims;

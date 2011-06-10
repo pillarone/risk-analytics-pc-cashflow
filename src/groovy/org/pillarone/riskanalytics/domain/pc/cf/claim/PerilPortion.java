@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
 
 import org.pillarone.riskanalytics.core.parameterization.IMultiDimensionalConstraints;
+import org.pillarone.riskanalytics.domain.utils.math.copula.IPerilMarker;
 
 /**
  * @author fouad.jaada@intuitive-collaboration.com
