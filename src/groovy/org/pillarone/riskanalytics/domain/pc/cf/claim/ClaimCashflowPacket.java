@@ -25,6 +25,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     private final IClaimRoot baseClaim;
 
+    private double ultimate;
+    private double nominalUltimate;
     private double paidIncremental;
     private double paidCumulated;
     private double reportedIncremental;
@@ -37,6 +39,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     /**
      * true only if this packet belongs to the occurrence period of the claim
      */
+    @Deprecated
     private boolean hasUltimate;
 
     private IPerilMarker peril;
@@ -52,6 +55,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public ClaimCashflowPacket(IClaimRoot baseClaim) {
         this.baseClaim = baseClaim;
         hasUltimate = true;
+        ultimate = baseClaim.getUltimate();
+        nominalUltimate = ultimate;
         this.paidCumulated = ultimate();
         this.paidIncremental = ultimate();
         this.reportedCumulated = ultimate();
@@ -68,10 +73,10 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         updatePeriod(periodCounter);
     }
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, double paidIncremental, double paidCumulated, double reserves,
-                               DateTime updateDate, IPeriodCounter periodCounter, boolean hasUltimate) {
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated, double reserves,
+                               DateTime updateDate, IPeriodCounter periodCounter) {
         this(baseClaim);
-        this.hasUltimate = hasUltimate;
+        this.ultimate = ultimate;
         this.paidCumulated = paidCumulated;
         this.paidIncremental = paidIncremental;
         this.reportedCumulated = baseClaim.getUltimate();
@@ -82,10 +87,11 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         setDate(updateDate);
     }
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, double paidIncremental, double paidCumulated,
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated,
                                double reportedIncremental, double reportedCumulated, double reserves,
-                               DateTime updateDate, IPeriodCounter periodCounter, boolean hasUltimate) {
+                               DateTime updateDate, IPeriodCounter periodCounter) {
         this(baseClaim);
+        this.ultimate = ultimate;
         this.paidCumulated = paidCumulated;
         this.paidIncremental = paidIncremental;
         this.reportedCumulated = reportedCumulated;
@@ -94,13 +100,13 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.updateDate = updateDate;
         updatePeriod(periodCounter);
         setDate(updateDate);
-        this.hasUltimate = hasUltimate;
     }
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, double paidIncremental, double paidCumulated,
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated,
                                double reportedIncremental, double reportedCumulated, double reserves,
-                               DateTime updateDate, int updatePeriod, boolean hasUltimate) {
+                               DateTime updateDate, int updatePeriod) {
         this(baseClaim);
+        this.ultimate = ultimate;
         this.paidCumulated = paidCumulated;
         this.paidIncremental = paidIncremental;
         this.reportedCumulated = reportedCumulated;
@@ -109,29 +115,6 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.updateDate = updateDate;
         this.updatePeriod = updatePeriod;
         setDate(updateDate);
-        this.hasUltimate = hasUltimate;
-    }
-
-    public ClaimCashflowPacket withBaseClaimAndShare(IClaimRoot baseClaim, double scaleFactorReported, double scaleFactorPaid, boolean hasUltimate) {
-        ClaimCashflowPacket packet = new ClaimCashflowPacket(baseClaim);
-        packet.paidCumulated = paidCumulated * scaleFactorPaid;
-        packet.paidIncremental = paidIncremental * scaleFactorPaid;
-        packet.reportedCumulated = reportedCumulated * scaleFactorReported;
-        packet.reportedIncremental = reportedIncremental * scaleFactorReported;
-        packet.reserves = baseClaim.getUltimate() - packet.getPaidCumulated();
-        packet.updateDate = updateDate;
-        packet.updatePeriod = updatePeriod;
-        packet.setDate(getDate());
-        packet.hasUltimate = hasUltimate;
-        packet.avoidNegativeZero();
-        return packet;
-    }
-
-    private void avoidNegativeZero() {
-        paidCumulated = paidCumulated == -0 ? 0 : paidCumulated;
-        paidIncremental = paidIncremental == -0 ? 0 : paidIncremental;
-        reportedCumulated = reportedCumulated == -0 ? 0 : reportedCumulated;
-        reportedIncremental = reportedIncremental == -0 ? 0 : reportedIncremental;
     }
 
     public ClaimCashflowPacket withScale(double scaleFactor) {
@@ -189,11 +172,15 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      * @return 0 except for the occurrence period, nominal ultimate without any index applied
      */
     public double ultimate() {
-        return hasUltimate ? baseClaim.getUltimate() : 0d;
+        return ultimate;
+    }
+
+    public double nominalUltimate() {
+        return nominalUltimate;
     }
 
     public double developmentResult() {
-        return baseClaim.hasTrivialPayout() ? 0 : developedUltimate() - baseClaim.getUltimate();
+        return baseClaim.hasTrivialPayout() ? 0 : developedUltimate() - nominalUltimate;
     }
 
     /**
@@ -262,7 +249,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     @Override
     public Map<String, Number> getValuesToSave() throws IllegalAccessException {
         Map<String, Number> valuesToSave = new HashMap<String, Number>();
-        valuesToSave.put(ULTIMATE, ultimate());    // this and missing default c'tor (final!) leads to failure during result tree building
+        valuesToSave.put(ULTIMATE, ultimate);    // this and missing default c'tor (final!) leads to failure during result tree building
         valuesToSave.put(PAID, paidIncremental);
         valuesToSave.put(RESERVES, reserved());
         valuesToSave.put(REPORTED, reportedIncremental);
@@ -286,7 +273,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public String toString() {
         String separator = ", ";
         StringBuilder result = new StringBuilder();
-        result.append(baseClaim.getUltimate());
+        result.append(ultimate);
         result.append(separator);
         result.append(reportedIncremental);
         result.append(separator);
@@ -332,41 +319,10 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return reportedCumulated;
     }
 
-    /**
-     * todo(sku): needs proper testing especially for calculated properties, furthermore a simpler CCP c'tor would be fine
-     * @param cededClaim
-     * @return
-     */
-    public ClaimCashflowPacket getNetClaim(ClaimCashflowPacket cededClaim) {
-        // todo(sku) refactor by adding a safe ultimate setter method
-        ClaimRoot netRootClaim = new ClaimRoot(ultimate() + cededClaim.ultimate(), getBaseClaim().getClaimType(),
-                getBaseClaim().getExposureStartDate(), getBaseClaim().getOccurrenceDate(), getBaseClaim().getEvent());
-        IClaimRoot netBaseClaim = new GrossClaimRoot(netRootClaim, null, null);
-        ClaimCashflowPacket netClaim = new ClaimCashflowPacket(netBaseClaim, this, cededClaim);
-        ClaimUtils.applyMarkers(cededClaim, netClaim);
-        return netClaim;
-    }
-
-    /**
-     * Used in order to construct a net claim based on a gross and ceded claim.
-     * @param baseClaim
-     * @param grossClaim
-     * @param cededClaim
-     */
-    public ClaimCashflowPacket(IClaimRoot baseClaim, ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim) {
-        this(baseClaim);
-        paidIncremental = grossClaim.paidIncremental + cededClaim.paidIncremental;
-        paidCumulated = grossClaim.paidCumulated + cededClaim.paidCumulated;
-        reportedIncremental = grossClaim.reportedIncremental + cededClaim.reportedIncremental;
-        reportedCumulated = grossClaim.reportedCumulated + cededClaim.reportedCumulated;
-        reserves = grossClaim.reserves + cededClaim.reserves;
-        updateDate = cededClaim.updateDate;
-        updatePeriod = cededClaim.updatePeriod;
-        setDate(updateDate);
-        hasUltimate = grossClaim.hasUltimate;
-    }
-
     public Integer getUpdatePeriod() {
         return updatePeriod;
     }
+
+    @Deprecated
+    public boolean hasUltimate() { return hasUltimate; }
 }

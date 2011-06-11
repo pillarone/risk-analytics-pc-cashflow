@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional;
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -22,8 +23,7 @@ public class QuotaShareContract extends AbstractProportionalReinsuranceContract 
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
-        IClaimRoot cededBaseClaim = storage.lazyInitCededClaimRoot(-quotaShare);
-        ClaimCashflowPacket cededClaim = grossClaim.withBaseClaimAndShare(cededBaseClaim, -quotaShare, -quotaShare, grossClaim.ultimate() != 0);
+        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, -quotaShare, -quotaShare, -quotaShare);
         add(grossClaim, cededClaim);
         return cededClaim;
     }

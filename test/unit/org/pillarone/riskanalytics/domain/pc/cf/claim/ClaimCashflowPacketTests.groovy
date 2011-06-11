@@ -34,11 +34,12 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
     DateTime date20110701 = new DateTime(2011,7,1,0,0,0,0)
     DateTime date20111001 = new DateTime(2011,10,1,0,0,0,0)
 
-    static ClaimCashflowPacket getClaimCashflowPacket(double ultimate, double incrementalPaid, IReinsuranceContractMarker contract) {
+    static ClaimCashflowPacket getClaimCashflowPacket(double ultimate, double incrementalPaid,
+                                                      IReinsuranceContractMarker contract, boolean hasUltimate = false) {
         ClaimRoot baseClaim = new ClaimRoot(ultimate, ClaimType.ATTRITIONAL, null, null)
         DateTime updateDate = new DateTime(2011,1,1,0,0,0,0)
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(updateDate, 1)
-        ClaimCashflowPacket claim = new ClaimCashflowPacket(baseClaim, incrementalPaid, 0, 0, 0, 0, updateDate, periodCounter, false)
+        ClaimCashflowPacket claim = new ClaimCashflowPacket(baseClaim, ultimate, incrementalPaid, 0, 0, 0, 0, updateDate, periodCounter)
         if (contract != null) {
             claim.setMarker contract
         }

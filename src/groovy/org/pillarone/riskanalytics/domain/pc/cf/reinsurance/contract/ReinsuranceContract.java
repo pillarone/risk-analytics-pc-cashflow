@@ -197,7 +197,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
                 outClaimsGross.add(grossClaim.getGrossClaim());
             }
             if (isSenderWired(outClaimsNet)) {
-                outClaimsNet.add(grossClaim.getGrossClaim().getNetClaim(cededClaim));
+                ClaimCashflowPacket netClaim = ClaimUtils.getNetClaim(grossClaim.getGrossClaim(), cededClaim);
+                outClaimsNet.add(netClaim);
             }
         }
     }

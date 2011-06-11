@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproport
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -73,10 +74,11 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
+        double cededFactorUltimate = 0;
         IClaimRoot cededBaseClaim = storage.getCededClaimRoot();
         if (cededBaseClaim == null) {
             // first time this gross claim is treated by this contract
-            double cededFactorUltimate = cededFactor(grossClaim.ultimate(), grossClaim.ultimate(),
+            cededFactorUltimate = cededFactor(grossClaim.ultimate(), grossClaim.ultimate(),
                                                      BasedOnClaimProperty.ULTIMATE, storage);
             cededBaseClaim = storage.lazyInitCededClaimRoot(cededFactorUltimate);
         }
@@ -87,8 +89,7 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
         double cededFactorPaid = cededFactor(grossClaim.getPaidCumulated(), grossClaim.getPaidIncremental(),
                 BasedOnClaimProperty.PAID, storage);
 
-        ClaimCashflowPacket cededClaim = grossClaim.withBaseClaimAndShare(cededBaseClaim, cededFactorReported,
-                cededFactorPaid, grossClaim.ultimate() != 0);
+        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, cededFactorUltimate , cededFactorReported, cededFactorPaid);
         add(grossClaim, cededClaim);
         return cededClaim;
     }

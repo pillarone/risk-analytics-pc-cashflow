@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional;
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
@@ -26,19 +27,19 @@ public class QuotaShareContractAAL extends QuotaShareContract {
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
+        double quotaShareUltimate = 0;
         IClaimRoot cededBaseClaim;
         if (storage.hasReferenceCeded()) {
             cededBaseClaim = storage.getCededClaimRoot();
         }
         else {
-            double quotaShareUltimate = adjustedQuote(grossClaim.ultimate(), annualAggregateLimitUltimate);
+            quotaShareUltimate = adjustedQuote(grossClaim.ultimate(), annualAggregateLimitUltimate);
             cededBaseClaim = storage.lazyInitCededClaimRoot(quotaShareUltimate);
         }
 
         double quotaShareReported = adjustedQuote(grossClaim.getReportedIncremental(), annualAggregateLimitReported);
         double quotaSharePaid = adjustedQuote(grossClaim.getPaidIncremental(), annualAggregateLimitPaid);
-        ClaimCashflowPacket cededClaim = grossClaim.withBaseClaimAndShare(cededBaseClaim, quotaShareReported,
-                quotaSharePaid, grossClaim.ultimate() != 0);
+        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, quotaShareUltimate, quotaShareReported, quotaSharePaid);
         add(grossClaim, cededClaim);
         return cededClaim;
     }

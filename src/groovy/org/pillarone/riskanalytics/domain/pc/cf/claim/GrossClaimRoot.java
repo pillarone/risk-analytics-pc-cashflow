@@ -83,15 +83,15 @@ public final class GrossClaimRoot implements IClaimRoot {
                 paidCumulatedIncludingAppliedFactors = paidCumulated;
                 ClaimCashflowPacket cashflowPacket;
                 if (!hasIBNR()) {
-                    cashflowPacket = new ClaimCashflowPacket(this, paidIncremental, paidCumulated,
-                            reserves, payoutDate, periodCounter, hasUltimate);
+                    cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncremental, paidCumulated,
+                            reserves, payoutDate, periodCounter);
                 }
                 else {
                     double reportedIncremental = reportedIncremental(ultimate, factor, reports, i);
                     double reportedCumulated = reportedCumulated(ultimate, paidCumulated, factor, payoutCumulatedFactor, reports, i);
                     reportedCumulatedIncludingAppliedFactors = reportedCumulated;
-                    cashflowPacket = new ClaimCashflowPacket(this, paidIncremental, paidCumulated,
-                            reportedIncremental, reportedCumulated, reserves, payoutDate, periodCounter, hasUltimate);
+                    cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncremental, paidCumulated,
+                            reportedIncremental, reportedCumulated, reserves, payoutDate, periodCounter);
                 }
                 childCounter++;
                 hasUltimate = false;    // a period may contain several payouts and only the first should contain the ultimate

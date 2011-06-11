@@ -13,11 +13,12 @@ public class ClaimUtils {
     /**
      * Adds up all claims and builds a corresponding new base claim.
      * @param claims
-     * @param sameBaseClaim
-     * @return null if claims is empty
+     * @param sameBaseClaim: Marker interface of returned packet are all null if false
+     * @return null if claims is empty. New object if claims.size() > 1
      */
     public static ClaimCashflowPacket sum(List<ClaimCashflowPacket> claims, boolean sameBaseClaim) {
         if (claims.isEmpty()) return null;
+        if (claims.size() == 1) return claims.get(0);
         if (!sameBaseClaim) {
             throw new NotImplementedException("method is currently implemented for same base claim only");
         }
@@ -39,20 +40,74 @@ public class ClaimUtils {
         ClaimRoot baseClaim = new ClaimRoot(ultimate, claims.get(0).getBaseClaim());
         DateTime updateDate = claims.get(0).getUpdateDate();
         int updatePeriod = claims.get(0).getUpdatePeriod();
-        return new ClaimCashflowPacket(baseClaim, paidIncremental, paidCumulated,
-                reportedIncremental, reportedCumulated, reserves, updateDate, updatePeriod, hasUltimate);
+        ClaimCashflowPacket summedClaims = new ClaimCashflowPacket(baseClaim, ultimate, paidIncremental, paidCumulated,
+                reportedIncremental, reportedCumulated, reserves, updateDate, updatePeriod);
+        applyMarkers(claims.get(0), summedClaims);
+        return summedClaims;
     }
 
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor) {
         if (notTrivialValues(claim)) {
             ClaimRoot baseClaim = new ClaimRoot(claim.ultimate() * factor, claim.getBaseClaim());
-            ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(baseClaim, claim.getPaidIncremental() * factor, claim.getPaidCumulated() * factor,
+            ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(baseClaim, baseClaim.getUltimate(),
+                    claim.getPaidIncremental() * factor, claim.getPaidCumulated() * factor,
                     claim.getReportedIncremental() * factor, claim.getReportedCumulated() * factor, claim.reserved() * factor,
-                    claim.getUpdateDate(), claim.getUpdatePeriod(), claim.ultimate() > 0);
+                    claim.getUpdateDate(), claim.getUpdatePeriod());
             applyMarkers(claim, scaledClaim);
             return scaledClaim;
         }
         return claim;
+    }
+
+    /**
+     * Scales all figures either by the reported or paid scale factor. No distinction between incremental and cumulated
+     * claim properties.
+     * @param grossClaim
+     * @param scaleFactorUltimate
+     * @param scaleFactorReported
+     * @param scaleFactorPaid
+     * @return
+     */
+    public static ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, double scaleFactorUltimate,
+                                                    double scaleFactorReported, double scaleFactorPaid) {
+        if (scaleFactorReported == -0) { scaleFactorReported = 0; }
+        if (scaleFactorPaid == -0) { scaleFactorPaid = 0; }
+        ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(
+                grossClaim.getBaseClaim(),
+                avoidNegativeZero(grossClaim.ultimate() * scaleFactorUltimate),
+                avoidNegativeZero(grossClaim.getPaidIncremental() * scaleFactorPaid),
+                avoidNegativeZero(grossClaim.getPaidCumulated() * scaleFactorPaid),
+                avoidNegativeZero(grossClaim.getReportedIncremental() * scaleFactorReported),
+                avoidNegativeZero(grossClaim.getReportedCumulated() * scaleFactorReported),
+                grossClaim.nominalUltimate() - grossClaim.getPaidCumulated() * scaleFactorPaid,
+                grossClaim.getUpdateDate(),
+                grossClaim.getUpdatePeriod());
+        applyMarkers(grossClaim, cededClaim);
+        return cededClaim;
+    }
+
+    public static double avoidNegativeZero(double value) {
+        return value == -0 ? 0 : value;
+    }
+
+    /**
+     * @param grossClaim
+     * @param cededClaim
+     * @return
+     */
+    public static ClaimCashflowPacket getNetClaim(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim) {
+        ClaimCashflowPacket netClaim = new ClaimCashflowPacket(
+                grossClaim.getBaseClaim(),
+                grossClaim.ultimate() + cededClaim.ultimate(),
+                grossClaim.getPaidIncremental() + cededClaim.getPaidIncremental(),
+                grossClaim.getPaidCumulated() + cededClaim.getPaidCumulated(),
+                grossClaim.getReportedIncremental() + cededClaim.getReportedIncremental(),
+                grossClaim.getReportedCumulated() + cededClaim.getReportedCumulated(),
+                grossClaim.nominalUltimate() + cededClaim.nominalUltimate(),
+                grossClaim.getUpdateDate(),
+                grossClaim.getUpdatePeriod());
+        applyMarkers(cededClaim, netClaim);
+        return netClaim;
     }
 
     public static boolean notTrivialValues(ClaimCashflowPacket claim) {
