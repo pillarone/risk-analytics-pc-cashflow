@@ -10,9 +10,11 @@ import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingPortion;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
-import org.pillarone.riskanalytics.domain.utils.math.copula.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion;
+import org.pillarone.riskanalytics.domain.utils.constraint.UnderwritingPortion;
+import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
 import java.util.*;
 

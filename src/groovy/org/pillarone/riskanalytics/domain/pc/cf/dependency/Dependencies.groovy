@@ -4,7 +4,7 @@ import org.pillarone.riskanalytics.core.components.DynamicComposedComponent
 import org.pillarone.riskanalytics.core.packets.PacketList
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
 import org.pillarone.riskanalytics.domain.utils.math.copula.CopulaType
-import org.pillarone.riskanalytics.domain.utils.math.copula.ICorrelationMarker
+import org.pillarone.riskanalytics.domain.utils.marker.ICorrelationMarker
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

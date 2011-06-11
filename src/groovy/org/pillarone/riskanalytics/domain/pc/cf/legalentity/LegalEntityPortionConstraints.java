@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class LegalEntityPortionConstraints implements IMultiDimensionalConstraints, IUnityPortion {
 
-    public static final String IDENTIFIER = "COMPANY_PORTION";
+    public static final String IDENTIFIER = "LEGAL_ENTITY_PORTION";
 
     public static int COMPANY_COLUMN_INDEX = 0;
     public static int PORTION_COLUMN_INDEX = 1;

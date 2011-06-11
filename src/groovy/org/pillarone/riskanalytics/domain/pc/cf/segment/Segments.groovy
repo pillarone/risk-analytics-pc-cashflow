@@ -9,8 +9,8 @@ import org.pillarone.riskanalytics.core.components.MultiPhaseComponent
 import org.pillarone.riskanalytics.core.components.Component
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
-import org.pillarone.riskanalytics.domain.pc.cf.claim.PerilPortion
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingPortion
+import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion
+import org.pillarone.riskanalytics.domain.utils.constraint.UnderwritingPortion
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

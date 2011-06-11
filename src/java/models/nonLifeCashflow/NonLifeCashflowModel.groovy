@@ -1,28 +1,30 @@
 package models.nonLifeCashflow
 
-import org.joda.time.DateTime
-import org.joda.time.Period
 import org.pillarone.riskanalytics.core.model.StochasticModel
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.LimitedContinuousPeriodCounter
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerators
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingSegments
-import org.pillarone.riskanalytics.domain.pc.cf.global.GlobalParameters
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.Indices
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.Pattern
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.Patterns
+
+
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+import org.joda.time.DateTime
+import org.joda.time.Period
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.Dependencies
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventGenerators
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
-import org.apache.commons.logging.LogFactory
-import org.apache.commons.logging.Log
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingSegments
+import org.pillarone.riskanalytics.domain.pc.cf.global.GlobalParameters
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Indices
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ReinsuranceContracts
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPremiumPatternMarker
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
+import org.pillarone.riskanalytics.domain.pc.cf.segment.Segments
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.Patterns
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerators
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.Pattern
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PayoutReportingCombinedPattern
-import org.pillarone.riskanalytics.domain.pc.cf.segment.Segments
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPremiumPatternMarker
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

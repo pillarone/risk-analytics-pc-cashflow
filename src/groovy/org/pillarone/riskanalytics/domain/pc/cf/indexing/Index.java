@@ -4,7 +4,7 @@ import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
-import org.pillarone.riskanalytics.domain.utils.math.copula.ICorrelationMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.ICorrelationMarker;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,6 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator
 
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.IUnderwritingInfoMarker
+import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints

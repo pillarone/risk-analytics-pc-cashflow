@@ -10,7 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPa
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
-import org.pillarone.riskanalytics.domain.utils.math.copula.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionUtils;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;

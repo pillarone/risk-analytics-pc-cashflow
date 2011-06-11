@@ -7,7 +7,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
-import org.pillarone.riskanalytics.domain.utils.math.copula.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 
 import java.util.List;
 

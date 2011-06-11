@@ -20,6 +20,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints;
+import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker;
 
 import java.util.ArrayList;
 import java.util.Arrays;

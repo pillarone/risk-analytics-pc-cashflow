@@ -5,8 +5,8 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.segment.SegmentPortion;
+import org.pillarone.riskanalytics.domain.utils.constraint.SegmentPortion;
+import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
 import java.util.Arrays;
 import java.util.HashMap;

@@ -15,7 +15,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.IRiskAllocatorS
 import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.RiskAllocatorType;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.IUnderwritingInfoMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
@@ -23,8 +23,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
-import org.pillarone.riskanalytics.domain.utils.math.copula.ICorrelationMarker;
-import org.pillarone.riskanalytics.domain.utils.math.copula.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.ICorrelationMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 
 import java.util.*;
 

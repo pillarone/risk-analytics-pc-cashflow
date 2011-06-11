@@ -2,7 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.exposure;
 
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 import org.pillarone.riskanalytics.domain.utils.PacketUtilities;
 
 import java.util.Arrays;

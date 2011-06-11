@@ -3,7 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
 import java.util.HashMap;
 import java.util.List;

@@ -6,15 +6,12 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.FrequencyIndexSelection
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.PremiumIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.PolicyIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.segment.SegmentPortion
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.DeterministicIndexTableConstraints
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.PMLClaimsGeneratorStrategyValidator
 import org.pillarone.riskanalytics.core.parameterization.validation.ValidatorRegistry
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
 import org.pillarone.riskanalytics.domain.utils.constraint.DateTimeConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.claim.PerilPortion
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingPortion
 import org.pillarone.riskanalytics.core.util.ResourceBundleRegistry
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.RecoveryPatternStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.PatternStrategyValidator
@@ -64,9 +61,6 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new SeverityIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
         ConstraintsFactory.registerConstraint(new PatternTableConstraints())
-        ConstraintsFactory.registerConstraint(new SegmentPortion())
-        ConstraintsFactory.registerConstraint(new PerilPortion())
-        ConstraintsFactory.registerConstraint(new UnderwritingPortion())
         ConstraintsFactory.registerConstraint(new DoubleConstraints())
         ConstraintsFactory.registerConstraint(new DateTimeConstraints())
 

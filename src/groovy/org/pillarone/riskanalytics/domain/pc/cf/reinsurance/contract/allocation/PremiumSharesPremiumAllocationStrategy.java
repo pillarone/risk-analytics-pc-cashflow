@@ -2,7 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.segment.ISegmentMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
 import java.util.Collections;
 import java.util.List;
