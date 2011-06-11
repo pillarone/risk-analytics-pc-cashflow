@@ -1,11 +1,9 @@
 package org.pillarone.riskanalytics.domain.pc.cf.pattern;
 
-import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,7 +40,7 @@ public class PayoutReportingCombinedCumulativePatternStrategy
     public PatternPacket getPayoutPattern() {
         if (payoutPattern == null) {
             payoutPattern = getCumulativePattern(cumulativePattern, PayoutReportingCombinedPatternStrategyType.CUMULATIVE_PAYOUT,
-                IReportingPatternMarker.class);
+                IPayoutPatternMarker.class);
         }
         return payoutPattern;
     }
