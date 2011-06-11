@@ -1,6 +1,6 @@
-package models.nonLifeCashflow
+package models.gira
 
-model = models.nonLifeCashflow.NonLifeCashflowModel
+model = models.gira.GIRAModel
 displayName = "Single Gross Claims"
 components {
 	claimsGenerators {

@@ -1,6 +1,6 @@
-package models.nonLifeCashflow
+package models.gira
 
-model=models.nonLifeCashflow.NonLifeCashflowModel
+model=models.gira.GIRAModel
 periodCount=1
 displayName='Developed Claims'
 applicationVersion='1.4-ALPHA-1.5'

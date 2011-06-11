@@ -1,10 +1,10 @@
-package models.nonLifeCashflow
+package models.gira
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 
-model = NonLifeCashflowModel
+model = GIRAModel
 periodCount = 1
 
 company {

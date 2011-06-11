@@ -1,18 +1,20 @@
-import models.nonLifeCashflow.NonLifeCashflowModel
+
+
+import models.gira.GIRAModel
 import org.pillarone.riskanalytics.core.simulation.engine.ModelTest
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class NonLifeCashflowModelTests extends ModelTest {
+class GIRAPtfModelTests extends ModelTest {
 
     Class getModelClass() {
-        NonLifeCashflowModel
+        GIRAModel
     }
 
     @Override
     String getResultConfigurationFileName() {
-        'NonLifeCashflowAggregateResultConfiguration'
+        'GIRAAggregateResultConfiguration'
     }
 
     String getResultConfigurationDisplayName() {
@@ -21,11 +23,11 @@ class NonLifeCashflowModelTests extends ModelTest {
 
     @Override
     String getParameterFileName() {
-        'NonLifeCashflowParameters'
+        'GIRAPtfParameters'
     }
 
     String getParameterDisplayName() {
-        'Claims'
+        'Gross Portfolio'
     }
 
     protected boolean shouldCompareResults() {

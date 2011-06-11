@@ -1,4 +1,4 @@
-package models.nonLifeCashflow
+package models.gira
 
 import org.pillarone.riskanalytics.core.model.StochasticModel
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
@@ -29,9 +29,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPremiumPatternMarker
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class NonLifeCashflowModel extends StochasticModel {
+class GIRAModel extends StochasticModel {
 
-    private static Log LOG = LogFactory.getLog(NonLifeCashflowModel);
+    private static Log LOG = LogFactory.getLog(GIRAModel);
 
     GlobalParameters globalParameters
     Indices indices
