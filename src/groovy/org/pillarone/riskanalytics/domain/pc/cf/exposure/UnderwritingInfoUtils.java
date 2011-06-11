@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.exposure;
 
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
@@ -69,15 +70,50 @@ public class UnderwritingInfoUtils {
         }
         return correctMetaProperties(summedUnderwritingInfo, underwritingInfos);
     }
+
+    static public CededUnderwritingInfoPacket aggregate(List<CededUnderwritingInfoPacket> underwritingInfos) {
+        if (underwritingInfos == null || underwritingInfos.size() == 0) {
+            return null;
+        }
+        CededUnderwritingInfoPacket summedUnderwritingInfo = new CededUnderwritingInfoPacket();
+        for (CededUnderwritingInfoPacket underwritingInfo : underwritingInfos) {
+            summedUnderwritingInfo.plus(underwritingInfo);
+            summedUnderwritingInfo.setExposure(underwritingInfo.getExposure());
+        }
+        return correctMetaProperties(summedUnderwritingInfo, underwritingInfos);
+    }
     
     static public UnderwritingInfoPacket correctMetaProperties(UnderwritingInfoPacket result, List<UnderwritingInfoPacket> underwritingInfos) {
         UnderwritingInfoPacket verifiedResult = (UnderwritingInfoPacket) result.clone();
-        ISegmentMarker lob = verifiedResult.getSegment();
+        ISegmentMarker lob = verifiedResult.segment();
         IReinsuranceContractMarker reinsuranceContract = verifiedResult.getReinsuranceContract();
         boolean underwritingInfosOfDifferentLobs = lob == null;
         boolean underwritingInfosOfDifferentContracts = reinsuranceContract == null;
         for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
-            if (!underwritingInfosOfDifferentLobs && !lob.equals(underwritingInfo.getSegment())) {
+            if (!underwritingInfosOfDifferentLobs && !lob.equals(underwritingInfo.segment())) {
+                underwritingInfosOfDifferentLobs = true;
+            }
+            if (!underwritingInfosOfDifferentContracts && !reinsuranceContract.equals(underwritingInfo.getReinsuranceContract())) {
+                underwritingInfosOfDifferentContracts = true;
+            }
+        }
+        if (underwritingInfosOfDifferentLobs) {
+            verifiedResult.setSegment(null);
+        }
+        if (underwritingInfosOfDifferentContracts) {
+            verifiedResult.setReinsuranceContract(null);
+        }
+        return verifiedResult;
+    }
+
+    static public CededUnderwritingInfoPacket correctMetaProperties(CededUnderwritingInfoPacket result, List<CededUnderwritingInfoPacket> underwritingInfos) {
+        CededUnderwritingInfoPacket verifiedResult = (CededUnderwritingInfoPacket) result.clone();
+        ISegmentMarker lob = verifiedResult.segment();
+        IReinsuranceContractMarker reinsuranceContract = verifiedResult.getReinsuranceContract();
+        boolean underwritingInfosOfDifferentLobs = lob == null;
+        boolean underwritingInfosOfDifferentContracts = reinsuranceContract == null;
+        for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
+            if (!underwritingInfosOfDifferentLobs && !lob.equals(underwritingInfo.segment())) {
                 underwritingInfosOfDifferentLobs = true;
             }
             if (!underwritingInfosOfDifferentContracts && !reinsuranceContract.equals(underwritingInfo.getReinsuranceContract())) {
@@ -133,4 +169,5 @@ public class UnderwritingInfoUtils {
         }
         return policies;
     }
+
 }

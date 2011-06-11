@@ -4,6 +4,7 @@ import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 import org.pillarone.riskanalytics.domain.utils.PacketUtilities;
+import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
     protected Integer inceptionPeriod;
 
     protected UnderwritingInfoPacket original;
+    private IUnderwritingInfoMarker riskBand;
     protected ISegmentMarker segment;
     protected IReinsuranceContractMarker reinsuranceContract;
 
@@ -231,7 +233,7 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
         this.premiumPaid = premiumPaid;
     }
 
-    public ISegmentMarker getSegment() {
+    public ISegmentMarker segment() {
         return segment;
     }
 
@@ -245,5 +247,13 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
 
     public void setReinsuranceContract(IReinsuranceContractMarker reinsuranceContract) {
         this.reinsuranceContract = reinsuranceContract;
+    }
+
+    public IUnderwritingInfoMarker riskBand() {
+        return riskBand;
+    }
+
+    public void setRiskBand(IUnderwritingInfoMarker riskBand) {
+        this.riskBand = riskBand;
     }
 }

@@ -29,17 +29,17 @@ abstract public class AbstractPremiumAllocation extends AbstractParameterObject 
         else {
             Map<ISegmentMarker, Double> segmentPremium = new HashMap<ISegmentMarker, Double>();
             for (UnderwritingInfoPacket underwritingInfo : grossUnderwritingInfoPackets) {
-                Double aggregatedPremium = segmentPremium.get(underwritingInfo.getSegment());
+                Double aggregatedPremium = segmentPremium.get(underwritingInfo.segment());
                 if (aggregatedPremium == null) {
-                    segmentPremium.put(underwritingInfo.getSegment(), underwritingInfo.getPremiumWritten());
+                    segmentPremium.put(underwritingInfo.segment(), underwritingInfo.getPremiumWritten());
                 }
                 else {
-                    segmentPremium.put(underwritingInfo.getSegment(), underwritingInfo.getPremiumWritten() + aggregatedPremium);
+                    segmentPremium.put(underwritingInfo.segment(), underwritingInfo.getPremiumWritten() + aggregatedPremium);
                 }
             }
             for (UnderwritingInfoPacket underwritingInfo : grossUnderwritingInfoPackets) {
-                double premiumShareInSegment = underwritingInfo.getPremiumWritten() / segmentPremium.get(underwritingInfo.getSegment());
-                Double segmentShare = segmentShares.get(underwritingInfo.getSegment());
+                double premiumShareInSegment = underwritingInfo.getPremiumWritten() / segmentPremium.get(underwritingInfo.segment());
+                Double segmentShare = segmentShares.get(underwritingInfo.segment());
                 cededPremiumSharePerGrossUnderwritingInfo.put(underwritingInfo, premiumShareInSegment * (segmentShare == null ? 1 : segmentShare));
             }
         }

@@ -74,6 +74,7 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
         cededPacket.maxSumInsured = 0;
         cededPacket.exposure = packet.exposure;
         cededPacket.original = packet;
+        cededPacket.setRiskBand(packet.riskBand());
         cededPacket.segment = packet.segment;
         cededPacket.reinsuranceContract = contract;
         cededPacket.original = packet;

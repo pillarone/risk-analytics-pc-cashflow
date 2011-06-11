@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion;
 import org.pillarone.riskanalytics.domain.utils.constraint.UnderwritingPortion;
@@ -66,17 +67,17 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     }
 
     private void calculateNetUnderwritingInfo() {
-        Map<UnderwritingInfoPacket, CededUnderwritingInfoPacket> aggregateCededUnderwritingInfos
-                = new HashMap<UnderwritingInfoPacket, CededUnderwritingInfoPacket>();
+        ListMultimap<UnderwritingInfoPacket, CededUnderwritingInfoPacket> aggregateCededUnderwritingInfos
+                = ArrayListMultimap.create();
         if (isSenderWired(outUnderwritingInfoNet)) {
             for (CededUnderwritingInfoPacket cededUnderwritingInfo : inUnderwritingInfoCeded) {
-                UnderwritingInfoPacket aggregateCededUnderwritingInfo = aggregateCededUnderwritingInfos.get(cededUnderwritingInfo.getOriginal());
-                if (aggregateCededUnderwritingInfo == null) {
-                    aggregateCededUnderwritingInfos.put(cededUnderwritingInfo.getOriginal(), cededUnderwritingInfo);
-                }
-                else {
-                    aggregateCededUnderwritingInfo.plus(cededUnderwritingInfo);
-                }
+                aggregateCededUnderwritingInfos.put(cededUnderwritingInfo.getOriginal(), cededUnderwritingInfo);
+            }
+            for (UnderwritingInfoPacket grossUwInfo : outUnderwritingInfoGross) {
+                List<CededUnderwritingInfoPacket> cededUnderwritingInfoPackets = aggregateCededUnderwritingInfos.get(grossUwInfo);
+                CededUnderwritingInfoPacket aggregateCededUwInfo = UnderwritingInfoUtils.aggregate(cededUnderwritingInfoPackets);
+                UnderwritingInfoPacket netUwInfo = grossUwInfo.getNet(aggregateCededUwInfo, true);
+                outUnderwritingInfoNet.add(netUwInfo);
             }
         }
     }
@@ -85,25 +86,20 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         ListMultimap<IClaimRoot, ClaimCashflowPacket> aggregateCededClaimPerRoot = ArrayListMultimap.create();
         if (isSenderWired(outClaimsNet)) {
             for (ClaimCashflowPacket cededClaim : inClaimsCeded) {
-//                List<ClaimCashflowPacket> cededClaims = aggregateCededClaimPerRoot.get(cededClaim.getBaseClaim());
-//                if (cededClaims == null) {
-                    aggregateCededClaimPerRoot.put(cededClaim.getBaseClaim(), (ClaimCashflowPacket) cededClaim.copy());
-//                }
-//                else {
-//                    cededClaims.add(cededClaim);
-//                }
+                aggregateCededClaimPerRoot.put(cededClaim.getBaseClaim(), (ClaimCashflowPacket) cededClaim.copy());
             }
             for (ClaimCashflowPacket grossClaim : outClaimsGross) {
                 List<ClaimCashflowPacket> cededClaims = aggregateCededClaimPerRoot.get(grossClaim.getBaseClaim());
                 ClaimCashflowPacket aggregateCededClaim = ClaimUtils.sum(cededClaims, true);
-                outClaimsNet.add(grossClaim.getNetClaim(aggregateCededClaim));
+                ClaimCashflowPacket netClaim = ClaimUtils.getNetClaim(grossClaim, aggregateCededClaim);
+                outClaimsNet.add(netClaim);
             }
         }
     }
 
     private void filterCededUnderwritingInfo() {
         for (CededUnderwritingInfoPacket underwritingInfo : inUnderwritingInfoCeded) {
-            if (underwritingInfo.getSegment().equals(this)) {
+            if (underwritingInfo.segment().equals(this)) {
                 outUnderwritingInfoCeded.add(underwritingInfo);
             }
         }
@@ -122,7 +118,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             List<UnderwritingInfoPacket> lobUnderwritingInfos = new ArrayList<UnderwritingInfoPacket>();
             int portionColumn = parmUnderwritingPortions.getColumnIndex(PORTION);
             for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
-                String originName = underwritingInfo.origin.getNormalizedName();
+                String originName = underwritingInfo.riskBand().getNormalizedName();
                 int row = parmUnderwritingPortions.getColumnByName(UNDERWRITING).indexOf(originName);
                 if (row > -1) {
                     UnderwritingInfoPacket lobUnderwritingInfo = (UnderwritingInfoPacket) underwritingInfo.copy();
@@ -138,10 +134,6 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             }
             outUnderwritingInfoGross.addAll(lobUnderwritingInfos);
         }
-    }
-
-    private void doCalculationNet() {
-        //To change body of created methods use File | Settings | File Templates.
     }
 
     private void getSegmentClaims() {
