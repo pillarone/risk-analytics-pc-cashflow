@@ -39,7 +39,8 @@ public class QuotaShareContractAAL extends QuotaShareContract {
 
         double quotaShareReported = adjustedQuote(grossClaim.getReportedIncremental(), annualAggregateLimitReported);
         double quotaSharePaid = adjustedQuote(grossClaim.getPaidIncremental(), annualAggregateLimitPaid);
-        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, quotaShareUltimate, quotaShareReported, quotaSharePaid);
+        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate,
+                quotaShareReported, quotaSharePaid);
         add(grossClaim, cededClaim);
         return cededClaim;
     }

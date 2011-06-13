@@ -93,6 +93,10 @@ public class ClaimStorage {
         return incrementalReported;
     }
 
+    public double cededReserves() {
+        return referenceCeded.getUltimate() - cumulatedPaidCeded;
+    }
+
     /**
      * @param cededShare should be negative
      * @return
@@ -119,5 +123,9 @@ public class ClaimStorage {
         buffer.append(", cumulatedPaidCeded: ");
         buffer.append(cumulatedPaidCeded);
         return buffer.toString();
+    }
+
+    public IClaimRoot getReference() {
+        return reference;
     }
 }

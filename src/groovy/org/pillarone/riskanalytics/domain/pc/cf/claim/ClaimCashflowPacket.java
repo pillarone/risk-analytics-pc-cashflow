@@ -107,6 +107,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
                                DateTime updateDate, int updatePeriod) {
         this(baseClaim);
         this.ultimate = ultimate;
+        if (ultimate != 0) { nominalUltimate = ultimate; }
         this.paidCumulated = paidCumulated;
         this.paidIncremental = paidIncremental;
         this.reportedCumulated = reportedCumulated;

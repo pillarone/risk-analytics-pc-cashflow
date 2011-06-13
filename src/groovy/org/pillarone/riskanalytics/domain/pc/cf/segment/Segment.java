@@ -47,7 +47,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     private static final String PERIL = "Claims Generator";
     private static final String UNDERWRITING = "Underwriting";
-    private static final String PORTION = "Portion of Claims";
+    private static final String PORTION = "Portion";
 
     private static final String PHASE_GROSS = "Phase Gross";
     private static final String PHASE_NET = "Phase Net";

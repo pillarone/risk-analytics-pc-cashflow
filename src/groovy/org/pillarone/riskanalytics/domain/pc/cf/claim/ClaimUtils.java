@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 
 import java.util.List;
 
@@ -68,18 +69,22 @@ public class ClaimUtils {
      * @param scaleFactorPaid
      * @return
      */
-    public static ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, double scaleFactorUltimate,
+    public static ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, ClaimStorage storage, double scaleFactorUltimate,
                                                     double scaleFactorReported, double scaleFactorPaid) {
         if (scaleFactorReported == -0) { scaleFactorReported = 0; }
         if (scaleFactorPaid == -0) { scaleFactorPaid = 0; }
+        double cededPaidIncremental = grossClaim.getPaidIncremental() * scaleFactorPaid;
+        double cededReportedIncremental = grossClaim.getReportedIncremental() * scaleFactorReported;
+        storage.update(cededPaidIncremental, BasedOnClaimProperty.PAID);
+        storage.update(cededReportedIncremental, BasedOnClaimProperty.REPORTED);
         ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(
-                grossClaim.getBaseClaim(),
+                storage.getReference(),
                 avoidNegativeZero(grossClaim.ultimate() * scaleFactorUltimate),
-                avoidNegativeZero(grossClaim.getPaidIncremental() * scaleFactorPaid),
-                avoidNegativeZero(grossClaim.getPaidCumulated() * scaleFactorPaid),
-                avoidNegativeZero(grossClaim.getReportedIncremental() * scaleFactorReported),
-                avoidNegativeZero(grossClaim.getReportedCumulated() * scaleFactorReported),
-                grossClaim.nominalUltimate() - grossClaim.getPaidCumulated() * scaleFactorPaid,
+                avoidNegativeZero(storage.getIncrementalPaidCeded()),
+                avoidNegativeZero(storage.getCumulatedCeded(BasedOnClaimProperty.PAID)),
+                avoidNegativeZero(storage.getIncrementalReportedCeded()),
+                avoidNegativeZero(storage.getCumulatedCeded(BasedOnClaimProperty.REPORTED)),
+                storage.cededReserves(),
                 grossClaim.getUpdateDate(),
                 grossClaim.getUpdatePeriod());
         applyMarkers(grossClaim, cededClaim);
@@ -103,7 +108,7 @@ public class ClaimUtils {
                 grossClaim.getPaidCumulated() + cededClaim.getPaidCumulated(),
                 grossClaim.getReportedIncremental() + cededClaim.getReportedIncremental(),
                 grossClaim.getReportedCumulated() + cededClaim.getReportedCumulated(),
-                grossClaim.nominalUltimate() + cededClaim.nominalUltimate(),
+                grossClaim.reserved() + cededClaim.reserved(),
                 grossClaim.getUpdateDate(),
                 grossClaim.getUpdatePeriod());
         applyMarkers(cededClaim, netClaim);

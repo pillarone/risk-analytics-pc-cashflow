@@ -192,6 +192,7 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
                 underwritingInfo.setNumberOfPolicies(InputFormatConverter.getDouble(
                         parmUnderwritingInformation.getValueAt(i, columnIndexNumberOfPolicies)));
                 underwritingInfo.origin = this;
+                underwritingInfo.setRiskBand(this);
                 ExposureInfo exposure = new ExposureInfo(iterationScope.getPeriodScope().getCurrentPeriodStartDate(),
                         iterationScope.getPeriodScope().getPeriodCounter());
                 exposure.setSumInsured(underwritingInfo.getSumInsured());

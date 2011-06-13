@@ -89,7 +89,8 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
         double cededFactorPaid = cededFactor(grossClaim.getPaidCumulated(), grossClaim.getPaidIncremental(),
                 BasedOnClaimProperty.PAID, storage);
 
-        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, cededFactorUltimate , cededFactorReported, cededFactorPaid);
+        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, cededFactorUltimate,
+                cededFactorReported, cededFactorPaid);
         add(grossClaim, cededClaim);
         return cededClaim;
     }
@@ -104,12 +105,10 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
             periodDeductible.set(Math.max(0, periodDeductible.get(claimPropertyBase) - reduceAAD), claimPropertyBase);
             double incrementalCeded = Math.max(0, cededAfterAAD - storage.getCumulatedCeded(claimPropertyBase));
             double cededAfterAAL = aggregateLimitValue > incrementalCeded ? incrementalCeded : aggregateLimitValue;
-            storage.update(cededAfterAAL, claimPropertyBase);
             periodLimit.plus(-cededAfterAAL, claimPropertyBase);
             return claimPropertyIncremental == 0 ? 0 : cededAfterAAL / claimPropertyIncremental;
         }
         else {
-            storage.update(0, claimPropertyBase);
             return 0;
         }
     }

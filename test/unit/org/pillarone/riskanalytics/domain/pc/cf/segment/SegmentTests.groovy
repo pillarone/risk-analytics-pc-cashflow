@@ -14,6 +14,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -149,6 +150,8 @@ class SegmentTests extends GroovyTestCase {
     }
 
     private ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, double quotaShare) {
-        return ClaimUtils.getCededClaim(grossClaim, -quotaShare, -quotaShare, -quotaShare);
+        ClaimStorage storage = new ClaimStorage(grossClaim)
+        storage.lazyInitCededClaimRoot(quotaShare)
+        return ClaimUtils.getCededClaim(grossClaim, storage, -quotaShare, -quotaShare, -quotaShare);
     }
 }
