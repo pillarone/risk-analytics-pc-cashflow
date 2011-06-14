@@ -20,11 +20,16 @@ class PatternStrategyType extends AbstractParameterObjectClassifier {
             cumulativePattern :  new ConstrainedMultiDimensionalParameter([[0],[1d]], [PatternTableConstraints.MONTHS,CUMULATIVE2],
                     ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER)),
     ])
+    public static final PatternStrategyType AGE_TO_AGE = new PatternStrategyType("age-to-age", "AGE_TO_AGE", [
+            ageToAgePattern :  new ConstrainedMultiDimensionalParameter([[0],[1d]], [PatternTableConstraints.MONTHS,LINK_RATIOS],
+                    ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER)),
+    ])
 
-    public static final all = [NONE, INCREMENTAL, CUMULATIVE]
+    public static final all = [NONE, INCREMENTAL, CUMULATIVE, AGE_TO_AGE]
 
     public static final String INCREMENTS = "Increments";
     public static final String CUMULATIVE2 = "Cumulative";
+     public static final String LINK_RATIOS = "Link ratios";
 
     protected static Map types = [:]
     static {
@@ -67,6 +72,10 @@ class PatternStrategyType extends AbstractParameterObjectClassifier {
             case PatternStrategyType.CUMULATIVE:
                 pattern = new CumulativePatternStrategy(
                         cumulativePattern : (ConstrainedMultiDimensionalParameter) parameters['cumulativePattern'])
+                break
+            case PatternStrategyType.AGE_TO_AGE:
+                pattern = new AgeToAgePatternStrategy(
+                        ageToAgePattern : (ConstrainedMultiDimensionalParameter) parameters['ageToAgePattern'])
                 break
         }
         return pattern

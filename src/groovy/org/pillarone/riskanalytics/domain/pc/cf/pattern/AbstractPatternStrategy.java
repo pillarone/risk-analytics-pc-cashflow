@@ -29,6 +29,7 @@ public abstract class AbstractPatternStrategy extends AbstractParameterObject {
        return pattern.getValues();
     }
 
+
     protected static List<Period> getCumulativePeriods(ConstrainedMultiDimensionalParameter pattern, int monthColumnIndex) {
         List<Period> periods = new ArrayList<Period>();
         boolean firstPeriod = true;
@@ -66,6 +67,27 @@ public abstract class AbstractPatternStrategy extends AbstractParameterObject {
         for (Double increment : incrementalValues) {
             cumulative += increment;
             cumulativeValues.add(cumulative);
+        }
+        return cumulativeValues;
+    }
+
+    protected static List<Double> getCumulativePatternValuesFromLinkRatios(List<Double> linkRatios) {
+        List<Double> cumulativeValues = new ArrayList<Double>(linkRatios.size());
+        boolean firstEntryNull = false;
+        if (linkRatios.get(0) == 0){
+            firstEntryNull = true;
+            linkRatios.remove(0);
+        }
+        double product = 1.0;
+        for (Double ratio : linkRatios){
+            product *= ratio;
+        }
+        cumulativeValues.set(0,1.0/product);
+        for (int i=1; i<linkRatios.size();i++) {
+            cumulativeValues.set(i,linkRatios.get(i-1)*cumulativeValues.get(i-1));
+        }
+        if (firstEntryNull){
+            cumulativeValues.add(0,0d);
         }
         return cumulativeValues;
     }

@@ -26,11 +26,16 @@ class IndexStrategyType extends AbstractParameterObjectClassifier {
             [indices: new ConstrainedMultiDimensionalParameter([[],[]],
                     DeterministicIndexTableConstraints.COLUMN_TITLES,
                     ConstraintsFactory.getConstraints(DeterministicIndexTableConstraints.IDENTIFIER))])
+    public static final IndexStrategyType AGE_TO_AGE = new IndexStrategyType(
+            'age-to-age', 'AGE_TO_AGE',
+            [indices: new ConstrainedMultiDimensionalParameter([[],[]],
+                    LinkRatioIndexTableConstraints.COLUMN_TITLES,
+                    ConstraintsFactory.getConstraints(LinkRatioIndexTableConstraints.IDENTIFIER))])
     public static final IndexStrategyType STOCHASTIC = new IndexStrategyType("stochastic", "STOCHASTIC", [
             startDate: new DateTime(2011,1,1,0,0,0,0),
             distribution: DistributionType.getStrategy(DistributionType.NORMAL, [mean: 0d, stDev: 1d])])
 
-    public static final all = [NONE, DETERMINISTICANNUALCHANGE, DETERMINISTICINDEXSERIES, STOCHASTIC]
+    public static final all = [NONE, DETERMINISTICANNUALCHANGE, DETERMINISTICINDEXSERIES, AGE_TO_AGE, STOCHASTIC]
 
     protected static Map types = [:]
     static {
@@ -73,6 +78,10 @@ class IndexStrategyType extends AbstractParameterObjectClassifier {
             case IndexStrategyType.DETERMINISTICINDEXSERIES:
                 indexStrategy = new DeterministicIndexStrategy(
                         indices : (ConstrainedMultiDimensionalParameter) parameters['indices'])
+                break;
+            case IndexStrategyType.AGE_TO_AGE:
+                indexStrategy = new AgeToAgeIndexStrategy(
+                        ratios : (ConstrainedMultiDimensionalParameter) parameters['ratios'])
                 break;
             case IndexStrategyType.STOCHASTIC:
                 indexStrategy = new StochasticIndexStrategy(

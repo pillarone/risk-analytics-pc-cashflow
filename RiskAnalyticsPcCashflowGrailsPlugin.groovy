@@ -15,6 +15,7 @@ import org.pillarone.riskanalytics.domain.utils.constraint.DateTimeConstraints
 import org.pillarone.riskanalytics.core.util.ResourceBundleRegistry
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.RecoveryPatternStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.PatternStrategyValidator
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.LinkRatioIndexTableConstraints
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -54,6 +55,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
 
     def doWithApplicationContext = { applicationContext ->
         ConstraintsFactory.registerConstraint(new AnnualIndexTableConstraints())
+        ConstraintsFactory.registerConstraint(new LinkRatioIndexTableConstraints())
         ConstraintsFactory.registerConstraint(new DeterministicIndexTableConstraints())
         ConstraintsFactory.registerConstraint(new PolicyIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new PremiumIndexSelectionTableConstraints())
