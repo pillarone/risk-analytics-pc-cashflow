@@ -132,14 +132,39 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                         "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "produceClaim": FrequencySeverityClaimType.AGGREGATED_EVENT,])
 
-        UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000, numberOfPolicies: 20, origin: riskBands)
+        UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000.5, numberOfPolicies: 20, origin: riskBands)
         claimsGenerator.inUnderwritingInfo.add(underwritingInfo)
 
         claimsGenerator.doCalculation()
 
         assertEquals "number of claims", 40, claimsGenerator.outClaims.size()
-        assertEquals "correct value of claim", -123000, claimsGenerator.outClaims[0].ultimate()
-        assertEquals "correct value of claim", -123000, claimsGenerator.outClaims[39].ultimate()
+        assertEquals "correct value of claim", -123*1000.5, claimsGenerator.outClaims[0].ultimate()
+        assertEquals "correct value of claim", -123*1000.5, claimsGenerator.outClaims[39].ultimate()
+        assertEquals "event one", true, claimsGenerator.outClaims[0].baseClaim.event != null
+        assertEquals "occurrence date equals event date", true,
+                claimsGenerator.outClaims[0].baseClaim.event.getDate() == claimsGenerator.outClaims[0].occurrenceDate
+
+        claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
+                ClaimsGeneratorType.FREQUENCY_SEVERITY, [
+                        "frequencyIndices": new ConstrainedMultiDimensionalParameter(
+                                Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
+                                ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
+                        "frequencyBase": FrequencyBase.PREMIUM_WRITTEN,
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2]),
+                        "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
+                        "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
+                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
+                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
+                        "produceClaim": FrequencySeverityClaimType.AGGREGATED_EVENT,])
+
+        claimsGenerator.reset()
+        claimsGenerator.inUnderwritingInfo.add(underwritingInfo)
+
+        claimsGenerator.doCalculation()
+
+        assertEquals "number of claims", 2000, claimsGenerator.outClaims.size()
+        assertEquals "correct value of claim", -123*1000.5, claimsGenerator.outClaims[0].ultimate()
+        assertEquals "correct value of claim", -123*1000.5, claimsGenerator.outClaims[1999].ultimate()
         assertEquals "event one", true, claimsGenerator.outClaims[0].baseClaim.event != null
         assertEquals "occurrence date equals event date", true,
                 claimsGenerator.outClaims[0].baseClaim.event.getDate() == claimsGenerator.outClaims[0].occurrenceDate
@@ -248,7 +273,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
                         "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
                         "produceClaim": FrequencySeverityClaimType.SINGLE,])
 
-        UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000, numberOfPolicies: 20, origin: riskBands)
+        UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(sumInsured: 2500000.5, premiumWritten: 1000, numberOfPolicies: 20, origin: riskBands)
         claimsGenerator.reset()
         claimsGenerator.inUnderwritingInfo.add(underwritingInfo)
         claimsGenerator.inEventSeverities << stream1 << stream2
@@ -288,6 +313,35 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
         assertEquals "claim value", -120 * 1000, claimsGenerator.outClaims[0].ultimate(), 1E-8
         assertEquals "claim value", -120 * 1000, claimsGenerator.outClaims[1].ultimate(), 1E-8
         assertEquals "claim value", -120 * 1000, claimsGenerator.outClaims[2].ultimate(), 1E-8
+        assertEquals "no event", true, claimsGenerator.outClaims[0].baseClaim.event == null
+        assertEquals "occurrence date", new DateTime(2011, 1, 2, 0, 0, 0, 0), claimsGenerator.outClaims[0].getDate()
+        assertEquals "occurrence date", new DateTime(2011, 1, 2, 0, 0, 0, 0), claimsGenerator.outClaims[0].occurrenceDate
+        assertEquals "occurrence date", new DateTime(2011, 1, 2, 0, 0, 0, 0), claimsGenerator.outClaims[0].baseClaim.occurrenceDate
+        assertEquals "occurrence date", new DateTime(2011, 3, 2, 0, 0, 0, 0), claimsGenerator.outClaims[1].occurrenceDate
+
+        claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
+                ClaimsGeneratorType.FREQUENCY_SEVERITY, [
+                        "frequencyIndices": new ConstrainedMultiDimensionalParameter(
+                                Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
+                                ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
+                        "frequencyBase": FrequencyBase.ABSOLUTE,
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 3d]),
+                        "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
+                        "claimsSizeBase": ExposureBase.SUM_INSURED,
+                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 120]),
+                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
+                        "produceClaim": FrequencySeverityClaimType.SINGLE,])
+
+        claimsGenerator.reset()
+        claimsGenerator.inUnderwritingInfo.add(underwritingInfo)
+        claimsGenerator.inEventSeverities << stream1 << stream2
+        claimsGenerator.inEventFrequencies << sysFrequencyPacket1
+        claimsGenerator.doCalculation()
+
+        assertEquals "claim number", 3, claimsGenerator.outClaims.size()
+        assertEquals "claim value", -120 * 2500000.5, claimsGenerator.outClaims[0].ultimate(), 1E-8
+        assertEquals "claim value", -120 * 2500000.5, claimsGenerator.outClaims[1].ultimate(), 1E-8
+        assertEquals "claim value", -120 * 2500000.5, claimsGenerator.outClaims[2].ultimate(), 1E-8
         assertEquals "no event", true, claimsGenerator.outClaims[0].baseClaim.event == null
         assertEquals "occurrence date", new DateTime(2011, 1, 2, 0, 0, 0, 0), claimsGenerator.outClaims[0].getDate()
         assertEquals "occurrence date", new DateTime(2011, 1, 2, 0, 0, 0, 0), claimsGenerator.outClaims[0].occurrenceDate

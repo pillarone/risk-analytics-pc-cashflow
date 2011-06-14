@@ -29,7 +29,10 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
                                           ExposureBase severityBase, FrequencyBase frequencyBase, ClaimType claimType,
                                           List<Factors> factors, PeriodScope periodScope) {
         double frequencyScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, frequencyBase, uwInfosFilterCriteria);
-        int numberOfClaims = (int) (claimNumberGenerator.nextValue().intValue() * frequencyScalingFactor);
+        int numberOfClaims = 0;
+        for (int i = 0; i < (int) frequencyScalingFactor; i++) {
+            numberOfClaims += claimNumberGenerator.nextValue().intValue();
+        }
         numberOfClaims = calculateNumberOfClaimsWithAppliedIndices(numberOfClaims, periodScope, factors);
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
         return generateClaims(severityScalingFactor, numberOfClaims, claimType, periodScope);
@@ -50,7 +53,8 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
         String key = key(distribution, modifier);
         if (cachedClaimNumberGenerators.containsKey(key)) {
             claimNumberGenerator = cachedClaimNumberGenerators.get(key);
-        } else {
+        }
+        else {
             claimNumberGenerator = RandomNumberGeneratorFactory.getGenerator(distribution, modifier);
             cachedClaimNumberGenerators.put(key, claimNumberGenerator);
         }

@@ -16,7 +16,7 @@ import java.util.Map;
  */
 // todo(sku): think! should we head for a similar design as for claims (.. root ..)
 public class UnderwritingInfoPacket extends MultiValuePacket {
-    
+
     protected double premiumWritten;
     protected double premiumPaid;
     protected double numberOfPolicies;
@@ -36,7 +36,6 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
     }
 
     /**
-     * 
      * @param policyFactor
      * @param premiumFactor
      * @return creates a cloned instance with numberOfPolicies and premiumWritten according to parameters
@@ -51,7 +50,7 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
 
     /**
      * @param cededUnderwritingInfo
-     * @param proportionalContractApplied   if true sumInsured, maxSumInsured are adjusted too
+     * @param proportionalContractApplied if true sumInsured, maxSumInsured are adjusted too
      * @return
      */
     public UnderwritingInfoPacket getNet(CededUnderwritingInfoPacket cededUnderwritingInfo, boolean proportionalContractApplied) {
@@ -69,6 +68,7 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
 
     /**
      * Has to be applied after withFactorsApplied() to avoid overwritting premiumPaid wrongly.
+     *
      * @param positiveWrittenValue
      * @param paidShare
      */
@@ -89,6 +89,8 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
                 return premiumWritten;
             case NUMBER_OF_POLICIES:
                 return numberOfPolicies;
+            case SUM_INSURED:
+                return sumInsured;
         }
         return 0;
     }
@@ -103,6 +105,10 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
                 return 1d;
             case NUMBER_OF_POLICIES:
                 return numberOfPolicies;
+            case PREMIUM_WRITTEN:
+                return premiumWritten;
+            case SUM_INSURED:
+                return sumInsured;
         }
         return 1;
     }
@@ -138,11 +144,12 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
                 && premiumWritten == other.getPremiumWritten()
                 && premiumPaid == other.getPremiumPaid())
                 && (exposure == null && other.getExposure() == null
-                   || exposure.equals(other.getExposure()));
+                || exposure.equals(other.getExposure()));
     }
 
     private static final String PREMIUM_WRITTEN = "premiumWritten";
     private static final String PREMIUM_PAID = "premiumPaid";
+
     /**
      * Warning: if the number or names of values is modified, UnderwritingBatchInsertDBCollector
      * has to be corrected accordingly.

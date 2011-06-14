@@ -55,7 +55,10 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
         IRandomNumberGenerator frequencyGenerator = RandomNumberGeneratorFactory.getGenerator(
                 FrequencyDistributionUtils.getIdiosyncraticDistribution(frequencyDistribution, systematicFrequencyDistribution), frequencyModification);
         IRandomNumberGenerator claimsSizeGenerator = RandomNumberGeneratorFactory.getGenerator(claimsSizeDistribution, claimsSizeModification);
-        int numberOfClaims = (int) (frequencyGenerator.nextValue().intValue() * frequencyFactor);
+        int numberOfClaims = 0;
+        for (int i = 0; i < (int) frequencyFactor; i++) {
+            numberOfClaims += frequencyGenerator.nextValue().intValue();
+        }
         double claimValue = baseClaims.get(0).getUltimate();
         for (int i = 0; i < numberOfClaims; i++) {
             claimValue += claimsSizeGenerator.nextValue().doubleValue() * severityScalingFactor;

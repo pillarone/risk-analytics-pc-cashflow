@@ -70,7 +70,6 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
 
     void testRelativeClaimsForExceptionalCases() {
         // todo(jwa): please decide: either scale factor is 1 for all of the exception cases, or it is 0 for all the cases; now it is inconsistent
-        // todo(jwa): ExposureBase.SUM_INSURED yields scaling factor 0; has to be implemented correctly
 
         // no ingoing underwriting info packets
         claimsGenerator.setParmClaimsModel(ClaimsGeneratorType.getStrategy(
@@ -107,26 +106,6 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
 
         assertEquals "one attritional claim", 1, claimsGenerator.outClaims.size()
         assertEquals "correct value of attritional claim", -123, claimsGenerator.outClaims[0].ultimate()
-
-        // ExposureBase is sum insured
-        uwInfoComboBox = new ComboBoxTableMultiDimensionalParameter(
-                ["motor hull"], ["Underwriting Information"], IUnderwritingInfoMarker)
-        uwInfoComboBox.comboBoxValues.put('motor hull', riskBands)
-        claimsGenerator.setParmUnderwritingSegments(uwInfoComboBox)
-        claimsGenerator.setParmClaimsModel(ClaimsGeneratorType.getStrategy(
-                ClaimsGeneratorType.ATTRITIONAL, [
-                        "claimsSizeBase": ExposureBase.SUM_INSURED,
-                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
-                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),]))
-
-        underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000, numberOfPolicies: 20, sumInsured: 10E6, origin: riskBands)
-        claimsGenerator.reset()
-        claimsGenerator.inUnderwritingInfo.add(underwritingInfo)
-
-        claimsGenerator.doCalculation()
-
-        assertEquals "one attritional claim", 1, claimsGenerator.outClaims.size()
-        assertEquals "correct value of attritional claim", -0d, claimsGenerator.outClaims[0].ultimate()
 
     }
 
@@ -166,6 +145,22 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
 
         assertEquals "one attritional claim", 1, claimsGenerator.outClaims.size()
         assertEquals "correct value of attritional claim", -123 * 20, claimsGenerator.outClaims[0].ultimate()
+
+        // ExposureBase is sum insured
+        claimsGenerator.setParmClaimsModel(ClaimsGeneratorType.getStrategy(
+                ClaimsGeneratorType.ATTRITIONAL, [
+                        "claimsSizeBase": ExposureBase.SUM_INSURED,
+                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
+                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),]))
+
+        underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000, numberOfPolicies: 20, sumInsured: 10E6, origin: riskBands)
+        claimsGenerator.reset()
+        claimsGenerator.inUnderwritingInfo.add(underwritingInfo)
+
+        claimsGenerator.doCalculation()
+
+        assertEquals "one attritional claim", 1, claimsGenerator.outClaims.size()
+        assertEquals "correct value of attritional claim", -123*10E6, claimsGenerator.outClaims[0].ultimate()
 
     }
 
@@ -323,6 +318,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
 
         assertEquals "one single claim", 1, claimsGenerator.outClaims.size()
         assertEquals "correct value of claim", -3 * 123, claimsGenerator.outClaims[0].ultimate()
+
     }
 
     void testFrequencyAverageAttritionalRelativeClaims() {
@@ -336,7 +332,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
                         "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),])
 
-        UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000, numberOfPolicies: 20, origin: riskBands)
+        UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(sumInsured: 20000, premiumWritten: 1000, numberOfPolicies: 20, origin: riskBands)
         claimsGenerator.inUnderwritingInfo.add(underwritingInfo)
         claimsGenerator.doCalculation()
 
@@ -358,6 +354,22 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
 
         assertEquals "one single claim", 1, claimsGenerator.outClaims.size()
         assertEquals "correct value of claim", -123 * 20 * 3, claimsGenerator.outClaims[0].ultimate()
+
+        claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
+                ClaimsGeneratorType.FREQUENCY_AVERAGE_ATTRITIONAL, [
+                        "frequencyBase": FrequencyBase.ABSOLUTE,
+                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 3]),
+                        "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
+                        "claimsSizeBase": ExposureBase.SUM_INSURED,
+                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
+                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),])
+
+        claimsGenerator.reset()
+        claimsGenerator.inUnderwritingInfo.add(underwritingInfo)
+        claimsGenerator.doCalculation()
+
+        assertEquals "one single claim", 1, claimsGenerator.outClaims.size()
+        assertEquals "correct value of claim", -3 * 123*20000, claimsGenerator.outClaims[0].ultimate()
     }
 
     void testFrequencyAverageAttritionalSystematicSeverities() {
