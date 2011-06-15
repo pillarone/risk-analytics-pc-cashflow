@@ -21,13 +21,21 @@ class PayoutReportingCombinedPatternStrategyType extends AbstractParameterObject
                     [PatternTableConstraints.MONTHS,CUMULATIVE_REPORTED,CUMULATIVE_PAYOUT],
                     ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER)),
     ])
+    public static final PayoutReportingCombinedPatternStrategyType AGE_TO_AGE = new PayoutReportingCombinedPatternStrategyType(
+            "age-to-age", "AGE_TO_AGE", [
+            ageToAgePattern :  new ConstrainedMultiDimensionalParameter([[0],[1d],[1d]],
+                    [PatternTableConstraints.MONTHS,LINK_RATIOS_REPORTED,LINK_RATIOS_PAYOUT],
+                    ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER)),
+    ])
 
-    public static final all = [NONE, INCREMENTAL, CUMULATIVE]
+    public static final all = [NONE, INCREMENTAL, CUMULATIVE, AGE_TO_AGE]
 
     public static final String INCREMENTS_REPORTED = "Increments Reported";
     public static final String INCREMENTS_PAYOUT = "Increments Payout";
     public static final String CUMULATIVE_REPORTED = "Cumulative Reported";
     public static final String CUMULATIVE_PAYOUT = "Cumulative Payout";
+    public static final String LINK_RATIOS_REPORTED = "Link Ratios Reported";
+    public static final String LINK_RATIOS_PAYOUT = "Link Ratios Payout";
 
     protected static Map types = [:]
     static {
@@ -67,6 +75,9 @@ class PayoutReportingCombinedPatternStrategyType extends AbstractParameterObject
             case PayoutReportingCombinedPatternStrategyType.CUMULATIVE:
                 return new PayoutReportingCombinedCumulativePatternStrategy(
                         cumulativePattern : (ConstrainedMultiDimensionalParameter) parameters['cumulativePattern'])
+            case PayoutReportingCombinedPatternStrategyType.AGE_TO_AGE:
+                return new PayoutReportingCombinedAgeToAgePatternStrategy(
+                        ageToAgePattern : (ConstrainedMultiDimensionalParameter) parameters['ageToAgePattern'])
         }
     }
 }

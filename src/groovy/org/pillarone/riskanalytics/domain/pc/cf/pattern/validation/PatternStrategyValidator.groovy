@@ -36,13 +36,13 @@ class PatternStrategyValidator implements IParameterizationValidator {
 
         List<ParameterValidation> errors = []
 
-        /** key: path             */
+        /** key: path              */
         Map<String, PatternPacket> payoutPatterns = [:]
-        /** key: path             */
+        /** key: path              */
         Map<String, PatternPacket> reportingPatterns = [:]
-        /** key: path             */
+        /** key: path              */
         Map<String, String> reportingPatternPerClaimsGenerator = [:]
-        /** key: path             */
+        /** key: path              */
         Map<String, String> payoutPatternPerClaimsGenerator = [:]
 
 
@@ -84,7 +84,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
             TreeMap<Integer, Double> reportingValuesPerMonth = getCumulativeValuePerMonth(reportingPattern)
             TreeMap<Integer, Double> payoutValuesPerMonth = getCumulativeValuePerMonth(payoutPattern)
             for (Map.Entry<Integer, Double> payoutEntry: payoutValuesPerMonth.entrySet()) {
-                if (payoutEntry.value <= reportingValuesPerMonth.floorEntry(payoutEntry.key).value) continue
+                if (payoutEntry.value <= reportingValuesPerMonth.floorEntry(payoutEntry.key).value + EPSILON) continue
                 ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
                         'claims.generator.reporting.pattern.smaller.than.payout.pattern',
                         [payoutEntry.key, payoutEntry.value, reportingValuesPerMonth.floorEntry(payoutEntry.key).value])
@@ -132,7 +132,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
 
         validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
             double[] values = type.cumulativePattern.getColumnByName(PatternStrategyType.CUMULATIVE2)
-            if (values[values.length - 1] == 1) return true
+            if (values[values.length - 1] >= 1 - EPSILON && values[values.length - 1] <= 1 + EPSILON) return true
             [ValidationType.ERROR, "cumulative.pattern.error.last.value.not.one", values[values.length - 1]]
         }
 
@@ -145,6 +145,24 @@ class PatternStrategyValidator implements IParameterizationValidator {
             }
             return true
         }
+
+        validationService.register(PatternStrategyType.AGE_TO_AGE) {Map type ->
+            double[] values = type.ageToAgePattern.getColumnByName(PatternStrategyType.LINK_RATIOS)
+            if (values.length == 0) {
+                return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.empty", values]
+            }
+            if (values[0] < 1) {
+                return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.smaller.one", values[0]]
+            }
+            return true
+        }
+
+        validationService.register(PatternStrategyType.AGE_TO_AGE) {Map type ->
+            double[] values = type.ageToAgePattern.getColumnByName(PatternStrategyType.LINK_RATIOS)
+            if (values[values.length - 1] >= 1 - EPSILON && values[values.length - 1] <= 1 + EPSILON) return true
+            [ValidationType.ERROR, "age.to.age.pattern.error.last.ratio.not.one", values[values.length - 1]]
+        }
+
 
         validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
             double[] months = type.cumulativePattern.getColumnByName(PatternTableConstraints.MONTHS)
@@ -178,6 +196,25 @@ class PatternStrategyValidator implements IParameterizationValidator {
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
                     return [ValidationType.ERROR, "incremental.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
+                }
+            }
+            return true
+        }
+
+        validationService.register(PatternStrategyType.AGE_TO_AGE) {Map type ->
+            double[] months = type.ageToAgePattern.getColumnByName(PatternTableConstraints.MONTHS)
+
+            if (months[0] < 0) {
+                return [ValidationType.ERROR, "age.to.age.pattern.error.cumulative.months.not.non-negative", months[0]]
+            }
+            return true
+        }
+
+        validationService.register(PatternStrategyType.AGE_TO_AGE) {Map type ->
+            double[] months = type.ageToAgePattern.getColumnByName(PatternTableConstraints.MONTHS)
+            for (int i = 0; i < months.length - 1; i++) {
+                if (months[i + 1] <= months[i]) {
+                    return [ValidationType.ERROR, "age.to.age.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
                 }
             }
             return true

@@ -16,17 +16,17 @@ public abstract class AbstractPatternStrategy extends AbstractParameterObject {
 
     protected static List<Double> getPatternValues(ConstrainedMultiDimensionalParameter pattern, int monthColumnIndex, int patternColumnIndex) {
         if (pattern.getValues().size() > 0 && pattern.getValues().get(0) instanceof List) {
-           int cumulatedMonths = InputFormatConverter.getInt(pattern.getValueAt(pattern.getTitleRowCount(), monthColumnIndex));
-           List<Double> patternValues = new ArrayList<Double>();
-           if (cumulatedMonths > 0) {
-               patternValues.add(0d);    // make sure paid is 0 if no payout ratio is defined for period 0
-           }
-           for (int row = pattern.getTitleRowCount(); row < pattern.getRowCount(); row++) {
-               patternValues.add(InputFormatConverter.getDouble(pattern.getValueAt(row, patternColumnIndex)));
-           }
-           return patternValues;
-       }
-       return pattern.getValues();
+            int cumulatedMonths = InputFormatConverter.getInt(pattern.getValueAt(pattern.getTitleRowCount(), monthColumnIndex));
+            List<Double> patternValues = new ArrayList<Double>();
+            if (cumulatedMonths > 0) {
+                patternValues.add(0d);    // make sure paid is 0 if no payout ratio is defined for period 0
+            }
+            for (int row = pattern.getTitleRowCount(); row < pattern.getRowCount(); row++) {
+                patternValues.add(InputFormatConverter.getDouble(pattern.getValueAt(row, patternColumnIndex)));
+            }
+            return patternValues;
+        }
+        return pattern.getValues();
     }
 
 
@@ -35,7 +35,8 @@ public abstract class AbstractPatternStrategy extends AbstractParameterObject {
         boolean firstPeriod = true;
         for (int row = pattern.getTitleRowCount(); row < pattern.getRowCount(); row++) {
             int cumulatedMonths = InputFormatConverter.getInt(pattern.getValueAt(row, monthColumnIndex));
-            if (firstPeriod && cumulatedMonths > 0) periods.add(Period.months(0));   // make sure paid is 0 if no payout ratio is defined for period 0
+            if (firstPeriod && cumulatedMonths > 0)
+                periods.add(Period.months(0));   // make sure paid is 0 if no payout ratio is defined for period 0
             firstPeriod = false;
             periods.add(Period.months(cumulatedMonths));
         }
@@ -43,21 +44,31 @@ public abstract class AbstractPatternStrategy extends AbstractParameterObject {
     }
 
     protected static PatternPacket getCumulativePattern(ConstrainedMultiDimensionalParameter cumulativePattern,
-                                                 String columnName, Class<? extends IPatternMarker> patternMarker) {
+                                                        String columnName, Class<? extends IPatternMarker> patternMarker) {
         int columnMonthIndex = cumulativePattern.getColumnIndex(PatternTableConstraints.MONTHS);
         List<Double> cumulativeValues = getPatternValues(cumulativePattern, columnMonthIndex,
                 cumulativePattern.getColumnIndex(columnName));
         List<Period> cumulativePeriods = getCumulativePeriods(cumulativePattern, columnMonthIndex);
-        return new  PatternPacket(patternMarker, cumulativeValues, cumulativePeriods);
+        return new PatternPacket(patternMarker, cumulativeValues, cumulativePeriods);
     }
 
     protected static PatternPacket getIncrementalPattern(ConstrainedMultiDimensionalParameter incrementalPattern,
-                                                       String columnName, Class<? extends IPatternMarker> patternMarker) {
+                                                         String columnName, Class<? extends IPatternMarker> patternMarker) {
         int columnMonthIndex = incrementalPattern.getColumnIndex(PatternTableConstraints.MONTHS);
         List<Double> incrementalValues = getPatternValues(incrementalPattern, columnMonthIndex,
                 incrementalPattern.getColumnIndex(columnName));
         List<Double> cumulativeValues = getCumulativePatternValues(incrementalValues);
         List<Period> cumulativePeriods = getCumulativePeriods(incrementalPattern, columnMonthIndex);
+        return new PatternPacket(patternMarker, cumulativeValues, cumulativePeriods);
+    }
+
+    protected static PatternPacket getAgeToAgePattern(ConstrainedMultiDimensionalParameter ageToAgePattern,
+                                                      String columnName, Class<? extends IPatternMarker> patternMarker) {
+        int columnMonthIndex = ageToAgePattern.getColumnIndex(PatternTableConstraints.MONTHS);
+        List<Double> ageToAgeValues = getPatternValues(ageToAgePattern, columnMonthIndex,
+                ageToAgePattern.getColumnIndex(columnName));
+        List<Double> cumulativeValues = getCumulativePatternValuesFromLinkRatios(ageToAgeValues);
+        List<Period> cumulativePeriods = getCumulativePeriods(ageToAgePattern, columnMonthIndex);
         return new PatternPacket(patternMarker, cumulativeValues, cumulativePeriods);
     }
 
@@ -74,20 +85,20 @@ public abstract class AbstractPatternStrategy extends AbstractParameterObject {
     protected static List<Double> getCumulativePatternValuesFromLinkRatios(List<Double> linkRatios) {
         List<Double> cumulativeValues = new ArrayList<Double>(linkRatios.size());
         boolean firstEntryNull = false;
-        if (linkRatios.get(0) == 0){
+        if (linkRatios.get(0) == 0) {
             firstEntryNull = true;
             linkRatios.remove(0);
         }
         double product = 1.0;
-        for (Double ratio : linkRatios){
+        for (Double ratio : linkRatios) {
             product *= ratio;
         }
-        cumulativeValues.set(0,1.0/product);
-        for (int i=1; i<linkRatios.size();i++) {
-            cumulativeValues.set(i,linkRatios.get(i-1)*cumulativeValues.get(i-1));
+        cumulativeValues.add(0, 1.0 / product);
+        for (int i = 1; i < linkRatios.size(); i++) {
+            cumulativeValues.add(i, linkRatios.get(i - 1) * cumulativeValues.get(i - 1));
         }
-        if (firstEntryNull){
-            cumulativeValues.add(0,0d);
+        if (firstEntryNull) {
+            cumulativeValues.add(0, 0d);
         }
         return cumulativeValues;
     }
