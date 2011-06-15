@@ -4,7 +4,7 @@ package models.gira
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 model = GIRAModel
-displayName = "Claims"
+displayName = "Details"
 
 mappings = {
     GIRA {
