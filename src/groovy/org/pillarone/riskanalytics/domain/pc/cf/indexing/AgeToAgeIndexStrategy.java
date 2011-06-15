@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author stefan.kunz (at) intuitive-collaboration (dot) com
+ * @author jessika.walter (at) intuitive-collaboration (dot) com
  */
 public class AgeToAgeIndexStrategy extends AbstractParameterObject implements IIndexStrategy {
 
@@ -52,9 +52,6 @@ public class AgeToAgeIndexStrategy extends AbstractParameterObject implements II
                     factors.origin = origin;
                     index *= ratio;
                 }
-            }
-            else {
-                return; // in the trivial case the returned list has to be void
             }
         }
     }

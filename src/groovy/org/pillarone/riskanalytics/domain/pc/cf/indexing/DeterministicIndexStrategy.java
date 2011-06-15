@@ -51,9 +51,6 @@ public class DeterministicIndexStrategy extends AbstractParameterObject implemen
                     factors.origin = origin;
                 }
             }
-            else {
-                return; // in the trivial case the returned list has to be void
-            }
         }
     }
 }
