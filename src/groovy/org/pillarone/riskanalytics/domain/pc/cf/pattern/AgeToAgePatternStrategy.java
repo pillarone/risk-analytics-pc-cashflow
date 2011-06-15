@@ -30,12 +30,7 @@ public class AgeToAgePatternStrategy extends AbstractPatternStrategy implements 
 
     public PatternPacket getPattern(Class<? extends IPatternMarker> patternMarker) {
         if (pattern == null) {
-            int columnMonthIndex = ageToAgePattern.getColumnIndex(PatternTableConstraints.MONTHS);
-            List<Double> ageToAgeValues = getPatternValues(ageToAgePattern, columnMonthIndex,
-                    ageToAgePattern.getColumnIndex(PatternStrategyType.LINK_RATIOS));
-            List<Double> cumulativeValues = getCumulativePatternValuesFromLinkRatios(ageToAgeValues);
-            List<Period> cumulativePeriods = getCumulativePeriods(ageToAgePattern, columnMonthIndex);
-            pattern = new  PatternPacket(patternMarker,cumulativeValues, cumulativePeriods);
+            pattern = getAgeToAgePattern(ageToAgePattern, PatternStrategyType.LINK_RATIOS, patternMarker);
         }
         return pattern;
     }

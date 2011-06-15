@@ -20,7 +20,7 @@ public class PayoutReportingCombinedCumulativePatternStrategy
     private PatternPacket payoutPattern;
 
     public IParameterObjectClassifier getType() {
-        return PatternStrategyType.CUMULATIVE;
+        return PayoutReportingCombinedPatternStrategyType.CUMULATIVE;
     }
 
     public Map getParameters() {

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class LinkRatioIndexTableConstraints implements IMultiDimensionalConstraints {
 
-    public static final String IDENTIFIER = "AGETOAGEINDEXCHANGE";
+    public static final String IDENTIFIER = "AGETOAGEINDEXRATIO";
     public static final String DATE = "Date";
     public static final String LINK_TO_LINK_RATIO = "Link-to-link Ratio";
 

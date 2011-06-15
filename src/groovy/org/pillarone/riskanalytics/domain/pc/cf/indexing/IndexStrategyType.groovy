@@ -28,7 +28,7 @@ class IndexStrategyType extends AbstractParameterObjectClassifier {
                     ConstraintsFactory.getConstraints(DeterministicIndexTableConstraints.IDENTIFIER))])
     public static final IndexStrategyType AGE_TO_AGE = new IndexStrategyType(
             'age-to-age', 'AGE_TO_AGE',
-            [indices: new ConstrainedMultiDimensionalParameter([[],[]],
+            [ratios: new ConstrainedMultiDimensionalParameter([[],[]],
                     LinkRatioIndexTableConstraints.COLUMN_TITLES,
                     ConstraintsFactory.getConstraints(LinkRatioIndexTableConstraints.IDENTIFIER))])
     public static final IndexStrategyType STOCHASTIC = new IndexStrategyType("stochastic", "STOCHASTIC", [

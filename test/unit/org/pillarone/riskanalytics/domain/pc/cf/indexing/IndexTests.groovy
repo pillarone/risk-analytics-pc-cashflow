@@ -82,7 +82,7 @@ class IndexTests extends GroovyTestCase {
 
         assertEquals "one factor only", 1, index.outFactors.size()
         assertEquals "factor for 2012-01-01", 1, index.outFactors[0].getFactorAtDate(date20110101)
-        assertEquals "factor for 2012-01-01", 1+4.5 * 0.95d, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1))
+        assertEquals "factor for 2012-01-01", 1 + 4.5 * 0.95d, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1))
 
     }
 
@@ -90,7 +90,7 @@ class IndexTests extends GroovyTestCase {
         Index index = new Index(parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.DETERMINISTICANNUALCHANGE,
                 [changes: new ConstrainedMultiDimensionalParameter(
                         [[date20010101, date20020101, date20030222, date20030316, date20041212, date20050421],
-                                [0.0222, 0d, 0.0094, 0.0188, 0.0267, 0.0155]],
+                               [0.0222, 0d, 0.0094, 0.0188, 0.0267, 0.0155]],
                         [AnnualIndexTableConstraints.DATE, AnnualIndexTableConstraints.ANNUAL_CHANGE],
                         ConstraintsFactory.getConstraints(AnnualIndexTableConstraints.IDENTIFIER))]))
         index.doCalculation()
@@ -102,5 +102,26 @@ class IndexTests extends GroovyTestCase {
         assertEquals "factor for 2003-03-16", 1.022761317632, index.outFactors[0].getFactorAtDate(date20030316), EPSILON
         assertEquals "factor for 2004-12-12", 1.056529863448, index.outFactors[0].getFactorAtDate(date20041212), EPSILON
         assertEquals "factor for 2005-04-21", 1.066485267071, index.outFactors[0].getFactorAtDate(date20050421), EPSILON
+    }
+
+
+
+    void testAgeToAgeIndexRatios() {
+
+        Index index = new Index(parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.AGE_TO_AGE,
+                [ratios: new ConstrainedMultiDimensionalParameter(
+                        [[date20010101, date20020101, date20030222, date20030316, date20041212, date20050421],
+                                [1.05, 0.99, 1.1, 1.4, 1.2, 1.0]],
+                        [LinkRatioIndexTableConstraints.DATE, LinkRatioIndexTableConstraints.LINK_TO_LINK_RATIO],
+                        ConstraintsFactory.getConstraints(LinkRatioIndexTableConstraints.IDENTIFIER))]))
+        index.doCalculation()
+
+        assertEquals "number of packet", 1, index.outFactors.size()
+        assertEquals "factor for 2001-01-01", 1d, index.outFactors[0].getFactorAtDate(date20010101), 1E-5
+        assertEquals "factor for 2002-01-01", 1.05, index.outFactors[0].getFactorAtDate(date20020101), 1E-5
+        assertEquals "factor for 2003-02-22", 1.0395, index.outFactors[0].getFactorAtDate(date20030222), 1E-5
+        assertEquals "factor for 2003-03-16", 1.14345, index.outFactors[0].getFactorAtDate(date20030316), 1E-5
+        assertEquals "factor for 2004-12-12", 1.60083, index.outFactors[0].getFactorAtDate(date20041212), 1E-5
+        assertEquals "factor for 2005-04-21", 1.920996, index.outFactors[0].getFactorAtDate(date20050421), 1E-5
     }
 }
