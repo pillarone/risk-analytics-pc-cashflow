@@ -16,6 +16,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.core.simulation.item.parameter.ConstrainedStringParameterHolder
 import org.joda.time.Period
 import org.pillarone.riskanalytics.domain.utils.validation.ParameterValidationImpl
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PayoutReportingCombinedPatternStrategyType
+import sun.misc.RegexpPool
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -36,13 +38,13 @@ class PatternStrategyValidator implements IParameterizationValidator {
 
         List<ParameterValidation> errors = []
 
-        /** key: path              */
+        /** key: path                          */
         Map<String, PatternPacket> payoutPatterns = [:]
-        /** key: path              */
+        /** key: path                          */
         Map<String, PatternPacket> reportingPatterns = [:]
-        /** key: path              */
+        /** key: path                          */
         Map<String, String> reportingPatternPerClaimsGenerator = [:]
-        /** key: path              */
+        /** key: path                          */
         Map<String, String> payoutPatternPerClaimsGenerator = [:]
 
 
@@ -64,6 +66,15 @@ class PatternStrategyValidator implements IParameterizationValidator {
                     currentErrors*.path = parameter.path
                     errors.addAll(currentErrors)
                 }
+                else if (classifier instanceof PayoutReportingCombinedPatternStrategyType) {
+
+                    payoutPatterns[parameter.path - 'patterns:subPayoutAndReportingPatterns:' - ':parmPattern'] = parameter.getBusinessObject().getPayoutPattern()
+                    reportingPatterns[parameter.path - 'patterns:subPayoutAndReportingPatterns:' - ':parmPattern'] = parameter.getBusinessObject().getReportingPattern()
+
+                    def currentErrors = validationService.validate(classifier, parameter.getParameterMap())
+                    currentErrors*.path = parameter.path
+                    errors.addAll(currentErrors)
+                }
                 errors.addAll(validate(parameter.classifierParameters.values().toList()))
             }
 
@@ -74,7 +85,6 @@ class PatternStrategyValidator implements IParameterizationValidator {
                 else if (parameter.path.contains("parmPayoutPattern")) {
                     payoutPatternPerClaimsGenerator[parameter.path - ':parmPayoutPattern'] = parameter.value.getStringValue()
                 }
-
             }
         }
 
@@ -90,9 +100,14 @@ class PatternStrategyValidator implements IParameterizationValidator {
                         [payoutEntry.key, payoutEntry.value, reportingValuesPerMonth.floorEntry(payoutEntry.key).value])
                 error.path = claimsGeneratorPath + ':parmPayoutPattern'
                 errors << error
+                // next error only for inking all of the associated paths
+                error = new ParameterValidationImpl(ValidationType.ERROR,
+                        'claims.generator.reporting.pattern.smaller.than.payout.pattern',
+                        [payoutEntry.key, payoutEntry.value, reportingValuesPerMonth.floorEntry(payoutEntry.key).value])
+                error.path = claimsGeneratorPath + ':parmReportingPattern'
+                errors << error
             }
         }
-
         return errors
     }
 
@@ -132,7 +147,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
 
         validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
             double[] values = type.cumulativePattern.getColumnByName(PatternStrategyType.CUMULATIVE2)
-            if (values[values.length - 1] >= 1 - EPSILON && values[values.length - 1] <= 1 + EPSILON) return true
+            if (values[values.length - 1] == 1) return true
             [ValidationType.ERROR, "cumulative.pattern.error.last.value.not.one", values[values.length - 1]]
         }
 
@@ -151,20 +166,25 @@ class PatternStrategyValidator implements IParameterizationValidator {
             if (values.length == 0) {
                 return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.empty", values]
             }
-            if (values[0] < 1) {
-                return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.smaller.one", values[0]]
+
+            for (int i = 0; i < values.length; i++) {
+                if (values[i] < 1) {
+                    return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.smaller.one", i + 1, values[i]]
+                }
             }
             return true
         }
 
-        validationService.register(PatternStrategyType.AGE_TO_AGE) {Map type ->
+        validationService.register(PatternStrategyType.AGE_TO_AGE) {
+            Map type ->
             double[] values = type.ageToAgePattern.getColumnByName(PatternStrategyType.LINK_RATIOS)
-            if (values[values.length - 1] >= 1 - EPSILON && values[values.length - 1] <= 1 + EPSILON) return true
+            if (values[values.length - 1] == 1) return true
             [ValidationType.ERROR, "age.to.age.pattern.error.last.ratio.not.one", values[values.length - 1]]
         }
 
 
-        validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
+        validationService.register(PatternStrategyType.CUMULATIVE) {
+            Map type ->
             double[] months = type.cumulativePattern.getColumnByName(PatternTableConstraints.MONTHS)
             if (months[0] < 0) {
                 return [ValidationType.ERROR, "cumulative.pattern.error.cumulative.months.not.non-negative", months[0]]
@@ -172,7 +192,8 @@ class PatternStrategyValidator implements IParameterizationValidator {
             return true
         }
 
-        validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
+        validationService.register(PatternStrategyType.CUMULATIVE) {
+            Map type ->
             double[] months = type.cumulativePattern.getColumnByName(PatternTableConstraints.MONTHS)
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
@@ -182,7 +203,8 @@ class PatternStrategyValidator implements IParameterizationValidator {
             return true
         }
 
-        validationService.register(PatternStrategyType.INCREMENTAL) {Map type ->
+        validationService.register(PatternStrategyType.INCREMENTAL) {
+            Map type ->
             double[] months = type.incrementalPattern.getColumnByName(PatternTableConstraints.MONTHS)
 
             if (months[0] < 0) {
@@ -191,7 +213,8 @@ class PatternStrategyValidator implements IParameterizationValidator {
             return true
         }
 
-        validationService.register(PatternStrategyType.INCREMENTAL) {Map type ->
+        validationService.register(PatternStrategyType.INCREMENTAL) {
+            Map type ->
             double[] months = type.incrementalPattern.getColumnByName(PatternTableConstraints.MONTHS)
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
@@ -201,7 +224,8 @@ class PatternStrategyValidator implements IParameterizationValidator {
             return true
         }
 
-        validationService.register(PatternStrategyType.AGE_TO_AGE) {Map type ->
+        validationService.register(PatternStrategyType.AGE_TO_AGE) {
+            Map type ->
             double[] months = type.ageToAgePattern.getColumnByName(PatternTableConstraints.MONTHS)
 
             if (months[0] < 0) {
@@ -210,11 +234,275 @@ class PatternStrategyValidator implements IParameterizationValidator {
             return true
         }
 
-        validationService.register(PatternStrategyType.AGE_TO_AGE) {Map type ->
+        validationService.register(PatternStrategyType.AGE_TO_AGE) {
+            Map type ->
             double[] months = type.ageToAgePattern.getColumnByName(PatternTableConstraints.MONTHS)
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
                     return [ValidationType.ERROR, "age.to.age.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
+                }
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.INCREMENTAL) {
+            Map type ->
+            double[] payoutValues = type.incrementalPattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.INCREMENTS_PAYOUT)
+            double sum = (double) GroovyCollections.sum(payoutValues)
+            if (sum >= 1.0 - EPSILON && sum <= 1.0 + EPSILON) return true
+            [ValidationType.ERROR, "incremental.combined.pattern.payout.error.sum.not.one", sum]
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.INCREMENTAL) {
+            Map type ->
+            double[] reportedValues = type.incrementalPattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.INCREMENTS_REPORTED)
+            double sum = (double) GroovyCollections.sum(reportedValues)
+            if (sum >= 1.0 - EPSILON && sum <= 1.0 + EPSILON) return true
+            [ValidationType.ERROR, "incremental.combined.pattern.reported.error.sum.not.one", sum]
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.INCREMENTAL) {
+            Map type ->
+            double[] payoutValues = type.incrementalPattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.INCREMENTS_PAYOUT)
+            if (payoutValues.length == 0) {
+                return [ValidationType.ERROR, "incremental.combined.pattern.error.incremental.payout.values.empty", payoutValues]
+            }
+
+            for (int i = 0; i < payoutValues.length; i++) {
+                if (payoutValues[i] < 0 || payoutValues[i] > 1) {
+                    return [ValidationType.ERROR, "incremental.combined.pattern.error.incremental.payout.values.not.in.unity.interval", i + 1, payoutValues[i]]
+                }
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.INCREMENTAL) {
+            Map type ->
+            double[] reportedValues = type.incrementalPattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.INCREMENTS_REPORTED)
+            if (reportedValues.length == 0) {
+                return [ValidationType.ERROR, "incremental.combined.pattern.error.incremental.reported.values.empty", reportedValues]
+            }
+
+            for (int i = 0; i < reportedValues.length; i++) {
+                if (reportedValues[i] < 0 || reportedValues[i] > 1) {
+                    return [ValidationType.ERROR, "incremental.combined.pattern.error.incremental.reported.values.not.in.unity.interval", i + 1, reportedValues[i]]
+                }
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.INCREMENTAL) {
+            Map type ->
+            double[] reportedValues = type.incrementalPattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.INCREMENTS_REPORTED)
+            double[] payoutValues = type.incrementalPattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.INCREMENTS_PAYOUT)
+            double cumulativeReported = 0
+            double cumulativePayout = 0
+            for (int i = 0; i < reportedValues.length; i++) {
+                cumulativeReported += reportedValues[i]
+                cumulativePayout += payoutValues[i]
+                if (cumulativeReported < cumulativePayout - EPSILON) {
+                    return [ValidationType.ERROR, "incremental.combined.pattern.error.reported.smaller.than.payout", i + 1, reportedValues[i], payoutValues[i]]
+                }
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
+            Map type ->
+            double[] payoutValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_PAYOUT)
+            if (payoutValues.length == 0) {
+                return [ValidationType.ERROR, "cumulative.combined.pattern.error.cumulative.payout.values.empty", payoutValues]
+            }
+            if (payoutValues[0] < 0) {
+                return [ValidationType.ERROR, "cumulative.combined.pattern.error.cumulative.payout.values.negative", payoutValues[0]]
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
+            Map type ->
+            double[] reportedValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_REPORTED)
+            if (reportedValues.length == 0) {
+                return [ValidationType.ERROR, "cumulative.combined.pattern.error.cumulative.reported.values.empty", reportedValues]
+            }
+            if (reportedValues[0] < 0) {
+                return [ValidationType.ERROR, "cumulative.combined.pattern.error.cumulative.reported.values.negative", reportedValues[0]]
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
+            Map type ->
+            double[] payoutValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_PAYOUT)
+            if (payoutValues[payoutValues.length - 1] == 1) return true
+            [ValidationType.ERROR, "cumulative.combined.pattern.payout.error.last.value.not.one", payoutValues[payoutValues.length - 1]]
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
+            Map type ->
+            double[] reportedValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_REPORTED)
+            if (reportedValues[reportedValues.length - 1] == 1) return true
+            [ValidationType.ERROR, "cumulative.combined.pattern.reported.error.last.value.not.one", reportedValues[reportedValues.length - 1]]
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
+            Map type ->
+            double[] payoutValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_PAYOUT)
+            for (int i = 0; i < payoutValues.length - 1; i++) {
+                if (payoutValues[i + 1] < payoutValues[i]) {
+                    return [ValidationType.ERROR, "cumulative.combined.pattern.error.cumulative.payout.values.not.increasing", i + 1, payoutValues[i], payoutValues[i + 1]]
+                }
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
+            Map type ->
+            double[] reportedValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_REPORTED)
+            for (int i = 0; i < reportedValues.length - 1; i++) {
+                if (reportedValues[i + 1] < reportedValues[i]) {
+                    return [ValidationType.ERROR, "cumulative.combined.pattern.error.cumulative.reported.values.not.increasing", i + 1, reportedValues[i], reportedValues[i + 1]]
+                }
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
+            Map type ->
+            double[] reportedValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_REPORTED)
+            double[] payoutValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_PAYOUT)
+            for (int i = 0; i < reportedValues.length; i++) {
+                if (reportedValues[i] < payoutValues[i]) {
+                    return [ValidationType.ERROR, "cumulative.combined.pattern.error.reported.smaller.than.payout", i + 1, reportedValues[i], payoutValues[i]]
+                }
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.AGE_TO_AGE) {
+            Map type ->
+            double[] reportedValues = type.ageToAgePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.LINK_RATIOS_REPORTED)
+            if (reportedValues.length == 0) {
+                return [ValidationType.ERROR, "age.to.age.combined.pattern.error.reported.ratios.empty", reportedValues]
+            }
+            for (int i = 0; i < reportedValues.length; i++) {
+                if (reportedValues[i] < 1) {
+                    return [ValidationType.ERROR, "age.to.age.combined.pattern.error.reported.ratios.smaller.one", i + 1, reportedValues[i]]
+                }
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.AGE_TO_AGE) {
+            Map type ->
+            double[] payoutValues = type.ageToAgePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.LINK_RATIOS_PAYOUT)
+            if (payoutValues.length == 0) {
+                return [ValidationType.ERROR, "age.to.age.combined.pattern.error.payout.ratios.empty", payoutValues]
+            }
+            for (int i = 0; i < payoutValues.length; i++) {
+                if (payoutValues[i] < 1) {
+                    return [ValidationType.ERROR, "age.to.age.combined.pattern.error.payout.ratios.smaller.one", i + 1, payoutValues[i]]
+                }
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.AGE_TO_AGE) {
+            Map type ->
+            double[] reportedValues = type.ageToAgePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.LINK_RATIOS_REPORTED)
+            if (reportedValues[reportedValues.length - 1] == 1) return true
+            [ValidationType.ERROR, "age.to.age.combined.pattern.error.last.reported.ratio.not.one", reportedValues[reportedValues.length - 1]]
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.AGE_TO_AGE) {
+            Map type ->
+            double[] payoutValues = type.ageToAgePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.LINK_RATIOS_PAYOUT)
+            if (payoutValues[payoutValues.length - 1] == 1) return true
+            [ValidationType.ERROR, "age.to.age.combined.pattern.error.last.payout.ratio.not.one", payoutValues[payoutValues.length - 1]]
+        }
+
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.AGE_TO_AGE) {
+            Map type ->
+            double[] reportedValues = type.ageToAgePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.LINK_RATIOS_REPORTED)
+            double[] payoutValues = type.ageToAgePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.LINK_RATIOS_PAYOUT)
+            double reportedProduct = 1.0
+            double payoutProduct = 1.0
+            for (double value in reportedValues) {
+                reportedProduct *= value
+            }
+            for (double value in payoutValues) {
+                payoutProduct *= value
+            }
+            double cumulativeReported = 1.0 / reportedProduct
+            double cumulativePayout = 1.0 / payoutProduct
+            for (int i = 0; i < reportedValues.length - 1; i++) {
+                if (cumulativeReported < cumulativePayout - EPSILON) {
+                    return [ValidationType.ERROR, "age.to.age.combined.pattern.error.reported.smaller.than.payout", i + 1, cumulativeReported, cumulativePayout]
+                }
+                cumulativeReported *= reportedValues[i]
+                cumulativePayout *= payoutValues[i]
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
+            Map type ->
+            double[] months = type.cumulativePattern.getColumnByName(PatternTableConstraints.MONTHS)
+            if (months[0] < 0) {
+                return [ValidationType.ERROR, "cumulative.combined.pattern.error.cumulative.months.not.non-negative", months[0]]
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
+            Map type ->
+            double[] months = type.cumulativePattern.getColumnByName(PatternTableConstraints.MONTHS)
+            for (int i = 0; i < months.length - 1; i++) {
+                if (months[i + 1] <= months[i]) {
+                    return [ValidationType.ERROR, "cumulative.combined.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
+                }
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.INCREMENTAL) {
+            Map type ->
+            double[] months = type.incrementalPattern.getColumnByName(PatternTableConstraints.MONTHS)
+
+            if (months[0] < 0) {
+                return [ValidationType.ERROR, "incremental.combined.pattern.error.cumulative.months.not.non-negative", months[0]]
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.INCREMENTAL) {
+            Map type ->
+            double[] months = type.incrementalPattern.getColumnByName(PatternTableConstraints.MONTHS)
+            for (int i = 0; i < months.length - 1; i++) {
+                if (months[i + 1] <= months[i]) {
+                    return [ValidationType.ERROR, "incremental.combined.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
+                }
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.AGE_TO_AGE) {
+            Map type ->
+            double[] months = type.ageToAgePattern.getColumnByName(PatternTableConstraints.MONTHS)
+
+            if (months[0] < 0) {
+                return [ValidationType.ERROR, "age.to.age.combined.pattern.error.cumulative.months.not.non-negative", months[0]]
+            }
+            return true
+        }
+
+        validationService.register(PayoutReportingCombinedPatternStrategyType.AGE_TO_AGE) {
+            Map type ->
+            double[] months = type.ageToAgePattern.getColumnByName(PatternTableConstraints.MONTHS)
+            for (int i = 0; i < months.length - 1; i++) {
+                if (months[i + 1] <= months[i]) {
+                    return [ValidationType.ERROR, "age.to.age.combined.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
                 }
             }
             return true

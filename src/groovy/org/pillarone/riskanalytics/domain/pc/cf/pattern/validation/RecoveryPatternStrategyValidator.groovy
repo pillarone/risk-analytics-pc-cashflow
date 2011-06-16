@@ -51,6 +51,12 @@ class RecoveryPatternStrategyValidator implements IParameterizationValidator {
 
     private void registerConstraints() {
 
+        validationService.register(PatternStrategyType.INCREMENTAL) {Map type ->
+            double[] values = type.incrementalPattern.getColumnByName(PatternStrategyType.INCREMENTS)
+            double sum = (double) GroovyCollections.sum(values)
+            if (sum <= 1.0 + EPSILON) return true
+            [ValidationType.ERROR, "incremental.pattern.error.sum.greater.than.one", sum]
+        }
 
         validationService.register(PatternStrategyType.INCREMENTAL) {Map type ->
             double[] values = type.incrementalPattern.getColumnByName(PatternStrategyType.INCREMENTS)
@@ -138,13 +144,15 @@ class RecoveryPatternStrategyValidator implements IParameterizationValidator {
             if (values.length == 0) {
                 return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.empty", values]
             }
-            if (values[0] < 1) {
-                return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.smaller.one", values[0]]
+            for (int i = 0; i < values.length; i++) {
+                if (values[i] < 1) {
+                    return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.smaller.one", i + 1, values[i]]
+                }
             }
             return true
         }
 
-         validationService.register(PatternStrategyType.AGE_TO_AGE) {Map type ->
+        validationService.register(PatternStrategyType.AGE_TO_AGE) {Map type ->
             double[] months = type.ageToAgePattern.getColumnByName(PatternTableConstraints.MONTHS)
 
             if (months[0] < 0) {
