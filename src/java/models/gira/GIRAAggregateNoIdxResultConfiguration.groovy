@@ -21,6 +21,22 @@ components {
 			outUnderwritingInfoNet = "AGGREGATED"
 		}
 	}
+	segments {
+		outClaimsCeded = "AGGREGATED"
+		outClaimsGross = "AGGREGATED"
+		outClaimsNet = "AGGREGATED"
+		outUnderwritingInfoCeded = "AGGREGATED"
+		outUnderwritingInfoGross = "AGGREGATED"
+		outUnderwritingInfoNet = "AGGREGATED"
+		subsubcomponents {
+			outClaimsCeded = "AGGREGATED"
+			outClaimsGross = "AGGREGATED"
+			outClaimsNet = "AGGREGATED"
+			outUnderwritingInfoCeded = "AGGREGATED"
+			outUnderwritingInfoGross = "AGGREGATED"
+			outUnderwritingInfoNet = "AGGREGATED"
+		}
+	}
 	underwritingSegments {
 		subsubcomponents {
 			outUnderwritingInfo = "AGGREGATED"

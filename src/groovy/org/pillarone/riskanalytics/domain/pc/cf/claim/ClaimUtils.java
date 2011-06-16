@@ -49,10 +49,11 @@ public class ClaimUtils {
 
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor) {
         if (notTrivialValues(claim)) {
-            ClaimRoot baseClaim = new ClaimRoot(claim.ultimate() * factor, claim.getBaseClaim());
-            ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(baseClaim, baseClaim.getUltimate(),
+            double scaledUltimate = claim.ultimate() * factor;
+            double scaledReserves = scaledUltimate - claim.getPaidCumulated() * factor;
+            ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(claim.getBaseClaim(), scaledUltimate,
                     claim.getPaidIncremental() * factor, claim.getPaidCumulated() * factor,
-                    claim.getReportedIncremental() * factor, claim.getReportedCumulated() * factor, claim.reserved() * factor,
+                    claim.getReportedIncremental() * factor, claim.getReportedCumulated() * factor, scaledReserves,
                     claim.getUpdateDate(), claim.getUpdatePeriod());
             applyMarkers(claim, scaledClaim);
             return scaledClaim;
@@ -101,7 +102,11 @@ public class ClaimUtils {
      * @return
      */
     public static ClaimCashflowPacket getNetClaim(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim) {
-        ClaimCashflowPacket netClaim = new ClaimCashflowPacket(
+        if (cededClaim == null) {
+            return (ClaimCashflowPacket) grossClaim.clone();
+        }
+        else {
+            ClaimCashflowPacket netClaim = new ClaimCashflowPacket(
                 grossClaim.getBaseClaim(),
                 grossClaim.ultimate() + cededClaim.ultimate(),
                 grossClaim.getPaidIncremental() + cededClaim.getPaidIncremental(),
@@ -111,8 +116,9 @@ public class ClaimUtils {
                 grossClaim.reserved() + cededClaim.reserved(),
                 grossClaim.getUpdateDate(),
                 grossClaim.getUpdatePeriod());
-        applyMarkers(cededClaim, netClaim);
-        return netClaim;
+            applyMarkers(cededClaim, netClaim);
+            return netClaim;
+        }
     }
 
     public static boolean notTrivialValues(ClaimCashflowPacket claim) {
