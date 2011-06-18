@@ -6,15 +6,14 @@
 
     <property file="application.properties"/>
 
-    <property name="build.prod.dir" value="${user.home}/.grails/${app.grails.version}/projects/RiskAnalyticsPC"/>
-    <property name="plugin.dir" value="${basedir}/../local-plugins/RiskAnalyticsPropertyCasualty-master"/>
+    <property name="build.prod.dir" value="${user.home}/.grails/${app.grails.version}/projects/risk-analytics-pc-cashflow"/>
+    <property name="plugin.dir" value="${basedir}/../local-plugins/risk-analytics-pc-casualty-master"/>
     <property name="classes.prod.dir" value="${build.prod.dir}/classes"/>
     <property name="resources.prod.dir" value="src/java"/>
 
     <property name="dist.dir" value="dist"/>
     <property name="target.dir" value="target"/>
     <property name="webapp.lib.dir" value="web-app/lib"/>
-    <property name="ulcPlugIn.webapp.lib.dir" value="${build.prod.dir}/plugins/ulc-2008-u1/web-app/lib"/>
     <property name="doc.dir" value="docs/gapi"/>
 
     <condition property="grails" value="${GRAILS_HOME}/bin/grails.bat">
