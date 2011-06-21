@@ -4,7 +4,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.ModelTest
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class GIRAReDevModelTests extends ModelTest {
+class GIRASegmentsModelTests extends ModelTest {
 
     Class getModelClass() {
         GIRAModel

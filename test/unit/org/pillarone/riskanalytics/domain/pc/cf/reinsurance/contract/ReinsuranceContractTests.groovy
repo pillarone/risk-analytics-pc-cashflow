@@ -190,8 +190,10 @@ class ReinsuranceContractTests extends GroovyTestCase {
         claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
         quotaShare20.inClaims.addAll(claims)
         quotaShare20.doCalculation()
-        // as there is a 'gap' in the pattern from 24..48
-        assertEquals 'P3 number of ceded claims', 0, quotaShare20.outClaimsCeded.size()
+        assertEquals 'P3 number of ceded claims', 1, quotaShare20.outClaimsCeded.size()
+        assertEquals 'P3 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
+        assertEquals 'P3 ceded incremental paid', 0, quotaShare20.outClaimsCeded[0].paidIncremental, EPSILON
+        assertEquals 'P3 ceded incremental reported', 0, quotaShare20.outClaimsCeded[0].reportedIncremental, EPSILON
 
 
         quotaShare20.reset()

@@ -2,7 +2,7 @@ package models.gira
 
 model=models.gira.GIRAModel
 periodCount=1
-displayName='segment'
+displayName='Segment'
 applicationVersion='1.4-ALPHA-1.5'
 periodLabels=["2011-01-01"]
 components {

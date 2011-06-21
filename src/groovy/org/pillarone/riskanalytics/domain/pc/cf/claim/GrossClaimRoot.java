@@ -77,34 +77,44 @@ public final class GrossClaimRoot implements IClaimRoot {
         if (!hasTrivialPayout() || isReservesClaim) {
             List<DateFactors> payouts = payoutPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter);
             List<DateFactors> reports = reportingPattern != null ?
-                    reportingPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter) : null;
-            if (!hasIBNR() && isReservesClaim) {
-                reports = new PatternPacket.TrivialPattern(IReportingPatternMarker.class).getDateFactorsForCurrentPeriod(
-                        claimRoot.getOccurrenceDate(), periodCounter);
-            }
-            for (int i = 0; i < payouts.size(); i++) {
-                DateTime payoutDate = payouts.get(i).getDate();
-                double factor = manageFactor(factors, payoutDate, periodCounter, claimRoot.getOccurrenceDate());
-                double payoutIncrementalFactor = payouts.get(i).getFactorIncremental();
-                double payoutCumulatedFactor = payouts.get(i).getFactorCumulated();
-                double ultimate = claimRoot.getUltimate();
-                double reserves = ultimate * (1 - payoutCumulatedFactor) * factor;
-                double paidIncremental = ultimate * payoutIncrementalFactor * factor;
-                double paidCumulated = paidCumulatedIncludingAppliedFactors + paidIncremental;
-                paidCumulatedIncludingAppliedFactors = paidCumulated;
-                ClaimCashflowPacket cashflowPacket;
-                if (!hasIBNR() && !isReservesClaim) {
-                    // todo(jwa): This is not equal to reporting pattern with full report at month 0 (trivial reporting pattern)
-                    cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncremental, paidCumulated,
-                            reserves, payoutDate, periodCounter);
+                    reportingPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter)
+                    : null;
+            if ((payouts.size() == 0 && reports == null) || (hasIBNR() && (payouts.size() + reports.size() == 0))) {
+                // PMO-1645: this if block is a quick fix and does not contain the final solution.
+                // further details posted at
+                if (claimRoot.getOccurrenceDate().plus(payoutPattern.getLastCumulativePeriod()).isAfter(periodCounter.getCurrentPeriodStart())) {
+                    DateTime artificalPayoutDate = periodCounter.getCurrentPeriodStart();
+                    ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, 0, 0,0,0,0,0, artificalPayoutDate, periodCounter);
+                    currentPeriodClaims.add(cashflowPacket);
                 }
-                else {
-                    // ask stefan: reportedCumulated != sum (reported incremental)
-                    double reportedIncremental = reportedIncremental(ultimate, factor, reports, i);
-                    double reportedCumulated = reportedCumulated(ultimate, paidCumulated, factor, payoutCumulatedFactor, reports, i);
-                    reportedCumulatedIncludingAppliedFactors = reportedCumulated;
-                    cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncremental, paidCumulated,
-                            reportedIncremental, reportedCumulated, reserves, payoutDate, periodCounter);
+            }
+            else {
+                for (int i = 0; i < payouts.size(); i++) {
+                    DateTime payoutDate = payouts.get(i).getDate();
+                    double factor = manageFactor(factors, payoutDate, periodCounter, claimRoot.getOccurrenceDate());
+                    double payoutIncrementalFactor = payouts.get(i).getFactorIncremental();
+                    double payoutCumulatedFactor = payouts.get(i).getFactorCumulated();
+                    double ultimate = claimRoot.getUltimate();
+                    double reserves = ultimate * (1 - payoutCumulatedFactor) * factor;
+                    double paidIncremental = ultimate * payoutIncrementalFactor * factor;
+                    double paidCumulated = paidCumulatedIncludingAppliedFactors + paidIncremental;
+                    paidCumulatedIncludingAppliedFactors = paidCumulated;
+                    ClaimCashflowPacket cashflowPacket;
+                    if (!hasIBNR()) {
+                        cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncremental, paidCumulated,
+                                reserves, payoutDate, periodCounter);
+                    }
+                    else {
+                        double reportedIncremental = reportedIncremental(ultimate, factor, reports, i);
+                        double reportedCumulated = reportedCumulated(ultimate, paidCumulated, factor, payoutCumulatedFactor, reports, i);
+                        reportedCumulatedIncludingAppliedFactors = reportedCumulated;
+                        cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncremental, paidCumulated,
+                                reportedIncremental, reportedCumulated, reserves, payoutDate, periodCounter);
+                    }
+                    childCounter++;
+                    hasUltimate = false;    // a period may contain several payouts and only the first should contain the ultimate
+                    checkCorrectDevelopment(cashflowPacket);
+                    currentPeriodClaims.add(cashflowPacket);
                 }
                 childCounter++;
                 hasUltimate = false;    // a period may contain several payouts and only the first should contain the ultimate

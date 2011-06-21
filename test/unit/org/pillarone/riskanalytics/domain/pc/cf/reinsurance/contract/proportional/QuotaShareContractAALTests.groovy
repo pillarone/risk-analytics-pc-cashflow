@@ -282,7 +282,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         quotaShare20.inClaims.addAll(claimRoot1200.getClaimCashflowPackets(periodCounter, false))
         quotaShare20.doCalculation()
 
-        assertEquals 'number of ceded claims', 0, quotaShare20.outClaimsCeded.size()
+        assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
