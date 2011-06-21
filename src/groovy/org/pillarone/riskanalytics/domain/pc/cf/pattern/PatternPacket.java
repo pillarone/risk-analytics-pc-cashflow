@@ -5,7 +5,9 @@ import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.packets.Packet;
+import org.pillarone.riskanalytics.core.simulation.BeforeSimulationStartException;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.DateFactors;
 
 import java.util.*;
@@ -20,7 +22,9 @@ public class PatternPacket extends Packet {
     protected List<Double> cumulativeValues;
     protected List<Period> cumulativePeriods;
 
-    /** this field is required to enable different kinds of pattern within one mdp @see PayoutReportingCombinedPattern */
+    /**
+     * this field is required to enable different kinds of pattern within one mdp @see PayoutReportingCombinedPattern
+     */
     private Class<? extends IPatternMarker> patternMarker;
 
     public PatternPacket() {
@@ -38,6 +42,9 @@ public class PatternPacket extends Packet {
      */
     public double outstandingShare(double elapsedMonths) {
         int indexAboveElapsedMonths = 0;
+        if (elapsedMonths < 0){
+            throw new IllegalArgumentException("elapsed months are negative!");
+        }
         for (int i = 0; i < cumulativePeriods.size(); i++) {
             if (elapsedMonths < cumulativePeriods.get(i).getMonths()) {
                 indexAboveElapsedMonths = i;
@@ -81,7 +88,18 @@ public class PatternPacket extends Packet {
         List<DateFactors> dateFactors = new ArrayList<DateFactors>();       //      todo(sku): avoid looping through complete pattern
         for (int devPeriod = 0; devPeriod < cumulativeValues.size(); devPeriod++) {
             DateTime date = occurrenceDate.plus(cumulativePeriods.get(devPeriod));
-            if (periodCounter.belongsToCurrentPeriod(date)) {
+            if (!date.isBefore(periodCounter.startOfFirstPeriod()) && periodCounter.belongsToCurrentPeriod(date)) {
+                    dateFactors.add(new DateFactors(date, incrementFactor(devPeriod), cumulativeValues.get(devPeriod)));
+                }
+        }
+        return dateFactors;
+    }
+
+    public List<DateFactors> getDateFactorsTillStartOfCurrentPeriod(DateTime occurrenceDate, IPeriodCounter periodCounter) {
+        List<DateFactors> dateFactors = new ArrayList<DateFactors>();       //      todo(sku): avoid looping through complete pattern
+        for (int devPeriod = 0; devPeriod < cumulativeValues.size(); devPeriod++) {
+            DateTime date = occurrenceDate.plus(cumulativePeriods.get(devPeriod));
+            if (date.isBefore(periodCounter.getCurrentPeriodStart())) {
                 dateFactors.add(new DateFactors(date, incrementFactor(devPeriod), cumulativeValues.get(devPeriod)));
             }
         }
@@ -94,7 +112,7 @@ public class PatternPacket extends Packet {
 
     /**
      * @param elapsedMonths
-     * @return nearest pattern index with month value lower elapsedMonths or null if elapsedMonths is after last period
+     * @return nearest pattern index with month value greater elapsedMonths or null if elapsedMonths is after last period
      */
     public Integer nextPayoutIndex(double elapsedMonths) {
         for (int i = 0; i < cumulativePeriods.size(); i++) {
@@ -108,7 +126,7 @@ public class PatternPacket extends Packet {
 
     /**
      * @param elapsedMonths
-     * @return nearest pattern index with month value lower or equal elapsedMonths or null if elapsedMonths is after last period
+     * @return nearest pattern index with month value greater or equal elapsedMonths or null if elapsedMonths is after last period
      */
     public Integer thisOrNextPayoutIndex(double elapsedMonths) {
         for (int i = 0; i < cumulativePeriods.size(); i++) {
@@ -118,6 +136,23 @@ public class PatternPacket extends Packet {
         }
         // elapseMonths is after latest period
         return null;
+    }
+
+    /**
+     * @param elapsedMonths
+     * @return nearest pattern index with month value lower or equal elapsedMonths or null if elapsedMonths is after last period
+     */
+    public Integer thisOrLastPayoutIndex(double elapsedMonths) {
+        int index = -1;  // elapseMonths is before first period
+        for (int i = 0; i < cumulativePeriods.size(); i++) {
+            if (elapsedMonths >= cumulativePeriods.get(i).getMonths()) {
+                index +=1;
+            }
+            else {
+                break;
+            }
+        }
+        return index > -1 ? index : null;
     }
 
     public int size() {

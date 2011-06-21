@@ -9,6 +9,11 @@ components {
 			outClaims = "AGGREGATED"
 		}
 	}
+    reservesGenerators {
+		subsubcomponents {
+			outReserves = "AGGREGATED"
+		}
+	}
 	reinsuranceContracts {
 		subsubcomponents {
 			outClaimsCeded = "AGGREGATED"

@@ -25,6 +25,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PayoutReportingCombinedP
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPremiumPatternMarker
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerators
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -38,6 +39,7 @@ class GIRAModel extends StochasticModel {
     Patterns patterns
     UnderwritingSegments underwritingSegments
     ClaimsGenerators claimsGenerators
+    ReservesGenerators reservesGenerators
     Dependencies dependencies
     EventGenerators eventGenerators
     Segments segments
@@ -50,6 +52,7 @@ class GIRAModel extends StochasticModel {
         indices = new Indices()
         patterns = new Patterns()
         claimsGenerators = new ClaimsGenerators()
+        reservesGenerators = new ReservesGenerators()
         dependencies = new Dependencies()
         eventGenerators = new EventGenerators()
         segments = new Segments()
@@ -70,6 +73,8 @@ class GIRAModel extends StochasticModel {
         claimsGenerators.inEventSeverities = dependencies.outEventSeverities
         claimsGenerators.inEventSeverities = eventGenerators.outEventSeverities
         claimsGenerators.inEventFrequencies = eventGenerators.outEventFrequencies
+        reservesGenerators.inFactors= indices.outFactors
+        reservesGenerators.inPatterns = patterns.outPatterns
         indices.inEventSeverities = dependencies.outEventSeverities
         if (segments.subComponentCount() == 0) {
             reinsuranceContracts.inClaims = claimsGenerators.outClaims

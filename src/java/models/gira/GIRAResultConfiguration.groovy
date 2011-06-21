@@ -9,6 +9,11 @@ components {
             outClaimNumber ="AGGREGATED"
 		}
 	}
+    reservesGenerators {
+		subsubcomponents {
+			outReserves = "SINGLE"
+		}
+	}
 	underwritingSegments {
 		subsubcomponents {
 			outUnderwritingInfo = "AGGREGATED"

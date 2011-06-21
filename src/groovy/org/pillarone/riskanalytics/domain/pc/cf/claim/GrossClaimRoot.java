@@ -9,7 +9,10 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.TrivialPatternStrategy;
+import org.pillarone.riskanalytics.domain.utils.marker.IReserveMarker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +39,9 @@ public final class GrossClaimRoot implements IClaimRoot {
     private double paidCumulatedIncludingAppliedFactors = 0d;
     private double reportedCumulatedIncludingAppliedFactors = 0d;
 
-    /** counts the currently existing ClaimCashflowPacket referencing this instance */
+    /**
+     * counts the currently existing ClaimCashflowPacket referencing this instance
+     */
     private int childCounter;
 
     public GrossClaimRoot(ClaimRoot claimRoot, PatternPacket payoutPattern, PatternPacket reportingPattern) {
@@ -57,6 +62,7 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     /**
      * Utility method to derive cashflow claim of a base claim using its ultimate and pattern
+     *
      * @param periodCounter
      * @return
      */
@@ -66,11 +72,16 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter, List<Factors> factors, boolean hasUltimate) {
         List<ClaimCashflowPacket> currentPeriodClaims = new ArrayList<ClaimCashflowPacket>();
-        if (!hasTrivialPayout()) {
+        // todo(jwa): improve (inquiry isReservesClaim not nice)
+        boolean isReservesClaim = claimRoot.getClaimType().equals(ClaimType.AGGREGATED_RESERVES) || claimRoot.getClaimType().equals(ClaimType.RESERVE);
+        if (!hasTrivialPayout() || isReservesClaim) {
             List<DateFactors> payouts = payoutPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter);
             List<DateFactors> reports = reportingPattern != null ?
-                    reportingPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter)
-                    : null;
+                    reportingPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter) : null;
+            if (!hasIBNR() && isReservesClaim) {
+                reports = new PatternPacket.TrivialPattern(IReportingPatternMarker.class).getDateFactorsForCurrentPeriod(
+                        claimRoot.getOccurrenceDate(), periodCounter);
+            }
             for (int i = 0; i < payouts.size(); i++) {
                 DateTime payoutDate = payouts.get(i).getDate();
                 double factor = manageFactor(factors, payoutDate, periodCounter, claimRoot.getOccurrenceDate());
@@ -82,11 +93,13 @@ public final class GrossClaimRoot implements IClaimRoot {
                 double paidCumulated = paidCumulatedIncludingAppliedFactors + paidIncremental;
                 paidCumulatedIncludingAppliedFactors = paidCumulated;
                 ClaimCashflowPacket cashflowPacket;
-                if (!hasIBNR()) {
+                if (!hasIBNR() && !isReservesClaim) {
+                    // todo(jwa): This is not equal to reporting pattern with full report at month 0 (trivial reporting pattern)
                     cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncremental, paidCumulated,
                             reserves, payoutDate, periodCounter);
                 }
                 else {
+                    // ask stefan: reportedCumulated != sum (reported incremental)
                     double reportedIncremental = reportedIncremental(ultimate, factor, reports, i);
                     double reportedCumulated = reportedCumulated(ultimate, paidCumulated, factor, payoutCumulatedFactor, reports, i);
                     reportedCumulatedIncludingAppliedFactors = reportedCumulated;
@@ -130,6 +143,22 @@ public final class GrossClaimRoot implements IClaimRoot {
         Double productFactor = IndexUtils.aggregateFactor(factors, payoutDate, periodCounter, dateOfLoss);
         this.factors.add(payoutDate, productFactor);
         return productFactor;
+    }
+
+    public void updateCumulatedPaidAtStartOfFirstPeriod(IPeriodCounter periodCounter, List<Factors> factors) {
+        List<DateFactors> payouts = payoutPattern.getDateFactorsTillStartOfCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter);
+        List<DateFactors> reports = reportingPattern != null ?
+                reportingPattern.getDateFactorsTillStartOfCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter)
+                : null;
+        for (int i = 0; i < payouts.size(); i++) {
+            DateTime payoutDate = payouts.get(i).getDate();
+            double factor = manageFactor(factors, payoutDate, periodCounter, claimRoot.getOccurrenceDate());
+            double payoutIncrementalFactor = payouts.get(i).getFactorIncremental();
+            double ultimate = claimRoot.getUltimate();
+            double paidIncremental = ultimate * payoutIncrementalFactor * factor;
+            double paidCumulated = paidCumulatedIncludingAppliedFactors + paidIncremental;
+            paidCumulatedIncludingAppliedFactors = paidCumulated;
+        }
     }
 
     public double getUltimate() {
@@ -205,6 +234,7 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     /**
      * check that a claim is fully reported and paid
+     *
      * @param cashflowPacket
      */
     private void checkCorrectDevelopment(ClaimCashflowPacket cashflowPacket) {

@@ -25,6 +25,19 @@ mappings = {
                 }
             }
         }
+        "reserves" {
+            "[%reservesGenerator%]" {
+                "ultimate" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:ultimate"
+                "incremental paid" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:paidIncremental"
+                "cumulated paid" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:paidCumulated"
+                "outstanding" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:outstanding"
+                "reported" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:reportedCumulated"
+                "IBNR" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:IBNR"
+                "reserves" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:reserves"
+                "indexed ultimate" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:developedUltimate"
+                //     "developedResult" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:developedResult"
+            }
+        }
         "grossUnderwritingWritten" "GIRA:underwritingSegments:outUnderwritingInfo:premiumWritten"
         "grossUnderwritingPaid" "GIRA:underwritingSegments:outUnderwritingInfo:premiumPaid"
         "grossUnderwritingBySegment" {
@@ -73,13 +86,13 @@ mappings = {
                         "gross" "GIRA:segments:[%segment%]:outUnderwritingInfoGross:premiumPaid"
                         "ceded" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:premiumPaid", {
                             "fixed" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:premiumPaidFixed"
-                         "variable" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:premiumPaidVariable"
+                            "variable" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:premiumPaidVariable"
                         }
                     }
                 }
                 "commission" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commission", {
-                        "fixed" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commissionFixed"
-                        "variable" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commissionVariable"
+                    "fixed" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commissionFixed"
+                    "variable" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commissionVariable"
                 }
             }
         }
@@ -121,13 +134,13 @@ mappings = {
                         "gross" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoGross:premiumPaid"
                         "ceded" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:premiumPaid", {
                             "fixed" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:premiumPaidFixed"
-                         "variable" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:premiumPaidVariable"
+                            "variable" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:premiumPaidVariable"
                         }
                     }
                 }
                 "commission" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commission", {
-                        "fixed" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionFixed"
-                        "variable" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionVariable"
+                    "fixed" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionFixed"
+                    "variable" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionVariable"
                 }
             }
         }

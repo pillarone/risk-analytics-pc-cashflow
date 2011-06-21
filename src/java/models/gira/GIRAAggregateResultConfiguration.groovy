@@ -10,6 +10,11 @@ components {
 			outSeverityIndexApplied = "AGGREGATED"
 		}
 	}
+    reservesGenerators {
+		subsubcomponents {
+			outReserves = "AGGREGATED"
+		}
+	}
 	underwritingSegments {
 		subsubcomponents {
 			outPolicyIndexApplied = "AGGREGATED"

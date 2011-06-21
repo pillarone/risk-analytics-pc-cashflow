@@ -10,7 +10,7 @@ import java.util.Collections;
  */
 abstract public class Pattern extends Component {
 
-    private PacketList<PatternPacket> outPattern = new PacketList<PatternPacket>(PatternPacket.class);
+    protected PacketList<PatternPacket> outPattern = new PacketList<PatternPacket>(PatternPacket.class);
     private IPatternStrategy parmPattern = PatternStrategyType.getStrategy(PatternStrategyType.NONE, Collections.emptyMap());
     private PatternPacket pattern;
 
