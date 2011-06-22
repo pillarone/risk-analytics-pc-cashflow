@@ -17,7 +17,7 @@ public class ReserveBasedReserveCalculationStrategy extends AbstractParameterObj
     private double reserveAtBaseDate;
     private DateTime baseDate;
     private DateTime occurrenceDate;
-    private UseInterpolation useInterpolation;
+    private InterpolationMode interpolationMode;
 
     public IParameterObjectClassifier getType() {
         return ReserveCalculationType.RESERVEBASED;
@@ -28,7 +28,7 @@ public class ReserveBasedReserveCalculationStrategy extends AbstractParameterObj
         parameters.put("reserveAtBaseDate", reserveAtBaseDate);
         parameters.put("baseDate", baseDate);
         parameters.put("occurrenceDate", occurrenceDate);
-        parameters.put("useInterpolation", useInterpolation);
+        parameters.put("interpolationMode", interpolationMode);
         return parameters;
     }
 
@@ -36,12 +36,12 @@ public class ReserveBasedReserveCalculationStrategy extends AbstractParameterObj
         double numberOfMonths = DateTimeUtilities.deriveNumberOfMonths(occurrenceDate, baseDate);
         double reportedPortionAtBaseDate = 1.0;
         double payoutPortionAtBaseDate = 1.0;
-        switch (useInterpolation) {
-            case YES:
+        switch (interpolationMode) {
+            case LINEAR:
                 reportedPortionAtBaseDate = 1.0 - reportingPattern.outstandingShare(numberOfMonths);
                 payoutPortionAtBaseDate = 1.0-payoutPattern.outstandingShare(numberOfMonths);
                 break;
-            case NO:
+            case NONE:
                 reportedPortionAtBaseDate = reportingPattern.getCumulativeValues().get(reportingPattern.thisOrLastPayoutIndex(numberOfMonths));
                 payoutPortionAtBaseDate = payoutPattern.getCumulativeValues().get(payoutPattern.thisOrLastPayoutIndex(numberOfMonths));
                 break;
