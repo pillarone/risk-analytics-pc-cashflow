@@ -15,11 +15,11 @@ class ReserveCalculationType extends AbstractParameterObjectClassifier {
 
     public static final ReserveCalculationType REPORTEDBASED = new ReserveCalculationType("based on reported information", "REPORTEDBASED",
             [reportedAtBaseDate: 0d, baseDate: new DateTime(2010, 1, 1, 0, 0, 0, 0), occurrenceDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
-                    useInterpolation: UseInterpolation.NO])
+                    interpolationMode: InterpolationMode.NONE])
 
     public static final ReserveCalculationType RESERVEBASED = new ReserveCalculationType("based on reserve information", "RESERVEBASED",
             [reserveAtBaseDate: 0d, baseDate: new DateTime(2010, 1, 1, 0, 0, 0, 0), occurrenceDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
-                    useInterpolation: UseInterpolation.NO])
+                    interpolationMode: InterpolationMode.NONE])
 
     public static final all = [ULTIMATE, REPORTEDBASED, RESERVEBASED]
 
@@ -60,12 +60,12 @@ class ReserveCalculationType extends AbstractParameterObjectClassifier {
             case ReserveCalculationType.REPORTEDBASED:
                 strategy = new ReportedBasedReserveCalculationStrategy(reportedAtBaseDate: (double) parameters["reportedAtBaseDate"],
                         baseDate: (DateTime) parameters["baseDate"], occurrenceDate: (DateTime) parameters["occurrenceDate"],
-                        useInterpolation: (UseInterpolation) parameters["useInterpolation"])
+                        interpolationMode: (InterpolationMode) parameters["interpolationMode"])
                 break;
             case ReserveCalculationType.RESERVEBASED:
                 strategy = new ReserveBasedReserveCalculationStrategy(reserveAtBaseDate: (double) parameters["reserveAtBaseDate"],
                         baseDate: (DateTime) parameters["baseDate"], occurrenceDate: (DateTime) parameters["occurrenceDate"],
-                        useInterpolation: (UseInterpolation) parameters["useInterpolation"])
+                        interpolationMode: (InterpolationMode) parameters["interpolationMode"])
                 break;
         }
         return strategy;

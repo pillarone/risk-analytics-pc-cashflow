@@ -28,14 +28,12 @@ mappings = {
         "reserves" {
             "[%reservesGenerator%]" {
                 "ultimate" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:ultimate"
-                "incremental paid" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:paidIncremental"
-                "cumulated paid" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:paidCumulated"
+                "reported" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:reportedIncremental"
+                "paid" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:paidIncremental"
                 "outstanding" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:outstanding"
-                "reported" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:reportedCumulated"
                 "IBNR" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:IBNR"
                 "reserves" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:reserves"
-                "indexed ultimate" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:developedUltimate"
-                //     "developedResult" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:developedResult"
+                "developedResult" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:developedResult"
             }
         }
         "grossUnderwritingWritten" "GIRA:underwritingSegments:outUnderwritingInfo:premiumWritten"

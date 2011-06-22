@@ -6,7 +6,6 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
-import java.text.BreakIterator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ public class ReportedBasedReserveCalculationStrategy extends AbstractParameterOb
     private double reportedAtBaseDate;
     private DateTime baseDate;
     private DateTime occurrenceDate;
-    private UseInterpolation useInterpolation;
+    private InterpolationMode interpolationMode;
 
     public IParameterObjectClassifier getType() {
         return ReserveCalculationType.REPORTEDBASED;
@@ -29,18 +28,18 @@ public class ReportedBasedReserveCalculationStrategy extends AbstractParameterOb
         parameters.put("reportedAtBaseDate", reportedAtBaseDate);
         parameters.put("baseDate", baseDate);
         parameters.put("occurrenceDate", occurrenceDate);
-        parameters.put("useInterpolation", useInterpolation);
+        parameters.put("interpolationMode", interpolationMode);
         return parameters;
     }
 
     public Double getUltimate(PatternPacket payoutPattern, PatternPacket reportingPattern) {
         double numberOfMonths = DateTimeUtilities.deriveNumberOfMonths(occurrenceDate, baseDate);
         double reportedPortionAtBaseDate = 1.0;
-        switch (useInterpolation) {
-            case YES:
+        switch (interpolationMode) {
+            case LINEAR:
                 reportedPortionAtBaseDate = 1.0 - reportingPattern.outstandingShare(numberOfMonths);
                 break;
-            case NO:
+            case NONE:
                 reportedPortionAtBaseDate = reportingPattern.getCumulativeValues().get(reportingPattern.thisOrLastPayoutIndex(numberOfMonths));
                 break;
         }

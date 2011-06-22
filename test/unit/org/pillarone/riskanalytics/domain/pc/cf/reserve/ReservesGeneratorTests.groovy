@@ -15,9 +15,9 @@ import org.pillarone.riskanalytics.core.wiring.WiringUtils
 import org.pillarone.riskanalytics.core.util.TestProbe
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.Index
+
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.AnnualIndexTableConstraints
+
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
@@ -25,17 +25,11 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.DeterministicIndexTable
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexMode
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.BaseDateMode
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.IIndexMarker
+
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndex
-import org.pillarone.riskanalytics.core.components.Component
+
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.Pattern
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
-import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope
-import org.pillarone.riskanalytics.core.simulation.TestVoidModel
-import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
-import org.joda.time.Period
-import org.pillarone.riskanalytics.core.simulation.ContinuousPeriodCounter
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -98,7 +92,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reservesGenerator.periodStore = new PeriodStore(reservesGenerator.periodScope)
         reservesGenerator.setParmBasisOfReserveCalculation(ReserveCalculationType.getStrategy(
                 ReserveCalculationType.REPORTEDBASED, ["reportedAtBaseDate": (double) 3500.0, "occurrenceDate": occurrenceDate,
-                        "baseDate": baseDate, "useInterpolation": UseInterpolation.NO]))
+                        "baseDate": baseDate, "interpolationMode": InterpolationMode.NONE]))
         reservesGenerator.parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker, 'motor hull')
         reservesGenerator.parmPayoutPattern.selectedComponent = payoutPatterns
         reservesGenerator.parmReportingPattern = new ConstrainedString(IReportingPatternMarker, 'motor hull')
@@ -265,7 +259,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
 
         reservesGenerator.setParmBasisOfReserveCalculation(ReserveCalculationType.getStrategy(
                 ReserveCalculationType.RESERVEBASED, ["reserveAtBaseDate": (double) 3684.0*0.15, "occurrenceDate": occurrenceDate,
-                        "baseDate": baseDate, "useInterpolation": UseInterpolation.NO]))
+                        "baseDate": baseDate, "interpolationMode": InterpolationMode.NONE]))
 
         List<PatternPacket> payoutPatternPackets = new TestProbe(payoutPatterns, "outPattern").result
         List<PatternPacket> reportedPatternPackets = new TestProbe(reportingPatterns, "outPattern").result
