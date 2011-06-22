@@ -149,7 +149,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                     segmentClaim.origin = this;
                     segmentClaim.setMarker(this);
                     double scaleFactor = InputFormatConverter.getDouble(parmClaimsPortions.getValueAt(row + 1, portionColumn));
-                    segmentClaims.add(ClaimUtils.scale(segmentClaim, scaleFactor));
+                    segmentClaims.add(ClaimUtils.scale(segmentClaim, scaleFactor, true));
                 }
             }
             outClaimsGross.addAll(segmentClaims);

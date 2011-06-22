@@ -53,7 +53,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
                 periodStore: iterationScope.periodStores[0])
     }
 
-    /** one claim without development */
+    /** three claims without development */
     void testUsage() {
         ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, date20110101)
         IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
@@ -76,8 +76,31 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         quotaShare20.doCalculation()
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P0 800 ceded ultimate', 160, quotaShare20.outClaimsCeded[0].ultimate()
+        assertEquals 'P0 800 ceded reported incremental', 160, quotaShare20.outClaimsCeded[0].reportedIncremental
+        assertEquals 'P0 800 ceded reported cumulated', 160, quotaShare20.outClaimsCeded[0].reportedCumulated
+        assertEquals 'P0 800 ceded paid incremental', 160, quotaShare20.outClaimsCeded[0].paidIncremental
+        assertEquals 'P0 800 ceded paid cumulated', 160, quotaShare20.outClaimsCeded[0].paidCumulated
+        assertEquals 'P0 800 ceded reserved', 0, quotaShare20.outClaimsCeded[0].reserved()
+        assertEquals 'P0 800 ceded outstanding', 0, quotaShare20.outClaimsCeded[0].outstanding()
+        assertEquals 'P0 800 ceded ibnr', 0, quotaShare20.outClaimsCeded[0].ibnr()
+
         assertEquals 'P0 1000 ceded ultimate', 140, quotaShare20.outClaimsCeded[1].ultimate()
+        assertEquals 'P0 1000 ceded reported incremental', 140, quotaShare20.outClaimsCeded[1].reportedIncremental
+        assertEquals 'P0 1000 ceded reported cumulated', 140, quotaShare20.outClaimsCeded[1].reportedCumulated
+        assertEquals 'P0 1000 ceded paid incremental', 140, quotaShare20.outClaimsCeded[1].paidIncremental
+        assertEquals 'P0 1000 ceded paid cumulated', 140, quotaShare20.outClaimsCeded[1].paidCumulated
+        assertEquals 'P0 1000 ceded reserved', 0, quotaShare20.outClaimsCeded[1].reserved()
+        assertEquals 'P0 1000 ceded outstanding', 0, quotaShare20.outClaimsCeded[1].outstanding()
+        assertEquals 'P0 1000 ceded ibnr', 0, quotaShare20.outClaimsCeded[1].ibnr()
+
         assertEquals 'P0 1200 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
+        assertEquals 'P0 1200 ceded reported incremental', 0, quotaShare20.outClaimsCeded[2].reportedIncremental
+        assertEquals 'P0 1200 ceded reported cumulated', 0, quotaShare20.outClaimsCeded[2].reportedCumulated
+        assertEquals 'P0 1200 ceded paid incremental', 0, quotaShare20.outClaimsCeded[2].paidIncremental
+        assertEquals 'P0 1200 ceded paid cumulated', 0, quotaShare20.outClaimsCeded[2].paidCumulated
+        assertEquals 'P0 1200 ceded reserved', 0, quotaShare20.outClaimsCeded[2].reserved()
+        assertEquals 'P0 1200 ceded outstanding', 0, quotaShare20.outClaimsCeded[2].outstanding()
+        assertEquals 'P0 1200 ceded ibnr', 0, quotaShare20.outClaimsCeded[2].ibnr()
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
@@ -85,7 +108,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 0, quotaShare20.outClaimsCeded.size()
     }
 
-    /** one claim with one development per period */
+    /** three claims with one development per period */
     void testUsageDevelopment() {
         ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, date20110101)
         IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
@@ -196,7 +219,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 0, quotaShare20.outClaimsCeded.size()
     }
 
-     /** one claim with two developments in 1st period */
+     /** three claims with two developments in 1st period */
     void testUsageTwoDevelopmentsFirstPeriod() {
                 ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, date20110101)
         IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter

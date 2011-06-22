@@ -121,7 +121,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     /**
      * Make sure a ClaimStorage object is created for every new CashflowClaimPacket and put in the first time slot of
-     * the periodStore with key CLAIM_HISTORY. This objects contain the incremental history for paid and reported.
+     * the periodStore with key CLAIM_HISTORY. This object contains the incremental history for paid and reported.
      * Put a list of claims sorted by update date with an update in this period containing a reference to their history to the
      * current periodStore time slot using key GROSS_CLAIMS.
      *
@@ -138,20 +138,29 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             claimsHistories = new HashMap<IClaimRoot, ClaimStorage>();
             periodStore.put(CLAIM_HISTORY, claimsHistories);
             for (ClaimCashflowPacket claim : inClaims) {
+                ClaimStorage claimStorage = claimsHistories.get(claim.getBaseClaim());
                 int occurrencePeriod = claim.occurrencePeriod(periodCounter);
-                contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, currentPeriod, claimsHistories,
-                        currentPeriodGrossClaims));
+                if (claimStorage == null) {
+                    contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, currentPeriod, claimsHistories,
+                            currentPeriodGrossClaims));
+                }
+                else {
+                    IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, occurrencePeriod - currentPeriod);
+                    contracts.add(contract);
+                    ClaimHistoryAndApplicableContract claimWithHistory = new ClaimHistoryAndApplicableContract(claim, claimStorage, contract);
+                    currentPeriodGrossClaims.add(claimWithHistory);
+                }
             }
         }
         else {
             for (ClaimCashflowPacket claim : inClaims) {
                 int occurrencePeriod = claim.occurrencePeriod(periodCounter);
-                if (currentPeriod == occurrencePeriod) {
+                ClaimStorage claimStorage = claimsHistories.get(claim.getBaseClaim());
+                if (currentPeriod == occurrencePeriod && claimStorage == null) {
                     contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, currentPeriod, claimsHistories,
                             currentPeriodGrossClaims));
                 }
                 else {
-                    ClaimStorage claimStorage = claimsHistories.get(claim.getBaseClaim());
                     IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, occurrencePeriod - currentPeriod);
                     contracts.add(contract);
                     ClaimHistoryAndApplicableContract claimWithHistory = new ClaimHistoryAndApplicableContract(claim, claimStorage, contract);
@@ -184,12 +193,15 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     /**
      * This has to be done on a claims by claims level and not by contract to consider paid dates and parameters shared
      * among several periods correctly.
+     * @param periodCounter
      */
     private void calculateCededClaims(IPeriodCounter periodCounter) {
         List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
         for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
             ClaimCashflowPacket cededClaim = grossClaim.getCededClaim();
-            cededClaim = ClaimUtils.scale(cededClaim, parmCoveredByReinsurers);
+            if (parmCoveredByReinsurers != 1) {
+                cededClaim = ClaimUtils.scale(cededClaim, parmCoveredByReinsurers);
+            }
             ClaimUtils.applyMarkers(grossClaim.getGrossClaim(), cededClaim);
             cededClaim.setMarker(this);
             outClaimsCeded.add(cededClaim);

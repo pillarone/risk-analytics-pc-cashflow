@@ -25,7 +25,9 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     private final IClaimRoot baseClaim;
 
+    /** is different from 0 only in the occurrence period */
     private double ultimate;
+    /** contains the ultimate value of the occurrence period in every period */
     private double nominalUltimate;
     private double paidIncremental;
     private double paidCumulated;
@@ -73,8 +75,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         updatePeriod(periodCounter);
     }
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated, double reserves,
-                               DateTime updateDate, IPeriodCounter periodCounter) {
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated,
+                               double reserves, DateTime updateDate, IPeriodCounter periodCounter) {
         this(baseClaim);
         this.ultimate = ultimate;
         this.paidCumulated = paidCumulated;
@@ -88,8 +90,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     }
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated,
-                               double reportedIncremental, double reportedCumulated, double reserves,
-                               DateTime updateDate, IPeriodCounter periodCounter) {
+                               double reportedIncremental, double reportedCumulated, double reserves, DateTime updateDate,
+                               IPeriodCounter periodCounter) {
         this(baseClaim);
         this.ultimate = ultimate;
         this.paidCumulated = paidCumulated;
@@ -101,6 +103,14 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         updatePeriod(periodCounter);
         setDate(updateDate);
     }
+
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double nominalUltimate, double paidIncremental,
+                               double paidCumulated, double reportedIncremental, double reportedCumulated,
+                               double reserves, DateTime updateDate, int updatePeriod) {
+        this(baseClaim, ultimate, paidIncremental, paidCumulated, reportedIncremental, reportedCumulated, reserves, updateDate, updatePeriod);
+        this.nominalUltimate = nominalUltimate;
+     }
+
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated,
                                double reportedIncremental, double reportedCumulated, double reserves,
@@ -143,7 +153,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      * @return reserves - outstanding
      */
     public double ibnr() {
-        return reserves - outstanding();
+        return reserved() - outstanding();
     }
 
     /** reported = cumulated paid + outstanding */
@@ -326,4 +336,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     @Deprecated
     public boolean hasUltimate() { return hasUltimate; }
+
+    public double getNominalUltimate() {
+        return nominalUltimate;
+    }
 }
