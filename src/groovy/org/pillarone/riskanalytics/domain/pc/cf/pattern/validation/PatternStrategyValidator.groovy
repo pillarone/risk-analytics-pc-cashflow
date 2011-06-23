@@ -38,13 +38,13 @@ class PatternStrategyValidator implements IParameterizationValidator {
 
         List<ParameterValidation> errors = []
 
-        /** key: path                           */
+        /** key: path                                   */
         Map<String, PatternPacket> payoutPatterns = [:]
-        /** key: path                           */
+        /** key: path                                   */
         Map<String, PatternPacket> reportingPatterns = [:]
-        /** key: path                           */
+        /** key: path                                   */
         Map<String, String> reportingPatternPerClaimsGenerator = [:]
-        /** key: path                           */
+        /** key: path                                   */
         Map<String, String> payoutPatternPerClaimsGenerator = [:]
 
 
@@ -126,17 +126,17 @@ class PatternStrategyValidator implements IParameterizationValidator {
                 return [ValidationType.ERROR, "incremental.pattern.error.incremental.values.empty", values]
             }
 
-//            for (int i = 0; i < values.length; i++) {
-            //                if (values[i] < 0 || values[i] > 1) {
-            //                    return [ValidationType.ERROR, "incremental.pattern.error.incremental.values.not.in.unity.interval", i + 1, values[i]]
-            //                }
-            //            }
-
             double sum = 0
             for (int i = 0; i < values.length; i++) {
                 sum += values[i]
                 if (sum < -EPSILON) {
                     return [ValidationType.ERROR, "incremental.pattern.error.cumulated.increments.negative", i + 1, values[i], sum]
+                }
+            }
+
+            for (int i = 0; i < values.length; i++) {
+                if (values[i] < 0 || values[i] > 1) {
+                    return [ValidationType.HINT, "incremental.pattern.error.incremental.values.not.in.unity.interval", i + 1, values[i]]
                 }
             }
 
@@ -160,15 +160,15 @@ class PatternStrategyValidator implements IParameterizationValidator {
             [ValidationType.ERROR, "cumulative.pattern.error.last.value.not.one", values[values.length - 1]]
         }
 
-//        validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
-        //            double[] values = type.cumulativePattern.getColumnByName(PatternStrategyType.CUMULATIVE2)
-        //            for (int i = 0; i < values.length - 1; i++) {
-        //                if (values[i + 1] < values[i]) {
-        //                    return [ValidationType.ERROR, "cumulative.pattern.error.cumulative.values.not.increasing", i + 1, values[i], values[i + 1]]
-        //                }
-        //            }
-        //            return true
-        //        }
+        validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
+            double[] values = type.cumulativePattern.getColumnByName(PatternStrategyType.CUMULATIVE2)
+            for (int i = 0; i < values.length - 1; i++) {
+                if (values[i + 1] < values[i]) {
+                    return [ValidationType.HINT, "cumulative.pattern.error.cumulative.values.not.increasing", i + 1, values[i], values[i + 1]]
+                }
+            }
+            return true
+        }
 
         validationService.register(PatternStrategyType.AGE_TO_AGE) {Map type ->
             double[] values = type.ageToAgePattern.getColumnByName(PatternStrategyType.LINK_RATIOS)
@@ -176,15 +176,17 @@ class PatternStrategyValidator implements IParameterizationValidator {
                 return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.empty", values]
             }
 
-//            for (int i = 0; i < values.length; i++) {
-//                if (values[i] < 1) {
-//                    return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.smaller.one", i + 1, values[i]]
-//                }
-//            }
+
 
             for (int i = 0; i < values.length; i++) {
-             if (values[i] <= 0){
+                if (values[i] <= 0) {
                     return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.non.positive", i + 1, values[i]]
+                }
+            }
+
+            for (int i = 0; i < values.length; i++) {
+                if (values[i] < 1) {
+                    return [ValidationType.HINT, "age.to.age.pattern.error.ratios.smaller.one", i + 1, values[i]]
                 }
             }
 
@@ -285,17 +287,17 @@ class PatternStrategyValidator implements IParameterizationValidator {
                 return [ValidationType.ERROR, "incremental.combined.pattern.error.incremental.payout.values.empty", payoutValues]
             }
 
-//            for (int i = 0; i < payoutValues.length; i++) {
-//                if (payoutValues[i] < 0 || payoutValues[i] > 1) {
-//                    return [ValidationType.ERROR, "incremental.combined.pattern.error.incremental.payout.values.not.in.unity.interval", i + 1, payoutValues[i]]
-//                }
-//            }
-
             double sum = 0
             for (int i = 0; i < payoutValues.length; i++) {
                 sum += payoutValues[i]
                 if (sum < -EPSILON) {
                     return [ValidationType.ERROR, "incremental.combined.pattern.error.cumulated.payout.increments.negative", i + 1, payoutValues[i], sum]
+                }
+            }
+
+            for (int i = 0; i < payoutValues.length; i++) {
+                if (payoutValues[i] < 0 || payoutValues[i] > 1) {
+                    return [ValidationType.HINT, "incremental.combined.pattern.error.incremental.payout.values.not.in.unity.interval", i + 1, payoutValues[i]]
                 }
             }
 
@@ -309,17 +311,17 @@ class PatternStrategyValidator implements IParameterizationValidator {
                 return [ValidationType.ERROR, "incremental.combined.pattern.error.incremental.reported.values.empty", reportedValues]
             }
 
-//            for (int i = 0; i < reportedValues.length; i++) {
-//                if (reportedValues[i] < 0 || reportedValues[i] > 1) {
-//                    return [ValidationType.ERROR, "incremental.combined.pattern.error.incremental.reported.values.not.in.unity.interval", i + 1, reportedValues[i]]
-//                }
-//            }
-
             double sum = 0
             for (int i = 0; i < reportedValues.length; i++) {
                 sum += reportedValues[i]
                 if (sum < -EPSILON) {
                     return [ValidationType.ERROR, "incremental.combined.pattern.error.cumulated.reported.increments.negative", i + 1, reportedValues[i], sum]
+                }
+            }
+
+            for (int i = 0; i < reportedValues.length; i++) {
+                if (reportedValues[i] < 0 || reportedValues[i] > 1) {
+                    return [ValidationType.HINT, "incremental.combined.pattern.error.incremental.reported.values.not.in.unity.interval", i + 1, reportedValues[i]]
                 }
             }
 
@@ -380,27 +382,27 @@ class PatternStrategyValidator implements IParameterizationValidator {
             [ValidationType.ERROR, "cumulative.combined.pattern.reported.error.last.value.not.one", reportedValues[reportedValues.length - 1]]
         }
 
-//        validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
-//            Map type ->
-//            double[] payoutValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_PAYOUT)
-//            for (int i = 0; i < payoutValues.length - 1; i++) {
-//                if (payoutValues[i + 1] < payoutValues[i]) {
-//                    return [ValidationType.ERROR, "cumulative.combined.pattern.error.cumulative.payout.values.not.increasing", i + 1, payoutValues[i], payoutValues[i + 1]]
-//                }
-//            }
-//            return true
-//        }
+        validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
+            Map type ->
+            double[] payoutValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_PAYOUT)
+            for (int i = 0; i < payoutValues.length - 1; i++) {
+                if (payoutValues[i + 1] < payoutValues[i]) {
+                    return [ValidationType.HINT, "cumulative.combined.pattern.error.cumulative.payout.values.not.increasing", i + 1, payoutValues[i], payoutValues[i + 1]]
+                }
+            }
+            return true
+        }
 
-//        validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
-//            Map type ->
-//            double[] reportedValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_REPORTED)
-//            for (int i = 0; i < reportedValues.length - 1; i++) {
-//                if (reportedValues[i + 1] < reportedValues[i]) {
-//                    return [ValidationType.ERROR, "cumulative.combined.pattern.error.cumulative.reported.values.not.increasing", i + 1, reportedValues[i], reportedValues[i + 1]]
-//                }
-//            }
-//            return true
-//        }
+        validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
+            Map type ->
+            double[] reportedValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_REPORTED)
+            for (int i = 0; i < reportedValues.length - 1; i++) {
+                if (reportedValues[i + 1] < reportedValues[i]) {
+                    return [ValidationType.HINT, "cumulative.combined.pattern.error.cumulative.reported.values.not.increasing", i + 1, reportedValues[i], reportedValues[i + 1]]
+                }
+            }
+            return true
+        }
 
         validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
             Map type ->
@@ -420,17 +422,19 @@ class PatternStrategyValidator implements IParameterizationValidator {
             if (reportedValues.length == 0) {
                 return [ValidationType.ERROR, "age.to.age.combined.pattern.error.reported.ratios.empty", reportedValues]
             }
-//            for (int i = 0; i < reportedValues.length; i++) {
-//                if (reportedValues[i] < 1) {
-//                    return [ValidationType.ERROR, "age.to.age.combined.pattern.error.reported.ratios.smaller.one", i + 1, reportedValues[i]]
-//                }
-//            }
 
-           for (int i = 0; i < reportedValues.length; i++) {
-             if (reportedValues[i] <= 0){
+            for (int i = 0; i < reportedValues.length; i++) {
+                if (reportedValues[i] <= 0) {
                     return [ValidationType.ERROR, "age.to.age.combined.pattern.error.reported.ratios.non.positive", i + 1, reportedValues[i]]
                 }
             }
+
+            for (int i = 0; i < reportedValues.length; i++) {
+                if (reportedValues[i] < 1) {
+                    return [ValidationType.HINT, "age.to.age.combined.pattern.error.reported.ratios.smaller.one", i + 1, reportedValues[i]]
+                }
+            }
+
             return true
         }
 
@@ -440,14 +444,16 @@ class PatternStrategyValidator implements IParameterizationValidator {
             if (payoutValues.length == 0) {
                 return [ValidationType.ERROR, "age.to.age.combined.pattern.error.payout.ratios.empty", payoutValues]
             }
-//            for (int i = 0; i < payoutValues.length; i++) {
-//                if (payoutValues[i] < 1) {
-//                    return [ValidationType.ERROR, "age.to.age.combined.pattern.error.payout.ratios.smaller.one", i + 1, payoutValues[i]]
-//                }
-//            }
-           for (int i = 0; i < payoutValues.length; i++) {
-             if (payoutValues[i] <= 0){
+
+            for (int i = 0; i < payoutValues.length; i++) {
+                if (payoutValues[i] <= 0) {
                     return [ValidationType.ERROR, "age.to.age.combined.pattern.error.payout.ratios.non.positive", i + 1, payoutValues[i]]
+                }
+            }
+
+            for (int i = 0; i < payoutValues.length; i++) {
+                if (payoutValues[i] < 1) {
+                    return [ValidationType.HINT, "age.to.age.combined.pattern.error.payout.ratios.smaller.one", i + 1, payoutValues[i]]
                 }
             }
             return true

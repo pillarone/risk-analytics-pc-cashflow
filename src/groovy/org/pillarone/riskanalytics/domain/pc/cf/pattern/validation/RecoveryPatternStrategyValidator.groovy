@@ -51,28 +51,30 @@ class RecoveryPatternStrategyValidator implements IParameterizationValidator {
 
     private void registerConstraints() {
 
-//        validationService.register(PatternStrategyType.INCREMENTAL) {Map type ->
-//            double[] values = type.incrementalPattern.getColumnByName(PatternStrategyType.INCREMENTS)
-//            double sum = (double) GroovyCollections.sum(values)
-//            if (sum <= 1.0 + EPSILON) return true
-//            [ValidationType.ERROR, "incremental.pattern.error.sum.greater.than.one", sum]
-//        }
+        validationService.register(PatternStrategyType.INCREMENTAL) {Map type ->
+            double[] values = type.incrementalPattern.getColumnByName(PatternStrategyType.INCREMENTS)
+            double sum = (double) GroovyCollections.sum(values)
+            if (sum <= 1.0 + EPSILON) return true
+            [ValidationType.HINT, "incremental.pattern.error.sum.greater.than.one", sum]
+        }
 
         validationService.register(PatternStrategyType.INCREMENTAL) {Map type ->
             double[] values = type.incrementalPattern.getColumnByName(PatternStrategyType.INCREMENTS)
             if (values.length == 0) {
                 return [ValidationType.ERROR, "incremental.pattern.error.incremental.values.empty", values]
             }
-//            for (int i = 0; i < values.length; i++) {
-//                if (values[i] < 0 || values[i] > 1) {
-//                    return [ValidationType.ERROR, "incremental.pattern.error.incremental.values.not.in.unity.interval", i + 1, values[i]]
-//                }
-//            }
+
             double sum = 0
             for (int i = 0; i < values.length; i++) {
                 sum += values[i]
                 if (sum < -EPSILON) {
                     return [ValidationType.ERROR, "incremental.pattern.error.cumulated.increments.negative", i + 1, values[i], sum]
+                }
+            }
+
+            for (int i = 0; i < values.length; i++) {
+                if (values[i] < 0 || values[i] > 1) {
+                    return [ValidationType.HINT, "incremental.pattern.error.incremental.values.not.in.unity.interval", i + 1, values[i]]
                 }
             }
             return true
@@ -81,33 +83,33 @@ class RecoveryPatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
             double[] values = type.cumulativePattern.getColumnByName(PatternStrategyType.CUMULATIVE2)
             if (values.length == 0) {
-                return [ValidationType.ERROR, "cumulative.pattern.error.cumulative.values.empty", values]
+                return [ValidationType.HINT, "cumulative.pattern.error.cumulative.values.empty", values]
             }
             if (values[0] < 0) {
-                return [ValidationType.ERROR, "cumulative.pattern.error.cumulative.values.negative", values[0]]
+                return [ValidationType.HINT, "cumulative.pattern.error.cumulative.values.negative", values[0]]
             }
             return true
         }
 
-//        validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
-//            double[] values = type.cumulativePattern.getColumnByName(PatternStrategyType.CUMULATIVE2)
-//
-//            if (values[values.size() - 1] > 1) {
-//                return [ValidationType.ERROR, "cumulative.pattern.error.cumulative.values.greater.than.one", values[values.size() - 1]]
-//            }
-//            return true
-//        }
+        validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
+            double[] values = type.cumulativePattern.getColumnByName(PatternStrategyType.CUMULATIVE2)
+
+            if (values[values.size() - 1] > 1) {
+                return [ValidationType.HINT, "cumulative.pattern.error.cumulative.values.greater.than.one", values[values.size() - 1]]
+            }
+            return true
+        }
 
 
-//        validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
-//            double[] values = type.cumulativePattern.getColumnByName(PatternStrategyType.CUMULATIVE2)
-//            for (int i = 0; i < values.length - 1; i++) {
-//                if (values[i + 1] < values[i]) {
-//                    return [ValidationType.ERROR, "cumulative.pattern.error.cumulative.values.not.increasing", i + 1, values[i], values[i + 1]]
-//                }
-//            }
-//            return true
-//        }
+        validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
+            double[] values = type.cumulativePattern.getColumnByName(PatternStrategyType.CUMULATIVE2)
+            for (int i = 0; i < values.length - 1; i++) {
+                if (values[i + 1] < values[i]) {
+                    return [ValidationType.HINT, "cumulative.pattern.error.cumulative.values.not.increasing", i + 1, values[i], values[i + 1]]
+                }
+            }
+            return true
+        }
 
         validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
             double[] months = type.cumulativePattern.getColumnByName(PatternTableConstraints.MONTHS)
@@ -151,14 +153,16 @@ class RecoveryPatternStrategyValidator implements IParameterizationValidator {
             if (values.length == 0) {
                 return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.empty", values]
             }
-//            for (int i = 0; i < values.length; i++) {
-//                if (values[i] < 1) {
-//                    return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.smaller.one", i + 1, values[i]]
-//                }
-//            }
-           for (int i = 0; i < values.length; i++) {
-             if (values[i] <= 0){
+
+            for (int i = 0; i < values.length; i++) {
+                if (values[i] <= 0) {
                     return [ValidationType.ERROR, "age.to.age.pattern.error.ratios.non.positive", i + 1, values[i]]
+                }
+            }
+
+            for (int i = 0; i < values.length; i++) {
+                if (values[i] < 1) {
+                    return [ValidationType.HINT, "age.to.age.pattern.error.ratios.smaller.one", i + 1, values[i]]
                 }
             }
             return true
