@@ -13,8 +13,9 @@ import java.util.Map;
  */
 public class FixedUltimateReserveCalculationStrategy extends AbstractParameterObject implements IReserveCalculationStrategy {
 
-    private double ultimateAtBaseDate;
-    private DateTime occurrenceDate;
+    private double ultimateAtReportingDate;
+    private DateTime reportingDate;
+    private DateTime averageInceptionDate;
 
     public IParameterObjectClassifier getType() {
         return ReserveCalculationType.ULTIMATE;
@@ -22,17 +23,18 @@ public class FixedUltimateReserveCalculationStrategy extends AbstractParameterOb
 
     public Map getParameters() {
         Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("ultimateAtBaseDate", ultimateAtBaseDate);
-        parameters.put("occurrenceDate", occurrenceDate);
+        parameters.put("ultimateAtReportingDate", ultimateAtReportingDate);
+        parameters.put("reportingDate", reportingDate);
+        parameters.put("averageInceptionDate", averageInceptionDate);
         return parameters;
     }
 
-    public Double getUltimate(PatternPacket payoutPattern, PatternPacket reportingPattern){
-        return ultimateAtBaseDate;
+    public Double getUltimate(PatternPacket payoutPattern, PatternPacket reportingPattern) {
+        return ultimateAtReportingDate;
     }
 
-    public DateTime getOccurrenceDate(){
-        return occurrenceDate;
+    public DateTime getAverageInceptionDate() {
+        return averageInceptionDate;
     }
 
 }

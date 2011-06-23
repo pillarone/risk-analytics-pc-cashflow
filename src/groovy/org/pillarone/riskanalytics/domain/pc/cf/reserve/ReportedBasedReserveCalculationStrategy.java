@@ -14,9 +14,9 @@ import java.util.Map;
  */
 public class ReportedBasedReserveCalculationStrategy extends AbstractParameterObject implements IReserveCalculationStrategy {
 
-    private double reportedAtBaseDate;
-    private DateTime baseDate;
-    private DateTime occurrenceDate;
+    private double reportedAtReportingDate;
+    private DateTime reportingDate;
+    private DateTime averageInceptionDate;
     private InterpolationMode interpolationMode;
 
     public IParameterObjectClassifier getType() {
@@ -25,15 +25,15 @@ public class ReportedBasedReserveCalculationStrategy extends AbstractParameterOb
 
     public Map getParameters() {
         Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("reportedAtBaseDate", reportedAtBaseDate);
-        parameters.put("baseDate", baseDate);
-        parameters.put("occurrenceDate", occurrenceDate);
+        parameters.put("reportedAtReportingDate", reportedAtReportingDate);
+        parameters.put("reportingDate", reportingDate);
+        parameters.put("averageInceptionDate", averageInceptionDate);
         parameters.put("interpolationMode", interpolationMode);
         return parameters;
     }
 
     public Double getUltimate(PatternPacket payoutPattern, PatternPacket reportingPattern) {
-        double numberOfMonths = DateTimeUtilities.deriveNumberOfMonths(occurrenceDate, baseDate);
+        double numberOfMonths = DateTimeUtilities.deriveNumberOfMonths(averageInceptionDate, reportingDate);
         double reportedPortionAtBaseDate = 1.0;
         switch (interpolationMode) {
             case LINEAR:
@@ -46,11 +46,11 @@ public class ReportedBasedReserveCalculationStrategy extends AbstractParameterOb
         if (reportedPortionAtBaseDate == 0){
             throw new IllegalArgumentException("cumulative reported value at base date is zero!");
         }
-        return reportedAtBaseDate/reportedPortionAtBaseDate;
+        return reportedAtReportingDate /reportedPortionAtBaseDate;
     }
 
-    public DateTime getOccurrenceDate() {
-        return occurrenceDate;
+    public DateTime getAverageInceptionDate() {
+        return averageInceptionDate;
     }
 
 }
