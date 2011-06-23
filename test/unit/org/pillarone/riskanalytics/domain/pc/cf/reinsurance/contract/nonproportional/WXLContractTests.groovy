@@ -78,15 +78,20 @@ class WXLContractTests extends GroovyTestCase {
         wxl.doCalculation()
         assertEquals 'number of ceded claims', 1, wxl.outClaimsCeded.size()
         assertEquals 'P0.0 ceded ultimate', 30, wxl.outClaimsCeded[0].ultimate()
-        assertEquals 'P0.0 ceded incremental paid', 0, wxl.outClaimsCeded[0].paidIncremental, EPSILON
-        assertEquals 'P0.0 ceded incremental reported', 0, wxl.outClaimsCeded[0].reportedIncremental
-        assertEquals 'P0.0 ceded premium written', -100, wxl.outUnderwritingInfoCeded[0].premiumWritten
-        assertEquals 'P0.0 ceded premium paid', -100, wxl.outUnderwritingInfoCeded[0].premiumPaid
-        assertEquals 'P0.0 ceded premium fixed', -100, wxl.outUnderwritingInfoCeded[0].premiumPaidFixed
-        assertEquals 'P0.0 ceded premium variable', 0, wxl.outUnderwritingInfoCeded[0].premiumPaidVariable, EPSILON
-        assertEquals 'P0.0 ceded commission', 0, wxl.outUnderwritingInfoCeded[0].commission, EPSILON
-        assertEquals 'P0.0 ceded commission fixed', 0, wxl.outUnderwritingInfoCeded[0].commissionFixed
-        assertEquals 'P0.0 ceded commission variable', 0, wxl.outUnderwritingInfoCeded[0].commissionVariable, EPSILON
+        assertEquals 'P0.0 ceded reported incremental', 0, wxl.outClaimsCeded[0].reportedIncremental
+        assertEquals 'P0.0 ceded reported cumulated', 0, wxl.outClaimsCeded[0].reportedCumulated
+        assertEquals 'P0.0 ceded paid incremental', 0, wxl.outClaimsCeded[0].paidIncremental
+        assertEquals 'P0.0 ceded paid cumulated', 0, wxl.outClaimsCeded[0].paidCumulated
+        assertEquals 'P0.0 ceded reserved', 30, wxl.outClaimsCeded[0].reserved()
+        assertEquals 'P0.0 ceded outstanding', 0, wxl.outClaimsCeded[0].outstanding()
+        assertEquals 'P0.0 ceded ibnr', 30, wxl.outClaimsCeded[0].ibnr()
+        assertEquals 'P0 ceded premium written', -100, wxl.outUnderwritingInfoCeded[0].premiumWritten
+        assertEquals 'P0 ceded premium paid', -100, wxl.outUnderwritingInfoCeded[0].premiumPaid
+        assertEquals 'P0 ceded premium fixed', -100, wxl.outUnderwritingInfoCeded[0].premiumPaidFixed
+        assertEquals 'P0 ceded premium variable', 0, wxl.outUnderwritingInfoCeded[0].premiumPaidVariable, EPSILON
+        assertEquals 'P0 ceded commission', 0, wxl.outUnderwritingInfoCeded[0].commission, EPSILON
+        assertEquals 'P0 ceded commission fixed', 0, wxl.outUnderwritingInfoCeded[0].commissionFixed
+        assertEquals 'P0 ceded commission variable', 0, wxl.outUnderwritingInfoCeded[0].commissionVariable, EPSILON
 
         wxl.reset()
         wxl.iterationScope.periodScope.prepareNextPeriod()
@@ -99,11 +104,21 @@ class WXLContractTests extends GroovyTestCase {
 
         assertEquals 'number of ceded claims', 2, wxl.outClaimsCeded.size()
         assertEquals 'P1.1 ceded ultimate', 30, wxl.outClaimsCeded[0].ultimate()
-        assertEquals 'P1.1 ceded incremental paid', 0, wxl.outClaimsCeded[0].paidIncremental, EPSILON
-        assertEquals 'P1.1 ceded incremental reported', 1, wxl.outClaimsCeded[0].reportedIncremental
+        assertEquals 'P1.1 ceded reported incremental', 1, wxl.outClaimsCeded[0].reportedIncremental
+        assertEquals 'P1.1 ceded reported cumulated', 1, wxl.outClaimsCeded[0].reportedCumulated
+        assertEquals 'P1.1 ceded paid incremental', 0, wxl.outClaimsCeded[0].paidIncremental
+        assertEquals 'P1.1 ceded paid cumulated', 0, wxl.outClaimsCeded[0].paidCumulated
+        assertEquals 'P1.1 ceded reserved', 30, wxl.outClaimsCeded[0].reserved()
+        assertEquals 'P1.1 ceded outstanding', 1, wxl.outClaimsCeded[0].outstanding()
+        assertEquals 'P1.1 ceded ibnr', 29, wxl.outClaimsCeded[0].ibnr()
         assertEquals 'P1.0 ceded ultimate', 0, wxl.outClaimsCeded[1].ultimate()
-        assertEquals 'P1.0 ceded incremental paid', 0, wxl.outClaimsCeded[1].paidIncremental
-        assertEquals 'P1.0 ceded incremental reported', 10, wxl.outClaimsCeded[1].reportedIncremental
+        assertEquals 'P1.0 ceded reported incremental', 10, wxl.outClaimsCeded[1].reportedIncremental
+        assertEquals 'P1.0 ceded reported cumulated', 10, wxl.outClaimsCeded[1].reportedCumulated
+        assertEquals 'P1.0 ceded paid incremental', 0, wxl.outClaimsCeded[1].paidIncremental
+        assertEquals 'P1.0 ceded paid cumulated', 0, wxl.outClaimsCeded[1].paidCumulated
+        assertEquals 'P1.0 ceded reserved', 30, wxl.outClaimsCeded[1].reserved()
+        assertEquals 'P1.0 ceded outstanding', 10, wxl.outClaimsCeded[1].outstanding()
+        assertEquals 'P1.0 ceded ibnr', 20, wxl.outClaimsCeded[1].ibnr()
 
 
         wxl.reset()
@@ -114,11 +129,21 @@ class WXLContractTests extends GroovyTestCase {
 
         assertEquals 'number of ceded claims', 2, wxl.outClaimsCeded.size()
         assertEquals 'P2.1 ceded ultimate', 0, wxl.outClaimsCeded[0].ultimate()
-        assertEquals 'P2.1 ceded incremental paid', 8, wxl.outClaimsCeded[0].paidIncremental, EPSILON
-        assertEquals 'P2.1 ceded incremental reported', 21, wxl.outClaimsCeded[0].reportedIncremental
+        assertEquals 'P2.1 ceded reported incremental', 21, wxl.outClaimsCeded[0].reportedIncremental
+        assertEquals 'P2.1 ceded reported cumulated', 22, wxl.outClaimsCeded[0].reportedCumulated
+        assertEquals 'P2.1 ceded paid incremental', 8, wxl.outClaimsCeded[0].paidIncremental
+        assertEquals 'P2.1 ceded paid cumulated', 8, wxl.outClaimsCeded[0].paidCumulated
+        assertEquals 'P2.1 ceded reserved', 22, wxl.outClaimsCeded[0].reserved()
+        assertEquals 'P2.1 ceded outstanding', 14, wxl.outClaimsCeded[0].outstanding()
+        assertEquals 'P2.1 ceded ibnr', 8, wxl.outClaimsCeded[0].ibnr()
         assertEquals 'P2.0 ceded ultimate', 0, wxl.outClaimsCeded[1].ultimate()
-        assertEquals 'P2.0 ceded incremental paid', 15, wxl.outClaimsCeded[1].paidIncremental, EPSILON
-        assertEquals 'P2.0 ceded incremental reported', 10, wxl.outClaimsCeded[1].reportedIncremental, EPSILON
+        assertEquals 'P2.0 ceded reported incremental', 10, wxl.outClaimsCeded[1].reportedIncremental, EPSILON
+        assertEquals 'P2.0 ceded reported cumulated', 20, wxl.outClaimsCeded[1].reportedCumulated, EPSILON
+        assertEquals 'P2.0 ceded paid incremental', 15, wxl.outClaimsCeded[1].paidIncremental
+        assertEquals 'P2.0 ceded paid cumulated', 15, wxl.outClaimsCeded[1].paidCumulated
+        assertEquals 'P2.0 ceded reserved', 15, wxl.outClaimsCeded[1].reserved()
+        assertEquals 'P2.0 ceded outstanding', 5, wxl.outClaimsCeded[1].outstanding(), EPSILON
+        assertEquals 'P2.0 ceded ibnr', 10, wxl.outClaimsCeded[1].ibnr(), EPSILON
 
 
         wxl.reset()
@@ -129,11 +154,21 @@ class WXLContractTests extends GroovyTestCase {
 
         assertEquals 'number of ceded claims', 2, wxl.outClaimsCeded.size()
         assertEquals 'P3.1 ceded ultimate', 0, wxl.outClaimsCeded[0].ultimate()
-        assertEquals 'P3.1 ceded incremental paid', 21, wxl.outClaimsCeded[0].paidIncremental, EPSILON
-        assertEquals 'P3.1 ceded incremental reported', 8, wxl.outClaimsCeded[0].reportedIncremental, EPSILON
+        assertEquals 'P3.1 ceded reported incremental', 8, wxl.outClaimsCeded[0].reportedIncremental, EPSILON
+        assertEquals 'P3.1 ceded reported cumulated', 30, wxl.outClaimsCeded[0].reportedCumulated
+        assertEquals 'P3.1 ceded paid incremental', 21, wxl.outClaimsCeded[0].paidIncremental
+        assertEquals 'P3.1 ceded paid cumulated', 29, wxl.outClaimsCeded[0].paidCumulated
+        assertEquals 'P3.1 ceded reserved', 1, wxl.outClaimsCeded[0].reserved()
+        assertEquals 'P3.1 ceded outstanding', 1, wxl.outClaimsCeded[0].outstanding()
+        assertEquals 'P3.1 ceded ibnr', 0, wxl.outClaimsCeded[0].ibnr()
         assertEquals 'P3.0 ceded ultimate', 0, wxl.outClaimsCeded[1].ultimate()
-        assertEquals 'P3.0 ceded incremental paid', 7.5, wxl.outClaimsCeded[1].paidIncremental, EPSILON
-        assertEquals 'P3.0 ceded incremental reported', 9, wxl.outClaimsCeded[1].reportedIncremental, EPSILON
+        assertEquals 'P3.0 ceded reported incremental', 9, wxl.outClaimsCeded[1].reportedIncremental, EPSILON
+        assertEquals 'P3.0 ceded reported cumulated', 29, wxl.outClaimsCeded[1].reportedCumulated
+        assertEquals 'P3.0 ceded paid incremental', 7.5, wxl.outClaimsCeded[1].paidIncremental
+        assertEquals 'P3.0 ceded paid cumulated', 22.5, wxl.outClaimsCeded[1].paidCumulated
+        assertEquals 'P3.0 ceded reserved', 7.5, wxl.outClaimsCeded[1].reserved()
+        assertEquals 'P3.0 ceded outstanding', 6.5, wxl.outClaimsCeded[1].outstanding()
+        assertEquals 'P3.0 ceded ibnr', 1, wxl.outClaimsCeded[1].ibnr()
 
 
         wxl.reset()
@@ -144,11 +179,21 @@ class WXLContractTests extends GroovyTestCase {
 
         assertEquals 'number of ceded claims', 2, wxl.outClaimsCeded.size()
         assertEquals 'P4.1 ceded ultimate', 0, wxl.outClaimsCeded[0].ultimate()
-        assertEquals 'P4.1 ceded incremental paid', 1, wxl.outClaimsCeded[0].paidIncremental, EPSILON
-        assertEquals 'P4.1 ceded incremental reported', 0, wxl.outClaimsCeded[0].reportedIncremental, EPSILON
+        assertEquals 'P4.1 ceded reported incremental', 0, wxl.outClaimsCeded[0].reportedIncremental
+        assertEquals 'P4.1 ceded reported cumulated', 30, wxl.outClaimsCeded[0].reportedCumulated
+        assertEquals 'P4.1 ceded paid incremental', 1, wxl.outClaimsCeded[0].paidIncremental
+        assertEquals 'P4.1 ceded paid cumulated', 30, wxl.outClaimsCeded[0].paidCumulated
+        assertEquals 'P4.1 ceded reserved', 0, wxl.outClaimsCeded[0].reserved()
+        assertEquals 'P4.1 ceded outstanding', 0, wxl.outClaimsCeded[0].outstanding()
+        assertEquals 'P4.1 ceded ibnr', 0, wxl.outClaimsCeded[0].ibnr()
         assertEquals 'P4.0 ceded ultimate', 0, wxl.outClaimsCeded[1].ultimate()
-        assertEquals 'P4.0 ceded incremental paid', 7.5, wxl.outClaimsCeded[1].paidIncremental, EPSILON
-        assertEquals 'P4.0 ceded incremental reported', 1, wxl.outClaimsCeded[1].reportedIncremental, EPSILON
+        assertEquals 'P4.0 ceded reported incremental', 1, wxl.outClaimsCeded[1].reportedIncremental
+        assertEquals 'P4.0 ceded reported cumulated', 30, wxl.outClaimsCeded[1].reportedCumulated
+        assertEquals 'P4.0 ceded paid incremental', 7.5, wxl.outClaimsCeded[1].paidIncremental
+        assertEquals 'P4.0 ceded paid cumulated', 30, wxl.outClaimsCeded[1].paidCumulated
+        assertEquals 'P4.0 ceded reserved', 0, wxl.outClaimsCeded[1].reserved()
+        assertEquals 'P4.0 ceded outstanding', 0, wxl.outClaimsCeded[1].outstanding()
+        assertEquals 'P4.0 ceded ibnr', 0, wxl.outClaimsCeded[1].ibnr()
 
         wxl.reset()
         wxl.iterationScope.periodScope.prepareNextPeriod()
@@ -157,8 +202,13 @@ class WXLContractTests extends GroovyTestCase {
         wxl.doCalculation()
 
         assertEquals 'number of ceded claims', 1, wxl.outClaimsCeded.size()
-        assertEquals 'P5 summed ceded reported', 0, wxl.outClaimsCeded.reportedIncremental.sum()
-        assertEquals 'P5 summed ceded paid', 0, wxl.outClaimsCeded.paidIncremental.sum()
+        assertEquals 'P5 summed ceded reported incremental', 0, wxl.outClaimsCeded.reportedIncremental.sum()
+        assertEquals 'P5 summed ceded reported cumulated', 30, wxl.outClaimsCeded.reportedCumulated.sum()
+        assertEquals 'P5 summed ceded paid incremental', 0, wxl.outClaimsCeded.paidIncremental.sum()
+        assertEquals 'P5 summed ceded paid cumulated', 30, wxl.outClaimsCeded.paidCumulated.sum()
+        assertEquals 'P5 summed ceded reserved', 0, wxl.outClaimsCeded.reserves.sum()
+        assertEquals 'P5 summed ceded outstanding', 0, wxl.outClaimsCeded*.outstanding().sum()
+        assertEquals 'P5 summed ceded ibnr', 0, wxl.outClaimsCeded*.ibnr().sum()
     }
 
     /**

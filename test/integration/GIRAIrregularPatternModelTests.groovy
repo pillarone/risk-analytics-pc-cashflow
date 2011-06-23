@@ -4,7 +4,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.ModelTest
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class GIRAReDevModelTests extends ModelTest {
+class GIRAIrregularPatternModelTests extends ModelTest {
 
     Class getModelClass() {
         GIRAModel
@@ -21,11 +21,11 @@ class GIRAReDevModelTests extends ModelTest {
 
     @Override
     String getParameterFileName() {
-        'GIRAStochReDevParameters'
+        'GIRAIrregularPatternsParameters'
     }
 
     String getParameterDisplayName() {
-        'Re (with dev)'
+        'Irregular Pattern'
     }
 
     protected boolean shouldCompareResults() {

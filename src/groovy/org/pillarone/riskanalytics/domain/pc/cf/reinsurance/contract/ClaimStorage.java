@@ -128,4 +128,8 @@ public class ClaimStorage {
     public IClaimRoot getReference() {
         return reference;
     }
+
+    public IClaimRoot getReferenceCeded() {
+        return referenceCeded;
+    }
 }

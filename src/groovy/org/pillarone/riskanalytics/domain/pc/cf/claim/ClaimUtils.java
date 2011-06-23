@@ -61,10 +61,27 @@ public class ClaimUtils {
         return claim;
     }
 
+    public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor, boolean scaleBaseClaim) {
+        if (!scaleBaseClaim) return scale(claim, factor);
+        if (notTrivialValues(claim)) {
+            double scaledUltimate = claim.ultimate() * factor;
+            double scaledReserves = scaledUltimate - claim.getPaidCumulated() * factor;
+            IClaimRoot scaledBaseClaim = claim.getBaseClaim().withScale(factor);
+            ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(scaledBaseClaim, scaledUltimate,
+                    claim.getPaidIncremental() * factor, claim.getPaidCumulated() * factor,
+                    claim.getReportedIncremental() * factor, claim.getReportedCumulated() * factor, scaledReserves,
+                    claim.getUpdateDate(), claim.getUpdatePeriod());
+            applyMarkers(claim, scaledClaim);
+            return scaledClaim;
+        }
+        return claim;
+    }
+
     /**
      * Scales all figures either by the reported or paid scale factor. No distinction between incremental and cumulated
      * claim properties.
      * @param grossClaim
+     * @param storage
      * @param scaleFactorUltimate
      * @param scaleFactorReported
      * @param scaleFactorPaid
@@ -81,11 +98,12 @@ public class ClaimUtils {
         ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(
                 storage.getReference(),
                 avoidNegativeZero(grossClaim.ultimate() * scaleFactorUltimate),
+                storage.getReferenceCeded().getUltimate(),
                 avoidNegativeZero(storage.getIncrementalPaidCeded()),
                 avoidNegativeZero(storage.getCumulatedCeded(BasedOnClaimProperty.PAID)),
                 avoidNegativeZero(storage.getIncrementalReportedCeded()),
                 avoidNegativeZero(storage.getCumulatedCeded(BasedOnClaimProperty.REPORTED)),
-                storage.cededReserves(),
+                avoidNegativeZero(storage.cededReserves()),
                 grossClaim.getUpdateDate(),
                 grossClaim.getUpdatePeriod());
         applyMarkers(grossClaim, cededClaim);
@@ -109,6 +127,7 @@ public class ClaimUtils {
             ClaimCashflowPacket netClaim = new ClaimCashflowPacket(
                 grossClaim.getBaseClaim(),
                 grossClaim.ultimate() + cededClaim.ultimate(),
+                grossClaim.nominalUltimate() + cededClaim.nominalUltimate(),
                 grossClaim.getPaidIncremental() + cededClaim.getPaidIncremental(),
                 grossClaim.getPaidCumulated() + cededClaim.getPaidCumulated(),
                 grossClaim.getReportedIncremental() + cededClaim.getReportedIncremental(),
