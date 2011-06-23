@@ -24,4 +24,10 @@ public interface IPeriodStrategy extends IParameterObject {
      * @return true if date is between start and end of cover
      */
     boolean isCovered(DateTime date);
+
+    /**
+     * Used in order to synchronize the projection start date with the start cover 
+     * @param date
+     */
+    void initStartCover(DateTime date);
 }

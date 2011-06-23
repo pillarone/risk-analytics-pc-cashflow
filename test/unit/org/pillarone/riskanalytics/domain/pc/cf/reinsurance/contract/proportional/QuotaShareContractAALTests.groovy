@@ -15,6 +15,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.Reinsurance
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -323,6 +324,8 @@ class QuotaShareContractAALTests extends GroovyTestCase {
     /** claims occur in different periods, make sure both get the whole AAL or more generally a new contract instance */
     void testIndependenceOfContractsPerPeriod() {
         ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, 120, date20110101)
+        quotaShare20.parmCoveredPeriod = PeriodStrategyType.getStrategy(PeriodStrategyType.MONTHS, [
+                startCover: new DateTime(date20110101), numberOfMonths: 24])
         IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
 
         GrossClaimRoot claimRoot800 = new GrossClaimRoot(-800, ClaimType.AGGREGATED,

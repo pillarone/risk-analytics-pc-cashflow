@@ -64,6 +64,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     protected void doCalculation() {
         // todo(sku): reinsurer default and recovery
         // check cover
+        initSimulation();
         filterInChannels();
         updateContractParameters();
         Set<IReinsuranceContract> contracts = fillGrossClaims();
@@ -71,6 +72,12 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         calculateCededClaims(iterationScope.getPeriodScope().getPeriodCounter());
         processUnderwritingInfo(contracts);
         discountClaims();
+    }
+
+    private void initSimulation() {
+        if (iterationScope.isFirstIteration() && iterationScope.getPeriodScope().isFirstPeriod()) {
+            parmCoveredPeriod.initStartCover(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
+        }
     }
 
 
@@ -386,5 +393,13 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     public void setOutUnderwritingInfoGross(PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross) {
         this.outUnderwritingInfoGross = outUnderwritingInfoGross;
+    }
+
+    public double getParmCoveredByReinsurers() {
+        return parmCoveredByReinsurers;
+    }
+
+    public void setParmCoveredByReinsurers(double parmCoveredByReinsurers) {
+        this.parmCoveredByReinsurers = parmCoveredByReinsurers;
     }
 }

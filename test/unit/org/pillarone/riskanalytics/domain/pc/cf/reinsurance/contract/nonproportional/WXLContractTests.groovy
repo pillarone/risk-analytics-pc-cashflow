@@ -18,6 +18,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -64,6 +65,8 @@ class WXLContractTests extends GroovyTestCase {
      */
     void testIndependenceOfContractsPerPeriod() {
         ReinsuranceContract wxl = getWXLContract(20, 30, 100, 0, 100, [0.2d], date20110101)
+        wxl.parmCoveredPeriod = PeriodStrategyType.getStrategy(PeriodStrategyType.MONTHS, [
+                startCover: new DateTime(date20110101), numberOfMonths: 24])
         PeriodScope periodScope = wxl.iterationScope.periodScope
         IPeriodCounter periodCounter = periodScope.periodCounter
 

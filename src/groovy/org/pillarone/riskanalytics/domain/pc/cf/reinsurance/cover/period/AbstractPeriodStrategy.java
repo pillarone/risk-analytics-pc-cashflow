@@ -12,4 +12,7 @@ abstract public class AbstractPeriodStrategy extends AbstractParameterObject imp
         // interval right closed, left open
         return !getStartCover().isAfter(date) && date.isBefore(getEndCover());
     }
+
+    public void initStartCover(DateTime date) {
+    }
 }

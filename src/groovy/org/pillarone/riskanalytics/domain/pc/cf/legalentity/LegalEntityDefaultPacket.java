@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.legalentity;
 
 import org.pillarone.riskanalytics.core.packets.SingleValuePacket;
+import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

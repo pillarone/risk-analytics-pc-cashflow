@@ -5,6 +5,7 @@ import com.google.common.collect.ListMultimap;
 import org.pillarone.riskanalytics.core.components.MultiPhaseComponent;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
@@ -16,6 +17,7 @@ import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion;
 import org.pillarone.riskanalytics.domain.utils.constraint.UnderwritingPortion;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 
 import java.util.*;
 
@@ -38,6 +40,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
 
+    private ConstrainedString parmCompany = new ConstrainedString(ILegalEntityMarker.class, "");
     private ConstrainedMultiDimensionalParameter parmClaimsPortions = new ConstrainedMultiDimensionalParameter(
             GroovyUtils.toList("[[],[]]"), Arrays.asList(PERIL, PORTION), ConstraintsFactory.getConstraints(PerilPortion.IDENTIFIER));
     private ConstrainedMultiDimensionalParameter parmUnderwritingPortions = new ConstrainedMultiDimensionalParameter(
@@ -269,5 +272,13 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     public void setParmUnderwritingPortions(ConstrainedMultiDimensionalParameter parmUnderwritingPortions) {
         this.parmUnderwritingPortions = parmUnderwritingPortions;
+    }
+
+    public ConstrainedString getParmCompany() {
+        return parmCompany;
+    }
+
+    public void setParmCompany(ConstrainedString parmCompany) {
+        this.parmCompany = parmCompany;
     }
 }

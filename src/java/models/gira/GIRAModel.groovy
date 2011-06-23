@@ -26,6 +26,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPremiumPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerators
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntities
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -42,6 +43,7 @@ class GIRAModel extends StochasticModel {
     ReservesGenerators reservesGenerators
     Dependencies dependencies
     EventGenerators eventGenerators
+    LegalEntities legalEntities
     Segments segments
     ReinsuranceContracts reinsuranceContracts
 
@@ -55,6 +57,7 @@ class GIRAModel extends StochasticModel {
         reservesGenerators = new ReservesGenerators()
         dependencies = new Dependencies()
         eventGenerators = new EventGenerators()
+        legalEntities = new LegalEntities()
         segments = new Segments()
         reinsuranceContracts = new ReinsuranceContracts()
 
