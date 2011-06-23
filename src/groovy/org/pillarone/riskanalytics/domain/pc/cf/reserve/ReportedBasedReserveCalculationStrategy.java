@@ -40,7 +40,7 @@ public class ReportedBasedReserveCalculationStrategy extends AbstractParameterOb
                 reportedPortionAtBaseDate = 1.0 - reportingPattern.outstandingShare(numberOfMonths);
                 break;
             case NONE:
-                reportedPortionAtBaseDate = reportingPattern.getCumulativeValues().get(reportingPattern.thisOrLastPayoutIndex(numberOfMonths));
+                reportedPortionAtBaseDate = reportingPattern.getCumulativeValues().get(reportingPattern.thisOrPreviousPayoutIndex(numberOfMonths));
                 break;
         }
         if (reportedPortionAtBaseDate == 0){

@@ -42,8 +42,8 @@ public class ReserveBasedReserveCalculationStrategy extends AbstractParameterObj
                 payoutPortionAtBaseDate = 1.0-payoutPattern.outstandingShare(numberOfMonths);
                 break;
             case NONE:
-                reportedPortionAtBaseDate = reportingPattern.getCumulativeValues().get(reportingPattern.thisOrLastPayoutIndex(numberOfMonths));
-                payoutPortionAtBaseDate = payoutPattern.getCumulativeValues().get(payoutPattern.thisOrLastPayoutIndex(numberOfMonths));
+                reportedPortionAtBaseDate = reportingPattern.getCumulativeValues().get(reportingPattern.thisOrPreviousPayoutIndex(numberOfMonths));
+                payoutPortionAtBaseDate = payoutPattern.getCumulativeValues().get(payoutPattern.thisOrPreviousPayoutIndex(numberOfMonths));
                 break;
         }
         if (reportedPortionAtBaseDate == payoutPortionAtBaseDate){
