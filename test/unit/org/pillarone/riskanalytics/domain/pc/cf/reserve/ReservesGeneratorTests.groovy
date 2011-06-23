@@ -44,8 +44,8 @@ class ReservesGeneratorTests extends GroovyTestCase {
     SeverityIndex inflationIndex
 
     DateTime projectionStart = new DateTime(2008, 1, 1, 0, 0, 0, 0)
-    DateTime occurrenceDate = new DateTime(2008, 7, 1, 0, 0, 0, 0)
-    DateTime baseDate = new DateTime(2011, 3, 31, 0, 0, 0, 0)
+    DateTime averageInceptionDate = new DateTime(2008, 7, 1, 0, 0, 0, 0)
+    DateTime reportingDate = new DateTime(2011, 3, 31, 0, 0, 0, 0)
 
     DateTime date20080701 = new DateTime(2008, 7, 1, 0, 0, 0, 0)
     DateTime date20090101 = new DateTime(2009, 1, 1, 0, 0, 0, 0)
@@ -90,15 +90,15 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reservesGenerator = new ReservesGenerator(name: "motor hull")
         reservesGenerator.periodScope = TestPeriodScopeUtilities.getPeriodScope(projectionStart, 7)
         reservesGenerator.periodStore = new PeriodStore(reservesGenerator.periodScope)
-        reservesGenerator.setParmBasisOfReserveCalculation(ReserveCalculationType.getStrategy(
-                ReserveCalculationType.REPORTEDBASED, ["reportedAtBaseDate": (double) 3500.0, "occurrenceDate": occurrenceDate,
-                        "baseDate": baseDate, "interpolationMode": InterpolationMode.NONE]))
+        reservesGenerator.setParmUltimateEstimationMethod(ReserveCalculationType.getStrategy(
+                ReserveCalculationType.REPORTEDBASED, ["reportedAtReportingDate": (double) 3500.0, "averageInceptionDate": averageInceptionDate,
+                        "reportingDate": reportingDate, "interpolationMode": InterpolationMode.NONE]))
         reservesGenerator.parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker, 'motor hull')
         reservesGenerator.parmPayoutPattern.selectedComponent = payoutPatterns
         reservesGenerator.parmReportingPattern = new ConstrainedString(IReportingPatternMarker, 'motor hull')
         reservesGenerator.parmReportingPattern.selectedComponent = reportingPatterns
         reservesGenerator.parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
-                [[inflationIndex.name], [IndexMode.CONTINUOUS.toString()], [BaseDateMode.FIXED_DATE.toString()], [baseDate]],
+                [[inflationIndex.name], [IndexMode.CONTINUOUS.toString()], [BaseDateMode.FIXED_DATE.toString()], [reportingDate]],
                 SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
                 ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER))
         reservesGenerator.parmSeverityIndices.comboBoxValues.put(0, ['inflation': inflationIndex])
@@ -111,7 +111,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
 
     }
 
-    void testReservesOccurrenceDateInFirstPeriodReportedBasedStrategy() {
+    void testReservesaverageInceptionDateInFirstPeriodReportedBasedStrategy() {
 
         List<PatternPacket> payoutPatternPackets = new TestProbe(payoutPatterns, "outPattern").result
         List<PatternPacket> reportedPatternPackets = new TestProbe(reportingPatterns, "outPattern").result
@@ -252,14 +252,14 @@ class ReservesGeneratorTests extends GroovyTestCase {
 
     }
 
-    void testReservesOccurrenceDateBeforeFirstPeriodReserveBasedStrategy() {
+    void testReservesaverageInceptionDateBeforeFirstPeriodReserveBasedStrategy() {
 
         reservesGenerator.periodScope = TestPeriodScopeUtilities.getPeriodScope(date20100101, 7)
         reservesGenerator.periodStore = new PeriodStore(reservesGenerator.periodScope)
 
-        reservesGenerator.setParmBasisOfReserveCalculation(ReserveCalculationType.getStrategy(
-                ReserveCalculationType.RESERVEBASED, ["reserveAtBaseDate": (double) 3684.0*0.15, "occurrenceDate": occurrenceDate,
-                        "baseDate": baseDate, "interpolationMode": InterpolationMode.NONE]))
+        reservesGenerator.setParmUltimateEstimationMethod(ReserveCalculationType.getStrategy(
+                ReserveCalculationType.OUTSTANDINGBASED, ["outstandingAtReportingDate": (double) 3684.0*0.15, "averageInceptionDate": averageInceptionDate,
+                        "reportingDate": reportingDate, "interpolationMode": InterpolationMode.NONE]))
 
         List<PatternPacket> payoutPatternPackets = new TestProbe(payoutPatterns, "outPattern").result
         List<PatternPacket> reportedPatternPackets = new TestProbe(reportingPatterns, "outPattern").result

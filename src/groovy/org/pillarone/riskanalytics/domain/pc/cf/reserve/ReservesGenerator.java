@@ -46,7 +46,7 @@ public class ReservesGenerator extends Component implements IReserveMarker {
     private ConstrainedMultiDimensionalParameter parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
             Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
             ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER));
-    private IReserveCalculationStrategy parmBasisOfReserveCalculation = ReserveCalculationType.getDefault();
+    private IReserveCalculationStrategy parmUltimateEstimationMethod = ReserveCalculationType.getDefault();
 
     protected void doCalculation() {
         IPeriodCounter periodCounter = getPeriodScope().getPeriodCounter();
@@ -54,19 +54,19 @@ public class ReservesGenerator extends Component implements IReserveMarker {
         PatternPacket payoutPattern = getPayoutPattern();
         PatternPacket reportingPattern = getReportingPattern();
 
-        double ultimateAtBaseDate = parmBasisOfReserveCalculation.getUltimate(payoutPattern, reportingPattern);
-        DateTime occurrenceDate = parmBasisOfReserveCalculation.getOccurrenceDate();
+        double ultimateAtReportingDate = parmUltimateEstimationMethod.getUltimate(payoutPattern, reportingPattern);
+        DateTime averageInceptionDate = parmUltimateEstimationMethod.getAverageInceptionDate();
 
         GrossClaimRoot baseClaim;
         if (getPeriodScope().isFirstPeriod()) {
-            baseClaim = new GrossClaimRoot(ultimateAtBaseDate, ClaimType.AGGREGATED_RESERVES, null, occurrenceDate, payoutPattern, reportingPattern);
+            baseClaim = new GrossClaimRoot(ultimateAtReportingDate, ClaimType.AGGREGATED_RESERVES, null, averageInceptionDate, payoutPattern, reportingPattern);
             baseClaim.updateCumulatedPaidAtStartOfFirstPeriod(periodCounter, factors);
         }
         else {
             baseClaim = (GrossClaimRoot) periodStore.get(BASE_CLAIM, -1);
         }
         periodStore.put(BASE_CLAIM, baseClaim);
-        // what if outReserves empty ? always one packet needed ?
+        // what if outReserves empty ? always one packet needed ? will be solved within getClaimCashflowPackets
         outReserves.addAll(baseClaim.getClaimCashflowPackets(periodCounter, factors, true));
 
     }
@@ -84,12 +84,12 @@ public class ReservesGenerator extends Component implements IReserveMarker {
         return reportingPattern == null ? new PatternPacket.TrivialPattern(IReportingPatternMarker.class) : reportingPattern;
     }
 
-    public IReserveCalculationStrategy getParmBasisOfReserveCalculation() {
-        return parmBasisOfReserveCalculation;
+    public IReserveCalculationStrategy getParmUltimateEstimationMethod() {
+        return parmUltimateEstimationMethod;
     }
 
-    public void setParmBasisOfReserveCalculation(IReserveCalculationStrategy parmBasisOfReserveCalculation) {
-        this.parmBasisOfReserveCalculation = parmBasisOfReserveCalculation;
+    public void setParmUltimateEstimationMethod(IReserveCalculationStrategy parmUltimateEstimationMethod) {
+        this.parmUltimateEstimationMethod = parmUltimateEstimationMethod;
     }
 
     public ConstrainedString getParmPayoutPattern() {

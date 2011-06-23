@@ -142,7 +142,7 @@ public class PatternPacket extends Packet {
      * @param elapsedMonths
      * @return nearest pattern index with month value lower or equal elapsedMonths or null if elapsedMonths is after last period
      */
-    public Integer thisOrLastPayoutIndex(double elapsedMonths) {
+    public Integer thisOrPreviousPayoutIndex(double elapsedMonths) {
         int index = -1;  // elapseMonths is before first period
         for (int i = 0; i < cumulativePeriods.size(); i++) {
             if (elapsedMonths >= cumulativePeriods.get(i).getMonths()) {

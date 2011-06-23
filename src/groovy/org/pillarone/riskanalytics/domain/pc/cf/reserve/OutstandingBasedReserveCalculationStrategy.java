@@ -12,28 +12,28 @@ import java.util.Map;
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
  */
-public class ReserveBasedReserveCalculationStrategy extends AbstractParameterObject implements IReserveCalculationStrategy {
+public class OutstandingBasedReserveCalculationStrategy extends AbstractParameterObject implements IReserveCalculationStrategy {
 
-    private double reserveAtBaseDate;
-    private DateTime baseDate;
-    private DateTime occurrenceDate;
+    private double outstandingAtReportingDate;
+    private DateTime reportingDate;
+    private DateTime averageInceptionDate;
     private InterpolationMode interpolationMode;
 
     public IParameterObjectClassifier getType() {
-        return ReserveCalculationType.RESERVEBASED;
+        return ReserveCalculationType.OUTSTANDINGBASED;
     }
 
     public Map getParameters() {
         Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("reserveAtBaseDate", reserveAtBaseDate);
-        parameters.put("baseDate", baseDate);
-        parameters.put("occurrenceDate", occurrenceDate);
+        parameters.put("outstandingAtReportingDate", outstandingAtReportingDate);
+        parameters.put("reportingDate", reportingDate);
+        parameters.put("averageInceptionDate", averageInceptionDate);
         parameters.put("interpolationMode", interpolationMode);
         return parameters;
     }
 
     public Double getUltimate(PatternPacket payoutPattern, PatternPacket reportingPattern) {
-        double numberOfMonths = DateTimeUtilities.deriveNumberOfMonths(occurrenceDate, baseDate);
+        double numberOfMonths = DateTimeUtilities.deriveNumberOfMonths(averageInceptionDate, reportingDate);
         double reportedPortionAtBaseDate = 1.0;
         double payoutPortionAtBaseDate = 1.0;
         switch (interpolationMode) {
@@ -42,18 +42,18 @@ public class ReserveBasedReserveCalculationStrategy extends AbstractParameterObj
                 payoutPortionAtBaseDate = 1.0-payoutPattern.outstandingShare(numberOfMonths);
                 break;
             case NONE:
-                reportedPortionAtBaseDate = reportingPattern.getCumulativeValues().get(reportingPattern.thisOrLastPayoutIndex(numberOfMonths));
-                payoutPortionAtBaseDate = payoutPattern.getCumulativeValues().get(payoutPattern.thisOrLastPayoutIndex(numberOfMonths));
+                reportedPortionAtBaseDate = reportingPattern.getCumulativeValues().get(reportingPattern.thisOrPreviousPayoutIndex(numberOfMonths));
+                payoutPortionAtBaseDate = payoutPattern.getCumulativeValues().get(payoutPattern.thisOrPreviousPayoutIndex(numberOfMonths));
                 break;
         }
         if (reportedPortionAtBaseDate == payoutPortionAtBaseDate){
             throw new IllegalArgumentException("outstanding share is zero: Reserve based strategy not possible here!");
         }
-        return reserveAtBaseDate/(reportedPortionAtBaseDate-payoutPortionAtBaseDate);
+        return outstandingAtReportingDate /(reportedPortionAtBaseDate-payoutPortionAtBaseDate);
     }
 
-    public DateTime getOccurrenceDate() {
-        return occurrenceDate;
+    public DateTime getAverageInceptionDate() {
+        return averageInceptionDate;
     }
 
 }
