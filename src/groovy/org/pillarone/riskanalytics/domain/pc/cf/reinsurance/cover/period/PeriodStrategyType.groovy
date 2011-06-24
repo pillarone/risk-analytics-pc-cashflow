@@ -15,6 +15,7 @@ class PeriodStrategyType extends AbstractParameterObjectClassifier {
 
     public static final String PERIOD = "period";
 
+    public static final PeriodStrategyType ONEYEAR = new PeriodStrategyType("One Year as from Projection Start", "ONEYEAR", [:])
     public static final PeriodStrategyType MONTHS = new PeriodStrategyType("Months", "MONTHS",
             ['startCover': new DateTime(2011,1,1,0,0,0,0), 'numberOfMonths': 12])
     public static final PeriodStrategyType CUSTOM = new PeriodStrategyType(
@@ -22,7 +23,7 @@ class PeriodStrategyType extends AbstractParameterObjectClassifier {
                 [[new DateTime(2011,1,1,0,0,0,0)], [new DateTime(2011,12,31,0,0,0,0)]],
                 ['Start Date','End Date'], ConstraintsFactory.getConstraints(DateTimeConstraints.IDENTIFIER))])
 
-    public static final all = [MONTHS, CUSTOM]
+    public static final all = [ONEYEAR, MONTHS, CUSTOM]
 
     protected static Map types = [:]
     static {
@@ -49,12 +50,15 @@ class PeriodStrategyType extends AbstractParameterObjectClassifier {
     }
 
     public static IPeriodStrategy getDefault() {
-        return PeriodStrategyType.getStrategy(PeriodStrategyType.MONTHS, ['startCover': new DateTime(2011,1,1,0,0,0,0), 'numberOfMonths': 12])
+        return PeriodStrategyType.getStrategy(PeriodStrategyType.ONEYEAR, [:])
     }
 
     public static IPeriodStrategy getStrategy(PeriodStrategyType type, Map parameters) {
         IPeriodStrategy strategy;
         switch (type) {
+            case PeriodStrategyType.ONEYEAR:
+                strategy = new OneYearAsFromProjectionStartStrategy()
+                break
             case PeriodStrategyType.MONTHS:
                 strategy = new MonthPeriodStrategy(startCover: (DateTime) parameters['startCover'],
                                                    numberOfMonths: (Integer) parameters['numberOfMonths'])

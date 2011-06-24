@@ -17,6 +17,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -58,6 +59,8 @@ class QuotaShareContractTests extends GroovyTestCase {
     /** claims occur in different periods, make sure both get the whole AAL or more generally a new contract instance */
     void testIndependenceOfContractsPerPeriod() {
         ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, 120, date20110101)
+        quotaShare20.parmCoveredPeriod = PeriodStrategyType.getStrategy(PeriodStrategyType.MONTHS, [
+                startCover: new DateTime(date20110101), numberOfMonths: 24])
         PeriodScope periodScope = quotaShare20.iterationScope.periodScope
         IPeriodCounter periodCounter = periodScope.periodCounter
 

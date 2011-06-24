@@ -13,9 +13,8 @@ class TestIterationScopeUtilities {
     static IterationScope getIterationScope(DateTime date, int numberOfPeriods) {
         PeriodScope periodScope = TestPeriodScopeUtilities.getPeriodScope(date, numberOfPeriods)
         IterationScope iterationScope = new IterationScope(periodScope: periodScope)
-//        for (int i = 0; i < numberOfPeriods; i++) {
-            iterationScope.periodStores.add(new PeriodStore(periodScope))
-//        }
+        iterationScope.periodStores.add(new PeriodStore(periodScope))
+        iterationScope.currentIteration = 1
         return iterationScope
     }
 

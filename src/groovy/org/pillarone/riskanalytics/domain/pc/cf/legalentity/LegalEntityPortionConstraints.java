@@ -1,7 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.legalentity;
 
 import org.pillarone.riskanalytics.core.parameterization.IMultiDimensionalConstraints;
-
+import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
+import org.pillarone.riskanalytics.domain.utils.constraint.IUnityPortion;
 import java.util.Arrays;
 import java.util.List;
 
