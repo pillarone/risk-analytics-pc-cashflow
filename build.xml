@@ -7,7 +7,7 @@
     <property file="application.properties"/>
 
     <property name="build.prod.dir" value="${user.home}/.grails/${app.grails.version}/projects/risk-analytics-pc-cashflow"/>
-    <property name="plugin.dir" value="${basedir}/../local-plugins/risk-analytics-pc-casualty-master"/>
+    <property name="plugin.dir" value="${basedir}/../local-plugins/risk-analytics-property-casualty-master"/>
     <property name="classes.prod.dir" value="${build.prod.dir}/classes"/>
     <property name="resources.prod.dir" value="src/java"/>
 
