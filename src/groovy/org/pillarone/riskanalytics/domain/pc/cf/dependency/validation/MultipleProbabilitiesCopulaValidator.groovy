@@ -19,6 +19,12 @@ import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistr
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier
 import org.pillarone.riskanalytics.core.simulation.item.parameter.EnumParameterHolder
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IClaimsGeneratorStrategy
+import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomFrequencyDistribution
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.FrequencySeverityClaimsGeneratorStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.OccurrenceFrequencySeverityClaimsGeneratorStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.FrequencyAverageAttritionalClaimsGeneratorStrategy
+import umontreal.iro.lecuyer.probdist.Distribution
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -39,18 +45,12 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
 
         List<ParameterValidation> errors = []
 
-        /** key: path                                */
+        /** key: path                                              */
         Map<String, List<Component>> targetComponentsPerCopula = [:]
-        /** key: name of component                                */
-        Map<String, ClaimsGeneratorType> strategyPerClaimsGeneratorName = [:]
-        /** key: path of copula                               */
-        Map<String, FrequencyDistributionType> frequencyDistributionPerCopula = [:]
-        /** key: name of component                                */
-        Map<String, FrequencyDistributionType> frequencyDistributionPerClaimsGeneratorName = [:]
-        /** key: name of component                                */
-        Map<String, DistributionModifier> frequencyModificationPerClaimsGeneratorName = [:]
-        /** key: name of component                                */
-        Map<String, FrequencyBase> frequencyBasePerClaimsGeneratorName = [:]
+        /** key: name of component                                              */
+        Map<String, IClaimsGeneratorStrategy> claimsGeneratorStrategyPerClaimsGeneratorName = [:]
+        /** key: path of copula                                             */
+        Map<String, RandomFrequencyDistribution> frequencyDistributionPerCopula = [:]
 
         for (ParameterHolder parameter in parameters) {
             if (parameter instanceof ParameterObjectParameterHolder) {
@@ -70,66 +70,215 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
                     }
                 }
                 else if (classifier instanceof ClaimsGeneratorType) {
-                    strategyPerClaimsGeneratorName[parameter.path - 'claimsGenerators:' - ':parmClaimsModel'] = classifier
+                    claimsGeneratorStrategyPerClaimsGeneratorName[parameter.path - 'claimsGenerators:' - ':parmClaimsModel'] = (IClaimsGeneratorStrategy) parameter.getBusinessObject()
                 }
                 else if (classifier instanceof FrequencyDistributionType && parameter.path.contains('eventGenerators:sub')) {
-                    frequencyDistributionPerCopula[parameter.path - 'parmFrequencyDistribution' + 'parmCopulaStrategy'] = classifier
+                    frequencyDistributionPerCopula[parameter.path - 'parmFrequencyDistribution' + 'parmCopulaStrategy'] = (RandomFrequencyDistribution) parameter.getBusinessObject()
                 }
-                else if (classifier instanceof FrequencyDistributionType && parameter.path.contains('claimsGenerators:sub')) {
-                    frequencyDistributionPerClaimsGeneratorName[parameter.path - 'claimsGenerators:' - ':parmClaimsModel:frequencyDistribution'] = classifier
-                }
-                else if (classifier instanceof DistributionModifier && parameter.path.contains('claimsGenerators:sub')) {
-                    frequencyModificationPerClaimsGeneratorName[parameter.path - 'claimsGenerators:' - ':parmClaimsModel:frequencyModification'] = classifier
-                }
+
                 errors.addAll(validate(parameter.classifierParameters.values().toList()))
             }
-            else if (parameter instanceof EnumParameterHolder && parameter.value instanceof FrequencyBase) {
-                if (parameter.path.contains('claimsGenerators:sub')) {
-                    frequencyBasePerClaimsGeneratorName[parameter.path - 'claimsGenerators:' - ':parmClaimsModel:frequencyBase'] = parameter.value
-                }
-            }
-
-
         }
 
         for (String copulaPath: targetComponentsPerCopula.keySet()) {
             for (Component target: targetComponentsPerCopula[copulaPath]) {
                 String claimsGeneratorName = target.getName()
-                ClaimsGeneratorType claimsGeneratorStrategy = strategyPerClaimsGeneratorName[claimsGeneratorName]
-                if (claimsGeneratorStrategy.equals(ClaimsGeneratorType.FREQUENCY_SEVERITY)
-                        || claimsGeneratorStrategy.equals(ClaimsGeneratorType.OCCURRENCE_AND_SEVERITY)
-                        || claimsGeneratorStrategy.equals(ClaimsGeneratorType.FREQUENCY_AVERAGE_ATTRITIONAL)) {
-                    FrequencyDistributionType frequencyDistributionTypeClaims = frequencyDistributionPerClaimsGeneratorName[claimsGeneratorName]
-                    FrequencyDistributionType frequencyDistributionTypeEvents = frequencyDistributionPerCopula[copulaPath]
-                    DistributionModifier modifier = frequencyModificationPerClaimsGeneratorName[claimsGeneratorName]
-                    FrequencyBase base = frequencyBasePerClaimsGeneratorName[claimsGeneratorName]
-                    if (!frequencyDistributionTypeClaims.equals(frequencyDistributionTypeEvents)) {
-                        ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
-                                'event.generators.copula.targets.invalid.frequency.distribution', [frequencyDistributionTypeClaims.toString(), frequencyDistributionTypeEvents.toString()])
-                        error.path = copulaPath // todo(jwa): probably claims generator path better (additonally?)
-                        errors << error
-                    } else {
-                        // todo(jwa): validate control parameter and mean and difference values, PMO-1605
-                    }
-                    if (!base.equals(FrequencyBase.ABSOLUTE)){
-                        ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
-                                'event.generators.copula.targets.invalid.frequency.base', [base.toString()])
-                        error.path = copulaPath // todo(jwa): probably claims generator path better (additonally?)
-                        errors << error
-                    }
-                    if (!modifier.equals(DistributionModifier.NONE)){
-                        ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
-                                'event.generators.copula.targets.invalid.frequency.modifier', [modifier.toString()])
-                        error.path = copulaPath // todo(jwa): probably claims generator path better (additonally?)
-                        errors << error
-                    }
+                IClaimsGeneratorStrategy strategy = claimsGeneratorStrategyPerClaimsGeneratorName[claimsGeneratorName]
+                if (strategy instanceof FrequencySeverityClaimsGeneratorStrategy || strategy instanceof OccurrenceFrequencySeverityClaimsGeneratorStrategy
+                        || strategy instanceof FrequencyAverageAttritionalClaimsGeneratorStrategy) {
+                    RandomFrequencyDistribution frequencyDistributionTotal = strategy.frequencyDistribution
+                    RandomFrequencyDistribution frequencyDistributionSystematic = frequencyDistributionPerCopula[copulaPath]
 
-                    continue
+                    if (!frequencyDistributionTotal.getType().equals(frequencyDistributionSystematic.getType())) {
+                        ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
+                                'event.generators.copula.targets.invalid.frequency.distribution',
+                                [frequencyDistributionTotal.getType().toString(), frequencyDistributionSystematic.getType().toString()])
+                        error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution'
+                        errors << error
+
+                        error = new ParameterValidationImpl(ValidationType.ERROR,
+                                'event.generators.copula.targets.invalid.frequency.distribution',
+                                [frequencyDistributionTotal.getType().toString(), frequencyDistributionSystematic.getType().toString()])
+                        error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution'
+                        errors << error
+                    }
+                    else {
+                        switch (frequencyDistributionTotal.getType()) {
+                            case FrequencyDistributionType.CONSTANT:
+                                if (frequencyDistributionTotal.distribution.constant < frequencyDistributionSystematic.distribution.constant) {
+                                    ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.frequency.distribution.total.constant.smaller.than.systematic.constant',
+                                            [frequencyDistributionTotal.distribution.constant, frequencyDistributionSystematic.distribution.constant])
+                                    error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution:constant'
+                                    errors << error
+                                    error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.frequency.distribution.total.constant.smaller.than.systematic.constant',
+                                            [frequencyDistributionTotal.distribution.constant, frequencyDistributionSystematic.distribution.constant])
+                                    error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:constant'
+                                    errors << error
+                                }
+                                break
+                            case FrequencyDistributionType.CONSTANTS:
+                                if (frequencyDistributionTotal.distribution.sortedValues[0] < frequencyDistributionSystematic.distribution.sortedValues[-1]) {
+                                    ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.frequency.distribution.total.min.observation.smaller.than.systematic.max.observation',
+                                            [frequencyDistributionTotal.distribution.sortedValues[0], frequencyDistributionSystematic.distribution.sortedValues[-1]])
+                                    error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution:constants'
+                                    errors << error
+
+                                    error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.frequency.distribution.total.min.observation.smaller.than.systematic.max.observation',
+                                            [frequencyDistributionTotal.distribution.sortedValues[0], frequencyDistributionSystematic.distribution.sortedValues[-1]])
+                                    error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:constants'
+                                    errors << error
+                                }
+                                break
+                            case FrequencyDistributionType.BINOMIALDIST:
+                                if (frequencyDistributionTotal.distribution.p != frequencyDistributionSystematic.distribution.p) {
+                                    ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.binomial.distribution.total.p.not.equal.to.systematic.p',
+                                            [frequencyDistributionTotal.distribution.p, frequencyDistributionSystematic.distribution.p])
+                                    error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution:p'
+                                    errors << error
+                                    error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.binomial.distribution.total.p.not.equal.to.systematic.p',
+                                            [frequencyDistributionTotal.distribution.p, frequencyDistributionSystematic.distribution.p])
+                                    error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:p'
+                                    errors << error
+                                }
+
+                                if (frequencyDistributionTotal.distribution.n < frequencyDistributionSystematic.distribution.n) {
+                                    ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.binomial.distribution.total.n.smaller.than.systematic.n',
+                                            [frequencyDistributionTotal.distribution.n, frequencyDistributionSystematic.distribution.n])
+                                    error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution:n'
+                                    errors << error
+
+                                    error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.binomial.distribution.total.n.smaller.than.systematic.n',
+                                            [frequencyDistributionTotal.distribution.n, frequencyDistributionSystematic.distribution.n])
+                                    error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:n'
+                                    errors << error
+
+                                }
+                                break
+                            case FrequencyDistributionType.NEGATIVEBINOMIAL:
+                                if (frequencyDistributionTotal.distribution.p != frequencyDistributionSystematic.distribution.p) {
+                                    ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.negative.binomial.distribution.total.p.not.equal.to.systematic.p',
+                                            [frequencyDistributionTotal.distribution.p, frequencyDistributionSystematic.distribution.p])
+                                    error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution:p'
+                                    errors << error
+
+                                    error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.negative.binomial.distribution.total.p.not.equal.to.systematic.p',
+                                            [frequencyDistributionTotal.distribution.p, frequencyDistributionSystematic.distribution.p])
+                                    error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:p'
+                                    errors << error
+                                }
+                                if (frequencyDistributionTotal.distribution.gamma < frequencyDistributionSystematic.distribution.gamma) {
+                                    ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.negative.binomial.distribution.total.gamma.smaller.than.systematic.gamma',
+                                            [frequencyDistributionTotal.distribution.gamma, frequencyDistributionSystematic.distribution.gamma])
+                                    error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution:gamma'
+                                    errors << error
+                                    error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.negative.binomial.distribution.total.gamma.smaller.than.systematic.gamma',
+                                            [frequencyDistributionTotal.distribution.gamma, frequencyDistributionSystematic.distribution.gamma])
+                                    error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:gamma'
+                                    errors << error
+                                }
+
+                                break
+                            case FrequencyDistributionType.POISSON:
+                                if (frequencyDistributionTotal.distribution.lambda < frequencyDistributionSystematic.distribution.lambda) {
+                                    ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.poisson.distribution.total.lambda.smaller.than.systematic.lambda',
+                                            [frequencyDistributionTotal.distribution.lambda, frequencyDistributionSystematic.distribution.lambda])
+                                    error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution:lambda'
+                                    errors << error
+                                     error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.poisson.distribution.total.lambda.smaller.than.systematic.lambda',
+                                            [frequencyDistributionTotal.distribution.lambda, frequencyDistributionSystematic.distribution.lambda])
+                                    error.path =  'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:lambda'
+                                    errors << error
+                                }
+                                break
+                            case FrequencyDistributionType.DISCRETEEMPIRICAL:
+                                List<Double> obsTotal = new ArrayList<Double>()
+                                for (int i = 0; i < frequencyDistributionTotal.distribution.pr.length; i++) {
+                                    if (frequencyDistributionTotal.distribution.pr[i] > 0.0) {
+                                        obsTotal.add(frequencyDistributionTotal.distribution.obs[i])
+                                    }
+                                }
+                                List<Double> obsSystematic = new ArrayList<Double>()
+                                for (int i = 0; i < frequencyDistributionSystematic.distribution.pr.length; i++) {
+                                    if (frequencyDistributionSystematic.distribution.pr[i] > 0.0) {
+                                        obsSystematic.add(frequencyDistributionSystematic.distribution.obs[i])
+                                    }
+                                }
+
+                                if (obsTotal.min() < obsSystematic.max()) {
+                                    ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.dicrete.empirical.distribution.total.min.observation.smaller.than.systematic.max.observation',
+                                            [obsTotal.min(), obsSystematic.max()])
+                                    error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution:discreteEmpiricalValues'
+                                    errors << error
+                                    error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.dicrete.empirical.distribution.total.min.observation.smaller.than.systematic.max.observation',
+                                            [obsTotal.min(), obsSystematic.max()])
+                                    error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:discreteEmpiricalValues'
+                                    errors << error
+                                }
+                                break
+                            case FrequencyDistributionType.DISCRETEEMPIRICALCUMULATIVE:
+                                List<Double> obsTotal = new ArrayList<Double>()
+                                for (int i = 0; i < frequencyDistributionTotal.distribution.pr.length; i++) {
+                                    if (frequencyDistributionTotal.distribution.pr[i] > 0.0) {
+                                        obsTotal.add(frequencyDistributionTotal.distribution.obs[i])
+                                    }
+                                }
+                                List<Double> obsSystematic = new ArrayList<Double>()
+                                for (int i = 0; i < frequencyDistributionSystematic.distribution.pr.length; i++) {
+                                    if (frequencyDistributionSystematic.distribution.pr[i] > 0.0) {
+                                        obsSystematic.add(frequencyDistributionSystematic.distribution.obs[i])
+                                    }
+                                }
+
+                                if (obsTotal.min() < obsSystematic.max()) {
+                                    ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.discrete.empirical.cumulative.distribution.total.min.observation.smaller.than.systematic.max.observation',
+                                            [obsTotal.min(), obsSystematic.max()])
+                                    error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution:discreteEmpiricalCumulativeValues'
+                                    errors << error
+                                    error = new ParameterValidationImpl(ValidationType.ERROR,
+                                            'event.generators.discrete.empirical.cumulative.distribution.total.min.observation.smaller.than.systematic.max.observation',
+                                            [obsTotal.min(), obsSystematic.max()])
+                                    error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:discreteEmpiricalCumulativeValues'
+                                    errors << error
+                                }
+                                break
+                        }
+                    }
+                    if (!strategy.frequencyBase.equals(FrequencyBase.ABSOLUTE)) {
+                        ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
+                                'event.generators.copula.targets.invalid.frequency.base', [strategy.frequencyBase.toString()])
+                        error.path = copulaPath // todo(jwa): also inking of claims generator path
+                        errors << error
+                    }
+                    if (!strategy.frequencyModification.type.equals(DistributionModifier.NONE)) {
+                        ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
+                                'event.generators.copula.targets.invalid.frequency.modifier', [strategy.frequencyModification.type.toString()])
+                        error.path = copulaPath // todo(jwa): also inking of claims generator path
+                        errors << error
+                    }
                 }
-                ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
-                        'event.generators.copula.targets.invalid.strategy', [claimsGeneratorStrategy.toString()])
-                error.path = copulaPath
-                errors << error
+                else {
+                    ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
+                            'event.generators.copula.targets.invalid.strategy', [strategy.toString()])
+                    error.path = copulaPath // todo(jwa): inking of claims generator path
+                    errors << error
+                }
             }
         }
 
