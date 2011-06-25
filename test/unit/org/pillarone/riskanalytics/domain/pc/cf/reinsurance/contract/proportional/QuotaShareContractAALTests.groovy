@@ -206,7 +206,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         quotaShare20.doCalculation()
 
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
-//        assertEquals 'P4 summed ceded ultimate', 0, quotaShare20.outClaimsCeded.ultimate().sum()
+        assertEquals 'P4 summed ceded ultimate', 0, quotaShare20.outClaimsCeded.ultimate.sum()
         assertEquals 'P4 summed ceded reported', 0, quotaShare20.outClaimsCeded.reportedIncremental.sum()
         assertEquals 'P4 summed ceded paid', 0, quotaShare20.outClaimsCeded.paidIncremental.sum()
 
@@ -316,7 +316,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         quotaShare20.doCalculation()
 
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
-//        assertEquals 'P4 summed ceded ultimate', 0, quotaShare20.outClaimsCeded.ultimate().sum()
+        assertEquals 'P4 summed ceded ultimate', 0, quotaShare20.outClaimsCeded.ultimate.sum()
         assertEquals 'P4 summed ceded reported', 0, quotaShare20.outClaimsCeded.reportedIncremental.sum(), EPSILON
         assertEquals 'P4 summed ceded paid', 0, quotaShare20.outClaimsCeded.paidIncremental.sum(), EPSILON
     }
@@ -394,7 +394,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         quotaShare20.doCalculation()
 
         assertEquals 'number of ceded claims', 2, quotaShare20.outClaimsCeded.size()
-//        assertEquals 'P4 summed ceded ultimate', 0, quotaShare20.outClaimsCeded.ultimate().sum()
+        assertEquals 'P4 summed ceded ultimate', 0, quotaShare20.outClaimsCeded.ultimate.sum()
         assertEquals 'P4 summed ceded reported', 0, quotaShare20.outClaimsCeded.reportedIncremental.sum()
         assertEquals 'P4 summed ceded paid', 0, quotaShare20.outClaimsCeded.paidIncremental.sum()
 

@@ -15,6 +15,7 @@ public interface IClaimRoot {
     public EventPacket getEvent();
     public ClaimType getClaimType();
     public ExposureInfo getExposure();
+    public boolean hasExposureInformation();
     public DateTime getExposureStartDate();
     public DateTime getOccurrenceDate();
     public Integer getOccurrencePeriod(IPeriodCounter periodCounter);
