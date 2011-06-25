@@ -8,16 +8,11 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
-import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
-import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionTableConstraints;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
@@ -31,8 +26,6 @@ import java.util.*;
  */
 public class ReservesGenerator extends Component implements IReserveMarker {
 
-    private SimulationScope simulationScope;
-    private IterationScope iterationScope;
     private PeriodScope periodScope;
     private PeriodStore periodStore;
 
@@ -43,14 +36,14 @@ public class ReservesGenerator extends Component implements IReserveMarker {
 
     private ConstrainedString parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker.class, "");
     private ConstrainedString parmReportingPattern = new ConstrainedString(IReportingPatternMarker.class, "");
-    private ConstrainedMultiDimensionalParameter parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
-            Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
-            ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER));
+    private ConstrainedMultiDimensionalParameter parmIndices = new ConstrainedMultiDimensionalParameter(
+            Collections.emptyList(), ReservesIndexSelectionTableConstraints.COLUMN_TITLES,
+            ConstraintsFactory.getConstraints(ReservesIndexSelectionTableConstraints.IDENTIFIER));
     private IReserveCalculationStrategy parmUltimateEstimationMethod = ReserveCalculationType.getDefault();
 
     protected void doCalculation() {
-        IPeriodCounter periodCounter = getPeriodScope().getPeriodCounter();
-        List<Factors> factors = IndexUtils.filterFactors(inFactors, parmSeverityIndices);
+        IPeriodCounter periodCounter = periodScope.getPeriodCounter();
+        List<Factors> factors = IndexUtils.filterFactors(inFactors, parmIndices, parmUltimateEstimationMethod.getReportingDate());
         PatternPacket payoutPattern = getPayoutPattern();
         PatternPacket reportingPattern = getReportingPattern();
 
@@ -58,8 +51,9 @@ public class ReservesGenerator extends Component implements IReserveMarker {
         DateTime averageInceptionDate = parmUltimateEstimationMethod.getAverageInceptionDate();
 
         GrossClaimRoot baseClaim;
-        if (getPeriodScope().isFirstPeriod()) {
-            baseClaim = new GrossClaimRoot(ultimateAtReportingDate, ClaimType.AGGREGATED_RESERVES, null, averageInceptionDate, payoutPattern, reportingPattern);
+        if (periodScope.isFirstPeriod()) {
+            baseClaim = new GrossClaimRoot(ultimateAtReportingDate, ClaimType.AGGREGATED_RESERVES, averageInceptionDate,
+                    averageInceptionDate, payoutPattern, reportingPattern);
             baseClaim.updateCumulatedPaidAtStartOfFirstPeriod(periodCounter, factors);
         }
         else {
@@ -108,12 +102,12 @@ public class ReservesGenerator extends Component implements IReserveMarker {
         this.parmReportingPattern = parmReportingPattern;
     }
 
-    public ConstrainedMultiDimensionalParameter getParmSeverityIndices() {
-        return parmSeverityIndices;
+    public ConstrainedMultiDimensionalParameter getParmIndices() {
+        return parmIndices;
     }
 
-    public void setParmSeverityIndices(ConstrainedMultiDimensionalParameter parmSeverityIndices) {
-        this.parmSeverityIndices = parmSeverityIndices;
+    public void setParmIndices(ConstrainedMultiDimensionalParameter parmIndices) {
+        this.parmIndices = parmIndices;
     }
 
     public PacketList<FactorsPacket> getInFactors() {
@@ -140,13 +134,6 @@ public class ReservesGenerator extends Component implements IReserveMarker {
         this.outReserves = outReserves;
     }
 
-    public PeriodScope getPeriodScope() {
-        return periodScope;
-    }
-
-    public void setPeriodScope(PeriodScope periodScope) {
-        this.periodScope = periodScope;
-    }
 
     public PeriodStore getPeriodStore() {
         return periodStore;
@@ -156,19 +143,11 @@ public class ReservesGenerator extends Component implements IReserveMarker {
         this.periodStore = periodStore;
     }
 
-    public SimulationScope getSimulationScope() {
-        return simulationScope;
+    public PeriodScope getPeriodScope() {
+        return periodScope;
     }
 
-    public void setSimulationScope(SimulationScope simulationScope) {
-        this.simulationScope = simulationScope;
-    }
-
-    public IterationScope getIterationScope() {
-        return iterationScope;
-    }
-
-    public void setIterationScope(IterationScope iterationScope) {
-        this.iterationScope = iterationScope;
+    public void setPeriodScope(PeriodScope periodScope) {
+        this.periodScope = periodScope;
     }
 }

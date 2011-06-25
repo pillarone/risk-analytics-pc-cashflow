@@ -15,6 +15,7 @@ class Indices extends ComposedComponent {
     PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream)
 
     SeverityIndices subSeverityIndices = new SeverityIndices()
+    ReservesIndices subReservesIndices = new ReservesIndices()
     FrequencyIndices subFrequencyIndices = new FrequencyIndices()
     PolicyIndices subPolicyIndices = new PolicyIndices()
     PremiumIndices subPremiumIndices = new PremiumIndices()
@@ -23,10 +24,12 @@ class Indices extends ComposedComponent {
     void wire() {
         WiringUtils.use(PortReplicatorCategory) {
             this.outFactors = subSeverityIndices.outFactors
+            this.outFactors = subReservesIndices.outFactors
             this.outFactors = subFrequencyIndices.outFactors
             this.outFactors = subPolicyIndices.outFactors
             this.outFactors = subPremiumIndices.outFactors
             subSeverityIndices.inEventSeverities = this.inEventSeverities
+            subReservesIndices.inEventSeverities = this.inEventSeverities
             subFrequencyIndices.inEventSeverities = this.inEventSeverities
             subPolicyIndices.inEventSeverities = this.inEventSeverities
             subPremiumIndices.inEventSeverities = this.inEventSeverities

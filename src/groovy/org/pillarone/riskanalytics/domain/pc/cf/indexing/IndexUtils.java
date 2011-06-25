@@ -41,6 +41,29 @@ public class IndexUtils {
     }
 
     /**
+     * This method sets the BaseDateMode automatically to fixed date.
+     * @param factorsPackets
+     * @param criteria
+     * @param fixedDate
+     * @return
+     */
+    public static List<Factors> filterFactors(List<FactorsPacket> factorsPackets,
+                                              ConstrainedMultiDimensionalParameter criteria, DateTime fixedDate) {
+        List<Factors> filteredFactors = new ArrayList<Factors>();
+        if (criteria.isEmpty()) return null;
+        List<IIndexMarker> indices = criteria.getValuesAsObjects(criteria.getColumnIndex(IndexSelectionTableConstraints.INDEX));
+        List<String> indexModes = criteria.getColumnByName(IndexSelectionTableConstraints.MODE);
+        for (FactorsPacket factorPacket : factorsPackets) {
+            int row = indices.indexOf((IIndexMarker) factorPacket.getOrigin());
+            if (row > -1) {
+                filteredFactors.add(new Factors(factorPacket, BaseDateMode.FIXED_DATE,
+                        IndexMode.valueOf(indexModes.get(row)), fixedDate));
+            }
+        }
+        return filteredFactors;
+    }
+
+    /**
      * @param factors
      * @param evaluationDate
      * @return aggregated indices for a specific evaluationDate

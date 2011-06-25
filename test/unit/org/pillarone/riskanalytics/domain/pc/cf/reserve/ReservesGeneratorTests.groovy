@@ -24,12 +24,12 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.DeterministicIndexTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexMode
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.BaseDateMode
 
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndex
 
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.Pattern
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ReservesIndexSelectionTableConstraints
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -60,7 +60,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
     void setUp() {
         ConstraintsFactory.registerConstraint(new PatternTableConstraints())
         ConstraintsFactory.registerConstraint(new DeterministicIndexTableConstraints())
-        ConstraintsFactory.registerConstraint(new SeverityIndexSelectionTableConstraints())
+        ConstraintsFactory.registerConstraint(new ReservesIndexSelectionTableConstraints())
 
         payoutPatterns = new PayoutPattern(
                 name: 'motor hull',
@@ -90,18 +90,21 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reservesGenerator = new ReservesGenerator(name: "motor hull")
         reservesGenerator.periodScope = TestPeriodScopeUtilities.getPeriodScope(projectionStart, 7)
         reservesGenerator.periodStore = new PeriodStore(reservesGenerator.periodScope)
-        reservesGenerator.setParmUltimateEstimationMethod(ReserveCalculationType.getStrategy(
-                ReserveCalculationType.REPORTEDBASED, ["reportedAtReportingDate": (double) 3500.0, "averageInceptionDate": averageInceptionDate,
-                        "reportingDate": reportingDate, "interpolationMode": InterpolationMode.NONE]))
+        reservesGenerator.parmUltimateEstimationMethod = ReserveCalculationType.getStrategy(
+                ReserveCalculationType.REPORTEDBASED, [
+                        'reportedAtReportingDate': (double) 3500.0,
+                        'averageInceptionDate': averageInceptionDate,
+                        'reportingDate': reportingDate,
+                        'interpolationMode': InterpolationMode.NONE])
         reservesGenerator.parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker, 'motor hull')
         reservesGenerator.parmPayoutPattern.selectedComponent = payoutPatterns
         reservesGenerator.parmReportingPattern = new ConstrainedString(IReportingPatternMarker, 'motor hull')
         reservesGenerator.parmReportingPattern.selectedComponent = reportingPatterns
-        reservesGenerator.parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
-                [[inflationIndex.name], [IndexMode.CONTINUOUS.toString()], [BaseDateMode.FIXED_DATE.toString()], [reportingDate]],
-                SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
-                ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER))
-        reservesGenerator.parmSeverityIndices.comboBoxValues.put(0, ['inflation': inflationIndex])
+        reservesGenerator.parmIndices = new ConstrainedMultiDimensionalParameter(
+                [[inflationIndex.name], [IndexMode.CONTINUOUS.toString()]],
+                ReservesIndexSelectionTableConstraints.COLUMN_TITLES,
+                ConstraintsFactory.getConstraints(ReservesIndexSelectionTableConstraints.IDENTIFIER))
+        reservesGenerator.parmIndices.comboBoxValues.put(0, ['inflation': inflationIndex])
 
         WiringUtils.use(WireCategory) {
             reservesGenerator.inPatterns = payoutPatterns.outPattern
