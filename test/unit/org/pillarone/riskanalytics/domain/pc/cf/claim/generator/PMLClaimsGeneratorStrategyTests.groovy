@@ -41,7 +41,6 @@ class PMLClaimsGeneratorStrategyTests extends GroovyTestCase {
         claimsGenerator.setParmClaimsModel(ClaimsGeneratorType.getStrategy(ClaimsGeneratorType.PML,
                 ["pmlData": pmlData, "claimsSizeModification": claimsSizeModification,'produceClaim': FrequencySeverityClaimType.SINGLE]))
 
-
         MathUtils.initRandomStreamBase(1531)
         RandomStreamBase referenceStream = MathUtils.getRandomStream(MathUtils.getRandomStreamBase(), 0).clone()
         List<Double> randomNumbers = UniformDoubleList.getDoubles((int) 300, false, referenceStream);

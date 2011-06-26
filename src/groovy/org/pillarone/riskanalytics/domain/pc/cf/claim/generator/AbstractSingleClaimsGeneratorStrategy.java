@@ -38,10 +38,12 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
         return generateClaims(severityScalingFactor, numberOfClaims, claimType, periodScope);
     }
 
-    public List<ClaimRoot> generateClaims(ClaimType claimType, List<Factors> factors, PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+                                          ExposureBase severityBase, ClaimType claimType, List<Factors> factors, PeriodScope periodScope) {
         int numberOfClaims = claimNumberGenerator.nextValue().intValue();
         numberOfClaims = calculateNumberOfClaimsWithAppliedIndices(numberOfClaims, periodScope, factors);
-        return generateClaims(1, numberOfClaims, claimType, periodScope);
+        double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
+        return generateClaims(severityScalingFactor, numberOfClaims, claimType, periodScope);
     }
 
     private int calculateNumberOfClaimsWithAppliedIndices(int numberOfClaims, PeriodScope periodScope, List<Factors> factors) {

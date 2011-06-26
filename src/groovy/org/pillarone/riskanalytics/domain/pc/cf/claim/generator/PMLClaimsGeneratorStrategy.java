@@ -11,6 +11,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.*;
@@ -31,6 +32,7 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
     public static final String RETURN_PERIOD = "return period";
     public static final String MAX_CLAIM = "maximum claim";
 
+    private ExposureBase claimsSizeBase = ExposureBase.ABSOLUTE;
     private ConstrainedMultiDimensionalParameter pmlData = new ConstrainedMultiDimensionalParameter(
             GroovyUtils.toList("[[0d], [0d]]"), Arrays.asList("return period", "maximum claim"),
             ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER));
@@ -47,6 +49,7 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
 
     public Map getParameters() {
         Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("claimsSizeBase", claimsSizeBase);
         parameters.put("pmlData", pmlData);
         parameters.put("claimsSizeModification", claimsSizeModification);
         parameters.put("produceClaim", produceClaim);
@@ -66,7 +69,7 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
         setClaimsSizeGenerator(periodScope);
         setClaimNumberGenerator(periodScope);
         ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
-        return generateClaims(claimType, null, periodScope);
+        return generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, claimType, null, periodScope);
     }
 
     private void setClaimsSizeGenerator(PeriodScope periodScope) {

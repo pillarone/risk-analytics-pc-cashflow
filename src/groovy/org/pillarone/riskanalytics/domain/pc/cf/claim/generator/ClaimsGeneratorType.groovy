@@ -67,6 +67,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
             occurrenceDistribution: DistributionType.getStrategy(DistributionType.UNIFORM, ["a": 0d, "b": 1d]),
             produceClaim: FrequencySeverityClaimType.SINGLE])
     public static final ClaimsGeneratorType PML = new ClaimsGeneratorType("PML curve", "PML", [
+            claimsSizeBase: ExposureBase.ABSOLUTE,
             pmlData: new ConstrainedMultiDimensionalParameter([[0d], [0d]], ["return period", "maximum claim"],
                     ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
             claimsSizeModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
@@ -158,13 +159,14 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                         produceClaim: (FrequencySeverityClaimType) parameters.get("produceClaim"))
                 break;
 //            case ClaimsGeneratorType.SEVERITY_OF_EVENT_GENERATOR:
-//                claimsGenerator = new ExternalSeverityClaimsGeneratorStrategy(
-//                        claimsSizeBase: (Exposure) parameters.get("claimsSizeBase"),
-//                        claimsSizeDistribution: (RandomDistribution) parameters.get("claimsSizeDistribution"),
-//                        produceClaim: (FrequencySeverityClaimType) parameters.get("produceClaim"))
-//                break;
+        //                claimsGenerator = new ExternalSeverityClaimsGeneratorStrategy(
+        //                        claimsSizeBase: (Exposure) parameters.get("claimsSizeBase"),
+        //                        claimsSizeDistribution: (RandomDistribution) parameters.get("claimsSizeDistribution"),
+        //                        produceClaim: (FrequencySeverityClaimType) parameters.get("produceClaim"))
+        //                break;
             case ClaimsGeneratorType.PML:
                 claimsGenerator = new PMLClaimsGeneratorStrategy(
+                       claimsSizeBase: (ExposureBase) parameters.get("claimsSizeBase"),
                         pmlData: (ConstrainedMultiDimensionalParameter) parameters.get("pmlData"),
                         claimsSizeModification: (DistributionModified) parameters.get("claimsSizeModification"),
                         produceClaim: (FrequencySeverityClaimType) parameters.get("produceClaim"))
