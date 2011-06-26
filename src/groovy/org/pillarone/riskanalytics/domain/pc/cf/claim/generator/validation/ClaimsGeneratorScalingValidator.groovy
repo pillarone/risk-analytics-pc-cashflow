@@ -16,6 +16,13 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
+import org.pillarone.riskanalytics.core.simulation.item.parameter.MultiDimensionalParameterHolder
+import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractSingleClaimsGeneratorStrategy
+import org.pillarone.riskanalytics.domain.utils.validation.ParameterValidationImpl
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.FrequencySeverityClaimsGeneratorStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.FrequencyAverageAttritionalClaimsGeneratorStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGeneratorStrategy
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -36,8 +43,10 @@ class ClaimsGeneratorScalingValidator implements IParameterizationValidator {
 
         List<ParameterValidation> errors = []
 
-        /** key: path                                        */
+        /** key: path                                              */
         Map<String, IClaimsGeneratorStrategy> claimsGeneratorStrategyPerClaimsGeneratorName = [:]
+        /** key:       */
+        Map<String, Boolean> underwritingInfoPerClaimsGeneratorName = [:]
 
         for (ParameterHolder parameter in parameters) {
             if (parameter instanceof ParameterObjectParameterHolder) {
@@ -46,12 +55,50 @@ class ClaimsGeneratorScalingValidator implements IParameterizationValidator {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug "validating ${parameter.path}"
                     }
+
+                    claimsGeneratorStrategyPerClaimsGeneratorName[parameter.path - ':parmClaimsModel'] = (IClaimsGeneratorStrategy) parameter.getBusinessObject()
+
                     def currentErrors = validationService.validate(classifier, parameter.getParameterMap())
                     currentErrors*.path = parameter.path
                     errors.addAll(currentErrors)
                 }
 
+
                 errors.addAll(validate(parameter.classifierParameters.values().toList()))
+            }
+            else if (parameter instanceof MultiDimensionalParameterHolder && parameter.value instanceof ComboBoxTableMultiDimensionalParameter) {
+                if (parameter.path.contains('claimsGenerators:sub') && parameter.value.markerClass.is(IUnderwritingInfoMarker)) {
+                    underwritingInfoPerClaimsGeneratorName[parameter.path - ':parmUnderwritingSegments'] = hasSelectedUnderwritingInfo(parameter.value)
+                }
+            }
+        }
+
+        for (String claimsGeneratorName: claimsGeneratorStrategyPerClaimsGeneratorName.keySet()) {
+
+            IClaimsGeneratorStrategy strategy = claimsGeneratorStrategyPerClaimsGeneratorName[claimsGeneratorName]
+            boolean hasSelectedUnderwritingInfo = underwritingInfoPerClaimsGeneratorName[claimsGeneratorName]
+            if (strategy instanceof FrequencySeverityClaimsGeneratorStrategy
+                    || strategy instanceof FrequencyAverageAttritionalClaimsGeneratorStrategy) {
+                if (!strategy.frequencyBase.equals(FrequencyBase.ABSOLUTE) && !hasSelectedUnderwritingInfo) {
+                    ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.WARNING,
+                            'frequency.base.requires.underwriting.info', [strategy.frequencyBase.toString()])
+                    errors << error
+                    error.path = claimsGeneratorName + ':parmClaimsModel:frequencyBase'
+                    error = new ParameterValidationImpl(ValidationType.WARNING,
+                            'frequency.base.requires.underwriting.info', [strategy.frequencyBase.toString()])
+                    errors << error
+                    error.path = claimsGeneratorName + ':parmUnderwritingSegments'
+                }
+            }
+            if (!strategy.claimsSizeBase.equals(ExposureBase.ABSOLUTE) && !hasSelectedUnderwritingInfo) {
+                ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.WARNING,
+                        'claims.size.base.requires.underwriting.info', [strategy.claimsSizeBase.toString()])
+                errors << error
+                error.path = claimsGeneratorName + ':parmClaimsModel:claimsSizeBase'
+                error = new ParameterValidationImpl(ValidationType.WARNING,
+                        'claims.size.base.requires.underwriting.info', [strategy.claimsSizeBase.toString()])
+                errors << error
+                error.path = claimsGeneratorName + ':parmUnderwritingSegments'
             }
         }
         return errors
@@ -115,6 +162,20 @@ class ClaimsGeneratorScalingValidator implements IParameterizationValidator {
         }
 
 
+    }
+
+    boolean hasSelectedUnderwritingInfo(ComboBoxTableMultiDimensionalParameter parameter) {
+        if (parameter.values.empty) {
+            return false
+        }
+
+        List content = parameter.values[0] instanceof List ? parameter.values[0] : parameter.values
+
+        if (content.empty) {
+            return false
+        }
+
+        return content[0] instanceof String && content[0].length() > 0
     }
 
 }
