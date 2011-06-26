@@ -17,6 +17,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.RecoveryPatte
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.PatternStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.LinkRatioIndexTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.ReservesIndexSelectionTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.ClaimsGeneratorScalingValidator
+import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.validation.RiskAllocationValidator
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
