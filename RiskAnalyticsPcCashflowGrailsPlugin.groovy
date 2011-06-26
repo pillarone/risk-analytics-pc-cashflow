@@ -16,8 +16,7 @@ import org.pillarone.riskanalytics.core.util.ResourceBundleRegistry
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.RecoveryPatternStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.PatternStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.LinkRatioIndexTableConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.ClaimsGeneratorScalingValidator
-import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.validation.RiskAllocationValidator
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ReservesIndexSelectionTableConstraints
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -63,6 +62,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new PremiumIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new FrequencyIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new SeverityIndexSelectionTableConstraints())
+        ConstraintsFactory.registerConstraint(new ReservesIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
         ConstraintsFactory.registerConstraint(new PatternTableConstraints())
         ConstraintsFactory.registerConstraint(new DoubleConstraints())

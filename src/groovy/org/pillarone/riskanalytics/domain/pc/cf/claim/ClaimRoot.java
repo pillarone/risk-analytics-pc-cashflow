@@ -83,6 +83,10 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
         return exposure;
     }
 
+    public boolean hasExposureInformation() {
+        return getExposure() != null;
+    }
+
     public DateTime getExposureStartDate() {
         return exposureStartDate;
     }

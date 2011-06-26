@@ -11,14 +11,14 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportiona
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class QuotaShareContractAAL extends QuotaShareContract {
+public class AALQuotaShareContract extends QuotaShareContract {
 
     private DoubleValue annualAggregateLimitUltimate = new DoubleValue();
     private DoubleValue annualAggregateLimitPaid = new DoubleValue();
     private DoubleValue annualAggregateLimitReported = new DoubleValue();
 
 
-    public QuotaShareContractAAL(double quotaShare, ICommission commission, AalLimitStrategy limit) {
+    public AALQuotaShareContract(double quotaShare, ICommission commission, AalLimitStrategy limit) {
         super(quotaShare, commission);
         double annualAggregateLimit = limit.getAAL();
         annualAggregateLimitUltimate.value = annualAggregateLimit;

@@ -10,5 +10,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 public interface IReserveCalculationStrategy extends IParameterObject {
 
     Double getUltimate(PatternPacket payoutPattern, PatternPacket reportingPattern);
+    DateTime getReportingDate();
     DateTime getAverageInceptionDate();
 }

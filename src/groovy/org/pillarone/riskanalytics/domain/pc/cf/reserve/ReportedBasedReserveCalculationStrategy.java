@@ -1,22 +1,17 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve;
 
-import org.joda.time.DateTime;
-import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
  */
-public class ReportedBasedReserveCalculationStrategy extends AbstractParameterObject implements IReserveCalculationStrategy {
+public class ReportedBasedReserveCalculationStrategy extends AbstractReserveCalculationStrategy {
 
     private double reportedAtReportingDate;
-    private DateTime reportingDate;
-    private DateTime averageInceptionDate;
     private InterpolationMode interpolationMode;
 
     public IParameterObjectClassifier getType() {
@@ -24,11 +19,9 @@ public class ReportedBasedReserveCalculationStrategy extends AbstractParameterOb
     }
 
     public Map getParameters() {
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("reportedAtReportingDate", reportedAtReportingDate);
-        parameters.put("reportingDate", reportingDate);
-        parameters.put("averageInceptionDate", averageInceptionDate);
-        parameters.put("interpolationMode", interpolationMode);
+        Map<String, Object> parameters = super.getParameters();
+        parameters.put(REPORTED_AT_REPORTING_DATE, reportedAtReportingDate);
+        parameters.put(INTERPOLATION_MODE, interpolationMode);
         return parameters;
     }
 
@@ -49,8 +42,6 @@ public class ReportedBasedReserveCalculationStrategy extends AbstractParameterOb
         return reportedAtReportingDate /reportedPortionAtBaseDate;
     }
 
-    public DateTime getAverageInceptionDate() {
-        return averageInceptionDate;
-    }
-
+    public static final String REPORTED_AT_REPORTING_DATE = "reportedAtReportingDate";
+    public static final String INTERPOLATION_MODE = "interpolationMode";
 }

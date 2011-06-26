@@ -11,15 +11,16 @@ import org.joda.time.DateTime
 class ReserveCalculationType extends AbstractParameterObjectClassifier {
 
     public static final ReserveCalculationType ULTIMATE = new ReserveCalculationType("fixed ultimate", "ULTIMATE",
-            [ultimateAtReportingDate: 0d, reportingDate: new DateTime(2010, 1, 1, 0, 0, 0, 0), averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0)])
+            [ultimateAtReportingDate: 0d, reportingDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
+             averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0)])
 
     public static final ReserveCalculationType REPORTEDBASED = new ReserveCalculationType("based on reported information", "REPORTEDBASED",
-            [reportedAtReportingDate: 0d, reportingDate: new DateTime(2010, 1, 1, 0, 0, 0, 0), averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
-                    interpolationMode: InterpolationMode.NONE])
+            [reportedAtReportingDate: 0d, reportingDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
+             averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0), interpolationMode: InterpolationMode.NONE])
 
     public static final ReserveCalculationType OUTSTANDINGBASED = new ReserveCalculationType("based on outstanding information", "OUTSTANDINGBASED",
-            [outstandingAtReportingDate: 0d, reportingDate: new DateTime(2010, 1, 1, 0, 0, 0, 0), averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
-                    interpolationMode: InterpolationMode.NONE])
+            [outstandingAtReportingDate: 0d, reportingDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
+             averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0), interpolationMode: InterpolationMode.NONE])
 
     public static final all = [ULTIMATE, REPORTEDBASED, OUTSTANDINGBASED]
 
@@ -47,25 +48,34 @@ class ReserveCalculationType extends AbstractParameterObjectClassifier {
     }
 
     static IReserveCalculationStrategy getDefault() {
-        return new FixedUltimateReserveCalculationStrategy(ultimateAtReportingDate: 0d, averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0))
+        return new FixedUltimateReserveCalculationStrategy(
+                ultimateAtReportingDate: 0d,
+                reportingDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
+                averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0))
     }
 
     static IReserveCalculationStrategy getStrategy(ReserveCalculationType type, Map parameters) {
         IReserveCalculationStrategy strategy;
         switch (type) {
             case ReserveCalculationType.ULTIMATE:
-                strategy = new FixedUltimateReserveCalculationStrategy(ultimateAtReportingDate: (double) parameters["ultimateAtReportingDate"],
-                        reportingDate: (DateTime) parameters["reportingDate"], averageInceptionDate: (DateTime) parameters["averageInceptionDate"])
+                strategy = new FixedUltimateReserveCalculationStrategy(
+                        ultimateAtReportingDate: (double) parameters[FixedUltimateReserveCalculationStrategy.ULTIMATE_AT_REPORTING_DATE],
+                        reportingDate: (DateTime) parameters[ReportedBasedReserveCalculationStrategy.REPORTING_DATE],
+                        averageInceptionDate: (DateTime) parameters[FixedUltimateReserveCalculationStrategy.AVERAGE_INCEPTION_DATE])
                 break;
             case ReserveCalculationType.REPORTEDBASED:
-                strategy = new ReportedBasedReserveCalculationStrategy(reportedAtReportingDate: (double) parameters["reportedAtReportingDate"],
-                        reportingDate: (DateTime) parameters["reportingDate"], averageInceptionDate: (DateTime) parameters["averageInceptionDate"],
-                        interpolationMode: (InterpolationMode) parameters["interpolationMode"])
+                strategy = new ReportedBasedReserveCalculationStrategy(
+                        reportedAtReportingDate: (double) parameters[ReportedBasedReserveCalculationStrategy.REPORTED_AT_REPORTING_DATE],
+                        reportingDate: (DateTime) parameters[ReportedBasedReserveCalculationStrategy.REPORTING_DATE],
+                        averageInceptionDate: (DateTime) parameters[ReportedBasedReserveCalculationStrategy.AVERAGE_INCEPTION_DATE],
+                        interpolationMode: (InterpolationMode) parameters[ReportedBasedReserveCalculationStrategy.INTERPOLATION_MODE])
                 break;
             case ReserveCalculationType.OUTSTANDINGBASED:
-                strategy = new OutstandingBasedReserveCalculationStrategy(outstandingAtReportingDate: (double) parameters["outstandingAtReportingDate"],
-                        reportingDate: (DateTime) parameters["reportingDate"], averageInceptionDate: (DateTime) parameters["averageInceptionDate"],
-                        interpolationMode: (InterpolationMode) parameters["interpolationMode"])
+                strategy = new OutstandingBasedReserveCalculationStrategy(
+                        outstandingAtReportingDate: (double) parameters[OutstandingBasedReserveCalculationStrategy.OUTSTANDING_AT_REPORTING_DATE],
+                        reportingDate: (DateTime) parameters[OutstandingBasedReserveCalculationStrategy.REPORTING_DATE],
+                        averageInceptionDate: (DateTime) parameters[OutstandingBasedReserveCalculationStrategy.AVERAGE_INCEPTION_DATE],
+                        interpolationMode: (InterpolationMode) parameters[OutstandingBasedReserveCalculationStrategy.INTERPOLATION_MODE])
                 break;
         }
         return strategy;

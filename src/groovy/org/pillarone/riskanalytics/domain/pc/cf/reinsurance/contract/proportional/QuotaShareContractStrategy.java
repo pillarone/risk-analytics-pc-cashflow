@@ -6,9 +6,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.AalLimitStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.ILimitStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.NoneLimitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy;
 
 import java.util.HashMap;
@@ -42,7 +40,13 @@ public class QuotaShareContractStrategy extends AbstractParameterObject implemen
             return new QuotaShareContract(quotaShare, commission.getCalculator());
         }
         else if (limit instanceof AalLimitStrategy) {
-            return new QuotaShareContractAAL(quotaShare, commission.getCalculator(), (AalLimitStrategy) limit);
+            return new AALQuotaShareContract(quotaShare, commission.getCalculator(), (AalLimitStrategy) limit);
+        }
+        else if (limit instanceof AadLimitStrategy) {
+            return new AADQuotaShareContract(quotaShare, commission.getCalculator(), (AadLimitStrategy) limit);
+        }
+        else if (limit instanceof AalAadLimitStrategy) {
+            return new AALAADQuotaShareContract(quotaShare, commission.getCalculator(), (AalAadLimitStrategy) limit);
         }
         else {
             throw new NotImplementedException(limit + " not implemented.");

@@ -188,6 +188,10 @@ public final class GrossClaimRoot implements IClaimRoot {
         return claimRoot.getExposure();
     }
 
+    public boolean hasExposureInformation() {
+        return claimRoot.hasExposureInfo();
+    }
+
     public DateTime getExposureStartDate() {
         return claimRoot.getExposureStartDate();
     }
