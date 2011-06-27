@@ -1,6 +1,5 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve;
 
-import org.codehaus.groovy.transform.powerassert.Value;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
