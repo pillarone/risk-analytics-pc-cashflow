@@ -27,7 +27,7 @@ mappings = {
         }
         "reserves" {
             "[%reservesGenerator%]" {
-                "ultimate" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:ultimate"
+                "ultimateFromInceptionPeriod" "GIRA:reservesGenerators:[%reservesGenerator%]:outNominalUltimates:value"
                 "reported" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:reportedIncremental"
                 "paid" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:paidIncremental"
                 "outstanding" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:outstanding"

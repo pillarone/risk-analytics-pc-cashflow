@@ -13,6 +13,7 @@ components {
     reservesGenerators {
 		subsubcomponents {
 			outReserves = "AGGREGATED"
+            outNominalUltimates = "AGGREGATED"
 		}
 	}
 	underwritingSegments {

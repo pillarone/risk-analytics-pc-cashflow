@@ -30,6 +30,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndex
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.Pattern
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.ReservesIndexSelectionTableConstraints
+import org.pillarone.riskanalytics.core.packets.SingleValuePacket
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -120,6 +121,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         List<PatternPacket> reportedPatternPackets = new TestProbe(reportingPatterns, "outPattern").result
         List<FactorsPacket> indexPackets = new TestProbe(inflationIndex, "outFactors").result
         List<ClaimCashflowPacket> reserves = new TestProbe(reservesGenerator, "outReserves").result
+        List<SingleValuePacket> ultimates = new TestProbe(reservesGenerator, "outNominalUltimates").result
 
         payoutPatterns.start()
         reportingPatterns.start()
@@ -129,7 +131,8 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals "# reporting patterns", 1, reportedPatternPackets.size()
         assertEquals "# indices", 1, indexPackets.size()
         assertEquals "# reserves", 1, reserves.size()
-        assertEquals " ultimate", 3684d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 0d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 3684d, ultimates[0].value, EPSILON
         assertEquals " incr. paid", 0d, reserves[0].paidIncremental
         assertEquals " cum paid", 0d, reserves[0].paidCumulated
         assertEquals " outstanding", 658d, reserves[0].outstanding(), EPSILON
@@ -140,6 +143,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals "update period", 0, reserves[0].updatePeriod
 
         reserves.clear()
+        ultimates.clear()
         reservesGenerator.periodScope.prepareNextPeriod()
         payoutPatterns.start()
         reportingPatterns.start()
@@ -165,6 +169,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals "update period", 1, reserves[1].updatePeriod
 
         reserves.clear()
+        ultimates.clear()
         reservesGenerator.periodScope.prepareNextPeriod()
         payoutPatterns.start()
         reportingPatterns.start()
@@ -261,20 +266,21 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reservesGenerator.periodStore = new PeriodStore(reservesGenerator.periodScope)
 
         reservesGenerator.setParmUltimateEstimationMethod(ReserveCalculationType.getStrategy(
-                ReserveCalculationType.OUTSTANDINGBASED, ["outstandingAtReportingDate": (double) 3684.0*0.15, "averageInceptionDate": averageInceptionDate,
+                ReserveCalculationType.OUTSTANDINGBASED, ["outstandingAtReportingDate": (double) 3684.0 * 0.15, "averageInceptionDate": averageInceptionDate,
                         "reportingDate": reportingDate, "interpolationMode": InterpolationMode.NONE]))
 
         List<PatternPacket> payoutPatternPackets = new TestProbe(payoutPatterns, "outPattern").result
         List<PatternPacket> reportedPatternPackets = new TestProbe(reportingPatterns, "outPattern").result
         List<FactorsPacket> indexPackets = new TestProbe(inflationIndex, "outFactors").result
         List<ClaimCashflowPacket> reserves = new TestProbe(reservesGenerator, "outReserves").result
-
+        List<SingleValuePacket> ultimates = new TestProbe(reservesGenerator, "outNominalUltimates").result
 
         payoutPatterns.start()
         reportingPatterns.start()
         inflationIndex.start()
         assertEquals "# reserves", 1, reserves.size()
-        assertEquals " ultimate", 3684d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 0d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 3684d, ultimates[0].value, EPSILON
         assertEquals " incr. paid", 710d, reserves[0].paidIncremental, EPSILON
         assertEquals " cum paid", 2756d, reserves[0].paidCumulated, EPSILON
         assertEquals " outstanding", 533d, reserves[0].outstanding(), EPSILON

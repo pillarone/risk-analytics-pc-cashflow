@@ -1,9 +1,11 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve;
 
+import org.codehaus.groovy.transform.powerassert.Value;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.packets.SingleValuePacket;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
@@ -33,6 +35,7 @@ public class ReservesGenerator extends Component implements IReserveMarker {
     private PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket.class);
 
     private PacketList<ClaimCashflowPacket> outReserves = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    private PacketList<SingleValuePacket> outNominalUltimates = new PacketList<SingleValuePacket>(SingleValuePacket.class);
 
     private ConstrainedString parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker.class, "");
     private ConstrainedString parmReportingPattern = new ConstrainedString(IReportingPatternMarker.class, "");
@@ -55,12 +58,13 @@ public class ReservesGenerator extends Component implements IReserveMarker {
             baseClaim = new GrossClaimRoot(ultimateAtReportingDate, ClaimType.AGGREGATED_RESERVES, averageInceptionDate,
                     averageInceptionDate, payoutPattern, reportingPattern);
             baseClaim.updateCumulatedPaidAtStartOfFirstPeriod(periodCounter, factors);
+            outNominalUltimates.add(new SingleValuePacket(ultimateAtReportingDate));
         }
         else {
             baseClaim = (GrossClaimRoot) periodStore.get(BASE_CLAIM, -1);
         }
         periodStore.put(BASE_CLAIM, baseClaim);
-        outReserves.addAll(baseClaim.getClaimCashflowPackets(periodCounter, factors, periodScope.isFirstPeriod()));
+        outReserves.addAll(baseClaim.getClaimCashflowPackets(periodCounter, factors, false));
 
     }
 
@@ -148,5 +152,13 @@ public class ReservesGenerator extends Component implements IReserveMarker {
 
     public void setPeriodScope(PeriodScope periodScope) {
         this.periodScope = periodScope;
+    }
+
+    public PacketList<SingleValuePacket> getOutNominalUltimates() {
+        return outNominalUltimates;
+    }
+
+    public void setOutNominalUltimates(PacketList<SingleValuePacket> outNominalUltimates) {
+        this.outNominalUltimates = outNominalUltimates;
     }
 }
