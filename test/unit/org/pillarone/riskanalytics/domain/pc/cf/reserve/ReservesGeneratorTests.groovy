@@ -114,7 +114,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
 
     }
 
-    void testReservesaverageInceptionDateInFirstPeriodReportedBasedStrategy() {
+    void testAverageInceptionDateInFirstPeriodReportedBasedStrategy() {
 
         List<PatternPacket> payoutPatternPackets = new TestProbe(payoutPatterns, "outPattern").result
         List<PatternPacket> reportedPatternPackets = new TestProbe(reportingPatterns, "outPattern").result
@@ -145,7 +145,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reportingPatterns.start()
         inflationIndex.start()
         assertEquals "# reserves", 2, reserves.size()
-        assertEquals " ultimate", 3684d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 0d, reserves[0].ultimate, EPSILON
         assertEquals " incr. paid", 336d, reserves[0].paidIncremental, EPSILON
         assertEquals " cum paid", 336d, reserves[0].paidCumulated, EPSILON
         assertEquals " outstanding", 2350d, reserves[0].outstanding(), EPSILON
@@ -170,7 +170,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reportingPatterns.start()
         inflationIndex.start()
         assertEquals "# reserves", 1, reserves.size()
-        assertEquals " ultimate", 3684d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 0d, reserves[0].ultimate, EPSILON
         assertEquals " incr. paid", 710d, reserves[0].paidIncremental, EPSILON
         assertEquals " cum paid", 2756d, reserves[0].paidCumulated, EPSILON
         assertEquals " outstanding", 533d, reserves[0].outstanding(), EPSILON
@@ -186,7 +186,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reportingPatterns.start()
         inflationIndex.start()
         assertEquals "# reserves", 1, reserves.size()
-        assertEquals " ultimate", 3684d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 0d, reserves[0].ultimate, EPSILON
         assertEquals " incr. paid", 186d, reserves[0].paidIncremental, EPSILON
         assertEquals " cum paid", 2942d, reserves[0].paidCumulated, EPSILON
         assertEquals " outstanding", 928d, reserves[0].outstanding(), EPSILON
@@ -202,7 +202,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reportingPatterns.start()
         inflationIndex.start()
         assertEquals "# reserves", 1, reserves.size()
-        assertEquals " ultimate", 3684d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 0d, reserves[0].ultimate, EPSILON
         assertEquals " incr. paid", 202d, reserves[0].paidIncremental, EPSILON
         assertEquals " cum paid", 3144d, reserves[0].paidCumulated, EPSILON
         assertEquals " outstanding", 403d, reserves[0].outstanding(), EPSILON
@@ -218,7 +218,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reportingPatterns.start()
         inflationIndex.start()
         assertEquals "# reserves", 1, reserves.size()
-        assertEquals " ultimate", 3684d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 0d, reserves[0].ultimate, EPSILON
         assertEquals " incr. paid", 226d, reserves[0].paidIncremental, EPSILON
         assertEquals " cum paid", 3370d, reserves[0].paidCumulated, EPSILON
         assertEquals " outstanding", 226d, reserves[0].outstanding(), EPSILON
@@ -234,7 +234,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reportingPatterns.start()
         inflationIndex.start()
         assertEquals "# reserves", 2, reserves.size()
-        assertEquals " ultimate", 3684d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 0d, reserves[0].ultimate, EPSILON
         assertEquals " incr. paid", 207d, reserves[0].paidIncremental, EPSILON
         assertEquals " cum paid", 3576d, reserves[0].paidCumulated, EPSILON
         assertEquals " outstanding", 52d, reserves[0].outstanding(), EPSILON
@@ -255,7 +255,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
 
     }
 
-    void testReservesaverageInceptionDateBeforeFirstPeriodReserveBasedStrategy() {
+    void testAverageInceptionDateBeforeFirstPeriodOutstandingBasedStrategy() {
 
         reservesGenerator.periodScope = TestPeriodScopeUtilities.getPeriodScope(date20100101, 7)
         reservesGenerator.periodStore = new PeriodStore(reservesGenerator.periodScope)
@@ -290,7 +290,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reportingPatterns.start()
         inflationIndex.start()
         assertEquals "# reserves", 1, reserves.size()
-        assertEquals " ultimate", 3684d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 0d, reserves[0].ultimate, EPSILON
         assertEquals " incr. paid", 186d, reserves[0].paidIncremental, EPSILON
         assertEquals " cum paid", 2942d, reserves[0].paidCumulated, EPSILON
         assertEquals " outstanding", 928d, reserves[0].outstanding(), EPSILON
@@ -306,7 +306,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reportingPatterns.start()
         inflationIndex.start()
         assertEquals "# reserves", 1, reserves.size()
-        assertEquals " ultimate", 3684d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 0d, reserves[0].ultimate, EPSILON
         assertEquals " incr. paid", 202d, reserves[0].paidIncremental, EPSILON
         assertEquals " cum paid", 3144d, reserves[0].paidCumulated, EPSILON
         assertEquals " outstanding", 403d, reserves[0].outstanding(), EPSILON
@@ -322,7 +322,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reportingPatterns.start()
         inflationIndex.start()
         assertEquals "# reserves", 1, reserves.size()
-        assertEquals " ultimate", 3684d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 0d, reserves[0].ultimate, EPSILON
         assertEquals " incr. paid", 226d, reserves[0].paidIncremental, EPSILON
         assertEquals " cum paid", 3370d, reserves[0].paidCumulated, EPSILON
         assertEquals " outstanding", 226d, reserves[0].outstanding(), EPSILON
@@ -338,7 +338,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         reportingPatterns.start()
         inflationIndex.start()
         assertEquals "# reserves", 2, reserves.size()
-        assertEquals " ultimate", 3684d, reserves[0].ultimate, EPSILON
+        assertEquals " ultimate", 0d, reserves[0].ultimate, EPSILON
         assertEquals " incr. paid", 207d, reserves[0].paidIncremental, EPSILON
         assertEquals " cum paid", 3576d, reserves[0].paidCumulated, EPSILON
         assertEquals " outstanding", 52d, reserves[0].outstanding(), EPSILON

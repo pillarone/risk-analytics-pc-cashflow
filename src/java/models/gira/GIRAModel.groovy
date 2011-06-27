@@ -27,6 +27,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPremiumPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerators
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntities
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerator
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -129,6 +131,19 @@ class GIRAModel extends StochasticModel {
                 period = claimsGeneratorPatternLengths.get(generator.parmReportingPattern?.stringValue)
                 if (period != null) {
                     maxPeriods = Period.months(Math.max(maxPeriods.months, period.months))
+                }
+            }
+
+            for (ReservesGenerator generator: reservesGenerators.componentList) {
+                DateTime averageInceptionDate = generator.parmUltimateEstimationMethod.getAverageInceptionDate()
+                Double elapsedMonths = DateTimeUtilities.deriveNumberOfMonths(averageInceptionDate, globalParameters.parmProjectionStartDate)
+                Period period = claimsGeneratorPatternLengths.get(generator.parmPayoutPattern?.stringValue)
+                if (period != null) {
+                    maxPeriods = Period.months(Math.max(maxPeriods.months, (Integer) Math.ceil(period.months-elapsedMonths)))
+                }
+                period = claimsGeneratorPatternLengths.get(generator.parmReportingPattern?.stringValue)
+                if (period != null) {
+                    maxPeriods = Period.months(Math.max(maxPeriods.months, (Integer) Math.ceil(period.months-elapsedMonths)))
                 }
             }
         }

@@ -60,20 +60,19 @@ public class ReservesGenerator extends Component implements IReserveMarker {
             baseClaim = (GrossClaimRoot) periodStore.get(BASE_CLAIM, -1);
         }
         periodStore.put(BASE_CLAIM, baseClaim);
-        // what if outReserves empty ? always one packet needed ? will be solved within getClaimCashflowPackets
-        outReserves.addAll(baseClaim.getClaimCashflowPackets(periodCounter, factors, true));
+        outReserves.addAll(baseClaim.getClaimCashflowPackets(periodCounter, factors, periodScope.isFirstPeriod()));
 
     }
 
     // period store key
     private static final String BASE_CLAIM = "base claim root";
 
-    private PatternPacket getPayoutPattern(){
+    private PatternPacket getPayoutPattern() {
         PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
         return payoutPattern == null ? new PatternPacket.TrivialPattern(IPayoutPatternMarker.class) : payoutPattern;
     }
 
-    private PatternPacket getReportingPattern(){
+    private PatternPacket getReportingPattern() {
         PatternPacket reportingPattern = PatternUtils.filterPattern(inPatterns, parmReportingPattern, IReportingPatternMarker.class);
         return reportingPattern == null ? new PatternPacket.TrivialPattern(IReportingPatternMarker.class) : reportingPattern;
     }
