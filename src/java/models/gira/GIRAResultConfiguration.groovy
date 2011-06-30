@@ -20,4 +20,14 @@ components {
 			outUnderwritingInfo = "AGGREGATED"
 		}
 	}
+    structures {
+		subsubcomponents {
+			outClaimsGross= "SINGLE"
+            outClaimsNet= "SINGLE"
+            outClaimsCeded= "SINGLE"
+            outUnderwritingInfoGross = "SINGLE"
+            outUnderwritingInfoNet = "SINGLE"
+            outUnderwritingInfoCeded = "SINGLE"
+		}
+	}
 }

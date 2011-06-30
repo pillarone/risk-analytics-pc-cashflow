@@ -29,6 +29,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerators
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntities
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerator
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
+import org.pillarone.riskanalytics.domain.pc.cf.structure.Structures
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -48,6 +49,7 @@ class GIRAModel extends StochasticModel {
     LegalEntities legalEntities
     Segments segments
     ReinsuranceContracts reinsuranceContracts
+    Structures structures
 
     @Override
     void initComponents() {
@@ -62,6 +64,7 @@ class GIRAModel extends StochasticModel {
         legalEntities = new LegalEntities()
         segments = new Segments()
         reinsuranceContracts = new ReinsuranceContracts()
+        structures = new Structures()
 
         addStartComponent patterns
         addStartComponent dependencies
@@ -78,12 +81,20 @@ class GIRAModel extends StochasticModel {
         claimsGenerators.inEventSeverities = dependencies.outEventSeverities
         claimsGenerators.inEventSeverities = eventGenerators.outEventSeverities
         claimsGenerators.inEventFrequencies = eventGenerators.outEventFrequencies
-        reservesGenerators.inFactors= indices.outFactors
+        reservesGenerators.inFactors = indices.outFactors
         reservesGenerators.inPatterns = patterns.outPatterns
         indices.inEventSeverities = dependencies.outEventSeverities
         if (segments.subComponentCount() == 0) {
             reinsuranceContracts.inClaims = claimsGenerators.outClaims
             reinsuranceContracts.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
+            if (structures.subComponentCount() > 0) {
+                structures.inClaimsGross = claimsGenerators.outClaims
+                structures.inClaimsCeded = reinsuranceContracts.outClaimsCeded
+                structures.inClaimsNet = reinsuranceContracts.outClaimsNet
+                structures.inUnderwritingInfoGross = underwritingSegments.outUnderwritingInfo
+                structures.inUnderwritingInfoNet = reinsuranceContracts.outUnderwritingInfoNet
+                structures.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
+            }
         }
         else {
             segments.inClaims = claimsGenerators.outClaims
@@ -92,6 +103,14 @@ class GIRAModel extends StochasticModel {
             reinsuranceContracts.inUnderwritingInfo = segments.outUnderwritingInfoGross
             segments.inClaimsCeded = reinsuranceContracts.outClaimsCeded
             segments.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
+            if (structures.subComponentCount() > 0){
+                structures.inClaimsGross = segments.outClaimsGross
+                structures.inClaimsCeded = segments.outClaimsCeded
+                structures.inClaimsNet = segments.outClaimsNet
+                structures.inUnderwritingInfoGross = segments.outUnderwritingInfoGross
+                structures.inUnderwritingInfoNet = segments.outUnderwritingInfoNet
+                structures.inUnderwritingInfoCeded = segments.outUnderwritingInfoCeded
+            }
         }
     }
 
@@ -139,11 +158,11 @@ class GIRAModel extends StochasticModel {
                 Double elapsedMonths = DateTimeUtilities.deriveNumberOfMonths(averageInceptionDate, globalParameters.parmProjectionStartDate)
                 Period period = claimsGeneratorPatternLengths.get(generator.parmPayoutPattern?.stringValue)
                 if (period != null) {
-                    maxPeriods = Period.months(Math.max(maxPeriods.months, (Integer) Math.ceil(period.months-elapsedMonths)))
+                    maxPeriods = Period.months(Math.max(maxPeriods.months, (Integer) Math.ceil(period.months - elapsedMonths)))
                 }
                 period = claimsGeneratorPatternLengths.get(generator.parmReportingPattern?.stringValue)
                 if (period != null) {
-                    maxPeriods = Period.months(Math.max(maxPeriods.months, (Integer) Math.ceil(period.months-elapsedMonths)))
+                    maxPeriods = Period.months(Math.max(maxPeriods.months, (Integer) Math.ceil(period.months - elapsedMonths)))
                 }
             }
         }
