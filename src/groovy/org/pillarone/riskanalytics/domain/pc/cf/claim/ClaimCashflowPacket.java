@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.IReserveMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
@@ -49,6 +50,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private ISegmentMarker segment;
     private IReinsuranceContractMarker reinsuranceContract;
     private ILegalEntityMarker legalEntity;
+    private IReserveMarker reserve;
 
     public ClaimCashflowPacket() {
         this(new ClaimRoot(0, ClaimType.ATTRITIONAL, null, null));
@@ -232,6 +234,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     }
 
     public IPerilMarker peril() { return peril; }
+    public IReserveMarker reserve() { return reserve; }
     public ISegmentMarker segment() { return segment; }
     public IReinsuranceContractMarker reinsuranceContract() { return reinsuranceContract; }
     public ILegalEntityMarker legalEntity() { return legalEntity; }
@@ -249,6 +252,9 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         }
         else if (ILegalEntityMarker.class.isAssignableFrom(marker.getClass())) {
             legalEntity = (ILegalEntityMarker) marker;
+        }
+        else if (IReserveMarker.class.isAssignableFrom(marker.getClass())) {
+            reserve = (IReserveMarker) marker;
         }
     }
 

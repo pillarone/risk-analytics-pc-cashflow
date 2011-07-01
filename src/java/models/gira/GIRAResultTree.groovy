@@ -94,6 +94,54 @@ mappings = {
                 }
             }
         }
+          "structures" {
+            "[%structure%]" {
+                "claimsNet" {
+                    "ultimate" "GIRA:structures:[%structure%]:outClaimsNet:ultimate"
+                    "reported" "GIRA:structures:[%structure%]:outClaimsNet:reportedIncremental"
+                    "paid" "GIRA:structures:[%structure%]:outClaimsNet:paidIncremental"
+                    "outstanding" "GIRA:structures:[%structure%]:outClaimsNet:outstanding"
+                    "IBNR" "GIRA:structures:[%structure%]:outClaimsNet:IBNR"
+                    "reserves" "GIRA:structures:[%structure%]:outClaimsNet:reserves"
+                    "developedResult" "GIRA:structures:[%structure%]:outClaimsNet:developedResult"
+                    "claimsGross" {
+                        "ultimate" "GIRA:structures:[%structure%]:outClaimsGross:ultimate"
+                        "reported" "GIRA:structures:[%structure%]:outClaimsGross:reportedIncremental"
+                        "paid" "GIRA:structures:[%structure%]:outClaimsGross:paidIncremental"
+                        "outstanding" "GIRA:structures:[%structure%]:outClaimsGross:outstanding"
+                        "IBNR" "GIRA:structures:[%structure%]:outClaimsGross:IBNR"
+                        "reserves" "GIRA:structures:[%structure%]:outClaimsGross:reserves"
+                        "developedResult" "GIRA:structures:[%structure%]:outClaimsGross:developedResult"
+                    }
+                    "claimsCeded" {
+                        "ultimate" "GIRA:structures:[%structure%]:outClaimsCeded:ultimate"
+                        "reported" "GIRA:structures:[%structure%]:outClaimsCeded:reportedIncremental"
+                        "paid" "GIRA:structures:[%structure%]:outClaimsCeded:paidIncremental"
+                        "outstanding" "GIRA:structures:[%structure%]:outClaimsCeded:outstanding"
+                        "IBNR" "GIRA:structures:[%structure%]:outClaimsCeded:IBNR"
+                        "reserves" "GIRA:structures:[%structure%]:outClaimsCeded:reserves"
+                        "developedResult" "GIRA:structures:[%structure%]:outClaimsCeded:developedResult"
+                    }
+                }
+                "premium" {
+                    "premiumWrittenNet" "GIRA:structures:[%structure%]:outUnderwritingInfoNet:premiumWritten", {
+                        "gross" "GIRA:structures:[%structure%]:outUnderwritingInfoGross:premiumWritten"
+                        "ceded" "GIRA:structures:[%structure%]:outUnderwritingInfoCeded:premiumWritten"
+                    }
+                    "premiumPaidNet" "GIRA:structures:[%structure%]:outUnderwritingInfoNet:premiumPaid", {
+                        "gross" "GIRA:structures:[%structure%]:outUnderwritingInfoGross:premiumPaid"
+                        "ceded" "GIRA:structures:[%structure%]:outUnderwritingInfoCeded:premiumPaid", {
+                            "fixed" "GIRA:structures:[%structure%]:outUnderwritingInfoCeded:premiumPaidFixed"
+                            "variable" "GIRA:structures:[%structure%]:outUnderwritingInfoCeded:premiumPaidVariable"
+                        }
+                    }
+                }
+                "commission" "GIRA:structures:[%structure%]:outUnderwritingInfoCeded:commission", {
+                    "fixed" "GIRA:structures:[%structure%]:outUnderwritingInfoCeded:commissionFixed"
+                    "variable" "GIRA:structures:[%structure%]:outUnderwritingInfoCeded:commissionVariable"
+                }
+            }
+        }
         "reinsurance" {
             "[%contract%]" {
                 "claimsNet" {
