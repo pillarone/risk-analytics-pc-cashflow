@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
@@ -339,5 +340,13 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     public double getNominalUltimate() {
         return nominalUltimate;
+    }
+
+    public boolean hasEvent() {
+        return getBaseClaim().getClaimType().equals(ClaimType.EVENT) || getBaseClaim().getClaimType().equals(ClaimType.AGGREGATED_EVENT);
+    }
+
+    public EventPacket getEvent() {
+        return getBaseClaim().getEvent();
     }
 }

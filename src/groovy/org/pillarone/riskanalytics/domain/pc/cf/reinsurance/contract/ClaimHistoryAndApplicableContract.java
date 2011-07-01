@@ -41,4 +41,8 @@ public class ClaimHistoryAndApplicableContract {
         buffer.append(contract.toString());
         return buffer.toString();
     }
+
+    public boolean hasContract(IReinsuranceContract contract) {
+        return contract == this.contract;
+    }
 }

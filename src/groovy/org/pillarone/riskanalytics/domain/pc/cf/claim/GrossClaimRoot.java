@@ -55,6 +55,12 @@ public final class GrossClaimRoot implements IClaimRoot {
         claimRoot = new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate);
     }
 
+    public GrossClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate,
+                          PatternPacket payoutPattern, PatternPacket reportingPattern, EventPacket event) {
+        this(payoutPattern, reportingPattern);
+        claimRoot = new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate, event);
+    }
+
     public GrossClaimRoot(PatternPacket payoutPattern, PatternPacket reportingPattern) {
         this.payoutPattern = payoutPattern;
         this.reportingPattern = reportingPattern;

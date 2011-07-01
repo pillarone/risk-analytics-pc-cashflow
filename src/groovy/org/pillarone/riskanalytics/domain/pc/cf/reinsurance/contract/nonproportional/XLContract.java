@@ -31,12 +31,12 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
     // todo: business object instead of parameter
     private IPremiumAllocationStrategy premiumAllocation;
     private ReinstatementsAndLimitStore reinstatements;
-    private double attachmentPoint;
-    private double limit;
+    protected double attachmentPoint;
+    protected double limit;
 
 
-    private ThresholdStore periodDeductible;
-    private ThresholdStore periodLimit;
+    protected ThresholdStore periodDeductible;
+    protected ThresholdStore periodLimit;
 
     /**
      * All provided values have to be absolute! Scaling is done within the parameter strategy.
@@ -60,7 +60,7 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
     }
 
     /**
-     * reintialization of the deductibles is required as calculations are base on cumulated values in XL contracts
+     * reinitialization of the deductibles is required as calculations are base on cumulated values in XL contracts
      */
     @Override
     public void initPeriod() {

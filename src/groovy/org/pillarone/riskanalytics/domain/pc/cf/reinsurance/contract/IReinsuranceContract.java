@@ -20,6 +20,12 @@ public interface IReinsuranceContract {
 
     void add(UnderwritingInfoPacket grossUnderwritingInfo);
 
+    /** This function is used if some preprocessing steps are required before calculating ceded claims on an individual
+     *  level, ie CXL, SL. Default implementation is void.
+     * @param grossClaim
+     */
+    void initPeriodClaims(List<ClaimCashflowPacket> grossClaim);
+
     /**
      *  Calculates the claim covered of the loss net after contracts with
      *  a smaller inuring priority or preceding contracts in the net.
