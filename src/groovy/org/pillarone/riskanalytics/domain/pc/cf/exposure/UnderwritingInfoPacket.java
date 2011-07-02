@@ -55,14 +55,16 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
      */
     public UnderwritingInfoPacket getNet(CededUnderwritingInfoPacket cededUnderwritingInfo, boolean proportionalContractApplied) {
         UnderwritingInfoPacket netUnderwritingInfo = (UnderwritingInfoPacket) this.clone();
-        netUnderwritingInfo.premiumWritten += cededUnderwritingInfo.getPremiumWritten();
-        netUnderwritingInfo.premiumPaid += cededUnderwritingInfo.getPremiumPaid();
-        if (proportionalContractApplied) {
-            netUnderwritingInfo.sumInsured += cededUnderwritingInfo.getSumInsured();
-            netUnderwritingInfo.maxSumInsured += cededUnderwritingInfo.getMaxSumInsured();
+        if (cededUnderwritingInfo != null) {
+            netUnderwritingInfo.premiumWritten += cededUnderwritingInfo.getPremiumWritten();
+            netUnderwritingInfo.premiumPaid += cededUnderwritingInfo.getPremiumPaid();
+            if (proportionalContractApplied) {
+                netUnderwritingInfo.sumInsured += cededUnderwritingInfo.getSumInsured();
+                netUnderwritingInfo.maxSumInsured += cededUnderwritingInfo.getMaxSumInsured();
+            }
+            boolean anyRemaining = netUnderwritingInfo.premiumWritten > 0 || netUnderwritingInfo.premiumPaid > 0;
+            netUnderwritingInfo.numberOfPolicies = anyRemaining ? netUnderwritingInfo.numberOfPolicies : 0;
         }
-        boolean anyRemaining = netUnderwritingInfo.premiumWritten > 0 || netUnderwritingInfo.premiumPaid > 0;
-        netUnderwritingInfo.numberOfPolicies = anyRemaining ? netUnderwritingInfo.numberOfPolicies : 0;
         return netUnderwritingInfo;
     }
 
