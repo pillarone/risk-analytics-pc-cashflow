@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class OccurrenceAttritionalClaimsGeneratorStrategy extends AttritionalClaimsGeneratorStrategy {
 
-    private RandomDistribution occurrenceDistribution;
+    private RandomDistribution occurrenceDateDistribution;
 
     public IParameterObjectClassifier getType() {
         return ClaimsGeneratorType.ATTRITIONAL_WITH_DATE;
@@ -25,7 +25,7 @@ public class OccurrenceAttritionalClaimsGeneratorStrategy extends AttritionalCla
 
     public Map getParameters() {
         Map<String, Object> parameters = super.getParameters();
-        parameters.put(OCCURRENCE_DISTRIBUTION, occurrenceDistribution);
+        parameters.put(OCCURRENCE_DATE_DISTRIBUTION, occurrenceDateDistribution);
         return parameters;
     }
 
@@ -34,7 +34,7 @@ public class OccurrenceAttritionalClaimsGeneratorStrategy extends AttritionalCla
                                           List<FactorsPacket> factorsPackets, PeriodScope periodScope,
                                           List<SystematicFrequencyPacket> systematicFrequencies,
                                           IPerilMarker filterCriteria) {
-        setDateGenerator(occurrenceDistribution);
+        setDateGenerator(occurrenceDateDistribution);
         return super.generateClaims(baseClaims, uwInfos, uwInfosFilterCriteria, factorsPackets, periodScope, systematicFrequencies, filterCriteria);
     }
 

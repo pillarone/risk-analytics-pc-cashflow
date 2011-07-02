@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class OccurrenceFrequencySeverityClaimsGeneratorStrategy extends FrequencySeverityClaimsGeneratorStrategy {
 
-    private RandomDistribution occurrenceDistribution;
+    private RandomDistribution occurrenceDateDistribution;
 
     public IParameterObjectClassifier getType() {
         return ClaimsGeneratorType.OCCURRENCE_AND_SEVERITY;
@@ -25,7 +25,7 @@ public class OccurrenceFrequencySeverityClaimsGeneratorStrategy extends Frequenc
 
     public Map getParameters() {
         Map<String, Object> parameters = super.getParameters();
-        parameters.put(OCCURRENCE_DISTRIBUTION, occurrenceDistribution);
+        parameters.put(OCCURRENCE_DATE_DISTRIBUTION, occurrenceDateDistribution);
         return parameters;
     }
 
@@ -33,7 +33,7 @@ public class OccurrenceFrequencySeverityClaimsGeneratorStrategy extends Frequenc
                                           List uwInfosFilterCriteria, List<FactorsPacket> factorPackets,
                                           PeriodScope periodScope, List<SystematicFrequencyPacket> systematicFrequencies,
                                           IPerilMarker filterCriteria) {
-        setDateGenerator(occurrenceDistribution);
+        setDateGenerator(occurrenceDateDistribution);
         return super.generateClaims(baseClaims, uwInfos, uwInfosFilterCriteria, factorPackets, periodScope, systematicFrequencies, filterCriteria);
     }
 

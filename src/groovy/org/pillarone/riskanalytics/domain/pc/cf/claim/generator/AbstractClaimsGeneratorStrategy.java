@@ -101,7 +101,7 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     protected final static String FREQUENCY_BASE = "frequencyBase";
     protected final static String FREQUENCY_DISTRIBUTION = "frequencyDistribution";
     protected final static String FREQUENCY_MODIFICATION = "frequencyModification";
-    protected final static String OCCURRENCE_DISTRIBUTION = "occurrenceDistribution";
+    protected final static String OCCURRENCE_DATE_DISTRIBUTION = "occurrenceDateDistribution";
 
     public Distribution getModifiedClaimsSizeDistribution() {
         return modifiedClaimsSizeDistribution;

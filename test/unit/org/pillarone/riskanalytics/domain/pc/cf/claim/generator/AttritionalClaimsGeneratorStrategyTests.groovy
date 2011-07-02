@@ -211,7 +211,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
                 ClaimsGeneratorType.ATTRITIONAL_WITH_DATE, [
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
-                        "occurrenceDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957]),
+                        "occurrenceDateDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957]),
                         "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),])
 
         claimsGenerator.doCalculation()
@@ -229,7 +229,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
                 ClaimsGeneratorType.ATTRITIONAL_WITH_DATE, [
                         "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
-                        "occurrenceDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957]),
+                        "occurrenceDateDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957]),
                         "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),])
 
         UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000, numberOfPolicies: 20, origin: riskBands)
@@ -246,7 +246,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
                 ClaimsGeneratorType.ATTRITIONAL_WITH_DATE, [
                         "claimsSizeBase": ExposureBase.NUMBER_OF_POLICIES,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
-                        "occurrenceDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957]),
+                        "occurrenceDateDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957]),
                         "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),])
 
         claimsGenerator.reset()
@@ -268,7 +268,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
                 ClaimsGeneratorType.ATTRITIONAL_WITH_DATE, [
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.UNIFORM, [a: 0, b: 1]),
-                        "occurrenceDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957]),
+                        "occurrenceDateDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957]),
                         "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),]))
 
         claimsGenerator.inEventSeverities << stream1
@@ -285,7 +285,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
                 ClaimsGeneratorType.ATTRITIONAL_WITH_DATE, [
                         "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.UNIFORM, [a: 0, b: 1]),
-                        "occurrenceDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957]),
+                        "occurrenceDateDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 0.957]),
                         "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),]))
 
         UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000, numberOfPolicies: 20, origin: riskBands)

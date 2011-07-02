@@ -56,7 +56,7 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
                         "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 100]),
                         "claimsSizeModification": DistributionModifier.getDefault(),
-                        'occurrenceDistribution': DistributionType.getStrategy(DistributionType.CONSTANT, ['constant': 0.49789d])]))
+                        'occurrenceDateDistribution': DistributionType.getStrategy(DistributionType.CONSTANT, ['constant': 0.49789d])]))
         return generator
     }
 

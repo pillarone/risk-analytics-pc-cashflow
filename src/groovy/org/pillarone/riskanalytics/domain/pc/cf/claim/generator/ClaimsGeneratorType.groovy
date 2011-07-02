@@ -31,7 +31,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
             claimsSizeBase: ExposureBase.ABSOLUTE,
             claimsSizeDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
             claimsSizeModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-            occurrenceDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0.5d])])
+            occurrenceDateDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0.5d])])
 //    public static final ClaimsGeneratorType SEVERITY_OF_EVENT_GENERATOR = new ClaimsGeneratorType("external severity", "SEVERITY_OF_EVENT_GENERATOR", [
 //            claimsSizeBase: Exposure.ABSOLUTE,
 //            claimsSizeDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
@@ -64,7 +64,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
             claimsSizeBase: ExposureBase.ABSOLUTE,
             claimsSizeDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
             claimsSizeModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-            occurrenceDistribution: DistributionType.getStrategy(DistributionType.UNIFORM, ["a": 0d, "b": 1d]),
+            occurrenceDateDistribution: DistributionType.getStrategy(DistributionType.UNIFORM, ["a": 0d, "b": 1d]),
             produceClaim: FrequencySeverityClaimType.SINGLE])
     public static final ClaimsGeneratorType PML = new ClaimsGeneratorType("PML curve", "PML", [
             claimsSizeBase: ExposureBase.ABSOLUTE,
@@ -124,7 +124,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                         claimsSizeBase: (ExposureBase) parameters.get("claimsSizeBase"),
                         claimsSizeDistribution: (RandomDistribution) parameters.get("claimsSizeDistribution"),
                         claimsSizeModification: (DistributionModified) parameters.get("claimsSizeModification"),
-                        occurrenceDistribution: (RandomDistribution) parameters.get("occurrenceDistribution"))
+                        occurrenceDateDistribution: (RandomDistribution) parameters.get("occurrenceDateDistribution"))
                 break;
             case ClaimsGeneratorType.FREQUENCY_AVERAGE_ATTRITIONAL:
                 claimsGenerator = new FrequencyAverageAttritionalClaimsGeneratorStrategy(
@@ -155,7 +155,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                         claimsSizeBase: (ExposureBase) parameters.get("claimsSizeBase"),
                         claimsSizeDistribution: (RandomDistribution) parameters.get("claimsSizeDistribution"),
                         claimsSizeModification: (DistributionModified) parameters.get("claimsSizeModification"),
-                        occurrenceDistribution: (RandomDistribution) parameters.get("occurrenceDistribution"),
+                        occurrenceDateDistribution: (RandomDistribution) parameters.get("occurrenceDateDistribution"),
                         produceClaim: (FrequencySeverityClaimType) parameters.get("produceClaim"))
                 break;
 //            case ClaimsGeneratorType.SEVERITY_OF_EVENT_GENERATOR:
