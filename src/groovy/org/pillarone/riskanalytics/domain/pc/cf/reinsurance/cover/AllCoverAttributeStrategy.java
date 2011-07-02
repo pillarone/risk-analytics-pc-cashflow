@@ -2,8 +2,11 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover;
 
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,5 +24,13 @@ public class AllCoverAttributeStrategy extends AbstractParameterObject implement
         Map<String, IncludeType> parameters = new HashMap<String, IncludeType>(1);
         parameters.put("reserves", reserves);
         return parameters;
+    }
+
+    public List<ClaimCashflowPacket> coveredClaims(List<ClaimCashflowPacket> source) {
+        return source;
+    }
+
+    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source) {
+        return source;
     }
 }

@@ -13,6 +13,16 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.LimitStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
+import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
+import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
+import org.pillarone.riskanalytics.domain.pc.cf.segment.Segment
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.PerilsCoverAttributeStrategy
+import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.SegmentsCoverAttributeStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -280,4 +290,115 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         assertEquals 'P5 number of ceded claims', 0, quotaShare20.outClaimsCeded.size()
     }
+
+
+    void testCoverNone() {
+        ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, date20110101)
+        IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
+        quotaShare20.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.NONE, [:]);
+
+        GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
+                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
+
+        quotaShare20.inClaims.addAll(claims)
+
+        quotaShare20.doCalculation()
+        assertEquals 'number of covered claims', 0, quotaShare20.inClaims.size()
+        assertEquals 'number of ceded claims', 0, quotaShare20.outClaimsCeded.size()
+    }
+
+    void testCoverPerils() {
+        ClaimsGenerator perilMotor = new ClaimsGenerator(name: "motor")
+        ClaimsGenerator perilMotorHull = new ClaimsGenerator(name: "motor hull")
+
+        ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, date20110101)
+        IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
+        quotaShare20.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.PERILS,
+                ['perils': new ComboBoxTableMultiDimensionalParameter(['motor'], ['Perils'], IPerilMarker)])
+        ((PerilsCoverAttributeStrategy) quotaShare20.parmCover).perils.comboBoxValues['motor'] = perilMotor
+
+        GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
+                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
+
+        List<ClaimCashflowPacket> claimsMotor = claimRoot.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claimsMotorHull = claimRoot.getClaimCashflowPackets(periodCounter, true)
+        claimsMotor*.setMarker(perilMotor)
+        claimsMotorHull*.setMarker(perilMotorHull)
+
+        quotaShare20.inClaims.addAll(claimsMotor)
+        quotaShare20.inClaims.addAll(claimsMotorHull)
+
+        quotaShare20.doCalculation()
+        assertEquals '0 number of covered claims', 1, quotaShare20.inClaims.size()
+        assertEquals '0 number of ceded claims', 1, quotaShare20.outClaimsCeded.size()
+
+        quotaShare20.reset()
+
+        quotaShare20.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.PERILS,
+                ['perils': new ComboBoxTableMultiDimensionalParameter(['motor','motor hull'], ['Perils'], IPerilMarker)])
+        ((PerilsCoverAttributeStrategy) quotaShare20.parmCover).perils.comboBoxValues['motor'] = perilMotor
+        ((PerilsCoverAttributeStrategy) quotaShare20.parmCover).perils.comboBoxValues['motor hull'] = perilMotorHull
+
+        quotaShare20.inClaims.addAll(claimsMotor)
+        quotaShare20.inClaims.addAll(claimsMotorHull)
+
+        quotaShare20.doCalculation()
+        assertEquals '1 number of covered claims', 2, quotaShare20.inClaims.size()
+        assertEquals '1 number of ceded claims', 2, quotaShare20.outClaimsCeded.size()
+
+    }
+
+    void testCoverSegments() {
+        Segment segmentMotor = new Segment(name: 'motor')
+        Segment segmentMotorHull = new Segment(name: 'motor hull')
+
+        ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, date20110101)
+        IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
+        quotaShare20.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.SEGMENTS,
+                ['segments': new ComboBoxTableMultiDimensionalParameter(['motor'], ['Segments'], ISegmentMarker)])
+        ((SegmentsCoverAttributeStrategy) quotaShare20.parmCover).segments.comboBoxValues['motor'] = segmentMotor
+
+        GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
+                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
+
+        List<ClaimCashflowPacket> claimsMotor = claimRoot.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claimsMotorHull = claimRoot.getClaimCashflowPackets(periodCounter, true)
+        claimsMotor*.setMarker(segmentMotor)
+        claimsMotorHull*.setMarker(segmentMotorHull)
+
+        quotaShare20.inClaims.addAll(claimsMotor)
+        quotaShare20.inClaims.addAll(claimsMotorHull)
+
+        UnderwritingInfoPacket underwritingInfoMotor = new UnderwritingInfoPacket(segment: segmentMotor,
+                exposure: new ExposureInfo(date20110101, periodCounter))
+        UnderwritingInfoPacket underwritingInfoMotorHull = new UnderwritingInfoPacket(segment: segmentMotorHull,
+                exposure: new ExposureInfo(date20110101, periodCounter))
+
+        quotaShare20.inUnderwritingInfo << underwritingInfoMotor << underwritingInfoMotorHull
+
+        quotaShare20.doCalculation()
+        assertEquals '0 number of covered claims', 1, quotaShare20.inClaims.size()
+        assertEquals '0 number of ceded claims', 1, quotaShare20.outClaimsCeded.size()
+        assertEquals '0 number of covered uw infos', 1, quotaShare20.inUnderwritingInfo.size()
+        assertEquals '0 number of ceded uw infos', 1, quotaShare20.inUnderwritingInfo.size()
+
+        quotaShare20.reset()
+
+        quotaShare20.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.SEGMENTS,
+                ['segments': new ComboBoxTableMultiDimensionalParameter(['motor','motor hull'], ['Segments'], ISegmentMarker)])
+        ((SegmentsCoverAttributeStrategy) quotaShare20.parmCover).segments.comboBoxValues['motor'] = segmentMotor
+        ((SegmentsCoverAttributeStrategy) quotaShare20.parmCover).segments.comboBoxValues['motor hull'] = segmentMotorHull
+
+        quotaShare20.inClaims.addAll(claimsMotor)
+        quotaShare20.inClaims.addAll(claimsMotorHull)
+        quotaShare20.inUnderwritingInfo << underwritingInfoMotor << underwritingInfoMotorHull
+
+        quotaShare20.doCalculation()
+        assertEquals '1 number of covered claims', 2, quotaShare20.inClaims.size()
+        assertEquals '1 number of ceded claims', 2, quotaShare20.outClaimsCeded.size()
+        assertEquals '0 number of covered uw infos', 2, quotaShare20.inUnderwritingInfo.size()
+        assertEquals '0 number of ceded uw infos', 2, quotaShare20.inUnderwritingInfo.size()
+    }
+
 }

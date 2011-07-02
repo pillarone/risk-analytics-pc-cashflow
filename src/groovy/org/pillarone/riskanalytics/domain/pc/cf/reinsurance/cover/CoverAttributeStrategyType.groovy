@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker
+import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -17,8 +18,11 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
     public static final CoverAttributeStrategyType PERILS = new CoverAttributeStrategyType(
             'perils', 'PERILS',
             ['perils':new ComboBoxTableMultiDimensionalParameter([], ['Covered Perils'], IPerilMarker)])
+    public static final CoverAttributeStrategyType SEGMENTS = new CoverAttributeStrategyType(
+            'segments', 'SEGMENTS',
+            ['segments':new ComboBoxTableMultiDimensionalParameter([], ['Covered Segments'], ISegmentMarker)])
 
-    public static final all = [ALL, NONE, PERILS]
+    public static final all = [ALL, NONE, PERILS, SEGMENTS]
 
     protected static Map types = [:]
     static {
@@ -59,6 +63,9 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
                 break
             case CoverAttributeStrategyType.PERILS:
                 coverStrategy = new PerilsCoverAttributeStrategy(perils: (ComboBoxTableMultiDimensionalParameter) parameters['perils'])
+                break
+            case CoverAttributeStrategyType.SEGMENTS:
+                coverStrategy = new SegmentsCoverAttributeStrategy(segments: (ComboBoxTableMultiDimensionalParameter) parameters['segments'])
                 break
         }
         return coverStrategy;

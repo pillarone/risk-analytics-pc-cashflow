@@ -114,7 +114,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
      * filter according to covered claims generators, segments and companies (parmCover)
      */
     private void coverFilter() {
-
+        parmCover.coveredClaims(inClaims);
+        parmCover.coveredUnderwritingInfo(inUnderwritingInfo);
     }
 
     /**
