@@ -130,11 +130,11 @@ class ClaimsGeneratorScalingValidator implements IParameterizationValidator {
             FrequencyBase frequencyBase = type.frequencyBase
             if (claimsType.equals(FrequencySeverityClaimType.SINGLE)) {
                 if (base.equals(ExposureBase.ABSOLUTE)) return true
-                return [ValidationType.ERROR, "claims.generator.model.frequency.severity.claim.type.single.exposure.base.not.absolute", claimsType.toString(), base.toString()]
+                return [ValidationType.WARNING, "claims.generator.model.frequency.severity.claim.type.single.exposure.base.not.absolute", claimsType.toString(), base.toString()]
             }
             if (claimsType.equals(FrequencySeverityClaimType.AGGREGATED_EVENT)) {
                 if (frequencyBase.equals(FrequencyBase.ABSOLUTE)) return true
-                return [ValidationType.ERROR, "claims.generator.model.frequency.severity.claim.type.event.frequency.base.not.absolute", claimsType.toString(), frequencyBase.toString()]
+                return [ValidationType.WARNING, "claims.generator.model.frequency.severity.claim.type.event.frequency.base.not.absolute", claimsType.toString(), frequencyBase.toString()]
             }
         }
 
@@ -144,11 +144,11 @@ class ClaimsGeneratorScalingValidator implements IParameterizationValidator {
             FrequencyBase frequencyBase = type.frequencyBase
             if (claimsType.equals(FrequencySeverityClaimType.SINGLE)) {
                 if (base.equals(ExposureBase.ABSOLUTE)) return true
-                return [ValidationType.ERROR, "claims.generator.model.frequency.severity.claim.type.single.exposure.base.not.absolute", claimsType.toString(), base.toString()]
+                return [ValidationType.WARNING, "claims.generator.model.frequency.severity.claim.type.single.exposure.base.not.absolute", claimsType.toString(), base.toString()]
             }
             if (claimsType.equals(FrequencySeverityClaimType.AGGREGATED_EVENT)) {
                 if (frequencyBase.equals(FrequencyBase.ABSOLUTE)) return true
-                return [ValidationType.ERROR, "claims.generator.model.frequency.severity.claim.type.event.frequency.base.not.absolute", claimsType.toString(), frequencyBase.toString()]
+                return [ValidationType.WARNING, "claims.generator.model.frequency.severity.claim.type.event.frequency.base.not.absolute", claimsType.toString(), frequencyBase.toString()]
             }
         }
 

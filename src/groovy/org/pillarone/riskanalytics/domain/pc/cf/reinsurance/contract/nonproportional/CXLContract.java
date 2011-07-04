@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class CXLContract extends XLContract {
 
-    private Map<EventPacket, AggregateEventClaimsStorage> cededShareByEvent = new LinkedHashMap<EventPacket, AggregateEventClaimsStorage>();
+    protected Map<EventPacket, AggregateEventClaimsStorage> cededShareByEvent = new LinkedHashMap<EventPacket, AggregateEventClaimsStorage>();
 
     /**
      * All provided values have to be absolute! Scaling is done within the parameter strategy.
@@ -39,7 +39,7 @@ public class CXLContract extends XLContract {
         }
         for (ClaimCashflowPacket grossClaim : grossClaims) {
             if (grossClaim.hasEvent()) {
-                AggregateEventClaimsStorage claimStorage = cededShareByEvent.get(grossClaim.getEvent());
+                AggregateEventClaimsStorage claimStorage = getClaimsStorage(grossClaim);
                 if (claimStorage == null) {
                     claimStorage = new AggregateEventClaimsStorage(grossClaim);
                     cededShareByEvent.put(grossClaim.getEvent(), claimStorage);
@@ -47,6 +47,7 @@ public class CXLContract extends XLContract {
                 claimStorage.add(grossClaim);
             }
         }
+        // todo(sku): check if ceding is done according to event date (first happened, first served)
         for (AggregateEventClaimsStorage storage : cededShareByEvent.values()) {
             cededFactor(BasedOnClaimProperty.ULTIMATE, storage);
             cededFactor(BasedOnClaimProperty.REPORTED, storage);
@@ -55,7 +56,11 @@ public class CXLContract extends XLContract {
         }
     }
 
-    private void cededFactor(BasedOnClaimProperty claimPropertyBase, AggregateEventClaimsStorage storage) {
+    protected AggregateEventClaimsStorage getClaimsStorage(ClaimCashflowPacket grossClaim) {
+        return cededShareByEvent.get(grossClaim.getEvent());
+    }
+
+    protected void cededFactor(BasedOnClaimProperty claimPropertyBase, AggregateEventClaimsStorage storage) {
         double aggregateLimitValue = periodLimit.get(claimPropertyBase);
         if (aggregateLimitValue > 0) {
             double claimPropertyCumulated = storage.getCumulated(claimPropertyBase);
@@ -74,11 +79,10 @@ public class CXLContract extends XLContract {
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
-        if (grossClaim.getBaseClaim().getClaimType().equals(ClaimType.EVENT)
-                || grossClaim.getBaseClaim().getClaimType().equals(ClaimType.AGGREGATED_EVENT)) {
+        if (isClaimTypeCovered(grossClaim)) {
             double cededFactorUltimate = 0;
             IClaimRoot cededBaseClaim = storage.getCededClaimRoot();
-            AggregateEventClaimsStorage eventStorage = cededShareByEvent.get(grossClaim.getEvent());
+            AggregateEventClaimsStorage eventStorage = getClaimsStorage(grossClaim);
             if (cededBaseClaim == null) {
                 // first time this gross claim is treated by this contract
                 cededFactorUltimate = eventStorage.getCededFactorUltimate();
@@ -93,6 +97,11 @@ public class CXLContract extends XLContract {
             return cededClaim;
         }
         return new ClaimCashflowPacket();
+    }
+
+    protected boolean isClaimTypeCovered(ClaimCashflowPacket grossClaim) {
+        return grossClaim.getBaseClaim().getClaimType().equals(ClaimType.EVENT)
+                || grossClaim.getBaseClaim().getClaimType().equals(ClaimType.AGGREGATED_EVENT);
     }
 
 }

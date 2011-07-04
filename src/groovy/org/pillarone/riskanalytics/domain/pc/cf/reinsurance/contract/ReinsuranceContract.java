@@ -196,6 +196,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         System.out.println("Start date: " + iterationScope.getPeriodScope().getCurrentPeriodStartDate());
         for (IReinsuranceContract contract : contracts) {
             contract.initPeriod();
+            // todo(sku): the following lines are required only if initPeriodClaims() has a non trivial implementation for this contract, avoid!
             List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
             List<ClaimCashflowPacket> contractGrossClaims = new ArrayList<ClaimCashflowPacket>();
             for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {

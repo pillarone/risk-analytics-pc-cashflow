@@ -1,21 +1,23 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional;
 
+import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimsStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IPremiumAllocationStrategy;
 
-import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class WCXLContract extends XLContract {
+public class WCXLContract extends CXLContract {
 
-    private Map<EventPacket, Double> cededShareByEvent = Collections.emptyMap();
+    protected Map<DateTime, AggregateEventClaimsStorage> singleClaimsStorage = new LinkedHashMap<DateTime, AggregateEventClaimsStorage>();
 
     /**
      * All provided values have to be absolute! Scaling is done within the parameter strategy.
@@ -35,17 +37,49 @@ public class WCXLContract extends XLContract {
             premiumAllocation);
     }
 
-    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
-        if (grossClaim.getBaseClaim().getClaimType().equals(ClaimType.EVENT)
-                || grossClaim.getBaseClaim().getClaimType().equals(ClaimType.AGGREGATED_EVENT)) {
-            // todo(sku): overwrite, challenges cededShareByEvent is different for ultimate, paid and reported as different
-            //            claims generators may have different patterns
-//            return
+    public void initPeriodClaims(List<ClaimCashflowPacket> grossClaims) {
+        for (AggregateEventClaimsStorage storage : cededShareByEvent.values()) {
+            storage.resetIncrementsAndFactors();
+        }
+        for (ClaimCashflowPacket grossClaim : grossClaims) {
+            if (grossClaim.hasEvent()) {
+                AggregateEventClaimsStorage claimStorage = cededShareByEvent.get(grossClaim.getEvent());
+                if (claimStorage == null) {
+                    claimStorage = new AggregateEventClaimsStorage(grossClaim);
+                    cededShareByEvent.put(grossClaim.getEvent(), claimStorage);
+                }
+                claimStorage.add(grossClaim);
+            }
+            if (grossClaim.getBaseClaim().getClaimType().equals(ClaimType.SINGLE)) {
+                AggregateEventClaimsStorage claimStorage = singleClaimsStorage.get(grossClaim.getOccurrenceDate());
+                if (claimStorage == null) {
+                    claimStorage = new AggregateEventClaimsStorage(grossClaim);
+                    cededShareByEvent.put(new EventPacket(grossClaim.getOccurrenceDate()), claimStorage);
+                    singleClaimsStorage.put(grossClaim.getOccurrenceDate(), claimStorage);
+                }
+                claimStorage.add(grossClaim);
+            }
+        }
+        for (AggregateEventClaimsStorage storage : cededShareByEvent.values()) {
+            cededFactor(BasedOnClaimProperty.ULTIMATE, storage);
+            cededFactor(BasedOnClaimProperty.REPORTED, storage);
+            cededFactor(BasedOnClaimProperty.PAID, storage);
+            storage.printFactors();
+        }
+    }
+
+    protected boolean isClaimTypeCovered(ClaimCashflowPacket grossClaim) {
+        return super.isClaimTypeCovered(grossClaim) || grossClaim.getBaseClaim().getClaimType().equals(ClaimType.SINGLE);
+    }
+
+    protected AggregateEventClaimsStorage getClaimsStorage(ClaimCashflowPacket grossClaim) {
+        if (grossClaim.hasEvent()) {
+            return cededShareByEvent.get(grossClaim.getEvent());
         }
         else if (grossClaim.getBaseClaim().getClaimType().equals(ClaimType.SINGLE)) {
-            return super.calculateClaimCeded(grossClaim, storage);
+            return singleClaimsStorage.get(grossClaim.getOccurrenceDate());
         }
-        return new ClaimCashflowPacket();
+        return null;
     }
 
 }
