@@ -84,13 +84,34 @@ public class PatternPacket extends Packet {
         return samePeriods;
     }
 
-    public List<DateFactors> getDateFactorsForCurrentPeriod(DateTime occurrenceDate, IPeriodCounter periodCounter) {
+    /**
+     * @param occurrenceDate
+     * @param periodCounter
+     * @param returnPrevious if nothing is found in current period return value of last period containing information
+     * @return
+     */
+    public List<DateFactors> getDateFactorsForCurrentPeriod(DateTime occurrenceDate, IPeriodCounter periodCounter,
+                                                            boolean returnPrevious) {
         List<DateFactors> dateFactors = new ArrayList<DateFactors>();       //      todo(sku): avoid looping through complete pattern
+        double previousCumulativeValue = 0;
+        boolean previousBeforeLastElement = false;
+        DateTime previousDate = null;
         for (int devPeriod = 0; devPeriod < cumulativeValues.size(); devPeriod++) {
             DateTime date = occurrenceDate.plus(cumulativePeriods.get(devPeriod));
             if (!date.isBefore(periodCounter.startOfFirstPeriod()) && periodCounter.belongsToCurrentPeriod(date)) {
-                    dateFactors.add(new DateFactors(date, incrementFactor(devPeriod), cumulativeValues.get(devPeriod)));
-                }
+                dateFactors.add(new DateFactors(date, incrementFactor(devPeriod), cumulativeValues.get(devPeriod)));
+            }
+            else if (date.isBefore(periodCounter.getCurrentPeriodStart())) {
+                previousDate = date;
+                previousCumulativeValue = cumulativeValues.get(devPeriod);
+            }
+            else if (date.isAfter(periodCounter.getCurrentPeriodEnd())) {
+                previousBeforeLastElement = true;
+                break;
+            }
+        }
+        if (returnPrevious && previousBeforeLastElement && dateFactors.isEmpty() && previousDate != null) {
+            dateFactors.add(new DateFactors(previousDate, 0, previousCumulativeValue));
         }
         return dateFactors;
     }
@@ -107,7 +128,7 @@ public class PatternPacket extends Packet {
     }
 
     public List<DateFactors> getDateFactorsForCurrentPeriod(IPeriodCounter periodCounter) {
-        return getDateFactorsForCurrentPeriod(periodCounter.getCurrentPeriodStart(), periodCounter);
+        return getDateFactorsForCurrentPeriod(periodCounter.getCurrentPeriodStart(), periodCounter, false);
     }
 
     /**

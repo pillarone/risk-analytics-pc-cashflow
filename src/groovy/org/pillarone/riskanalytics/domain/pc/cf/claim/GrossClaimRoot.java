@@ -81,9 +81,9 @@ public final class GrossClaimRoot implements IClaimRoot {
         // todo(jwa): improve (inquiry isReservesClaim not nice)
         boolean isReservesClaim = claimRoot.getClaimType().equals(ClaimType.AGGREGATED_RESERVES) || claimRoot.getClaimType().equals(ClaimType.RESERVE);
         if (!hasTrivialPayout() || isReservesClaim) {
-            List<DateFactors> payouts = payoutPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter);
+            List<DateFactors> payouts = payoutPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter, true);
             List<DateFactors> reports = reportingPattern != null ?
-                    reportingPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter)
+                    reportingPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter, true)
                     : null;
             if ((payouts.size() == 0 && reports == null) || (hasIBNR() && (payouts.size() + reports.size() == 0))) {
                 // PMO-1645: this if block is a quick fix and does not contain the final solution.

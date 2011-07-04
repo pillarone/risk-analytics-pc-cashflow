@@ -95,6 +95,7 @@ public class ClaimUtils {
         double cededReportedIncremental = grossClaim.getReportedIncremental() * scaleFactorReported;
         storage.update(cededPaidIncremental, BasedOnClaimProperty.PAID);
         storage.update(cededReportedIncremental, BasedOnClaimProperty.REPORTED);
+        double cededReserves = storage.cededReserves() + grossClaim.developmentResult() * scaleFactorUltimate;
         ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(
                 storage.getReference(),
                 avoidNegativeZero(grossClaim.ultimate() * scaleFactorUltimate),
@@ -103,7 +104,7 @@ public class ClaimUtils {
                 avoidNegativeZero(storage.getCumulatedCeded(BasedOnClaimProperty.PAID)),
                 avoidNegativeZero(storage.getIncrementalReportedCeded()),
                 avoidNegativeZero(storage.getCumulatedCeded(BasedOnClaimProperty.REPORTED)),
-                avoidNegativeZero(storage.cededReserves()),
+                avoidNegativeZero(cededReserves),
                 grossClaim.getUpdateDate(),
                 grossClaim.getUpdatePeriod());
         applyMarkers(grossClaim, cededClaim);
