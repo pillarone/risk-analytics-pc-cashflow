@@ -40,7 +40,7 @@ public class AADQuotaShareContract extends QuotaShareContract {
         double quotaShareReported = adjustedQuote(grossClaim.getReportedIncremental(), annualAggregateDeductibleReported);
         double quotaSharePaid = adjustedQuote(grossClaim.getPaidIncremental(), annualAggregateDeductiblePaid);
         ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate,
-                quotaShareReported, quotaSharePaid);
+                quotaShareReported, quotaSharePaid, true);
         add(grossClaim, cededClaim);
         return cededClaim;
     }

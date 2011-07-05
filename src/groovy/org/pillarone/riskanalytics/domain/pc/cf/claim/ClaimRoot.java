@@ -79,12 +79,12 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
         return claimType;
     }
 
-    public ExposureInfo getExposure() {
+    public ExposureInfo getExposureInfo() {
         return exposure;
     }
 
-    public boolean hasExposureInformation() {
-        return getExposure() != null;
+    public boolean hasExposureInfo() {
+        return exposure != null;
     }
 
     public DateTime getExposureStartDate() {
@@ -143,9 +143,5 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
         result.append(separator);
         result.append(occurrenceDate);
         return result.toString();
-    }
-
-    public  boolean hasExposureInfo() {
-        return this.exposure != null;
     }
 }

@@ -35,6 +35,19 @@ public class ExposureInfo {
         this(periodScope.getPeriodCounter().getCurrentPeriodStart(), periodScope.getPeriodCounter());
     }
 
+    private ExposureInfo(DateTime inceptionDate, Integer inceptionPeriod, double sumInsured, double maxSumInsured,
+                        ExposureBase exposureDefinition) {
+        this.inceptionDate = inceptionDate;
+        this.inceptionPeriod = inceptionPeriod;
+        this.sumInsured = sumInsured;
+        this.maxSumInsured = maxSumInsured;
+        this.exposureDefinition = exposureDefinition;
+    }
+
+    public ExposureInfo withScale(double scale) {
+        return new ExposureInfo(inceptionDate, inceptionPeriod, sumInsured * scale, maxSumInsured * scale, exposureDefinition);
+    }
+
     public DateTime getInceptionDate() {
         return inceptionDate;
     }

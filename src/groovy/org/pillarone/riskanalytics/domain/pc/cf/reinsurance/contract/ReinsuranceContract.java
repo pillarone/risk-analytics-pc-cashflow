@@ -16,6 +16,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.IPropReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.CommissionPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ICoverAttributeStrategy;
@@ -412,5 +413,9 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     public void setParmCoveredByReinsurers(double parmCoveredByReinsurers) {
         this.parmCoveredByReinsurers = parmCoveredByReinsurers;
+    }
+
+    public boolean adjustExposureInfo() {
+        return parmContractStrategy instanceof IPropReinsuranceContract;
     }
 }

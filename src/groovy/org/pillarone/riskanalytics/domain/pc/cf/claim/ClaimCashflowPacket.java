@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReserveMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
@@ -26,6 +27,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private static Log LOG = LogFactory.getLog(ClaimCashflowPacket.class);
 
     private final IClaimRoot baseClaim;
+    private ExposureInfo exposureInfo;
 
     /** is different from 0 only in the occurrence period */
     private double ultimate;
@@ -52,12 +54,15 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private ILegalEntityMarker legalEntity;
     private IReserveMarker reserve;
 
+    /**
+     * Used for 'zero' claims
+     */
     public ClaimCashflowPacket() {
         this(new ClaimRoot(0, ClaimType.ATTRITIONAL, null, null));
     }
 
     // todo(sku): safer c'tor required, currently used for ultimate modelling
-    public ClaimCashflowPacket(IClaimRoot baseClaim) {
+    private ClaimCashflowPacket(IClaimRoot baseClaim) {
         this.baseClaim = baseClaim;
         hasUltimate = true;
         ultimate = baseClaim.getUltimate();
@@ -73,13 +78,14 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
 
     // todo(sku): safer c'tor required, currently used for ultimate modelling
-    public ClaimCashflowPacket(IClaimRoot baseClaim, IPeriodCounter periodCounter) {
+    public ClaimCashflowPacket(IClaimRoot baseClaim, IPeriodCounter periodCounter, ExposureInfo exposureInfo) {
         this(baseClaim);
         updatePeriod(periodCounter);
+        this.exposureInfo = exposureInfo;
     }
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated,
-                               double reserves, DateTime updateDate, IPeriodCounter periodCounter) {
+                               double reserves, ExposureInfo exposureInfo, DateTime updateDate, IPeriodCounter periodCounter) {
         this(baseClaim);
         this.ultimate = ultimate;
         this.paidCumulated = paidCumulated;
@@ -88,13 +94,14 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.reportedIncremental = ultimate();
         this.reserves = reserves;
         this.updateDate = updateDate;
+        this.exposureInfo = exposureInfo;
         updatePeriod(periodCounter);
         setDate(updateDate);
     }
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated,
-                               double reportedIncremental, double reportedCumulated, double reserves, DateTime updateDate,
-                               IPeriodCounter periodCounter) {
+                               double reportedIncremental, double reportedCumulated, double reserves,
+                               ExposureInfo exposureInfo, DateTime updateDate, IPeriodCounter periodCounter) {
         this(baseClaim);
         this.ultimate = ultimate;
         this.paidCumulated = paidCumulated;
@@ -103,21 +110,23 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.reportedIncremental = reportedIncremental;
         this.reserves = reserves;
         this.updateDate = updateDate;
+        this.exposureInfo = exposureInfo;
         updatePeriod(periodCounter);
         setDate(updateDate);
     }
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double nominalUltimate, double paidIncremental,
                                double paidCumulated, double reportedIncremental, double reportedCumulated,
-                               double reserves, DateTime updateDate, int updatePeriod) {
-        this(baseClaim, ultimate, paidIncremental, paidCumulated, reportedIncremental, reportedCumulated, reserves, updateDate, updatePeriod);
+                               double reserves, ExposureInfo exposureInfo, DateTime updateDate, int updatePeriod) {
+        this(baseClaim, ultimate, paidIncremental, paidCumulated, reportedIncremental, reportedCumulated, reserves,
+                exposureInfo, updateDate, updatePeriod);
         this.nominalUltimate = nominalUltimate;
      }
 
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated,
                                double reportedIncremental, double reportedCumulated, double reserves,
-                               DateTime updateDate, int updatePeriod) {
+                               ExposureInfo exposureInfo, DateTime updateDate, int updatePeriod) {
         this(baseClaim);
         this.ultimate = ultimate;
         if (ultimate != 0) { nominalUltimate = ultimate; }
@@ -128,18 +137,19 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.reserves = reserves;
         this.updateDate = updateDate;
         this.updatePeriod = updatePeriod;
+        this.exposureInfo = exposureInfo;
         setDate(updateDate);
     }
 
-    public ClaimCashflowPacket withScale(double scaleFactor) {
-        ClaimCashflowPacket packet = (ClaimCashflowPacket) super.clone();
-        packet.paidCumulated = paidCumulated * scaleFactor;
-        packet.paidIncremental = paidIncremental * scaleFactor;
-        packet.reportedCumulated = reportedCumulated * scaleFactor;
-        packet.reportedIncremental = reportedIncremental * scaleFactor;
-        packet.reserves = reserves * scaleFactor;
-        return packet;
-    }
+//    public ClaimCashflowPacket withScale(double scaleFactor) {
+//        ClaimCashflowPacket packet = (ClaimCashflowPacket) super.clone();
+//        packet.paidCumulated = paidCumulated * scaleFactor;
+//        packet.paidIncremental = paidIncremental * scaleFactor;
+//        packet.reportedCumulated = reportedCumulated * scaleFactor;
+//        packet.reportedIncremental = reportedIncremental * scaleFactor;
+//        packet.reserves = reserves * scaleFactor;
+//        return packet;
+//    }
 
     /**
      * Used to modify the packet date property according the persistence date on a cloned instance.
@@ -256,6 +266,16 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         else if (IReserveMarker.class.isAssignableFrom(marker.getClass())) {
             reserve = (IReserveMarker) marker;
         }
+    }
+
+    public ClaimType getClaimType() {
+        return baseClaim.getClaimType();
+    }
+    public ExposureInfo getExposureInfo() {
+        return exposureInfo;
+    }
+    public boolean hasExposureInfo() {
+        return exposureInfo != null;
     }
 
     /**

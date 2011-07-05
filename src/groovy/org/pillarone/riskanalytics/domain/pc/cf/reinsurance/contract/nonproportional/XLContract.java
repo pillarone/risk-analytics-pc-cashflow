@@ -90,7 +90,7 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
                 BasedOnClaimProperty.PAID, storage);
 
         ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, cededFactorUltimate,
-                cededFactorReported, cededFactorPaid);
+                cededFactorReported, cededFactorPaid, false);
         add(grossClaim, cededClaim);
         return cededClaim;
     }

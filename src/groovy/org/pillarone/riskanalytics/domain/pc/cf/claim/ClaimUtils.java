@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public class ClaimUtils {
 
     /**
-     * Adds up all claims and builds a corresponding new base claim.
+     * Adds up all claims and builds a corresponding new base claim. It's exposure info is null.
      * @param claims
      * @param sameBaseClaim: Marker interface of returned packet are all null if false
      * @return null if claims is empty. New object if claims.size() > 1
@@ -42,7 +43,7 @@ public class ClaimUtils {
         DateTime updateDate = claims.get(0).getUpdateDate();
         int updatePeriod = claims.get(0).getUpdatePeriod();
         ClaimCashflowPacket summedClaims = new ClaimCashflowPacket(baseClaim, ultimate, paidIncremental, paidCumulated,
-                reportedIncremental, reportedCumulated, reserves, updateDate, updatePeriod);
+                reportedIncremental, reportedCumulated, reserves, null, updateDate, updatePeriod);
         applyMarkers(claims.get(0), summedClaims);
         return summedClaims;
     }
@@ -54,13 +55,20 @@ public class ClaimUtils {
             ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(claim.getBaseClaim(), scaledUltimate,
                     claim.getPaidIncremental() * factor, claim.getPaidCumulated() * factor,
                     claim.getReportedIncremental() * factor, claim.getReportedCumulated() * factor, scaledReserves,
-                    claim.getUpdateDate(), claim.getUpdatePeriod());
+                    claim.getExposureInfo(), claim.getUpdateDate(), claim.getUpdatePeriod());
             applyMarkers(claim, scaledClaim);
             return scaledClaim;
         }
         return claim;
     }
 
+    /**
+     * exposure info is not affected by scaling.
+     * @param claim
+     * @param factor
+     * @param scaleBaseClaim
+     * @return
+     */
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor, boolean scaleBaseClaim) {
         if (!scaleBaseClaim) return scale(claim, factor);
         if (notTrivialValues(claim)) {
@@ -70,7 +78,7 @@ public class ClaimUtils {
             ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(scaledBaseClaim, scaledUltimate,
                     claim.getPaidIncremental() * factor, claim.getPaidCumulated() * factor,
                     claim.getReportedIncremental() * factor, claim.getReportedCumulated() * factor, scaledReserves,
-                    claim.getUpdateDate(), claim.getUpdatePeriod());
+                    claim.getExposureInfo(), claim.getUpdateDate(), claim.getUpdatePeriod());
             applyMarkers(claim, scaledClaim);
             return scaledClaim;
         }
@@ -88,7 +96,7 @@ public class ClaimUtils {
      * @return
      */
     public static ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, ClaimStorage storage, double scaleFactorUltimate,
-                                                    double scaleFactorReported, double scaleFactorPaid) {
+                                                    double scaleFactorReported, double scaleFactorPaid, boolean adjustExposureInfo) {
         if (scaleFactorReported == -0) { scaleFactorReported = 0; }
         if (scaleFactorPaid == -0) { scaleFactorPaid = 0; }
         double cededPaidIncremental = grossClaim.getPaidIncremental() * scaleFactorPaid;
@@ -96,6 +104,8 @@ public class ClaimUtils {
         storage.update(cededPaidIncremental, BasedOnClaimProperty.PAID);
         storage.update(cededReportedIncremental, BasedOnClaimProperty.REPORTED);
         double cededReserves = storage.cededReserves() + grossClaim.developmentResult() * scaleFactorUltimate;
+        ExposureInfo cededExposureInfo = adjustExposureInfo && grossClaim.getExposureInfo() != null
+                ? grossClaim.getExposureInfo().withScale(scaleFactorUltimate) : grossClaim.getExposureInfo();
         ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(
                 storage.getReference(),
                 avoidNegativeZero(grossClaim.ultimate() * scaleFactorUltimate),
@@ -105,6 +115,7 @@ public class ClaimUtils {
                 avoidNegativeZero(storage.getIncrementalReportedCeded()),
                 avoidNegativeZero(storage.getCumulatedCeded(BasedOnClaimProperty.REPORTED)),
                 avoidNegativeZero(cededReserves),
+                cededExposureInfo,
                 grossClaim.getUpdateDate(),
                 grossClaim.getUpdatePeriod());
         applyMarkers(grossClaim, cededClaim);
@@ -125,6 +136,10 @@ public class ClaimUtils {
             return (ClaimCashflowPacket) grossClaim.clone();
         }
         else {
+            boolean isProportionalContract = cededClaim.reinsuranceContract() != null && cededClaim.reinsuranceContract().adjustExposureInfo();
+            double factor = 0;
+            ExposureInfo netExposureInfo = isProportionalContract && grossClaim.getExposureInfo() != null
+                    ? grossClaim.getExposureInfo().withScale(factor) : grossClaim.getExposureInfo();
             ClaimCashflowPacket netClaim = new ClaimCashflowPacket(
                 grossClaim.getBaseClaim(),
                 grossClaim.ultimate() + cededClaim.ultimate(),
@@ -134,6 +149,7 @@ public class ClaimUtils {
                 grossClaim.getReportedIncremental() + cededClaim.getReportedIncremental(),
                 grossClaim.getReportedCumulated() + cededClaim.getReportedCumulated(),
                 grossClaim.reserved() + cededClaim.reserved(),
+                netExposureInfo,
                 grossClaim.getUpdateDate(),
                 grossClaim.getUpdatePeriod());
             applyMarkers(cededClaim, netClaim);

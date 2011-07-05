@@ -5,14 +5,10 @@ import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.TrivialPatternStrategy;
-import org.pillarone.riskanalytics.domain.utils.marker.IReserveMarker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +86,8 @@ public final class GrossClaimRoot implements IClaimRoot {
                 // further details posted at
                 if (claimRoot.getOccurrenceDate().plus(payoutPattern.getLastCumulativePeriod()).isAfter(periodCounter.getCurrentPeriodStart())) {
                     DateTime artificalPayoutDate = periodCounter.getCurrentPeriodStart();
-                    ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, 0, 0,0,0,0,0, artificalPayoutDate, periodCounter);
+                    ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, 0, 0,0,0,0,0,
+                            claimRoot.getExposureInfo(), artificalPayoutDate, periodCounter);
                     currentPeriodClaims.add(cashflowPacket);
                 }
             }
@@ -108,7 +105,7 @@ public final class GrossClaimRoot implements IClaimRoot {
                     ClaimCashflowPacket cashflowPacket;
                     if (!hasIBNR() && !isReservesClaim) {
                         cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncremental, paidCumulated,
-                                reserves, payoutDate, periodCounter);
+                                reserves, claimRoot.getExposureInfo(), payoutDate, periodCounter);
                     }
                     else {
                     // ask stefan: reportedCumulated != sum (reported incremental)
@@ -116,7 +113,7 @@ public final class GrossClaimRoot implements IClaimRoot {
                         double reportedCumulated = reportedCumulated(ultimate, paidCumulated, factor, payoutCumulatedFactor, reports, i);
                         reportedCumulatedIncludingAppliedFactors = reportedCumulated;
                         cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncremental, paidCumulated,
-                                reportedIncremental, reportedCumulated, reserves, payoutDate, periodCounter);
+                                reportedIncremental, reportedCumulated, reserves, claimRoot.getExposureInfo(), payoutDate, periodCounter);
                     }
                     childCounter++;
                     hasUltimate = false;    // a period may contain several payouts and only the first should contain the ultimate
@@ -126,7 +123,7 @@ public final class GrossClaimRoot implements IClaimRoot {
             }
         }
         else {
-            ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, periodCounter);
+            ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, periodCounter, claimRoot.getExposureInfo());
             currentPeriodClaims.add(cashflowPacket);
         }
         return currentPeriodClaims;
@@ -188,14 +185,6 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     public ClaimType getClaimType() {
         return claimRoot.getClaimType();
-    }
-
-    public ExposureInfo getExposure() {
-        return claimRoot.getExposure();
-    }
-
-    public boolean hasExposureInformation() {
-        return claimRoot.hasExposureInfo();
     }
 
     public DateTime getExposureStartDate() {

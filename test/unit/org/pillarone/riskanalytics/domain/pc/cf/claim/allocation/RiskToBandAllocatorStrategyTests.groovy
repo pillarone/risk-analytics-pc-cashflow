@@ -86,7 +86,7 @@ public class RiskToBandAllocatorStrategyTests extends GroovyTestCase {
         for (int i = 0; i < n; i++) {
             ClaimRoot claim = allocatedClaims[i]
             assertEquals "ultimate $i", value * underwritingInfos[i].premiumWritten / totalPremium, claim.ultimate
-            assertNotNull "exposure $i not null", claim.getExposure()
+            assertNotNull "exposure $i not null", claim.getExposureInfo()
             assertEquals "exposure $i", claim.exposure, underwritingInfos[i].exposure
         }
     }

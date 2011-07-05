@@ -87,7 +87,7 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
         ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage,
                 aggregateClaimStorage.getCededFactorUltimate(),
                 aggregateClaimStorage.getCededFactorReported(),
-                aggregateClaimStorage.getCededFactorPaid());
+                aggregateClaimStorage.getCededFactorPaid(), false);
         add(grossClaim, cededClaim);
         return cededClaim;
     }

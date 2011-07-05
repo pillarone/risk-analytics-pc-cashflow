@@ -30,16 +30,16 @@ public class SurplusContract extends AbstractProportionalReinsuranceContract {
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
         double cessionRate = defaultCededLossShare;
-        if (grossClaim.getBaseClaim().hasExposureInformation()) {
-            if (grossClaim.getNominalUltimate() > grossClaim.getBaseClaim().getExposure().getSumInsured()) {
+        if (grossClaim.hasExposureInfo()) {
+            if (grossClaim.getNominalUltimate() > grossClaim.getExposureInfo().getSumInsured()) {
                 // handle a total loss according to https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1261
                 cessionRate = getFractionCeded(grossClaim.getNominalUltimate());
             }
             else {
-                cessionRate = getFractionCeded(grossClaim.getBaseClaim().getExposure().getSumInsured());
+                cessionRate = getFractionCeded(grossClaim.getExposureInfo().getSumInsured());
             }
         }
-        return ClaimUtils.getCededClaim(grossClaim, storage, -cessionRate, -cessionRate, -cessionRate);
+        return ClaimUtils.getCededClaim(grossClaim, storage, -cessionRate, -cessionRate, -cessionRate, true);
     }
 
     private double getFractionCeded(double sumInsured) {
