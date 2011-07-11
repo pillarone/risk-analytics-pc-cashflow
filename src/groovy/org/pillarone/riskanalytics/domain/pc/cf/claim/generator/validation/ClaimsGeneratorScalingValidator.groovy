@@ -43,9 +43,9 @@ class ClaimsGeneratorScalingValidator implements IParameterizationValidator {
 
         List<ParameterValidation> errors = []
 
-        /** key: path                                              */
+        /** key: path                                                */
         Map<String, IClaimsGeneratorStrategy> claimsGeneratorStrategyPerClaimsGeneratorName = [:]
-        /** key:       */
+        /** key:         */
         Map<String, Boolean> underwritingInfoPerClaimsGeneratorName = [:]
 
         for (ParameterHolder parameter in parameters) {
@@ -56,11 +56,16 @@ class ClaimsGeneratorScalingValidator implements IParameterizationValidator {
                         LOG.debug "validating ${parameter.path}"
                     }
 
-                    claimsGeneratorStrategyPerClaimsGeneratorName[parameter.path - ':parmClaimsModel'] = (IClaimsGeneratorStrategy) parameter.getBusinessObject()
-
-                    def currentErrors = validationService.validate(classifier, parameter.getParameterMap())
-                    currentErrors*.path = parameter.path
-                    errors.addAll(currentErrors)
+                    try {
+                        claimsGeneratorStrategyPerClaimsGeneratorName[parameter.path - ':parmClaimsModel'] = (IClaimsGeneratorStrategy) parameter.getBusinessObject()
+                        def currentErrors = validationService.validate(classifier, parameter.getParameterMap())
+                        currentErrors*.path = parameter.path
+                        errors.addAll(currentErrors)
+                    }
+                    catch (IllegalArgumentException ex) {
+                        // https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1619
+                        LOG.debug("call parameter.getBusinessObject() failed " + ex.toString())
+                    }
                 }
 
 
