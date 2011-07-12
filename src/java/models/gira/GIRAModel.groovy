@@ -86,6 +86,7 @@ class GIRAModel extends StochasticModel {
         indices.inEventSeverities = dependencies.outEventSeverities
         if (segments.subComponentCount() == 0) {
             reinsuranceContracts.inClaims = claimsGenerators.outClaims
+            reinsuranceContracts.inClaims = reservesGenerators.outReserves
             reinsuranceContracts.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
             if (structures.subComponentCount() > 0) {
                 structures.inClaimsGross = claimsGenerators.outClaims
@@ -98,6 +99,8 @@ class GIRAModel extends StochasticModel {
         }
         else {
             segments.inClaims = claimsGenerators.outClaims
+            // todo(jwa): change inReserves to inClaims as soon as PMO-???? is solved
+            segments.inReserves = reservesGenerators.outReserves
             segments.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
             reinsuranceContracts.inClaims = segments.outClaimsGross
             reinsuranceContracts.inUnderwritingInfo = segments.outUnderwritingInfoGross

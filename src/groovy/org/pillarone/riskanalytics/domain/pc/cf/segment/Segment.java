@@ -14,6 +14,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion;
+import org.pillarone.riskanalytics.domain.utils.constraint.ReservePortion;
 import org.pillarone.riskanalytics.domain.utils.constraint.UnderwritingPortion;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
@@ -27,6 +28,8 @@ import java.util.*;
 public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    // todo(jwa): remove inReserves as soon as PMO-???? is solved (and collect within inClaims)
+    private PacketList<ClaimCashflowPacket> inReserves = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded
@@ -46,9 +49,12 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     private ConstrainedMultiDimensionalParameter parmUnderwritingPortions = new ConstrainedMultiDimensionalParameter(
             GroovyUtils.toList("[[],[]]"), Arrays.asList(UNDERWRITING, PORTION),
             ConstraintsFactory.getConstraints(UnderwritingPortion.IDENTIFIER));
+    private ConstrainedMultiDimensionalParameter parmReservesPortions = new ConstrainedMultiDimensionalParameter(
+            GroovyUtils.toList("[[],[]]"), Arrays.asList(RESERVE, PORTION), ConstraintsFactory.getConstraints(ReservePortion.IDENTIFIER));
 
 
     private static final String PERIL = "Claims Generator";
+    private static final String RESERVE = "Reserves Generator";
     private static final String UNDERWRITING = "Underwriting";
     private static final String PORTION = "Portion";
 
@@ -59,6 +65,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     public void doCalculation(String phase) {
         if (phase.equals(PHASE_GROSS)) {
             getSegmentClaims();
+            getSegmentReserves();
             getSegmentUnderwritingInfo();
         }
         else if (phase.equals(PHASE_NET)) {
@@ -144,23 +151,48 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             List<ClaimCashflowPacket> segmentClaims = new ArrayList<ClaimCashflowPacket>();
             int portionColumn = parmClaimsPortions.getColumnIndex(PORTION);
             for (ClaimCashflowPacket marketClaim : inClaims) {
-                String originName = marketClaim.peril().getNormalizedName();
-                int row = parmClaimsPortions.getColumnByName(PERIL).indexOf(originName);
-                if (row > -1 && marketClaim.peril() instanceof IPerilMarker) {
-                    ClaimCashflowPacket segmentClaim = (ClaimCashflowPacket) marketClaim.copy();
-                    // PMO-750: claim mergers in reinsurance program won't work with reference to market claims
-                    segmentClaim.origin = this;
-                    segmentClaim.setMarker(this);
-                    double scaleFactor = InputFormatConverter.getDouble(parmClaimsPortions.getValueAt(row + 1, portionColumn));
-                    segmentClaims.add(ClaimUtils.scale(segmentClaim, scaleFactor, true));
+                if (marketClaim.peril() != null) {
+                    String originName = marketClaim.peril().getNormalizedName();
+                    int row = parmClaimsPortions.getColumnByName(PERIL).indexOf(originName);
+                    if (row > -1) {
+                        ClaimCashflowPacket segmentClaim = (ClaimCashflowPacket) marketClaim.copy();
+                        // PMO-750: claim mergers in reinsurance program won't work with reference to market claims
+                        segmentClaim.origin = this;
+                        segmentClaim.setMarker(this);
+                        double scaleFactor = InputFormatConverter.getDouble(parmClaimsPortions.getValueAt(row + 1, portionColumn));
+                        segmentClaims.add(ClaimUtils.scale(segmentClaim, scaleFactor, true));
+                    }
                 }
             }
             outClaimsGross.addAll(segmentClaims);
         }
     }
 
+    private void getSegmentReserves() {
+        if (inReserves.size() > 0) {
+            List<ClaimCashflowPacket> segmentReserves = new ArrayList<ClaimCashflowPacket>();
+            int portionColumn = parmReservesPortions.getColumnIndex(PORTION);
+            for (ClaimCashflowPacket marketClaim : inReserves) {
+                if (marketClaim.reserve() != null) {
+                    String originName = marketClaim.reserve().getNormalizedName();
+                    int row = parmReservesPortions.getColumnByName(RESERVE).indexOf(originName);
+                    if (row > -1) {
+                        ClaimCashflowPacket segmentReserve = (ClaimCashflowPacket) marketClaim.copy();
+                        // PMO-750: claim mergers in reinsurance program won't work with reference to market claims
+                        segmentReserve.origin = this;
+                        segmentReserve.setMarker(this);
+                        double scaleFactor = InputFormatConverter.getDouble(parmReservesPortions.getValueAt(row + 1, portionColumn));
+                        segmentReserves.add(ClaimUtils.scale(segmentReserve, scaleFactor, true));
+                    }
+                }
+            }
+            outClaimsGross.addAll(segmentReserves);
+        }
+    }
+
     public void allocateChannelsToPhases() {
         setTransmitterPhaseInput(inClaims, PHASE_GROSS);
+        setTransmitterPhaseInput(inReserves, PHASE_GROSS);
         setTransmitterPhaseInput(inUnderwritingInfo, PHASE_GROSS);
         setTransmitterPhaseOutput(outClaimsGross, PHASE_GROSS);
         setTransmitterPhaseOutput(outUnderwritingInfoGross, PHASE_GROSS);
@@ -280,5 +312,21 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     public void setParmCompany(ConstrainedString parmCompany) {
         this.parmCompany = parmCompany;
+    }
+
+    public ConstrainedMultiDimensionalParameter getParmReservesPortions() {
+        return parmReservesPortions;
+    }
+
+    public void setParmReservesPortions(ConstrainedMultiDimensionalParameter parmReservesPortions) {
+        this.parmReservesPortions = parmReservesPortions;
+    }
+
+    public PacketList<ClaimCashflowPacket> getInReserves() {
+        return inReserves;
+    }
+
+    public void setInReserves(PacketList<ClaimCashflowPacket> inReserves) {
+        this.inReserves = inReserves;
     }
 }

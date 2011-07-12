@@ -11,6 +11,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion
 import org.pillarone.riskanalytics.domain.utils.constraint.UnderwritingPortion
+import org.pillarone.riskanalytics.domain.utils.constraint.ReservePortion
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -18,6 +19,8 @@ import org.pillarone.riskanalytics.domain.utils.constraint.UnderwritingPortion
 class Segments extends DynamicMultiPhaseComposedComponent {
 
     PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
+    // todo(jwa): remove as soon as PMO-???? is solved
+    PacketList<ClaimCashflowPacket> inReserves = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
@@ -37,7 +40,9 @@ class Segments extends DynamicMultiPhaseComposedComponent {
                 [[],[]], Arrays.asList(Segment.PERIL, Segment.PORTION), ConstraintsFactory.getConstraints(PerilPortion.IDENTIFIER)),
             parmUnderwritingPortions : new ConstrainedMultiDimensionalParameter(
                 [[],[]], Arrays.asList(Segment.UNDERWRITING, Segment.PORTION),
-                ConstraintsFactory.getConstraints(UnderwritingPortion.IDENTIFIER)))
+                ConstraintsFactory.getConstraints(UnderwritingPortion.IDENTIFIER)),
+            parmReservesPortions : new ConstrainedMultiDimensionalParameter(
+                [[],[]], Arrays.asList(Segment.RESERVE, Segment.PORTION), ConstraintsFactory.getConstraints(ReservePortion.IDENTIFIER)))
         return segment
     }
 
@@ -50,6 +55,7 @@ class Segments extends DynamicMultiPhaseComposedComponent {
     @Override
     void wire() {
         replicateInChannels this, 'inClaims'
+        replicateInChannels this, 'inReserves'
         replicateInChannels this, 'inClaimsCeded'
         replicateInChannels this, 'inUnderwritingInfo'
         replicateInChannels this, 'inUnderwritingInfoCeded'
@@ -63,6 +69,7 @@ class Segments extends DynamicMultiPhaseComposedComponent {
 
     public void allocateChannelsToPhases() {
         setTransmitterPhaseInput(inClaims, PHASE_GROSS);
+        setTransmitterPhaseInput(inReserves, PHASE_GROSS);
         setTransmitterPhaseInput(inUnderwritingInfo, PHASE_GROSS);
         setTransmitterPhaseOutput(outClaimsGross, PHASE_GROSS);
         setTransmitterPhaseOutput(outUnderwritingInfoGross, PHASE_GROSS);
