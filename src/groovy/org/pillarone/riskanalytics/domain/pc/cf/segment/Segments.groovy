@@ -12,6 +12,9 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion
 import org.pillarone.riskanalytics.domain.utils.constraint.UnderwritingPortion
 import org.pillarone.riskanalytics.domain.utils.constraint.ReservePortion
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountedValuesPacket
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.NetPresentValuesPacket
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -24,10 +27,13 @@ class Segments extends DynamicMultiPhaseComposedComponent {
     PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
+    PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
 
     PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
+    PacketList<DiscountedValuesPacket> outDiscountedValues = new PacketList<DiscountedValuesPacket>(DiscountedValuesPacket)
+    PacketList<NetPresentValuesPacket> outNetPresentValues = new PacketList<NetPresentValuesPacket>(NetPresentValuesPacket)
     PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
@@ -59,9 +65,12 @@ class Segments extends DynamicMultiPhaseComposedComponent {
         replicateInChannels this, 'inClaimsCeded'
         replicateInChannels this, 'inUnderwritingInfo'
         replicateInChannels this, 'inUnderwritingInfoCeded'
+        replicateInChannels this, 'inFactors'
         replicateOutChannels this, 'outClaimsGross'
         replicateOutChannels this, 'outClaimsNet'
         replicateOutChannels this, 'outClaimsCeded'
+        replicateOutChannels this, 'outDiscountedValues'
+        replicateOutChannels this, 'outNetPresentValues'
         replicateOutChannels this, 'outUnderwritingInfoGross'
         replicateOutChannels this, 'outUnderwritingInfoNet'
         replicateOutChannels this, 'outUnderwritingInfoCeded'
@@ -71,6 +80,7 @@ class Segments extends DynamicMultiPhaseComposedComponent {
         setTransmitterPhaseInput(inClaims, PHASE_GROSS);
         setTransmitterPhaseInput(inReserves, PHASE_GROSS);
         setTransmitterPhaseInput(inUnderwritingInfo, PHASE_GROSS);
+        setTransmitterPhaseInput(inFactors, PHASE_GROSS);
         setTransmitterPhaseOutput(outClaimsGross, PHASE_GROSS);
         setTransmitterPhaseOutput(outUnderwritingInfoGross, PHASE_GROSS);
 
@@ -78,6 +88,8 @@ class Segments extends DynamicMultiPhaseComposedComponent {
         setTransmitterPhaseInput(inUnderwritingInfoCeded, PHASE_NET);
         setTransmitterPhaseOutput(outClaimsNet, PHASE_NET);
         setTransmitterPhaseOutput(outClaimsCeded, PHASE_NET);
+        setTransmitterPhaseOutput(outDiscountedValues, PHASE_NET);
+        setTransmitterPhaseOutput(outNetPresentValues, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_NET);
     }

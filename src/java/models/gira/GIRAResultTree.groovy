@@ -75,6 +75,17 @@ mappings = {
                         "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsCeded:developedResult"
                     }
                 }
+                "discountedValues" {
+                    "paidIncrementalGross" "GIRA:segments:[%segment%]:outDiscountedValues:discountedPaidIncrementalGross"
+                    "paidIncrementalNet" "GIRA:segments:[%segment%]:outDiscountedValues:discountedPaidIncrementalNet"
+                    "paidIncrementalCeded" "GIRA:segments:[%segment%]:outDiscountedValues:discountedPaidIncrementalCeded"
+                    "reservesGross" "GIRA:segments:[%segment%]:outDiscountedValues:discountedReservedGross"
+                    "reservesNet" "GIRA:segments:[%segment%]:outDiscountedValues:discountedReservedNet"
+                    "reservesCeded" "GIRA:segments:[%segment%]:outDiscountedValues:discountedReservedCeded"
+                    "netPresentValuePaidGross" "GIRA:segments:[%segment%]:outNetPresentValues:netPresentValueGross"
+                    "netPresentValuePaidNet" "GIRA:segments:[%segment%]:outNetPresentValues:netPresentValueNet"
+                    "netPresentValuePaidCeded" "GIRA:segments:[%segment%]:outNetPresentValues:netPresentValueCeded"
+                }
                 "premium" {
                     "premiumWrittenNet" "GIRA:segments:[%segment%]:outUnderwritingInfoNet:premiumWritten", {
                         "gross" "GIRA:segments:[%segment%]:outUnderwritingInfoGross:premiumWritten"
@@ -94,7 +105,7 @@ mappings = {
                 }
             }
         }
-          "structures" {
+        "structures" {
             "[%structure%]" {
                 "claimsNet" {
                     "ultimate" "GIRA:structures:[%structure%]:outClaimsNet:ultimate"

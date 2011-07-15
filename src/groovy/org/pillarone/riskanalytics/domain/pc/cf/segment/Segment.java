@@ -2,21 +2,28 @@ package org.pillarone.riskanalytics.domain.pc.cf.segment;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.MultiPhaseComponent;
+import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.*;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion;
 import org.pillarone.riskanalytics.domain.utils.constraint.ReservePortion;
 import org.pillarone.riskanalytics.domain.utils.constraint.UnderwritingPortion;
-import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 
@@ -27,6 +34,13 @@ import java.util.*;
  */
 public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
+    private IterationScope iterationScope;
+    private PeriodScope periodScope;
+    private PeriodStore periodStore;
+    private static final String NET_PRESENT_VALUE_GROSS = "netPresentValueGross";
+    private static final String NET_PRESENT_VALUE_CEDED = "netPresentValueCeded";
+    private static final String NET_PRESENT_VALUE_NET = "netPresentValueNet";
+
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     // todo(jwa): remove inReserves as soon as PMO-???? is solved (and collect within inClaims)
     private PacketList<ClaimCashflowPacket> inReserves = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
@@ -34,10 +48,13 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
+    private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
 
     private PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    private PacketList<DiscountedValuesPacket> outDiscountedValues = new PacketList<DiscountedValuesPacket>(DiscountedValuesPacket.class);
+    private PacketList<NetPresentValuesPacket> outNetPresentValues = new PacketList<NetPresentValuesPacket>(NetPresentValuesPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
@@ -51,6 +68,8 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             ConstraintsFactory.getConstraints(UnderwritingPortion.IDENTIFIER));
     private ConstrainedMultiDimensionalParameter parmReservesPortions = new ConstrainedMultiDimensionalParameter(
             GroovyUtils.toList("[[],[]]"), Arrays.asList(RESERVE, PORTION), ConstraintsFactory.getConstraints(ReservePortion.IDENTIFIER));
+    private ComboBoxTableMultiDimensionalParameter parmDiscounting = new ComboBoxTableMultiDimensionalParameter(
+            Arrays.asList(""), Arrays.asList("Discount Index"), IDiscountMarker.class);
 
 
     private static final String PERIL = "Claims Generator";
@@ -60,19 +79,64 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     private static final String PHASE_GROSS = "Phase Gross";
     private static final String PHASE_NET = "Phase Net";
+    private List<Factors> filteredFactors;
+    private double discountedIncrementalPaidGross;
+    private double discountedReservedGross;
+    private double netPresentValueGross;
 
     @Override
     public void doCalculation(String phase) {
         if (phase.equals(PHASE_GROSS)) {
+            filteredFactors = DiscountUtils.filterFactors(inFactors, parmDiscounting, periodScope.getPeriodCounter().startOfFirstPeriod());
             getSegmentClaims();
             getSegmentReserves();
             getSegmentUnderwritingInfo();
+
+            discountedIncrementalPaidGross = getSumOfDiscountedIncrementalPaids(outClaimsGross);
+            discountedReservedGross = getDiscountedReservedAtEndOfCurrentPeriod(outClaimsGross);
+            double startNetPresentValueGross = getPeriodStore().exists(NET_PRESENT_VALUE_GROSS) ? (Double) getPeriodStore().get(NET_PRESENT_VALUE_GROSS, -1) : 0d;
+            double endNetPresentValueGross = startNetPresentValueGross + discountedIncrementalPaidGross;
+            periodStore.put(NET_PRESENT_VALUE_GROSS, endNetPresentValueGross);
         }
         else if (phase.equals(PHASE_NET)) {
             filterCededClaims();
             calculateNetClaims();
             filterCededUnderwritingInfo();
             calculateNetUnderwritingInfo();
+
+            double discountedIncrementalPaidCeded = getSumOfDiscountedIncrementalPaids(outClaimsCeded);
+            double discountedIncrementalPaidNet = getSumOfDiscountedIncrementalPaids(outClaimsNet);
+            double discountedReservedCeded = getDiscountedReservedAtEndOfCurrentPeriod(outClaimsCeded);
+            double discountedReservedNet = getDiscountedReservedAtEndOfCurrentPeriod(outClaimsNet);
+            double startNetPresentValueCeded = getPeriodStore().exists(NET_PRESENT_VALUE_CEDED) ? (Double) getPeriodStore().get(NET_PRESENT_VALUE_CEDED, -1) : 0d;
+            double startNetPresentValueNet = getPeriodStore().exists(NET_PRESENT_VALUE_NET) ? (Double) getPeriodStore().get(NET_PRESENT_VALUE_NET, -1) : 0d;
+            double endNetPresentValueCeded = startNetPresentValueCeded + discountedIncrementalPaidCeded;
+            double endNetPresentValueNet = startNetPresentValueNet + discountedIncrementalPaidNet;
+            periodStore.put(NET_PRESENT_VALUE_CEDED, endNetPresentValueCeded);
+            periodStore.put(NET_PRESENT_VALUE_NET, endNetPresentValueNet);
+            DiscountedValuesPacket discountedValues = new DiscountedValuesPacket();
+            discountedValues.setDiscountedPaidIncrementalGross(discountedIncrementalPaidGross);
+            discountedValues.setDiscountedPaidIncrementalCeded(discountedIncrementalPaidCeded);
+            discountedValues.setDiscountedPaidIncrementalNet(discountedIncrementalPaidNet);
+            discountedValues.setDiscountedReservedGross(discountedReservedGross);
+            discountedValues.setDiscountedReservedCeded(discountedReservedCeded);
+            discountedValues.setDiscountedReservedNet(discountedReservedNet);
+            outDiscountedValues.add(discountedValues);
+
+            // todo(sku): simplify once PMO-1071 is resolved
+            int period = periodScope.getCurrentPeriod();
+            if (period + 1 == iterationScope.getNumberOfPeriods()) {
+                NetPresentValuesPacket netPresentValues = new NetPresentValuesPacket();
+                netPresentValues.setNetPresentValueGross((Double) periodStore.get(NET_PRESENT_VALUE_GROSS, 0));
+                netPresentValues.setNetPresentValueCeded(endNetPresentValueCeded);
+                netPresentValues.setNetPresentValueNet(endNetPresentValueNet);
+                netPresentValues.period = 0;
+                outNetPresentValues.add(netPresentValues);
+            }
+            /*     else if (period == 0) {
+              netPresentValues.period = getIterationScope().getNumberOfPeriods() - 1;
+          }
+          outNetPresentValues.add(netPresentValues);  */
         }
     }
 
@@ -151,6 +215,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             List<ClaimCashflowPacket> segmentClaims = new ArrayList<ClaimCashflowPacket>();
             int portionColumn = parmClaimsPortions.getColumnIndex(PORTION);
             for (ClaimCashflowPacket marketClaim : inClaims) {
+                // todo(jwa): if-statement needed as soon as reserves contained within inClaims
                 if (marketClaim.peril() != null) {
                     String originName = marketClaim.peril().getNormalizedName();
                     int row = parmClaimsPortions.getColumnByName(PERIL).indexOf(originName);
@@ -173,6 +238,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             List<ClaimCashflowPacket> segmentReserves = new ArrayList<ClaimCashflowPacket>();
             int portionColumn = parmReservesPortions.getColumnIndex(PORTION);
             for (ClaimCashflowPacket marketClaim : inReserves) {
+                // todo(jwa): if-statement needed as soon as reserves contained within inClaims
                 if (marketClaim.reserve() != null) {
                     String originName = marketClaim.reserve().getNormalizedName();
                     int row = parmReservesPortions.getColumnByName(RESERVE).indexOf(originName);
@@ -190,10 +256,45 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         }
     }
 
+    private double getSumOfDiscountedIncrementalPaids(List<ClaimCashflowPacket> claims) {
+        double discountedIncrementalPaid = 0d;
+        for (ClaimCashflowPacket claim : claims) {
+            DateTime date = claim.getUpdateDate();
+            double discountFactor = DiscountUtils.getDiscountFactor(filteredFactors, date, periodScope.getPeriodCounter());
+            discountedIncrementalPaid += claim.getPaidIncremental() * discountFactor;
+        }
+        return discountedIncrementalPaid;
+    }
+
+    private double getDiscountedReservedAtEndOfCurrentPeriod(List<ClaimCashflowPacket> claims) {
+        Map<IClaimRoot, ClaimCashflowPacket> latestCashflowPerBaseClaim = new HashMap<IClaimRoot, ClaimCashflowPacket>();
+        for (ClaimCashflowPacket claim : claims) {
+            ClaimCashflowPacket latestCashflow = latestCashflowPerBaseClaim.get(claim.getBaseClaim());
+            if (latestCashflow == null || claim.getUpdateDate().isAfter(latestCashflow.getUpdateDate()))
+            {
+                latestCashflow = claim;
+                latestCashflowPerBaseClaim.put(claim.getBaseClaim(), latestCashflow);
+            }
+        }
+        double discountedReserved = 0d;
+        for (ClaimCashflowPacket claim : latestCashflowPerBaseClaim.values()) {
+            DateTime date = claim.getUpdateDate();
+            double discountFactor = DiscountUtils.getDiscountFactor(filteredFactors, date, periodScope.getPeriodCounter());
+            discountedReserved += claim.reserved() * discountFactor;
+        }
+        return discountedReserved;
+    }
+
+    private double getDiscountedReserves(List<ClaimCashflowPacket> claims) {
+        // note: per claim only last dated reserve
+        return 0d;
+    }
+
     public void allocateChannelsToPhases() {
         setTransmitterPhaseInput(inClaims, PHASE_GROSS);
         setTransmitterPhaseInput(inReserves, PHASE_GROSS);
         setTransmitterPhaseInput(inUnderwritingInfo, PHASE_GROSS);
+        setTransmitterPhaseInput(inFactors, PHASE_GROSS);
         setTransmitterPhaseOutput(outClaimsGross, PHASE_GROSS);
         setTransmitterPhaseOutput(outUnderwritingInfoGross, PHASE_GROSS);
 
@@ -201,6 +302,8 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         setTransmitterPhaseInput(inUnderwritingInfoCeded, PHASE_NET);
         setTransmitterPhaseOutput(outClaimsNet, PHASE_NET);
         setTransmitterPhaseOutput(outClaimsCeded, PHASE_NET);
+        setTransmitterPhaseOutput(outDiscountedValues, PHASE_NET);
+        setTransmitterPhaseOutput(outNetPresentValues, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_NET);
     }
@@ -328,5 +431,61 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     public void setInReserves(PacketList<ClaimCashflowPacket> inReserves) {
         this.inReserves = inReserves;
+    }
+
+    public ComboBoxTableMultiDimensionalParameter getParmDiscounting() {
+        return parmDiscounting;
+    }
+
+    public void setParmDiscounting(ComboBoxTableMultiDimensionalParameter parmDiscounting) {
+        this.parmDiscounting = parmDiscounting;
+    }
+
+    public PacketList<FactorsPacket> getInFactors() {
+        return inFactors;
+    }
+
+    public void setInFactors(PacketList<FactorsPacket> inFactors) {
+        this.inFactors = inFactors;
+    }
+
+    public PeriodScope getPeriodScope() {
+        return periodScope;
+    }
+
+    public void setPeriodScope(PeriodScope periodScope) {
+        this.periodScope = periodScope;
+    }
+
+    public PacketList<DiscountedValuesPacket> getOutDiscountedValues() {
+        return outDiscountedValues;
+    }
+
+    public void setOutDiscountedValues(PacketList<DiscountedValuesPacket> outDiscountedValues) {
+        this.outDiscountedValues = outDiscountedValues;
+    }
+
+    public PacketList<NetPresentValuesPacket> getOutNetPresentValues() {
+        return outNetPresentValues;
+    }
+
+    public void setOutNetPresentValues(PacketList<NetPresentValuesPacket> outNetPresentValues) {
+        this.outNetPresentValues = outNetPresentValues;
+    }
+
+    public PeriodStore getPeriodStore() {
+        return periodStore;
+    }
+
+    public void setPeriodStore(PeriodStore periodStore) {
+        this.periodStore = periodStore;
+    }
+
+    public IterationScope getIterationScope() {
+        return iterationScope;
+    }
+
+    public void setIterationScope(IterationScope iterationScope) {
+        this.iterationScope = iterationScope;
     }
 }

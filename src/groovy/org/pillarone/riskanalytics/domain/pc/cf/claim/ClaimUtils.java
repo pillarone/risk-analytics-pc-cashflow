@@ -168,5 +168,6 @@ public class ClaimUtils {
         target.setMarker(source.segment());
         target.setMarker(source.reinsuranceContract());
         target.setMarker(source.legalEntity());
+        target.setMarker(source.reserve());
     }
 }

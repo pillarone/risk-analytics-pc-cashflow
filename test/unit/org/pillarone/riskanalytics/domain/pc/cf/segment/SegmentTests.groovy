@@ -67,7 +67,7 @@ class SegmentTests extends GroovyTestCase {
             true, periodScope, motorReservesGenerator)
     ClaimCashflowPacket paReserve800 = getClaimCashflowPacket(null, -800, -200, projectionStart, projectionStart,
             true, periodScope, paReservesGenerator)
-
+   // todo(jwa): test cases for reserved values over several periods (seem to be incorrect, see PMO-1730)
 
     void setUp() {
 

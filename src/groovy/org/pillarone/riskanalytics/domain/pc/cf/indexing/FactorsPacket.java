@@ -12,10 +12,7 @@ import java.util.TreeMap;
  */
 public class FactorsPacket extends Packet {
 
-    /**
-     * contains absolute factors per date
-     */
-    TreeMap<DateTime, Double> factorsPerDate = new TreeMap<DateTime, Double>();
+    private TreeMap<DateTime, Double> factorsPerDate = new TreeMap<DateTime, Double>();
 
     public FactorsPacket() {
     }
@@ -25,35 +22,35 @@ public class FactorsPacket extends Packet {
     }
 
     public void add(DateTime date, double factor) {
-        factorsPerDate.put(date, factor);
+        getFactorsPerDate().put(date, factor);
     }
 
     public Double getFactorAtDate(DateTime date) {
-        Double factor = factorsPerDate.get(date);
+        Double factor = getFactorsPerDate().get(date);
         return factor == null ? 1 : factor;
     }
 
     public Double getFactorFloor(DateTime date) {
-        Map.Entry<DateTime, Double> dateTimeDoubleEntry = factorsPerDate.floorEntry(date);
-        return dateTimeDoubleEntry == null ? factorsPerDate.firstEntry().getValue() : dateTimeDoubleEntry.getValue();
+        Map.Entry<DateTime, Double> dateTimeDoubleEntry = getFactorsPerDate().floorEntry(date);
+        return dateTimeDoubleEntry == null ? getFactorsPerDate().firstEntry().getValue() : dateTimeDoubleEntry.getValue();
     }
 
     public Double getFactorCeiling(DateTime date) {
-        Map.Entry<DateTime, Double> dateTimeDoubleEntry = factorsPerDate.ceilingEntry(date);
-        return dateTimeDoubleEntry == null ? factorsPerDate.lastEntry().getValue() : dateTimeDoubleEntry.getValue();
+        Map.Entry<DateTime, Double> dateTimeDoubleEntry = getFactorsPerDate().ceilingEntry(date);
+        return dateTimeDoubleEntry == null ? getFactorsPerDate().lastEntry().getValue() : dateTimeDoubleEntry.getValue();
     }
 
     public Double getFactorInterpolated(DateTime date) {
-        Map.Entry<DateTime, Double> floorEntry = factorsPerDate.floorEntry(date);
-        Map.Entry<DateTime, Double> ceilingEntry = factorsPerDate.ceilingEntry(date);
+        Map.Entry<DateTime, Double> floorEntry = getFactorsPerDate().floorEntry(date);
+        Map.Entry<DateTime, Double> ceilingEntry = getFactorsPerDate().ceilingEntry(date);
 
         if (ceilingEntry == null) {
             ceilingEntry = floorEntry;
-            floorEntry = factorsPerDate.floorEntry(floorEntry.getKey().minusDays(1));
+            floorEntry = getFactorsPerDate().floorEntry(floorEntry.getKey().minusDays(1));
         }
         else if (floorEntry == null) {
             floorEntry = ceilingEntry;
-            ceilingEntry = factorsPerDate.ceilingEntry(floorEntry.getKey().plusDays(1));
+            ceilingEntry = getFactorsPerDate().ceilingEntry(floorEntry.getKey().plusDays(1));
         }
         else if (floorEntry.equals(ceilingEntry)) {
             return floorEntry.getValue();
@@ -63,5 +60,16 @@ public class FactorsPacket extends Packet {
         double keyDifference = Days.daysBetween(floorEntry.getKey(), ceilingEntry.getKey()).getDays();
         double factorRatio = ceilingEntry.getValue() / floorEntry.getValue();
         return Math.pow(factorRatio, elapsedTime / keyDifference) * floorEntry.getValue();
+    }
+
+    /**
+     * contains absolute factors per date
+     */
+    public TreeMap<DateTime, Double> getFactorsPerDate() {
+        return factorsPerDate;
+    }
+
+    public void setFactorsPerDate(TreeMap<DateTime, Double> factorsPerDate) {
+        this.factorsPerDate = factorsPerDate;
     }
 }

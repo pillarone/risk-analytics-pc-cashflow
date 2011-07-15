@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.indexing;
 
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
@@ -46,7 +47,7 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
         return params;
     }
 
-    public FactorsPacket getFactors(PeriodScope periodScope, Index origin, List<EventDependenceStream> eventStreams) {
+    public FactorsPacket getFactors(PeriodScope periodScope, Component origin, List<EventDependenceStream> eventStreams) {
         lazyInitGenerator(periodScope);
         Double filteredSeverity = filterSeverity(origin, eventStreams);
         // note: indexGenerator.getDistribution() yields the unmodified distribution; hence this is only correct if there is no DistributionModifier
@@ -68,7 +69,7 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
         }
     }
 
-    private static Double filterSeverity(Index filterCriteria, List<EventDependenceStream> eventStreams) {
+    private static Double filterSeverity(Component filterCriteria, List<EventDependenceStream> eventStreams) {
         List<EventSeverity> filteredEventSeverities = new ArrayList<EventSeverity>();
         for (EventDependenceStream eventStream : eventStreams) {
             if (eventStream.getEventDependenceStream().containsKey(filterCriteria.getNormalizedName())) {

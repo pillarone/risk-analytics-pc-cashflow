@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.indexing;
 
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
@@ -33,12 +34,12 @@ public class DeterministicIndexStrategy extends AbstractParameterObject implemen
         return params;
     }
 
-    public FactorsPacket getFactors(PeriodScope periodScope, Index origin, List<EventDependenceStream> eventStreams) {
+    public FactorsPacket getFactors(PeriodScope periodScope, Component origin, List<EventDependenceStream> eventStreams) {
         lazyInitFactors(origin);
         return factors;
     }
 
-    protected void lazyInitFactors(Index origin) {
+    protected void lazyInitFactors(Component origin) {
         if (factors == null) {
             factors = new FactorsPacket();
             int dateColumnIndex = indices.getColumnIndex(DeterministicIndexTableConstraints.DATE);

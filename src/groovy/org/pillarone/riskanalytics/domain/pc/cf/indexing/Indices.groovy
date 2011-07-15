@@ -34,6 +34,7 @@ class Indices extends ComposedComponent {
             subPolicyIndices.inEventSeverities = this.inEventSeverities
             subPremiumIndices.inEventSeverities = this.inEventSeverities
 
+
         }
     }
 }
