@@ -104,6 +104,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             filterCededUnderwritingInfo();
             calculateNetUnderwritingInfo();
 
+            // todo(jwa): 1. code cleaning, 2. iterationScope not needed (number of periods may be obtained by periodCounter)
             double discountedIncrementalPaidCeded = getSumOfDiscountedIncrementalPaids(outClaimsCeded);
             double discountedIncrementalPaidNet = getSumOfDiscountedIncrementalPaids(outClaimsNet);
             double discountedReservedCeded = getDiscountedReservedAtEndOfCurrentPeriod(outClaimsCeded);
@@ -133,10 +134,6 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                 netPresentValues.period = 0;
                 outNetPresentValues.add(netPresentValues);
             }
-            /*     else if (period == 0) {
-              netPresentValues.period = getIterationScope().getNumberOfPeriods() - 1;
-          }
-          outNetPresentValues.add(netPresentValues);  */
         }
     }
 
