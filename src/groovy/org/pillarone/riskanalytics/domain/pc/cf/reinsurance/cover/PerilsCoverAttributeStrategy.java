@@ -33,7 +33,7 @@ public class PerilsCoverAttributeStrategy extends AbstractParameterObject implem
 
     public List<ClaimCashflowPacket> coveredClaims(List<ClaimCashflowPacket> source) {
         List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
-        List coveredPerils = perils.getValuesAsObjects();
+        List coveredPerils = (List) perils.getValuesAsObjects(0, true);
         for (ClaimCashflowPacket claim : source) {
             if (coveredPerils.contains(claim.peril())) {
                 filteredClaims.add(claim);

@@ -58,8 +58,8 @@ public class Commission extends Component {
             boolean isFirstPeriod = simulationScope.getIterationScope().getPeriodScope().getCurrentPeriod() == 0;
 
             if (parmApplicableStrategy instanceof ContractApplicableStrategy) {
-                List<IReinsuranceContractMarker> applicableContracts = ((IContractApplicableStrategy) parmApplicableStrategy)
-                        .getApplicableContracts().getValuesAsObjects();
+                List<IReinsuranceContractMarker> applicableContracts = (List<IReinsuranceContractMarker>) ((IContractApplicableStrategy) parmApplicableStrategy)
+                        .getApplicableContracts().getValuesAsObjects(0, true);
                 PacketList<ClaimCashflowPacket> filteredClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
                 filteredClaims.addAll(ClaimFilterUtils.filterClaimsByContract(inClaims, applicableContracts));
 
