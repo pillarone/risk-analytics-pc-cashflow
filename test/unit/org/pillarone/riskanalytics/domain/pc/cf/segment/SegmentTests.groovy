@@ -32,25 +32,39 @@ import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerator
 import org.pillarone.riskanalytics.core.components.PeriodStore
 import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.Discounting
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.DeterministicIndexTableConstraints
+import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
+import org.pillarone.riskanalytics.core.wiring.WiringUtils
+import org.pillarone.riskanalytics.core.wiring.WireCategory
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 class SegmentTests extends GroovyTestCase {
 
+    double EPSILON = 1E-7
+
     DateTime projectionStart = new DateTime(2010, 1, 1, 0, 0, 0, 0)
+    DateTime updateDate1 = new DateTime(2010, 6, 1, 0, 0, 0, 0)
+    DateTime updateDate2 = new DateTime(2010, 10, 1, 0, 0, 0, 0)
+    DateTime updateDate3 = new DateTime(2011, 7, 1, 0, 0, 0, 0)
+
     IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(projectionStart, 5)
     PeriodScope periodScope = iterationScope.periodScope
     PeriodStore periodStore
 
     Segment segment = new Segment()
+    Discounting discounting
 
     ClaimsGenerator motorClaimsGenerator = new ClaimsGenerator(name: 'motor')
     ClaimsGenerator marineClaimsGenerator = new ClaimsGenerator(name: 'marine')
     // is ignored as it is not part of included claims generators
     ClaimsGenerator paClaimsGenerator = new ClaimsGenerator(name: 'personal accident')
 
-    ClaimCashflowPacket marine1000 = getClaimCashflowPacket(null, -1000, -200, projectionStart, projectionStart,
+    ClaimCashflowPacket marine1000 = getClaimCashflowPacket(null, -1000, -200, updateDate1, updateDate1,
             true, periodScope, marineClaimsGenerator)
     ClaimCashflowPacket motor500 = getClaimCashflowPacket(null, -500, -200, projectionStart, projectionStart,
             true, periodScope, motorClaimsGenerator)
@@ -67,9 +81,16 @@ class SegmentTests extends GroovyTestCase {
             true, periodScope, motorReservesGenerator)
     ClaimCashflowPacket paReserve800 = getClaimCashflowPacket(null, -800, -200, projectionStart, projectionStart,
             true, periodScope, paReservesGenerator)
-   // todo(jwa): test cases for reserved values over several periods (seem to be incorrect, see PMO-1730)
+    // todo(jwa): test cases for reserved values over several periods (seem to be incorrect, see PMO-1730)
 
     void setUp() {
+
+        discounting = new Discounting(name: 'discount index', parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.DETERMINISTICINDEXSERIES,
+                [indices: new ConstrainedMultiDimensionalParameter(
+                        [[new DateTime(2010, 1, 1, 0, 0, 0, 0), new DateTime(2011, 1, 1, 0, 0, 0, 0), new DateTime(2012, 3, 1, 0, 0, 0, 0)],
+                                [1.02, 1.04, 1.062]],
+                        DeterministicIndexTableConstraints.COLUMN_TITLES,
+                        ConstraintsFactory.getConstraints(DeterministicIndexTableConstraints.IDENTIFIER))]))
 
         segment.iterationScope = iterationScope
         segment.periodScope = periodScope
@@ -83,11 +104,18 @@ class SegmentTests extends GroovyTestCase {
         segment.parmReservesPortions = new ConstrainedMultiDimensionalParameter(
                 [['marine reserve', 'motor reserve'], [1d, 0.5d]], [Segment.RESERVE, Segment.PORTION],
                 ConstraintsFactory.getConstraints(ReservePortion.IDENTIFIER))
-        segment.parmDiscounting = new ComboBoxTableMultiDimensionalParameter(["index"], ["Discount Index"], IDiscountMarker)
+        ComboBoxTableMultiDimensionalParameter discountComboBox = new ComboBoxTableMultiDimensionalParameter(
+                ["discount index"], ["Discount Index"], IDiscountMarker)
+        discountComboBox.comboBoxValues.put('discount index', discounting)
+        segment.setParmDiscounting(discountComboBox)
+
+        WiringUtils.use(WireCategory) {
+            segment.inFactors = discounting.outFactors
+        }
 
     }
 
-    /** apply weight for motor claim, ignore personal accident claim, net calculation      */
+    /** apply weight for motor claim, ignore personal accident claim, net calculation       */
     void testUsage() {
 
         RiskBands marineRisk = new RiskBands(name: 'marine')
@@ -224,6 +252,35 @@ class SegmentTests extends GroovyTestCase {
         assertEquals "net motor risk segment", segment, segment.outUnderwritingInfoNet[1].segment()
         assertEquals "net motor premium written", 216, segment.outUnderwritingInfoNet[1].premiumWritten
         assertEquals "net motor premium paid", 186, segment.outUnderwritingInfoNet[1].premiumPaid
+    }
+
+    void testDiscountedValues() {
+
+        ClaimCashflowPacket marine1000Two = getClaimCashflowPacket(marine1000.getBaseClaim(), 0d, -500d, updateDate2,
+                updateDate2, false, periodScope, marineClaimsGenerator)
+        ClaimCashflowPacket marine1000Three = getClaimCashflowPacket(marine1000.getBaseClaim(), 0d, -300d, updateDate3,
+                updateDate3, false, periodScope, marineClaimsGenerator)
+
+        segment.inClaims << marine1000 << marine1000Two
+        // segment.inReserves << marineReserve2000 << motorReserve600 << paReserve800
+
+        discounting.start()
+        segment.doCalculation(Segment.PHASE_NET)
+
+        double factorAtUpdateDate1 = Math.pow(1.04 / 1.02, 151d / 365d)
+        double factorAtUpdateDate2 = Math.pow(1.04 / 1.02, 273d / 365d)
+        assertEquals "# discount values", 1, segment.outDiscountedValues.size()
+        assertEquals "gross incremental paid", -200 / factorAtUpdateDate1 - 500 / factorAtUpdateDate2,
+                segment.outDiscountedValues[0].discountedPaidIncrementalGross, EPSILON
+
+        segment.periodScope.prepareNextPeriod()
+        segment.inClaims << marine1000Three
+        discounting.start()
+        segment.doCalculation(Segment.PHASE_NET)
+
+        double factorAtUpdateDate3 = Math.pow(1.062 / 1.04, 181d / 425d) * 1.04 / 1.02
+        assertEquals "# discount values", 1, segment.outDiscountedValues.size()
+        assertEquals "gross incremental paid", -300 / factorAtUpdateDate3, segment.outDiscountedValues[0].discountedPaidIncrementalGross, EPSILON
     }
 
     private ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, double quotaShare) {
