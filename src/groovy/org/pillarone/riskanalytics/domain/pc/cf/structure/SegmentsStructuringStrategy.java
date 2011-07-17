@@ -33,8 +33,9 @@ public class SegmentsStructuringStrategy extends AbstractParameterObject impleme
 
     public List<ClaimCashflowPacket> filterClaims(List<ClaimCashflowPacket> claims) {
         List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
+        List filterCriteria = (List) segments.getValuesAsObjects(0, true);
         for (ClaimCashflowPacket claim : claims) {
-            if (segments.getValuesAsObjects().contains(claim.segment())) {
+            if (filterCriteria.contains(claim.segment())) {
                 filteredClaims.add(claim);
             }
         }
@@ -46,8 +47,9 @@ public class SegmentsStructuringStrategy extends AbstractParameterObject impleme
 
     public List<UnderwritingInfoPacket> filterUnderwritingInfos(List<UnderwritingInfoPacket> underwritingInfos) {
         List<UnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
+        List filterCriteria = (List) segments.getValuesAsObjects().get(0);
         for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
-            if (segments.getValuesAsObjects().contains(underwritingInfo.segment())) {
+            if (filterCriteria.contains(underwritingInfo.segment())) {
                 filteredUnderwritingInfo.add(underwritingInfo);
             }
         }

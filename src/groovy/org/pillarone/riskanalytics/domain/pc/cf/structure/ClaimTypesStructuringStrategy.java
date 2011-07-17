@@ -1,7 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.structure;
 
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
-import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
@@ -31,8 +30,9 @@ public class ClaimTypesStructuringStrategy extends AbstractParameterObject imple
 
     public List<ClaimCashflowPacket> filterClaims(List<ClaimCashflowPacket> claims){
        List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
+        List filteredClaimTypes = claimTypes.getValuesAsObjects(0);
         for (ClaimCashflowPacket claim : claims){
-            if (claimTypes.getValuesAsObjects(0).contains(claim.getBaseClaim().getClaimType().name())){
+            if (filteredClaimTypes.contains(claim.getBaseClaim().getClaimType().name())){
                 filteredClaims.add(claim);
            }
         }

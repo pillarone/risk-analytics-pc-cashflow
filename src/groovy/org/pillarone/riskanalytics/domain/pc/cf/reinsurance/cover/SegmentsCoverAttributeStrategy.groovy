@@ -24,7 +24,7 @@ class SegmentsCoverAttributeStrategy extends AbstractParameterObject implements 
     }
 
     List<ISegmentMarker> getCoveredSegments() {
-        return (List<ISegmentMarker>) segments.getValuesAsObjects();
+        return (List<ISegmentMarker>) segments.getValuesAsObjects(0, true);
     }
 
     public List<ClaimCashflowPacket> coveredClaims(List<ClaimCashflowPacket> source) {

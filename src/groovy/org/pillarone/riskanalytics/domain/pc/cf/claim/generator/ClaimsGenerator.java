@@ -83,7 +83,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
         if (globalGenerateNewClaimsInFirstPeriodOnly
                 && periodScope.isFirstPeriod()
                 || !globalGenerateNewClaimsInFirstPeriodOnly) {
-            List uwFilterCriteria = parmUnderwritingSegments.getValuesAsObjects();
+            List uwFilterCriteria = (List) parmUnderwritingSegments.getValuesAsObjects(0, true);
             // a nominal ultimate is generated, therefore no factors are applied
             List<ClaimRoot> baseClaims = parmClaimsModel.calculateClaims(inUnderwritingInfo, uwFilterCriteria,
                     inEventSeverities, this, periodScope);

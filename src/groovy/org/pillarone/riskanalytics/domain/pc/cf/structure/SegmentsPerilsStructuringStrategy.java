@@ -40,19 +40,19 @@ public class SegmentsPerilsStructuringStrategy extends AbstractParameterObject i
 
     public List<ClaimCashflowPacket> filterClaims(List<ClaimCashflowPacket> claims) {
         List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
+        List segmentsFilterCriteria = ((List) segments.getValuesAsObjects(0, true));
+        List perilsFilterCriteria = ((List) perils.getValuesAsObjects(0, true));
         switch (connection) {
             case AND:
                 for (ClaimCashflowPacket claim : claims) {
-                    if (segments.getValuesAsObjects().contains(claim.segment())
-                            && perils.getValuesAsObjects().contains(claim.peril())) {
+                    if (segmentsFilterCriteria.contains(claim.segment()) && perilsFilterCriteria.contains(claim.peril())) {
                         filteredClaims.add(claim);
                     }
                 }
                 break;
             case OR:
                 for (ClaimCashflowPacket claim : claims) {
-                    if (segments.getValuesAsObjects().contains(claim.segment())
-                            || perils.getValuesAsObjects().contains(claim.peril())) {
+                    if (segmentsFilterCriteria.contains(claim.segment()) || perilsFilterCriteria.contains(claim.peril())) {
                         filteredClaims.add(claim);
                     }
                 }
@@ -67,8 +67,9 @@ public class SegmentsPerilsStructuringStrategy extends AbstractParameterObject i
 
     public List<UnderwritingInfoPacket> filterUnderwritingInfos(List<UnderwritingInfoPacket> underwritingInfos) {
         List<UnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
+        List segmentsFilterCriteria = ((List) segments.getValuesAsObjects(0, true));
         for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
-            if (segments.getValuesAsObjects().contains(underwritingInfo.segment())) {
+            if (segmentsFilterCriteria.contains(underwritingInfo.segment())) {
                 filteredUnderwritingInfo.add(underwritingInfo);
             }
         }

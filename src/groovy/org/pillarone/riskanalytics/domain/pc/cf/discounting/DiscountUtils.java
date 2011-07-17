@@ -28,7 +28,7 @@ public class DiscountUtils {
                                               ComboBoxTableMultiDimensionalParameter criteria, DateTime fixedDate) {
         List<Factors> filteredFactors = new ArrayList<Factors>();
         if (criteria.isEmpty()) return null;
-        List<IDiscountMarker> discounts = criteria.getValuesAsObjects();
+        List<IDiscountMarker> discounts = criteria.getValuesAsObjects(0, true);
         for (FactorsPacket factorPacket : factorsPackets) {
             int row = discounts.indexOf((IDiscountMarker) factorPacket.getOrigin());
             if (row > -1) {
