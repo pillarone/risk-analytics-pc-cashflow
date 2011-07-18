@@ -76,14 +76,6 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         setDate(updateDate);
     }
 
-
-    // todo(sku): safer c'tor required, currently used for ultimate modelling
-    public ClaimCashflowPacket(IClaimRoot baseClaim, IPeriodCounter periodCounter, ExposureInfo exposureInfo) {
-        this(baseClaim);
-        updatePeriod(periodCounter);
-        this.exposureInfo = exposureInfo;
-    }
-
     public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated,
                                double reserves, ExposureInfo exposureInfo, DateTime updateDate, IPeriodCounter periodCounter) {
         this(baseClaim);

@@ -123,7 +123,11 @@ public final class GrossClaimRoot implements IClaimRoot {
             }
         }
         else {
-            ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, periodCounter, claimRoot.getExposureInfo());
+            double factor = manageFactor(factors, getOccurrenceDate(), periodCounter, claimRoot.getOccurrenceDate());
+            double scaledUltimate = claimRoot.getUltimate() * factor;
+            ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, claimRoot.getUltimate(), scaledUltimate,
+                    scaledUltimate, scaledUltimate, scaledUltimate, 0, claimRoot.getExposureInfo(), getOccurrenceDate(),
+                    periodCounter);
             currentPeriodClaims.add(cashflowPacket);
         }
         return currentPeriodClaims;
