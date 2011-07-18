@@ -72,9 +72,9 @@ public class ClaimUtils {
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor, boolean scaleBaseClaim) {
         if (!scaleBaseClaim) return scale(claim, factor);
         if (notTrivialValues(claim)) {
-            double scaledUltimate = claim.ultimate() * factor;
-            double scaledReserves = scaledUltimate - claim.getPaidCumulated() * factor;
+            double scaledReserves = (claim.developedUltimate() - claim.getPaidCumulated()) * factor;
             IClaimRoot scaledBaseClaim = claim.getBaseClaim().withScale(factor);
+            double scaledUltimate = claim.ultimate() * factor;
             ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(scaledBaseClaim, scaledUltimate,
                     claim.getPaidIncremental() * factor, claim.getPaidCumulated() * factor,
                     claim.getReportedIncremental() * factor, claim.getReportedCumulated() * factor, scaledReserves,
