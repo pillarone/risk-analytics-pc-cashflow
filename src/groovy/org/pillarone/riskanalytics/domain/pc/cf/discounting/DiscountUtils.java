@@ -5,10 +5,14 @@ import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimen
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -42,6 +46,46 @@ public class DiscountUtils {
     public static double getDiscountFactor(List<Factors> factors, DateTime payoutDate, IPeriodCounter periodCounter) {
         Double productFactor = IndexUtils.aggregateFactor(factors, payoutDate, periodCounter, periodCounter.startOfFirstPeriod());
         return 1d / productFactor;
+    }
+
+    public static double getSumOfDiscountedIncrementalPaids(List<ClaimCashflowPacket> claims, List<Factors> factors, IPeriodCounter periodCounter) {
+        double discountedIncrementalPaid = 0d;
+        for (ClaimCashflowPacket claim : claims) {
+            DateTime date = claim.getUpdateDate();
+            double discountFactor = getDiscountFactor(factors, date, periodCounter);
+            discountedIncrementalPaid += claim.getPaidIncremental() * discountFactor;
+        }
+        return discountedIncrementalPaid;
+    }
+
+    public static double getDiscountedReservedAtEndOfPeriod(List<ClaimCashflowPacket> claims, List<Factors> factors, IPeriodCounter periodCounter) {
+        Map<IClaimRoot, ClaimCashflowPacket> latestCashflowPerBaseClaim = new HashMap<IClaimRoot, ClaimCashflowPacket>();
+        for (ClaimCashflowPacket claim : claims) {
+            ClaimCashflowPacket latestCashflow = latestCashflowPerBaseClaim.get(claim.getBaseClaim());
+            if (latestCashflow == null || claim.getUpdateDate().isAfter(latestCashflow.getUpdateDate())) {
+                latestCashflow = claim;
+                latestCashflowPerBaseClaim.put(claim.getBaseClaim(), latestCashflow);
+            }
+        }
+        double discountedReserved = 0d;
+        for (ClaimCashflowPacket claim : latestCashflowPerBaseClaim.values()) {
+            DateTime date = claim.getUpdateDate();
+            double discountFactor = getDiscountFactor(factors, date, periodCounter);
+            discountedReserved += claim.reserved() * discountFactor;
+        }
+        return discountedReserved;
+    }
+
+    public static DiscountedValuesPacket getDiscountedValuesPacket(double paidGross, double paidCeded, double paidNet,
+                                                                   double reservedGross, double reservedCeded, double reservedNet ){
+        DiscountedValuesPacket discountedValues = new DiscountedValuesPacket();
+        discountedValues.setDiscountedPaidIncrementalGross(paidGross);
+        discountedValues.setDiscountedPaidIncrementalCeded(paidCeded);
+        discountedValues.setDiscountedPaidIncrementalNet(paidNet);
+        discountedValues.setDiscountedReservedGross(reservedGross);
+        discountedValues.setDiscountedReservedCeded(reservedCeded);
+        discountedValues.setDiscountedReservedNet(reservedNet);
+        return discountedValues;
     }
 
 

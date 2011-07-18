@@ -103,7 +103,7 @@ class GIRAModel extends StochasticModel {
         }
         else {
             segments.inClaims = claimsGenerators.outClaims
-            // todo(jwa): change inReserves to inClaims as soon as PMO-???? is solved
+            // todo(jwa): change inReserves to inClaims as soon as PMO-1733 is solved
             segments.inReserves = reservesGenerators.outReserves
             segments.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
             segments.inFactors = discountings.outFactors
