@@ -4,10 +4,8 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractMultiDimensiona
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IPremiumAllocationStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.PremiumBase;
 
 import java.util.HashMap;
@@ -26,7 +24,7 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
     protected double premium;
 
     /** Strategy to allocate the ceded premium to the different lines of business  */
-    protected IPremiumAllocationStrategy premiumAllocation;
+    protected IRIPremiumSplitStrategy riPremiumSplit;
     /** As a percentage of premium */
     protected AbstractMultiDimensionalParameter reinstatementPremiums;
     protected double attachmentPoint;
@@ -39,7 +37,7 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
         Map params = new HashMap();
         params.put(PREMIUM_BASE, premiumBase);
         params.put(PREMIUM, premium);
-        params.put(PREMIUM_ALLOCATION, premiumAllocation);
+        params.put(PREMIUM_ALLOCATION, riPremiumSplit);
         params.put(REINSTATEMENT_PREMIUMS, reinstatementPremiums);
         params.put(ATTACHMENT_POINT, attachmentPoint);
         params.put(LIMIT, limit);
@@ -69,7 +67,7 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
 
     public static final String PREMIUM_BASE = "premiumBase";
     public static final String PREMIUM = "premium";
-    public static final String PREMIUM_ALLOCATION = "premiumAllocation";
+    public static final String PREMIUM_ALLOCATION = "riPremiumSplit";
     public static final String REINSTATEMENT_PREMIUMS = "reinstatementPremiums";
     public static final String ATTACHMENT_POINT = "attachmentPoint";
     public static final String LIMIT = "limit";

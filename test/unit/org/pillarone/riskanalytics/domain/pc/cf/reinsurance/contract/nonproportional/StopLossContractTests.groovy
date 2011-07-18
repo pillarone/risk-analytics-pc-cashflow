@@ -54,7 +54,7 @@ class StopLossContractTests extends GroovyTestCase {
                     'attachmentPoint': attachmentPoint,
                     'limit': limit, 'premiumBase': PremiumBase.ABSOLUTE,
                     'premium': premium,
-                    'premiumAllocation': PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:])]),
+                    'riPremiumSplit': PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:])]),
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0])
     }

@@ -51,7 +51,7 @@ class WXLContractTests extends GroovyTestCase {
                     'aggregateDeductible': aggregateDeductible, 'attachmentPoint': attachmentPoint,
                     'limit': limit, 'aggregateLimit': aggregateLimit, 'premiumBase': PremiumBase.ABSOLUTE,
                     'premium': premium,
-                    'premiumAllocation': PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
+                    'riPremiumSplit': PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
                     'reinstatementPremiums': new TableMultiDimensionalParameter(reinstatementPremiumFactors, ['Reinstatement Premium'])]),
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0])

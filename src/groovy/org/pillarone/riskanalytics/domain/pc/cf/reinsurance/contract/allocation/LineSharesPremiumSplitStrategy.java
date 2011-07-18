@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
  */
-public class LineSharesPremiumAllocationStrategy extends AbstractPremiumAllocation {
+public class LineSharesPremiumSplitStrategy extends AbstractPremiumSplit {
 
     private static final String LINES = "Segment";
     private static final String SHARES = "Share";

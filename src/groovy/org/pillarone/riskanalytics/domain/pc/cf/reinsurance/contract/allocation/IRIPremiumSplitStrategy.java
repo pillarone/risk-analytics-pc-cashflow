@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
  */
-public interface IPremiumAllocationStrategy extends IParameterObject {
+public interface IRIPremiumSplitStrategy extends IParameterObject {
     void initSegmentShares(List<ClaimCashflowPacket> cededClaims, List<UnderwritingInfoPacket> grossUnderwritingInfos);
     double getShare(UnderwritingInfoPacket grossUnderwritingInfo);
 }

@@ -13,7 +13,7 @@ import java.util.Map;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 // todo(sku): correct implementation for written and paid https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1579
-abstract public class AbstractPremiumAllocation extends AbstractParameterObject implements IPremiumAllocationStrategy {
+abstract public class AbstractPremiumSplit extends AbstractParameterObject implements IRIPremiumSplitStrategy {
 
     protected Map<UnderwritingInfoPacket, Double> cededPremiumSharePerGrossUnderwritingInfo = new HashMap<UnderwritingInfoPacket, Double>();
 

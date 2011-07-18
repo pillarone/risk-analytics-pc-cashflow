@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
  */
-public class PremiumSharesPremiumAllocationStrategy extends AbstractPremiumAllocation {
+public class PremiumSharesPremiumSplitStrategy extends AbstractPremiumSplit {
 
     public PremiumAllocationType getType() {
         return PremiumAllocationType.PREMIUM_SHARES;

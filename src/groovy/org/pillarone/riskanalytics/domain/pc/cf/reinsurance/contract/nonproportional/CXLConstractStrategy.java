@@ -20,6 +20,6 @@ public class CXLConstractStrategy extends XLConstractStrategy implements IReinsu
         double cededPremiumFixed = getCededPremiumFixed(underwritingInfoPackets);
         List<Double> reinstatementPremiumFactors = (List<Double>) reinstatementPremiums.getValues().get(0);
         return new CXLContract(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit,
-                reinstatementPremiumFactors, premiumAllocation);
+                reinstatementPremiumFactors, riPremiumSplit);
     }
 }
