@@ -22,7 +22,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.discounting.NetPresentValuesPack
 class Segments extends DynamicMultiPhaseComposedComponent {
 
     PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
-    // todo(jwa): remove as soon as PMO-???? is solved
+    // todo(jwa): remove as soon as PMO-1733 is solved
     PacketList<ClaimCashflowPacket> inReserves = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)

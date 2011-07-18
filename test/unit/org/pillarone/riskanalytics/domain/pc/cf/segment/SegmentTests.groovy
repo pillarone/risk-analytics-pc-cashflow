@@ -5,23 +5,17 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion
 import org.pillarone.riskanalytics.domain.utils.constraint.UnderwritingPortion
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacketTests
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils
 import org.pillarone.riskanalytics.core.util.TestProbe
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.joda.time.DateTime
-import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
-import org.pillarone.riskanalytics.core.simulation.TestPeriodCounterUtilities
-import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
 import org.pillarone.riskanalytics.core.components.IComponentMarker
@@ -35,8 +29,6 @@ import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.Discounting
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.DeterministicIndexTableConstraints
-import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.core.wiring.WiringUtils
 import org.pillarone.riskanalytics.core.wiring.WireCategory
 
@@ -51,8 +43,9 @@ class SegmentTests extends GroovyTestCase {
     DateTime updateDate1 = new DateTime(2010, 6, 1, 0, 0, 0, 0)
     DateTime updateDate2 = new DateTime(2010, 10, 1, 0, 0, 0, 0)
     DateTime updateDate3 = new DateTime(2011, 7, 1, 0, 0, 0, 0)
+    DateTime updateDate4 = new DateTime(2011, 8, 1, 0, 0, 0, 0)
 
-    IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(projectionStart, 5)
+    IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(projectionStart, 2)
     PeriodScope periodScope = iterationScope.periodScope
     PeriodStore periodStore
 
@@ -84,6 +77,10 @@ class SegmentTests extends GroovyTestCase {
     // todo(jwa): test cases for reserved values over several periods (seem to be incorrect, see PMO-1730)
 
     void setUp() {
+        ConstraintsFactory.registerConstraint(new DeterministicIndexTableConstraints())
+        ConstraintsFactory.registerConstraint(new PerilPortion())
+        ConstraintsFactory.registerConstraint(new ReservePortion())
+        ConstraintsFactory.registerConstraint(new UnderwritingPortion())
 
         discounting = new Discounting(name: 'discount index', parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.DETERMINISTICINDEXSERIES,
                 [indices: new ConstrainedMultiDimensionalParameter(
@@ -93,8 +90,8 @@ class SegmentTests extends GroovyTestCase {
                         ConstraintsFactory.getConstraints(DeterministicIndexTableConstraints.IDENTIFIER))]))
 
         segment.iterationScope = iterationScope
-        segment.periodScope = periodScope
-        segment.periodStore = new PeriodStore(segment.periodScope)
+        iterationScope.numberOfPeriods = 2
+        segment.periodStore = new PeriodStore(segment.iterationScope.periodScope)
         segment.parmClaimsPortions = new ConstrainedMultiDimensionalParameter(
                 [['marine', 'motor'], [1d, 0.5d]], [Segment.PERIL, Segment.PORTION],
                 ConstraintsFactory.getConstraints(PerilPortion.IDENTIFIER))
@@ -115,7 +112,7 @@ class SegmentTests extends GroovyTestCase {
 
     }
 
-    /** apply weight for motor claim, ignore personal accident claim, net calculation       */
+    /** apply weight for motor claim, ignore personal accident claim, net calculation        */
     void testUsage() {
 
         RiskBands marineRisk = new RiskBands(name: 'marine')
@@ -256,12 +253,14 @@ class SegmentTests extends GroovyTestCase {
 
     void testDiscountedValues() {
 
-        ClaimCashflowPacket marine1000Two = getClaimCashflowPacket(marine1000.getBaseClaim(), 0d, -500d, updateDate2,
+        ClaimCashflowPacket marine1000Two = getClaimCashflowPacket(marine1000.getBaseClaim(), 0d, -500d, updateDate1,
                 updateDate2, false, periodScope, marineClaimsGenerator)
-        ClaimCashflowPacket marine1000Three = getClaimCashflowPacket(marine1000.getBaseClaim(), 0d, -300d, updateDate3,
+        ClaimCashflowPacket marine1000Three = getClaimCashflowPacket(marine1000.getBaseClaim(), 0d, -300d, updateDate1,
                 updateDate3, false, periodScope, marineClaimsGenerator)
+        ClaimCashflowPacket motor500Two = getClaimCashflowPacket(motor500.getBaseClaim(), 0d, -300, projectionStart,
+                updateDate4, false, periodScope, motorClaimsGenerator)
 
-        segment.inClaims << marine1000 << marine1000Two
+        segment.inClaims << marine1000 << marine1000Two << motor500
         // segment.inReserves << marineReserve2000 << motorReserve600 << paReserve800
 
         discounting.start()
@@ -269,18 +268,26 @@ class SegmentTests extends GroovyTestCase {
 
         double factorAtUpdateDate1 = Math.pow(1.04 / 1.02, 151d / 365d)
         double factorAtUpdateDate2 = Math.pow(1.04 / 1.02, 273d / 365d)
+        double sumOfDiscountedIncrements0 = -200 / factorAtUpdateDate1 - 500 / factorAtUpdateDate2 - 100
         assertEquals "# discount values", 1, segment.outDiscountedValues.size()
-        assertEquals "gross incremental paid", -200 / factorAtUpdateDate1 - 500 / factorAtUpdateDate2,
+        assertEquals "gross incremental paid", sumOfDiscountedIncrements0,
                 segment.outDiscountedValues[0].discountedPaidIncrementalGross, EPSILON
 
-        segment.periodScope.prepareNextPeriod()
-        segment.inClaims << marine1000Three
+        segment.iterationScope.periodScope.prepareNextPeriod()
+        segment.inClaims << marine1000Three << motor500Two
         discounting.start()
         segment.doCalculation(Segment.PHASE_NET)
 
         double factorAtUpdateDate3 = Math.pow(1.062 / 1.04, 181d / 425d) * 1.04 / 1.02
+        double factorAtUpdateDate4 = Math.pow(1.062 / 1.04, 212d / 425d) * 1.04 / 1.02
+        double sumOfDiscountedIncrements1 = -300 / factorAtUpdateDate3 - 150 / factorAtUpdateDate4
         assertEquals "# discount values", 1, segment.outDiscountedValues.size()
-        assertEquals "gross incremental paid", -300 / factorAtUpdateDate3, segment.outDiscountedValues[0].discountedPaidIncrementalGross, EPSILON
+        assertEquals "gross incremental paid", sumOfDiscountedIncrements1,
+                segment.outDiscountedValues[0].discountedPaidIncrementalGross, EPSILON
+        assertEquals "# net present values",1, segment.outNetPresentValues.size()
+        assertEquals "gross net present value paids", sumOfDiscountedIncrements0+ sumOfDiscountedIncrements1,
+                segment.outNetPresentValues[0].netPresentValueGross, EPSILON
+        assertEquals " period", 0, segment.outNetPresentValues[0].period
     }
 
     private ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, double quotaShare) {
