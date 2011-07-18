@@ -73,6 +73,8 @@ class ReinsuranceContracts extends DynamicComposedComponent {
         else {
             wireTrivialContractsOnly()
         }
+        println contractsBasedOnContracts
+        println contractsBasedOnCompanies
     }
 
     private void wireContractsBasedOnGross() {
