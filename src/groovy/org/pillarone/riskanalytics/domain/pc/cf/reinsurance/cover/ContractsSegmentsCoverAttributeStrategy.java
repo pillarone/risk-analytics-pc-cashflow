@@ -1,41 +1,45 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover;
 
-import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.utils.constant.LogicArguments;
-import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class PerilsCoverAttributeStrategy extends AbstractParameterObject implements ICoverAttributeStrategy {
+public class ContractsSegmentsCoverAttributeStrategy extends AbstractContractsCoverAttributeStrategy
+        implements ICoverAttributeStrategy, IContractCover {
 
-    private ComboBoxTableMultiDimensionalParameter perils;
+    private ComboBoxTableMultiDimensionalParameter segments;
 
     public IParameterObjectClassifier getType() {
-        return CoverAttributeStrategyType.PERILS;
+        return CoverAttributeStrategyType.CONTRACTSSEGMENTS;
     }
 
     public Map getParameters() {
-        Map<String, ComboBoxTableMultiDimensionalParameter> parameters = new HashMap<String, ComboBoxTableMultiDimensionalParameter>(1);
-        parameters.put("perils", perils);
+        Map<String, Object> parameters = new HashMap<String, Object>(2);
+        parameters.put("contracts", contracts);
+        parameters.put("segments", segments);
         return parameters;
     }
 
-    List<IPerilMarker> getCoveredPerils() {
-        return (List<IPerilMarker>) perils.getValuesAsObjects();
+    List<ISegmentMarker> getCoveredSegments() {
+        return (List<ISegmentMarker>) segments.getValuesAsObjects(0, false);
     }
 
     public List<ClaimCashflowPacket> coveredClaims(List<ClaimCashflowPacket> source) {
         List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
-        List coveredPerils = (List) perils.getValuesAsObjects(0, true);
+        List coveredSegments = getCoveredSegments();
+        List coveredContracts = getCoveredReinsuranceContracts();
         for (ClaimCashflowPacket claim : source) {
-            if (coveredPerils.contains(claim.peril())) {
+            if (coveredSegments.contains(claim.segment()) && coveredContracts.contains(claim.reinsuranceContract())) {
                 filteredClaims.add(claim);
             }
         }

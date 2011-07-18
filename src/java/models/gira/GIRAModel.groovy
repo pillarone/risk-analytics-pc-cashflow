@@ -95,9 +95,7 @@ class GIRAModel extends StochasticModel {
             if (structures.subComponentCount() > 0) {
                 structures.inClaimsGross = claimsGenerators.outClaims
                 structures.inClaimsCeded = reinsuranceContracts.outClaimsCeded
-                structures.inClaimsNet = reinsuranceContracts.outClaimsNet
                 structures.inUnderwritingInfoGross = underwritingSegments.outUnderwritingInfo
-                structures.inUnderwritingInfoNet = reinsuranceContracts.outUnderwritingInfoNet
                 structures.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
             }
         }

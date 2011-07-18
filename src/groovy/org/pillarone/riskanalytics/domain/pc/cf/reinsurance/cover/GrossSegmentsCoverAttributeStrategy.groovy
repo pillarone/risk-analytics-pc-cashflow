@@ -10,11 +10,11 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class SegmentsCoverAttributeStrategy extends AbstractParameterObject implements ICoverAttributeStrategy {
+class GrossSegmentsCoverAttributeStrategy extends AbstractParameterObject implements ICoverAttributeStrategy {
     private ComboBoxTableMultiDimensionalParameter segments;
 
     public IParameterObjectClassifier getType() {
-        return CoverAttributeStrategyType.SEGMENTS;
+        return CoverAttributeStrategyType.GROSSSEGMENTS;
     }
 
     public Map getParameters() {

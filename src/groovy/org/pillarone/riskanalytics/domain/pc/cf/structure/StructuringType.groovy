@@ -16,7 +16,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
  */
 class StructuringType extends AbstractParameterObjectClassifier {
 
-    public static final StructuringType SEGMENTS = new StructuringType("segments", "SEGMENTS",
+    public static final StructuringType SEGMENTS = new StructuringType("segments", "GROSSSEGMENTS",
             [segments: new ComboBoxTableMultiDimensionalParameter([], [SegmentsStructuringStrategy.SEGMENT], ISegmentMarker)])
     public static final StructuringType SEGMENTSPERILS = new StructuringType("segments, perils", "SEGMENTSPERILS",
             [segments: new ComboBoxTableMultiDimensionalParameter([], [SegmentsPerilsStructuringStrategy.SEGMENT], ISegmentMarker),

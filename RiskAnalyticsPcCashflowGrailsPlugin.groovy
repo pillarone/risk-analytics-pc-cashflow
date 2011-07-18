@@ -20,6 +20,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.ReservesIndexSelectionT
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.ClaimsGeneratorScalingValidator
 import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.validation.RiskAllocationValidator
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimTypeSelectionTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ContractBasedOn
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -59,6 +60,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
 
     def doWithApplicationContext = { applicationContext ->
         ConstraintsFactory.registerConstraint(new AnnualIndexTableConstraints())
+        ConstraintsFactory.registerConstraint(new ContractBasedOn())
         ConstraintsFactory.registerConstraint(new LinkRatioIndexTableConstraints())
         ConstraintsFactory.registerConstraint(new DeterministicIndexTableConstraints())
         ConstraintsFactory.registerConstraint(new PolicyIndexSelectionTableConstraints())

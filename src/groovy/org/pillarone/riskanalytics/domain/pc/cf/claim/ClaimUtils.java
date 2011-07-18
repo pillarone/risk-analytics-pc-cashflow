@@ -48,6 +48,11 @@ public class ClaimUtils {
         return summedClaims;
     }
 
+    /**
+     * @param claim
+     * @param factor
+     * @return new ClaimCashflowPacket()
+     */
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor) {
         if (notTrivialValues(claim)) {
             double scaledUltimate = claim.ultimate() * factor;
