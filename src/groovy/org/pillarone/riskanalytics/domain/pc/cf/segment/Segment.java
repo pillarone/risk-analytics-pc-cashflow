@@ -88,7 +88,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             getSegmentClaims();
             getSegmentReserves();
             getSegmentUnderwritingInfo();
-            if (this.isReceiverWired(inFactors)) {
+            if (this.isReceiverWired(inFactors) && inFactors.size() > 0) {
                 filteredFactors = DiscountUtils.filterFactors(inFactors, parmDiscounting, periodCounter.startOfFirstPeriod());
                 getDiscountedGrossValues(periodCounter);
             }
@@ -98,7 +98,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             calculateNetClaims();
             filterCededUnderwritingInfo();
             calculateNetUnderwritingInfo();
-            if (this.isReceiverWired(inFactors)) {
+            if (filteredFactors != null) {
                 getDiscountedNetValuesAndFillOutChannels(periodCounter);
             }
         }
