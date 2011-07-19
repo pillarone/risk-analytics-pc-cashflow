@@ -141,10 +141,10 @@ class PayoutReportingCombinedPatternTests extends GroovyTestCase {
         assertEquals "#patterns", 2, patternPackets.size()
         assertEquals "#claims", 1, claims.size()
         assertEquals "claims ultimate", -123d, claims[0].ultimate()
-        assertEquals "claims paid", -12.3, claims[0].paidIncremental
-        assertEquals "claims reported", -49.2, claims[0].reportedIncremental
-        assertEquals "claims reserves", -110.7, claims[0].reserved()
-        assertEquals "claims outstanding", -36.9, claims[0].outstanding(), EPSILON
-        assertEquals "claims IBNR", -73.8, claims[0].ibnr()
+        assertEquals "claims paid", -12.3, claims[0].paidIncrementalIndexed
+        assertEquals "claims reported", -49.2, claims[0].reportedIncrementalIndexed
+        assertEquals "claims reservesIndexed", -110.7, claims[0].reservedIndexed()
+        assertEquals "claims outstandingIndexed", -36.9, claims[0].outstandingIndexed(), EPSILON
+        assertEquals "claims IBNR_INDEXED", -73.8, claims[0].ibnrIndexed()
     }
 }

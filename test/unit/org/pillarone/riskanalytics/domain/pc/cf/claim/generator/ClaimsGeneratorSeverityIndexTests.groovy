@@ -99,15 +99,15 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         ClaimsGenerator claimsGenerator = getGenerator(null, IndexMode.CONTINUOUS, BaseDateMode.DATE_OF_LOSS)
 
         claimsGenerator.doCalculation()
-        assertTrue "P0, index effect on paid claim", -50 == claimsGenerator.outClaims[0].paidIncremental
+        assertTrue "P0, index effect on paid claim", -50 == claimsGenerator.outClaims[0].paidIncrementalIndexed
 
         doCalculationNextPeriod(claimsGenerator)
-        println claimsGenerator.outClaims[0].paidIncremental
-        assertEquals "P1, index effect on paid claim", 1.0193266424, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+        println claimsGenerator.outClaims[0].paidIncrementalIndexed
+        assertEquals "P1, index effect on paid claim", 1.0193266424, claimsGenerator.outClaims[0].paidIncrementalIndexed / -30, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        println claimsGenerator.outClaims[0].paidIncremental
-        assertEquals "P2, index effect on paid claim", 1.0382897717, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+        println claimsGenerator.outClaims[0].paidIncrementalIndexed
+        assertEquals "P2, index effect on paid claim", 1.0382897717, claimsGenerator.outClaims[0].paidIncrementalIndexed / -20, EPSILON
     }
 
     /** IndexMode.STEPWISE_PREVIOUS, BaseDateMode.DATE_OF_LOSS */
@@ -115,13 +115,13 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         ClaimsGenerator claimsGenerator = getGenerator(null, IndexMode.STEPWISE_PREVIOUS, BaseDateMode.DATE_OF_LOSS)
 
         claimsGenerator.doCalculation()
-        assertTrue "P0, index effect on paid claim", -50 == claimsGenerator.outClaims[0].paidIncremental
+        assertTrue "P0, index effect on paid claim", -50 == claimsGenerator.outClaims[0].paidIncrementalIndexed
 
         doCalculationNextPeriod(claimsGenerator)
-        assertEquals "P1, index effect on paid claim", 1.0291262136, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+        assertEquals "P1, index effect on paid claim", 1.0291262136, claimsGenerator.outClaims[0].paidIncrementalIndexed / -30, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        assertEquals "P2, index effect on paid claim", 1.0388349515, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+        assertEquals "P2, index effect on paid claim", 1.0388349515, claimsGenerator.outClaims[0].paidIncrementalIndexed / -20, EPSILON
     }
 
     /** IndexMode.STEPWISE_NEXT, BaseDateMode.DATE_OF_LOSS */
@@ -129,13 +129,13 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         ClaimsGenerator claimsGenerator = getGenerator(null, IndexMode.STEPWISE_NEXT, BaseDateMode.DATE_OF_LOSS)
 
         claimsGenerator.doCalculation()
-        assertTrue "P0, index effect on paid claim", -50 == claimsGenerator.outClaims[0].paidIncremental
+        assertTrue "P0, index effect on paid claim", -50 == claimsGenerator.outClaims[0].paidIncrementalIndexed
 
         doCalculationNextPeriod(claimsGenerator)
-        assertEquals "P1, index effect on paid claim", 1.0094339623, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+        assertEquals "P1, index effect on paid claim", 1.0094339623, claimsGenerator.outClaims[0].paidIncrementalIndexed / -30, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        assertEquals "P2, index effect on paid claim", 1.0377358491, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+        assertEquals "P2, index effect on paid claim", 1.0377358491, claimsGenerator.outClaims[0].paidIncrementalIndexed / -20, EPSILON
     }
 
     /** IndexMode.CONTINUOUS, BaseDateMode.START_OF_PROJECTION */
@@ -143,15 +143,15 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         ClaimsGenerator claimsGenerator = getGenerator(null, date20100101, IndexMode.CONTINUOUS, BaseDateMode.START_OF_PROJECTION)
 
         claimsGenerator.doCalculation()
-        assertEquals "P0, index effect on paid claim", 1.02, claimsGenerator.outClaims[0].paidIncremental / -50, EPSILON
+        assertEquals "P0, index effect on paid claim", 1.02, claimsGenerator.outClaims[0].paidIncrementalIndexed / -50, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        println claimsGenerator.outClaims[0].paidIncremental
-        assertEquals "P1, index effect on paid claim", 1.0447690628, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+        println claimsGenerator.outClaims[0].paidIncrementalIndexed
+        assertEquals "P1, index effect on paid claim", 1.0447690628, claimsGenerator.outClaims[0].paidIncrementalIndexed / -30, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        println claimsGenerator.outClaims[0].paidIncremental
-        assertEquals "P2, index effect on paid claim", 1.0649609409, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+        println claimsGenerator.outClaims[0].paidIncrementalIndexed
+        assertEquals "P2, index effect on paid claim", 1.0649609409, claimsGenerator.outClaims[0].paidIncrementalIndexed / -20, EPSILON
     }
 
     /** IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION */
@@ -159,13 +159,13 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         ClaimsGenerator claimsGenerator = getGenerator(null, date20100101, IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION)
 
         claimsGenerator.doCalculation()
-        assertEquals "P0, index effect on paid claim", 1.02, claimsGenerator.outClaims[0].paidIncremental / -50, EPSILON
+        assertEquals "P0, index effect on paid claim", 1.02, claimsGenerator.outClaims[0].paidIncrementalIndexed / -50, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        assertEquals "P1, index effect on paid claim", 1.03, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+        assertEquals "P1, index effect on paid claim", 1.03, claimsGenerator.outClaims[0].paidIncrementalIndexed / -30, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        assertEquals "P2, index effect on paid claim", 1.06, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+        assertEquals "P2, index effect on paid claim", 1.06, claimsGenerator.outClaims[0].paidIncrementalIndexed / -20, EPSILON
     }
 
     /** IndexMode.STEPWISE_NEXT, BaseDateMode.START_OF_PROJECTION */
@@ -174,13 +174,13 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
 
         claimsGenerator.doCalculation()
         // not 1.03 as the payout date is exactly at an index date
-        assertEquals "P0, index effect on paid claim", 1.02, claimsGenerator.outClaims[0].paidIncremental / -50, EPSILON
+        assertEquals "P0, index effect on paid claim", 1.02, claimsGenerator.outClaims[0].paidIncrementalIndexed / -50, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        assertEquals "P1, index effect on paid claim", 1.06, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+        assertEquals "P1, index effect on paid claim", 1.06, claimsGenerator.outClaims[0].paidIncrementalIndexed / -30, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        assertEquals "P2, index effect on paid claim", 1.07, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+        assertEquals "P2, index effect on paid claim", 1.07, claimsGenerator.outClaims[0].paidIncrementalIndexed / -20, EPSILON
     }
 
     /** IndexMode.CONTINUOUS, BaseDateMode.FIXED_DATE */
@@ -188,15 +188,15 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         ClaimsGenerator claimsGenerator = getGenerator(date20100701, IndexMode.CONTINUOUS, BaseDateMode.FIXED_DATE)
 
         claimsGenerator.doCalculation()
-        assertEquals "P0, index effect on paid claim", 1.0242833949, claimsGenerator.outClaims[0].paidIncremental / -50, EPSILON
+        assertEquals "P0, index effect on paid claim", 1.0242833949, claimsGenerator.outClaims[0].paidIncrementalIndexed / -50, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        println claimsGenerator.outClaims[0].paidIncremental
-        assertEquals "P1, index effect on paid claim", 1.0440793538, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+        println claimsGenerator.outClaims[0].paidIncrementalIndexed
+        assertEquals "P1, index effect on paid claim", 1.0440793538, claimsGenerator.outClaims[0].paidIncrementalIndexed / -30, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        println claimsGenerator.outClaims[0].paidIncremental
-        assertEquals "P2, index effect on paid claim", 1.0635029722, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+        println claimsGenerator.outClaims[0].paidIncrementalIndexed
+        assertEquals "P2, index effect on paid claim", 1.0635029722, claimsGenerator.outClaims[0].paidIncrementalIndexed / -20, EPSILON
     }
 
     /** IndexMode.STEPWISE_PREVIOUS, BaseDateMode.FIXED_DATE */
@@ -204,13 +204,13 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         ClaimsGenerator claimsGenerator = getGenerator(date20100701, IndexMode.STEPWISE_PREVIOUS, BaseDateMode.FIXED_DATE)
 
         claimsGenerator.doCalculation()
-        assertEquals "P0, index effect on paid claim", 1.0098039216, claimsGenerator.outClaims[0].paidIncremental / -50, EPSILON
+        assertEquals "P0, index effect on paid claim", 1.0098039216, claimsGenerator.outClaims[0].paidIncrementalIndexed / -50, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        assertEquals "P1, index effect on paid claim", 1.0392156863, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+        assertEquals "P1, index effect on paid claim", 1.0392156863, claimsGenerator.outClaims[0].paidIncrementalIndexed / -30, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        assertEquals "P2, index effect on paid claim", 1.0490196078, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+        assertEquals "P2, index effect on paid claim", 1.0490196078, claimsGenerator.outClaims[0].paidIncrementalIndexed / -20, EPSILON
     }
 
     /** IndexMode.STEPWISE_NEXT, BaseDateMode.FIXED_DATE */
@@ -218,13 +218,13 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         ClaimsGenerator claimsGenerator = getGenerator(date20100701, IndexMode.STEPWISE_NEXT, BaseDateMode.FIXED_DATE)
 
         claimsGenerator.doCalculation()
-        assertEquals "P0, index effect on paid claim", 1.0392156863, claimsGenerator.outClaims[0].paidIncremental / -50, EPSILON
+        assertEquals "P0, index effect on paid claim", 1.0392156863, claimsGenerator.outClaims[0].paidIncrementalIndexed / -50, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        assertEquals "P1, index effect on paid claim", 1.0490196078, claimsGenerator.outClaims[0].paidIncremental / -30, EPSILON
+        assertEquals "P1, index effect on paid claim", 1.0490196078, claimsGenerator.outClaims[0].paidIncrementalIndexed / -30, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        assertEquals "P2, index effect on paid claim", 1.0784313725, claimsGenerator.outClaims[0].paidIncremental / -20, EPSILON
+        assertEquals "P2, index effect on paid claim", 1.0784313725, claimsGenerator.outClaims[0].paidIncrementalIndexed / -20, EPSILON
     }
 
 

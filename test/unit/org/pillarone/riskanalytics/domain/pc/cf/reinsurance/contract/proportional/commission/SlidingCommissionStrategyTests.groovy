@@ -125,65 +125,65 @@ class SlidingCommissionStrategyTests extends GroovyTestCase {
      *
      */
     void testPercentageSelectionCase0a() {
-        claims[0].paidIncremental = 1e-6
+        claims[0].paidIncrementalIndexed = 1e-6
         commissionStrategy.calculator.calculateCommission claims, uwInfo, false, false
-        double lossRatio = claims.paidIncremental.sum() / -uwInfo.premiumPaid.sum() * 1E2
+        double lossRatio = claims.paidIncrementalIndexed.sum() / -uwInfo.premiumPaid.sum() * 1E2
         assertEquals '# outUnderwritingInfo packets', 1, uwInfo.size()
         assertEquals "Underwriting Commission (%) resulting from Loss Ratio of ${lossRatio}%", 7d, uwInfo[0].commission, EPSILON
     }
 
     void testPercentageSelectionCase0b() {
-        claims[0].paidIncremental = 0d
+        claims[0].paidIncrementalIndexed = 0d
         commissionStrategy.calculator.calculateCommission claims, uwInfo, false, false
-        double lossRatio = claims.paidIncremental.sum() / -uwInfo.premiumPaid.sum() * 1E2
+        double lossRatio = claims.paidIncrementalIndexed.sum() / -uwInfo.premiumPaid.sum() * 1E2
         assertEquals '# outUnderwritingInfo packets', 1, uwInfo.size()
         assertEquals "Underwriting Commission (%) resulting from Loss Ratio of ${lossRatio}%", 7d, uwInfo[0].commission, EPSILON
     }
 
     void testPercentageSelectionCase0c() {
-        claims[0].paidIncremental = 10d - 1e-6
+        claims[0].paidIncrementalIndexed = 10d - 1e-6
         commissionStrategy.calculator.calculateCommission claims, uwInfo, false, false
-        double lossRatio = claims.paidIncremental.sum() / -uwInfo.premiumPaid.sum() * 1E2
+        double lossRatio = claims.paidIncrementalIndexed.sum() / -uwInfo.premiumPaid.sum() * 1E2
         assertEquals '# outUnderwritingInfo packets', 1, uwInfo.size()
         assertEquals "Underwriting Commission (%) resulting from Loss Ratio of ${lossRatio}%", 7d, uwInfo[0].commission, EPSILON
     }
 
     void testPercentageSelectionCase1() {
-        claims[0].paidIncremental = 10d
+        claims[0].paidIncrementalIndexed = 10d
         commissionStrategy.calculator.calculateCommission claims, uwInfo, false, false
-        double lossRatio = claims.paidIncremental.sum() / -uwInfo.premiumPaid.sum() * 1E2
+        double lossRatio = claims.paidIncrementalIndexed.sum() / -uwInfo.premiumPaid.sum() * 1E2
         assertEquals '# outUnderwritingInfo packets', 1, uwInfo.size()
         assertEquals "Underwriting Commission (%) resulting from Loss Ratio of ${lossRatio}%", 7d, uwInfo[0].commission, EPSILON
     }
 
     void testPercentageSelectionCase2() {
-        claims[0].paidIncremental = 40d
+        claims[0].paidIncrementalIndexed = 40d
         commissionStrategy.calculator.calculateCommission claims, uwInfo, false, false
-        double lossRatio = claims.paidIncremental.sum() / -uwInfo.premiumPaid.sum() * 1E2
+        double lossRatio = claims.paidIncrementalIndexed.sum() / -uwInfo.premiumPaid.sum() * 1E2
         assertEquals '# outUnderwritingInfo packets', 1, uwInfo.size()
         assertEquals "Underwriting Commission (%) resulting from Loss Ratio of ${lossRatio}%", 5d, uwInfo[0].commission
     }
 
     void testPercentageSelectionCase3a() {
-        claims[0].paidIncremental = 50d
+        claims[0].paidIncrementalIndexed = 50d
         commissionStrategy.calculator.calculateCommission claims, uwInfo, false, false
-        double lossRatio = claims.paidIncremental.sum() / -uwInfo.premiumPaid.sum() * 1E2
+        double lossRatio = claims.paidIncrementalIndexed.sum() / -uwInfo.premiumPaid.sum() * 1E2
         assertEquals '# outUnderwritingInfo packets', 1, uwInfo.size()
         assertEquals "Underwriting Commission (%) resulting from Loss Ratio of ${lossRatio}%", 3d, uwInfo[0].commission
     }
 
     void testPercentageSelectionCase3b() {
-        claims[0].paidIncremental = 60d - 1e-6
+        claims[0].paidIncrementalIndexed = 60d - 1e-6
         commissionStrategy.calculator.calculateCommission claims, uwInfo, false, false
-        double lossRatio = claims.paidIncremental.sum() / -uwInfo.premiumPaid.sum() * 1E2
+        double lossRatio = claims.paidIncrementalIndexed.sum() / -uwInfo.premiumPaid.sum() * 1E2
         assertEquals '# outUnderwritingInfo packets', 1, uwInfo.size()
         assertEquals "Underwriting Commission (%) resulting from Loss Ratio of ${lossRatio}%", 3d, uwInfo[0].commission
     }
 
     void testPercentageSelectionCase4() {
-        claims[0].paidIncremental = 60d
+        claims[0].paidIncrementalIndexed = 60d
         commissionStrategy.calculator.calculateCommission claims, uwInfo, false, false
-        double lossRatio = claims.paidIncremental.sum() / -uwInfo.premiumPaid.sum() * 1E2
+        double lossRatio = claims.paidIncrementalIndexed.sum() / -uwInfo.premiumPaid.sum() * 1E2
         assertEquals '# outUnderwritingInfo packets', 1, uwInfo.size()
         assertEquals "Underwriting Commission (%) resulting from Loss Ratio of ${lossRatio}%", 0, uwInfo[0].commission, EPSILON
     }

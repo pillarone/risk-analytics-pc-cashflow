@@ -83,10 +83,10 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
             cededBaseClaim = storage.lazyInitCededClaimRoot(cededFactorUltimate);
         }
 
-        double cededFactorReported = cededFactor(grossClaim.getReportedCumulated(), grossClaim.getReportedIncremental(),
+        double cededFactorReported = cededFactor(grossClaim.getReportedCumulatedIndexed(), grossClaim.getReportedIncrementalIndexed(),
                 BasedOnClaimProperty.REPORTED, storage);
 
-        double cededFactorPaid = cededFactor(grossClaim.getPaidCumulated(), grossClaim.getPaidIncremental(),
+        double cededFactorPaid = cededFactor(grossClaim.getPaidCumulatedIndexed(), grossClaim.getPaidIncrementalIndexed(),
                 BasedOnClaimProperty.PAID, storage);
 
         ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, cededFactorUltimate,

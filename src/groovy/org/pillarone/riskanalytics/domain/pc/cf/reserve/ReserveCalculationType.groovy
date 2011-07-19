@@ -18,7 +18,7 @@ class ReserveCalculationType extends AbstractParameterObjectClassifier {
             [reportedAtReportingDate: 0d, reportingDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
              averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0), interpolationMode: InterpolationMode.NONE])
 
-    public static final ReserveCalculationType OUTSTANDINGBASED = new ReserveCalculationType("based on outstanding information", "OUTSTANDINGBASED",
+    public static final ReserveCalculationType OUTSTANDINGBASED = new ReserveCalculationType("based on outstandingIndexed information", "OUTSTANDINGBASED",
             [outstandingAtReportingDate: 0d, reportingDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
              averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0), interpolationMode: InterpolationMode.NONE])
 

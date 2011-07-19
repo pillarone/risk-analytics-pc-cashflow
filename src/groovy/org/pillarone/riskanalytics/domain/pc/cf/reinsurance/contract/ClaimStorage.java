@@ -27,8 +27,8 @@ public class ClaimStorage {
     }
 
     public void addIncrements(ClaimCashflowPacket claim) {
-        inrementalPaids.add(claim.getPaidIncremental());
-        inrementalReporteds.add(claim.getReportedIncremental());
+        inrementalPaids.add(claim.getPaidIncrementalIndexed());
+        inrementalReporteds.add(claim.getReportedIncrementalIndexed());
     }
 
     public double getCumulatedCeded(BasedOnClaimProperty claimProperty) {

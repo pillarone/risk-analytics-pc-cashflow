@@ -29,7 +29,7 @@ import java.util.*;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 // todo(sku): uw info is not yet calculated if run within the model
-// todo(sku): correct outstanding, IBNR, reserves values
+// todo(sku): correct outstandingIndexed, IBNR_INDEXED, reserves values
 // todo(sku): correct net values
 public class ReinsuranceContract extends Component implements IReinsuranceContractMarker {
 

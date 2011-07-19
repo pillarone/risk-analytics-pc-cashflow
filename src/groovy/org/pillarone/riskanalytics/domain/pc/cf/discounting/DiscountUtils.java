@@ -2,8 +2,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.discounting;
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
-import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
-import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
@@ -53,7 +51,7 @@ public class DiscountUtils {
         for (ClaimCashflowPacket claim : claims) {
             DateTime date = claim.getUpdateDate();
             double discountFactor = getDiscountFactor(factors, date, periodCounter);
-            discountedIncrementalPaid += claim.getPaidIncremental() * discountFactor;
+            discountedIncrementalPaid += claim.getPaidIncrementalIndexed() * discountFactor;
         }
         return discountedIncrementalPaid;
     }
@@ -71,7 +69,7 @@ public class DiscountUtils {
         for (ClaimCashflowPacket claim : latestCashflowPerBaseClaim.values()) {
             DateTime date = claim.getUpdateDate();
             double discountFactor = getDiscountFactor(factors, date, periodCounter);
-            discountedReserved += claim.reserved() * discountFactor;
+            discountedReserved += claim.reservedIndexed() * discountFactor;
         }
         return discountedReserved;
     }

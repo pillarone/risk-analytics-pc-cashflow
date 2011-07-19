@@ -74,7 +74,7 @@ class SegmentTests extends GroovyTestCase {
             true, periodScope, motorReservesGenerator)
     ClaimCashflowPacket paReserve800 = getClaimCashflowPacket(null, -800, -200, projectionStart, projectionStart,
             true, periodScope, paReservesGenerator)
-    // todo(jwa): test cases for reserved values over several periods (seem to be incorrect, see PMO-1730)
+    // todo(jwa): test cases for reservedIndexed values over several periods (seem to be incorrect, see PMO-1730)
 
     void setUp() {
         ConstraintsFactory.registerConstraint(new DeterministicIndexTableConstraints())
@@ -139,22 +139,22 @@ class SegmentTests extends GroovyTestCase {
         assertEquals "marine peril", marineClaimsGenerator, segmentMarine1000.peril()
         assertEquals "marine segment", segment, segmentMarine1000.segment()
         assertEquals "marine ultimate", -1000, segmentMarine1000.ultimate()
-        assertEquals "marine paid incremental", -200, segmentMarine1000.paidIncremental
+        assertEquals "marine paid incremental", -200, segmentMarine1000.paidIncrementalIndexed
         ClaimCashflowPacket segmentMotor250 = segment.outClaimsGross[1]
         assertEquals "motor peril", motorClaimsGenerator, segmentMotor250.peril()
         assertEquals "motor segment", segment, segmentMotor250.segment()
         assertEquals "motor ultimate", -250, segmentMotor250.ultimate()
-        assertEquals "motor paid incremental", -100, segmentMotor250.paidIncremental
+        assertEquals "motor paid incremental", -100, segmentMotor250.paidIncrementalIndexed
         ClaimCashflowPacket segmentMarineReserve2000 = segment.outClaimsGross[2]
         assertEquals "marine reserve", marineReservesGenerator, segment.outClaimsGross[2].reserve()
         assertEquals "marine reserve segment", segment, segment.outClaimsGross[2].segment()
         assertEquals "marine reserve ultimate", -2000, segment.outClaimsGross[2].ultimate()
-        assertEquals "marine reserve paid incremental", -200, segment.outClaimsGross[2].paidIncremental
+        assertEquals "marine reserve paid incremental", -200, segment.outClaimsGross[2].paidIncrementalIndexed
         ClaimCashflowPacket segmentMotorReserve300 = segment.outClaimsGross[3]
         assertEquals "motor reserve ", motorReservesGenerator, segment.outClaimsGross[3].reserve()
         assertEquals "motor reserve segment", segment, segment.outClaimsGross[3].segment()
         assertEquals "motor reserve ultimate", -300, segment.outClaimsGross[3].ultimate()
-        assertEquals "motor reserve paid incremental", -100, segment.outClaimsGross[3].paidIncremental
+        assertEquals "motor reserve paid incremental", -100, segment.outClaimsGross[3].paidIncrementalIndexed
 
         assertEquals "#gross underwriting info", 2, segment.outUnderwritingInfoGross.size()
         UnderwritingInfoPacket segmentUwInfoMarine = segment.outUnderwritingInfoGross[0]
@@ -198,19 +198,19 @@ class SegmentTests extends GroovyTestCase {
         assertEquals "ceded marine peril", marineClaimsGenerator, segment.outClaimsCeded[0].peril()
         assertEquals "ceded marine segment", segment, segment.outClaimsCeded[0].segment()
         assertEquals "ceded marine ultimate", 200, segment.outClaimsCeded[0].ultimate()
-        assertEquals "ceded marine paid incremental", 40, segment.outClaimsCeded[0].paidIncremental
+        assertEquals "ceded marine paid incremental", 40, segment.outClaimsCeded[0].paidIncrementalIndexed
         assertEquals "ceded motor peril", motorClaimsGenerator, segment.outClaimsCeded[1].peril()
         assertEquals "ceded motor segment", segment, segment.outClaimsCeded[1].segment()
         assertEquals "ceded motor ultimate", 50, segment.outClaimsCeded[1].ultimate()
-        assertEquals "ceded motor paid incremental", 20, segment.outClaimsCeded[1].paidIncremental
+        assertEquals "ceded motor paid incremental", 20, segment.outClaimsCeded[1].paidIncrementalIndexed
         assertEquals "ceded marine reserve", marineReservesGenerator, segment.outClaimsCeded[2].reserve()
         assertEquals "ceded marine reserve segment", segment, segment.outClaimsCeded[2].segment()
         assertEquals "ceded marine reserve ultimate", 200, segment.outClaimsCeded[2].ultimate()
-        assertEquals "ceded marine reserve paid incremental", 20, segment.outClaimsCeded[2].paidIncremental
+        assertEquals "ceded marine reserve paid incremental", 20, segment.outClaimsCeded[2].paidIncrementalIndexed
         assertEquals "ceded motor reserve", motorReservesGenerator, segment.outClaimsCeded[3].reserve()
         assertEquals "ceded motor reserve segment", segment, segment.outClaimsCeded[3].segment()
         assertEquals "ceded motor reserve ultimate", 30, segment.outClaimsCeded[3].ultimate()
-        assertEquals "ceded motor paid reserve incremental", 10, segment.outClaimsCeded[3].paidIncremental
+        assertEquals "ceded motor paid reserve incremental", 10, segment.outClaimsCeded[3].paidIncrementalIndexed
 
         assertEquals "#ceded underwriting info", 2, segment.outUnderwritingInfoCeded.size()
         assertEquals "ceded marine riskBand", marineRisk, segment.outUnderwritingInfoCeded[0].riskBand()
@@ -226,19 +226,19 @@ class SegmentTests extends GroovyTestCase {
         assertEquals "net marine peril", marineClaimsGenerator, segment.outClaimsNet[0].peril()
         assertEquals "net marine segment", segment, segment.outClaimsNet[0].segment()
         assertEquals "net marine ultimate", -800, segment.outClaimsNet[0].ultimate()
-        assertEquals "net marine paid incremental", -160, segment.outClaimsNet[0].paidIncremental
+        assertEquals "net marine paid incremental", -160, segment.outClaimsNet[0].paidIncrementalIndexed
         assertEquals "net motor peril", motorClaimsGenerator, segment.outClaimsNet[1].peril()
         assertEquals "net motor segment", segment, segment.outClaimsNet[1].segment()
         assertEquals "net motor ultimate", -200, segment.outClaimsNet[1].ultimate()
-        assertEquals "net motor paid incremental", -80, segment.outClaimsNet[1].paidIncremental
+        assertEquals "net motor paid incremental", -80, segment.outClaimsNet[1].paidIncrementalIndexed
         assertEquals "net marine reserve", marineReservesGenerator, segment.outClaimsNet[2].reserve()
         assertEquals "net marine reserve segment", segment, segment.outClaimsNet[2].segment()
         assertEquals "net marine reserve ultimate", -1800, segment.outClaimsNet[2].ultimate()
-        assertEquals "net marine reserve paid incremental", -180, segment.outClaimsNet[2].paidIncremental
+        assertEquals "net marine reserve paid incremental", -180, segment.outClaimsNet[2].paidIncrementalIndexed
         assertEquals "net motor reserve", motorReservesGenerator, segment.outClaimsNet[3].reserve()
         assertEquals "net motor reserve segment", segment, segment.outClaimsNet[3].segment()
         assertEquals "net motor reserve ultimate", -270, segment.outClaimsNet[3].ultimate()
-        assertEquals "net motor paid reserve incremental", -90, segment.outClaimsNet[3].paidIncremental
+        assertEquals "net motor paid reserve incremental", -90, segment.outClaimsNet[3].paidIncrementalIndexed
 
         assertEquals "#net underwriting info", 2, segment.outUnderwritingInfoNet.size()
         assertEquals "net marine riskBand", marineRisk, segment.outUnderwritingInfoNet[0].riskBand()

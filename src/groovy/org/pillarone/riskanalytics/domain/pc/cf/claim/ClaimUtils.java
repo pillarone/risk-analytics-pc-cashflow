@@ -32,11 +32,11 @@ public class ClaimUtils {
         double reserves = 0;
         for (ClaimCashflowPacket claim : claims) {
             ultimate += claim.ultimate();
-            paidIncremental += claim.getPaidIncremental();
-            paidCumulated += claim.getPaidCumulated();
-            reportedIncremental += claim.getReportedIncremental();
-            reportedCumulated += claim.getReportedCumulated();
-            reserves += claim.reserved();
+            paidIncremental += claim.getPaidIncrementalIndexed();
+            paidCumulated += claim.getPaidCumulatedIndexed();
+            reportedIncremental += claim.getReportedIncrementalIndexed();
+            reportedCumulated += claim.getReportedCumulatedIndexed();
+            reserves += claim.reservedIndexed();
         }
         boolean hasUltimate = ultimate > 0;
         ClaimRoot baseClaim = new ClaimRoot(ultimate, claims.get(0).getBaseClaim());
@@ -56,10 +56,10 @@ public class ClaimUtils {
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor) {
         if (notTrivialValues(claim)) {
             double scaledUltimate = claim.ultimate() * factor;
-            double scaledReserves = scaledUltimate - claim.getPaidCumulated() * factor;
+            double scaledReserves = scaledUltimate - claim.getPaidCumulatedIndexed() * factor;
             ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(claim.getBaseClaim(), scaledUltimate,
-                    claim.getPaidIncremental() * factor, claim.getPaidCumulated() * factor,
-                    claim.getReportedIncremental() * factor, claim.getReportedCumulated() * factor, scaledReserves,
+                    claim.getPaidIncrementalIndexed() * factor, claim.getPaidCumulatedIndexed() * factor,
+                    claim.getReportedIncrementalIndexed() * factor, claim.getReportedCumulatedIndexed() * factor, scaledReserves,
                     claim.getExposureInfo(), claim.getUpdateDate(), claim.getUpdatePeriod());
             applyMarkers(claim, scaledClaim);
             return scaledClaim;
@@ -77,12 +77,12 @@ public class ClaimUtils {
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor, boolean scaleBaseClaim) {
         if (!scaleBaseClaim) return scale(claim, factor);
         if (notTrivialValues(claim)) {
-            double scaledReserves = (claim.developedUltimate() - claim.getPaidCumulated()) * factor;
+            double scaledReserves = (claim.developedUltimate() - claim.getPaidCumulatedIndexed()) * factor;
             IClaimRoot scaledBaseClaim = claim.getBaseClaim().withScale(factor);
             double scaledUltimate = claim.ultimate() * factor;
             ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(scaledBaseClaim, scaledUltimate,
-                    claim.getPaidIncremental() * factor, claim.getPaidCumulated() * factor,
-                    claim.getReportedIncremental() * factor, claim.getReportedCumulated() * factor, scaledReserves,
+                    claim.getPaidIncrementalIndexed() * factor, claim.getPaidCumulatedIndexed() * factor,
+                    claim.getReportedIncrementalIndexed() * factor, claim.getReportedCumulatedIndexed() * factor, scaledReserves,
                     claim.getExposureInfo(), claim.getUpdateDate(), claim.getUpdatePeriod());
             applyMarkers(claim, scaledClaim);
             return scaledClaim;
@@ -104,8 +104,8 @@ public class ClaimUtils {
                                                     double scaleFactorReported, double scaleFactorPaid, boolean adjustExposureInfo) {
         if (scaleFactorReported == -0) { scaleFactorReported = 0; }
         if (scaleFactorPaid == -0) { scaleFactorPaid = 0; }
-        double cededPaidIncremental = grossClaim.getPaidIncremental() * scaleFactorPaid;
-        double cededReportedIncremental = grossClaim.getReportedIncremental() * scaleFactorReported;
+        double cededPaidIncremental = grossClaim.getPaidIncrementalIndexed() * scaleFactorPaid;
+        double cededReportedIncremental = grossClaim.getReportedIncrementalIndexed() * scaleFactorReported;
         storage.update(cededPaidIncremental, BasedOnClaimProperty.PAID);
         storage.update(cededReportedIncremental, BasedOnClaimProperty.REPORTED);
         double cededReserves = storage.cededReserves() + grossClaim.developmentResult() * scaleFactorUltimate;
@@ -149,11 +149,11 @@ public class ClaimUtils {
                 grossClaim.getBaseClaim(),
                 grossClaim.ultimate() + cededClaim.ultimate(),
                 grossClaim.nominalUltimate() + cededClaim.nominalUltimate(),
-                grossClaim.getPaidIncremental() + cededClaim.getPaidIncremental(),
-                grossClaim.getPaidCumulated() + cededClaim.getPaidCumulated(),
-                grossClaim.getReportedIncremental() + cededClaim.getReportedIncremental(),
-                grossClaim.getReportedCumulated() + cededClaim.getReportedCumulated(),
-                grossClaim.reserved() + cededClaim.reserved(),
+                grossClaim.getPaidIncrementalIndexed() + cededClaim.getPaidIncrementalIndexed(),
+                grossClaim.getPaidCumulatedIndexed() + cededClaim.getPaidCumulatedIndexed(),
+                grossClaim.getReportedIncrementalIndexed() + cededClaim.getReportedIncrementalIndexed(),
+                grossClaim.getReportedCumulatedIndexed() + cededClaim.getReportedCumulatedIndexed(),
+                grossClaim.reservedIndexed() + cededClaim.reservedIndexed(),
                 netExposureInfo,
                 grossClaim.getUpdateDate(),
                 grossClaim.getUpdatePeriod());
@@ -163,9 +163,9 @@ public class ClaimUtils {
     }
 
     public static boolean notTrivialValues(ClaimCashflowPacket claim) {
-        return (!(claim.ultimate() == 0 && claim.getPaidIncremental() == 0 && claim.getPaidCumulated() == 0
-                && claim.getReportedIncremental() == 0 && claim.getReportedCumulated() == 0
-                && claim.reserved() == 0));
+        return (!(claim.ultimate() == 0 && claim.getPaidIncrementalIndexed() == 0 && claim.getPaidCumulatedIndexed() == 0
+                && claim.getReportedIncrementalIndexed() == 0 && claim.getReportedCumulatedIndexed() == 0
+                && claim.reservedIndexed() == 0));
     }
 
     public static void applyMarkers(ClaimCashflowPacket source, ClaimCashflowPacket target) {

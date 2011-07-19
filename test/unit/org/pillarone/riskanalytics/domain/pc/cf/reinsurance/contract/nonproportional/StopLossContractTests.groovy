@@ -1,7 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional
 
 import org.joda.time.DateTime
-import org.pillarone.riskanalytics.core.parameterization.TableMultiDimensionalParameter
+
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
@@ -76,13 +76,13 @@ class StopLossContractTests extends GroovyTestCase {
         stopLoss.doCalculation()
         assertEquals 'number of ceded claims', 3, stopLoss.outClaimsCeded.size()
         assertEquals 'P0 ceded ultimate', [520, 120, 160], stopLoss.outClaimsCeded*.ultimate()
-        assertEquals 'P0 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncremental
-        assertEquals 'P0 ceded reported cumulated', [0] * 3, stopLoss.outClaimsCeded*.reportedCumulated
-        assertEquals 'P0 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncremental
-        assertEquals 'P0 ceded paid cumulated', [0] * 3, stopLoss.outClaimsCeded*.paidCumulated
-        assertEquals 'P0 ceded reserved', [520, 120, 160], stopLoss.outClaimsCeded*.reserved()
-        assertEquals 'P0 ceded outstanding', [0] * 3, stopLoss.outClaimsCeded*.outstanding()
-        assertEquals 'P0 ceded ibnr', [520, 120, 160], stopLoss.outClaimsCeded*.ibnr()
+        assertEquals 'P0 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P0 ceded reported cumulated', [0] * 3, stopLoss.outClaimsCeded*.reportedCumulatedIndexed
+        assertEquals 'P0 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncrementalIndexed
+        assertEquals 'P0 ceded paid cumulated', [0] * 3, stopLoss.outClaimsCeded*.paidCumulatedIndexed
+        assertEquals 'P0 ceded reservedIndexed', [520, 120, 160], stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P0 ceded outstandingIndexed', [0] * 3, stopLoss.outClaimsCeded*.outstandingIndexed()
+        assertEquals 'P0 ceded ibnrIndexed', [520, 120, 160], stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P0 ceded premium written', -400, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P0 ceded premium paid', -400, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P0 ceded premium fixed', -400, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -97,13 +97,13 @@ class StopLossContractTests extends GroovyTestCase {
         addClaimCashflowOfCurrentPeriod(stopLoss, claimRoots, periodCounter, false)
         stopLoss.doCalculation()
         assertEquals 'P1 ceded ultimate', [0] * 3, stopLoss.outClaimsCeded*.ultimate()
-        assertEquals 'P1 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncremental
-        assertEquals 'P1 ceded reported cumulated', [0] * 3, stopLoss.outClaimsCeded*.reportedCumulated
-        assertEquals 'P1 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncremental
-        assertEquals 'P1 ceded paid cumulated', [0] * 3, stopLoss.outClaimsCeded*.paidCumulated
-        assertEquals 'P1 ceded reserved', [520, 120, 160], stopLoss.outClaimsCeded*.reserved()
-        assertEquals 'P1 ceded outstanding', [0] * 3, stopLoss.outClaimsCeded*.outstanding()
-        assertEquals 'P1 ceded ibnr', [520, 120, 160], stopLoss.outClaimsCeded*.ibnr()
+        assertEquals 'P1 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P1 ceded reported cumulated', [0] * 3, stopLoss.outClaimsCeded*.reportedCumulatedIndexed
+        assertEquals 'P1 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncrementalIndexed
+        assertEquals 'P1 ceded paid cumulated', [0] * 3, stopLoss.outClaimsCeded*.paidCumulatedIndexed
+        assertEquals 'P1 ceded reservedIndexed', [520, 120, 160], stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P1 ceded outstandingIndexed', [0] * 3, stopLoss.outClaimsCeded*.outstandingIndexed()
+        assertEquals 'P1 ceded ibnrIndexed', [520, 120, 160], stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P1 ceded premium written', 0, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P1 ceded premium paid', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P1 ceded premium fixed', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -118,13 +118,13 @@ class StopLossContractTests extends GroovyTestCase {
         addClaimCashflowOfCurrentPeriod(stopLoss, claimRoots, periodCounter, false)
         stopLoss.doCalculation()
         assertEquals 'P2 ceded ultimate', [0] * 3, stopLoss.outClaimsCeded*.ultimate()
-        assertEquals 'P2 ceded reported incremental', [520, 120, 160], stopLoss.outClaimsCeded*.reportedIncremental
-        assertEquals 'P2 ceded reported cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.reportedCumulated
-        assertEquals 'P2 ceded paid incremental', [259.99999999999983, 59.999999999999964, 79.99999999999994], stopLoss.outClaimsCeded*.paidIncremental
-        assertEquals 'P2 ceded paid cumulated', [259.99999999999983, 59.999999999999964, 79.99999999999994], stopLoss.outClaimsCeded*.paidCumulated
-        assertEquals 'P2 ceded reserved', [260.00000000000017, 60.000000000000036, 80.00000000000006], stopLoss.outClaimsCeded*.reserved()
-        assertEquals 'P2 ceded outstanding', [260.00000000000017, 60.000000000000036, 80.00000000000006], stopLoss.outClaimsCeded*.outstanding()
-        assertEquals 'P2 ceded ibnr', [0] * 3, stopLoss.outClaimsCeded*.ibnr()
+        assertEquals 'P2 ceded reported incremental', [520, 120, 160], stopLoss.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P2 ceded reported cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.reportedCumulatedIndexed
+        assertEquals 'P2 ceded paid incremental', [259.99999999999983, 59.999999999999964, 79.99999999999994], stopLoss.outClaimsCeded*.paidIncrementalIndexed
+        assertEquals 'P2 ceded paid cumulated', [259.99999999999983, 59.999999999999964, 79.99999999999994], stopLoss.outClaimsCeded*.paidCumulatedIndexed
+        assertEquals 'P2 ceded reservedIndexed', [260.00000000000017, 60.000000000000036, 80.00000000000006], stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P2 ceded outstandingIndexed', [260.00000000000017, 60.000000000000036, 80.00000000000006], stopLoss.outClaimsCeded*.outstandingIndexed()
+        assertEquals 'P2 ceded ibnrIndexed', [0] * 3, stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P2 ceded premium written', 0, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P2 ceded premium paid', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P2 ceded premium fixed', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -139,13 +139,13 @@ class StopLossContractTests extends GroovyTestCase {
         addClaimCashflowOfCurrentPeriod(stopLoss, claimRoots, periodCounter, false)
         stopLoss.doCalculation()
         assertEquals 'P3 ceded ultimate', [0] * 3, stopLoss.outClaimsCeded*.ultimate()
-        assertEquals 'P3 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncremental
-        assertEquals 'P3 ceded reported cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.reportedCumulated
-        assertEquals 'P3 ceded paid incremental', [260.00000000000017, 60.000000000000036, 80.00000000000004], stopLoss.outClaimsCeded*.paidIncremental
-        assertEquals 'P3 ceded paid cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.paidCumulated
-        assertEquals 'P3 ceded reserved', [0] * 3, stopLoss.outClaimsCeded*.reserved()
-        assertEquals 'P3 ceded outstanding', [0] * 3, stopLoss.outClaimsCeded*.outstanding()
-        assertEquals 'P3 ceded ibnr', [0] * 3, stopLoss.outClaimsCeded*.ibnr()
+        assertEquals 'P3 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P3 ceded reported cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.reportedCumulatedIndexed
+        assertEquals 'P3 ceded paid incremental', [260.00000000000017, 60.000000000000036, 80.00000000000004], stopLoss.outClaimsCeded*.paidIncrementalIndexed
+        assertEquals 'P3 ceded paid cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.paidCumulatedIndexed
+        assertEquals 'P3 ceded reservedIndexed', [0] * 3, stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P3 ceded outstandingIndexed', [0] * 3, stopLoss.outClaimsCeded*.outstandingIndexed()
+        assertEquals 'P3 ceded ibnrIndexed', [0] * 3, stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P3 ceded premium written', 0, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P3 ceded premium paid', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P3 ceded premium fixed', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -160,13 +160,13 @@ class StopLossContractTests extends GroovyTestCase {
         addClaimCashflowOfCurrentPeriod(stopLoss, claimRoots, periodCounter, false)
         stopLoss.doCalculation()
         assertEquals 'P4 ceded ultimate', [0] * 3, stopLoss.outClaimsCeded*.ultimate()
-        assertEquals 'P4 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncremental
-        assertEquals 'P4 ceded reported cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.reportedCumulated
-        assertEquals 'P4 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncremental
-        assertEquals 'P4 ceded paid cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.paidCumulated
-        assertEquals 'P4 ceded reserved', [0] * 3, stopLoss.outClaimsCeded*.reserved()
-        assertEquals 'P4 ceded outstanding', [0] * 3, stopLoss.outClaimsCeded*.outstanding()
-        assertEquals 'P4 ceded ibnr', [0] * 3, stopLoss.outClaimsCeded*.ibnr()
+        assertEquals 'P4 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P4 ceded reported cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.reportedCumulatedIndexed
+        assertEquals 'P4 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncrementalIndexed
+        assertEquals 'P4 ceded paid cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.paidCumulatedIndexed
+        assertEquals 'P4 ceded reservedIndexed', [0] * 3, stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P4 ceded outstandingIndexed', [0] * 3, stopLoss.outClaimsCeded*.outstandingIndexed()
+        assertEquals 'P4 ceded ibnrIndexed', [0] * 3, stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P4 ceded premium written', 0, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P4 ceded premium paid', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P4 ceded premium fixed', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -193,13 +193,13 @@ class StopLossContractTests extends GroovyTestCase {
         stopLoss.doCalculation()
         assertEquals 'number of ceded claims', 3, stopLoss.outClaimsCeded.size()
         assertEquals 'P0 ceded ultimate', [520, 120, 160], stopLoss.outClaimsCeded*.ultimate()
-        assertEquals 'P0 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncremental
-        assertEquals 'P0 ceded reported cumulated', [0] * 3, stopLoss.outClaimsCeded*.reportedCumulated
-        assertEquals 'P0 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncremental
-        assertEquals 'P0 ceded paid cumulated', [0] * 3, stopLoss.outClaimsCeded*.paidCumulated
-        assertEquals 'P0 ceded reserved', [520, 120, 160], stopLoss.outClaimsCeded*.reserved()
-        assertEquals 'P0 ceded outstanding', [0] * 3, stopLoss.outClaimsCeded*.outstanding()
-        assertEquals 'P0 ceded ibnr', [520, 120, 160], stopLoss.outClaimsCeded*.ibnr()
+        assertEquals 'P0 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P0 ceded reported cumulated', [0] * 3, stopLoss.outClaimsCeded*.reportedCumulatedIndexed
+        assertEquals 'P0 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncrementalIndexed
+        assertEquals 'P0 ceded paid cumulated', [0] * 3, stopLoss.outClaimsCeded*.paidCumulatedIndexed
+        assertEquals 'P0 ceded reservedIndexed', [520, 120, 160], stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P0 ceded outstandingIndexed', [0] * 3, stopLoss.outClaimsCeded*.outstandingIndexed()
+        assertEquals 'P0 ceded ibnrIndexed', [520, 120, 160], stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P0 ceded premium written', -400, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P0 ceded premium paid', -400, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P0 ceded premium fixed', -400, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -214,13 +214,13 @@ class StopLossContractTests extends GroovyTestCase {
         addClaimCashflowOfCurrentPeriod(stopLoss, claimRoots, periodCounter, false)
         stopLoss.doCalculation()
         assertEquals 'P1 ceded ultimate', [0] * 3, stopLoss.outClaimsCeded*.ultimate()
-        assertEquals 'P1 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncremental
-        assertEquals 'P1 ceded reported cumulated', [0] * 3, stopLoss.outClaimsCeded*.reportedCumulated
-        assertEquals 'P1 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncremental
-        assertEquals 'P1 ceded paid cumulated', [0] * 3, stopLoss.outClaimsCeded*.paidCumulated
-        assertEquals 'P1 ceded reserved', [520, 120, 160], stopLoss.outClaimsCeded*.reserved()
-        assertEquals 'P1 ceded outstanding', [0] * 3, stopLoss.outClaimsCeded*.outstanding()
-        assertEquals 'P1 ceded ibnr', [520, 120, 160], stopLoss.outClaimsCeded*.ibnr()
+        assertEquals 'P1 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P1 ceded reported cumulated', [0] * 3, stopLoss.outClaimsCeded*.reportedCumulatedIndexed
+        assertEquals 'P1 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncrementalIndexed
+        assertEquals 'P1 ceded paid cumulated', [0] * 3, stopLoss.outClaimsCeded*.paidCumulatedIndexed
+        assertEquals 'P1 ceded reservedIndexed', [520, 120, 160], stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P1 ceded outstandingIndexed', [0] * 3, stopLoss.outClaimsCeded*.outstandingIndexed()
+        assertEquals 'P1 ceded ibnrIndexed', [520, 120, 160], stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P1 ceded premium written', 0, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P1 ceded premium paid', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P1 ceded premium fixed', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -235,13 +235,13 @@ class StopLossContractTests extends GroovyTestCase {
         addClaimCashflowOfCurrentPeriod(stopLoss, claimRoots, periodCounter, false)
         stopLoss.doCalculation()
         assertEquals 'P2 ceded ultimate', [0] * 3, stopLoss.outClaimsCeded*.ultimate()
-        assertEquals 'P2 ceded reported incremental', [520, 120, 160], stopLoss.outClaimsCeded*.reportedIncremental
-        assertEquals 'P2 ceded reported cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.reportedCumulated
-        assertEquals 'P2 ceded paid incremental', [259.99999999999983, 59.999999999999964, 79.99999999999994], stopLoss.outClaimsCeded*.paidIncremental
-        assertEquals 'P2 ceded paid cumulated', [259.99999999999983, 59.999999999999964, 79.99999999999994], stopLoss.outClaimsCeded*.paidCumulated
-        assertEquals 'P2 ceded reserved', [260.00000000000017, 60.000000000000036, 80.00000000000006], stopLoss.outClaimsCeded*.reserved()
-        assertEquals 'P2 ceded outstanding', [260.00000000000017, 60.000000000000036, 80.00000000000006], stopLoss.outClaimsCeded*.outstanding()
-        assertEquals 'P2 ceded ibnr', [0] * 3, stopLoss.outClaimsCeded*.ibnr()
+        assertEquals 'P2 ceded reported incremental', [520, 120, 160], stopLoss.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P2 ceded reported cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.reportedCumulatedIndexed
+        assertEquals 'P2 ceded paid incremental', [259.99999999999983, 59.999999999999964, 79.99999999999994], stopLoss.outClaimsCeded*.paidIncrementalIndexed
+        assertEquals 'P2 ceded paid cumulated', [259.99999999999983, 59.999999999999964, 79.99999999999994], stopLoss.outClaimsCeded*.paidCumulatedIndexed
+        assertEquals 'P2 ceded reservedIndexed', [260.00000000000017, 60.000000000000036, 80.00000000000006], stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P2 ceded outstandingIndexed', [260.00000000000017, 60.000000000000036, 80.00000000000006], stopLoss.outClaimsCeded*.outstandingIndexed()
+        assertEquals 'P2 ceded ibnrIndexed', [0] * 3, stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P2 ceded premium written', 0, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P2 ceded premium paid', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P2 ceded premium fixed', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -256,13 +256,13 @@ class StopLossContractTests extends GroovyTestCase {
         addClaimCashflowOfCurrentPeriod(stopLoss, claimRoots, periodCounter, false)
         stopLoss.doCalculation()
         assertEquals 'P3 ceded ultimate', [0] * 3, stopLoss.outClaimsCeded*.ultimate()
-        assertEquals 'P3 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncremental
-        assertEquals 'P3 ceded reported cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.reportedCumulated
-        assertEquals 'P3 ceded paid incremental', [260.00000000000017, 60.000000000000036, 80.00000000000004], stopLoss.outClaimsCeded*.paidIncremental
-        assertEquals 'P3 ceded paid cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.paidCumulated
-        assertEquals 'P3 ceded reserved', [0] * 3, stopLoss.outClaimsCeded*.reserved()
-        assertEquals 'P3 ceded outstanding', [0] * 3, stopLoss.outClaimsCeded*.outstanding()
-        assertEquals 'P3 ceded ibnr', [0] * 3, stopLoss.outClaimsCeded*.ibnr()
+        assertEquals 'P3 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P3 ceded reported cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.reportedCumulatedIndexed
+        assertEquals 'P3 ceded paid incremental', [260.00000000000017, 60.000000000000036, 80.00000000000004], stopLoss.outClaimsCeded*.paidIncrementalIndexed
+        assertEquals 'P3 ceded paid cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.paidCumulatedIndexed
+        assertEquals 'P3 ceded reservedIndexed', [0] * 3, stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P3 ceded outstandingIndexed', [0] * 3, stopLoss.outClaimsCeded*.outstandingIndexed()
+        assertEquals 'P3 ceded ibnrIndexed', [0] * 3, stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P3 ceded premium written', 0, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P3 ceded premium paid', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P3 ceded premium fixed', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -277,13 +277,13 @@ class StopLossContractTests extends GroovyTestCase {
         addClaimCashflowOfCurrentPeriod(stopLoss, claimRoots, periodCounter, false)
         stopLoss.doCalculation()
         assertEquals 'P4 ceded ultimate', [0] * 3, stopLoss.outClaimsCeded*.ultimate()
-        assertEquals 'P4 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncremental
-        assertEquals 'P4 ceded reported cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.reportedCumulated
-        assertEquals 'P4 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncremental
-        assertEquals 'P4 ceded paid cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.paidCumulated
-        assertEquals 'P4 ceded reserved', [0] * 3, stopLoss.outClaimsCeded*.reserved()
-        assertEquals 'P4 ceded outstanding', [0] * 3, stopLoss.outClaimsCeded*.outstanding()
-        assertEquals 'P4 ceded ibnr', [0] * 3, stopLoss.outClaimsCeded*.ibnr()
+        assertEquals 'P4 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P4 ceded reported cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.reportedCumulatedIndexed
+        assertEquals 'P4 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncrementalIndexed
+        assertEquals 'P4 ceded paid cumulated', [520, 120, 160], stopLoss.outClaimsCeded*.paidCumulatedIndexed
+        assertEquals 'P4 ceded reservedIndexed', [0] * 3, stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P4 ceded outstandingIndexed', [0] * 3, stopLoss.outClaimsCeded*.outstandingIndexed()
+        assertEquals 'P4 ceded ibnrIndexed', [0] * 3, stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P4 ceded premium written', 0, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P4 ceded premium paid', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P4 ceded premium fixed', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -312,13 +312,13 @@ class StopLossContractTests extends GroovyTestCase {
         stopLoss.doCalculation()
         assertEquals 'number of ceded claims', 2, stopLoss.outClaimsCeded.size()
         assertEquals 'P0 ceded ultimate', [650, 150], stopLoss.outClaimsCeded*.ultimate()
-        assertEquals 'P0 ceded reported incremental', [0] * 2, stopLoss.outClaimsCeded*.reportedIncremental
-        assertEquals 'P0 ceded reported cumulated', [0] * 2, stopLoss.outClaimsCeded*.reportedCumulated
-        assertEquals 'P0 ceded paid incremental', [0] * 2, stopLoss.outClaimsCeded*.paidIncremental
-        assertEquals 'P0 ceded paid cumulated', [0] * 2, stopLoss.outClaimsCeded*.paidCumulated
-        assertEquals 'P0 ceded reserved', [650, 150], stopLoss.outClaimsCeded*.reserved()
-        assertEquals 'P0 ceded outstanding', [0] * 2, stopLoss.outClaimsCeded*.outstanding()
-        assertEquals 'P0 ceded ibnr', [650, 150], stopLoss.outClaimsCeded*.ibnr()
+        assertEquals 'P0 ceded reported incremental', [0] * 2, stopLoss.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P0 ceded reported cumulated', [0] * 2, stopLoss.outClaimsCeded*.reportedCumulatedIndexed
+        assertEquals 'P0 ceded paid incremental', [0] * 2, stopLoss.outClaimsCeded*.paidIncrementalIndexed
+        assertEquals 'P0 ceded paid cumulated', [0] * 2, stopLoss.outClaimsCeded*.paidCumulatedIndexed
+        assertEquals 'P0 ceded reservedIndexed', [650, 150], stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P0 ceded outstandingIndexed', [0] * 2, stopLoss.outClaimsCeded*.outstandingIndexed()
+        assertEquals 'P0 ceded ibnrIndexed', [650, 150], stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P0 ceded premium written', -400, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P0 ceded premium paid', -400, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P0 ceded premium fixed', -400, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -336,13 +336,13 @@ class StopLossContractTests extends GroovyTestCase {
         claimRoots << grossClaimRoot3000
         stopLoss.doCalculation()
         assertEquals 'P1 ceded ultimate', [600, 0, 0], stopLoss.outClaimsCeded*.ultimate()
-        assertEquals 'P1 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncremental
-        assertEquals 'P1 ceded reported cumulated', [0] * 3, stopLoss.outClaimsCeded*.reportedCumulated
-        assertEquals 'P1 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncremental
-        assertEquals 'P1 ceded paid cumulated', [0] * 3, stopLoss.outClaimsCeded*.paidCumulated
-        assertEquals 'P1 ceded reserved', [600, 650, 150], stopLoss.outClaimsCeded*.reserved()
-        assertEquals 'P1 ceded outstanding', [0] * 3, stopLoss.outClaimsCeded*.outstanding()
-        assertEquals 'P1 ceded ibnr', [600, 650, 150], stopLoss.outClaimsCeded*.ibnr()
+        assertEquals 'P1 ceded reported incremental', [0] * 3, stopLoss.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P1 ceded reported cumulated', [0] * 3, stopLoss.outClaimsCeded*.reportedCumulatedIndexed
+        assertEquals 'P1 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncrementalIndexed
+        assertEquals 'P1 ceded paid cumulated', [0] * 3, stopLoss.outClaimsCeded*.paidCumulatedIndexed
+        assertEquals 'P1 ceded reservedIndexed', [600, 650, 150], stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P1 ceded outstandingIndexed', [0] * 3, stopLoss.outClaimsCeded*.outstandingIndexed()
+        assertEquals 'P1 ceded ibnrIndexed', [600, 650, 150], stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P1 ceded premium written', 0, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P1 ceded premium paid', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P1 ceded premium fixed', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -358,13 +358,13 @@ class StopLossContractTests extends GroovyTestCase {
         claimRoots << grossClaimRoot3000
         stopLoss.doCalculation()
         assertEquals 'P2 ceded ultimate', [0] * 3, stopLoss.outClaimsCeded*.ultimate()
-        assertEquals 'P2 ceded reported incremental', [0, 130.0000000000002, 30.000000000000043], stopLoss.outClaimsCeded*.reportedIncremental
-        assertEquals 'P2 ceded reported cumulated', [0, 130.0000000000002, 30.000000000000043], stopLoss.outClaimsCeded*.reportedCumulated
-        assertEquals 'P2 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncremental
-        assertEquals 'P2 ceded paid cumulated', [0] * 3, stopLoss.outClaimsCeded*.paidCumulated
-        assertEquals 'P2 ceded reserved', [600, 650, 150], stopLoss.outClaimsCeded*.reserved()
-        assertEquals 'P2 ceded outstanding', [0.0, 130.0000000000002, 30.000000000000043], stopLoss.outClaimsCeded*.outstanding()
-        assertEquals 'P2 ceded ibnr', [600.0, 519.9999999999998, 119.99999999999996], stopLoss.outClaimsCeded*.ibnr()
+        assertEquals 'P2 ceded reported incremental', [0, 130.0000000000002, 30.000000000000043], stopLoss.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P2 ceded reported cumulated', [0, 130.0000000000002, 30.000000000000043], stopLoss.outClaimsCeded*.reportedCumulatedIndexed
+        assertEquals 'P2 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncrementalIndexed
+        assertEquals 'P2 ceded paid cumulated', [0] * 3, stopLoss.outClaimsCeded*.paidCumulatedIndexed
+        assertEquals 'P2 ceded reservedIndexed', [600, 650, 150], stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P2 ceded outstandingIndexed', [0.0, 130.0000000000002, 30.000000000000043], stopLoss.outClaimsCeded*.outstandingIndexed()
+        assertEquals 'P2 ceded ibnrIndexed', [600.0, 519.9999999999998, 119.99999999999996], stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P2 ceded premium written', 0, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P2 ceded premium paid', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P2 ceded premium fixed', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed

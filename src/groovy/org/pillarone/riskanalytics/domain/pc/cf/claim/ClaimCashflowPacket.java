@@ -33,11 +33,11 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private double ultimate;
     /** contains the ultimate value of the occurrence period in every period */
     private double nominalUltimate;
-    private double paidIncremental;
-    private double paidCumulated;
-    private double reportedIncremental;
-    private double reportedCumulated;
-    private double reserves;
+    private double paidIncrementalIndexed;
+    private double paidCumulatedIndexed;
+    private double reportedIncrementalIndexed;
+    private double reportedCumulatedIndexed;
+    private double reservesIndexed;
 
     private DateTime updateDate;
     private Integer updatePeriod;
@@ -67,81 +67,71 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         hasUltimate = true;
         ultimate = baseClaim.getUltimate();
         nominalUltimate = ultimate;
-        this.paidCumulated = ultimate();
-        this.paidIncremental = ultimate();
-        this.reportedCumulated = ultimate();
-        this.reportedIncremental = ultimate();
-        this.reserves = 0;
+        this.paidCumulatedIndexed = ultimate();
+        this.paidIncrementalIndexed = ultimate();
+        this.reportedCumulatedIndexed = ultimate();
+        this.reportedIncrementalIndexed = ultimate();
+        this.reservesIndexed = 0;
         updateDate = baseClaim.getOccurrenceDate();
         setDate(updateDate);
     }
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated,
-                               double reserves, ExposureInfo exposureInfo, DateTime updateDate, IPeriodCounter periodCounter) {
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
+                               double reservesIndexed, ExposureInfo exposureInfo, DateTime updateDate, IPeriodCounter periodCounter) {
         this(baseClaim);
         this.ultimate = ultimate;
-        this.paidCumulated = paidCumulated;
-        this.paidIncremental = paidIncremental;
-        this.reportedCumulated = baseClaim.getUltimate();
-        this.reportedIncremental = ultimate();
-        this.reserves = reserves;
+        this.paidCumulatedIndexed = paidCumulatedIndexed;
+        this.paidIncrementalIndexed = paidIncrementalIndexed;
+        this.reportedCumulatedIndexed = baseClaim.getUltimate();
+        this.reportedIncrementalIndexed = ultimate();
+        this.reservesIndexed = reservesIndexed;
         this.updateDate = updateDate;
         this.exposureInfo = exposureInfo;
         updatePeriod(periodCounter);
         setDate(updateDate);
     }
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated,
-                               double reportedIncremental, double reportedCumulated, double reserves,
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
+                               double reportedIncrementalIndexed, double reportedCumulatedIndexed, double reservesIndexed,
                                ExposureInfo exposureInfo, DateTime updateDate, IPeriodCounter periodCounter) {
         this(baseClaim);
         this.ultimate = ultimate;
-        this.paidCumulated = paidCumulated;
-        this.paidIncremental = paidIncremental;
-        this.reportedCumulated = reportedCumulated;
-        this.reportedIncremental = reportedIncremental;
-        this.reserves = reserves;
+        this.paidCumulatedIndexed = paidCumulatedIndexed;
+        this.paidIncrementalIndexed = paidIncrementalIndexed;
+        this.reportedCumulatedIndexed = reportedCumulatedIndexed;
+        this.reportedIncrementalIndexed = reportedIncrementalIndexed;
+        this.reservesIndexed = reservesIndexed;
         this.updateDate = updateDate;
         this.exposureInfo = exposureInfo;
         updatePeriod(periodCounter);
         setDate(updateDate);
     }
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double nominalUltimate, double paidIncremental,
-                               double paidCumulated, double reportedIncremental, double reportedCumulated,
-                               double reserves, ExposureInfo exposureInfo, DateTime updateDate, int updatePeriod) {
-        this(baseClaim, ultimate, paidIncremental, paidCumulated, reportedIncremental, reportedCumulated, reserves,
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double nominalUltimate, double paidIncrementalIndexed,
+                               double paidCumulatedIndexed, double reportedIncrementalIndexed, double reportedCumulatedIndexed,
+                               double reservesIndexed, ExposureInfo exposureInfo, DateTime updateDate, int updatePeriod) {
+        this(baseClaim, ultimate, paidIncrementalIndexed, paidCumulatedIndexed, reportedIncrementalIndexed, reportedCumulatedIndexed, reservesIndexed,
                 exposureInfo, updateDate, updatePeriod);
         this.nominalUltimate = nominalUltimate;
      }
 
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncremental, double paidCumulated,
-                               double reportedIncremental, double reportedCumulated, double reserves,
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
+                               double reportedIncrementalIndexed, double reportedCumulatedIndexed, double reservesIndexed,
                                ExposureInfo exposureInfo, DateTime updateDate, int updatePeriod) {
         this(baseClaim);
         this.ultimate = ultimate;
         if (ultimate != 0) { nominalUltimate = ultimate; }
-        this.paidCumulated = paidCumulated;
-        this.paidIncremental = paidIncremental;
-        this.reportedCumulated = reportedCumulated;
-        this.reportedIncremental = reportedIncremental;
-        this.reserves = reserves;
+        this.paidCumulatedIndexed = paidCumulatedIndexed;
+        this.paidIncrementalIndexed = paidIncrementalIndexed;
+        this.reportedCumulatedIndexed = reportedCumulatedIndexed;
+        this.reportedIncrementalIndexed = reportedIncrementalIndexed;
+        this.reservesIndexed = reservesIndexed;
         this.updateDate = updateDate;
         this.updatePeriod = updatePeriod;
         this.exposureInfo = exposureInfo;
         setDate(updateDate);
     }
-
-//    public ClaimCashflowPacket withScale(double scaleFactor) {
-//        ClaimCashflowPacket packet = (ClaimCashflowPacket) super.clone();
-//        packet.paidCumulated = paidCumulated * scaleFactor;
-//        packet.paidIncremental = paidIncremental * scaleFactor;
-//        packet.reportedCumulated = reportedCumulated * scaleFactor;
-//        packet.reportedIncremental = reportedIncremental * scaleFactor;
-//        packet.reserves = reserves * scaleFactor;
-//        return packet;
-//    }
 
     /**
      * Used to modify the packet date property according the persistence date on a cloned instance.
@@ -155,33 +145,33 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     }
 
     /**
-     * @return reserves - outstanding
+     * @return reserves - outstandingIndexed
      */
-    public double ibnr() {
-        return reserved() - outstanding();
+    public double ibnrIndexed() {
+        return reservedIndexed() - outstandingIndexed();
     }
 
-    /** reported = cumulated paid + outstanding */
+    /** reported = cumulated paid + outstandingIndexed */
 
     /**
      * @return reported cumulated - paid cumulated
      */
-    public double outstanding() {
-        return reportedCumulated - paidCumulated;
+    public double outstandingIndexed() {
+        return reportedCumulatedIndexed - paidCumulatedIndexed;
     }
 
     /**
      * @return ultimate * (1 - cumulated payout factor)
      */
-    public double reserved() {
-        return reserves;
+    public double reservedIndexed() {
+        return reservesIndexed;
     }
 
     /**
-     * @return developed ultimate at time t_{i} and final ultimate if i = last paidIncremental date of claim
+     * @return developed ultimate at time t_{i} and final ultimate if i = last paidIncrementalIndexed date of claim
      */
     public double developedUltimate() {
-        return reserved() + paidCumulated;
+        return reservedIndexed() + paidCumulatedIndexed;
     }
 
     /**
@@ -227,12 +217,12 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return withDate(baseClaim.getOccurrenceDate());
     }
 
-    public double getPaidIncremental() {
-        return paidIncremental;
+    public double getPaidIncrementalIndexed() {
+        return paidIncrementalIndexed;
     }
 
-    public double getReportedIncremental() {
-        return reportedIncremental;
+    public double getReportedIncrementalIndexed() {
+        return reportedIncrementalIndexed;
     }
 
     public IPerilMarker peril() { return peril; }
@@ -280,12 +270,12 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public Map<String, Number> getValuesToSave() throws IllegalAccessException {
         Map<String, Number> valuesToSave = new HashMap<String, Number>();
         valuesToSave.put(ULTIMATE, ultimate);    // this and missing default c'tor (final!) leads to failure during result tree building
-        valuesToSave.put(PAID, paidIncremental);
-        valuesToSave.put(RESERVES, reserved());
-        valuesToSave.put(REPORTED, reportedIncremental);
-        valuesToSave.put(IBNR, ibnr());
-        valuesToSave.put(OUTSTANDING, outstanding());
-        valuesToSave.put(DEVELOPED_RESULT, developmentResult());
+        valuesToSave.put(PAID_INDEXED, paidIncrementalIndexed);
+        valuesToSave.put(RESERVES_INDEXED, reservedIndexed());
+        valuesToSave.put(REPORTED_INDEXED, reportedIncrementalIndexed);
+        valuesToSave.put(IBNR_INDEXED, ibnrIndexed());
+        valuesToSave.put(OUTSTANDING_INDEXED, outstandingIndexed());
+        valuesToSave.put(DEVELOPED_RESULT_INDEXED, developmentResult());
         return valuesToSave;
     }
 
@@ -305,31 +295,32 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         StringBuilder result = new StringBuilder();
         result.append(ultimate);
         result.append(separator);
-        result.append(reportedIncremental);
+        result.append(reportedIncrementalIndexed);
         result.append(separator);
-        result.append(paidIncremental);
+        result.append(paidIncrementalIndexed);
         result.append(separator);
         result.append(updateDate);
         return result.toString();
     }
 
     public final static String ULTIMATE = "ultimate";
-    public final static String REPORTED = "reportedIncremental";
-    public final static String PAID = "paidIncremental";
-    public final static String IBNR = "IBNR";
-    public final static String RESERVES = "reserves";
-    public final static String OUTSTANDING = "outstanding";
-    public final static String DEVELOPED_ULTIMATE = "developedUltimate";
-    public final static String DEVELOPED_RESULT = "developedResult";
+    public final static String REPORTED_INDEXED = "reportedIncrementalIndexed";
+    public final static String PAID_INDEXED = "paidIncrementalIndexed";
+    public final static String IBNR_INDEXED = "IBNRIndexed";
+    public final static String RESERVES_INDEXED = "reservesIndexed";
+    public final static String OUTSTANDING_INDEXED = "outstandingIndexed";
+    public final static String DEVELOPED_ULTIMATE = "developedUltimateIndexed";
+    public final static String DEVELOPED_RESULT_INDEXED = "developedResultIndexed";
 
-    public final static List<String> NON_TRIVIAL_PAYOUT_IBNR = Arrays.asList(ULTIMATE, PAID, RESERVES, REPORTED, IBNR, OUTSTANDING, DEVELOPED_RESULT);
+    public final static List<String> NON_TRIVIAL_PAYOUT_IBNR = Arrays.asList(ULTIMATE, PAID_INDEXED, RESERVES_INDEXED,
+            REPORTED_INDEXED, IBNR_INDEXED, OUTSTANDING_INDEXED, DEVELOPED_RESULT_INDEXED);
 
     public IClaimRoot getBaseClaim() {
         return baseClaim;
     }
 
     /**
-     * the updateDate might be the incurred, paidIncremental, reportedIncremental date, depending on the updated double properties above
+     * the updateDate might be the incurred, paidIncrementalIndexed, reportedIncrementalIndexed date, depending on the updated double properties above
      *
      * @return
      */
@@ -341,12 +332,12 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return baseClaim.getOccurrenceDate();
     }
 
-    public double getPaidCumulated() {
-        return paidCumulated;
+    public double getPaidCumulatedIndexed() {
+        return paidCumulatedIndexed;
     }
 
-    public double getReportedCumulated() {
-        return reportedCumulated;
+    public double getReportedCumulatedIndexed() {
+        return reportedCumulatedIndexed;
     }
 
     public Integer getUpdatePeriod() {

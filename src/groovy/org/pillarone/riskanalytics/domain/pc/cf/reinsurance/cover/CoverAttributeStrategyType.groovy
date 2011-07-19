@@ -17,7 +17,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
 
     public static final CoverAttributeStrategyType ALL = new CoverAttributeStrategyType("all", "ALL",
-            ['reserves': IncludeType.NOTINCLUDED])
+            ['reservesIndexed': IncludeType.NOTINCLUDED])
     public static final CoverAttributeStrategyType NONE = new CoverAttributeStrategyType("none", "NONE", [:])
     public static final CoverAttributeStrategyType GROSSPERILS = new CoverAttributeStrategyType(
             'gross perils', 'GROSSPERILS',
