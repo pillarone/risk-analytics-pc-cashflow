@@ -86,7 +86,7 @@ public final class GrossClaimRoot implements IClaimRoot {
                 // further details posted at
                 if (claimRoot.getOccurrenceDate().plus(payoutPattern.getLastCumulativePeriod()).isAfter(periodCounter.getCurrentPeriodStart())) {
                     DateTime artificalPayoutDate = periodCounter.getCurrentPeriodStart();
-                    ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, 0, 0,0,0,0,0,
+                    ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, 0, 0, 0, 0, 0, 0,
                             claimRoot.getExposureInfo(), artificalPayoutDate, periodCounter);
                     currentPeriodClaims.add(cashflowPacket);
                 }
@@ -110,7 +110,6 @@ public final class GrossClaimRoot implements IClaimRoot {
                                 paidCumulatedIndexed, reserves, claimRoot.getExposureInfo(), payoutDate, periodCounter);
                     }
                     else {
-                    // ask stefan: reportedCumulated != sum (reported incremental)
 //                        double reportedIncremental = reportedIncremental(ultimate, factor, reports, i);
                         double reportedCumulated = reportedCumulated(ultimate, paidCumulated, 1, payoutCumulatedFactor, reports, i);
                         double outstanding = reportedCumulated - paidCumulated;
@@ -166,7 +165,7 @@ public final class GrossClaimRoot implements IClaimRoot {
         return productFactor;
     }
 
-    public void updateCumulatedPaidAtStartOfFirstPeriod(IPeriodCounter periodCounter, List<Factors> factors) {
+    public void updateCumulatedValuesAtProjectionStart(IPeriodCounter periodCounter, List<Factors> factors) {
         List<DateFactors> payouts = payoutPattern.getDateFactorsTillStartOfCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter);
         List<DateFactors> reports = reportingPattern != null ?
                 reportingPattern.getDateFactorsTillStartOfCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter)
@@ -175,10 +174,17 @@ public final class GrossClaimRoot implements IClaimRoot {
             DateTime payoutDate = payouts.get(i).getDate();
             double factor = manageFactor(factors, payoutDate, periodCounter, claimRoot.getOccurrenceDate());
             double payoutIncrementalFactor = payouts.get(i).getFactorIncremental();
+            double payoutCumulatedFactor = payouts.get(i).getFactorCumulated();
             double ultimate = claimRoot.getUltimate();
-            double paidIncremental = ultimate * payoutIncrementalFactor * factor;
-            double paidCumulated = paidCumulatedIncludingAppliedFactors + paidIncremental;
-            paidCumulatedIncludingAppliedFactors = paidCumulated;
+            double paidIncrementalIndexed = ultimate * payoutIncrementalFactor * factor;
+            double paidCumulatedIndexed = paidCumulatedIncludingAppliedFactors + paidIncrementalIndexed;
+            paidCumulatedIncludingAppliedFactors = paidCumulatedIndexed;
+            double paidCumulated = ultimate * payoutCumulatedFactor;
+            double reportedCumulated = reportedCumulated(ultimate, paidCumulated, 1, payoutCumulatedFactor, reports, i);
+            double outstanding = reportedCumulated - paidCumulated;
+            double outstandingIndexed = outstanding * factor;
+            double reportedCumulatedIndexed = outstandingIndexed + paidCumulatedIndexed;
+            reportedCumulatedIncludingAppliedFactors = reportedCumulatedIndexed;
         }
     }
 

@@ -56,7 +56,7 @@ public class ReservesGenerator extends Component implements IReserveMarker {
         if (periodScope.isFirstPeriod()) {
             baseClaim = new GrossClaimRoot(ultimateAtReportingDate, ClaimType.AGGREGATED_RESERVES, averageInceptionDate,
                     averageInceptionDate, payoutPattern, reportingPattern);
-            baseClaim.updateCumulatedPaidAtStartOfFirstPeriod(periodCounter, factors);
+            baseClaim.updateCumulatedValuesAtProjectionStart(periodCounter, factors);
             outNominalUltimates.add(new SingleValuePacket(ultimateAtReportingDate));
         }
         else {
