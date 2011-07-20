@@ -214,7 +214,7 @@ class QuotaShareContractAADTests extends GroovyTestCase {
         assertEquals 'P2 1000 ceded cumulated paid', 140, quotaShare20.outClaimsCeded[1].paidCumulatedIndexed, EPSILON
         assertEquals 'P2 1000 ceded reservedIndexed', 60, quotaShare20.outClaimsCeded[1].reservedIndexed()
         assertEquals 'P2 1000 ceded outstandingIndexed', 8, quotaShare20.outClaimsCeded[1].outstandingIndexed(), EPSILON
-        assertEquals 'P2 1000 ceded ibnrIndexed', 52, quotaShare20.outClaimsCeded[1].ibnrIndexed()
+        assertEquals 'P2 1000 ceded ibnrIndexed', 52, quotaShare20.outClaimsCeded[1].ibnrIndexed(), EPSILON
         assertEquals 'P2 1200 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
         assertEquals 'P2 1200 ceded incremental reported', 48, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed, EPSILON
         assertEquals 'P2 1200 ceded cumulated reported', 192, quotaShare20.outClaimsCeded[2].reportedCumulatedIndexed, EPSILON

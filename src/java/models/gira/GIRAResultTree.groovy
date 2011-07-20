@@ -11,12 +11,12 @@ mappings = {
         "grossClaims" {
             "[%claimsGenerator%]" {
                 "ultimate" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:ultimate"
-                "reportedIncremental" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:reportedIncrementalIndexed"
-                "paidIncremental" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:paidIncrementalIndexed"
-                "outstanding" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:outstandingIndexed"
-                "IBNR" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:IBNR"
-                "reserves" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:reservesIndexed"
-                "increaseDueToIndex" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:developedResult"
+                "reportedIncrementalIndexed" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:reportedIncrementalIndexed"
+                "paidIncrementalIndexed" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:paidIncrementalIndexed"
+                "outstandingIndexed" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:outstandingIndexed"
+                "IBNRIndexed" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:IBNRIndexed"
+                "reservesIndexed" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:reservesIndexed"
+                "increaseDueToIndex" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:developedResultIndexed"
                 "numberOfClaims" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaimNumber:value"
                 "severityIndices" {
                     "continuous" "GIRA:claimsGenerators:[%claimsGenerator%]:outSeverityIndexApplied:continuous"
@@ -25,15 +25,15 @@ mappings = {
                 }
             }
         }
-        "reserves" {
+        "reservesIndexed" {
             "[%reservesGenerator%]" {
                 "ultimateFromInceptionPeriod" "GIRA:reservesGenerators:[%reservesGenerator%]:outNominalUltimates:value"
-                "reportedIncremental" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:reportedIncrementalIndexed"
-                "paidIncremental" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:paidIncrementalIndexed"
-                "outstanding" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:outstandingIndexed"
-                "IBNR" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:IBNR"
-                "reserves" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:reservesIndexed"
-                "increaseDueToIndex" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:developedResult"
+                "reportedIncrementalIndexed" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:reportedIncrementalIndexed"
+                "paidIncrementalIndexed" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:paidIncrementalIndexed"
+                "outstandingIndexed" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:outstandingIndexed"
+                "IBNRIndexed" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:IBNRIndexed"
+                "reservesIndexed" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:reservesIndexed"
+                "increaseDueToIndex" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:developedResultIndexed"
             }
         }
         "grossUnderwritingWritten" "GIRA:underwritingSegments:outUnderwritingInfo:premiumWritten"
@@ -50,29 +50,29 @@ mappings = {
             "[%segment%]" {
                 "claimsNet" {
                     "ultimate" "GIRA:segments:[%segment%]:outClaimsNet:ultimate"
-                    "reportedIncremental" "GIRA:segments:[%segment%]:outClaimsNet:reportedIncrementalIndexed"
-                    "paidIncremental" "GIRA:segments:[%segment%]:outClaimsNet:paidIncrementalIndexed"
-                    "outstanding" "GIRA:segments:[%segment%]:outClaimsNet:outstandingIndexed"
-                    "IBNR" "GIRA:segments:[%segment%]:outClaimsNet:IBNR"
-                    "reserves" "GIRA:segments:[%segment%]:outClaimsNet:reservesIndexed"
-                    "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsNet:developedResult"
+                    "reportedIncrementalIndexed" "GIRA:segments:[%segment%]:outClaimsNet:reportedIncrementalIndexed"
+                    "paidIncrementalIndexed" "GIRA:segments:[%segment%]:outClaimsNet:paidIncrementalIndexed"
+                    "outstandingIndexed" "GIRA:segments:[%segment%]:outClaimsNet:outstandingIndexed"
+                    "IBNRIndexed" "GIRA:segments:[%segment%]:outClaimsNet:IBNRIndexed"
+                    "reservesIndexed" "GIRA:segments:[%segment%]:outClaimsNet:reservesIndexed"
+                    "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsNet:developedResultIndexed"
                     "claimsGross" {
                         "ultimate" "GIRA:segments:[%segment%]:outClaimsGross:ultimate"
-                        "reportedIncremental" "GIRA:segments:[%segment%]:outClaimsGross:reportedIncrementalIndexed"
-                        "paidIncremental" "GIRA:segments:[%segment%]:outClaimsGross:paidIncrementalIndexed"
-                        "outstanding" "GIRA:segments:[%segment%]:outClaimsGross:outstandingIndexed"
-                        "IBNR" "GIRA:segments:[%segment%]:outClaimsGross:IBNR"
-                        "reserves" "GIRA:segments:[%segment%]:outClaimsGross:reservesIndexed"
-                        "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsGross:developedResult"
+                        "reportedIncrementalIndexed" "GIRA:segments:[%segment%]:outClaimsGross:reportedIncrementalIndexed"
+                        "paidIncrementalIndexed" "GIRA:segments:[%segment%]:outClaimsGross:paidIncrementalIndexed"
+                        "outstandingIndexed" "GIRA:segments:[%segment%]:outClaimsGross:outstandingIndexed"
+                        "IBNRIndexed" "GIRA:segments:[%segment%]:outClaimsGross:IBNRIndexed"
+                        "reservesIndexed" "GIRA:segments:[%segment%]:outClaimsGross:reservesIndexed"
+                        "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsGross:developedResultIndexed"
                     }
                     "claimsCeded" {
                         "ultimate" "GIRA:segments:[%segment%]:outClaimsCeded:ultimate"
-                        "reportedIncremental" "GIRA:segments:[%segment%]:outClaimsCeded:reportedIncrementalIndexed"
-                        "paidIncremental" "GIRA:segments:[%segment%]:outClaimsCeded:paidIncrementalIndexed"
-                        "outstanding" "GIRA:segments:[%segment%]:outClaimsCeded:outstandingIndexed"
-                        "IBNR" "GIRA:segments:[%segment%]:outClaimsCeded:IBNR"
-                        "reserves" "GIRA:segments:[%segment%]:outClaimsCeded:reservesIndexed"
-                        "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsCeded:developedResult"
+                        "reportedIncrementalIndexed" "GIRA:segments:[%segment%]:outClaimsCeded:reportedIncrementalIndexed"
+                        "paidIncrementalIndexed" "GIRA:segments:[%segment%]:outClaimsCeded:paidIncrementalIndexed"
+                        "outstandingIndexed" "GIRA:segments:[%segment%]:outClaimsCeded:outstandingIndexed"
+                        "IBNRIndexed" "GIRA:segments:[%segment%]:outClaimsCeded:IBNRIndexed"
+                        "reservesIndexed" "GIRA:segments:[%segment%]:outClaimsCeded:reservesIndexed"
+                        "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsCeded:developedResultIndexed"
                     }
                 }
                 "discountedValues" {
@@ -109,29 +109,29 @@ mappings = {
             "[%structure%]" {
                 "claimsNet" {
                     "ultimate" "GIRA:structures:[%structure%]:outClaimsNet:ultimate"
-                    "reportedIncremental" "GIRA:structures:[%structure%]:outClaimsNet:reportedIncrementalIndexed"
-                    "paidIncremental" "GIRA:structures:[%structure%]:outClaimsNet:paidIncrementalIndexed"
-                    "outstanding" "GIRA:structures:[%structure%]:outClaimsNet:outstandingIndexed"
-                    "IBNR" "GIRA:structures:[%structure%]:outClaimsNet:IBNR"
-                    "reserves" "GIRA:structures:[%structure%]:outClaimsNet:reservesIndexed"
-                    "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsNet:developedResult"
+                    "reportedIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsNet:reportedIncrementalIndexed"
+                    "paidIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsNet:paidIncrementalIndexed"
+                    "outstandingIndexed" "GIRA:structures:[%structure%]:outClaimsNet:outstandingIndexed"
+                    "IBNRIndexed" "GIRA:structures:[%structure%]:outClaimsNet:IBNRIndexed"
+                    "reservesIndexed" "GIRA:structures:[%structure%]:outClaimsNet:reservesIndexed"
+                    "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsNet:developedResultIndexed"
                     "claimsGross" {
                         "ultimate" "GIRA:structures:[%structure%]:outClaimsGross:ultimate"
-                        "reportedIncremental" "GIRA:structures:[%structure%]:outClaimsGross:reportedIncrementalIndexed"
-                        "paidIncremental" "GIRA:structures:[%structure%]:outClaimsGross:paidIncrementalIndexed"
-                        "outstanding" "GIRA:structures:[%structure%]:outClaimsGross:outstandingIndexed"
-                        "IBNR" "GIRA:structures:[%structure%]:outClaimsGross:IBNR"
-                        "reserves" "GIRA:structures:[%structure%]:outClaimsGross:reservesIndexed"
-                        "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsGross:developedResult"
+                        "reportedIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsGross:reportedIncrementalIndexed"
+                        "paidIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsGross:paidIncrementalIndexed"
+                        "outstandingIndexed" "GIRA:structures:[%structure%]:outClaimsGross:outstandingIndexed"
+                        "IBNRIndexed" "GIRA:structures:[%structure%]:outClaimsGross:IBNRIndexed"
+                        "reservesIndexed" "GIRA:structures:[%structure%]:outClaimsGross:reservesIndexed"
+                        "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsGross:developedResultIndexed"
                     }
                     "claimsCeded" {
                         "ultimate" "GIRA:structures:[%structure%]:outClaimsCeded:ultimate"
-                        "reportedIncremental" "GIRA:structures:[%structure%]:outClaimsCeded:reportedIncrementalIndexed"
-                        "paidIncremental" "GIRA:structures:[%structure%]:outClaimsCeded:paidIncrementalIndexed"
-                        "outstanding" "GIRA:structures:[%structure%]:outClaimsCeded:outstandingIndexed"
-                        "IBNR" "GIRA:structures:[%structure%]:outClaimsCeded:IBNR"
-                        "reserves" "GIRA:structures:[%structure%]:outClaimsCeded:reservesIndexed"
-                        "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsCeded:developedResult"
+                        "reportedIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:reportedIncrementalIndexed"
+                        "paidIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:paidIncrementalIndexed"
+                        "outstandingIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:outstandingIndexed"
+                        "IBNRIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:IBNRIndexed"
+                        "reservesIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:reservesIndexed"
+                        "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsCeded:developedResultIndexed"
                     }
                 }
                 "premium" {
@@ -157,29 +157,29 @@ mappings = {
             "[%contract%]" {
                 "claimsNet" {
                     "ultimate" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:ultimate"
-                    "reportedIncremental" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:reportedIncrementalIndexed"
-                    "paidIncremental" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:paidIncrementalIndexed"
-                    "outstanding" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:outstandingIndexed"
-                    "IBNR" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:IBNR"
-                    "reserves" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:reservesIndexed"
-                    "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:developedResult"
+                    "reportedIncrementalIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:reportedIncrementalIndexed"
+                    "paidIncrementalIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:paidIncrementalIndexed"
+                    "outstandingIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:outstandingIndexed"
+                    "IBNRIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:IBNRIndexed"
+                    "reservesIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:reservesIndexed"
+                    "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:developedResultIndexed"
                     "claimsGross" {
                         "ultimate" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:ultimate"
-                        "reportedIncremental" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:reportedIncrementalIndexed"
-                        "paidIncremental" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:paidIncrementalIndexed"
-                        "outstanding" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:outstandingIndexed"
-                        "IBNR" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:IBNR"
-                        "reserves" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:reservesIndexed"
-                        "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:developedResult"
+                        "reportedIncrementalIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:reportedIncrementalIndexed"
+                        "paidIncrementalIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:paidIncrementalIndexed"
+                        "outstandingIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:outstandingIndexed"
+                        "IBNRIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:IBNRIndexed"
+                        "reservesIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:reservesIndexed"
+                        "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:developedResultIndexed"
                     }
                     "claimsCeded" {
                         "ultimate" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:ultimate"
-                        "reportedIncremental" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:reportedIncrementalIndexed"
-                        "paidIncremental" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:paidIncrementalIndexed"
-                        "outstanding" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:outstandingIndexed"
-                        "IBNR" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:IBNR"
-                        "reserves" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:reservesIndexed"
-                        "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:developedResult"
+                        "reportedIncrementalIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:reportedIncrementalIndexed"
+                        "paidIncrementalIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:paidIncrementalIndexed"
+                        "outstandingIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:outstandingIndexed"
+                        "IBNRIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:IBNRIndexed"
+                        "reservesIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:reservesIndexed"
+                        "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:developedResultIndexed"
                     }
                 }
                 "premium" {
@@ -205,23 +205,23 @@ mappings = {
             "ultimate" "GIRA:claimsGenerators:outClaims:ultimate", {
                 "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:ultimate"
             }
-            "reportedIncremental" "GIRA:claimsGenerators:outClaims:reportedIncrementalIndexed", {
+            "reportedIncrementalIndexed" "GIRA:claimsGenerators:outClaims:reportedIncrementalIndexed", {
                 "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:reportedIncrementalIndexed"
             }
-            "paidIncremental" "GIRA:claimsGenerators:outClaims:paidIncrementalIndexed", {
+            "paidIncrementalIndexed" "GIRA:claimsGenerators:outClaims:paidIncrementalIndexed", {
                 "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:paidIncrementalIndexed"
             }
-            "outstanding" "GIRA:claimsGenerators:outClaims:outstandingIndexed", {
+            "outstandingIndexed" "GIRA:claimsGenerators:outClaims:outstandingIndexed", {
                 "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:outstandingIndexed"
             }
-            "IBNR" "GIRA:claimsGenerators:outClaims:IBNR", {
-                "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:IBNR"
+            "IBNRIndexed" "GIRA:claimsGenerators:outClaims:IBNRIndexed", {
+                "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:IBNRIndexed"
             }
-            "reserves" "GIRA:claimsGenerators:outClaims:reservesIndexed", {
+            "reservesIndexed" "GIRA:claimsGenerators:outClaims:reservesIndexed", {
                 "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:reservesIndexed"
             }
-            "increaseDueToIndex" "GIRA:claimsGenerators:outClaims:developedResult", {
-                "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:developedResult"
+            "increaseDueToIndex" "GIRA:claimsGenerators:outClaims:developedResultIndexed", {
+                "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:developedResultIndexed"
             }
             "numberOfClaims" {
                 "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaimNumber:value"

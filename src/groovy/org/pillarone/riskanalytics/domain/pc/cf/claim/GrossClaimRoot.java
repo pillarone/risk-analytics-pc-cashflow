@@ -99,21 +99,28 @@ public final class GrossClaimRoot implements IClaimRoot {
                     double payoutCumulatedFactor = payouts.get(i).getFactorCumulated();
                     double ultimate = claimRoot.getUltimate();
                     double reserves = ultimate * (1 - payoutCumulatedFactor) * factor;
-                    double paidIncremental = ultimate * payoutIncrementalFactor * factor;
-                    double paidCumulated = paidCumulatedIncludingAppliedFactors + paidIncremental;
-                    paidCumulatedIncludingAppliedFactors = paidCumulated;
+                    double paidIncremental = ultimate * payoutIncrementalFactor;
+                    double paidIncrementalIndexed = paidIncremental * factor;
+                    double paidCumulated = ultimate * payoutCumulatedFactor;
+                    double paidCumulatedIndexed = paidCumulatedIncludingAppliedFactors + paidIncrementalIndexed;
+                    paidCumulatedIncludingAppliedFactors = paidCumulatedIndexed;
                     ClaimCashflowPacket cashflowPacket;
                     if (!hasIBNR() && !isReservesClaim) {
-                        cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncremental, paidCumulated,
-                                reserves, claimRoot.getExposureInfo(), payoutDate, periodCounter);
+                        cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncrementalIndexed,
+                                paidCumulatedIndexed, reserves, claimRoot.getExposureInfo(), payoutDate, periodCounter);
                     }
                     else {
                     // ask stefan: reportedCumulated != sum (reported incremental)
-                        double reportedIncremental = reportedIncremental(ultimate, factor, reports, i);
-                        double reportedCumulated = reportedCumulated(ultimate, paidCumulated, factor, payoutCumulatedFactor, reports, i);
-                        reportedCumulatedIncludingAppliedFactors = reportedCumulated;
-                        cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncremental, paidCumulated,
-                                reportedIncremental, reportedCumulated, reserves, claimRoot.getExposureInfo(), payoutDate, periodCounter);
+//                        double reportedIncremental = reportedIncremental(ultimate, factor, reports, i);
+                        double reportedCumulated = reportedCumulated(ultimate, paidCumulated, 1, payoutCumulatedFactor, reports, i);
+                        double outstanding = reportedCumulated - paidCumulated;
+                        double outstandingIndexed = outstanding * factor;
+                        double reportedCumulatedIndexed = outstandingIndexed + paidCumulatedIndexed;
+                        double reportedIncrementalIndexed = reportedCumulatedIndexed - reportedCumulatedIncludingAppliedFactors;
+                        reportedCumulatedIncludingAppliedFactors = reportedCumulatedIndexed;
+                        cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncrementalIndexed,
+                                paidCumulatedIndexed, reportedIncrementalIndexed, reportedCumulatedIndexed, reserves,
+                                claimRoot.getExposureInfo(), payoutDate, periodCounter);
                     }
                     childCounter++;
                     hasUltimate = false;    // a period may contain several payouts and only the first should contain the ultimate
