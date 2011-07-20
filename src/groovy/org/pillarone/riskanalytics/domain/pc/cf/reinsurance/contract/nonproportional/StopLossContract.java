@@ -9,7 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AbstractReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimsStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IPremiumAllocationStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
 
     /** Strategy to allocate the ceded premium to the different lines of business  */
     // todo: business object instead of parameter
-    private IPremiumAllocationStrategy premiumAllocation;
+    private IRIPremiumSplitStrategy riPremiumSplit;
 
     private ThresholdStore periodAttachmentPoint;
     private ThresholdStore periodLimit;
@@ -41,12 +41,12 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
      * @param cededPremiumFixed
      * @param attachmentPoint
      * @param limit
-     * @param premiumAllocation
+     * @param riPremiumSplit
      */
     public StopLossContract(double cededPremiumFixed, double attachmentPoint, double limit,
-                            IPremiumAllocationStrategy premiumAllocation) {
+                            IRIPremiumSplitStrategy riPremiumSplit) {
         this.cededPremiumFixed = cededPremiumFixed;
-        this.premiumAllocation = premiumAllocation;
+        this.riPremiumSplit = riPremiumSplit;
         periodAttachmentPoint = new ThresholdStore(attachmentPoint);
         periodLimit = new ThresholdStore(limit);
     }
@@ -75,7 +75,7 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
 
     // todo(sku): try to call this function only if isStartCoverPeriod
     public void initCededPremiumAllocation(List<ClaimCashflowPacket> cededClaims, List<UnderwritingInfoPacket> grossUnderwritingInfos) {
-        premiumAllocation.initSegmentShares(cededClaims, grossUnderwritingInfos);
+        riPremiumSplit.initSegmentShares(cededClaims, grossUnderwritingInfos);
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
@@ -120,7 +120,7 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
             initCededPremiumAllocation(cededClaims, grossUwInfos);
         }
         for (UnderwritingInfoPacket grossUnderwritingInfo : grossUwInfos) {
-            double cededPremiumFixedShare = cededPremiumFixed * premiumAllocation.getShare(grossUnderwritingInfo);
+            double cededPremiumFixedShare = cededPremiumFixed * riPremiumSplit.getShare(grossUnderwritingInfo);
             cededPremiumFixedShare *= coveredByReinsurers;
             double cededPremiumVariable = 0;
             cededPremiumVariable *= coveredByReinsurers;

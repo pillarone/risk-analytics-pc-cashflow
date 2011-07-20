@@ -8,7 +8,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IPremiumAllocationStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +26,7 @@ public class StopLossConstractStrategy extends AbstractParameterObject implement
     private double premium;
 
     /** Strategy to allocate the ceded premium to the different lines of business  */
-    private IPremiumAllocationStrategy premiumAllocation;
+    private IRIPremiumSplitStrategy premiumAllocation;
     /** As a percentage of premium */
     private AbstractMultiDimensionalParameter reinstatementPremiums;
     private double attachmentPoint;
@@ -66,7 +66,7 @@ public class StopLossConstractStrategy extends AbstractParameterObject implement
 
     public static final String CONTRACT_BASE = "contractBase";
     public static final String PREMIUM = "premium";
-    public static final String PREMIUM_ALLOCATION = "premiumAllocation";
+    public static final String PREMIUM_ALLOCATION = "riPremiumSplit";
     public static final String REINSTATEMENT_PREMIUMS = "reinstatementPremiums";
     public static final String ATTACHMENT_POINT = "attachmentPoint";
     public static final String LIMIT = "limit";

@@ -5,10 +5,10 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public enum ContractBase {
-    CEDED, NET;
+public enum RIRateBase {
+    COMPLETESEGMENT, PROPORTIONALTOCOVEREDCLAIMS;
 
-    public Object getConstructionString(Map parameters) {
+     public Object getConstructionString(Map parameters) {
         return getClass().getName() + "." + this;
     }
 }

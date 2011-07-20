@@ -31,12 +31,12 @@ abstract public class AbstractCommission implements ICommission {
         }
         else if (useClaims.equals(BasedOnClaimProperty.PAID)) {
             for (ClaimCashflowPacket claim : claims) {
-                totalClaims += claim.getPaidIncremental();
+                totalClaims += claim.getPaidIncrementalIndexed();
             }
         }
         else if (useClaims.equals(BasedOnClaimProperty.REPORTED)) {
             for (ClaimCashflowPacket claim : claims) {
-                totalClaims += claim.getReportedIncremental();
+                totalClaims += claim.getReportedIncrementalIndexed();
             }
         }
         return totalClaims;

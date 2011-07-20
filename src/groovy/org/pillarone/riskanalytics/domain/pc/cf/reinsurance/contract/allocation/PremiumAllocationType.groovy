@@ -46,17 +46,17 @@ class PremiumAllocationType extends AbstractParameterObjectClassifier {
         return PremiumAllocationType.getStrategy(this, parameters)
     }
 
-    static IPremiumAllocationStrategy getStrategy(PremiumAllocationType type, Map parameters) {
-        IPremiumAllocationStrategy premiumAllocator;
+    static IRIPremiumSplitStrategy getStrategy(PremiumAllocationType type, Map parameters) {
+        IRIPremiumSplitStrategy premiumAllocator;
         switch (type) {
             case PremiumAllocationType.PREMIUM_SHARES:
-                premiumAllocator = new PremiumSharesPremiumAllocationStrategy()
+                premiumAllocator = new PremiumSharesPremiumSplitStrategy()
                 break;
             case PremiumAllocationType.CLAIMS_SHARES:
-                premiumAllocator = new ClaimsSharesPremiumAllocationStrategy()
+                premiumAllocator = new ClaimsSharesPremiumSplitStrategy()
                 break;
             case PremiumAllocationType.LINE_SHARES:
-                premiumAllocator = new LineSharesPremiumAllocationStrategy(lineOfBusinessShares: (ConstrainedMultiDimensionalParameter) parameters["lineOfBusinessShares"])
+                premiumAllocator = new LineSharesPremiumSplitStrategy(lineOfBusinessShares: (ConstrainedMultiDimensionalParameter) parameters["lineOfBusinessShares"])
                 break;
 
         }

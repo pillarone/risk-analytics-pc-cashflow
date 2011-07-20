@@ -37,8 +37,8 @@ public class EventLimitQuotaShareContract extends QuotaShareContract {
             cededBaseClaim = storage.lazyInitCededClaimRoot(quotaShareUltimate);
         }
 
-        double quotaShareReported = adjustedQuote(grossClaim.getReportedIncremental(), eventLimitReported, grossClaim.getBaseClaim().hasEvent());
-        double quotaSharePaid = adjustedQuote(grossClaim.getPaidIncremental(), eventLimitPaid, grossClaim.getBaseClaim().hasEvent());
+        double quotaShareReported = adjustedQuote(grossClaim.getReportedIncrementalIndexed(), eventLimitReported, grossClaim.getBaseClaim().hasEvent());
+        double quotaSharePaid = adjustedQuote(grossClaim.getPaidIncrementalIndexed(), eventLimitPaid, grossClaim.getBaseClaim().hasEvent());
         ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate,
                 quotaShareReported, quotaSharePaid, true);
         add(grossClaim, cededClaim);

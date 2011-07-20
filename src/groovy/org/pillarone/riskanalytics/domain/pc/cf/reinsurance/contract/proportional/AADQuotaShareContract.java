@@ -37,8 +37,8 @@ public class AADQuotaShareContract extends QuotaShareContract {
             cededBaseClaim = storage.lazyInitCededClaimRoot(quotaShareUltimate);
         }
 
-        double quotaShareReported = adjustedQuote(grossClaim.getReportedIncremental(), annualAggregateDeductibleReported);
-        double quotaSharePaid = adjustedQuote(grossClaim.getPaidIncremental(), annualAggregateDeductiblePaid);
+        double quotaShareReported = adjustedQuote(grossClaim.getReportedIncrementalIndexed(), annualAggregateDeductibleReported);
+        double quotaSharePaid = adjustedQuote(grossClaim.getPaidIncrementalIndexed(), annualAggregateDeductiblePaid);
         ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate,
                 quotaShareReported, quotaSharePaid, true);
         add(grossClaim, cededClaim);

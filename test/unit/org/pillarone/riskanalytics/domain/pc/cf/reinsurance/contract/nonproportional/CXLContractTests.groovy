@@ -55,7 +55,7 @@ class CXLContractTests extends GroovyTestCase {
                     'aggregateDeductible': aggregateDeductible, 'attachmentPoint': attachmentPoint,
                     'limit': limit, 'aggregateLimit': aggregateLimit, 'premiumBase': PremiumBase.ABSOLUTE,
                     'premium': premium,
-                    'premiumAllocation': PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
+                    'riPremiumSplit': PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
                     'reinstatementPremiums': new TableMultiDimensionalParameter(reinstatementPremiumFactors, ['Reinstatement Premium'])]),
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0])
@@ -85,13 +85,13 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 1, cxl.outClaimsCeded.size()
         assertEquals 'P0.0 ceded ultimate', 30, cxl.outClaimsCeded[0].ultimate()
-        assertEquals 'P0.0 ceded reported incremental', 0, cxl.outClaimsCeded[0].reportedIncremental
-        assertEquals 'P0.0 ceded reported cumulated', 0, cxl.outClaimsCeded[0].reportedCumulated
-        assertEquals 'P0.0 ceded paid incremental', 0, cxl.outClaimsCeded[0].paidIncremental
-        assertEquals 'P0.0 ceded paid cumulated', 0, cxl.outClaimsCeded[0].paidCumulated
-        assertEquals 'P0.0 ceded reserved', 30, cxl.outClaimsCeded[0].reserved()
-        assertEquals 'P0.0 ceded outstanding', 0, cxl.outClaimsCeded[0].outstanding()
-        assertEquals 'P0.0 ceded ibnr', 30, cxl.outClaimsCeded[0].ibnr()
+        assertEquals 'P0.0 ceded reported incremental', 0, cxl.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P0.0 ceded reported cumulated', 0, cxl.outClaimsCeded[0].reportedCumulatedIndexed
+        assertEquals 'P0.0 ceded paid incremental', 0, cxl.outClaimsCeded[0].paidIncrementalIndexed
+        assertEquals 'P0.0 ceded paid cumulated', 0, cxl.outClaimsCeded[0].paidCumulatedIndexed
+        assertEquals 'P0.0 ceded reservedIndexed', 30, cxl.outClaimsCeded[0].reservedIndexed()
+        assertEquals 'P0.0 ceded outstandingIndexed', 0, cxl.outClaimsCeded[0].outstandingIndexed()
+        assertEquals 'P0.0 ceded ibnrIndexed', 30, cxl.outClaimsCeded[0].ibnrIndexed()
         assertEquals 'P0 ceded premium written', -100, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P0 ceded premium paid', -100, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P0 ceded premium fixed', -100, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -111,21 +111,21 @@ class CXLContractTests extends GroovyTestCase {
 
         assertEquals 'number of ceded claims', 2, cxl.outClaimsCeded.size()
         assertEquals 'P1.1 ceded ultimate', 30, cxl.outClaimsCeded[0].ultimate()
-        assertEquals 'P1.1 ceded reported incremental', 1, cxl.outClaimsCeded[0].reportedIncremental
-        assertEquals 'P1.1 ceded reported cumulated', 1, cxl.outClaimsCeded[0].reportedCumulated
-        assertEquals 'P1.1 ceded paid incremental', 0, cxl.outClaimsCeded[0].paidIncremental
-        assertEquals 'P1.1 ceded paid cumulated', 0, cxl.outClaimsCeded[0].paidCumulated
-        assertEquals 'P1.1 ceded reserved', 30, cxl.outClaimsCeded[0].reserved()
-        assertEquals 'P1.1 ceded outstanding', 1, cxl.outClaimsCeded[0].outstanding()
-        assertEquals 'P1.1 ceded ibnr', 29, cxl.outClaimsCeded[0].ibnr()
+        assertEquals 'P1.1 ceded reported incremental', 1, cxl.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P1.1 ceded reported cumulated', 1, cxl.outClaimsCeded[0].reportedCumulatedIndexed
+        assertEquals 'P1.1 ceded paid incremental', 0, cxl.outClaimsCeded[0].paidIncrementalIndexed
+        assertEquals 'P1.1 ceded paid cumulated', 0, cxl.outClaimsCeded[0].paidCumulatedIndexed
+        assertEquals 'P1.1 ceded reservedIndexed', 30, cxl.outClaimsCeded[0].reservedIndexed()
+        assertEquals 'P1.1 ceded outstandingIndexed', 1, cxl.outClaimsCeded[0].outstandingIndexed()
+        assertEquals 'P1.1 ceded ibnrIndexed', 29, cxl.outClaimsCeded[0].ibnrIndexed()
         assertEquals 'P1.0 ceded ultimate', 0, cxl.outClaimsCeded[1].ultimate()
-        assertEquals 'P1.0 ceded reported incremental', 10, cxl.outClaimsCeded[1].reportedIncremental
-        assertEquals 'P1.0 ceded reported cumulated', 10, cxl.outClaimsCeded[1].reportedCumulated
-        assertEquals 'P1.0 ceded paid incremental', 0, cxl.outClaimsCeded[1].paidIncremental
-        assertEquals 'P1.0 ceded paid cumulated', 0, cxl.outClaimsCeded[1].paidCumulated
-        assertEquals 'P1.0 ceded reserved', 30, cxl.outClaimsCeded[1].reserved()
-        assertEquals 'P1.0 ceded outstanding', 10, cxl.outClaimsCeded[1].outstanding()
-        assertEquals 'P1.0 ceded ibnr', 20, cxl.outClaimsCeded[1].ibnr()
+        assertEquals 'P1.0 ceded reported incremental', 10, cxl.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P1.0 ceded reported cumulated', 10, cxl.outClaimsCeded[1].reportedCumulatedIndexed
+        assertEquals 'P1.0 ceded paid incremental', 0, cxl.outClaimsCeded[1].paidIncrementalIndexed
+        assertEquals 'P1.0 ceded paid cumulated', 0, cxl.outClaimsCeded[1].paidCumulatedIndexed
+        assertEquals 'P1.0 ceded reservedIndexed', 30, cxl.outClaimsCeded[1].reservedIndexed()
+        assertEquals 'P1.0 ceded outstandingIndexed', 10, cxl.outClaimsCeded[1].outstandingIndexed()
+        assertEquals 'P1.0 ceded ibnrIndexed', 20, cxl.outClaimsCeded[1].ibnrIndexed()
 
 
         cxl.reset()
@@ -136,21 +136,21 @@ class CXLContractTests extends GroovyTestCase {
 
         assertEquals 'number of ceded claims', 2, cxl.outClaimsCeded.size()
         assertEquals 'P2.1 ceded ultimate', 0, cxl.outClaimsCeded[0].ultimate()
-        assertEquals 'P2.1 ceded reported incremental', 21, cxl.outClaimsCeded[0].reportedIncremental
-        assertEquals 'P2.1 ceded reported cumulated', 22, cxl.outClaimsCeded[0].reportedCumulated
-        assertEquals 'P2.1 ceded paid incremental', 8, cxl.outClaimsCeded[0].paidIncremental
-        assertEquals 'P2.1 ceded paid cumulated', 8, cxl.outClaimsCeded[0].paidCumulated
-        assertEquals 'P2.1 ceded reserved', 22, cxl.outClaimsCeded[0].reserved()
-        assertEquals 'P2.1 ceded outstanding', 14, cxl.outClaimsCeded[0].outstanding()
-        assertEquals 'P2.1 ceded ibnr', 8, cxl.outClaimsCeded[0].ibnr()
+        assertEquals 'P2.1 ceded reported incremental', 21, cxl.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P2.1 ceded reported cumulated', 22, cxl.outClaimsCeded[0].reportedCumulatedIndexed
+        assertEquals 'P2.1 ceded paid incremental', 8, cxl.outClaimsCeded[0].paidIncrementalIndexed
+        assertEquals 'P2.1 ceded paid cumulated', 8, cxl.outClaimsCeded[0].paidCumulatedIndexed
+        assertEquals 'P2.1 ceded reservedIndexed', 22, cxl.outClaimsCeded[0].reservedIndexed()
+        assertEquals 'P2.1 ceded outstandingIndexed', 14, cxl.outClaimsCeded[0].outstandingIndexed()
+        assertEquals 'P2.1 ceded ibnrIndexed', 8, cxl.outClaimsCeded[0].ibnrIndexed()
         assertEquals 'P2.0 ceded ultimate', 0, cxl.outClaimsCeded[1].ultimate()
-        assertEquals 'P2.0 ceded reported incremental', 10, cxl.outClaimsCeded[1].reportedIncremental, EPSILON
-        assertEquals 'P2.0 ceded reported cumulated', 20, cxl.outClaimsCeded[1].reportedCumulated, EPSILON
-        assertEquals 'P2.0 ceded paid incremental', 15, cxl.outClaimsCeded[1].paidIncremental
-        assertEquals 'P2.0 ceded paid cumulated', 15, cxl.outClaimsCeded[1].paidCumulated
-        assertEquals 'P2.0 ceded reserved', 15, cxl.outClaimsCeded[1].reserved()
-        assertEquals 'P2.0 ceded outstanding', 5, cxl.outClaimsCeded[1].outstanding(), EPSILON
-        assertEquals 'P2.0 ceded ibnr', 10, cxl.outClaimsCeded[1].ibnr(), EPSILON
+        assertEquals 'P2.0 ceded reported incremental', 10, cxl.outClaimsCeded[1].reportedIncrementalIndexed, EPSILON
+        assertEquals 'P2.0 ceded reported cumulated', 20, cxl.outClaimsCeded[1].reportedCumulatedIndexed, EPSILON
+        assertEquals 'P2.0 ceded paid incremental', 15, cxl.outClaimsCeded[1].paidIncrementalIndexed
+        assertEquals 'P2.0 ceded paid cumulated', 15, cxl.outClaimsCeded[1].paidCumulatedIndexed
+        assertEquals 'P2.0 ceded reservedIndexed', 15, cxl.outClaimsCeded[1].reservedIndexed()
+        assertEquals 'P2.0 ceded outstandingIndexed', 5, cxl.outClaimsCeded[1].outstandingIndexed(), EPSILON
+        assertEquals 'P2.0 ceded ibnrIndexed', 10, cxl.outClaimsCeded[1].ibnrIndexed(), EPSILON
 
 
         cxl.reset()
@@ -161,21 +161,21 @@ class CXLContractTests extends GroovyTestCase {
 
         assertEquals 'number of ceded claims', 2, cxl.outClaimsCeded.size()
         assertEquals 'P3.1 ceded ultimate', 0, cxl.outClaimsCeded[0].ultimate()
-        assertEquals 'P3.1 ceded reported incremental', 8, cxl.outClaimsCeded[0].reportedIncremental, EPSILON
-        assertEquals 'P3.1 ceded reported cumulated', 30, cxl.outClaimsCeded[0].reportedCumulated
-        assertEquals 'P3.1 ceded paid incremental', 21, cxl.outClaimsCeded[0].paidIncremental
-        assertEquals 'P3.1 ceded paid cumulated', 29, cxl.outClaimsCeded[0].paidCumulated
-        assertEquals 'P3.1 ceded reserved', 1, cxl.outClaimsCeded[0].reserved()
-        assertEquals 'P3.1 ceded outstanding', 1, cxl.outClaimsCeded[0].outstanding()
-        assertEquals 'P3.1 ceded ibnr', 0, cxl.outClaimsCeded[0].ibnr()
+        assertEquals 'P3.1 ceded reported incremental', 8, cxl.outClaimsCeded[0].reportedIncrementalIndexed, EPSILON
+        assertEquals 'P3.1 ceded reported cumulated', 30, cxl.outClaimsCeded[0].reportedCumulatedIndexed
+        assertEquals 'P3.1 ceded paid incremental', 21, cxl.outClaimsCeded[0].paidIncrementalIndexed
+        assertEquals 'P3.1 ceded paid cumulated', 29, cxl.outClaimsCeded[0].paidCumulatedIndexed
+        assertEquals 'P3.1 ceded reservedIndexed', 1, cxl.outClaimsCeded[0].reservedIndexed()
+        assertEquals 'P3.1 ceded outstandingIndexed', 1, cxl.outClaimsCeded[0].outstandingIndexed()
+        assertEquals 'P3.1 ceded ibnrIndexed', 0, cxl.outClaimsCeded[0].ibnrIndexed()
         assertEquals 'P3.0 ceded ultimate', 0, cxl.outClaimsCeded[1].ultimate()
-        assertEquals 'P3.0 ceded reported incremental', 9, cxl.outClaimsCeded[1].reportedIncremental, EPSILON
-        assertEquals 'P3.0 ceded reported cumulated', 29, cxl.outClaimsCeded[1].reportedCumulated
-        assertEquals 'P3.0 ceded paid incremental', 7.5, cxl.outClaimsCeded[1].paidIncremental
-        assertEquals 'P3.0 ceded paid cumulated', 22.5, cxl.outClaimsCeded[1].paidCumulated
-        assertEquals 'P3.0 ceded reserved', 7.5, cxl.outClaimsCeded[1].reserved()
-        assertEquals 'P3.0 ceded outstanding', 6.5, cxl.outClaimsCeded[1].outstanding()
-        assertEquals 'P3.0 ceded ibnr', 1, cxl.outClaimsCeded[1].ibnr()
+        assertEquals 'P3.0 ceded reported incremental', 9, cxl.outClaimsCeded[1].reportedIncrementalIndexed, EPSILON
+        assertEquals 'P3.0 ceded reported cumulated', 29, cxl.outClaimsCeded[1].reportedCumulatedIndexed
+        assertEquals 'P3.0 ceded paid incremental', 7.5, cxl.outClaimsCeded[1].paidIncrementalIndexed
+        assertEquals 'P3.0 ceded paid cumulated', 22.5, cxl.outClaimsCeded[1].paidCumulatedIndexed
+        assertEquals 'P3.0 ceded reservedIndexed', 7.5, cxl.outClaimsCeded[1].reservedIndexed()
+        assertEquals 'P3.0 ceded outstandingIndexed', 6.5, cxl.outClaimsCeded[1].outstandingIndexed()
+        assertEquals 'P3.0 ceded ibnrIndexed', 1, cxl.outClaimsCeded[1].ibnrIndexed()
 
 
         cxl.reset()
@@ -186,21 +186,21 @@ class CXLContractTests extends GroovyTestCase {
 
         assertEquals 'number of ceded claims', 2, cxl.outClaimsCeded.size()
         assertEquals 'P4.1 ceded ultimate', 0, cxl.outClaimsCeded[0].ultimate()
-        assertEquals 'P4.1 ceded reported incremental', 0, cxl.outClaimsCeded[0].reportedIncremental
-        assertEquals 'P4.1 ceded reported cumulated', 30, cxl.outClaimsCeded[0].reportedCumulated
-        assertEquals 'P4.1 ceded paid incremental', 1, cxl.outClaimsCeded[0].paidIncremental
-        assertEquals 'P4.1 ceded paid cumulated', 30, cxl.outClaimsCeded[0].paidCumulated
-        assertEquals 'P4.1 ceded reserved', 0, cxl.outClaimsCeded[0].reserved()
-        assertEquals 'P4.1 ceded outstanding', 0, cxl.outClaimsCeded[0].outstanding()
-        assertEquals 'P4.1 ceded ibnr', 0, cxl.outClaimsCeded[0].ibnr()
+        assertEquals 'P4.1 ceded reported incremental', 0, cxl.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P4.1 ceded reported cumulated', 30, cxl.outClaimsCeded[0].reportedCumulatedIndexed
+        assertEquals 'P4.1 ceded paid incremental', 1, cxl.outClaimsCeded[0].paidIncrementalIndexed
+        assertEquals 'P4.1 ceded paid cumulated', 30, cxl.outClaimsCeded[0].paidCumulatedIndexed
+        assertEquals 'P4.1 ceded reservedIndexed', 0, cxl.outClaimsCeded[0].reservedIndexed()
+        assertEquals 'P4.1 ceded outstandingIndexed', 0, cxl.outClaimsCeded[0].outstandingIndexed()
+        assertEquals 'P4.1 ceded ibnrIndexed', 0, cxl.outClaimsCeded[0].ibnrIndexed()
         assertEquals 'P4.0 ceded ultimate', 0, cxl.outClaimsCeded[1].ultimate()
-        assertEquals 'P4.0 ceded reported incremental', 1, cxl.outClaimsCeded[1].reportedIncremental
-        assertEquals 'P4.0 ceded reported cumulated', 30, cxl.outClaimsCeded[1].reportedCumulated
-        assertEquals 'P4.0 ceded paid incremental', 7.5, cxl.outClaimsCeded[1].paidIncremental
-        assertEquals 'P4.0 ceded paid cumulated', 30, cxl.outClaimsCeded[1].paidCumulated
-        assertEquals 'P4.0 ceded reserved', 0, cxl.outClaimsCeded[1].reserved()
-        assertEquals 'P4.0 ceded outstanding', 0, cxl.outClaimsCeded[1].outstanding()
-        assertEquals 'P4.0 ceded ibnr', 0, cxl.outClaimsCeded[1].ibnr()
+        assertEquals 'P4.0 ceded reported incremental', 1, cxl.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P4.0 ceded reported cumulated', 30, cxl.outClaimsCeded[1].reportedCumulatedIndexed
+        assertEquals 'P4.0 ceded paid incremental', 7.5, cxl.outClaimsCeded[1].paidIncrementalIndexed
+        assertEquals 'P4.0 ceded paid cumulated', 30, cxl.outClaimsCeded[1].paidCumulatedIndexed
+        assertEquals 'P4.0 ceded reservedIndexed', 0, cxl.outClaimsCeded[1].reservedIndexed()
+        assertEquals 'P4.0 ceded outstandingIndexed', 0, cxl.outClaimsCeded[1].outstandingIndexed()
+        assertEquals 'P4.0 ceded ibnrIndexed', 0, cxl.outClaimsCeded[1].ibnrIndexed()
 
         cxl.reset()
         cxl.iterationScope.periodScope.prepareNextPeriod()
@@ -209,13 +209,13 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
 
         assertEquals 'number of ceded claims', 1, cxl.outClaimsCeded.size()
-        assertEquals 'P5 summed ceded reported incremental', 0, cxl.outClaimsCeded.reportedIncremental.sum()
-        assertEquals 'P5 summed ceded reported cumulated', 30, cxl.outClaimsCeded.reportedCumulated.sum()
-        assertEquals 'P5 summed ceded paid incremental', 0, cxl.outClaimsCeded.paidIncremental.sum()
-        assertEquals 'P5 summed ceded paid cumulated', 30, cxl.outClaimsCeded.paidCumulated.sum()
-        assertEquals 'P5 summed ceded reserved', 0, cxl.outClaimsCeded.reserves.sum()
-        assertEquals 'P5 summed ceded outstanding', 0, cxl.outClaimsCeded*.outstanding().sum()
-        assertEquals 'P5 summed ceded ibnr', 0, cxl.outClaimsCeded*.ibnr().sum()
+        assertEquals 'P5 summed ceded reported incremental', 0, cxl.outClaimsCeded.reportedIncrementalIndexed.sum()
+        assertEquals 'P5 summed ceded reported cumulated', 30, cxl.outClaimsCeded.reportedCumulatedIndexed.sum()
+        assertEquals 'P5 summed ceded paid incremental', 0, cxl.outClaimsCeded.paidIncrementalIndexed.sum()
+        assertEquals 'P5 summed ceded paid cumulated', 30, cxl.outClaimsCeded.paidCumulatedIndexed.sum()
+        assertEquals 'P5 summed ceded reservedIndexed', 0, cxl.outClaimsCeded.reservesIndexed.sum()
+        assertEquals 'P5 summed ceded outstandingIndexed', 0, cxl.outClaimsCeded*.outstandingIndexed().sum()
+        assertEquals 'P5 summed ceded ibnrIndexed', 0, cxl.outClaimsCeded*.ibnrIndexed().sum()
     }
 
     /**
@@ -238,8 +238,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 5, cxl.outClaimsCeded.size()
         assertEquals 'P0.0 ceded ultimates', [0, 0, 100, 200, 200], cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P0.0 ceded incremental reported', [0, 0, 100, 200, 200], cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P0.0 ceded incremental paids', [0d] * 5, cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P0.0 ceded incremental reported', [0, 0, 100, 200, 200], cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P0.0 ceded incremental paids', [0d] * 5, cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P0.0 ceded premium written', -800, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P0.0 ceded premium paid', -800, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P0.0 ceded premium fixed', -800, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -255,8 +255,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 5, cxl.outClaimsCeded.size()
         assertEquals 'P1 ceded ultimates', [0d] * 5, cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P1 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P1 ceded incremental paids', [0, 0, 0, 60, 140], cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P1 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P1 ceded incremental paids', [0, 0, 0, 60, 140], cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P1 ceded premium written', -480, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P1 ceded premium paid', -480, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P1 ceded premium fixed', 0, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -272,8 +272,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 5, cxl.outClaimsCeded.size()
         assertEquals 'P2 ceded ultimates', [0d] * 5, cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P2 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P2 ceded incremental paids', [0, 0, 100, 140, 60], cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P2 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P2 ceded incremental paids', [0, 0, 100, 140, 60], cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P2 ceded premium written', -720, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P2 ceded premium paid', -720, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P2 ceded premium fixed', 0, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -289,8 +289,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 5, cxl.outClaimsCeded.size()
         assertEquals 'P3 ceded ultimates', [0d] * 5, cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P3 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P3 ceded incremental paids', [0d] *5, cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P3 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P3 ceded incremental paids', [0d] *5, cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P3 ceded premium written', 0, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P3 ceded premium paid', 0, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P3 ceded premium fixed', 0, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -306,8 +306,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 5, cxl.outClaimsCeded.size()
         assertEquals 'P4 ceded ultimates', [0d] * 5, cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P4 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P4 ceded incremental paids', [0d] *5, cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P4 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P4 ceded incremental paids', [0d] *5, cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P4 ceded premium written', 0, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P4 ceded premium paid', 0, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P4 ceded premium fixed', 0, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -335,8 +335,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 5, cxl.outClaimsCeded.size()
         assertEquals 'P0.0 ceded ultimates', [0, 0, 100, 200, 100], cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P0.0 ceded incremental reported', [0, 0, 100, 200, 100], cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P0.0 ceded incremental paids', [0d] * 5, cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P0.0 ceded incremental reported', [0, 0, 100, 200, 100], cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P0.0 ceded incremental paids', [0d] * 5, cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P0.0 ceded premium written', -800, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P0.0 ceded premium paid', -800, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P0.0 ceded premium fixed', -800, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -352,8 +352,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 5, cxl.outClaimsCeded.size()
         assertEquals 'P1 ceded ultimates', [0d] * 5, cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P1 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P1 ceded incremental paids', [0, 0, 0, 60, 140], cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P1 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P1 ceded incremental paids', [0, 0, 0, 60, 140], cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P1 ceded premium written', -480, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P1 ceded premium paid', -480, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P1 ceded premium fixed', 0, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -369,8 +369,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 5, cxl.outClaimsCeded.size()
         assertEquals 'P2 ceded ultimates', [0d] * 5, cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P2 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P2 ceded incremental paids', [0, 0, 100, 100, 0], cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P2 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P2 ceded incremental paids', [0, 0, 100, 100, 0], cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P2 ceded premium written', 0, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P2 ceded premium paid', 0, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P2 ceded premium fixed', 0, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -386,8 +386,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 5, cxl.outClaimsCeded.size()
         assertEquals 'P3 ceded ultimates', [0d] * 5, cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P3 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P3 ceded incremental paids', [0d] *5, cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P3 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P3 ceded incremental paids', [0d] *5, cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P3 ceded premium written', 0, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P3 ceded premium paid', 0, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P3 ceded premium fixed', 0, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -403,8 +403,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 5, cxl.outClaimsCeded.size()
         assertEquals 'P4 ceded ultimates', [0d] * 5, cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P4 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P4 ceded incremental paids', [0d] *5, cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P4 ceded incremental reported', [0d] * 5, cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P4 ceded incremental paids', [0d] *5, cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P4 ceded premium written', 0, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P4 ceded premium paid', 0, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P4 ceded premium fixed', 0, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -441,8 +441,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 8, cxl.outClaimsCeded.size()
         assertEquals 'P0.0 ceded ultimates', [0, 0, 100, 50, 50, 100, 25, 175], cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P0.0 ceded incremental reported', [0, 0, 100, 50, 50, 100, 25, 175], cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P0.0 ceded incremental paids', [0d] * 8, cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P0.0 ceded incremental reported', [0, 0, 100, 50, 50, 100, 25, 175], cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P0.0 ceded incremental paids', [0d] * 8, cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P0.0 ceded premium written', -800, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P0.0 ceded premium paid', -800, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P0.0 ceded premium fixed', -800, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -458,8 +458,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 8, cxl.outClaimsCeded.size()
         assertEquals 'P1 ceded ultimates', [0d] * 8, cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P1 ceded incremental reported', [0d] * 8, cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P1 ceded incremental paids', [0, 0, 0, 15, 15, 30, 17.5, 122.49999999999999], cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P1 ceded incremental reported', [0d] * 8, cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P1 ceded incremental paids', [0, 0, 0, 15, 15, 30, 17.5, 122.49999999999999], cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P1 ceded premium written', -480, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P1 ceded premium paid', -480, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P1 ceded premium fixed', 0, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -475,8 +475,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 8, cxl.outClaimsCeded.size()
         assertEquals 'P2 ceded ultimates', [0d] * 8, cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P2 ceded incremental reported', [0d] * 8, cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P2 ceded incremental paids', [0, 0, 100, 35, 35, 70, 7.5, 52.5], cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P2 ceded incremental reported', [0d] * 8, cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P2 ceded incremental paids', [0, 0, 100, 35, 35, 70, 7.5, 52.5], cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P2 ceded premium written', -720, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P2 ceded premium paid', -720, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P2 ceded premium fixed', 0, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -492,8 +492,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 8, cxl.outClaimsCeded.size()
         assertEquals 'P3 ceded ultimates', [0d] * 8, cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P3 ceded incremental reported', [0d] * 8, cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P3 ceded incremental paids', [0d] *8, cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P3 ceded incremental reported', [0d] * 8, cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P3 ceded incremental paids', [0d] *8, cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P3 ceded premium written', 0, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P3 ceded premium paid', 0, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P3 ceded premium fixed', 0, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -509,8 +509,8 @@ class CXLContractTests extends GroovyTestCase {
         cxl.doCalculation()
         assertEquals 'number of ceded claims', 8, cxl.outClaimsCeded.size()
         assertEquals 'P4 ceded ultimates', [0d] * 8, cxl.outClaimsCeded*.ultimate()
-        assertEquals 'P4 ceded incremental reported', [0d] * 8, cxl.outClaimsCeded*.reportedIncremental
-        assertEquals 'P4 ceded incremental paids', [0d] *8, cxl.outClaimsCeded*.paidIncremental
+        assertEquals 'P4 ceded incremental reported', [0d] * 8, cxl.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals 'P4 ceded incremental paids', [0d] *8, cxl.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P4 ceded premium written', 0, cxl.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P4 ceded premium paid', 0, cxl.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P4 ceded premium fixed', 0, cxl.outUnderwritingInfoCeded[0].premiumPaidFixed

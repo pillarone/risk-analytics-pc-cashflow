@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
  */
-public class ClaimsSharesPremiumAllocationStrategy extends AbstractPremiumAllocation {
+public class ClaimsSharesPremiumSplitStrategy extends AbstractPremiumSplit {
 
     public PremiumAllocationType getType() {
         return PremiumAllocationType.CLAIMS_SHARES;

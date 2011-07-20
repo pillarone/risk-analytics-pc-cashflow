@@ -3,8 +3,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportion
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObjectClassifier
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
 
 /**
  * @author ben.ginsberg (at) intuitive-collaboration (dot) com

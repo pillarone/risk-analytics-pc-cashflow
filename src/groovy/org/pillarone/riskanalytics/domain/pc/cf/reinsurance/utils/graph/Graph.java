@@ -63,4 +63,17 @@ public class Graph {
     public List<Node> getNodes() {
         return nodes;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (Node node: getNodes()) {
+            builder.append(node.getName());
+            builder.append("\n\t");
+            builder.append(node.getAncestors());
+            builder.append("\n\t");
+            builder.append(node.getParents());
+        }
+        return builder.toString();
+    }
 }

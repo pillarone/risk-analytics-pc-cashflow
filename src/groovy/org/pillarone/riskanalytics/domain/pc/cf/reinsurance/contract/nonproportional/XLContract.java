@@ -8,7 +8,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPa
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AbstractReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IPremiumAllocationStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
 
     /** Strategy to allocate the ceded premium to the different lines of business  */
     // todo: business object instead of parameter
-    private IPremiumAllocationStrategy premiumAllocation;
+    private IRIPremiumSplitStrategy riPremiumSplit;
     private ReinstatementsAndLimitStore reinstatements;
     protected double attachmentPoint;
     protected double limit;
@@ -46,14 +46,14 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
      * @param aggregateDeductible
      * @param aggregateLimit
      * @param reinstatementPremiumFactors
-     * @param premiumAllocation
+     * @param riPremiumSplit
      */
     public XLContract(double cededPremiumFixed, double attachmentPoint, double limit, double aggregateDeductible,
-                      double aggregateLimit, List<Double> reinstatementPremiumFactors, IPremiumAllocationStrategy premiumAllocation) {
+                      double aggregateLimit, List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy riPremiumSplit) {
         this.cededPremiumFixed = cededPremiumFixed;
         this.attachmentPoint = attachmentPoint;
         this.limit = limit;
-        this.premiumAllocation = premiumAllocation;
+        this.riPremiumSplit = riPremiumSplit;
         periodDeductible = new ThresholdStore(aggregateDeductible);
         periodLimit = new ThresholdStore(aggregateLimit);
         reinstatements = new ReinstatementsAndLimitStore(periodLimit, limit, reinstatementPremiumFactors);
@@ -70,7 +70,7 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
 
     // todo(sku): try to call this function only if isStartCoverPeriod
     public void initCededPremiumAllocation(List<ClaimCashflowPacket> cededClaims, List<UnderwritingInfoPacket> grossUnderwritingInfos) {
-        premiumAllocation.initSegmentShares(cededClaims, grossUnderwritingInfos);
+        riPremiumSplit.initSegmentShares(cededClaims, grossUnderwritingInfos);
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
@@ -83,10 +83,10 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
             cededBaseClaim = storage.lazyInitCededClaimRoot(cededFactorUltimate);
         }
 
-        double cededFactorReported = cededFactor(grossClaim.getReportedCumulated(), grossClaim.getReportedIncremental(),
+        double cededFactorReported = cededFactor(grossClaim.getReportedCumulatedIndexed(), grossClaim.getReportedIncrementalIndexed(),
                 BasedOnClaimProperty.REPORTED, storage);
 
-        double cededFactorPaid = cededFactor(grossClaim.getPaidCumulated(), grossClaim.getPaidIncremental(),
+        double cededFactorPaid = cededFactor(grossClaim.getPaidCumulatedIndexed(), grossClaim.getPaidIncrementalIndexed(),
                 BasedOnClaimProperty.PAID, storage);
 
         ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, cededFactorUltimate,
@@ -120,7 +120,7 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
             initCededPremiumAllocation(cededClaims, grossUwInfos);
         }
         for (UnderwritingInfoPacket grossUnderwritingInfo : grossUwInfos) {
-            double cededPremiumFixedShare = cededPremiumFixed * premiumAllocation.getShare(grossUnderwritingInfo);
+            double cededPremiumFixedShare = cededPremiumFixed * riPremiumSplit.getShare(grossUnderwritingInfo);
             cededPremiumFixedShare *= coveredByReinsurers;
             double cededPremiumVariable = cededPremiumFixedShare * reinstatements.calculateReinstatementPremiumFactor();
             cededPremiumVariable *= coveredByReinsurers;

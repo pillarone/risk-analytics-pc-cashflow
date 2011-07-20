@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker
 import org.pillarone.riskanalytics.domain.utils.constant.LogicArguments
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
+import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -17,7 +18,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
 
     public static final CoverAttributeStrategyType ALL = new CoverAttributeStrategyType("all", "ALL",
-            ['reserves': IncludeType.NOTINCLUDED])
+            ['reservesIndexed': IncludeType.NOTINCLUDED])
     public static final CoverAttributeStrategyType NONE = new CoverAttributeStrategyType("none", "NONE", [:])
     public static final CoverAttributeStrategyType GROSSPERILS = new CoverAttributeStrategyType(
             'gross perils', 'GROSSPERILS',
@@ -36,19 +37,19 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
     public static final CoverAttributeStrategyType CONTRACTS = new CoverAttributeStrategyType(
             'contracts', 'CONTRACTS', [
                     'contracts': new ConstrainedMultiDimensionalParameter([[], []],
-                            [ContractBasedOn.CONTRACT, ContractBasedOn.BASED_ON],
-                            ConstraintsFactory.getConstraints(ContractBasedOn.IDENTIFIER))])
+                            [ReinsuranceContractBasedOn.CONTRACT, ReinsuranceContractBasedOn.BASED_ON],
+                            ConstraintsFactory.getConstraints(ReinsuranceContractBasedOn.IDENTIFIER))])
     public static final CoverAttributeStrategyType CONTRACTSPERILS = new CoverAttributeStrategyType(
             'contracts and perils', 'CONTRACTSPERILS', [
                     'contracts': new ConstrainedMultiDimensionalParameter([[], []],
-                            [ContractBasedOn.CONTRACT, ContractBasedOn.BASED_ON],
-                            ConstraintsFactory.getConstraints(ContractBasedOn.IDENTIFIER)),
+                            [ReinsuranceContractBasedOn.CONTRACT, ReinsuranceContractBasedOn.BASED_ON],
+                            ConstraintsFactory.getConstraints(ReinsuranceContractBasedOn.IDENTIFIER)),
                     'perils': new ComboBoxTableMultiDimensionalParameter([], ['Covered Perils'], IPerilMarker.class)])
     public static final CoverAttributeStrategyType CONTRACTSSEGMENTS = new CoverAttributeStrategyType(
             'contracts and segments', 'CONTRACTSSEGMENTS', [
                     'contracts': new ConstrainedMultiDimensionalParameter([[], []],
-                            [ContractBasedOn.CONTRACT, ContractBasedOn.BASED_ON],
-                            ConstraintsFactory.getConstraints(ContractBasedOn.IDENTIFIER)),
+                            [ReinsuranceContractBasedOn.CONTRACT, ReinsuranceContractBasedOn.BASED_ON],
+                            ConstraintsFactory.getConstraints(ReinsuranceContractBasedOn.IDENTIFIER)),
                     'segments': new ComboBoxTableMultiDimensionalParameter([], ['Covered Segments'], ISegmentMarker.class)])
     public static final CoverAttributeStrategyType INWARDLEGALENTITIES = new CoverAttributeStrategyType(
             'inward legal entities', 'INWARDLEGALENTITIES',

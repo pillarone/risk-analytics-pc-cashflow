@@ -22,6 +22,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttribute
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ICoverAttributeStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.IPeriodStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType;
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
 import java.util.*;
 
@@ -29,7 +30,7 @@ import java.util.*;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 // todo(sku): uw info is not yet calculated if run within the model
-// todo(sku): correct outstanding, IBNR, reserves values
+// todo(sku): correct outstandingIndexed, IBNR_INDEXED, reserves values
 // todo(sku): correct net values
 public class ReinsuranceContract extends Component implements IReinsuranceContractMarker {
 

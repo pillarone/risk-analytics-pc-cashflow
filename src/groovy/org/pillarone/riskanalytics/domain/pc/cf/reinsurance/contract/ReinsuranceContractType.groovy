@@ -11,7 +11,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.ILimitStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.QuotaShareContractStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.WXLConstractStrategy
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IPremiumAllocationStrategy
+
 import org.pillarone.riskanalytics.core.parameterization.AbstractMultiDimensionalParameter
 
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.TrivialContractStrategy
@@ -23,6 +23,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproporti
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.WCXLConstractStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.StopLossConstractStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.SurplusContractStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -36,25 +37,25 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
     public static final ReinsuranceContractType WXL = new ReinsuranceContractType("wxl", "WXL", [
             "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d,
             "aggregateLimit": 0d, "premiumBase": PremiumBase.ABSOLUTE, "premium": 0d,
-            "premiumAllocation": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
+            "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
             "reinstatementPremiums": new TableMultiDimensionalParameter([0.0], ['Reinstatement Premium'])])
     public static final ReinsuranceContractType CXL = new ReinsuranceContractType("cxl", "CXL", [
             "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d,
             "aggregateLimit": 0d, "premiumBase": PremiumBase.ABSOLUTE, "premium": 0d,
-            "premiumAllocation": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
+            "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
             "reinstatementPremiums": new TableMultiDimensionalParameter([0.0], ['Reinstatement Premium'])])
     public static final ReinsuranceContractType WCXL = new ReinsuranceContractType("wcxl", "WCXL", [
             "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d,
             "aggregateLimit": 0d, "premiumBase": PremiumBase.ABSOLUTE, "premium": 0d,
-            "premiumAllocation": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
+            "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
             "reinstatementPremiums": new TableMultiDimensionalParameter([0.0], ['Reinstatement Premium'])])
     public static final ReinsuranceContractType STOPLOSS = new ReinsuranceContractType("stop loss", "STOPLOSS",
             ["stopLossContractBase": StopLossBase.ABSOLUTE, "attachmentPoint": 0d, "limit": 0d, "premium": 0d,
-                    "premiumAllocation": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:])])
+                    "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:])])
     public static final ReinsuranceContractType TRIVIAL = new ReinsuranceContractType("trivial", "TRIVIAL", [:])
     public static final ReinsuranceContractType AGGREGATEXL = new ReinsuranceContractType("aggregate xl", "AggregateXL",
             ["attachmentPoint": 0d, "limit": 0d, "contractBase": PremiumBase.ABSOLUTE,
-                    "premiumAllocation": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
+                    "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
                     "premium": 0d, "claimClass": ClaimType.AGGREGATED_EVENT])
     public static final ReinsuranceContractType LOSSPORTFOLIOTRANSFER = new ReinsuranceContractType("loss portfolio transfer",
             "LOSSPORTFOLIOTRANSFER", ["quotaShare": 0d, "contractBase": LPTPremiumBase.ABSOLUTE, "premium": 0d])
@@ -114,7 +115,7 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
                         aggregateDeductible: (double) parameters[WXLConstractStrategy.AGGREGATE_DEDUCTIBLE],
                         premiumBase: (PremiumBase) parameters[WXLConstractStrategy.PREMIUM_BASE],
                         premium: (double) parameters[WXLConstractStrategy.PREMIUM],
-                        premiumAllocation: (IPremiumAllocationStrategy) parameters[WXLConstractStrategy.PREMIUM_ALLOCATION],
+                        riPremiumSplit: (IRIPremiumSplitStrategy) parameters[WXLConstractStrategy.PREMIUM_ALLOCATION],
                         reinstatementPremiums: (AbstractMultiDimensionalParameter) parameters[WXLConstractStrategy.REINSTATEMENT_PREMIUMS])
                 break
             case ReinsuranceContractType.CXL:
@@ -125,7 +126,7 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
                         aggregateDeductible: (double) parameters[CXLConstractStrategy.AGGREGATE_DEDUCTIBLE],
                         premiumBase: (PremiumBase) parameters[CXLConstractStrategy.PREMIUM_BASE],
                         premium: (double) parameters[CXLConstractStrategy.PREMIUM],
-                        premiumAllocation: (IPremiumAllocationStrategy) parameters[CXLConstractStrategy.PREMIUM_ALLOCATION],
+                        riPremiumSplit: (IRIPremiumSplitStrategy) parameters[CXLConstractStrategy.PREMIUM_ALLOCATION],
                         reinstatementPremiums: (AbstractMultiDimensionalParameter) parameters[CXLConstractStrategy.REINSTATEMENT_PREMIUMS])
                 break
             case ReinsuranceContractType.WCXL:
@@ -136,7 +137,7 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
                         aggregateDeductible: (double) parameters[WCXLConstractStrategy.AGGREGATE_DEDUCTIBLE],
                         premiumBase: (PremiumBase) parameters[WCXLConstractStrategy.PREMIUM_BASE],
                         premium: (double) parameters[WCXLConstractStrategy.PREMIUM],
-                        premiumAllocation: (IPremiumAllocationStrategy) parameters[WCXLConstractStrategy.PREMIUM_ALLOCATION],
+                        riPremiumSplit: (IRIPremiumSplitStrategy) parameters[WCXLConstractStrategy.PREMIUM_ALLOCATION],
                         reinstatementPremiums: (AbstractMultiDimensionalParameter) parameters[WCXLConstractStrategy.REINSTATEMENT_PREMIUMS])
                 break
             case ReinsuranceContractType.STOPLOSS:
@@ -145,7 +146,7 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
                         attachmentPoint: (double) parameters[StopLossConstractStrategy.ATTACHMENT_POINT],
                         limit: (double) parameters[StopLossConstractStrategy.LIMIT],
                         premium: (double) parameters[StopLossConstractStrategy.PREMIUM],
-                        premiumAllocation: (IPremiumAllocationStrategy) parameters[StopLossConstractStrategy.PREMIUM_ALLOCATION])
+                        premiumAllocation: (IRIPremiumSplitStrategy) parameters[StopLossConstractStrategy.PREMIUM_ALLOCATION])
                 break
             case ReinsuranceContractType.SURPLUS:
                 return new SurplusContractStrategy(

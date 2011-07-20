@@ -33,10 +33,10 @@ public class AggregateClaimsStorage {
      */
     public void add(ClaimCashflowPacket claim) {
         ultimate += claim.ultimate();
-        cumulatedReported += claim.getReportedIncremental();
-        incrementalReported += claim.getReportedIncremental();
-        cumulatedPaid += claim.getPaidIncremental();
-        incrementalPaid += claim.getPaidIncremental();
+        cumulatedReported += claim.getReportedIncrementalIndexed();
+        incrementalReported += claim.getReportedIncrementalIndexed();
+        cumulatedPaid += claim.getPaidIncrementalIndexed();
+        incrementalPaid += claim.getPaidIncrementalIndexed();
     }
 
     public void resetIncrementsAndFactors() {

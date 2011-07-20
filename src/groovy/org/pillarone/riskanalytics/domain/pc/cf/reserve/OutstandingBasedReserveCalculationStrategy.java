@@ -41,7 +41,7 @@ public class OutstandingBasedReserveCalculationStrategy extends AbstractReserveC
                 break;
         }
         if (reportedPortionAtBaseDate == payoutPortionAtBaseDate) {
-            throw new IllegalArgumentException("outstanding share is zero: Reserve based strategy not possible here!");
+            throw new IllegalArgumentException("outstandingIndexed share is zero: Reserve based strategy not possible here!");
         }
         return outstandingAtReportingDate / (reportedPortionAtBaseDate - payoutPortionAtBaseDate);
     }
