@@ -15,7 +15,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPa
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.CommissionPacket
@@ -24,6 +23,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.utils.graph.Graph
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.*
 import org.pillarone.riskanalytics.core.wiring.PortReplicatorCategory
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
+import org.pillarone.riskanalytics.domain.utils.constant.ReinsuranceContractBase
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -86,7 +87,7 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     private void wireContractsBaseOnContracts() {
         for (Map.Entry<ReinsuranceContract, ReinsuranceContractAndBase> contractCoveredByContracts: contractCoveredBy.entries()) {
             for (ReinsuranceContractAndBase contractAndBase : contractCoveredByContracts.value) {
-                if (contractAndBase.contractBase.equals(ContractBase.CEDED)) {
+                if (contractAndBase.contractBase.equals(ReinsuranceContractBase.CEDED)) {
                     doWire WC, contractCoveredByContracts.key, 'inClaims', contractAndBase.reinsuranceContract, 'outClaimsCeded'
                 }
                 else {

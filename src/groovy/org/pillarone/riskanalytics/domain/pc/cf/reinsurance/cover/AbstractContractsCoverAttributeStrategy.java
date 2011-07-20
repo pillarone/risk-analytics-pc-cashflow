@@ -2,8 +2,10 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover;
 
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract;
+import org.pillarone.riskanalytics.domain.utils.constant.ReinsuranceContractBase;
+import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn;
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +35,10 @@ abstract public class AbstractContractsCoverAttributeStrategy extends AbstractPa
         if (coveredContractsAndBase == null) {
             coveredContractsAndBase = new ArrayList<ReinsuranceContractAndBase>();
             for (int row = contracts.getTitleRowCount(); row < contracts.getRowCount(); row++) {
-                String contractName = (String) contracts.getValueAt(row, ContractBasedOn.CONTRACT_COLUMN_INDEX);
+                String contractName = (String) contracts.getValueAt(row, ReinsuranceContractBasedOn.CONTRACT_COLUMN_INDEX);
                 ReinsuranceContract contract = reinsuranceContracts.get(contractName);
-                String contractBase = (String) contracts.getValueAt(row, ContractBasedOn.BASED_ON_COLUMN_INDEX);
-                coveredContractsAndBase.add(new ReinsuranceContractAndBase(contract, ContractBase.valueOf(contractBase)));
+                String contractBase = (String) contracts.getValueAt(row, ReinsuranceContractBasedOn.BASED_ON_COLUMN_INDEX);
+                coveredContractsAndBase.add(new ReinsuranceContractAndBase(contract, ReinsuranceContractBase.valueOf(contractBase)));
             }
         }
         return coveredContractsAndBase;

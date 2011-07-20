@@ -134,12 +134,12 @@ class ReinsuranceContractTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 1, quotaShare20.outClaimsCeded.size()
         assertEquals 'P2 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P2 ceded reported incremental', 40, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed, EPSILON
-        assertEquals 'P2 ceded reported cumulated', 160, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed
+        assertEquals 'P2 ceded reported cumulated', 160, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed, EPSILON
         assertEquals 'P2 ceded paid incremental', 60, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
         assertEquals 'P2 ceded paid cumulated', 140, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed
         assertEquals 'P2 ceded reservedIndexed', 60, quotaShare20.outClaimsCeded[0].reservedIndexed()
-        assertEquals 'P2 ceded outstandingIndexed', 20, quotaShare20.outClaimsCeded[0].outstandingIndexed()
-        assertEquals 'P2 ceded ibnrIndexed', 40, quotaShare20.outClaimsCeded[0].ibnrIndexed()
+        assertEquals 'P2 ceded outstandingIndexed', 20, quotaShare20.outClaimsCeded[0].outstandingIndexed(), EPSILON
+        assertEquals 'P2 ceded ibnrIndexed', 40, quotaShare20.outClaimsCeded[0].ibnrIndexed(), EPSILON
 
 
         quotaShare20.reset()
@@ -151,12 +151,12 @@ class ReinsuranceContractTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 1, quotaShare20.outClaimsCeded.size()
         assertEquals 'P3 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P3 ceded reported incremental', 36, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed, EPSILON
-        assertEquals 'P3 ceded reported cumulated', 196, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed
+        assertEquals 'P3 ceded reported cumulated', 196, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed, EPSILON
         assertEquals 'P3 ceded paid incremental', 30, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
         assertEquals 'P3 ceded paid cumulated', 170, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed
         assertEquals 'P3 ceded reservedIndexed', 30, quotaShare20.outClaimsCeded[0].reservedIndexed()
-        assertEquals 'P3 ceded outstandingIndexed', 26, quotaShare20.outClaimsCeded[0].outstandingIndexed()
-        assertEquals 'P3 ceded ibnrIndexed', 4, quotaShare20.outClaimsCeded[0].ibnrIndexed()
+        assertEquals 'P3 ceded outstandingIndexed', 26, quotaShare20.outClaimsCeded[0].outstandingIndexed(), EPSILON
+        assertEquals 'P3 ceded ibnrIndexed', 4, quotaShare20.outClaimsCeded[0].ibnrIndexed(), EPSILON
 
 
         quotaShare20.reset()
@@ -168,7 +168,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 1, quotaShare20.outClaimsCeded.size()
         assertEquals 'P4 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P4 ceded reported incremental', 4, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed, EPSILON
-        assertEquals 'P4 ceded reported cumulated', 200, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed
+        assertEquals 'P4 ceded reported cumulated', 200, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed, EPSILON
         assertEquals 'P4 ceded paid incremental', 30, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
         assertEquals 'P4 ceded paid cumulated', 200, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed
         assertEquals 'P4 ceded reservedIndexed', 0, quotaShare20.outClaimsCeded[0].reservedIndexed()

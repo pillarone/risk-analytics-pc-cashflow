@@ -28,9 +28,9 @@ import org.pillarone.riskanalytics.domain.utils.constant.LogicArguments
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ContractsPerilsCoverAttributeStrategy
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ContractBasedOn
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ContractsCoverAttributeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ContractsSegmentsCoverAttributeStrategy
+import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -213,7 +213,7 @@ class ReinsuranceContractsTests extends GroovyTestCase {
     }
 
     void testCoverContracts() {
-        ConstraintsFactory.registerConstraint(new ContractBasedOn())
+        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
 
         Segment marine = new Segment(name: 'marine')
         Segment motor = new Segment(name: 'motor')
@@ -276,7 +276,7 @@ class ReinsuranceContractsTests extends GroovyTestCase {
     }
 
     void testCoverContractsPerils() {
-        ConstraintsFactory.registerConstraint(new ContractBasedOn())
+        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
 
         Segment marine = new Segment(name: 'marine')
         Segment motor = new Segment(name: 'motor')
@@ -341,7 +341,7 @@ class ReinsuranceContractsTests extends GroovyTestCase {
     }
 
     void testCoverContractsSegments() {
-        ConstraintsFactory.registerConstraint(new ContractBasedOn())
+        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
 
         Segment marine = new Segment(name: 'marine')
         Segment motor = new Segment(name: 'motor')

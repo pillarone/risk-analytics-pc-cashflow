@@ -11,7 +11,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportiona
 import org.pillarone.riskanalytics.core.components.Component
 import org.pillarone.riskanalytics.core.example.component.TestComponent
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 
@@ -20,6 +19,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportiona
 import org.pillarone.riskanalytics.core.simulation.TestVoidModel
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacketTests
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
 
 /**
  * @author shartmann (at) munichre (dot) com, ben.ginsberg (at) intuitive-collaboration (dot) com

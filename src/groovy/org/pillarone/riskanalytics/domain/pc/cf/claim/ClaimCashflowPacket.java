@@ -9,7 +9,7 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReserveMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
@@ -34,10 +34,13 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     /** contains the ultimate value of the occurrence period in every period */
     private double nominalUltimate;
     private double paidIncrementalIndexed;
+    private double paidIncremental;
     private double paidCumulatedIndexed;
     private double reportedIncrementalIndexed;
+    private double reportedIncremental;
     private double reportedCumulatedIndexed;
     private double reservesIndexed;
+    private double reserves;
 
     private DateTime updateDate;
     private Integer updatePeriod;

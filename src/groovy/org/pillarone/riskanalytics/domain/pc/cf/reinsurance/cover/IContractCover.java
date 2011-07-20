@@ -1,6 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover;
 
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract;
 
 import java.util.List;
