@@ -33,7 +33,7 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
              'connection':LogicArguments.AND])
     public static final CoverAttributeStrategyType GROSSLEGALENTITIES = new CoverAttributeStrategyType(
             'gross legal entities', 'GROSSLEGALENTITIES',
-            ['legal entities':new ComboBoxTableMultiDimensionalParameter([], ['Covered Legal Entities'], ILegalEntityMarker)])
+            ['legalEntities':new ComboBoxTableMultiDimensionalParameter([], ['Covered Legal Entities'], ILegalEntityMarker)])
     public static final CoverAttributeStrategyType CONTRACTS = new CoverAttributeStrategyType(
             'contracts', 'CONTRACTS', [
                     'contracts': new ConstrainedMultiDimensionalParameter([[], []],

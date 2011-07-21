@@ -29,6 +29,6 @@ class GIRAReservesModelTests extends ModelTest {
     }
 
     protected boolean shouldCompareResults() {
-        false
+        true
     }
 }

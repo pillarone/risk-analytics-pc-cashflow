@@ -137,6 +137,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 0d, reserves[0].paidCumulatedIndexed
         assertEquals " outstandingIndexed", 658d, reserves[0].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 658d, reserves[0].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 658d, reserves[0].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 3292d, reserves[0].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3292d, reserves[0].developedUltimate(), EPSILON
         assertEquals "update Date", date20080701, reserves[0].updateDate
@@ -154,6 +155,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 336d, reserves[0].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 2350d, reserves[0].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 2685d, reserves[0].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 2685-658d, reserves[0].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 3021d, reserves[0].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3357d, reserves[0].developedUltimate(), EPSILON
         assertEquals "update Date", date20090101, reserves[0].updateDate
@@ -163,6 +165,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 2046d, reserves[1].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 1026d, reserves[1].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 3073d, reserves[1].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 3073d-2685d, reserves[1].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 1369d, reserves[1].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3415d, reserves[1].developedUltimate(), EPSILON
         assertEquals "update Date", date20090701, reserves[1].updateDate
@@ -180,6 +183,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 2756d, reserves[0].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 533d, reserves[0].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 3289d, reserves[0].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 3289d-3073d, reserves[0].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 710d, reserves[0].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3467d, reserves[0].developedUltimate(), EPSILON
         assertEquals "update Date", date20100101, reserves[0].updateDate
@@ -196,6 +200,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 2942d, reserves[0].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 928d, reserves[0].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 3870d, reserves[0].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 3870d-3289d, reserves[0].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 557d, reserves[0].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3499d, reserves[0].developedUltimate(), EPSILON
         assertEquals "update Date", date20110701, reserves[0].updateDate
@@ -212,6 +217,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 3144d, reserves[0].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 403d, reserves[0].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 3547d, reserves[0].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 3547d-3870d, reserves[0].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 403d, reserves[0].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3547d, reserves[0].developedUltimate(), EPSILON
         assertEquals "update Date", date20120701, reserves[0].updateDate
@@ -228,6 +234,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 3370d, reserves[0].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 226d, reserves[0].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 3596d, reserves[0].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 3596d-3547d, reserves[0].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 226d, reserves[0].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3596d, reserves[0].developedUltimate(), EPSILON
         assertEquals "update Date", date20130701, reserves[0].updateDate
@@ -244,6 +251,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 3576d, reserves[0].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 52d, reserves[0].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 3628d, reserves[0].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 3628d-3596d, reserves[0].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 52d, reserves[0].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3628d, reserves[0].developedUltimate(), EPSILON
         assertEquals "update Date", date20140701, reserves[0].updateDate
@@ -253,6 +261,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 3629d, reserves[1].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 0d, reserves[1].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 3629d, reserves[1].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 3629d-3628d, reserves[1].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 0d, reserves[1].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3629d, reserves[1].developedUltimate(), EPSILON
         assertEquals "update Date", date20141001, reserves[1].updateDate
@@ -285,6 +294,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 2756d, reserves[0].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 533d, reserves[0].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 3289d, reserves[0].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 3289d-3073d, reserves[0].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 710d, reserves[0].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3467d, reserves[0].developedUltimate(), EPSILON
         assertEquals "update Date", date20100101, reserves[0].updateDate
@@ -301,6 +311,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 2942d, reserves[0].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 928d, reserves[0].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 3870d, reserves[0].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 3870d-3289d, reserves[0].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 557d, reserves[0].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3499d, reserves[0].developedUltimate(), EPSILON
         assertEquals "update Date", date20110701, reserves[0].updateDate
@@ -317,6 +328,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 3144d, reserves[0].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 403d, reserves[0].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 3547d, reserves[0].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 3547d-3870d, reserves[0].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 403d, reserves[0].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3547d, reserves[0].developedUltimate(), EPSILON
         assertEquals "update Date", date20120701, reserves[0].updateDate
@@ -332,6 +344,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " incr. paid", 226d, reserves[0].paidIncrementalIndexed, EPSILON
         assertEquals " cum paid", 3370d, reserves[0].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 226d, reserves[0].outstandingIndexed(), EPSILON
+        assertEquals " incr reported", 3596d-3547d, reserves[0].reportedIncrementalIndexed, EPSILON
         assertEquals " cum reported", 3596d, reserves[0].reportedCumulatedIndexed, EPSILON
         assertEquals " reservedIndexed", 226d, reserves[0].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3596d, reserves[0].developedUltimate(), EPSILON
@@ -349,6 +362,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 3576d, reserves[0].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 52d, reserves[0].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 3628d, reserves[0].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 3628d-3596d, reserves[0].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 52d, reserves[0].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3628d, reserves[0].developedUltimate(), EPSILON
         assertEquals "update Date", date20140701, reserves[0].updateDate
@@ -358,6 +372,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals " cum paid", 3629d, reserves[1].paidCumulatedIndexed, EPSILON
         assertEquals " outstandingIndexed", 0d, reserves[1].outstandingIndexed(), EPSILON
         assertEquals " cum reported", 3629d, reserves[1].reportedCumulatedIndexed, EPSILON
+        assertEquals " incr reported", 3629d-3628d, reserves[1].reportedIncrementalIndexed, EPSILON
         assertEquals " reservedIndexed", 0d, reserves[1].reservedIndexed(), EPSILON
         assertEquals " ultimate indexed", 3629d, reserves[1].developedUltimate(), EPSILON
         assertEquals "update Date", date20141001, reserves[1].updateDate
