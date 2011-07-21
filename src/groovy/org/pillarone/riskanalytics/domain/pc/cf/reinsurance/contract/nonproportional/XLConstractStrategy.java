@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.PremiumBase;
 
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
     protected double limit;
     protected double aggregateDeductible;
     protected double aggregateLimit;
+    protected IStabilizationStrategy stabilization;
 
 
     public Map getParameters() {
@@ -43,6 +45,7 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
         params.put(LIMIT, limit);
         params.put(AGGREGATE_DEDUCTIBLE, aggregateDeductible);
         params.put(AGGREGATE_LIMIT, aggregateLimit);
+        params.put(STABILIZATION, stabilization);
         return params;
     }
 
@@ -73,4 +76,5 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
     public static final String LIMIT = "limit";
     public static final String AGGREGATE_DEDUCTIBLE = "aggregateDeductible";
     public static final String AGGREGATE_LIMIT = "aggregateLimit";
+    public static final String STABILIZATION = "stabilization";
 }

@@ -4,7 +4,6 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +95,7 @@ public class IndexUtils {
 
     /**
      * @param factors
+     * @param updateDate
      * @param periodCounter
      * @param dateOfLoss
      * @return aggregate factors by evaluating each index series according its baseDate property

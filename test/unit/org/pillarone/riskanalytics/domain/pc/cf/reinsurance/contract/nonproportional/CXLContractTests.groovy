@@ -19,6 +19,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.PremiumBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationStrategyType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -54,6 +55,7 @@ class CXLContractTests extends GroovyTestCase {
                 parmContractStrategy : ReinsuranceContractType.getStrategy(ReinsuranceContractType.CXL, [
                     'aggregateDeductible': aggregateDeductible, 'attachmentPoint': attachmentPoint,
                     'limit': limit, 'aggregateLimit': aggregateLimit, 'premiumBase': PremiumBase.ABSOLUTE,
+                    'stabilization': StabilizationStrategyType.getDefault(),
                     'premium': premium,
                     'riPremiumSplit': PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
                     'reinstatementPremiums': new TableMultiDimensionalParameter(reinstatementPremiumFactors, ['Reinstatement Premium'])]),

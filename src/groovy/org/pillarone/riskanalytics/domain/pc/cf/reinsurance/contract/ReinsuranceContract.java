@@ -13,6 +13,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
@@ -40,6 +41,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket.class);
+    private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
 
     private PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
@@ -197,7 +199,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private void initContracts(Set<IReinsuranceContract> contracts) {
         System.out.println("Start date: " + iterationScope.getPeriodScope().getCurrentPeriodStartDate());
         for (IReinsuranceContract contract : contracts) {
-            contract.initPeriod();
+            contract.initPeriod(inFactors);
             // todo(sku): the following lines are required only if initPeriodClaims() has a non trivial implementation for this contract, avoid!
             List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
             List<ClaimCashflowPacket> contractGrossClaims = new ArrayList<ClaimCashflowPacket>();
@@ -418,5 +420,13 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     public boolean adjustExposureInfo() {
         return parmContractStrategy instanceof IPropReinsuranceContract;
+    }
+
+    public PacketList<FactorsPacket> getInFactors() {
+        return inFactors;
+    }
+
+    public void setInFactors(PacketList<FactorsPacket> inFactors) {
+        this.inFactors = inFactors;
     }
 }
