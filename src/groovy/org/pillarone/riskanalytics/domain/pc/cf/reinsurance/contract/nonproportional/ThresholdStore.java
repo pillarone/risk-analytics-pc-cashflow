@@ -39,6 +39,23 @@ public class ThresholdStore {
         throw new NotImplementedException(claimProperty.toString());
     }
 
+    public double get(BasedOnClaimProperty claimProperty, double stabilizationFactor) {
+        if (stabilizationFactor == 1) return get(claimProperty);
+        double thresholdAdjusted = threshold * stabilizationFactor;
+        switch (claimProperty) {
+            case ULTIMATE:
+                thresholdUltimate = thresholdAdjusted - (threshold - thresholdUltimate);
+                return thresholdUltimate;
+            case REPORTED:
+                thresholdReported = thresholdAdjusted - (threshold - thresholdReported);
+                return thresholdReported;
+            case PAID:
+                thresholdPaid = thresholdAdjusted - (threshold - thresholdPaid);
+                return thresholdPaid;
+        }
+        throw new NotImplementedException(claimProperty.toString());
+    }
+
     public void set(double threshold, BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
             case ULTIMATE:

@@ -3,6 +3,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilizat
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 
 import java.util.Collections;
@@ -25,7 +27,7 @@ public class NoStabilizationStrategy extends AbstractParameterObject implements 
     public void mergeFactors(List<FactorsPacket> inFactors) {
     }
 
-    public double indexFactor(DateTime date) {
+    public double indexFactor(ClaimCashflowPacket claim, IPeriodCounter periodCounter) {
         return 1;
     }
 

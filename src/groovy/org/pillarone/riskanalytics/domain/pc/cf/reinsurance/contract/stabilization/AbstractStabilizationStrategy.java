@@ -3,6 +3,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilizat
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
@@ -32,8 +34,8 @@ public abstract class AbstractStabilizationStrategy extends AbstractParameterObj
         factors = IndexUtils.filterFactors(inFactors, inflationIndices);
     }
 
-    public double indexFactor(DateTime date) {
-        return IndexUtils.aggregateFactor(factors, date);
+    public double indexFactor(ClaimCashflowPacket claim, IPeriodCounter periodCounter) {
+        return IndexUtils.aggregateFactor(factors, claim.getUpdateDate(), periodCounter, claim.getOccurrenceDate());
     }
 
     public boolean basedOnPaid() {

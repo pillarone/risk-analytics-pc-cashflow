@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional;
 
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimsStorage;
@@ -79,7 +80,8 @@ public class CXLContract extends XLContract {
         }
     }
 
-    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
+    @Override
+    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
         if (isClaimTypeCovered(grossClaim)) {
             double cededFactorUltimate = 0;
             IClaimRoot cededBaseClaim = storage.getCededClaimRoot();

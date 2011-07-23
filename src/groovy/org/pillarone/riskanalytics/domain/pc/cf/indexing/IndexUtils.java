@@ -62,6 +62,20 @@ public class IndexUtils {
         return filteredFactors;
     }
 
+    public static List<Factors> convertFactors(List<FactorsPacket> factorsPackets, BaseDateMode baseDateMode,
+                                               IndexMode indexMode, DateTime date) {
+        List<Factors> factors = new ArrayList<Factors>(factorsPackets.size());
+        for (FactorsPacket factorsPacket : factorsPackets) {
+            if (date == null) {
+                factors.add(new Factors(factorsPacket, baseDateMode, indexMode, factorsPacket.getDate()));
+            }
+            else {
+                factors.add(new Factors(factorsPacket, baseDateMode, indexMode, date));
+            }
+        }
+        return factors;
+    }
+
     /**
      * @param factors
      * @param evaluationDate

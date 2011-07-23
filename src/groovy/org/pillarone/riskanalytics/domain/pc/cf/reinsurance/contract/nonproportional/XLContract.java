@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional;
 
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
@@ -80,10 +81,10 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
         riPremiumSplit.initSegmentShares(cededClaims, grossUnderwritingInfos);
     }
 
-    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
+    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
         double cededFactorUltimate = 0;
         IClaimRoot cededBaseClaim = storage.getCededClaimRoot();
-        double stabilizationFactor = storage.stabilizationFactor(grossClaim, stabilization);
+        double stabilizationFactor = storage.stabilizationFactor(grossClaim, stabilization, periodCounter);
         if (cededBaseClaim == null) {
             // first time this gross claim is treated by this contract
             cededFactorUltimate = cededFactor(grossClaim.ultimate(), grossClaim.ultimate(),
@@ -105,11 +106,10 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
     private double cededFactor(double claimPropertyCumulated, double claimPropertyIncremental,
                                BasedOnClaimProperty claimPropertyBase, ClaimStorage storage,
                                double stabilizationFactor) {
-        double aggregateLimitValue = periodLimit.get(claimPropertyBase);
+        double aggregateLimitValue = periodLimit.get(claimPropertyBase, stabilizationFactor);
         if (aggregateLimitValue > 0) {
             double ceded = Math.min(Math.max(-claimPropertyCumulated - attachmentPoint * stabilizationFactor, 0), limit * stabilizationFactor);
-            // todo(sku): apply stabilizationFactor on periodDeductible and periodLimit
-            double cededAfterAAD = Math.max(0, ceded - periodDeductible.get(claimPropertyBase));
+            double cededAfterAAD = Math.max(0, ceded - periodDeductible.get(claimPropertyBase, stabilizationFactor));
             double reduceAAD = ceded - cededAfterAAD;
             periodDeductible.set(Math.max(0, periodDeductible.get(claimPropertyBase) - reduceAAD), claimPropertyBase);
             double incrementalCeded = Math.max(0, cededAfterAAD - storage.getCumulatedCeded(claimPropertyBase));

@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional;
 
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
@@ -26,7 +27,7 @@ public class AADQuotaShareContract extends QuotaShareContract {
         annualAggregateDeductibleReported.value = annualAggregateDeductible;
     }
 
-    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
+    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
         double quotaShareUltimate = 0;
         IClaimRoot cededBaseClaim;
         if (storage.hasReferenceCeded()) {

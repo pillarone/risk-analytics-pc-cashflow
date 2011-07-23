@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional;
 
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
@@ -28,7 +29,7 @@ public class SurplusContract extends AbstractProportionalReinsuranceContract {
         this.commission = commission;
     }
 
-    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
+    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
         double cessionRate = defaultCededLossShare;
         if (grossClaim.hasExposureInfo()) {
             if (grossClaim.getNominalUltimate() > grossClaim.getExposureInfo().getSumInsured()) {

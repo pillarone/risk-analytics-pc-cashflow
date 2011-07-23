@@ -19,9 +19,7 @@ mappings = {
                 "increaseDueToIndex" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:developedResultIndexed"
                 "numberOfClaims" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaimNumber:value"
                 "severityIndices" {
-                    "continuous" "GIRA:claimsGenerators:[%claimsGenerator%]:outSeverityIndexApplied:continuous"
-                    "stepwisePrevious" "GIRA:claimsGenerators:[%claimsGenerator%]:outSeverityIndexApplied:stepwisePrevious"
-                    "stepwiseNext" "GIRA:claimsGenerators:[%claimsGenerator%]:outSeverityIndexApplied:stepwiseNext"
+                    "appliedIndexSingle" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:appliedIndexValue"
                 }
             }
         }

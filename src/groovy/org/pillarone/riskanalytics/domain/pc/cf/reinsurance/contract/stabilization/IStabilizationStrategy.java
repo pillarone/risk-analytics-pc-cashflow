@@ -1,7 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization;
 
-import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface IStabilizationStrategy extends IParameterObject {
 
     void mergeFactors(List<FactorsPacket> inFactors);
 
-    double indexFactor(DateTime date);
+    double indexFactor(ClaimCashflowPacket claim, IPeriodCounter periodCounter);
     boolean basedOnPaid();
     boolean basedOnReported();
 }

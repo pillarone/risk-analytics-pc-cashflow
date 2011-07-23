@@ -98,6 +98,7 @@ public class ClaimUtils {
      * @param scaleFactorUltimate
      * @param scaleFactorReported
      * @param scaleFactorPaid
+     * @param adjustExposureInfo
      * @return
      */
     public static ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, ClaimStorage storage, double scaleFactorUltimate,

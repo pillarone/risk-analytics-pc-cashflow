@@ -166,7 +166,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         int claimNumber = 0
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, null, true)
         
-        assertEquals "#collected fields", 7, claims[claimNumber].valuesToSave.size()
+        assertEquals "#collected fields", 8, claims[claimNumber].valuesToSave.size()
         
         assertEquals "P$period ultimate", 1000, claims[claimNumber].ultimate()
         assertEquals "P$period developed result", 0, claims[claimNumber].developmentResult()
@@ -175,6 +175,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period reservesIndexed", 1000, claims[claimNumber].reservedIndexed()
         assertEquals "P$period reported", 0, claims[claimNumber].reportedIncrementalIndexed
         assertEquals "P$period paid", 0, claims[claimNumber].paidIncrementalIndexed
+        assertEquals "P$period outstandingIndexed", 0, claims[claimNumber].outstandingIndexed()
         assertEquals "P$period outstandingIndexed", 0, claims[claimNumber].outstandingIndexed()
 
 

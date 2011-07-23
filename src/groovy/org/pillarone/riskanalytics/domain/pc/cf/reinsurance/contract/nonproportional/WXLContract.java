@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional;
 
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
@@ -32,9 +33,9 @@ public class WXLContract extends XLContract {
               reinstatementPremiumFactors, premiumAllocation);
     }
 
-    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
+    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
         if (grossClaim.getBaseClaim().getClaimType().equals(ClaimType.SINGLE)) {
-            return super.calculateClaimCeded(grossClaim, storage);
+            return super.calculateClaimCeded(grossClaim, storage, periodCounter);
         }
         return new ClaimCashflowPacket();
     }

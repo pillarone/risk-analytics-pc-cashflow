@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional;
 
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
@@ -79,7 +80,7 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
         riPremiumSplit.initSegmentShares(cededClaims, grossUnderwritingInfos);
     }
 
-    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
+    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
         IClaimRoot cededBaseClaim = storage.getCededClaimRoot();
         if (cededBaseClaim == null) {
             // first time this gross claim is treated by this contract

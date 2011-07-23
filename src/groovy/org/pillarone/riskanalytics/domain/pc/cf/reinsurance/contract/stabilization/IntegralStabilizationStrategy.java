@@ -2,6 +2,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilizat
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 
 import java.util.Map;
 
@@ -22,8 +24,8 @@ public class IntegralStabilizationStrategy extends AbstractStabilizationStrategy
         return params;
     }
 
-    public double indexFactor(DateTime date) {
-        double index = super.indexFactor(date);
+    public double indexFactor(ClaimCashflowPacket claim, IPeriodCounter periodCounter) {
+        double index = super.indexFactor(claim, periodCounter);
         return index < 1 + franchise  ? 1 : index;
     }
 }

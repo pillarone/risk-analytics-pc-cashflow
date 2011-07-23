@@ -16,16 +16,19 @@ class StabilizationStrategyType extends AbstractParameterObjectClassifier {
     public static final StabilizationStrategyType FULL = new StabilizationStrategyType("full", "FULL",
             ['inflationIndices': new ConstrainedMultiDimensionalParameter(
                 Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
-                ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER))])
+                ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER)),
+             'stabilizationBasedOn': StabilizationBasedOn.PAID])
     public static final StabilizationStrategyType INTEGRAL = new StabilizationStrategyType("integral", "INTEGRAL",
             ['inflationIndices': new ConstrainedMultiDimensionalParameter(
                 Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
                 ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER)),
+             'stabilizationBasedOn': StabilizationBasedOn.PAID,
              'franchise': 0d])
     public static final StabilizationStrategyType SIC = new StabilizationStrategyType("sic", "SIC",
             ['inflationIndices': new ConstrainedMultiDimensionalParameter(
                 Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
                 ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER)),
+             'stabilizationBasedOn': StabilizationBasedOn.PAID,
              'franchise': 0d])
 
 
@@ -68,16 +71,19 @@ class StabilizationStrategyType extends AbstractParameterObjectClassifier {
                 break
             case StabilizationStrategyType.FULL:
                 stabilizationStrategy = new FullStabilizationStrategy(
-                        inflationIndices : (ConstrainedMultiDimensionalParameter) parameters['inflationIndices'])
+                        inflationIndices : (ConstrainedMultiDimensionalParameter) parameters['inflationIndices'],
+                        stabilizationBasedOn: (StabilizationBasedOn) parameters['stabilizationBasedOn'])
                 break
             case StabilizationStrategyType.INTEGRAL:
                 stabilizationStrategy = new IntegralStabilizationStrategy(
                         inflationIndices : (ConstrainedMultiDimensionalParameter) parameters['inflationIndices'],
+                        stabilizationBasedOn: (StabilizationBasedOn) parameters['stabilizationBasedOn'],
                         franchise : (Double) parameters['franchise'])
                 break
             case StabilizationStrategyType.SIC:
                 stabilizationStrategy = new SICStabilizationStrategy(
                         inflationIndices : (ConstrainedMultiDimensionalParameter) parameters['inflationIndices'],
+                        stabilizationBasedOn: (StabilizationBasedOn) parameters['stabilizationBasedOn'],
                         franchise : (Double) parameters['franchise'])
                 break
         }

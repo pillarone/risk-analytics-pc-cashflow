@@ -220,7 +220,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private void calculateCededClaims(IPeriodCounter periodCounter) {
         List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
         for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
-            ClaimCashflowPacket cededClaim = grossClaim.getCededClaim();
+            ClaimCashflowPacket cededClaim = grossClaim.getCededClaim(periodCounter);
             if (parmCoveredByReinsurers != 1) {
                 cededClaim = ClaimUtils.scale(cededClaim, parmCoveredByReinsurers);
             }
