@@ -17,7 +17,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.discounting.*;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion;
@@ -35,9 +34,12 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     private IterationScope iterationScope;
     private PeriodStore periodStore;
-    private static final String NET_PRESENT_VALUE_GROSS = "netPresentValueGross";
-    private static final String NET_PRESENT_VALUE_CEDED = "netPresentValueCeded";
-    private static final String NET_PRESENT_VALUE_NET = "netPresentValueNet";
+    public static final String NET_PRESENT_VALUE_GROSS = "netPresentValueGross";
+    public static final String NET_PRESENT_VALUE_CEDED = "netPresentValueCeded";
+    public static final String NET_PRESENT_VALUE_NET = "netPresentValueNet";
+    public static final String DISCOUNTED_INCREMENTAL_PAID_GROSS = "discountedIncrementalPaidGross";
+    public static final String DISCOUNTED_RESERVED_GROSS = "discountedReservedGross";
+    public static final String FILTERED_FACTORS = "filteredFactors";
 
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     // todo(jwa): remove inReserves as soon as PMO-1733 is solved (and collect within inClaims)
@@ -77,9 +79,6 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     private static final String PHASE_GROSS = "Phase Gross";
     private static final String PHASE_NET = "Phase Net";
-    private List<Factors> filteredFactors;
-    private double discountedIncrementalPaidGross;
-    private double discountedReservedGross;
 
     @Override
     public void doCalculation(String phase) {
@@ -88,9 +87,8 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             getSegmentClaims();
             getSegmentReserves();
             getSegmentUnderwritingInfo();
-            if (this.isReceiverWired(inFactors) && inFactors.size() > 0) {
-                filteredFactors = DiscountUtils.filterFactors(inFactors, parmDiscounting, periodCounter.startOfFirstPeriod());
-                getDiscountedGrossValues(periodCounter);
+            if (discountedValuesRequired()) {
+                DiscountUtils.getDiscountedGrossValues(inFactors, parmDiscounting, outClaimsGross, periodStore, periodCounter);
             }
         }
         else if (phase.equals(PHASE_NET)) {
@@ -98,8 +96,9 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             calculateNetClaims();
             filterCededUnderwritingInfo();
             calculateNetUnderwritingInfo();
-            if (filteredFactors != null) {
-                getDiscountedNetValuesAndFillOutChannels(periodCounter);
+            if (periodStore.exists(FILTERED_FACTORS)) {
+                DiscountUtils.getDiscountedNetValuesAndFillOutChannels(outClaimsCeded, outClaimsNet, outDiscountedValues,
+                        outNetPresentValues, periodStore, iterationScope);
             }
         }
     }
@@ -220,42 +219,11 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         }
     }
 
-    private void getDiscountedGrossValues(IPeriodCounter periodCounter) {
-        discountedIncrementalPaidGross = DiscountUtils.getSumOfDiscountedIncrementalPaids(outClaimsGross, filteredFactors, periodCounter);
-        discountedReservedGross = DiscountUtils.getDiscountedReservedAtEndOfPeriod(outClaimsGross, filteredFactors, periodCounter);
-        double startNetPresentValueGross = periodStore.exists(NET_PRESENT_VALUE_GROSS) ? (Double) periodStore.get(NET_PRESENT_VALUE_GROSS, -1) : 0d;
-        double endNetPresentValueGross = startNetPresentValueGross + discountedIncrementalPaidGross;
-        periodStore.put(NET_PRESENT_VALUE_GROSS, endNetPresentValueGross);
+    private boolean discountedValuesRequired() {
+        return isSenderWired(outDiscountedValues) && inFactors.size() > 0;
     }
 
-    private void getDiscountedNetValuesAndFillOutChannels(IPeriodCounter periodCounter) {
-        double discountedIncrementalPaidCeded = DiscountUtils.getSumOfDiscountedIncrementalPaids(outClaimsCeded, filteredFactors, periodCounter);
-        double discountedIncrementalPaidNet = DiscountUtils.getSumOfDiscountedIncrementalPaids(outClaimsNet, filteredFactors, periodCounter);
-        double discountedReservedCeded = DiscountUtils.getDiscountedReservedAtEndOfPeriod(outClaimsCeded, filteredFactors, periodCounter);
-        double discountedReservedNet = DiscountUtils.getDiscountedReservedAtEndOfPeriod(outClaimsNet, filteredFactors, periodCounter);
-        double startNetPresentValueCeded = periodStore.exists(NET_PRESENT_VALUE_CEDED) ? (Double) periodStore.get(NET_PRESENT_VALUE_CEDED, -1) : 0d;
-        double startNetPresentValueNet = periodStore.exists(NET_PRESENT_VALUE_NET) ? (Double) periodStore.get(NET_PRESENT_VALUE_NET, -1) : 0d;
-        double endNetPresentValueCeded = startNetPresentValueCeded + discountedIncrementalPaidCeded;
-        double endNetPresentValueNet = startNetPresentValueNet + discountedIncrementalPaidNet;
-        periodStore.put(NET_PRESENT_VALUE_CEDED, endNetPresentValueCeded);
-        periodStore.put(NET_PRESENT_VALUE_NET, endNetPresentValueNet);
-        DiscountedValuesPacket discountedValues = DiscountUtils.getDiscountedValuesPacket(discountedIncrementalPaidGross,
-                discountedIncrementalPaidCeded, discountedIncrementalPaidNet, discountedReservedGross,
-                discountedReservedCeded, discountedReservedNet);
-        outDiscountedValues.add(discountedValues);
-
-        int period = iterationScope.getPeriodScope().getCurrentPeriod();
-        if (period + 1 == iterationScope.getNumberOfPeriods()) {
-            NetPresentValuesPacket netPresentValues = new NetPresentValuesPacket();
-            netPresentValues.setNetPresentValueGross((Double) periodStore.get(NET_PRESENT_VALUE_GROSS, 0));
-            netPresentValues.setNetPresentValueCeded(endNetPresentValueCeded);
-            netPresentValues.setNetPresentValueNet(endNetPresentValueNet);
-            netPresentValues.period = 0;
-            outNetPresentValues.add(netPresentValues);
-        }
-    }
-
-    public void allocateChannelsToPhases() {
+   public void allocateChannelsToPhases() {
         setTransmitterPhaseInput(inClaims, PHASE_GROSS);
         setTransmitterPhaseInput(inReserves, PHASE_GROSS);
         setTransmitterPhaseInput(inUnderwritingInfo, PHASE_GROSS);
