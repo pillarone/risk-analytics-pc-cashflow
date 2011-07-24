@@ -31,6 +31,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.DeterministicIndexTableConstraints
 import org.pillarone.riskanalytics.core.wiring.WiringUtils
 import org.pillarone.riskanalytics.core.wiring.WireCategory
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountedValuesPacket
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -49,6 +50,7 @@ class SegmentTests extends GroovyTestCase {
     PeriodScope periodScope = iterationScope.periodScope
     PeriodStore periodStore
 
+    Segments segments = new Segments()
     Segment segment = new Segment()
     Discounting discounting
 
@@ -109,6 +111,8 @@ class SegmentTests extends GroovyTestCase {
         WiringUtils.use(WireCategory) {
             segment.inFactors = discounting.outFactors
         }
+
+        List<DiscountedValuesPacket> discountedValues = new TestProbe(segment, "outDiscountedValues").result
 
     }
 

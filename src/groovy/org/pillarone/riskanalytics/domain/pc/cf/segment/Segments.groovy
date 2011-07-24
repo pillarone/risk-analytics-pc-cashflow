@@ -41,19 +41,19 @@ class Segments extends DynamicMultiPhaseComposedComponent {
     private static final String PHASE_GROSS = "Phase Gross";
     private static final String PHASE_NET = "Phase Net";
 
-    public Segment createDefaultSubComponent(){
-        Segment segment = new Segment(parmClaimsPortions : new ConstrainedMultiDimensionalParameter(
-                [[],[]], Arrays.asList(Segment.PERIL, Segment.PORTION), ConstraintsFactory.getConstraints(PerilPortion.IDENTIFIER)),
-            parmUnderwritingPortions : new ConstrainedMultiDimensionalParameter(
-                [[],[]], Arrays.asList(Segment.UNDERWRITING, Segment.PORTION),
-                ConstraintsFactory.getConstraints(UnderwritingPortion.IDENTIFIER)),
-            parmReservesPortions : new ConstrainedMultiDimensionalParameter(
-                [[],[]], Arrays.asList(Segment.RESERVE, Segment.PORTION), ConstraintsFactory.getConstraints(ReservePortion.IDENTIFIER)))
+    public Segment createDefaultSubComponent() {
+        Segment segment = new Segment(parmClaimsPortions: new ConstrainedMultiDimensionalParameter(
+                [[], []], Arrays.asList(Segment.PERIL, Segment.PORTION), ConstraintsFactory.getConstraints(PerilPortion.IDENTIFIER)),
+                parmUnderwritingPortions: new ConstrainedMultiDimensionalParameter(
+                        [[], []], Arrays.asList(Segment.UNDERWRITING, Segment.PORTION),
+                        ConstraintsFactory.getConstraints(UnderwritingPortion.IDENTIFIER)),
+                parmReservesPortions: new ConstrainedMultiDimensionalParameter(
+                        [[], []], Arrays.asList(Segment.RESERVE, Segment.PORTION), ConstraintsFactory.getConstraints(ReservePortion.IDENTIFIER)))
         return segment
     }
 
     protected void doCalculation(String phase) {
-        for (Component component : componentList) {
+        for (Component component: componentList) {
             ((MultiPhaseComponent) component).doCalculation phase
         }
     }
@@ -69,11 +69,13 @@ class Segments extends DynamicMultiPhaseComposedComponent {
         replicateOutChannels this, 'outClaimsGross'
         replicateOutChannels this, 'outClaimsNet'
         replicateOutChannels this, 'outClaimsCeded'
-        replicateOutChannels this, 'outDiscountedValues'
-        replicateOutChannels this, 'outNetPresentValues'
         replicateOutChannels this, 'outUnderwritingInfoGross'
         replicateOutChannels this, 'outUnderwritingInfoNet'
         replicateOutChannels this, 'outUnderwritingInfoCeded'
+        if (isSenderWired(outDiscountedValues)) {
+            replicateOutChannels this, 'outDiscountedValues'
+            replicateOutChannels this, 'outNetPresentValues'
+        }
     }
 
     public void allocateChannelsToPhases() {
