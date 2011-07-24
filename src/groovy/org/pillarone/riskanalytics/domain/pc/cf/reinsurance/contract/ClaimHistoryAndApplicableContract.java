@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 
@@ -30,13 +31,13 @@ public class ClaimHistoryAndApplicableContract {
         return claim;
     }
 
-    public ClaimCashflowPacket getCededClaim() {
+    public ClaimCashflowPacket getCededClaim(IPeriodCounter periodCounter) {
         if (claim.getNominalUltimate() > 0) {
             // claim is positive is ceded claims are covered, inverting sign required
-            return contract.calculateClaimCeded(ClaimUtils.scale(claim, -1), storage);
+            return contract.calculateClaimCeded(ClaimUtils.scale(claim, -1), storage, periodCounter);
         }
         else {
-            return contract.calculateClaimCeded(claim, storage);
+            return contract.calculateClaimCeded(claim, storage, periodCounter);
         }
     }
 

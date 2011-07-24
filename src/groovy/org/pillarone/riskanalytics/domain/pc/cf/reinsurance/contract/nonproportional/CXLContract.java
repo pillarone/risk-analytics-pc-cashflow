@@ -1,10 +1,12 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional;
 
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimsStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 
 import java.util.*;
 
@@ -27,10 +29,10 @@ public class CXLContract extends XLContract {
      * @param riPremiumSplit
      */
     public CXLContract(double cededPremiumFixed, double attachmentPoint, double limit, double aggregateDeductible,
-                       double aggregateLimit, List<Double> reinstatementPremiumFactors,
-                       IRIPremiumSplitStrategy riPremiumSplit) {
-        super(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit, reinstatementPremiumFactors,
-                riPremiumSplit);
+                       double aggregateLimit, IStabilizationStrategy stabilization,
+                       List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy riPremiumSplit) {
+        super(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit, stabilization,
+              reinstatementPremiumFactors, riPremiumSplit);
     }
 
     public void initPeriodClaims(List<ClaimCashflowPacket> grossClaims) {
@@ -78,7 +80,8 @@ public class CXLContract extends XLContract {
         }
     }
 
-    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage) {
+    @Override
+    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
         if (isClaimTypeCovered(grossClaim)) {
             double cededFactorUltimate = 0;
             IClaimRoot cededBaseClaim = storage.getCededClaimRoot();

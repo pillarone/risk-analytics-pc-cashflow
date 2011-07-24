@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimsStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,14 +28,15 @@ public class WCXLContract extends CXLContract {
      * @param limit
      * @param aggregateDeductible
      * @param aggregateLimit
+     * @param stabilization
      * @param reinstatementPremiumFactors
      * @param premiumAllocation
      */
     public WCXLContract(double cededPremiumFixed, double attachmentPoint, double limit, double aggregateDeductible,
-                        double aggregateLimit, List<Double> reinstatementPremiumFactors,
-                        IRIPremiumSplitStrategy premiumAllocation) {
-        super(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit, reinstatementPremiumFactors,
-            premiumAllocation);
+                        double aggregateLimit, IStabilizationStrategy stabilization,
+                        List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy premiumAllocation) {
+        super(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit,
+                stabilization, reinstatementPremiumFactors, premiumAllocation);
     }
 
     public void initPeriodClaims(List<ClaimCashflowPacket> grossClaims) {

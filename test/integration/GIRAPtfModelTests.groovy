@@ -1,5 +1,3 @@
-
-
 import models.gira.GIRAModel
 import org.pillarone.riskanalytics.core.simulation.engine.ModelTest
 
@@ -31,6 +29,13 @@ class GIRAPtfModelTests extends ModelTest {
     }
 
     protected boolean shouldCompareResults() {
-        true
+        false
     }
+
+    @Override
+    int getIterationCount() {
+        2
+    }
+
+
 }

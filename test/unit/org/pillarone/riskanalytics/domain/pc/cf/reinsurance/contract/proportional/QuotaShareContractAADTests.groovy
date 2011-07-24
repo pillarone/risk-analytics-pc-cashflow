@@ -305,7 +305,7 @@ class QuotaShareContractAADTests extends GroovyTestCase {
      /** three claims with two developments in 1st period, includes negative outstandingIndexed in single claims
       *  with a correction over the portfolio */
     void testUsageTwoDevelopmentsFirstPeriod() {
-                ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, 300, date20110101)
+        ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, 300, date20110101)
         IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
 
         GrossClaimRoot claimRoot800 = new GrossClaimRoot(-800, ClaimType.AGGREGATED,

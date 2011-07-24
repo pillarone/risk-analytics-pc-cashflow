@@ -1,9 +1,11 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ public class ClaimStorage {
     private double incrementalReportedCeded;
     private double cumulatedPaidCeded;
     private double incrementalPaidCeded;
+    private double cumulatedStabilizedValue;
 
     public ClaimStorage(ClaimCashflowPacket claim) {
         reference = claim.getBaseClaim();
@@ -112,6 +115,20 @@ public class ClaimStorage {
 
     public boolean hasReferenceCeded() {
         return referenceCeded != null;
+    }
+
+    public double stabilizationFactor(ClaimCashflowPacket claim, IStabilizationStrategy stabilization, IPeriodCounter periodCounter) {
+        double indexFactor = stabilization.indexFactor(claim, periodCounter);
+        double claimPaidIncremental = claim.getPaidIncrementalIndexed() / indexFactor;
+        cumulatedStabilizedValue += claimPaidIncremental;
+        if (stabilization.basedOnPaid()) {
+            return claim.getPaidCumulatedIndexed() / cumulatedStabilizedValue;
+        }
+        else if (stabilization.basedOnReported()) {
+            double outstanding = claim.outstandingIndexed() / indexFactor;
+            return (claim.getPaidCumulatedIndexed() + claim.outstandingIndexed()) / (cumulatedStabilizedValue + outstanding);
+        }
+        return 1;
     }
 
     @Override

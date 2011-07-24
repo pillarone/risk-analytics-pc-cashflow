@@ -121,6 +121,7 @@ public final class GrossClaimRoot implements IClaimRoot {
                                 paidCumulatedIndexed, reportedIncrementalIndexed, reportedCumulatedIndexed, reserves,
                                 claimRoot.getExposureInfo(), payoutDate, periodCounter);
                     }
+                    cashflowPacket.setAppliedIndexValue(factor);
                     childCounter++;
                     hasUltimate = false;    // a period may contain several payouts and only the first should contain the ultimate
                     checkCorrectDevelopment(cashflowPacket);

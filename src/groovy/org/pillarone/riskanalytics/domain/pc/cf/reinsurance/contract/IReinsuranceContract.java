@@ -1,8 +1,10 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 
 import java.util.List;
 
@@ -14,8 +16,10 @@ import java.util.List;
  */
 public interface IReinsuranceContract {
 
-    /** used to reset deductibles, limits if required */
-    void initPeriod();
+    /** used to reset deductibles, limits if required
+     * @param inFactors
+     */
+    void initPeriod(List<FactorsPacket> inFactors);
 
 
     void add(UnderwritingInfoPacket grossUnderwritingInfo);
@@ -33,12 +37,13 @@ public interface IReinsuranceContract {
      *  @param storage
      *  @return
      */
-    ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage);
+    ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter);
 
 
     /**
      * @param cededUnderwritingInfos
      * @param netUnderwritingInfos
+     * @param coveredByReinsurers
      * @param fillNet if true the second list is filled too
      */
     void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos,

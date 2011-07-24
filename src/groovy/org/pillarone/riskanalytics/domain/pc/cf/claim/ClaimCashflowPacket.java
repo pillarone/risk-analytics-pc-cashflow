@@ -41,6 +41,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private double reportedCumulatedIndexed;
     private double reservesIndexed;
     private double reserves;
+    private double appliedIndexValue;
 
     private DateTime updateDate;
     private Integer updatePeriod;
@@ -279,6 +280,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         valuesToSave.put(IBNR_INDEXED, ibnrIndexed());
         valuesToSave.put(OUTSTANDING_INDEXED, outstandingIndexed());
         valuesToSave.put(DEVELOPED_RESULT_INDEXED, developmentResult());
+        valuesToSave.put(APPLIED_INDEX_VALUE, appliedIndexValue);
         return valuesToSave;
     }
 
@@ -314,9 +316,10 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public final static String OUTSTANDING_INDEXED = "outstandingIndexed";
     public final static String DEVELOPED_ULTIMATE = "developedUltimateIndexed";
     public final static String DEVELOPED_RESULT_INDEXED = "developedResultIndexed";
+    public final static String APPLIED_INDEX_VALUE = "appliedIndexValue";
 
     public final static List<String> NON_TRIVIAL_PAYOUT_IBNR = Arrays.asList(ULTIMATE, PAID_INDEXED, RESERVES_INDEXED,
-            REPORTED_INDEXED, IBNR_INDEXED, OUTSTANDING_INDEXED, DEVELOPED_RESULT_INDEXED);
+            REPORTED_INDEXED, IBNR_INDEXED, OUTSTANDING_INDEXED, DEVELOPED_RESULT_INDEXED, APPLIED_INDEX_VALUE);
 
     public IClaimRoot getBaseClaim() {
         return baseClaim;
@@ -360,5 +363,13 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     public EventPacket getEvent() {
         return getBaseClaim().getEvent();
+    }
+
+    public double getAppliedIndexValue() {
+        return appliedIndexValue;
+    }
+
+    public void setAppliedIndexValue(double appliedIndexValue) {
+        this.appliedIndexValue = appliedIndexValue;
     }
 }
