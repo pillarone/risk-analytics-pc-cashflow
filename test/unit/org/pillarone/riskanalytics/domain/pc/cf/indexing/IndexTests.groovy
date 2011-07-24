@@ -95,13 +95,16 @@ class IndexTests extends GroovyTestCase {
                         ConstraintsFactory.getConstraints(AnnualIndexTableConstraints.IDENTIFIER))]))
         index.doCalculation()
 
+        double factor1 = Math.pow(1.0094,22d/365d)
+        double factor2 = Math.pow(1.0188,291d/365d+346d/366d)
+        double factor3 = Math.pow(1.0267,20d/366d+110d/365d)
         assertEquals "number of packet", 1, index.outFactors.size()
         assertEquals "factor for 2001-01-01", 1d, index.outFactors[0].getFactorAtDate(date20010101), EPSILON
-        assertEquals "factor for 2002-01-01", 1.022185098175, index.outFactors[0].getFactorAtDate(date20020101), EPSILON
-        assertEquals "factor for 2003-02-22", 1.022185098175, index.outFactors[0].getFactorAtDate(date20030222), EPSILON
-        assertEquals "factor for 2003-03-16", 1.022761317632, index.outFactors[0].getFactorAtDate(date20030316), EPSILON
-        assertEquals "factor for 2004-12-12", 1.056529863448, index.outFactors[0].getFactorAtDate(date20041212), EPSILON
-        assertEquals "factor for 2005-04-21", 1.066485267071, index.outFactors[0].getFactorAtDate(date20050421), EPSILON
+        assertEquals "factor for 2002-01-01", 1.0222, index.outFactors[0].getFactorAtDate(date20020101), EPSILON
+        assertEquals "factor for 2003-02-22", 1.0222, index.outFactors[0].getFactorAtDate(date20030222), EPSILON
+        assertEquals "factor for 2003-03-16", 1.0222*factor1, index.outFactors[0].getFactorAtDate(date20030316), EPSILON
+        assertEquals "factor for 2004-12-12", 1.0222*factor1*factor2, index.outFactors[0].getFactorAtDate(date20041212), EPSILON
+        assertEquals "factor for 2005-04-21", 1.0222*factor1*factor2*factor3, index.outFactors[0].getFactorAtDate(date20050421), EPSILON
     }
 
 
