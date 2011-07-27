@@ -31,6 +31,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ContractsCoverAttributeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ContractsSegmentsCoverAttributeStrategy
 import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -45,6 +46,11 @@ class ReinsuranceContractsTests extends GroovyTestCase {
     DateTime date20110101 = new DateTime(2011,1,1,0,0,0,0)
     DateTime date20110418 = new DateTime(2011,4,18,0,0,0,0)
     DateTime date20110701 = new DateTime(2011,7,1,0,0,0,0)
+
+    void setUp() {
+        ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
+        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
+    }
 
     void testCoverGrossPerils() {
         ClaimsGenerator marine = new ClaimsGenerator(name: 'marine')
@@ -213,8 +219,6 @@ class ReinsuranceContractsTests extends GroovyTestCase {
     }
 
     void testCoverContracts() {
-        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
-
         Segment marine = new Segment(name: 'marine')
         Segment motor = new Segment(name: 'motor')
         ClaimsGenerator attritionalMarine = new ClaimsGenerator(name: 'attritional marine')
@@ -276,8 +280,6 @@ class ReinsuranceContractsTests extends GroovyTestCase {
     }
 
     void testCoverContractsPerils() {
-        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
-
         Segment marine = new Segment(name: 'marine')
         Segment motor = new Segment(name: 'motor')
         ClaimsGenerator attritionalMarine = new ClaimsGenerator(name: 'attritional marine')
@@ -341,8 +343,6 @@ class ReinsuranceContractsTests extends GroovyTestCase {
     }
 
     void testCoverContractsSegments() {
-        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
-
         Segment marine = new Segment(name: 'marine')
         Segment motor = new Segment(name: 'motor')
         ClaimsGenerator attritionalMarine = new ClaimsGenerator(name: 'attritional marine')
@@ -405,6 +405,48 @@ class ReinsuranceContractsTests extends GroovyTestCase {
         assertEquals "number of covered motor claims", 2, quotaShareMarineAttritionalOnCededCededClaims.size()
         assertEquals "ceded motor claim value", 60, quotaShareMarineAttritionalOnCededCededClaims[0].ultimate()
         assertEquals "ceded motor claim value", 30, quotaShareMarineAttritionalOnCededCededClaims[1].ultimate()
+    }
+
+    void testCoverInwardLegalEntities() {
+        ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
+
+        LegalEntity marine = new LegalEntity(name: 'marine')
+        LegalEntity motor = new LegalEntity(name: 'motor')
+
+        ReinsuranceContract quotaShareMarine = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
+        quotaShareMarine.name = 'marine'
+        quotaShareMarine.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.GROSSLEGALENTITIES,
+                ['legalEntities':new ComboBoxTableMultiDimensionalParameter([['marine']],['Covered Legal Entities'], ILegalEntityMarker),])
+        ((GrossLegalEntitiesCoverAttributeStrategy) quotaShareMarine.parmCover).legalEntities.comboBoxValues['marine'] = marine
+        quotaShareMarine.parmReinsurers = new ConstrainedMultiDimensionalParameter(
+                [['motor'], [0.8d]],
+                LegalEntityPortionConstraints.COLUMN_TITLES,
+                ConstraintsFactory.getConstraints(LegalEntityPortionConstraints.IDENTIFIER));
+        quotaShareMarine.parmReinsurers.comboBoxValues[0] = ['motor': motor]
+        IPeriodCounter periodCounter = quotaShareMarine.iterationScope.periodScope.periodCounter
+
+//        ReinsuranceContract quotaShareMotor = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
+//        quotaShareMotor.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.GROSSLEGALENTITIES,
+//                ['legalEntities':new ComboBoxTableMultiDimensionalParameter([['motor']],['Covered Legal Entities'], ILegalEntityMarker),])
+//        quotaShareMotor.name = 'motor'
+//        ((GrossLegalEntitiesCoverAttributeStrategy) quotaShareMotor.parmCover).legalEntities.comboBoxValues['motor'] = motor
+
+         List<ClaimCashflowPacket> marineClaimsAttritional = grossClaims(periodCounter, [marine], 1000)
+//         List<ClaimCashflowPacket> marineClaimsSingle = grossClaims(periodCounter, [marine, singleMarine], 500)
+//         List<ClaimCashflowPacket> motorClaims = grossClaims(periodCounter, [motor, attritionalMotor], 400)
+
+         ReinsuranceContracts contracts = new ReinsuranceContracts()
+         contracts.addSubComponent(quotaShareMarine)
+         contracts.internalWiring()
+         contracts.inClaims.addAll(marineClaimsAttritional) // + marineClaimsSingle + motorClaims)
+
+         List contractsCededClaims = new TestProbe(contracts, 'outClaimsCeded').result
+         List quotaShareMarineCededClaims = new TestProbe(quotaShareMarine, 'outClaimsCeded').result
+//         List quotaShareMarineAttritionalOnNetCededClaims = new TestProbe(quotaShareMarineAttritionalOnNet, 'outClaimsCeded').result
+//         List quotaShareMarineAttritionalOnCededCededClaims = new TestProbe(quotaShareMarineAttritionalOnCeded, 'outClaimsCeded').result
+
+         contracts.start()
+
     }
 
     private List<ClaimCashflowPacket> grossClaims(IPeriodCounter periodCounter, List<IComponentMarker> perils, double ultimate) {

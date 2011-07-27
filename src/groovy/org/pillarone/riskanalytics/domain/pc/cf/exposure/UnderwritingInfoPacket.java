@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.exposure;
 
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
+import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 import org.pillarone.riskanalytics.domain.utils.PacketUtilities;
@@ -30,6 +31,7 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
     private IUnderwritingInfoMarker riskBand;
     protected ISegmentMarker segment;
     protected IReinsuranceContractMarker reinsuranceContract;
+    protected ILegalEntityMarker legalEntity;
 
     public UnderwritingInfoPacket() {
         super();
@@ -264,5 +266,13 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
 
     public void setRiskBand(IUnderwritingInfoMarker riskBand) {
         this.riskBand = riskBand;
+    }
+
+    public ILegalEntityMarker legalEntity() {
+        return legalEntity;
+    }
+
+    public void setLegalEntity(ILegalEntityMarker legalEntity) {
+        this.legalEntity = legalEntity;
     }
 }

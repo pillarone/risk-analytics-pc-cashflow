@@ -14,6 +14,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
@@ -23,6 +24,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttribute
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ICoverAttributeStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.IPeriodStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType;
+import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
 import java.util.*;
@@ -46,7 +48,9 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    private PacketList<ClaimCashflowPacket> outClaimsInward = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    private PacketList<UnderwritingInfoPacket> outUnderwritingInfoInward = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
@@ -63,6 +67,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     private IReinsuranceContractStrategy parmContractStrategy = ReinsuranceContractType.getDefault();
 
+    private Map<ILegalEntityMarker, Double> counterPartyFactors;
+
 
     @Override
     protected void doCalculation() {
@@ -74,6 +80,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         Set<IReinsuranceContract> contracts = fillGrossClaims();
         initContracts(contracts);
         calculateCededClaims(iterationScope.getPeriodScope().getPeriodCounter());
+        splitCededClaimsByCounterParty();
         processUnderwritingInfo(contracts);
         discountClaims();
     }
@@ -81,6 +88,17 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private void initSimulation() {
         if (iterationScope.isFirstIteration() && iterationScope.getPeriodScope().isFirstPeriod()) {
             parmCoveredPeriod.initStartCover(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
+            counterPartyFactors = new HashMap<ILegalEntityMarker, Double>();
+            List<LegalEntity> counterParties = parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX);
+            double totalCoveredPortion = 0;
+            for (int row = parmReinsurers.getTitleRowCount(); row < parmReinsurers.getRowCount(); row++) {
+                double coveredPortion = (Double) parmReinsurers.getValueAt(row, LegalEntityPortionConstraints.PORTION_COLUMN_INDEX);
+                totalCoveredPortion += coveredPortion;
+                counterPartyFactors.put(counterParties.get(row - 1), coveredPortion);
+            }
+            for (Map.Entry<ILegalEntityMarker, Double> entry : counterPartyFactors.entrySet()) {
+                entry.setValue(entry.getValue() / totalCoveredPortion);
+            }
         }
     }
 
@@ -233,6 +251,18 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             if (isSenderWired(outClaimsNet)) {
                 ClaimCashflowPacket netClaim = ClaimUtils.getNetClaim(grossClaim.getGrossClaim(), cededClaim);
                 outClaimsNet.add(netClaim);
+            }
+        }
+    }
+
+    private void splitCededClaimsByCounterParty() {
+        if (isSenderWired(outClaimsInward)) {
+            for (ClaimCashflowPacket cededClaim : outClaimsCeded) {
+                for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.entrySet()) {
+                    ClaimCashflowPacket counterPartyCededClaim = ClaimUtils.scale(cededClaim, -legalEntityAndFactor.getValue());
+                    counterPartyCededClaim.setMarker(legalEntityAndFactor.getKey());
+                    outClaimsInward.add(counterPartyCededClaim);
+                }
             }
         }
     }
@@ -428,5 +458,22 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     public void setInFactors(PacketList<FactorsPacket> inFactors) {
         this.inFactors = inFactors;
+    }
+
+    /** contains inward claims per counterparty */
+    public PacketList<ClaimCashflowPacket> getOutClaimsInward() {
+        return outClaimsInward;
+    }
+
+    public void setOutClaimsInward(PacketList<ClaimCashflowPacket> outClaimsInward) {
+        this.outClaimsInward = outClaimsInward;
+    }
+
+    public PacketList<UnderwritingInfoPacket> getOutUnderwritingInfoInward() {
+        return outUnderwritingInfoInward;
+    }
+
+    public void setOutUnderwritingInfoInward(PacketList<UnderwritingInfoPacket> outUnderwritingInfoInward) {
+        this.outUnderwritingInfoInward = outUnderwritingInfoInward;
     }
 }

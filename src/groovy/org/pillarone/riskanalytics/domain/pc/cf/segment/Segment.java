@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.segment;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.components.MultiPhaseComponent;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
@@ -166,6 +167,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                     lobUnderwritingInfo.setMaxSumInsured(lobUnderwritingInfo.getMaxSumInsured() * segmentPortion);
                     lobUnderwritingInfo.origin = this;
                     lobUnderwritingInfo.setSegment(this);
+                    lobUnderwritingInfo.setLegalEntity((ILegalEntityMarker) parmCompany.getSelectedComponent());
                     lobUnderwritingInfos.add(lobUnderwritingInfo);
                 }
             }
@@ -187,6 +189,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                         // PMO-750: claim mergers in reinsurance program won't work with reference to market claims
                         segmentClaim.origin = this;
                         segmentClaim.setMarker(this);
+                        segmentClaim.setMarker((IComponentMarker) parmCompany.getSelectedComponent());
                         double scaleFactor = InputFormatConverter.getDouble(parmClaimsPortions.getValueAt(row + 1, portionColumn));
                         segmentClaims.add(ClaimUtils.scale(segmentClaim, scaleFactor, true));
                     }
@@ -210,6 +213,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                         // PMO-750: claim mergers in reinsurance program won't work with reference to market claims
                         segmentReserve.origin = this;
                         segmentReserve.setMarker(this);
+                        segmentReserve.setMarker((IComponentMarker) parmCompany.getSelectedComponent());
                         double scaleFactor = InputFormatConverter.getDouble(parmReservesPortions.getValueAt(row + 1, portionColumn));
                         segmentReserves.add(ClaimUtils.scale(segmentReserve, scaleFactor, true));
                     }

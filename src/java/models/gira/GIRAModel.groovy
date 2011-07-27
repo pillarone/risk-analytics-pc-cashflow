@@ -110,13 +110,21 @@ class GIRAModel extends StochasticModel {
             reinsuranceContracts.inUnderwritingInfo = segments.outUnderwritingInfoGross
             segments.inClaimsCeded = reinsuranceContracts.outClaimsCeded
             segments.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
-            if (structures.subComponentCount() > 0){
+            if (structures.subComponentCount() > 0) {
                 structures.inClaimsGross = segments.outClaimsGross
                 structures.inClaimsCeded = segments.outClaimsCeded
                 structures.inClaimsNet = segments.outClaimsNet
                 structures.inUnderwritingInfoGross = segments.outUnderwritingInfoGross
                 structures.inUnderwritingInfoNet = segments.outUnderwritingInfoNet
                 structures.inUnderwritingInfoCeded = segments.outUnderwritingInfoCeded
+            }
+            if (legalEntities.subComponentCount() > 0) {
+                legalEntities.inClaims = segments.outClaimsGross
+                legalEntities.inUnderwritingInfo = segments.outUnderwritingInfoGross
+                legalEntities.inClaimsCeded = reinsuranceContracts.outClaimsCeded
+                legalEntities.inClaimsInward = reinsuranceContracts.outClaimsInward
+                legalEntities.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
+                legalEntities.inUnderwritingInfoInward = reinsuranceContracts.outUnderwritingInfoInward
             }
         }
     }

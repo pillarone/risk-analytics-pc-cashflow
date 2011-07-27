@@ -26,6 +26,7 @@ import org.pillarone.riskanalytics.core.wiring.PortReplicatorCategory
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
 import org.pillarone.riskanalytics.domain.utils.constant.ReinsuranceContractBase
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -40,14 +41,18 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket)
     PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
 
-    PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket);
+    PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
+    PacketList<ClaimCashflowPacket> outClaimsInward = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
+    PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoInward = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
     PacketList<CommissionPacket> outCommission = new PacketList<CommissionPacket>(CommissionPacket)
 
     private List contractsBasedOnGrossClaims = []
     private Graph contractsBasedOnContracts = new Graph()
     private ListMultimap<ReinsuranceContract, ReinsuranceContractAndBase> contractCoveredBy = ArrayListMultimap.create()
     private Graph contractsBasedOnCompanies = new Graph()
+    private ListMultimap<ILegalEntityMarker, IReinsuranceContractMarker> coverForLegalEntity = ArrayListMultimap.create()
+    private ListMultimap<ILegalEntityMarker, IReinsuranceContractMarker> inwardLegalEntity = ArrayListMultimap.create()
 
     /** key: normalized contract name, value: contract instance */
     private Map<String, ReinsuranceContract> reinsuranceContracts = new HashMap<String, ReinsuranceContract>()
@@ -69,9 +74,11 @@ class ReinsuranceContracts extends DynamicComposedComponent {
             init()
             replicateInChannels this, 'inUnderwritingInfo'
             replicateInChannels this, 'inFactors'
+            replicateOutChannels this, 'outClaimsInward'
+            replicateOutChannels this, 'outUnderwritingInfoInward'
             wireContractsBasedOnGross()
             wireContractsBaseOnContracts()
-//            wireContractsIncludingInwardBusiness()
+            wireContractsIncludingInwardBusiness()
             wireProgramIndependentReplications()
         }
         else {
@@ -100,14 +107,20 @@ class ReinsuranceContracts extends DynamicComposedComponent {
         }
     }
 
-    // todo(sku): for inward cover it would be best to connect only contracts covering the specified companies
-//    private void wireContractsIncludingInwardBusiness() {
-//        for (ReinsuranceContract contract : contractsBasedOnCompanies) {
-//            if (contract.parmCover.getType().equals(CoverAttributeStrategyType.INWARDLEGALENTITIES)) {
-//
-//            }
-//        }
-//    }
+    private void wireContractsIncludingInwardBusiness() {
+        if (contractsBasedOnCompanies.nodes.size() > 0) {
+            for (ReinsuranceContract contract : contractsBasedOnCompanies) {
+                if (contract.parmCover.getType().equals(CoverAttributeStrategyType.INWARDLEGALENTITIES)) {
+                    List<ILegalEntityMarker> coveredLegalEntities = ((InwardLegalEntitiesCoverAttributeStrategy) contract.parmCover).getCoveredLegalEntities();
+                    for (ILegalEntityMarker legalEntity : coveredLegalEntities) {
+                        for (ReinsuranceContract preceedingContract : inwardLegalEntity.get(legalEntity)) {
+                            doWire WC, contract, 'inClaims', preceedingContract, 'outClaimsInward'
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     private void init() {
         initContractMap()
@@ -129,6 +142,10 @@ class ReinsuranceContracts extends DynamicComposedComponent {
                 for (IReinsuranceContractMarker coveredContract : coveredContracts) {
                     contractsBasedOnCompanies.addRelation(contract.name, coveredContract.name)
                 }
+            }
+            List<LegalEntity> reinsurers = contract.parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX)
+            for (LegalEntity reinsurer : reinsurers) {
+                inwardLegalEntity.put(reinsurer, contract)
             }
         }
     }

@@ -20,6 +20,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.PremiumBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationStrategyType
+import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
+import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -62,6 +65,11 @@ class WCXLContractTests extends GroovyTestCase {
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0])
 
+    }
+
+    void setUp() {
+        ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
+        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
     }
 
 

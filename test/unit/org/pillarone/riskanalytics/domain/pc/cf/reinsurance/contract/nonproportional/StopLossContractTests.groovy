@@ -19,6 +19,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.Reinsurance
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.PremiumAllocationType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.PremiumBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
+import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
+import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -57,6 +60,11 @@ class StopLossContractTests extends GroovyTestCase {
                     'riPremiumSplit': PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:])]),
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0])
+    }
+
+    void setUp() {
+        ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
+        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
     }
 
     void testAbsolute() {

@@ -20,6 +20,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.PremiumBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationStrategyType
+import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
+import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -64,6 +67,10 @@ class CXLContractTests extends GroovyTestCase {
 
     }
 
+    void setUp() {
+        ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
+        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
+    }
 
     /**
      * claims occur in different periods, make sure both get the whole cover or more generally a new contract instance
