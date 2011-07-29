@@ -14,6 +14,8 @@ abstract public class Pattern extends Component {
     private IPatternStrategy parmPattern = PatternStrategyType.getStrategy(PatternStrategyType.NONE, Collections.emptyMap());
     private PatternPacket pattern;
 
+    private boolean globalTrivialPatterns = false;
+
     @Override
     protected void doCalculation() {
         initSimulation();
@@ -22,7 +24,12 @@ abstract public class Pattern extends Component {
 
     private void initSimulation() {
         if (pattern == null) {
-            pattern = parmPattern.getPattern(getPatternMarker());
+            if (globalTrivialPatterns) {
+                pattern = new PatternPacket.TrivialPattern(getPatternMarker());
+            }
+            else {
+                pattern = parmPattern.getPattern(getPatternMarker());
+            }
             pattern.setOrigin(this);
         }
     }
@@ -43,5 +50,13 @@ abstract public class Pattern extends Component {
 
     public void setParmPattern(IPatternStrategy parmPattern) {
         this.parmPattern = parmPattern;
+    }
+
+    public boolean isGlobalTrivialPatterns() {
+        return globalTrivialPatterns;
+    }
+
+    public void setGlobalTrivialPatterns(boolean globalTrivialPatterns) {
+        this.globalTrivialPatterns = globalTrivialPatterns;
     }
 }

@@ -20,10 +20,19 @@ public class Index extends Component implements ICorrelationMarker {
     private PacketList<IndexPacket> outIndices = new PacketList<IndexPacket>(IndexPacket.class);
 
     private IIndexStrategy parmIndex = IndexStrategyType.getStrategy(IndexStrategyType.NONE, Collections.emptyMap());
+
+    protected boolean globalTrivialIndices = false;
+    private IIndexStrategy trivialIndexStrategy = IndexStrategyType.getStrategy(IndexStrategyType.NONE, Collections.emptyMap());
     
     @Override
     protected void doCalculation() {
-        FactorsPacket factors = parmIndex.getFactors(periodScope, this, inEventSeverities);
+        FactorsPacket factors;
+        if (globalTrivialIndices) {
+            factors = trivialIndexStrategy.getFactors(periodScope, this, inEventSeverities);
+        }
+        else {
+            factors = parmIndex.getFactors(periodScope, this, inEventSeverities);
+        }
         if (factors != null && factors.getFactorsPerDate().size() > 0) {
             outFactors.add(factors);
         }
@@ -70,5 +79,13 @@ public class Index extends Component implements ICorrelationMarker {
 
     public void setInEventSeverities(PacketList<EventDependenceStream> inEventSeverities) {
         this.inEventSeverities = inEventSeverities;
+    }
+
+    public boolean isGlobalTrivialIndices() {
+        return globalTrivialIndices;
+    }
+
+    public void setGlobalTrivialIndices(boolean globalTrivialIndices) {
+        this.globalTrivialIndices = globalTrivialIndices;
     }
 }
