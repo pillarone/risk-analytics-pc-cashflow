@@ -45,11 +45,11 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
 
         List<ParameterValidation> errors = []
 
-        /** key: path                                              */
+        /** key: path                                                */
         Map<String, List<Component>> targetComponentsPerCopula = [:]
-        /** key: name of component                                              */
+        /** key: name of component                                                */
         Map<String, IClaimsGeneratorStrategy> claimsGeneratorStrategyPerClaimsGeneratorName = [:]
-        /** key: path of copula                                             */
+        /** key: path of copula                                               */
         Map<String, RandomFrequencyDistribution> frequencyDistributionPerCopula = [:]
 
         for (ParameterHolder parameter in parameters) {
@@ -59,7 +59,7 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
                     if (LOG.isDebugEnabled()) {
                         LOG.debug "validating ${parameter.path}"
                     }
-                    // todo(jwa): remove if requirement as soon as getRowObjects() is debugged
+                    // todo(jwa): remove if requirement as soon as PMO-1763 is solved
                     if (!(classifier.equals(CopulaType.NORMAL) || classifier.equals(CopulaType.T))) {
                         List<Component> targets = parameter.getBusinessObject().getTargetComponents()
                         targetComponentsPerCopula[parameter.path] = targets
@@ -70,10 +70,24 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
                     }
                 }
                 else if (classifier instanceof ClaimsGeneratorType) {
-                    claimsGeneratorStrategyPerClaimsGeneratorName[parameter.path - 'claimsGenerators:' - ':parmClaimsModel'] = (IClaimsGeneratorStrategy) parameter.getBusinessObject()
+                    try {
+                        claimsGeneratorStrategyPerClaimsGeneratorName[parameter.path - 'claimsGenerators:' - ':parmClaimsModel'] =
+                            (IClaimsGeneratorStrategy) parameter.getBusinessObject()
+                    }
+                    catch (IllegalArgumentException ex) {
+                        // https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1619
+                        LOG.debug("call parameter.getBusinessObject() failed " + ex.toString())
+                    }
                 }
                 else if (classifier instanceof FrequencyDistributionType && parameter.path.contains('eventGenerators:sub')) {
-                    frequencyDistributionPerCopula[parameter.path - 'parmFrequencyDistribution' + 'parmCopulaStrategy'] = (RandomFrequencyDistribution) parameter.getBusinessObject()
+                    try {
+                        frequencyDistributionPerCopula[parameter.path - 'parmFrequencyDistribution' + 'parmCopulaStrategy'] =
+                            (RandomFrequencyDistribution) parameter.getBusinessObject()
+                    }
+                    catch (IllegalArgumentException ex) {
+                        // https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1619
+                        LOG.debug("call parameter.getBusinessObject() failed " + ex.toString())
+                    }
                 }
 
                 errors.addAll(validate(parameter.classifierParameters.values().toList()))
@@ -84,21 +98,25 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
             for (Component target: targetComponentsPerCopula[copulaPath]) {
                 String claimsGeneratorName = target.getName()
                 IClaimsGeneratorStrategy strategy = claimsGeneratorStrategyPerClaimsGeneratorName[claimsGeneratorName]
+                if (strategy == null) continue // can happen because of try{} catch{} above
+
                 if (strategy instanceof FrequencySeverityClaimsGeneratorStrategy || strategy instanceof OccurrenceFrequencySeverityClaimsGeneratorStrategy
                         || strategy instanceof FrequencyAverageAttritionalClaimsGeneratorStrategy) {
+
                     RandomFrequencyDistribution frequencyDistributionTotal = strategy.frequencyDistribution
                     RandomFrequencyDistribution frequencyDistributionSystematic = frequencyDistributionPerCopula[copulaPath]
+                    if (frequencyDistributionSystematic == null) continue // can happen because of try{} catch{} above
 
                     if (!frequencyDistributionTotal.getType().equals(frequencyDistributionSystematic.getType())) {
                         ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
                                 'event.generators.copula.targets.invalid.frequency.distribution',
-                                [frequencyDistributionTotal.getType().toString(), frequencyDistributionSystematic.getType().toString()])
+                                [target.getNormalizedName(), frequencyDistributionTotal.getType().toString()])
                         error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution'
                         errors << error
 
                         error = new ParameterValidationImpl(ValidationType.ERROR,
                                 'event.generators.copula.targets.invalid.frequency.distribution',
-                                [frequencyDistributionTotal.getType().toString(), frequencyDistributionSystematic.getType().toString()])
+                                [target.getNormalizedName(), frequencyDistributionTotal.getType().toString()])
                         error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution'
                         errors << error
                     }
@@ -107,12 +125,12 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
                             case FrequencyDistributionType.CONSTANT:
                                 if (frequencyDistributionTotal.distribution.constant < frequencyDistributionSystematic.distribution.constant) {
                                     ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
-                                            'event.generators.frequency.distribution.total.constant.smaller.than.systematic.constant',
+                                            'event.generators.constant.distribution.total.constant.smaller.than.systematic.constant',
                                             [frequencyDistributionTotal.distribution.constant, frequencyDistributionSystematic.distribution.constant])
                                     error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution:constant'
                                     errors << error
                                     error = new ParameterValidationImpl(ValidationType.ERROR,
-                                            'event.generators.frequency.distribution.total.constant.smaller.than.systematic.constant',
+                                            'event.generators.constant.distribution.total.constant.smaller.than.systematic.constant',
                                             [frequencyDistributionTotal.distribution.constant, frequencyDistributionSystematic.distribution.constant])
                                     error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:constant'
                                     errors << error
@@ -121,13 +139,13 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
                             case FrequencyDistributionType.CONSTANTS:
                                 if (frequencyDistributionTotal.distribution.sortedValues[0] < frequencyDistributionSystematic.distribution.sortedValues[-1]) {
                                     ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
-                                            'event.generators.frequency.distribution.total.min.observation.smaller.than.systematic.max.observation',
+                                            'event.generators.constants.distribution.total.min.observation.smaller.than.systematic.max.observation',
                                             [frequencyDistributionTotal.distribution.sortedValues[0], frequencyDistributionSystematic.distribution.sortedValues[-1]])
                                     error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution:constants'
                                     errors << error
 
                                     error = new ParameterValidationImpl(ValidationType.ERROR,
-                                            'event.generators.frequency.distribution.total.min.observation.smaller.than.systematic.max.observation',
+                                            'event.generators.constants.distribution.total.min.observation.smaller.than.systematic.max.observation',
                                             [frequencyDistributionTotal.distribution.sortedValues[0], frequencyDistributionSystematic.distribution.sortedValues[-1]])
                                     error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:constants'
                                     errors << error
@@ -197,10 +215,10 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
                                             [frequencyDistributionTotal.distribution.lambda, frequencyDistributionSystematic.distribution.lambda])
                                     error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution:lambda'
                                     errors << error
-                                     error = new ParameterValidationImpl(ValidationType.ERROR,
+                                    error = new ParameterValidationImpl(ValidationType.ERROR,
                                             'event.generators.poisson.distribution.total.lambda.smaller.than.systematic.lambda',
                                             [frequencyDistributionTotal.distribution.lambda, frequencyDistributionSystematic.distribution.lambda])
-                                    error.path =  'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:lambda'
+                                    error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:lambda'
                                     errors << error
                                 }
                                 break
@@ -220,12 +238,12 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
 
                                 if (obsTotal.min() < obsSystematic.max()) {
                                     ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
-                                            'event.generators.dicrete.empirical.distribution.total.min.observation.smaller.than.systematic.max.observation',
+                                            'event.generators.discrete.empirical.distribution.total.min.observation.smaller.than.systematic.max.observation',
                                             [obsTotal.min(), obsSystematic.max()])
                                     error.path = copulaPath - 'parmCopulaStrategy' + 'parmFrequencyDistribution:discreteEmpiricalValues'
                                     errors << error
                                     error = new ParameterValidationImpl(ValidationType.ERROR,
-                                            'event.generators.dicrete.empirical.distribution.total.min.observation.smaller.than.systematic.max.observation',
+                                            'event.generators.discrete.empirical.distribution.total.min.observation.smaller.than.systematic.max.observation',
                                             [obsTotal.min(), obsSystematic.max()])
                                     error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyDistribution:discreteEmpiricalValues'
                                     errors << error
@@ -262,22 +280,34 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
                     }
                     if (!strategy.frequencyBase.equals(FrequencyBase.ABSOLUTE)) {
                         ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
-                                'event.generators.copula.targets.invalid.frequency.base', [strategy.frequencyBase.toString()])
-                        error.path = copulaPath // todo(jwa): also inking of claims generator path
+                                'event.generators.copula.targets.invalid.frequency.base', [target.getNormalizedName(), strategy.frequencyBase.toString()])
+                        error.path = copulaPath + ':targets'
+                        errors << error
+                        error = new ParameterValidationImpl(ValidationType.ERROR,
+                                'event.generators.copula.targets.invalid.frequency.base', [target.getNormalizedName(), strategy.frequencyBase.toString()])
+                        error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyBase'
                         errors << error
                     }
                     if (!strategy.frequencyModification.type.equals(DistributionModifier.NONE)) {
                         ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
-                                'event.generators.copula.targets.invalid.frequency.modifier', [strategy.frequencyModification.type.toString()])
-                        error.path = copulaPath // todo(jwa): also inking of claims generator path
+                                'event.generators.copula.targets.invalid.frequency.modifier', [target.getNormalizedName(), strategy.frequencyModification.type.toString()])
+                        error.path = copulaPath + ':targets'
+                        errors << error
+                        error = new ParameterValidationImpl(ValidationType.ERROR,
+                                'event.generators.copula.targets.invalid.frequency.modifier', [target.getNormalizedName(), strategy.frequencyModification.type.toString()])
+                        error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel:frequencyModification'
                         errors << error
                     }
                 }
                 else {
                     ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
-                            'event.generators.copula.targets.invalid.strategy', [strategy.toString()])
-                    error.path = copulaPath // todo(jwa): inking of claims generator path
+                            'event.generators.copula.targets.invalid.strategy', [target.getNormalizedName(), strategy.getType().toString()])
+                    error.path = copulaPath + ':targets'
                     errors << error
+//                    error = new ParameterValidationImpl(ValidationType.ERROR,
+                    //                            'event.generators.copula.targets.invalid.strategy', [target.getNormalizedName(),strategy.getType().toString()])
+                    //                    error.path = 'claimsGenerators:' + claimsGeneratorName + ':parmClaimsModel'
+                    //                    errors << error
                 }
             }
         }
@@ -290,8 +320,9 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
         validationService.register(CopulaType) {List type ->
             for (int i = 0; i < type.size() - 1; i++) {
                 for (int j = i; j < type.size() - 1; j++) {
-                    if (type[i].equals(type[j + 1])) return true
-                    [ValidationType.ERROR, "event.generators.copula.targets.duplicate.reference", type[i].getNormalizedName()]
+                    if (type[i].equals(type[j + 1])) {
+                        return [ValidationType.ERROR, "event.generators.copula.targets.duplicate.reference", type[i].getNormalizedName()]
+                    }
                 }
             }
         }
