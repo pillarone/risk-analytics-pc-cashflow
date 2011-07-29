@@ -24,6 +24,9 @@ import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.GrossSegmentsCoverAttributeStrategy
+import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
+import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -55,6 +58,11 @@ class ReinsuranceContractTests extends GroovyTestCase {
                 ]),
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0])
+    }
+
+    void setUp() {
+        ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
+        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
     }
 
     /** one claim without development */
