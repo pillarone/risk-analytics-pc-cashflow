@@ -34,6 +34,7 @@ public class UnderwritingInfoUtils {
     }
 
     private static double scalingFactor(List<UnderwritingInfoPacket> underwritingInfos, ExposureBase base) {
+        if (base.equals(ExposureBase.ABSOLUTE)) return 1;
         double factor = 0d;
         for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
             factor += underwritingInfo.scaleValue(base);
@@ -42,6 +43,7 @@ public class UnderwritingInfoUtils {
     }
 
     private static double scalingFactor(List<UnderwritingInfoPacket> underwritingInfos, FrequencyBase base) {
+        if (base.equals(FrequencyBase.ABSOLUTE)) return 1;
         double factor = 0d;
         for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
             factor += underwritingInfo.scaleValue(base);
@@ -50,12 +52,12 @@ public class UnderwritingInfoUtils {
     }
 
     public static double scalingFactor(List<UnderwritingInfoPacket> underwritingInfos, ExposureBase base, List coverCriteria) {
-        if (underwritingInfos.isEmpty() || coverCriteria.isEmpty()) return 1d;
+        if (underwritingInfos.isEmpty() || coverCriteria.isEmpty() || base.equals(ExposureBase.ABSOLUTE)) return 1d;
         return scalingFactor(filterUnderwritingInfo(underwritingInfos, coverCriteria), base);
     }
 
     public static double scalingFactor(List<UnderwritingInfoPacket> underwritingInfos, FrequencyBase base, List coverCriteria) {
-        if (underwritingInfos.isEmpty() || coverCriteria.isEmpty()) return 1d;
+        if (underwritingInfos.isEmpty() || coverCriteria.isEmpty() || base.equals(FrequencyBase.ABSOLUTE)) return 1d;
         return scalingFactor(filterUnderwritingInfo(underwritingInfos, coverCriteria), base);
     }
     
