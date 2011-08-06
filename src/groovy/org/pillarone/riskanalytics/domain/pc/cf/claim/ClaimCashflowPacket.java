@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
@@ -305,6 +306,16 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         result.append(paidIncrementalIndexed);
         result.append(separator);
         result.append(updateDate);
+        result.append(separator);
+        result.append(baseClaim.getClaimType());
+        if (peril() != null) {
+            result.append(separator);
+            result.append(((Component) peril()).getNormalizedName());
+        }
+        if (segment() != null) {
+            result.append(separator);
+            result.append(((Component) segment()).getNormalizedName());
+        }
         return result.toString();
     }
 

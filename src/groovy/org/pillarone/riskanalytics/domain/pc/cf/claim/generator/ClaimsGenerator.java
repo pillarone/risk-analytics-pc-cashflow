@@ -106,7 +106,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
                 claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, true));
             }
             periodStore.put(GROSS_CLAIMS, grossClaimRoots);
-            return grossClaimRoots.size();
+            return baseClaims.size();
         }
         return 0;
     }

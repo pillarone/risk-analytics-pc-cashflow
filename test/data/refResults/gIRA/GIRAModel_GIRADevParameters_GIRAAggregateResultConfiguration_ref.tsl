@@ -92,7 +92,7 @@ iteration	period	valueIndex	path	field	value
 1	0	5	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 1	0	6	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 1	0	7	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
-1	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	0.0
+1	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	1.0
 1	0	0	GIRA:claimsGenerators:subProperty:outClaims	developedResultIndexed	0.0
 1	0	0	GIRA:claimsGenerators:subProperty:outClaims	appliedIndexValue	0.0
 1	0	0	GIRA:claimsGenerators:subProperty:outClaims	IBNRIndexed	0.0
@@ -404,7 +404,7 @@ iteration	period	valueIndex	path	field	value
 2	0	1	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 2	0	2	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 2	0	3	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
-2	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	0.0
+2	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	1.0
 2	0	0	GIRA:claimsGenerators:subProperty:outClaims	developedResultIndexed	0.0
 2	0	0	GIRA:claimsGenerators:subProperty:outClaims	appliedIndexValue	0.0
 2	0	0	GIRA:claimsGenerators:subProperty:outClaims	IBNRIndexed	0.0
@@ -671,7 +671,7 @@ iteration	period	valueIndex	path	field	value
 3	0	4	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 3	0	5	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 3	0	6	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
-3	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	0.0
+3	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	1.0
 3	0	0	GIRA:claimsGenerators:subProperty:outClaims	developedResultIndexed	0.0
 3	0	0	GIRA:claimsGenerators:subProperty:outClaims	appliedIndexValue	0.0
 3	0	0	GIRA:claimsGenerators:subProperty:outClaims	IBNRIndexed	0.0
@@ -1001,7 +1001,7 @@ iteration	period	valueIndex	path	field	value
 4	0	5	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 4	0	6	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 4	0	7	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
-4	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	0.0
+4	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	1.0
 4	0	0	GIRA:claimsGenerators:subProperty:outClaims	developedResultIndexed	0.0
 4	0	0	GIRA:claimsGenerators:subProperty:outClaims	appliedIndexValue	0.0
 4	0	0	GIRA:claimsGenerators:subProperty:outClaims	IBNRIndexed	0.0
@@ -1340,7 +1340,7 @@ iteration	period	valueIndex	path	field	value
 5	0	4	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 5	0	5	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 5	0	6	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
-5	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	0.0
+5	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	1.0
 5	0	0	GIRA:claimsGenerators:subProperty:outClaims	developedResultIndexed	0.0
 5	0	0	GIRA:claimsGenerators:subProperty:outClaims	appliedIndexValue	0.0
 5	0	0	GIRA:claimsGenerators:subProperty:outClaims	IBNRIndexed	0.0
@@ -1634,7 +1634,7 @@ iteration	period	valueIndex	path	field	value
 6	0	1	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 6	0	2	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 6	0	3	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
-6	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	0.0
+6	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	1.0
 6	0	0	GIRA:claimsGenerators:subProperty:outClaims	developedResultIndexed	0.0
 6	0	0	GIRA:claimsGenerators:subProperty:outClaims	appliedIndexValue	0.0
 6	0	0	GIRA:claimsGenerators:subProperty:outClaims	IBNRIndexed	0.0
@@ -1856,7 +1856,7 @@ iteration	period	valueIndex	path	field	value
 7	0	1	GIRA:claimsGenerators:subMotorSingle:outClaims	ultimate	-54023.44122126698
 7	0	0	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 7	0	1	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
-7	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	0.0
+7	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	1.0
 7	0	0	GIRA:claimsGenerators:subProperty:outClaims	developedResultIndexed	0.0
 7	0	0	GIRA:claimsGenerators:subProperty:outClaims	appliedIndexValue	0.0
 7	0	0	GIRA:claimsGenerators:subProperty:outClaims	IBNRIndexed	0.0
@@ -2060,7 +2060,7 @@ iteration	period	valueIndex	path	field	value
 8	0	1	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 8	0	2	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 8	0	3	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
-8	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	0.0
+8	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	1.0
 8	0	0	GIRA:claimsGenerators:subProperty:outClaims	developedResultIndexed	0.0
 8	0	0	GIRA:claimsGenerators:subProperty:outClaims	appliedIndexValue	0.0
 8	0	0	GIRA:claimsGenerators:subProperty:outClaims	IBNRIndexed	0.0
@@ -2300,7 +2300,7 @@ iteration	period	valueIndex	path	field	value
 9	0	1	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 9	0	2	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 9	0	3	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
-9	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	0.0
+9	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	1.0
 9	0	0	GIRA:claimsGenerators:subProperty:outClaims	developedResultIndexed	0.0
 9	0	0	GIRA:claimsGenerators:subProperty:outClaims	appliedIndexValue	0.0
 9	0	0	GIRA:claimsGenerators:subProperty:outClaims	IBNRIndexed	0.0
@@ -2540,7 +2540,7 @@ iteration	period	valueIndex	path	field	value
 10	0	1	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 10	0	2	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
 10	0	3	GIRA:claimsGenerators:subMotorSingle:outSeverityIndicesApplied	value	1.0
-10	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	0.0
+10	0	0	GIRA:claimsGenerators:subProperty:outClaimNumber	value	1.0
 10	0	0	GIRA:claimsGenerators:subProperty:outClaims	developedResultIndexed	0.0
 10	0	0	GIRA:claimsGenerators:subProperty:outClaims	appliedIndexValue	0.0
 10	0	0	GIRA:claimsGenerators:subProperty:outClaims	IBNRIndexed	0.0
