@@ -53,7 +53,7 @@ class StopLossContractTests extends GroovyTestCase {
         IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
         return new ReinsuranceContract(
                 parmContractStrategy : ReinsuranceContractType.getStrategy(ReinsuranceContractType.STOPLOSS, [
-                    'contractBase': contractBase,
+                    'stopLossContractBase': contractBase,
                     'attachmentPoint': attachmentPoint,
                     'limit': limit, 'premiumBase': PremiumBase.ABSOLUTE,
                     'premium': premium,
