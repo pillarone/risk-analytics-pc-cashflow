@@ -150,7 +150,7 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
                 break
             case ReinsuranceContractType.STOPLOSS:
                 return new StopLossConstractStrategy(
-                        contractBase: (StopLossBase) parameters[StopLossConstractStrategy.CONTRACT_BASE],
+                        stopLossContractBase: (StopLossBase) parameters[StopLossConstractStrategy.CONTRACT_BASE],
                         attachmentPoint: (double) parameters[StopLossConstractStrategy.ATTACHMENT_POINT],
                         limit: (double) parameters[StopLossConstractStrategy.LIMIT],
                         premium: (double) parameters[StopLossConstractStrategy.PREMIUM],

@@ -20,24 +20,21 @@ import java.util.Map;
 public class StopLossConstractStrategy extends AbstractParameterObject implements IReinsuranceContractStrategy {
 
     /** Premium can be expressed as a fraction of a base quantity. */
-    private StopLossBase contractBase;
+    private StopLossBase stopLossContractBase;
 
     /** Premium as a percentage of the premium base */
     private double premium;
 
     /** Strategy to allocate the ceded premium to the different lines of business  */
     private IRIPremiumSplitStrategy premiumAllocation;
-    /** As a percentage of premium */
-    private AbstractMultiDimensionalParameter reinstatementPremiums;
     private double attachmentPoint;
     private double limit;
 
     public Map getParameters() {
-        Map params = new HashMap(6);
-        params.put(CONTRACT_BASE, contractBase);
+        Map params = new HashMap(5);
+        params.put(CONTRACT_BASE, stopLossContractBase);
         params.put(PREMIUM, premium);
         params.put(PREMIUM_ALLOCATION, premiumAllocation);
-        params.put(REINSTATEMENT_PREMIUMS, reinstatementPremiums);
         params.put(ATTACHMENT_POINT, attachmentPoint);
         params.put(LIMIT, limit);
         return params;
@@ -51,7 +48,7 @@ public class StopLossConstractStrategy extends AbstractParameterObject implement
         double cededPremiumFixed = premium;
         double scaledAttachmentPoint = attachmentPoint;
         double scaledLimit = limit;
-        switch (contractBase) {
+        switch (stopLossContractBase) {
             case ABSOLUTE:
                 break;
             case GNPI:
@@ -64,10 +61,9 @@ public class StopLossConstractStrategy extends AbstractParameterObject implement
         return new StopLossContract(cededPremiumFixed, scaledAttachmentPoint, scaledLimit, premiumAllocation);
     }
 
-    public static final String CONTRACT_BASE = "contractBase";
+    public static final String CONTRACT_BASE = "stopLossContractBase";
     public static final String PREMIUM = "premium";
     public static final String PREMIUM_ALLOCATION = "riPremiumSplit";
-    public static final String REINSTATEMENT_PREMIUMS = "reinstatementPremiums";
     public static final String ATTACHMENT_POINT = "attachmentPoint";
     public static final String LIMIT = "limit";
 
