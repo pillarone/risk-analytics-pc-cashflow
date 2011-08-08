@@ -67,6 +67,20 @@ public class ClaimUtils {
         return claim;
     }
 
+    public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor, IClaimRoot scaledBaseClaim) {
+        if (notTrivialValues(claim)) {
+            double scaledReserves = (claim.developedUltimate() - claim.getPaidCumulatedIndexed()) * factor;
+            double scaledUltimate = claim.ultimate() * factor;
+            ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(scaledBaseClaim, scaledUltimate,
+                    claim.getPaidIncrementalIndexed() * factor, claim.getPaidCumulatedIndexed() * factor,
+                    claim.getReportedIncrementalIndexed() * factor, claim.getReportedCumulatedIndexed() * factor, scaledReserves,
+                    claim.getExposureInfo(), claim.getUpdateDate(), claim.getUpdatePeriod());
+            applyMarkers(claim, scaledClaim);
+            return scaledClaim;
+        }
+        return claim;
+    }
+
     /**
      * exposure info is not affected by scaling.
      * @param claim

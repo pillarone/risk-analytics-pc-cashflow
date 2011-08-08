@@ -172,4 +172,11 @@ public class UnderwritingInfoUtils {
         return policies;
     }
 
+    public static void applyMarkers(UnderwritingInfoPacket source, UnderwritingInfoPacket target) {
+        target.setMarker(source.riskBand());
+        target.setMarker(source.segment());
+        target.setMarker(source.reinsuranceContract());
+        target.setMarker(source.legalEntity());
+    }
+
 }

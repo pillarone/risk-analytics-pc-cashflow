@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
 
@@ -57,6 +58,7 @@ public class SurplusContract extends AbstractProportionalReinsuranceContract {
             double cessionRate = getFractionCeded(grossUnderwritingInfo.getSumInsured());
             CededUnderwritingInfoPacket cededUnderwritingInfo = CededUnderwritingInfoPacket.scale(grossUnderwritingInfo,
                     contractMarker, 1, cessionRate * coveredByReinsurers, 1);
+            UnderwritingInfoUtils.applyMarkers(grossUnderwritingInfo, cededUnderwritingInfo);
             cededUwInfos.add(cededUnderwritingInfo);
             netUnderwritingInfos.add(grossUnderwritingInfo.getNet(cededUnderwritingInfo, true));
         }

@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
@@ -13,6 +15,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket;
@@ -36,6 +39,8 @@ import java.util.*;
 // todo(sku): correct outstandingIndexed, IBNR_INDEXED, reserves values
 // todo(sku): correct net values
 public class ReinsuranceContract extends Component implements IReinsuranceContractMarker {
+
+    private static Log LOG = LogFactory.getLog(ReinsuranceContract.class);
 
     private IterationScope iterationScope;
     private PeriodStore periodStore;
@@ -190,11 +195,14 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
                     contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, currentPeriod, claimsHistories,
                             currentPeriodGrossClaims));
                 }
-                else {
+                else if (claimStorage != null)  {
                     IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, occurrencePeriod - currentPeriod);
                     contracts.add(contract);
                     ClaimHistoryAndApplicableContract claimWithHistory = new ClaimHistoryAndApplicableContract(claim, claimStorage, contract);
                     currentPeriodGrossClaims.add(claimWithHistory);
+                }
+                else {
+                    LOG.error("claimStorage is null");
                 }
             }
         }
@@ -283,6 +291,12 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             // todo(sku): how time consuming are isSenderWired() calls? Might be necessary to cache this information.
             contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, parmCoveredByReinsurers,
                     isSenderWired(outUnderwritingInfoNet));
+        }
+        for (UnderwritingInfoPacket cededUnderwritingPacket : outUnderwritingInfoCeded) {
+            cededUnderwritingPacket.setMarker(this);
+        }
+        for (UnderwritingInfoPacket netUnderwritingPacket : outUnderwritingInfoNet) {
+            netUnderwritingPacket.setMarker(this);
         }
     }
 

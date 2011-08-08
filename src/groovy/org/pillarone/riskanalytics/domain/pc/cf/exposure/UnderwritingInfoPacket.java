@@ -1,11 +1,9 @@
 package org.pillarone.riskanalytics.domain.pc.cf.exposure;
 
+import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
-import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
-import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
-import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.*;
 import org.pillarone.riskanalytics.domain.utils.PacketUtilities;
-import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -67,6 +65,7 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
             boolean anyRemaining = netUnderwritingInfo.premiumWritten > 0 || netUnderwritingInfo.premiumPaid > 0;
             netUnderwritingInfo.numberOfPolicies = anyRemaining ? netUnderwritingInfo.numberOfPolicies : 0;
         }
+        UnderwritingInfoUtils.applyMarkers(cededUnderwritingInfo, netUnderwritingInfo);
         return netUnderwritingInfo;
     }
 
@@ -149,6 +148,22 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
                 && premiumPaid == other.getPremiumPaid())
                 && (exposure == null && other.getExposure() == null
                 || exposure.equals(other.getExposure()));
+    }
+
+    public void setMarker(IComponentMarker marker) {
+        if (marker == null) return;
+        if (IUnderwritingInfoMarker.class.isAssignableFrom(marker.getClass())) {
+            riskBand = (IUnderwritingInfoMarker) marker;
+        }
+        else if (ISegmentMarker.class.isAssignableFrom(marker.getClass())) {
+            segment = (ISegmentMarker) marker;
+        }
+        else if (IReinsuranceContractMarker.class.isAssignableFrom(marker.getClass())) {
+            reinsuranceContract = (IReinsuranceContractMarker) marker;
+        }
+        else if (ILegalEntityMarker.class.isAssignableFrom(marker.getClass())) {
+            legalEntity = (ILegalEntityMarker) marker;
+        }
     }
 
     private static final String PREMIUM_WRITTEN = "premiumWritten";
@@ -252,6 +267,11 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
         this.segment = segment;
     }
 
+    public IReinsuranceContractMarker reinsuranceContract() {
+        return reinsuranceContract;
+    }
+
+    @Deprecated
     public IReinsuranceContractMarker getReinsuranceContract() {
         return reinsuranceContract;
     }

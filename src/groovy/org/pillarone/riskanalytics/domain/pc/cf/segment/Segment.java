@@ -72,6 +72,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     private ComboBoxTableMultiDimensionalParameter parmDiscounting = new ComboBoxTableMultiDimensionalParameter(
             Arrays.asList(""), Arrays.asList("Discount Index"), IDiscountMarker.class);
 
+    private Map<IClaimRoot, IClaimRoot> incomingScaledBaseClaimMapping = new HashMap<IClaimRoot, IClaimRoot>();
 
     private static final String PERIL = "Claims Generator";
     private static final String RESERVE = "Reserves Generator";
@@ -83,12 +84,13 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     @Override
     public void doCalculation(String phase) {
-        IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
         if (phase.equals(PHASE_GROSS)) {
+            initIteration();
             getSegmentClaims();
             getSegmentReserves();
             getSegmentUnderwritingInfo();
             if (discountedValuesRequired()) {
+                IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
                 DiscountUtils.getDiscountedGrossValues(inFactors, parmDiscounting, outClaimsGross, periodStore, periodCounter);
             }
         }
@@ -101,6 +103,12 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                 DiscountUtils.getDiscountedNetValuesAndFillOutChannels(outClaimsCeded, outClaimsNet, outDiscountedValues,
                         outNetPresentValues, periodStore, iterationScope);
             }
+        }
+    }
+
+    private void initIteration() {
+        if (iterationScope.getPeriodScope().isFirstPeriod()) {
+            incomingScaledBaseClaimMapping.clear();
         }
     }
 
@@ -191,7 +199,16 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                         segmentClaim.setMarker(this);
                         segmentClaim.setMarker((IComponentMarker) parmCompany.getSelectedComponent());
                         double scaleFactor = InputFormatConverter.getDouble(parmClaimsPortions.getValueAt(row + 1, portionColumn));
-                        segmentClaims.add(ClaimUtils.scale(segmentClaim, scaleFactor, true));
+                        IClaimRoot scaledSegmentBaseClaim = incomingScaledBaseClaimMapping.get(marketClaim.getBaseClaim());
+                        if (scaledSegmentBaseClaim == null) {
+                            ClaimCashflowPacket scaledSegementClaim = ClaimUtils.scale(segmentClaim, scaleFactor, true);
+                            incomingScaledBaseClaimMapping.put(marketClaim.getBaseClaim(), scaledSegementClaim.getBaseClaim());
+                            segmentClaims.add(scaledSegementClaim);
+                        }
+                        else {
+                            ClaimCashflowPacket scaledSegementClaim = ClaimUtils.scale(segmentClaim, scaleFactor, scaledSegmentBaseClaim);
+                            segmentClaims.add(scaledSegementClaim);
+                        }
                     }
                 }
             }

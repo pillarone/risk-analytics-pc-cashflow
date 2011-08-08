@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
 
@@ -34,6 +35,7 @@ public class QuotaShareContract extends AbstractProportionalReinsuranceContract 
         for (UnderwritingInfoPacket grossUnderwritingInfo : grossUwInfos) {
             CededUnderwritingInfoPacket cededUnderwritingInfo = CededUnderwritingInfoPacket.scale(grossUnderwritingInfo,
                     contractMarker, 1, quotaShare * coveredByReinsurers, 1);
+            UnderwritingInfoUtils.applyMarkers(grossUnderwritingInfo, cededUnderwritingInfo);
             cededUwInfos.add(cededUnderwritingInfo);
             netUnderwritingInfos.add(grossUnderwritingInfo.getNet(cededUnderwritingInfo, true));
         }
