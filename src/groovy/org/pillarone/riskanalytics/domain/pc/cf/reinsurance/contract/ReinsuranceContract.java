@@ -15,7 +15,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket;
@@ -66,13 +65,12 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private ConstrainedMultiDimensionalParameter parmReinsurers = new ConstrainedMultiDimensionalParameter(
             Collections.emptyList(), LegalEntityPortionConstraints.COLUMN_TITLES,
             ConstraintsFactory.getConstraints(LegalEntityPortionConstraints.IDENTIFIER));
-    private double parmCoveredByReinsurers = 1d;
     private ICoverAttributeStrategy parmCover = CoverAttributeStrategyType.getDefault();
     private IPeriodStrategy parmCoveredPeriod = PeriodStrategyType.getDefault();
-
     private IReinsuranceContractStrategy parmContractStrategy = ReinsuranceContractType.getDefault();
 
     private Map<ILegalEntityMarker, Double> counterPartyFactors;
+    private double coveredByReinsurers = 1d;
 
 
     @Override
@@ -101,8 +99,14 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
                 totalCoveredPortion += coveredPortion;
                 counterPartyFactors.put(counterParties.get(row - 1), coveredPortion);
             }
-            for (Map.Entry<ILegalEntityMarker, Double> entry : counterPartyFactors.entrySet()) {
-                entry.setValue(entry.getValue() / totalCoveredPortion);
+            if (totalCoveredPortion > 1) {
+                for (Map.Entry<ILegalEntityMarker, Double> entry : counterPartyFactors.entrySet()) {
+                    entry.setValue(entry.getValue() / totalCoveredPortion);
+                }
+                totalCoveredPortion = 1;
+            }
+            if (totalCoveredPortion > 0) {
+                coveredByReinsurers = totalCoveredPortion;
             }
         }
     }
@@ -247,8 +251,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
         for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
             ClaimCashflowPacket cededClaim = grossClaim.getCededClaim(periodCounter);
-            if (parmCoveredByReinsurers != 1) {
-                cededClaim = ClaimUtils.scale(cededClaim, parmCoveredByReinsurers);
+            if (coveredByReinsurers != 1) {
+                cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers);
             }
             ClaimUtils.applyMarkers(grossClaim.getGrossClaim(), cededClaim);
             cededClaim.setMarker(this);
@@ -289,7 +293,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         }
         for (IReinsuranceContract contract : contracts) {
             // todo(sku): how time consuming are isSenderWired() calls? Might be necessary to cache this information.
-            contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, parmCoveredByReinsurers,
+            contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, coveredByReinsurers,
                     isSenderWired(outUnderwritingInfoNet));
         }
         for (UnderwritingInfoPacket cededUnderwritingPacket : outUnderwritingInfoCeded) {
@@ -452,14 +456,6 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     public void setOutUnderwritingInfoGross(PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross) {
         this.outUnderwritingInfoGross = outUnderwritingInfoGross;
-    }
-
-    public double getParmCoveredByReinsurers() {
-        return parmCoveredByReinsurers;
-    }
-
-    public void setParmCoveredByReinsurers(double parmCoveredByReinsurers) {
-        this.parmCoveredByReinsurers = parmCoveredByReinsurers;
     }
 
     public boolean adjustExposureInfo() {
