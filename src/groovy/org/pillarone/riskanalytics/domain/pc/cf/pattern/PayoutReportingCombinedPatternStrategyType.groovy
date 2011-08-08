@@ -12,19 +12,19 @@ class PayoutReportingCombinedPatternStrategyType extends AbstractParameterObject
     public static final PayoutReportingCombinedPatternStrategyType INCREMENTAL = new PayoutReportingCombinedPatternStrategyType(
             "incremental", "INCREMENTAL", [
             incrementalPattern :  new ConstrainedMultiDimensionalParameter([[0],[1d],[1d]],
-                    [PatternTableConstraints.MONTHS,INCREMENTS_REPORTED, INCREMENTS_PAYOUT],
+                    [PatternTableConstraints.MONTHS, INCREMENTS_PAYOUT, INCREMENTS_REPORTED],
                     ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER)),
     ])
     public static final PayoutReportingCombinedPatternStrategyType CUMULATIVE = new PayoutReportingCombinedPatternStrategyType(
             "cumulative", "CUMULATIVE", [
             cumulativePattern :  new ConstrainedMultiDimensionalParameter([[0],[1d],[1d]],
-                    [PatternTableConstraints.MONTHS,CUMULATIVE_REPORTED,CUMULATIVE_PAYOUT],
+                    [PatternTableConstraints.MONTHS, CUMULATIVE_PAYOUT, CUMULATIVE_REPORTED],
                     ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER)),
     ])
     public static final PayoutReportingCombinedPatternStrategyType AGE_TO_AGE = new PayoutReportingCombinedPatternStrategyType(
             "age-to-age", "AGE_TO_AGE", [
             ageToAgePattern :  new ConstrainedMultiDimensionalParameter([[0],[1d],[1d]],
-                    [PatternTableConstraints.MONTHS,LINK_RATIOS_REPORTED,LINK_RATIOS_PAYOUT],
+                    [PatternTableConstraints.MONTHS, LINK_RATIOS_PAYOUT, LINK_RATIOS_REPORTED],
                     ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER)),
     ])
 
