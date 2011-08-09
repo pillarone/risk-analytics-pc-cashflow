@@ -30,14 +30,14 @@ public class WXLContract extends XLContract {
                        double aggregateLimit, IStabilizationStrategy stabilization,
                        List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy premiumAllocation) {
         super(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit, stabilization,
-              reinstatementPremiumFactors, premiumAllocation);
+                reinstatementPremiumFactors, premiumAllocation);
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
         if (grossClaim.getBaseClaim().getClaimType().equals(ClaimType.SINGLE)) {
             return super.calculateClaimCeded(grossClaim, storage, periodCounter);
         }
-        return new ClaimCashflowPacket();
+        return new ClaimCashflowPacket(grossClaim.getBaseClaim(), 0, 0, 0, 0, 0, 0, 0, null, grossClaim.getUpdateDate(), grossClaim.getUpdatePeriod());
     }
 
 }

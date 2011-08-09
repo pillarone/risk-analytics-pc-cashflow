@@ -22,6 +22,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.validation.Risk
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimTypeSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.validation.CopulaValidator
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.validation.MultipleProbabilitiesCopulaValidator
+import org.pillarone.riskanalytics.core.output.aggregation.PacketAggregatorRegistry
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimPacketAggregator
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -92,6 +95,8 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
 
         // add resource bundle for exceptions
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.RESOURCE, "org.pillarone.riskanalytics.domain.pc.cf.exceptionResources")
+
+        PacketAggregatorRegistry.registerAggregator(ClaimCashflowPacket, new ClaimPacketAggregator())
     }
 
     def onChange = { event ->

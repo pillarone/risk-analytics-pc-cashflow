@@ -10,7 +10,7 @@ grails.project.dependency.resolution = {
         grailsCentral()
     }
 
-    mavenRepo "https://build.intuitive-collaboration.com/maven/plugins/"
+    mavenRepo "https://repository.intuitive-collaboration.com/nexus/content/repositories/pillarone-public/"
 
     plugins {
         runtime ":background-thread:1.3"
@@ -24,7 +24,7 @@ grails.project.dependency.resolution = {
         test ":code-coverage:1.2.4"
 
         if (appName == "risk-analytics-pc-cashflow") {
-            runtime "org.pillarone:risk-analytics-core:1.4-ALPHA-7"
+            runtime "org.pillarone:risk-analytics-core:1.4-BETA-1"
             runtime("org.pillarone:risk-analytics-commons:0.1.18") { transitive = false }
         }
     }
@@ -33,19 +33,21 @@ grails.project.dependency.resolution = {
 //grails.plugin.location.'risk-analytics-commons' = "../risk-analytics-commons"
 
 grails.project.dependency.distribution = {
-    String passPhrase = ""
+    String password = ""
+    String user = ""
     String scpUrl = ""
     try {
         Properties properties = new Properties()
         properties.load(new File("${userHome}/deployInfo.properties").newInputStream())
 
-        passPhrase = properties.get("passPhrase")
+        user = properties.get("user")
+        passowrd = properties.get("password")
         scpUrl = properties.get("url")
     }
     catch (Throwable t) {
     }
     remoteRepository(id: "pillarone", url: scpUrl) {
-        authentication username: 'root', privateKey: "${userHome.absolutePath}/.ssh/id_rsa", passphrase: passPhrase
+        authentication username: user, password: password
     }
 }
 

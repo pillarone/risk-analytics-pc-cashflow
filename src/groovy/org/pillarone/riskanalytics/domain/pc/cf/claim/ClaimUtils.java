@@ -1,11 +1,17 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang.NotImplementedException;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -30,6 +36,7 @@ public class ClaimUtils {
         double reportedIncremental = 0;
         double reportedCumulated = 0;
         double reserves = 0;
+        double appliedIndex = 1;
         for (ClaimCashflowPacket claim : claims) {
             ultimate += claim.ultimate();
             paidIncremental += claim.getPaidIncrementalIndexed();
@@ -37,15 +44,59 @@ public class ClaimUtils {
             reportedIncremental += claim.getReportedIncrementalIndexed();
             reportedCumulated += claim.getReportedCumulatedIndexed();
             reserves += claim.reservedIndexed();
+            appliedIndex *= claim.getAppliedIndexValue();
         }
-        boolean hasUltimate = ultimate > 0;
         ClaimRoot baseClaim = new ClaimRoot(ultimate, claims.get(0).getBaseClaim());
         DateTime updateDate = claims.get(0).getUpdateDate();
         int updatePeriod = claims.get(0).getUpdatePeriod();
         ClaimCashflowPacket summedClaims = new ClaimCashflowPacket(baseClaim, ultimate, paidIncremental, paidCumulated,
                 reportedIncremental, reportedCumulated, reserves, null, updateDate, updatePeriod);
         applyMarkers(claims.get(0), summedClaims);
+        summedClaims.setAppliedIndexValue(appliedIndex);
         return summedClaims;
+    }
+
+    public static List<ClaimCashflowPacket> aggregateByBaseClaim(List<ClaimCashflowPacket> claims) {
+        List<ClaimCashflowPacket> aggregateByBaseClaim = new ArrayList<ClaimCashflowPacket>();
+        ListMultimap<IClaimRoot, ClaimCashflowPacket> claimsByBaseClaim = ArrayListMultimap.create();
+        for (ClaimCashflowPacket claim : claims) {
+            claimsByBaseClaim.put(claim.getBaseClaim(), claim);
+        }
+        for (Collection<ClaimCashflowPacket> claimsWithSameBaseClaim : claimsByBaseClaim.asMap().values()) {
+            if (claimsWithSameBaseClaim.size() == 1) {
+                aggregateByBaseClaim.add(claimsWithSameBaseClaim.iterator().next());
+            }
+            else {
+                double ultimate = 0;
+                double paidIncremental = 0;
+                double paidCumulated = 0;
+                double reportedIncremental = 0;
+                double reportedCumulated = 0;
+                DateTime mostRecentClaimUpdate = null;
+                double latestReserves = 0;
+                double appliedIndex = 1;
+                for (ClaimCashflowPacket claim : claimsWithSameBaseClaim) {
+                    ultimate += claim.ultimate();
+                    paidIncremental += claim.getPaidIncrementalIndexed();
+                    reportedIncremental += claim.getReportedIncrementalIndexed();
+                    appliedIndex *= claim.getAppliedIndexValue();
+                    if (mostRecentClaimUpdate == null || claim.getUpdateDate().isAfter(mostRecentClaimUpdate)) {
+                        mostRecentClaimUpdate = claim.getUpdateDate();
+                        reportedCumulated = claim.getReportedCumulatedIndexed();
+                        paidCumulated = claim.getPaidCumulatedIndexed();
+                        latestReserves = claim.reservedIndexed();
+                    }
+                }
+                ClaimRoot baseClaim = new ClaimRoot(ultimate, claims.get(0).getBaseClaim());
+                int updatePeriod = claims.get(0).getUpdatePeriod();
+                ClaimCashflowPacket aggregateClaim = new ClaimCashflowPacket(baseClaim, ultimate, paidIncremental, paidCumulated,
+                    reportedIncremental, reportedCumulated, latestReserves, null, mostRecentClaimUpdate, updatePeriod);
+                aggregateClaim.setAppliedIndexValue(appliedIndex);
+                applyMarkers(claims.get(0), aggregateClaim);
+                aggregateByBaseClaim.add(aggregateClaim);
+            }
+        }
+        return aggregateByBaseClaim;
     }
 
     /**
