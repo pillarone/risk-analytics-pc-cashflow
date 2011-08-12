@@ -67,9 +67,8 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
         RandomFrequencyDistribution systematicFrequencyDistribution = ClaimsGeneratorUtils.extractFrequencyDistribution(systematicFrequencies, filterCriteria);
         setClaimNumberGenerator(FrequencyDistributionUtils.getIdiosyncraticDistribution(frequencyDistribution, systematicFrequencyDistribution),
                 frequencyModification);
-        ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
         List<Factors> factors = IndexUtils.filterFactors(factorPackets, frequencyIndices);
-        baseClaims.addAll(generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, frequencyBase, claimType, factors, periodScope));
+        baseClaims.addAll(generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, frequencyBase, factors, periodScope));
         return baseClaims;
     }
 
@@ -77,10 +76,13 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
                                            List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria,
                                            PeriodScope periodScope) {
         setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
-        ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
         List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(eventStreams, filterCriteria);
         List<Double> severities = ClaimsGeneratorUtils.extractSeverities(eventSeverities);
         List<EventPacket> events = ClaimsGeneratorUtils.extractEvents(eventSeverities);
-        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, claimType, periodScope, severities, events);
+        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, periodScope, severities, events);
+    }
+
+    public ClaimType claimType() {
+        return produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
     }
 }

@@ -26,7 +26,7 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
     private IRandomNumberGenerator claimNumberGenerator;
 
     public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                          ExposureBase severityBase, FrequencyBase frequencyBase, ClaimType claimType,
+                                          ExposureBase severityBase, FrequencyBase frequencyBase,
                                           List<Factors> factors, PeriodScope periodScope) {
         double frequencyScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, frequencyBase, uwInfosFilterCriteria);
         int numberOfClaims = 0;
@@ -35,15 +35,15 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
         }
         numberOfClaims = calculateNumberOfClaimsWithAppliedIndices(numberOfClaims, periodScope, factors);
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return generateClaims(severityScalingFactor, numberOfClaims, claimType, periodScope);
+        return generateClaims(severityScalingFactor, numberOfClaims, periodScope);
     }
 
     public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                          ExposureBase severityBase, ClaimType claimType, List<Factors> factors, PeriodScope periodScope) {
+                                          ExposureBase severityBase, List<Factors> factors, PeriodScope periodScope) {
         int numberOfClaims = claimNumberGenerator.nextValue().intValue();
         numberOfClaims = calculateNumberOfClaimsWithAppliedIndices(numberOfClaims, periodScope, factors);
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return generateClaims(severityScalingFactor, numberOfClaims, claimType, periodScope);
+        return generateClaims(severityScalingFactor, numberOfClaims, periodScope);
     }
 
     private int calculateNumberOfClaimsWithAppliedIndices(int numberOfClaims, PeriodScope periodScope, List<Factors> factors) {

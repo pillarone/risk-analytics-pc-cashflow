@@ -65,7 +65,7 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
         }
         List<Double> claimValues = new ArrayList<Double>();
         claimValues.add(claimValue);
-        return getClaims(claimValues, ClaimType.ATTRITIONAL, periodScope);
+        return getClaims(claimValues, periodScope);
     }
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
@@ -81,7 +81,7 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
         }
         List<Double> claimValues = new ArrayList<Double>();
         claimValues.add(claimValue * severityScalingFactor);
-        return getClaims(claimValues, ClaimType.ATTRITIONAL, periodScope);
+        return getClaims(claimValues, periodScope);
     }
 
 }

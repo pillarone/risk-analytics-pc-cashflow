@@ -36,37 +36,37 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
                                          ExposureBase severityBase, ClaimType claimType,
                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return generateClaims(severityScalingFactor, 1, claimType, periodScope);
+        return generateClaims(severityScalingFactor, 1, periodScope);
     }
 
-    protected List<ClaimRoot> generateClaims(double scaleFactor, int claimNumber, ClaimType claimType, PeriodScope periodScope) {
+    protected List<ClaimRoot> generateClaims(double scaleFactor, int claimNumber, PeriodScope periodScope) {
         return ClaimsGeneratorUtils.generateClaims(scaleFactor, claimSizeGenerator, dateGenerator, claimNumber,
-                claimType, periodScope);
+                claimType(), periodScope);
     }
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                           ExposureBase severityBase, ClaimType claimType, PeriodScope periodScope,
+                                           ExposureBase severityBase, PeriodScope periodScope,
                                            List<Double> severities, List<EventPacket> events) {
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return calculateClaims(severityScalingFactor, claimType, periodScope, severities, events);
+        return calculateClaims(severityScalingFactor, periodScope, severities, events);
     }
 
-    protected List<ClaimRoot> calculateClaims(double scaleFactor, ClaimType claimType, PeriodScope periodScope,
+    protected List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope,
                                               List<Double> severities, List<EventPacket> events) {
-        return ClaimsGeneratorUtils.calculateClaims(scaleFactor, modifiedClaimsSizeDistribution, claimType, periodScope,
+        return ClaimsGeneratorUtils.calculateClaims(scaleFactor, modifiedClaimsSizeDistribution, claimType(), periodScope,
                 severities, events, shift);
     }
 
-    protected List<ClaimRoot> getClaims(List<Double> claimValues, ClaimType claimType, PeriodScope periodScope) {
+    protected List<ClaimRoot> getClaims(List<Double> claimValues, PeriodScope periodScope) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
-        List<EventPacket> events = ClaimsGeneratorUtils.generateEvents(claimType, claimValues.size(), periodScope, dateGenerator);
+        List<EventPacket> events = ClaimsGeneratorUtils.generateEvents(claimType(), claimValues.size(), periodScope, dateGenerator);
         for (int i = 0; i < claimValues.size(); i++) {
             DateTime occurrenceDate = events == null ?
                     DateTimeUtilities.getDate(periodScope, dateGenerator.nextValue().doubleValue()) : events.get(i).getDate();
             // todo(sku): replace with information from underwriting
             DateTime exposureStartDate = periodScope.getCurrentPeriodStartDate();
             EventPacket event = events == null ? null : events.get(i);
-            baseClaims.add(new ClaimRoot(claimValues.get(i) * -1, claimType, exposureStartDate, occurrenceDate, event));
+            baseClaims.add(new ClaimRoot(claimValues.get(i) * -1, claimType(), exposureStartDate, occurrenceDate, event));
         }
         return baseClaims;
     }

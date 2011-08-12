@@ -64,7 +64,11 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
         List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(eventStreams, filterCriteria);
         List<Double> severities = ClaimsGeneratorUtils.extractSeverities(eventSeverities);
         List<EventPacket> events = ClaimsGeneratorUtils.extractEvents(eventSeverities);
-        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, ClaimType.ATTRITIONAL, periodScope, severities, events);
+        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, periodScope, severities, events);
+    }
+
+    public ClaimType claimType() {
+        return ClaimType.ATTRITIONAL;
     }
 
 }

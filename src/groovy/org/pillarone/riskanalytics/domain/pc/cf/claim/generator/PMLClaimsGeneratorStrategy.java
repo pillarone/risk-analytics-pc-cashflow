@@ -68,8 +68,7 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
                                           List<SystematicFrequencyPacket> systematicFrequencies, IPerilMarker filterCriteria) {
         setClaimsSizeGenerator(periodScope);
         setClaimNumberGenerator(periodScope);
-        ClaimType claimType = produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
-        return generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, claimType, null, periodScope);
+        return generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, null, periodScope);
     }
 
     private void setClaimsSizeGenerator(PeriodScope periodScope) {
@@ -155,5 +154,9 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
                                            List<EventDependenceStream> eventStreams,
                                            IPerilMarker filterCriteria, PeriodScope periodScope) {
         return new ArrayList<ClaimRoot>();
+    }
+
+    public ClaimType claimType() {
+        return produceClaim == FrequencySeverityClaimType.SINGLE ? ClaimType.SINGLE : ClaimType.AGGREGATED_EVENT;
     }
 }

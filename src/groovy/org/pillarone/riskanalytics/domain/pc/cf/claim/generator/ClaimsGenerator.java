@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
+import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
@@ -15,6 +16,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.IRiskAllocatorS
 import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.RiskAllocatorType;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
@@ -83,14 +85,20 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
      * @param factors
      */
     private int generateClaimsOfCurrentPeriod(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter, List<Factors> factors) {
-        if (globalGenerateNewClaimsInFirstPeriodOnly
-                && periodScope.isFirstPeriod()
-                || !globalGenerateNewClaimsInFirstPeriodOnly) {
+        if (generateNewClaims()) {
             List uwFilterCriteria = (List) parmUnderwritingSegments.getValuesAsObjects(0, true);
             // a nominal ultimate is generated, therefore no factors are applied
             List<ClaimRoot> baseClaims = parmClaimsModel.calculateClaims(inUnderwritingInfo, uwFilterCriteria,
                     inEventSeverities, this, periodScope);
             baseClaims = parmClaimsModel.generateClaims(baseClaims, inUnderwritingInfo, uwFilterCriteria, inFactors, periodScope, inEventFrequencies, this);
+            if (baseClaims.isEmpty()) {
+                // avoid no claims in single iterations as this would produce wrong statistics
+                ClaimType claimType = parmClaimsModel.claimType();
+                DateTime exposureStartDate = periodScope.getCurrentPeriodStartDate();
+                EventPacket event = claimType.equals(ClaimType.AGGREGATED_EVENT) ? new EventPacket(exposureStartDate) : null;
+                DateTime occurrenceDate = periodScope.getCurrentPeriodStartDate();
+                baseClaims.add(new ClaimRoot(0, claimType, exposureStartDate, occurrenceDate , event));
+            }
             baseClaims = parmAssociateExposureInfo.getAllocatedClaims(baseClaims, UnderwritingInfoUtils.filterUnderwritingInfo(inUnderwritingInfo, uwFilterCriteria));
 
             PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
@@ -110,6 +118,12 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
             return baseClaims.size();
         }
         return 0;
+    }
+
+    private boolean generateNewClaims() {
+        return globalGenerateNewClaimsInFirstPeriodOnly
+                && periodScope.isFirstPeriod()
+                || !globalGenerateNewClaimsInFirstPeriodOnly;
     }
 
     private void developClaimsOfFormerPeriods(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter, List<Factors> factors) {

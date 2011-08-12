@@ -20,6 +20,7 @@ public class ClaimUtils {
 
     /**
      * Adds up all claims and builds a corresponding new base claim. It's exposure info is null.
+     * WARNING: if the updatePeriod of the first claim is not set the return claim has updatePeriod = 0.
      * @param claims
      * @param sameBaseClaim: Marker interface of returned packet are all null if false
      * @return null if claims is empty. New object if claims.size() > 1
@@ -48,7 +49,10 @@ public class ClaimUtils {
         }
         ClaimRoot baseClaim = new ClaimRoot(ultimate, claims.get(0).getBaseClaim());
         DateTime updateDate = claims.get(0).getUpdateDate();
-        int updatePeriod = claims.get(0).getUpdatePeriod();
+        int updatePeriod = 0;
+        if (claims.get(0).getUpdatePeriod() != null) {
+            updatePeriod = claims.get(0).getUpdatePeriod();
+        }
         ClaimCashflowPacket summedClaims = new ClaimCashflowPacket(baseClaim, ultimate, paidIncremental, paidCumulated,
                 reportedIncremental, reportedCumulated, reserves, null, updateDate, updatePeriod);
         applyMarkers(claims.get(0), summedClaims);
