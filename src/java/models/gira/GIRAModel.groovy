@@ -149,12 +149,18 @@ class GIRAModel extends StochasticModel {
         for (Pattern pattern: patterns.subReportingPatterns.componentList) {
             Period period = pattern.parmPattern.getPattern(IReportingPatternMarker.class).getLastCumulativePeriod()
             LOG.debug("reporting pattern $pattern.name $period.months")
-            claimsGeneratorPatternLengths.put(pattern.name, period)
+            Period existingPeriod = claimsGeneratorPatternLengths.get(pattern.name)
+            if (existingPeriod == null || existingPeriod.months < period.months) {
+                claimsGeneratorPatternLengths.put(pattern.name, period)
+            }
         }
         for (PayoutReportingCombinedPattern pattern: patterns.subPayoutAndReportingPatterns.componentList) {
             Period period = pattern.parmPattern.getPayoutPattern().getLastCumulativePeriod()
             LOG.debug("combined payout reporting pattern $pattern.name $period.months")
-            claimsGeneratorPatternLengths.put(pattern.name, period)
+            Period existingPeriod = claimsGeneratorPatternLengths.get(pattern.name)
+            if (existingPeriod == null || existingPeriod.months < period.months) {
+                claimsGeneratorPatternLengths.put(pattern.name, period)
+            }
         }
 
         if (!claimsGeneratorPatternLengths.isEmpty()) {
@@ -187,7 +193,7 @@ class GIRAModel extends StochasticModel {
         for (Pattern pattern: patterns.subPremiumPatterns.componentList) {
             Period period = pattern.parmPattern.getPattern(IPremiumPatternMarker.class).getLastCumulativePeriod()
             LOG.debug("premium pattern $pattern.name $period.months")
-            premiumPatternLengths.put(pattern.name, period)
+            premiumPatternLengths.put("premium ${pattern.name}", period)
         }
         if (!premiumPatternLengths.isEmpty()) {
             for (RiskBands riskBands: underwritingSegments.componentList) {
