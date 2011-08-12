@@ -41,10 +41,9 @@ grails.project.dependency.distribution = {
         properties.load(new File("${userHome}/deployInfo.properties").newInputStream())
 
         user = properties.get("user")
-        passowrd = properties.get("password")
+        password = properties.get("password")
         scpUrl = properties.get("url")
-    }
-    catch (Throwable t) {
+    } catch (Throwable t) {
     }
     remoteRepository(id: "pillarone", url: scpUrl) {
         authentication username: user, password: password
