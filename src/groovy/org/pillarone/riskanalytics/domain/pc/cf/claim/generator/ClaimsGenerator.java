@@ -95,6 +95,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
 
             PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
             PatternPacket reportingPattern = PatternUtils.filterPattern(inPatterns, parmReportingPattern, IReportingPatternMarker.class);
+            PatternUtils.synchronizePatterns(payoutPattern, reportingPattern);
 
             List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
             for (ClaimRoot baseClaim : baseClaims) {

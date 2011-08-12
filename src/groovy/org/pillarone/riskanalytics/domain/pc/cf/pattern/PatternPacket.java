@@ -1,21 +1,22 @@
 package org.pillarone.riskanalytics.domain.pc.cf.pattern;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.packets.Packet;
-import org.pillarone.riskanalytics.core.simulation.BeforeSimulationStartException;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
-import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.DateFactors;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class PatternPacket extends Packet {
+public class PatternPacket extends Packet implements Cloneable {
 
     private static Log LOG = LogFactory.getLog(PatternPacket.class);
 
@@ -73,16 +74,16 @@ public class PatternPacket extends Packet {
         return synchronous;
     }
 
-    public static boolean hasSameCumulativePeriods(PatternPacket payout, PatternPacket reporting, boolean payoutPatternMaybeLonger) {
-        boolean sameSizeOrPayoutLonger = payout.size() >= reporting.size();
-        boolean samePeriods = sameSizeOrPayoutLonger;
-        if (sameSizeOrPayoutLonger) {
-            for (int developmentPeriod = 0; samePeriods && developmentPeriod < reporting.size(); developmentPeriod++) {
-                samePeriods = payout.incrementMonths(developmentPeriod).equals(reporting.incrementMonths(developmentPeriod));
-            }
-        }
-        return samePeriods;
-    }
+//    public static boolean hasSameCumulativePeriods(PatternPacket payout, PatternPacket reporting, boolean payoutPatternMaybeLonger) {
+//        boolean sameSizeOrPayoutLonger = payout.size() >= reporting.size();
+//        boolean samePeriods = sameSizeOrPayoutLonger;
+//        if (sameSizeOrPayoutLonger) {
+//            for (int developmentPeriod = 0; samePeriods && developmentPeriod < reporting.size(); developmentPeriod++) {
+//                samePeriods = payout.incrementMonths(developmentPeriod).equals(reporting.incrementMonths(developmentPeriod));
+//            }
+//        }
+//        return samePeriods;
+//    }
 
     /**
      * @param occurrenceDate
@@ -241,11 +242,55 @@ public class PatternPacket extends Packet {
         return patternMarker.equals(other);
     }
 
+    public void insertTrivialPeriod(Period period, int index) {
+        cumulativeValues.add(index, cumulativeValues.get(index - 1));
+        cumulativePeriods.add(index, period);
+    }
+
     public static final class TrivialPattern extends PatternPacket {
 
         public TrivialPattern(Class<? extends IPatternMarker> patternMarker) {
             // todo(sku): use immutable lists
             super(patternMarker, Arrays.asList(1d), Arrays.asList(Period.days(0)));
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof PatternPacket) {
+            boolean difference = true;           //samePatternType((Class<? extends IPatternMarker>) obj);
+            for (int idx = 0; idx < size() && difference; idx++) {
+                difference = cumulativePeriods.get(idx).equals(((PatternPacket) obj).getCumulativePeriod(idx));
+                difference &= cumulativeValues.get(idx).equals(((PatternPacket) obj).getCumulativeValues().get(idx));
+            }
+            return difference;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        HashCodeBuilder builder = new HashCodeBuilder();
+        builder.append(patternMarker);
+        for (Period period : cumulativePeriods) {
+            builder.append(period.hashCode());
+        }
+        for (Double value : cumulativeValues) {
+            builder.append(value);
+        }
+        return builder.toHashCode();
+    }
+
+    @Override
+    public PatternPacket clone() {
+        List<Double>  clonedCumulativeValues = new ArrayList<Double>(cumulativeValues.size());
+        for (Double value : cumulativeValues) {
+            clonedCumulativeValues.add(new Double(value));
+        }
+        List<Period> clonedCumulativePeriods = new ArrayList<Period>(cumulativePeriods.size());
+        for (Period period : cumulativePeriods) {
+            clonedCumulativePeriods.add(new Period(period));
+        }
+        return new PatternPacket(patternMarker, clonedCumulativeValues, clonedCumulativePeriods);
     }
 }

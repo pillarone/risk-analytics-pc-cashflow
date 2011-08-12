@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,6 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter, List<Factors> factors, boolean hasUltimate) {
         List<ClaimCashflowPacket> currentPeriodClaims = new ArrayList<ClaimCashflowPacket>();
-        // todo(jwa): improve (inquiry isReservesClaim not nice)
         boolean isReservesClaim = claimRoot.getClaimType().equals(ClaimType.AGGREGATED_RESERVES) || claimRoot.getClaimType().equals(ClaimType.RESERVE);
         if (!hasTrivialPayout() || isReservesClaim) {
             List<DateFactors> payouts = payoutPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter, true);
@@ -110,7 +110,6 @@ public final class GrossClaimRoot implements IClaimRoot {
                                 paidCumulatedIndexed, reserves, claimRoot.getExposureInfo(), payoutDate, periodCounter);
                     }
                     else {
-//                        double reportedIncremental = reportedIncremental(ultimate, factor, reports, i);
                         double reportedCumulated = reportedCumulated(ultimate, paidCumulated, 1, payoutCumulatedFactor, reports, i);
                         double outstanding = reportedCumulated - paidCumulated;
                         double outstandingIndexed = outstanding * factor;
@@ -138,15 +137,6 @@ public final class GrossClaimRoot implements IClaimRoot {
             currentPeriodClaims.add(cashflowPacket);
         }
         return currentPeriodClaims;
-    }
-
-    private double reportedIncremental(double ultimate, double factor, List<DateFactors> reports, int idx) {
-        if (hasSynchronizedPatterns()) {
-            // set reportsIncrementalFactor = 0 if payout pattern is longer than reported pattern
-            double reportsIncrementalFactor = idx < reports.size() ? reports.get(idx).getFactorIncremental() : 0d;
-            return ultimate * reportsIncrementalFactor * factor;
-        }
-        return 0;
     }
 
     private double reportedCumulated(double ultimate, double paidCumulated, double factor, double payoutCumulatedFactor,
@@ -226,7 +216,7 @@ public final class GrossClaimRoot implements IClaimRoot {
                 synchronizedPatterns = false;
             }
             else {
-                synchronizedPatterns = PatternPacket.hasSameCumulativePeriods(payoutPattern, reportingPattern, true);
+                synchronizedPatterns = PatternUtils.hasSameCumulativePeriods(payoutPattern, reportingPattern, true);
             }
         }
         return synchronizedPatterns;
