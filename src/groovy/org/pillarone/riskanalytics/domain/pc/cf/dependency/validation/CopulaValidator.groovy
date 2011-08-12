@@ -35,11 +35,11 @@ class CopulaValidator implements IParameterizationValidator {
 
         List<ParameterValidation> errors = []
 
-        /** key: path                                  */
+        /** key: path                                   */
         Map<String, List<Component>> targetComponentsPerCopula = [:]
-        /** key: path                                  */
+        /** key: path                                   */
         Map<String, IndexStrategyType> strategyPerIndexName = [:]
-        /** key: path                                  */
+        /** key: path                                   */
         Map<String, ClaimsGeneratorType> strategyPerClaimsGeneratorName = [:]
 
         for (ParameterHolder parameter in parameters) {
@@ -49,16 +49,12 @@ class CopulaValidator implements IParameterizationValidator {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug "validating ${parameter.path}"
                     }
-                    // todo(jwa): remove if requirement as soon as as PMO-1763 is solved
-                    if (!(classifier.equals(CopulaType.NORMAL) || classifier.equals(CopulaType.T))) {
+                    List<Component> targets = parameter.getBusinessObject().getTargetComponents()
+                    targetComponentsPerCopula[parameter.path] = targets
 
-                        List<Component> targets = parameter.getBusinessObject().getTargetComponents()
-                        targetComponentsPerCopula[parameter.path] = targets
-
-                        def currentErrors = validationService.validate(classifier, targets)
-                        currentErrors*.path = parameter.path + ':targets'
-                        errors.addAll(currentErrors)
-                    }
+                    def currentErrors = validationService.validate(classifier, targets)
+                    currentErrors*.path = parameter.path + pathExtension(classifier)
+                    errors.addAll(currentErrors)
                 }
                 else if (classifier instanceof IndexStrategyType) {
                     if (parameter.path.contains('indices:subFrequencyIndices:')) {
@@ -120,11 +116,13 @@ class CopulaValidator implements IParameterizationValidator {
                 ClaimsGeneratorType claimsGeneratorType = strategyPerClaimsGeneratorName[target.getName()]
                 if ((indexType == null || indexType.equals(IndexStrategyType.STOCHASTIC)) &&
                         (claimsGeneratorType == null || claimsGeneratorType.equals(ClaimsGeneratorType.ATTRITIONAL) ||
-                                claimsGeneratorType.equals(ClaimsGeneratorType.ATTRITIONAL_WITH_DATE))) continue
+                                claimsGeneratorType.equals(ClaimsGeneratorType.ATTRITIONAL_WITH_DATE))) {
+                    continue
+                }
                 ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
                         'dependencies.copula.targets.invalid.strategy', [target.getNormalizedName(),
                                 indexType == null ? claimsGeneratorType.toString() : indexType.toString()])
-                error.path = copulaPath + ':targets'
+                error.path = copulaPath + ':type'
                 errors << error
             }
         }
@@ -138,7 +136,7 @@ class CopulaValidator implements IParameterizationValidator {
             for (int i = 0; i < type.size() - 1; i++) {
                 for (int j = i; j < type.size() - 1; j++) {
                     if (type[i].equals(type[j + 1])) {
-                        return [ValidationType.ERROR, "dependencies.copula.targets.duplicate.reference", type[i].getNormalizedName()]
+                        return [ValidationType.ERROR, "dependencies.copula.targets.duplicate.reference", type[i].normalizedName]
                     }
                 }
             }
@@ -146,4 +144,12 @@ class CopulaValidator implements IParameterizationValidator {
         }
     }
 
+    private String pathExtension(IParameterObjectClassifier classifier) {
+        if (classifier.equals(CopulaType.NORMAL) || classifier.equals(CopulaType.T)) {
+            return ':dependencyMatrix'
+        }
+        else {
+            return ':targets'
+        }
+    }
 }

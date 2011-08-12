@@ -24,7 +24,7 @@ grails.project.dependency.resolution = {
         test ":code-coverage:1.2.4"
 
         if (appName == "risk-analytics-pc-cashflow") {
-            runtime "org.pillarone:risk-analytics-core:1.4-BETA-1"
+            runtime "org.pillarone:risk-analytics-core:1.4-BETA-1.1"
             runtime("org.pillarone:risk-analytics-commons:0.1.20") { transitive = false }
         }
     }

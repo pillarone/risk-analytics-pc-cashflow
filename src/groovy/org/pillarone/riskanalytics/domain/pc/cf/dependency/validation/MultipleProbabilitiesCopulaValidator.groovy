@@ -59,15 +59,12 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
                     if (LOG.isDebugEnabled()) {
                         LOG.debug "validating ${parameter.path}"
                     }
-                    // todo(jwa): remove if requirement as soon as PMO-1763 is solved
-                    if (!(classifier.equals(CopulaType.NORMAL) || classifier.equals(CopulaType.T))) {
-                        List<Component> targets = parameter.getBusinessObject().getTargetComponents()
-                        targetComponentsPerCopula[parameter.path] = targets
+                    List<Component> targets = parameter.getBusinessObject().getTargetComponents()
+                    targetComponentsPerCopula[parameter.path] = targets
 
-                        def currentErrors = validationService.validate(classifier, targets)
-                        currentErrors*.path = parameter.path
-                        errors.addAll(currentErrors)
-                    }
+                    def currentErrors = validationService.validate(classifier, targets)
+                    currentErrors*.path = parameter.path
+                    errors.addAll(currentErrors)
                 }
                 else if (classifier instanceof ClaimsGeneratorType) {
                     try {
@@ -281,7 +278,7 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
                     if (!strategy.frequencyBase.equals(FrequencyBase.ABSOLUTE)) {
                         ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
                                 'event.generators.copula.targets.invalid.frequency.base', [target.getNormalizedName(), strategy.frequencyBase.toString()])
-                        error.path = copulaPath + ':targets'
+                        error.path = copulaPath + pathExtension(classifier)
                         errors << error
                         error = new ParameterValidationImpl(ValidationType.ERROR,
                                 'event.generators.copula.targets.invalid.frequency.base', [target.getNormalizedName(), strategy.frequencyBase.toString()])
@@ -291,7 +288,7 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
                     if (!strategy.frequencyModification.type.equals(DistributionModifier.NONE)) {
                         ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
                                 'event.generators.copula.targets.invalid.frequency.modifier', [target.getNormalizedName(), strategy.frequencyModification.type.toString()])
-                        error.path = copulaPath + ':targets'
+                        error.path = copulaPath + pathExtension(classifier)
                         errors << error
                         error = new ParameterValidationImpl(ValidationType.ERROR,
                                 'event.generators.copula.targets.invalid.frequency.modifier', [target.getNormalizedName(), strategy.frequencyModification.type.toString()])
@@ -302,7 +299,7 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
                 else {
                     ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
                             'event.generators.copula.targets.invalid.strategy', [target.getNormalizedName(), strategy.getType().toString()])
-                    error.path = copulaPath + ':targets'
+                    error.path = copulaPath + ':type'
                     errors << error
 //                    error = new ParameterValidationImpl(ValidationType.ERROR,
                     //                            'event.generators.copula.targets.invalid.strategy', [target.getNormalizedName(),strategy.getType().toString()])
@@ -321,10 +318,19 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
             for (int i = 0; i < type.size() - 1; i++) {
                 for (int j = i; j < type.size() - 1; j++) {
                     if (type[i].equals(type[j + 1])) {
-                        return [ValidationType.ERROR, "event.generators.copula.targets.duplicate.reference", type[i].getNormalizedName()]
+                        return [ValidationType.ERROR, "event.generators.copula.targets.duplicate.reference", type[i].normalizedName]
                     }
                 }
             }
+        }
+    }
+
+    private String pathExtension(IParameterObjectClassifier classifier) {
+        if (classifier.equals(CopulaType.NORMAL) || classifier.equals(CopulaType.T)) {
+            return ':dependencyMatrix'
+        }
+        else {
+            return ':targets'
         }
     }
 
