@@ -82,11 +82,13 @@ public final class GrossClaimRoot implements IClaimRoot {
                     reportingPattern.getDateFactorsForCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter, true)
                     : null;
             if ((payouts.size() == 0 && reports == null) || (hasIBNR() && (payouts.size() + reports.size() == 0))) {
-                // PMO-1645: this if block is a quick fix and does not contain the final solution.
-                // further details posted at
                 if (claimRoot.getOccurrenceDate().plus(payoutPattern.getLastCumulativePeriod()).isAfter(periodCounter.getCurrentPeriodStart())) {
                     DateTime artificalPayoutDate = periodCounter.getCurrentPeriodStart();
-                    ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, 0, 0, 0, 0, 0, 0,
+                    payouts = payoutPattern.getDateFactorsTillStartOfCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter);
+                    double payoutCumulatedFactor = payouts.get(payouts.size() - 1).getFactorCumulated();
+                    double factor = manageFactor(factors, artificalPayoutDate, periodCounter, claimRoot.getOccurrenceDate());
+                    double reserves = claimRoot.getUltimate() * (1 - payoutCumulatedFactor) * factor;
+                    ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, 0, 0, paidCumulatedIncludingAppliedFactors, reserves,
                             claimRoot.getExposureInfo(), artificalPayoutDate, periodCounter);
                     currentPeriodClaims.add(cashflowPacket);
                 }

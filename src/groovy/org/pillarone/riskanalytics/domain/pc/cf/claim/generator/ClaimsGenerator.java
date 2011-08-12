@@ -64,7 +64,6 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     protected void doCalculation() {
         List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
         IPeriodCounter periodCounter = periodScope.getPeriodCounter();
-
         List<Factors> factors = IndexUtils.filterFactors(inFactors, parmSeverityIndices);
         int number = generateClaimsOfCurrentPeriod(claims, periodCounter, factors);
         developClaimsOfFormerPeriods(claims, periodCounter, factors);
