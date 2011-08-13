@@ -27,6 +27,7 @@ import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarke
 import org.pillarone.riskanalytics.domain.utils.constant.ReinsuranceContractBase
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity
+import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -40,6 +41,7 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket)
     PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
+    PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault)
 
     PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> outClaimsInward = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
@@ -74,6 +76,7 @@ class ReinsuranceContracts extends DynamicComposedComponent {
             init()
             replicateInChannels this, 'inUnderwritingInfo'
             replicateInChannels this, 'inFactors'
+            replicateInChannels this, 'inLegalEntityDefault'
             replicateOutChannels this, 'outClaimsInward'
             replicateOutChannels this, 'outUnderwritingInfoInward'
             wireContractsBasedOnGross()

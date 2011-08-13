@@ -1,12 +1,26 @@
 package org.pillarone.riskanalytics.domain.pc.cf.legalentity;
 
+import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.components.AbstractStore;
 import org.pillarone.riskanalytics.core.components.MultiPhaseComponent;
+import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.DefaultProbabilities;
+import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.IRecoveryPatternMarker;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.constant.Rating;
+import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
+import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
+import umontreal.iro.lecuyer.probdist.BinomialDist;
+
+import java.util.Map;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -14,6 +28,9 @@ import org.pillarone.riskanalytics.domain.utils.constant.Rating;
 public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMarker {
 
     private Rating parmRating = Rating.NO_DEFAULT;
+    private ConstrainedString parmRecoveryPattern = new ConstrainedString(IRecoveryPatternMarker.class, "");
+
+    private DefaultProbabilities globalProbabilities;
 
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
@@ -22,6 +39,8 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfoCeded = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfoInward = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+
+    private PacketList<LegalEntityDefault> outLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
 
     private PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsPrimaryInsurer = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
@@ -35,11 +54,23 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
 
+    private static final String PHASE_DEFAULT = "Phase Default";
     private static final String PHASE_GROSS = "Phase Gross";
     private static final String PHASE_NET = "Phase Net";
 
+    private IRandomNumberGenerator generator = RandomNumberGeneratorFactory.getBinomialGenerator();
+    private IRandomNumberGenerator dateGenerator = RandomNumberGeneratorFactory.getUniformGenerator();
+
+    private PeriodStore periodStore;
+    private PeriodScope periodScope;
+    private static final String IS_DEFAULT = "IS_DEFAULT";
+
     @Override
     public void doCalculation(String phase) {
+        if (phase.equals(PHASE_DEFAULT)) {
+            DateTime dateOfDefault = defaultOfReinsurer(globalProbabilities.getDefaultProbability(parmRating));
+            outLegalEntityDefault.add(new LegalEntityDefault(this, dateOfDefault));
+        }
         if (phase.equals(PHASE_GROSS)) {
             for (ClaimCashflowPacket grossClaim : inClaims) {
                 if (grossClaim.legalEntity().equals(this)) {
@@ -81,7 +112,22 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
         }
     }
 
+    private DateTime defaultOfReinsurer(double probability) {
+        DateTime dateOfDefault = (DateTime) periodStore.get(IS_DEFAULT, AbstractStore.LAST_PERIOD);
+        if (dateOfDefault == null) {
+            ((BinomialDist) generator.getDistribution()).setParams(1, probability);
+            boolean isDefault = ((Integer) generator.nextValue()) == 1;
+            if (isDefault) {
+                dateOfDefault = DateTimeUtilities.getDate(periodScope, dateGenerator.nextValue().doubleValue());
+                periodStore.put(IS_DEFAULT, dateOfDefault);
+            }
+        }
+        return dateOfDefault;
+    }
+
     public void allocateChannelsToPhases() {
+        setTransmitterPhaseOutput(outLegalEntityDefault, PHASE_DEFAULT);
+
         setTransmitterPhaseInput(inClaims, PHASE_GROSS);
         setTransmitterPhaseInput(inUnderwritingInfo, PHASE_GROSS);
         setTransmitterPhaseOutput(outClaimsGross, PHASE_GROSS);
@@ -235,5 +281,45 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
 
     public void setOutUnderwritingInfoNet(PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet) {
         this.outUnderwritingInfoNet = outUnderwritingInfoNet;
+    }
+
+    public ConstrainedString getParmRecoveryPattern() {
+        return parmRecoveryPattern;
+    }
+
+    public void setParmRecoveryPattern(ConstrainedString parmRecoveryPattern) {
+        this.parmRecoveryPattern = parmRecoveryPattern;
+    }
+
+    public DefaultProbabilities getGlobalProbabilities() {
+        return globalProbabilities;
+    }
+
+    public void setGlobalProbabilities(DefaultProbabilities globalProbabilities) {
+        this.globalProbabilities = globalProbabilities;
+    }
+
+    public PacketList<LegalEntityDefault> getOutLegalEntityDefault() {
+        return outLegalEntityDefault;
+    }
+
+    public void setOutLegalEntityDefault(PacketList<LegalEntityDefault> outLegalEntityDefault) {
+        this.outLegalEntityDefault = outLegalEntityDefault;
+    }
+
+    public PeriodStore getPeriodStore() {
+        return periodStore;
+    }
+
+    public void setPeriodStore(PeriodStore periodStore) {
+        this.periodStore = periodStore;
+    }
+
+    public PeriodScope getPeriodScope() {
+        return periodScope;
+    }
+
+    public void setPeriodScope(PeriodScope periodScope) {
+        this.periodScope = periodScope;
     }
 }

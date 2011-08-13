@@ -31,6 +31,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerator
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
 import org.pillarone.riskanalytics.domain.pc.cf.structure.Structures
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.Discountings
+import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.CreditDefault
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -40,6 +41,7 @@ class GIRAModel extends StochasticModel {
     private static Log LOG = LogFactory.getLog(GIRAModel);
 
     GlobalParameters globalParameters
+    CreditDefault creditDefault
     Indices indices
     Discountings discountings
     Patterns patterns
@@ -56,6 +58,7 @@ class GIRAModel extends StochasticModel {
     @Override
     void initComponents() {
         globalParameters = new GlobalParameters()
+        creditDefault = new CreditDefault()
         underwritingSegments = new UnderwritingSegments()
         indices = new Indices()
         discountings = new Discountings()
@@ -69,6 +72,7 @@ class GIRAModel extends StochasticModel {
         reinsuranceContracts = new ReinsuranceContracts()
         structures = new Structures()
 
+        addStartComponent legalEntities
         addStartComponent patterns
         addStartComponent dependencies
         addStartComponent eventGenerators
@@ -106,8 +110,10 @@ class GIRAModel extends StochasticModel {
             segments.inReserves = reservesGenerators.outReserves
             segments.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
             segments.inFactors = discountings.outFactors
+            segments.inLegalEntityDefault = legalEntities.outLegalEntityDefault
             reinsuranceContracts.inClaims = segments.outClaimsGross
             reinsuranceContracts.inUnderwritingInfo = segments.outUnderwritingInfoGross
+            reinsuranceContracts.inLegalEntityDefault = legalEntities.outLegalEntityDefault
             segments.inClaimsCeded = reinsuranceContracts.outClaimsCeded
             segments.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
             if (structures.subComponentCount() > 0) {

@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.segment;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.components.MultiPhaseComponent;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
@@ -14,6 +15,7 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
+import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault;
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.*;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -31,6 +33,7 @@ import java.util.*;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
+// todo(sku): problem with no packets after default -> zero packets required!
 public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     private IterationScope iterationScope;
@@ -50,6 +53,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     private PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
     private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
+    private PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
 
     private PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
@@ -82,33 +86,55 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     private static final String PHASE_GROSS = "Phase Gross";
     private static final String PHASE_NET = "Phase Net";
 
+    private DateTime dateOfDefault;
+
     @Override
     public void doCalculation(String phase) {
-        if (phase.equals(PHASE_GROSS)) {
-            initIteration();
-            getSegmentClaims();
-            getSegmentReserves();
-            getSegmentUnderwritingInfo();
-            if (discountedValuesRequired()) {
-                IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
-                DiscountUtils.getDiscountedGrossValues(inFactors, parmDiscounting, outClaimsGross, periodStore, periodCounter);
+        if (defaultNotBeforeCurrentPeriodStart()) {
+            if (phase.equals(PHASE_GROSS)) {
+                initIteration();
+                getSegmentClaims(dateOfDefault);
+                getSegmentReserves(dateOfDefault);
+                getSegmentUnderwritingInfo(dateOfDefault);
+                if (discountedValuesRequired()) {
+                    IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
+                    DiscountUtils.getDiscountedGrossValues(inFactors, parmDiscounting, outClaimsGross, periodStore, periodCounter);
+                }
+            }
+            else if (phase.equals(PHASE_NET)) {
+                filterCededClaims();
+                calculateNetClaims();
+                filterCededUnderwritingInfo();
+                calculateNetUnderwritingInfo();
+                if (periodStore.exists(FILTERED_FACTORS)) {
+                    DiscountUtils.getDiscountedNetValuesAndFillOutChannels(outClaimsCeded, outClaimsNet, outDiscountedValues,
+                            outNetPresentValues, periodStore, iterationScope);
+                }
             }
         }
-        else if (phase.equals(PHASE_NET)) {
-            filterCededClaims();
-            calculateNetClaims();
-            filterCededUnderwritingInfo();
-            calculateNetUnderwritingInfo();
-            if (periodStore.exists(FILTERED_FACTORS)) {
-                DiscountUtils.getDiscountedNetValuesAndFillOutChannels(outClaimsCeded, outClaimsNet, outDiscountedValues,
-                        outNetPresentValues, periodStore, iterationScope);
+    }
+
+    private boolean defaultNotBeforeCurrentPeriodStart() {
+        if (dateOfDefault == null) {
+            dateOfDefault = getDateOfDefault();
+            return dateOfDefault == null || dateOfDefault.isAfter(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
+        }
+        return false;
+    }
+
+    private DateTime getDateOfDefault() {
+        for (LegalEntityDefault legalEntityDefault : inLegalEntityDefault) {
+            if (legalEntityDefault.getLegalEntity().equals(parmCompany.getSelectedComponent())) {
+                return legalEntityDefault.getDateOfDefault();
             }
         }
+        return null;
     }
 
     private void initIteration() {
         if (iterationScope.getPeriodScope().isFirstPeriod()) {
             incomingScaledBaseClaimMapping.clear();
+            dateOfDefault = null;
         }
     }
 
@@ -159,14 +185,14 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         }
     }
 
-    private void getSegmentUnderwritingInfo() {
+    private void getSegmentUnderwritingInfo(DateTime dateOfDefault) {
         if (inUnderwritingInfo.size() > 0) {
             List<UnderwritingInfoPacket> lobUnderwritingInfos = new ArrayList<UnderwritingInfoPacket>();
             int portionColumn = parmUnderwritingPortions.getColumnIndex(PORTION);
             for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
                 String originName = underwritingInfo.riskBand().getNormalizedName();
                 int row = parmUnderwritingPortions.getColumnByName(UNDERWRITING).indexOf(originName);
-                if (row > -1) {
+                if (row > -1 && (dateOfDefault == null || dateOfDefault.isAfter(underwritingInfo.getDate()))) {
                     UnderwritingInfoPacket lobUnderwritingInfo = (UnderwritingInfoPacket) underwritingInfo.copy();
                     double segmentPortion = InputFormatConverter.getDouble(parmUnderwritingPortions.getValueAt(row + 1, portionColumn));
                     lobUnderwritingInfo.setPremiumWritten(lobUnderwritingInfo.getPremiumWritten() * segmentPortion);
@@ -183,7 +209,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         }
     }
 
-    private void getSegmentClaims() {
+    private void getSegmentClaims(DateTime dateOfDefault) {
         if (inClaims.size() > 0) {
             List<ClaimCashflowPacket> segmentClaims = new ArrayList<ClaimCashflowPacket>();
             int portionColumn = parmClaimsPortions.getColumnIndex(PORTION);
@@ -192,7 +218,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                 if (marketClaim.peril() != null) {
                     String originName = marketClaim.peril().getNormalizedName();
                     int row = parmClaimsPortions.getColumnByName(PERIL).indexOf(originName);
-                    if (row > -1) {
+                    if (row > -1 && (dateOfDefault == null || dateOfDefault.isAfter(marketClaim.getOccurrenceDate()))) {
                         ClaimCashflowPacket segmentClaim = (ClaimCashflowPacket) marketClaim.copy();
                         // PMO-750: claim mergers in reinsurance program won't work with reference to market claims
                         segmentClaim.origin = this;
@@ -216,7 +242,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         }
     }
 
-    private void getSegmentReserves() {
+    private void getSegmentReserves(DateTime dateOfDefault) {
         if (inReserves.size() > 0) {
             List<ClaimCashflowPacket> segmentReserves = new ArrayList<ClaimCashflowPacket>();
             int portionColumn = parmReservesPortions.getColumnIndex(PORTION);
@@ -225,7 +251,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                 if (marketClaim.reserve() != null) {
                     String originName = marketClaim.reserve().getNormalizedName();
                     int row = parmReservesPortions.getColumnByName(RESERVE).indexOf(originName);
-                    if (row > -1) {
+                    if (row > -1 && (dateOfDefault == null || dateOfDefault.isAfter(marketClaim.getOccurrenceDate()))) {
                         ClaimCashflowPacket segmentReserve = (ClaimCashflowPacket) marketClaim.copy();
                         // PMO-750: claim mergers in reinsurance program won't work with reference to market claims
                         segmentReserve.origin = this;
@@ -249,6 +275,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         setTransmitterPhaseInput(inReserves, PHASE_GROSS);
         setTransmitterPhaseInput(inUnderwritingInfo, PHASE_GROSS);
         setTransmitterPhaseInput(inFactors, PHASE_GROSS);
+        setTransmitterPhaseInput(inLegalEntityDefault, PHASE_GROSS);
         setTransmitterPhaseOutput(outClaimsGross, PHASE_GROSS);
         setTransmitterPhaseOutput(outUnderwritingInfoGross, PHASE_GROSS);
 
@@ -433,5 +460,13 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     public void setIterationScope(IterationScope iterationScope) {
         this.iterationScope = iterationScope;
+    }
+
+    public PacketList<LegalEntityDefault> getInLegalEntityDefault() {
+        return inLegalEntityDefault;
+    }
+
+    public void setInLegalEntityDefault(PacketList<LegalEntityDefault> inLegalEntityDefault) {
+        this.inLegalEntityDefault = inLegalEntityDefault;
     }
 }
