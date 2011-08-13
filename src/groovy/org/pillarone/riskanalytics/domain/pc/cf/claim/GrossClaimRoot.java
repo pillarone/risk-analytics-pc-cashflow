@@ -88,7 +88,7 @@ public final class GrossClaimRoot implements IClaimRoot {
                     double payoutCumulatedFactor = payouts.get(payouts.size() - 1).getFactorCumulated();
                     double factor = manageFactor(factors, artificalPayoutDate, periodCounter, claimRoot.getOccurrenceDate());
                     double reserves = claimRoot.getUltimate() * (1 - payoutCumulatedFactor) * factor;
-                    ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, 0, 0, paidCumulatedIncludingAppliedFactors, reserves,
+                    ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, 0, 0, paidCumulatedIncludingAppliedFactors, reserves * factor,
                             claimRoot.getExposureInfo(), artificalPayoutDate, periodCounter);
                     currentPeriodClaims.add(cashflowPacket);
                 }
@@ -107,9 +107,10 @@ public final class GrossClaimRoot implements IClaimRoot {
                     double paidCumulatedIndexed = paidCumulatedIncludingAppliedFactors + paidIncrementalIndexed;
                     paidCumulatedIncludingAppliedFactors = paidCumulatedIndexed;
                     ClaimCashflowPacket cashflowPacket;
-                    if (!hasIBNR() && !isReservesClaim) {
+                    if (!hasIBNR() && !isReservesClaim && factor == 1) {
                         cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncrementalIndexed,
                                 paidCumulatedIndexed, reserves, claimRoot.getExposureInfo(), payoutDate, periodCounter);
+                        reportedCumulatedIncludingAppliedFactors = ultimate;
                     }
                     else {
                         double reportedCumulated = reportedCumulated(ultimate, paidCumulated, 1, payoutCumulatedFactor, reports, i);
@@ -148,6 +149,9 @@ public final class GrossClaimRoot implements IClaimRoot {
             double reportsCumulatedFactor = idx < reports.size() ? reports.get(idx).getFactorCumulated() : 1d;
             double outstanding = ultimate * (reportsCumulatedFactor - payoutCumulatedFactor) * factor;
             return outstanding + paidCumulated;
+        }
+        else if (!hasIBNR()) {
+            return ultimate * factor;
         }
         return 0;
     }
