@@ -7,12 +7,15 @@ import org.pillarone.riskanalytics.core.components.Component
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.core.packets.PacketList
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
-import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault;
+import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault
+import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.DefaultProbabilities;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 class LegalEntities extends DynamicMultiPhaseComposedComponent {
+
+    PacketList<DefaultProbabilities> inDefaultProbabilities = new PacketList<DefaultProbabilities>(DefaultProbabilities)
 
     PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
@@ -44,11 +47,6 @@ class LegalEntities extends DynamicMultiPhaseComposedComponent {
         new LegalEntity(parmRating: Rating.NO_DEFAULT)
     }
 
-//    @Override
-//    void start() {
-//        doCalculation(PHASE_DEFAULT)
-//    }
-
     @Override
     protected void doCalculation(String phase) {
         for (Component component : componentList) {
@@ -57,6 +55,7 @@ class LegalEntities extends DynamicMultiPhaseComposedComponent {
     }
 
     void allocateChannelsToPhases() {
+        setTransmitterPhaseInput(inDefaultProbabilities, PHASE_DEFAULT)
         setTransmitterPhaseOutput(outLegalEntityDefault, PHASE_DEFAULT)
 
         setTransmitterPhaseInput(inClaims, PHASE_GROSS)
@@ -80,6 +79,7 @@ class LegalEntities extends DynamicMultiPhaseComposedComponent {
 
     @Override
     void wire() {
+        replicateInChannels this, 'inDefaultProbabilities'
         replicateInChannels this, 'inClaims'
         replicateInChannels this, 'inClaimsCeded'
         replicateInChannels this, 'inClaimsInward'

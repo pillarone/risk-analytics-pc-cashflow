@@ -1,14 +1,13 @@
 package org.pillarone.riskanalytics.domain.pc.cf.creditrisk;
 
-import org.pillarone.riskanalytics.core.components.GlobalParameterComponent;
+import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.packets.PacketList;
-import org.pillarone.riskanalytics.core.parameterization.global.Global;
 import org.pillarone.riskanalytics.domain.utils.constant.Rating;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class CreditDefault extends GlobalParameterComponent {
+public class CreditDefault extends Component {
 
  // preset values according to CEIOPS
     private double parmDefaultAAA = 0.00002;
@@ -21,9 +20,15 @@ public class CreditDefault extends GlobalParameterComponent {
     private double parmDefaultCC  = 0.04175;
     private double parmDefaultC   = 0.04175;
 
+    private PacketList<DefaultProbabilities> outDefaultProbabilities = new PacketList<DefaultProbabilities>(DefaultProbabilities.class);
+
     private DefaultProbabilities probabilities;
 
-    @Global(identifier = "probabilities")
+    @Override
+    protected void doCalculation() {
+        outDefaultProbabilities.add(probabilities());
+    }
+
     public DefaultProbabilities probabilities() {
         if (probabilities == null) {
             probabilities = new DefaultProbabilities();
@@ -114,4 +119,11 @@ public class CreditDefault extends GlobalParameterComponent {
         this.parmDefaultC = parmDefaultC;
     }
 
+    public PacketList<DefaultProbabilities> getOutDefaultProbabilities() {
+        return outDefaultProbabilities;
+    }
+
+    public void setOutDefaultProbabilities(PacketList<DefaultProbabilities> outDefaultProbabilities) {
+        this.outDefaultProbabilities = outDefaultProbabilities;
+    }
 }

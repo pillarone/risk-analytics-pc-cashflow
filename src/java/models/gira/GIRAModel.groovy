@@ -72,7 +72,7 @@ class GIRAModel extends StochasticModel {
         reinsuranceContracts = new ReinsuranceContracts()
         structures = new Structures()
 
-        addStartComponent legalEntities
+        addStartComponent creditDefault
         addStartComponent patterns
         addStartComponent dependencies
         addStartComponent eventGenerators
@@ -110,10 +110,8 @@ class GIRAModel extends StochasticModel {
             segments.inReserves = reservesGenerators.outReserves
             segments.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
             segments.inFactors = discountings.outFactors
-            segments.inLegalEntityDefault = legalEntities.outLegalEntityDefault
             reinsuranceContracts.inClaims = segments.outClaimsGross
             reinsuranceContracts.inUnderwritingInfo = segments.outUnderwritingInfoGross
-            reinsuranceContracts.inLegalEntityDefault = legalEntities.outLegalEntityDefault
             segments.inClaimsCeded = reinsuranceContracts.outClaimsCeded
             segments.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
             if (structures.subComponentCount() > 0) {
@@ -125,6 +123,9 @@ class GIRAModel extends StochasticModel {
                 structures.inUnderwritingInfoCeded = segments.outUnderwritingInfoCeded
             }
             if (legalEntities.subComponentCount() > 0) {
+                legalEntities.inDefaultProbabilities = creditDefault.outDefaultProbabilities
+                segments.inLegalEntityDefault = legalEntities.outLegalEntityDefault
+                reinsuranceContracts.inLegalEntityDefault = legalEntities.outLegalEntityDefault
                 legalEntities.inClaims = segments.outClaimsGross
                 legalEntities.inUnderwritingInfo = segments.outUnderwritingInfoGross
                 legalEntities.inClaimsCeded = reinsuranceContracts.outClaimsCeded

@@ -90,9 +90,9 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     @Override
     public void doCalculation(String phase) {
+        initIteration(phase);
         if (defaultNotBeforeCurrentPeriodStart()) {
             if (phase.equals(PHASE_GROSS)) {
-                initIteration();
                 getSegmentClaims(dateOfDefault);
                 getSegmentReserves(dateOfDefault);
                 getSegmentUnderwritingInfo(dateOfDefault);
@@ -131,8 +131,8 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         return null;
     }
 
-    private void initIteration() {
-        if (iterationScope.getPeriodScope().isFirstPeriod()) {
+    private void initIteration(String phase) {
+        if (phase.equals(PHASE_GROSS) && iterationScope.getPeriodScope().isFirstPeriod()) {
             incomingScaledBaseClaimMapping.clear();
             dateOfDefault = null;
         }

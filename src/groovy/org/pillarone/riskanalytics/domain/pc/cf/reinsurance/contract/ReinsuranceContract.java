@@ -91,15 +91,19 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     }
 
     private void initSimulation() {
-        if (iterationScope.isFirstIteration() && iterationScope.getPeriodScope().isFirstPeriod()) {
+        if (firstIterationAndPeriod()) {
             parmCoveredPeriod.initStartCover(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
             counterPartyFactors = new CounterPartyState();
         }
     }
 
+    private boolean firstIterationAndPeriod() {
+        return iterationScope.isFirstIteration() && iterationScope.getPeriodScope().isFirstPeriod();
+    }
+
     private void initIteration() {
         if (iterationScope.getPeriodScope().isFirstPeriod()) {
-            if (counterPartyFactors.newInitializationRequired()) {
+            if (counterPartyFactors.newInitializationRequired() || firstIterationAndPeriod()) {
                 DateTime validAsOf = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
                 List<LegalEntity> counterParties = parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX);
                 for (int row = parmReinsurers.getTitleRowCount(); row < parmReinsurers.getRowCount(); row++) {
@@ -146,10 +150,13 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
 
     private void updateCounterPartyFactors() {
+        List<LegalEntity> counterParties = parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX);
         for (LegalEntityDefault legalEntityDefault : inLegalEntityDefault) {
-            DateTime dateOfDefault = legalEntityDefault.getDateOfDefault();
-            if (dateOfDefault != null) {
-                counterPartyFactors.addCounterPartyFactor(dateOfDefault, legalEntityDefault.getLegalEntity(), 0d, false);
+            if (counterParties.contains(legalEntityDefault.getLegalEntity())) {
+                DateTime dateOfDefault = legalEntityDefault.getDateOfDefault();
+                if (dateOfDefault != null) {
+                    counterPartyFactors.addCounterPartyFactor(dateOfDefault, legalEntityDefault.getLegalEntity(), 0d, false);
+                }
             }
         }
     }

@@ -68,7 +68,9 @@ class Segments extends DynamicMultiPhaseComposedComponent {
         replicateInChannels this, 'inUnderwritingInfo'
         replicateInChannels this, 'inUnderwritingInfoCeded'
         replicateInChannels this, 'inFactors'
-        replicateInChannels this, 'inLegalEntityDefault'
+        if (isReceiverWired(inLegalEntityDefault)) {
+            replicateInChannels this, 'inLegalEntityDefault'
+        }
         replicateOutChannels this, 'outClaimsGross'
         replicateOutChannels this, 'outClaimsNet'
         replicateOutChannels this, 'outClaimsCeded'

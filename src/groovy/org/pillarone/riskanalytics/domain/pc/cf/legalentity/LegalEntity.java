@@ -30,8 +30,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     private Rating parmRating = Rating.NO_DEFAULT;
     private ConstrainedString parmRecoveryPattern = new ConstrainedString(IRecoveryPatternMarker.class, "");
 
-    private DefaultProbabilities globalProbabilities;
-
+    private PacketList<DefaultProbabilities> inDefaultProbabilities = new PacketList<DefaultProbabilities>(DefaultProbabilities.class);
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> inClaimsInward = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
@@ -68,7 +67,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     @Override
     public void doCalculation(String phase) {
         if (phase.equals(PHASE_DEFAULT)) {
-            DateTime dateOfDefault = defaultOfReinsurer(globalProbabilities.getDefaultProbability(parmRating));
+            DateTime dateOfDefault = defaultOfReinsurer(inDefaultProbabilities.get(0).getDefaultProbability(parmRating));
             outLegalEntityDefault.add(new LegalEntityDefault(this, dateOfDefault));
         }
         if (phase.equals(PHASE_GROSS)) {
@@ -126,6 +125,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     }
 
     public void allocateChannelsToPhases() {
+        setTransmitterPhaseInput(inDefaultProbabilities, PHASE_DEFAULT);
         setTransmitterPhaseOutput(outLegalEntityDefault, PHASE_DEFAULT);
 
         setTransmitterPhaseInput(inClaims, PHASE_GROSS);
@@ -291,14 +291,6 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
         this.parmRecoveryPattern = parmRecoveryPattern;
     }
 
-    public DefaultProbabilities getGlobalProbabilities() {
-        return globalProbabilities;
-    }
-
-    public void setGlobalProbabilities(DefaultProbabilities globalProbabilities) {
-        this.globalProbabilities = globalProbabilities;
-    }
-
     public PacketList<LegalEntityDefault> getOutLegalEntityDefault() {
         return outLegalEntityDefault;
     }
@@ -321,5 +313,13 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
 
     public void setPeriodScope(PeriodScope periodScope) {
         this.periodScope = periodScope;
+    }
+
+    public PacketList<DefaultProbabilities> getInDefaultProbabilities() {
+        return inDefaultProbabilities;
+    }
+
+    public void setInDefaultProbabilities(PacketList<DefaultProbabilities> inDefaultProbabilities) {
+        this.inDefaultProbabilities = inDefaultProbabilities;
     }
 }
