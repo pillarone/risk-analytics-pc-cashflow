@@ -71,11 +71,8 @@ public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObj
 
     private double incrementalFactor(DateTime formerDate, double formerChange, DateTime date) {
         if (formerDate != null) {
-            double interestRate= DateTimeUtilities.getInterestRateForTimeInterval(formerChange,formerDate, date);
-            return 1d+interestRate;
-            /*int daysInYear = Days.daysBetween(formerDate, formerDate.plusYears(1)).getDays();
-            double elapsedTime = Days.daysBetween(formerDate, date).getDays() / (double) daysInYear;
-            return Math.pow(1 + formerChange, elapsedTime);  */
+            double interestRate = DateTimeUtilities.getInterestRateForTimeInterval(formerChange, formerDate, date);
+            return 1d + interestRate;
         }
         return 1d;
     }
