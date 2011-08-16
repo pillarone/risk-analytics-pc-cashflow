@@ -8,7 +8,6 @@ import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
 
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.PremiumBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.PremiumAllocationType
 import org.pillarone.riskanalytics.core.parameterization.TableMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
@@ -53,7 +52,7 @@ class WXLContractTests extends GroovyTestCase {
         return new ReinsuranceContract(
                 parmContractStrategy : ReinsuranceContractType.getStrategy(ReinsuranceContractType.WXL, [
                     'aggregateDeductible': aggregateDeductible, 'attachmentPoint': attachmentPoint,
-                    'limit': limit, 'aggregateLimit': aggregateLimit, 'premiumBase': PremiumBase.ABSOLUTE,
+                    'limit': limit, 'aggregateLimit': aggregateLimit, 'premiumBase': XLPremiumBase.ABSOLUTE,
                     'stabilization': StabilizationStrategyType.getDefault(),
                     'premium': premium,
                     'riPremiumSplit': PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),

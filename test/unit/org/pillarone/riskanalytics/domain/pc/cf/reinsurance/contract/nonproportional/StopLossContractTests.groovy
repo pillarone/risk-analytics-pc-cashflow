@@ -17,7 +17,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.PremiumAllocationType
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.PremiumBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
@@ -55,7 +54,7 @@ class StopLossContractTests extends GroovyTestCase {
                 parmContractStrategy : ReinsuranceContractType.getStrategy(ReinsuranceContractType.STOPLOSS, [
                     'stopLossContractBase': contractBase,
                     'attachmentPoint': attachmentPoint,
-                    'limit': limit, 'premiumBase': PremiumBase.ABSOLUTE,
+                    'limit': limit, 'premiumBase': XLPremiumBase.ABSOLUTE,
                     'premium': premium,
                     'riPremiumSplit': PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:])]),
                 iterationScope: iterationScope,
