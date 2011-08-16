@@ -38,13 +38,13 @@ class PatternStrategyValidator implements IParameterizationValidator {
 
         List<ParameterValidation> errors = []
 
-        /** key: path                                   */
+        /** key: path                                     */
         Map<String, PatternPacket> payoutPatterns = [:]
-        /** key: path                                   */
+        /** key: path                                     */
         Map<String, PatternPacket> reportingPatterns = [:]
-        /** key: path                                   */
+        /** key: path                                     */
         Map<String, String> reportingPatternPerClaimsGenerator = [:]
-        /** key: path                                   */
+        /** key: path                                     */
         Map<String, String> payoutPatternPerClaimsGenerator = [:]
 
 
@@ -216,7 +216,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
             double[] months = type.cumulativePattern.getColumnByName(PatternTableConstraints.MONTHS)
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
-                    return [ValidationType.ERROR, "cumulative.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
+                    return [ValidationType.ERROR, "cumulative.pattern.error.cumulative.months.not.strictly.increasing", i + 2, months[i], months[i + 1]]
                 }
             }
             return true
@@ -237,7 +237,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
             double[] months = type.incrementalPattern.getColumnByName(PatternTableConstraints.MONTHS)
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
-                    return [ValidationType.ERROR, "incremental.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
+                    return [ValidationType.ERROR, "incremental.pattern.error.cumulative.months.not.strictly.increasing", i + 2, months[i], months[i + 1]]
                 }
             }
             return true
@@ -258,7 +258,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
             double[] months = type.ageToAgePattern.getColumnByName(PatternTableConstraints.MONTHS)
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
-                    return [ValidationType.ERROR, "age.to.age.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
+                    return [ValidationType.ERROR, "age.to.age.pattern.error.cumulative.months.not.strictly.increasing", i + 2, months[i], months[i + 1]]
                 }
             }
             return true
@@ -387,7 +387,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
             double[] payoutValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_PAYOUT)
             for (int i = 0; i < payoutValues.length - 1; i++) {
                 if (payoutValues[i + 1] < payoutValues[i]) {
-                    return [ValidationType.HINT, "cumulative.combined.pattern.error.cumulative.payout.values.not.increasing", i + 1, payoutValues[i], payoutValues[i + 1]]
+                    return [ValidationType.HINT, "cumulative.combined.pattern.error.cumulative.payout.values.not.increasing", i + 1, i + 2, payoutValues[i], payoutValues[i + 1]]
                 }
             }
             return true
@@ -398,7 +398,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
             double[] reportedValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_REPORTED)
             for (int i = 0; i < reportedValues.length - 1; i++) {
                 if (reportedValues[i + 1] < reportedValues[i]) {
-                    return [ValidationType.HINT, "cumulative.combined.pattern.error.cumulative.reported.values.not.increasing", i + 1, reportedValues[i], reportedValues[i + 1]]
+                    return [ValidationType.HINT, "cumulative.combined.pattern.error.cumulative.reported.values.not.increasing", i + 1, i + 2, reportedValues[i], reportedValues[i + 1]]
                 }
             }
             return true
@@ -512,7 +512,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
             double[] months = type.cumulativePattern.getColumnByName(PatternTableConstraints.MONTHS)
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
-                    return [ValidationType.ERROR, "cumulative.combined.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
+                    return [ValidationType.ERROR, "cumulative.combined.pattern.error.cumulative.months.not.strictly.increasing", i + 2, months[i], months[i + 1]]
                 }
             }
             return true
@@ -533,7 +533,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
             double[] months = type.incrementalPattern.getColumnByName(PatternTableConstraints.MONTHS)
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
-                    return [ValidationType.ERROR, "incremental.combined.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
+                    return [ValidationType.ERROR, "incremental.combined.pattern.error.cumulative.months.not.strictly.increasing", i + 2, months[i], months[i + 1]]
                 }
             }
             return true
@@ -554,7 +554,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
             double[] months = type.ageToAgePattern.getColumnByName(PatternTableConstraints.MONTHS)
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
-                    return [ValidationType.ERROR, "age.to.age.combined.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
+                    return [ValidationType.ERROR, "age.to.age.combined.pattern.error.cumulative.months.not.strictly.increasing", i + 2, months[i], months[i + 1]]
                 }
             }
             return true
