@@ -13,6 +13,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
@@ -48,6 +49,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket.class);
     private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
+    private PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
 
     private PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
@@ -69,15 +71,15 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private IPeriodStrategy parmCoveredPeriod = PeriodStrategyType.getDefault();
     private IReinsuranceContractStrategy parmContractStrategy = ReinsuranceContractType.getDefault();
 
-    private Map<ILegalEntityMarker, Double> counterPartyFactors;
-    private double coveredByReinsurers = 1d;
-
+    private CounterPartyState counterPartyFactors;
 
     @Override
     protected void doCalculation() {
-        // todo(sku): reinsurer default and recovery
+        // todo(sku): apply recovery patterns
         // check cover
         initSimulation();
+        initIteration();
+        updateCounterPartyFactors();
         filterInChannels();
         updateContractParameters();
         Set<IReinsuranceContract> contracts = fillGrossClaims();
@@ -89,24 +91,26 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     }
 
     private void initSimulation() {
-        if (iterationScope.isFirstIteration() && iterationScope.getPeriodScope().isFirstPeriod()) {
+        if (firstIterationAndPeriod()) {
             parmCoveredPeriod.initStartCover(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
-            counterPartyFactors = new HashMap<ILegalEntityMarker, Double>();
-            List<LegalEntity> counterParties = parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX);
-            double totalCoveredPortion = 0;
-            for (int row = parmReinsurers.getTitleRowCount(); row < parmReinsurers.getRowCount(); row++) {
-                double coveredPortion = (Double) parmReinsurers.getValueAt(row, LegalEntityPortionConstraints.PORTION_COLUMN_INDEX);
-                totalCoveredPortion += coveredPortion;
-                counterPartyFactors.put(counterParties.get(row - 1), coveredPortion);
-            }
-            if (totalCoveredPortion > 1) {
-                for (Map.Entry<ILegalEntityMarker, Double> entry : counterPartyFactors.entrySet()) {
-                    entry.setValue(entry.getValue() / totalCoveredPortion);
+            counterPartyFactors = new CounterPartyState();
+        }
+    }
+
+    private boolean firstIterationAndPeriod() {
+        return iterationScope.isFirstIteration() && iterationScope.getPeriodScope().isFirstPeriod();
+    }
+
+    private void initIteration() {
+        if (iterationScope.getPeriodScope().isFirstPeriod()) {
+            if (counterPartyFactors.newInitializationRequired() || firstIterationAndPeriod()) {
+                DateTime validAsOf = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
+                List<LegalEntity> counterParties = parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX);
+                for (int row = parmReinsurers.getTitleRowCount(); row < parmReinsurers.getRowCount(); row++) {
+                    ILegalEntityMarker legalEntity = counterParties.get(row - 1);
+                    double coveredPortion = (Double) parmReinsurers.getValueAt(row, LegalEntityPortionConstraints.PORTION_COLUMN_INDEX);
+                    counterPartyFactors.addCounterPartyFactor(validAsOf, legalEntity, coveredPortion, true);
                 }
-                totalCoveredPortion = 1;
-            }
-            if (totalCoveredPortion > 0) {
-                coveredByReinsurers = totalCoveredPortion;
             }
         }
     }
@@ -124,9 +128,11 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
      * filter according to covered period and occurrence date of claim
      */
     private void timeFilter() {
+        DateTime noCoverAfter = counterPartyFactors.allCounterPartiesDefaultAfter();
         List<ClaimCashflowPacket> uncoveredClaims = new ArrayList<ClaimCashflowPacket>();
         for (ClaimCashflowPacket grossClaim : inClaims) {
-            if (!parmCoveredPeriod.isCovered(grossClaim.getOccurrenceDate())) {
+            if (!parmCoveredPeriod.isCovered(grossClaim.getOccurrenceDate())
+                    || (noCoverAfter != null && grossClaim.getOccurrenceDate().isAfter(noCoverAfter))) {
                 uncoveredClaims.add(grossClaim);
             }
         }
@@ -134,11 +140,25 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
         List<UnderwritingInfoPacket> uncoveredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
         for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
-            if (!parmCoveredPeriod.isCovered(underwritingInfo.getExposure().getInceptionDate())) {
+            if (!parmCoveredPeriod.isCovered(underwritingInfo.getExposure().getInceptionDate())
+                    || (noCoverAfter != null && underwritingInfo.getExposure().getInceptionDate().isAfter(noCoverAfter))) {
                 uncoveredUnderwritingInfo.add(underwritingInfo);
             }
         }
         inUnderwritingInfo.removeAll(uncoveredUnderwritingInfo);
+    }
+
+
+    private void updateCounterPartyFactors() {
+        List<LegalEntity> counterParties = parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX);
+        for (LegalEntityDefault legalEntityDefault : inLegalEntityDefault) {
+            if (counterParties.contains(legalEntityDefault.getLegalEntity())) {
+                DateTime dateOfDefault = legalEntityDefault.getDateOfDefault();
+                if (dateOfDefault != null) {
+                    counterPartyFactors.addCounterPartyFactor(dateOfDefault, legalEntityDefault.getLegalEntity(), 0d, false);
+                }
+            }
+        }
     }
 
     /**
@@ -251,6 +271,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
         for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
             ClaimCashflowPacket cededClaim = grossClaim.getCededClaim(periodCounter);
+            double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(grossClaim.getUpdateDate());
             if (coveredByReinsurers != 1) {
                 cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers);
             }
@@ -270,7 +291,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private void splitCededClaimsByCounterParty() {
         if (isSenderWired(outClaimsInward)) {
             for (ClaimCashflowPacket cededClaim : outClaimsCeded) {
-                for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.entrySet()) {
+                for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.getFactors(cededClaim.getUpdateDate()).entrySet()) {
                     ClaimCashflowPacket counterPartyCededClaim = ClaimUtils.scale(cededClaim, -legalEntityAndFactor.getValue());
                     counterPartyCededClaim.setMarker(legalEntityAndFactor.getKey());
                     outClaimsInward.add(counterPartyCededClaim);
@@ -279,6 +300,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         }
     }
 
+    // todo(sku): split uw info by counter party
     private void processUnderwritingInfo(Set<IReinsuranceContract> contracts) {
         if (contracts == null || contracts.size() == 0) return;
         int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
@@ -293,6 +315,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         }
         for (IReinsuranceContract contract : contracts) {
             // todo(sku): how time consuming are isSenderWired() calls? Might be necessary to cache this information.
+            // todo(sku): needs to be more fine granular
+            double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
             contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, coveredByReinsurers,
                     isSenderWired(outUnderwritingInfoNet));
         }
@@ -485,5 +509,13 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     public void setOutUnderwritingInfoInward(PacketList<UnderwritingInfoPacket> outUnderwritingInfoInward) {
         this.outUnderwritingInfoInward = outUnderwritingInfoInward;
+    }
+
+    public PacketList<LegalEntityDefault> getInLegalEntityDefault() {
+        return inLegalEntityDefault;
+    }
+
+    public void setInLegalEntityDefault(PacketList<LegalEntityDefault> inLegalEntityDefault) {
+        this.inLegalEntityDefault = inLegalEntityDefault;
     }
 }

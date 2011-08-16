@@ -15,6 +15,7 @@ import org.pillarone.riskanalytics.domain.utils.constraint.ReservePortion
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountedValuesPacket
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.NetPresentValuesPacket
+import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -28,6 +29,7 @@ class Segments extends DynamicMultiPhaseComposedComponent {
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
     PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
+    PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault)
 
     PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
@@ -66,6 +68,9 @@ class Segments extends DynamicMultiPhaseComposedComponent {
         replicateInChannels this, 'inUnderwritingInfo'
         replicateInChannels this, 'inUnderwritingInfoCeded'
         replicateInChannels this, 'inFactors'
+        if (isReceiverWired(inLegalEntityDefault)) {
+            replicateInChannels this, 'inLegalEntityDefault'
+        }
         replicateOutChannels this, 'outClaimsGross'
         replicateOutChannels this, 'outClaimsNet'
         replicateOutChannels this, 'outClaimsCeded'
@@ -83,6 +88,7 @@ class Segments extends DynamicMultiPhaseComposedComponent {
         setTransmitterPhaseInput(inReserves, PHASE_GROSS);
         setTransmitterPhaseInput(inUnderwritingInfo, PHASE_GROSS);
         setTransmitterPhaseInput(inFactors, PHASE_GROSS);
+        setTransmitterPhaseInput(inLegalEntityDefault, PHASE_GROSS)
         setTransmitterPhaseOutput(outClaimsGross, PHASE_GROSS);
         setTransmitterPhaseOutput(outUnderwritingInfoGross, PHASE_GROSS);
 

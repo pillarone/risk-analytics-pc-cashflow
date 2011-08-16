@@ -258,10 +258,10 @@ public final class GrossClaimRoot implements IClaimRoot {
      * @param cashflowPacket
      */
     private void checkCorrectDevelopment(ClaimCashflowPacket cashflowPacket) {
-        if (LOG.isDebugEnabled()) {
+        if (LOG.isTraceEnabled()) {
             if (childCounter == payoutPattern.size() & cashflowPacket.developedUltimate() != paidCumulatedIncludingAppliedFactors) {
-                LOG.debug("developed ultimate: " + cashflowPacket.developedUltimate());
-                LOG.debug("paid cumulated: " + paidCumulatedIncludingAppliedFactors);
+                LOG.trace("developed ultimate: " + cashflowPacket.developedUltimate());
+                LOG.trace("paid cumulated: " + paidCumulatedIncludingAppliedFactors);
             }
         }
     }

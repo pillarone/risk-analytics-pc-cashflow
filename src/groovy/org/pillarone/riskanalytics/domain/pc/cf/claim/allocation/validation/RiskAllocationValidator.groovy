@@ -34,14 +34,16 @@ class RiskAllocationValidator implements IParameterizationValidator {
         Map<String, Boolean> underwritingInfoPerClaimsGenerator = [:]
 
         for (ParameterHolder parameter in parameters) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug "validating ${parameter.path}"
-            }
-
             if (parameter instanceof ParameterObjectParameterHolder && parameter.classifier instanceof RiskAllocatorType) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug "validating ${parameter.path}"
+                }
                 associateExposureInfoPerClaimsGenerator[parameter.path - ':parmAssociateExposureInfo'] = (RiskAllocatorType) parameter.classifier
             }
             else if (parameter instanceof MultiDimensionalParameterHolder && parameter.value instanceof ComboBoxTableMultiDimensionalParameter) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug "validating ${parameter.path}"
+                }
                 if (parameter.path.contains('claimsGenerators:sub') && parameter.value.markerClass.is(IUnderwritingInfoMarker)) {
                     underwritingInfoPerClaimsGenerator[parameter.path - ':parmUnderwritingSegments'] = hasSelectedUnderwritingInfo(parameter.value)
                 }

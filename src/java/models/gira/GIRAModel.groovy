@@ -31,6 +31,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerator
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
 import org.pillarone.riskanalytics.domain.pc.cf.structure.Structures
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.Discountings
+import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.CreditDefault
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -40,6 +41,7 @@ class GIRAModel extends StochasticModel {
     private static Log LOG = LogFactory.getLog(GIRAModel);
 
     GlobalParameters globalParameters
+    CreditDefault creditDefault
     Indices indices
     Discountings discountings
     Patterns patterns
@@ -56,6 +58,7 @@ class GIRAModel extends StochasticModel {
     @Override
     void initComponents() {
         globalParameters = new GlobalParameters()
+        creditDefault = new CreditDefault()
         underwritingSegments = new UnderwritingSegments()
         indices = new Indices()
         discountings = new Discountings()
@@ -69,6 +72,7 @@ class GIRAModel extends StochasticModel {
         reinsuranceContracts = new ReinsuranceContracts()
         structures = new Structures()
 
+        addStartComponent creditDefault
         addStartComponent patterns
         addStartComponent dependencies
         addStartComponent eventGenerators
@@ -119,6 +123,9 @@ class GIRAModel extends StochasticModel {
                 structures.inUnderwritingInfoCeded = segments.outUnderwritingInfoCeded
             }
             if (legalEntities.subComponentCount() > 0) {
+                legalEntities.inDefaultProbabilities = creditDefault.outDefaultProbabilities
+                segments.inLegalEntityDefault = legalEntities.outLegalEntityDefault
+                reinsuranceContracts.inLegalEntityDefault = legalEntities.outLegalEntityDefault
                 legalEntities.inClaims = segments.outClaimsGross
                 legalEntities.inUnderwritingInfo = segments.outUnderwritingInfoGross
                 legalEntities.inClaimsCeded = reinsuranceContracts.outClaimsCeded
