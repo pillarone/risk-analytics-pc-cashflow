@@ -123,7 +123,7 @@ class RecoveryPatternStrategyValidator implements IParameterizationValidator {
             double[] months = type.cumulativePattern.getColumnByName(PatternTableConstraints.MONTHS)
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
-                    return [ValidationType.ERROR, "cumulative.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
+                    return [ValidationType.ERROR, "cumulative.pattern.error.cumulative.months.not.strictly.increasing", i + 2, months[i], months[i + 1]]
                 }
             }
             return true
@@ -142,7 +142,7 @@ class RecoveryPatternStrategyValidator implements IParameterizationValidator {
             double[] months = type.incrementalPattern.getColumnByName(PatternTableConstraints.MONTHS)
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
-                    return [ValidationType.ERROR, "incremental.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
+                    return [ValidationType.ERROR, "incremental.pattern.error.cumulative.months.not.strictly.increasing", i + 2, months[i], months[i + 1]]
                 }
             }
             return true
@@ -181,7 +181,7 @@ class RecoveryPatternStrategyValidator implements IParameterizationValidator {
             double[] months = type.ageToAgePattern.getColumnByName(PatternTableConstraints.MONTHS)
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
-                    return [ValidationType.ERROR, "age.to.age.pattern.error.cumulative.months.not.strictly.increasing", i + 1, months[i], months[i + 1]]
+                    return [ValidationType.ERROR, "age.to.age.pattern.error.cumulative.months.not.strictly.increasing", i + 2, months[i], months[i + 1]]
                 }
             }
             return true
