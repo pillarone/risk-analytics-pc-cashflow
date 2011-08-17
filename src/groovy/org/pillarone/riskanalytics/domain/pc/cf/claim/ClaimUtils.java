@@ -4,14 +4,12 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang.NotImplementedException;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -56,7 +54,7 @@ public class ClaimUtils {
         ClaimCashflowPacket summedClaims = new ClaimCashflowPacket(baseClaim, ultimate, paidIncremental, paidCumulated,
                 reportedIncremental, reportedCumulated, reserves, null, updateDate, updatePeriod);
         applyMarkers(claims.get(0), summedClaims);
-        summedClaims.setAppliedIndexValue(appliedIndex);
+        summedClaims.setAppliedIndexValue(claims.size() == 0 ? 1d : Math.pow(appliedIndex, 1d / claims.size()));
         return summedClaims;
     }
 
@@ -211,7 +209,7 @@ public class ClaimUtils {
             return (ClaimCashflowPacket) grossClaim.clone();
         }
         else {
-            boolean isProportionalContract = cededClaim.reinsuranceContract() != null && cededClaim.reinsuranceContract().adjustExposureInfo();
+            boolean isProportionalContract = cededClaim.reinsuranceContract() != null && cededClaim.reinsuranceContract().isProportionalContract();
             double factor = 0;
             ExposureInfo netExposureInfo = isProportionalContract && grossClaim.getExposureInfo() != null
                     ? grossClaim.getExposureInfo().withScale(factor) : grossClaim.getExposureInfo();
