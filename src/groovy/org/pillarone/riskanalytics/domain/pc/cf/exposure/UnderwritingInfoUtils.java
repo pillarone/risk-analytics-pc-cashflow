@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.exposure;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
@@ -60,7 +62,7 @@ public class UnderwritingInfoUtils {
         if (underwritingInfos.isEmpty() || coverCriteria.isEmpty() || base.equals(FrequencyBase.ABSOLUTE)) return 1d;
         return scalingFactor(filterUnderwritingInfo(underwritingInfos, coverCriteria), base);
     }
-    
+
     static public UnderwritingInfoPacket aggregate(List<UnderwritingInfoPacket> underwritingInfos) {
         if (underwritingInfos == null || underwritingInfos.size() == 0) {
             return null;
@@ -84,7 +86,7 @@ public class UnderwritingInfoUtils {
         }
         return correctMetaProperties(summedUnderwritingInfo, underwritingInfos);
     }
-    
+
     static public UnderwritingInfoPacket correctMetaProperties(UnderwritingInfoPacket result, List<UnderwritingInfoPacket> underwritingInfos) {
         UnderwritingInfoPacket verifiedResult = (UnderwritingInfoPacket) result.clone();
         ISegmentMarker lob = verifiedResult.segment();
@@ -177,6 +179,23 @@ public class UnderwritingInfoUtils {
         target.setMarker(source.segment());
         target.setMarker(source.reinsuranceContract());
         target.setMarker(source.legalEntity());
+    }
+
+    public static List<UnderwritingInfoPacket> calculateNetUnderwritingInfo(List<UnderwritingInfoPacket> underwritingInfoGross,
+                                                                            List<CededUnderwritingInfoPacket> underwritingInfoCeded) {
+        List<UnderwritingInfoPacket> underwritingInfoNet = new ArrayList<UnderwritingInfoPacket>();
+        ListMultimap<UnderwritingInfoPacket, CededUnderwritingInfoPacket> aggregateCededUnderwritingInfos
+                = ArrayListMultimap.create();
+        for (CededUnderwritingInfoPacket cededUnderwritingInfo : underwritingInfoCeded) {
+            aggregateCededUnderwritingInfos.put(cededUnderwritingInfo.getOriginal(), cededUnderwritingInfo);
+        }
+        for (UnderwritingInfoPacket grossUwInfo : underwritingInfoGross) {
+            List<CededUnderwritingInfoPacket> cededUnderwritingInfoPackets = aggregateCededUnderwritingInfos.get(grossUwInfo);
+            CededUnderwritingInfoPacket aggregateCededUwInfo = aggregate(cededUnderwritingInfoPackets);
+            UnderwritingInfoPacket netUwInfo = grossUwInfo.getNet(aggregateCededUwInfo, true);
+            underwritingInfoNet.add(netUwInfo);
+        }
+        return underwritingInfoNet;
     }
 
 }

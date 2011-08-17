@@ -3,7 +3,10 @@ package org.pillarone.riskanalytics.domain.pc.cf.structure;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 
 
 /**
@@ -12,30 +15,28 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 public class Structure extends Component {
 
     private PacketList<ClaimCashflowPacket> inClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
-    private PacketList<ClaimCashflowPacket> inClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<UnderwritingInfoPacket> inUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<UnderwritingInfoPacket> inUnderwritingInfoCeded = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    private PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
 
     private PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<UnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
 
     private IStructuringStrategy parmBasisOfStructures = StructuringType.getDefault();
 
     @Override
     protected void doCalculation() {
         outClaimsGross.addAll(parmBasisOfStructures.filterClaims(inClaimsGross));
-        outClaimsNet.addAll(parmBasisOfStructures.filterClaims(inClaimsNet));
         outClaimsCeded.addAll(parmBasisOfStructures.filterClaims(inClaimsCeded));
+        outClaimsNet.addAll(ClaimUtils.calculateNetClaims(outClaimsGross, outClaimsCeded));
 
         outUnderwritingInfoGross.addAll(parmBasisOfStructures.filterUnderwritingInfos(inUnderwritingInfoGross));
-        outUnderwritingInfoNet.addAll(parmBasisOfStructures.filterUnderwritingInfos(inUnderwritingInfoNet));
-        outUnderwritingInfoCeded.addAll(parmBasisOfStructures.filterUnderwritingInfos(inUnderwritingInfoCeded));
+        outUnderwritingInfoCeded.addAll(parmBasisOfStructures.filterUnderwritingInfosCeded(inUnderwritingInfoCeded));
+        outUnderwritingInfoNet.addAll(UnderwritingInfoUtils.calculateNetUnderwritingInfo(outUnderwritingInfoGross, outUnderwritingInfoCeded));
     }
 
     public PacketList<ClaimCashflowPacket> getInClaimsGross() {
@@ -44,14 +45,6 @@ public class Structure extends Component {
 
     public void setInClaimsGross(PacketList<ClaimCashflowPacket> inClaimsGross) {
         this.inClaimsGross = inClaimsGross;
-    }
-
-    public PacketList<ClaimCashflowPacket> getInClaimsNet() {
-        return inClaimsNet;
-    }
-
-    public void setInClaimsNet(PacketList<ClaimCashflowPacket> inClaimsNet) {
-        this.inClaimsNet = inClaimsNet;
     }
 
     public PacketList<ClaimCashflowPacket> getInClaimsCeded() {
@@ -94,19 +87,11 @@ public class Structure extends Component {
         this.inUnderwritingInfoGross = inUnderwritingInfoGross;
     }
 
-    public PacketList<UnderwritingInfoPacket> getInUnderwritingInfoNet() {
-        return inUnderwritingInfoNet;
-    }
-
-    public void setInUnderwritingInfoNet(PacketList<UnderwritingInfoPacket> inUnderwritingInfoNet) {
-        this.inUnderwritingInfoNet = inUnderwritingInfoNet;
-    }
-
-    public PacketList<UnderwritingInfoPacket> getInUnderwritingInfoCeded() {
+    public PacketList<CededUnderwritingInfoPacket> getInUnderwritingInfoCeded() {
         return inUnderwritingInfoCeded;
     }
 
-    public void setInUnderwritingInfoCeded(PacketList<UnderwritingInfoPacket> inUnderwritingInfoCeded) {
+    public void setInUnderwritingInfoCeded(PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded) {
         this.inUnderwritingInfoCeded = inUnderwritingInfoCeded;
     }
 
@@ -126,11 +111,11 @@ public class Structure extends Component {
         this.outUnderwritingInfoNet = outUnderwritingInfoNet;
     }
 
-    public PacketList<UnderwritingInfoPacket> getOutUnderwritingInfoCeded() {
+    public PacketList<CededUnderwritingInfoPacket> getOutUnderwritingInfoCeded() {
         return outUnderwritingInfoCeded;
     }
 
-    public void setOutUnderwritingInfoCeded(PacketList<UnderwritingInfoPacket> outUnderwritingInfoCeded) {
+    public void setOutUnderwritingInfoCeded(PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded) {
         this.outUnderwritingInfoCeded = outUnderwritingInfoCeded;
     }
 

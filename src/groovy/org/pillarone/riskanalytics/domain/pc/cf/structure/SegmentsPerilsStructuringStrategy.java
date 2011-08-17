@@ -4,6 +4,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.constant.LogicArguments;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
@@ -75,6 +76,22 @@ public class SegmentsPerilsStructuringStrategy extends AbstractParameterObject i
         }
         if (filteredUnderwritingInfo.size() == 0 && !(connection.equals(LogicArguments.OR) && segments.getValuesAsObjects().size() == 0)) {
             UnderwritingInfoPacket trivialPacket = new UnderwritingInfoPacket();
+            trivialPacket.setPremiumWritten(0d);
+            filteredUnderwritingInfo.add(trivialPacket);
+        }
+        return filteredUnderwritingInfo;
+    }
+
+    public List<CededUnderwritingInfoPacket> filterUnderwritingInfosCeded(List<CededUnderwritingInfoPacket> underwritingInfos) {
+        List<CededUnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<CededUnderwritingInfoPacket>();
+        List segmentsFilterCriteria = ((List) segments.getValuesAsObjects(0, true));
+        for (CededUnderwritingInfoPacket underwritingInfo : underwritingInfos) {
+            if (segmentsFilterCriteria.contains(underwritingInfo.segment())) {
+                filteredUnderwritingInfo.add(underwritingInfo);
+            }
+        }
+        if (filteredUnderwritingInfo.size() == 0 && !(connection.equals(LogicArguments.OR) && segments.getValuesAsObjects().size() == 0)) {
+            CededUnderwritingInfoPacket trivialPacket = new CededUnderwritingInfoPacket();
             trivialPacket.setPremiumWritten(0d);
             filteredUnderwritingInfo.add(trivialPacket);
         }

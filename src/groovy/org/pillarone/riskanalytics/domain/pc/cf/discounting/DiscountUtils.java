@@ -22,7 +22,7 @@ public class DiscountUtils {
 
     /**
      * This method sets the BaseDateMode automatically to start of projection and IndexMode to continuous.
-     * Only applicable to criteria originating from Discountings
+     * Only applicable to criteria originating from Discounting
      *
      * @param factorsPackets
      * @param criteria

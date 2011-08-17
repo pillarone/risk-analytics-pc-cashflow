@@ -139,33 +139,14 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     }
 
     private void calculateNetUnderwritingInfo() {
-        ListMultimap<UnderwritingInfoPacket, CededUnderwritingInfoPacket> aggregateCededUnderwritingInfos
-                = ArrayListMultimap.create();
         if (isSenderWired(outUnderwritingInfoNet)) {
-            for (CededUnderwritingInfoPacket cededUnderwritingInfo : inUnderwritingInfoCeded) {
-                aggregateCededUnderwritingInfos.put(cededUnderwritingInfo.getOriginal(), cededUnderwritingInfo);
-            }
-            for (UnderwritingInfoPacket grossUwInfo : outUnderwritingInfoGross) {
-                List<CededUnderwritingInfoPacket> cededUnderwritingInfoPackets = aggregateCededUnderwritingInfos.get(grossUwInfo);
-                CededUnderwritingInfoPacket aggregateCededUwInfo = UnderwritingInfoUtils.aggregate(cededUnderwritingInfoPackets);
-                UnderwritingInfoPacket netUwInfo = grossUwInfo.getNet(aggregateCededUwInfo, true);
-                outUnderwritingInfoNet.add(netUwInfo);
-            }
+            outUnderwritingInfoNet.addAll(UnderwritingInfoUtils.calculateNetUnderwritingInfo(outUnderwritingInfoGross, inUnderwritingInfoCeded));
         }
     }
 
     private void calculateNetClaims() {
-        ListMultimap<IClaimRoot, ClaimCashflowPacket> aggregateCededClaimPerRoot = ArrayListMultimap.create();
         if (isSenderWired(outClaimsNet)) {
-            for (ClaimCashflowPacket cededClaim : inClaimsCeded) {
-                aggregateCededClaimPerRoot.put(cededClaim.getBaseClaim(), (ClaimCashflowPacket) cededClaim.copy());
-            }
-            for (ClaimCashflowPacket grossClaim : outClaimsGross) {
-                List<ClaimCashflowPacket> cededClaims = aggregateCededClaimPerRoot.get(grossClaim.getBaseClaim());
-                ClaimCashflowPacket aggregateCededClaim = ClaimUtils.sum(cededClaims, true);
-                ClaimCashflowPacket netClaim = ClaimUtils.getNetClaim(grossClaim, aggregateCededClaim);
-                outClaimsNet.add(netClaim);
-            }
+            outClaimsNet.addAll(ClaimUtils.calculateNetClaims(outClaimsGross, inClaimsCeded));
         }
     }
 

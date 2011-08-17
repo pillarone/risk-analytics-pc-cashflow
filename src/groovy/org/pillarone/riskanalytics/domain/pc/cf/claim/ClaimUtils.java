@@ -21,6 +21,7 @@ public class ClaimUtils {
     /**
      * Adds up all claims and builds a corresponding new base claim. It's exposure info is null.
      * WARNING: if the updatePeriod of the first claim is not set the return claim has updatePeriod = 0.
+     *
      * @param claims
      * @param sameBaseClaim: Marker interface of returned packet are all null if false
      * @return null if claims is empty. New object if claims.size() > 1
@@ -94,7 +95,7 @@ public class ClaimUtils {
                 ClaimRoot baseClaim = new ClaimRoot(ultimate, claims.get(0).getBaseClaim());
                 int updatePeriod = claims.get(0).getUpdatePeriod();
                 ClaimCashflowPacket aggregateClaim = new ClaimCashflowPacket(baseClaim, ultimate, paidIncremental, paidCumulated,
-                    reportedIncremental, reportedCumulated, latestReserves, null, mostRecentClaimUpdate, updatePeriod);
+                        reportedIncremental, reportedCumulated, latestReserves, null, mostRecentClaimUpdate, updatePeriod);
                 aggregateClaim.setAppliedIndexValue(appliedIndex);
                 applyMarkers(claims.get(0), aggregateClaim);
                 aggregateByBaseClaim.add(aggregateClaim);
@@ -138,6 +139,7 @@ public class ClaimUtils {
 
     /**
      * exposure info is not affected by scaling.
+     *
      * @param claim
      * @param factor
      * @param scaleBaseClaim
@@ -162,6 +164,7 @@ public class ClaimUtils {
     /**
      * Scales all figures either by the reported or paid scale factor. No distinction between incremental and cumulated
      * claim properties.
+     *
      * @param grossClaim
      * @param storage
      * @param scaleFactorUltimate
@@ -172,8 +175,12 @@ public class ClaimUtils {
      */
     public static ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, ClaimStorage storage, double scaleFactorUltimate,
                                                     double scaleFactorReported, double scaleFactorPaid, boolean adjustExposureInfo) {
-        if (scaleFactorReported == -0) { scaleFactorReported = 0; }
-        if (scaleFactorPaid == -0) { scaleFactorPaid = 0; }
+        if (scaleFactorReported == -0) {
+            scaleFactorReported = 0;
+        }
+        if (scaleFactorPaid == -0) {
+            scaleFactorPaid = 0;
+        }
         double cededPaidIncremental = grossClaim.getPaidIncrementalIndexed() * scaleFactorPaid;
         double cededReportedIncremental = grossClaim.getReportedIncrementalIndexed() * scaleFactorReported;
         storage.update(cededPaidIncremental, BasedOnClaimProperty.PAID);
@@ -216,17 +223,17 @@ public class ClaimUtils {
             ExposureInfo netExposureInfo = isProportionalContract && grossClaim.getExposureInfo() != null
                     ? grossClaim.getExposureInfo().withScale(factor) : grossClaim.getExposureInfo();
             ClaimCashflowPacket netClaim = new ClaimCashflowPacket(
-                grossClaim.getBaseClaim(),
-                grossClaim.ultimate() + cededClaim.ultimate(),
-                grossClaim.nominalUltimate() + cededClaim.nominalUltimate(),
-                grossClaim.getPaidIncrementalIndexed() + cededClaim.getPaidIncrementalIndexed(),
-                grossClaim.getPaidCumulatedIndexed() + cededClaim.getPaidCumulatedIndexed(),
-                grossClaim.getReportedIncrementalIndexed() + cededClaim.getReportedIncrementalIndexed(),
-                grossClaim.getReportedCumulatedIndexed() + cededClaim.getReportedCumulatedIndexed(),
-                grossClaim.reservedIndexed() + cededClaim.reservedIndexed(),
-                netExposureInfo,
-                grossClaim.getUpdateDate(),
-                grossClaim.getUpdatePeriod());
+                    grossClaim.getBaseClaim(),
+                    grossClaim.ultimate() + cededClaim.ultimate(),
+                    grossClaim.nominalUltimate() + cededClaim.nominalUltimate(),
+                    grossClaim.getPaidIncrementalIndexed() + cededClaim.getPaidIncrementalIndexed(),
+                    grossClaim.getPaidCumulatedIndexed() + cededClaim.getPaidCumulatedIndexed(),
+                    grossClaim.getReportedIncrementalIndexed() + cededClaim.getReportedIncrementalIndexed(),
+                    grossClaim.getReportedCumulatedIndexed() + cededClaim.getReportedCumulatedIndexed(),
+                    grossClaim.reservedIndexed() + cededClaim.reservedIndexed(),
+                    netExposureInfo,
+                    grossClaim.getUpdateDate(),
+                    grossClaim.getUpdatePeriod());
             applyMarkers(cededClaim, netClaim);
             return netClaim;
         }
@@ -245,4 +252,20 @@ public class ClaimUtils {
         target.setMarker(source.legalEntity());
         target.setMarker(source.reserve());
     }
+
+    public static List<ClaimCashflowPacket> calculateNetClaims(List<ClaimCashflowPacket> claimsGross, List<ClaimCashflowPacket> claimsCeded) {
+        List<ClaimCashflowPacket> claimsNet = new ArrayList<ClaimCashflowPacket>();
+        ListMultimap<IClaimRoot, ClaimCashflowPacket> aggregateCededClaimPerRoot = ArrayListMultimap.create();
+        for (ClaimCashflowPacket cededClaim : claimsCeded) {
+            aggregateCededClaimPerRoot.put(cededClaim.getBaseClaim(), (ClaimCashflowPacket) cededClaim.copy());
+        }
+        for (ClaimCashflowPacket grossClaim : claimsGross) {
+            List<ClaimCashflowPacket> cededClaims = aggregateCededClaimPerRoot.get(grossClaim.getBaseClaim());
+            ClaimCashflowPacket aggregateCededClaim = sum(cededClaims, true);
+            ClaimCashflowPacket netClaim = getNetClaim(grossClaim, aggregateCededClaim);
+            claimsNet.add(netClaim);
+        }
+        return claimsNet;
+    }
+
 }

@@ -64,8 +64,8 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
             }
             boolean anyRemaining = netUnderwritingInfo.premiumWritten > 0 || netUnderwritingInfo.premiumPaid > 0;
             netUnderwritingInfo.numberOfPolicies = anyRemaining ? netUnderwritingInfo.numberOfPolicies : 0;
+            UnderwritingInfoUtils.applyMarkers(cededUnderwritingInfo, netUnderwritingInfo);
         }
-        UnderwritingInfoUtils.applyMarkers(cededUnderwritingInfo, netUnderwritingInfo);
         return netUnderwritingInfo;
     }
 
