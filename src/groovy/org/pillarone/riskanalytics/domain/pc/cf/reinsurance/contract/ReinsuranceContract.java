@@ -35,9 +35,7 @@ import java.util.*;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-// todo(sku): uw info is not yet calculated if run within the model
-// todo(sku): correct outstandingIndexed, IBNR_INDEXED, reserves values
-// todo(sku): correct net values
+// todo(sku): apply recovery patterns
 public class ReinsuranceContract extends Component implements IReinsuranceContractMarker {
 
     private static Log LOG = LogFactory.getLog(ReinsuranceContract.class);
@@ -47,6 +45,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    private PacketList<UnderwritingInfoPacket> inUnderwritingInfoGNPI = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket.class);
     private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     private PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
@@ -58,6 +57,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoInward = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    private PacketList<UnderwritingInfoPacket> outUnderwritingInfoGNPI = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
     private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
@@ -75,7 +75,6 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     @Override
     protected void doCalculation() {
-        // todo(sku): apply recovery patterns
         // check cover
         initSimulation();
         initIteration();
@@ -86,7 +85,9 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         initContracts(contracts);
         calculateCededClaims(iterationScope.getPeriodScope().getPeriodCounter());
         splitCededClaimsByCounterParty();
-        processUnderwritingInfo(contracts);
+        processUnderwritingInfo();
+        splitCededUnderwritingInfoByCounterParty();
+        processUnderwritingInfoGNPI();
         discountClaims();
     }
 
@@ -300,22 +301,31 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         }
     }
 
-    // todo(sku): split uw info by counter party
-    private void processUnderwritingInfo(Set<IReinsuranceContract> contracts) {
-        if (contracts == null || contracts.size() == 0) return;
+    private void processUnderwritingInfo() {
         int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
         // map underwriting info to corresponding contracts
-        for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
-            int inceptionPeriod = underwritingInfo.getExposure().getInceptionPeriod();
-            IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, inceptionPeriod - currentPeriod);
-            contract.add(underwritingInfo);
+        Set<IReinsuranceContract> contracts = new HashSet<IReinsuranceContract>();
+        if (!inUnderwritingInfo.isEmpty()) {
+            for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
+                int inceptionPeriod = underwritingInfo.getExposure().getInceptionPeriod();
+                IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, inceptionPeriod - currentPeriod);
+                contracts.add(contract);
+                contract.add(underwritingInfo);
+            }
+        }
+        else {
+            for (int period = 0; period <= currentPeriod; period++) {
+                IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, period - currentPeriod);
+                if (contract != null) {
+                    contracts.add(contract);
+                }
+            }
         }
         if (isSenderWired(outUnderwritingInfoGross)) {
             outUnderwritingInfoGross.addAll(inUnderwritingInfo);
         }
         for (IReinsuranceContract contract : contracts) {
             // todo(sku): how time consuming are isSenderWired() calls? Might be necessary to cache this information.
-            // todo(sku): needs to be more fine granular
             double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
             contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, coveredByReinsurers,
                     isSenderWired(outUnderwritingInfoNet));
@@ -327,6 +337,49 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             netUnderwritingPacket.setMarker(this);
         }
     }
+
+    private void splitCededUnderwritingInfoByCounterParty() {
+        if (isSenderWired(outUnderwritingInfoInward)) {
+            for (UnderwritingInfoPacket cededUnderwritingInfo : outUnderwritingInfoCeded) {
+                for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.getFactors(cededUnderwritingInfo.getDate()).entrySet()) {
+                    UnderwritingInfoPacket counterPartyCededUnderwritingInfo = cededUnderwritingInfo.withFactorsApplied(1, -legalEntityAndFactor.getValue());
+                    counterPartyCededUnderwritingInfo.setMarker(legalEntityAndFactor.getKey());
+                    outUnderwritingInfoInward.add(counterPartyCededUnderwritingInfo);
+                }
+            }
+        }
+    }
+
+    private void processUnderwritingInfoGNPI() {
+        if (isReceiverWired(inUnderwritingInfoGNPI) && isSenderWired(outUnderwritingInfoGNPI)) {
+            calculateUnderwritingInfoGNPI(inUnderwritingInfoGNPI);
+        }
+        else if (isSenderWired(outUnderwritingInfoGNPI)) {
+            calculateUnderwritingInfoGNPI(inUnderwritingInfo);
+        }
+    }
+
+    private void calculateUnderwritingInfoGNPI(List<UnderwritingInfoPacket> baseUnderwritingInfos) {
+        if (isProportionalContract()) {
+            if (baseUnderwritingInfos.size() == outUnderwritingInfoCeded.size()) {
+                for (int i = 0; i < baseUnderwritingInfos.size(); i++) {
+                    if (baseUnderwritingInfos.get(i).getOriginal().equals(outUnderwritingInfoCeded.get(i).getOriginal())) {
+                        outUnderwritingInfoGNPI.add(baseUnderwritingInfos.get(i).getNet(outUnderwritingInfoCeded.get(i), true));
+                    }
+                    else {
+                        throw new RuntimeException("original claims mismatch.");
+                    }
+                }
+            }
+            else {
+                throw new RuntimeException("different number of incoming GNPI and ceded claims.");
+            }
+        }
+        else {
+            outUnderwritingInfoGNPI.addAll(baseUnderwritingInfos);
+        }
+    }
+
 
     private void discountClaims() {
         // use utility method as discounting is required in several places
@@ -482,7 +535,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         this.outUnderwritingInfoGross = outUnderwritingInfoGross;
     }
 
-    public boolean adjustExposureInfo() {
+    public boolean isProportionalContract() {
         return parmContractStrategy instanceof IPropReinsuranceContract;
     }
 
@@ -517,5 +570,21 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     public void setInLegalEntityDefault(PacketList<LegalEntityDefault> inLegalEntityDefault) {
         this.inLegalEntityDefault = inLegalEntityDefault;
+    }
+
+    public PacketList<UnderwritingInfoPacket> getOutUnderwritingInfoGNPI() {
+        return outUnderwritingInfoGNPI;
+    }
+
+    public void setOutUnderwritingInfoGNPI(PacketList<UnderwritingInfoPacket> outUnderwritingInfoGNPI) {
+        this.outUnderwritingInfoGNPI = outUnderwritingInfoGNPI;
+    }
+
+    public PacketList<UnderwritingInfoPacket> getInUnderwritingInfoGNPI() {
+        return inUnderwritingInfoGNPI;
+    }
+
+    public void setInUnderwritingInfoGNPI(PacketList<UnderwritingInfoPacket> inUnderwritingInfoGNPI) {
+        this.inUnderwritingInfoGNPI = inUnderwritingInfoGNPI;
     }
 }

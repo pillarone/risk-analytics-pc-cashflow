@@ -27,6 +27,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.XLPremiumBase
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.ProportionalPremiumBase
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -34,9 +35,10 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproporti
 class ReinsuranceContractType extends AbstractParameterObjectClassifier {
 
     public static final ReinsuranceContractType QUOTASHARE = new ReinsuranceContractType("quota share", "QUOTASHARE",
-            ["quotaShare": 0d, "limit": LimitStrategyType.getDefault(), 'commission': CommissionStrategyType.getNoCommission()])
+            ["quotaShare": 0d, "limit": LimitStrategyType.getDefault(),
+             'commission': CommissionStrategyType.getNoCommission(), 'premiumBase':ProportionalPremiumBase.GROSS])
     public static final ReinsuranceContractType SURPLUS = new ReinsuranceContractType("surplus", "SURPLUS",
-            ["retention": 0d, "lines": 0d, "defaultCededLossShare": 0d])
+            ["retention": 0d, "lines": 0d, "defaultCededLossShare": 0d, 'premiumBase':ProportionalPremiumBase.GROSS])
     public static final ReinsuranceContractType WXL = new ReinsuranceContractType("wxl", "WXL", [
             "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d, "aggregateLimit": 0d,
             "stabilization": StabilizationStrategyType.getDefault(),
@@ -111,7 +113,8 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
                 return new QuotaShareContractStrategy(
                         quotaShare: (double) parameters[QuotaShareContractStrategy.QUOTASHARE],
                         limit: (ILimitStrategy) parameters[QuotaShareContractStrategy.LIMIT],
-                        commission: (ICommissionStrategy) parameters[QuotaShareContractStrategy.COMMISSION])
+                        commission: (ICommissionStrategy) parameters[QuotaShareContractStrategy.COMMISSION],
+                        premiumBase: (ProportionalPremiumBase) parameters[QuotaShareContractStrategy.PREMIUM_BASE])
                 break
             case ReinsuranceContractType.WXL:
                 return new WXLConstractStrategy(
@@ -162,7 +165,8 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
                         retention: (double) parameters[SurplusContractStrategy.RETENTION],
                         lines: (double) parameters[SurplusContractStrategy.LINES],
                         defaultCededLossShare: (double) parameters[SurplusContractStrategy.DEFAULTCEDEDLOSSSHARE],
-                        commission: (ICommissionStrategy) parameters[SurplusContractStrategy.COMMISSION])
+                        commission: (ICommissionStrategy) parameters[SurplusContractStrategy.COMMISSION],
+                        premiumBase: (ProportionalPremiumBase) parameters[QuotaShareContractStrategy.PREMIUM_BASE])
                 break
             case ReinsuranceContractType.TRIVIAL:
                 return new TrivialContractStrategy()
