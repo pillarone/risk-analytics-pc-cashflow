@@ -130,7 +130,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
 
         setTransmitterPhaseInput(inClaims, PHASE_GROSS);
         setTransmitterPhaseInput(inUnderwritingInfo, PHASE_GROSS);
-        setTransmitterPhaseOutput(outClaimsGross, PHASE_GROSS);
+        setTransmitterPhaseOutput(outClaimsGross, PHASE_NET);   // as it is filled in gross and net phase
         setTransmitterPhaseOutput(outClaimsPrimaryInsurer, PHASE_GROSS);
         setTransmitterPhaseOutput(outUnderwritingInfoGross, PHASE_GROSS);
         setTransmitterPhaseOutput(outUnderwritingInfoPrimeryInsurer, PHASE_GROSS);

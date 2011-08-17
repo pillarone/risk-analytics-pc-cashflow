@@ -17,7 +17,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.PremiumAllocationType
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.PremiumBase
+
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationStrategyType
 import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
@@ -57,7 +57,7 @@ class WCXLContractTests extends GroovyTestCase {
         return new ReinsuranceContract(
                 parmContractStrategy : ReinsuranceContractType.getStrategy(ReinsuranceContractType.WCXL, [
                     'aggregateDeductible': aggregateDeductible, 'attachmentPoint': attachmentPoint,
-                    'limit': limit, 'aggregateLimit': aggregateLimit, 'premiumBase': PremiumBase.ABSOLUTE,
+                    'limit': limit, 'aggregateLimit': aggregateLimit, 'premiumBase': XLPremiumBase.ABSOLUTE,
                     'stabilization': StabilizationStrategyType.getDefault(),
                     'premium': premium,
                     'riPremiumSplit': PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),

@@ -19,9 +19,10 @@ public class QuotaShareContract extends AbstractProportionalReinsuranceContract 
 
     protected double quotaShare = 0;
 
-    public QuotaShareContract(double quotaShare, ICommission commission) {
+    public QuotaShareContract(double quotaShare, ICommission commission, ProportionalPremiumBase premiumBase) {
         this.quotaShare = quotaShare;
         this.commission = commission;
+        this.premiumBase = premiumBase;
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {

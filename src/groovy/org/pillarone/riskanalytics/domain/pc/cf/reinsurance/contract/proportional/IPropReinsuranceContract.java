@@ -8,4 +8,5 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranc
 public interface IPropReinsuranceContract extends IReinsuranceContract {
 
     void calculateCommission();
+    ProportionalPremiumBase premiumBase();
 }

@@ -7,7 +7,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.PremiumBase;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +18,7 @@ import java.util.Map;
 public abstract class XLConstractStrategy extends AbstractParameterObject implements IReinsuranceContractStrategy {
 
     /** Premium can be expressed as a fraction of a base quantity. */
-    protected PremiumBase premiumBase;
+    protected XLPremiumBase premiumBase;
 
     /** Premium as a percentage of the premium base */
     protected double premium;

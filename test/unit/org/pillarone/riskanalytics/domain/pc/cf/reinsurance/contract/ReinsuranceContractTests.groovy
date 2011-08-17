@@ -410,4 +410,30 @@ class ReinsuranceContractTests extends GroovyTestCase {
         assertEquals '0 number of ceded uw infos', 2, quotaShare20.inUnderwritingInfo.size()
     }
 
+    void testUnderwritingCededNet() {
+        ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, date20110101)
+        IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
+
+        Segment segmentMotor = new Segment(name: 'motor')
+        Segment segmentMotorHull = new Segment(name: 'motor hull')
+        UnderwritingInfoPacket underwritingInfoMotor = new UnderwritingInfoPacket(segment: segmentMotor,
+                premiumWritten: 1000, premiumPaid: 800, numberOfPolicies: 10, sumInsured: 10000, maxSumInsured: 5000,
+                exposure: new ExposureInfo(date20110101, periodCounter))
+        UnderwritingInfoPacket underwritingInfoMotorHull = new UnderwritingInfoPacket(segment: segmentMotorHull,
+                premiumWritten: 1200, premiumPaid: 700, numberOfPolicies: 20, sumInsured: 20000, maxSumInsured: 3000,
+                exposure: new ExposureInfo(date20110101, periodCounter))
+        quotaShare20.inUnderwritingInfo << underwritingInfoMotor << underwritingInfoMotorHull
+
+        quotaShare20.doCalculation()
+        assertEquals 'number of ceded uw', 2, quotaShare20.outUnderwritingInfoCeded.size()
+        assertEquals 'number of net uw', 2, quotaShare20.outUnderwritingInfoNet.size()
+    }
+    
+    void testUnderwritingGNPIonGrossProportional() {
+
+    }
+
+    void testUnderwritingGNPIonGNPIProportional() {
+
+    }
 }

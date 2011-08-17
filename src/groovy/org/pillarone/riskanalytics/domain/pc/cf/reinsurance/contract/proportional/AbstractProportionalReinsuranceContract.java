@@ -13,6 +13,7 @@ import java.util.List;
 abstract public class AbstractProportionalReinsuranceContract extends AbstractReinsuranceContract implements IPropReinsuranceContract {
 
     protected ICommission commission;
+    protected ProportionalPremiumBase premiumBase;
 
     /** used to make sure that fixed premium is paid only in first period */
     private boolean isStartCoverPeriod = true;
@@ -40,4 +41,7 @@ abstract public class AbstractProportionalReinsuranceContract extends AbstractRe
         commission.calculateCommission(cededClaims, cededUwInfos, false, false);
     }
 
+    public ProportionalPremiumBase premiumBase() {
+        return premiumBase;
+    }
 }
