@@ -33,7 +33,7 @@ public class MultipleProbabilitiesCopula extends GeneratorCachingComponent {
     // todo(jwa): old stuff, replace with new validation concept if the error still occurs
     public void validateParameterization() {
         if (parmFrequencyDistribution == null) {
-            throw new IllegalStateException("MultipleProbabilitiesCopula.missingDistribution");
+            throw new IllegalStateException("['MultipleProbabilitiesCopula.missingDistribution']");
         }
         super.validateParameterization();
     }

@@ -77,7 +77,7 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
             }
         }
         if (filteredEventSeverities.size() > 1) {
-            throw new IllegalArgumentException("StochasticIndexStrategy.invalidDependencies");
+            throw new IllegalArgumentException("['StochasticIndexStrategy.invalidDependencies']");
         }
         return filteredEventSeverities.size() == 1 ? filteredEventSeverities.get(0).getValue() : null;
     }

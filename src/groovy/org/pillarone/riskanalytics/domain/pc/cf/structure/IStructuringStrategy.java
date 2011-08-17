@@ -11,6 +11,7 @@ import java.util.List;
  */
 public interface IStructuringStrategy extends IParameterObject {
 
+    // todo(jwa): for net not filter. but compute after filtering gross and ceded
     List<ClaimCashflowPacket> filterClaims(List<ClaimCashflowPacket > claims);
     List<UnderwritingInfoPacket> filterUnderwritingInfos(List<UnderwritingInfoPacket> underwritingInfos);
 }
