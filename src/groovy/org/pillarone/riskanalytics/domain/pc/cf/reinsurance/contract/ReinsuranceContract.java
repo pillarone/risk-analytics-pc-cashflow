@@ -248,7 +248,6 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     }
 
     private void initContracts(Set<IReinsuranceContract> contracts) {
-        System.out.println("Start date: " + iterationScope.getPeriodScope().getCurrentPeriodStartDate());
         for (IReinsuranceContract contract : contracts) {
             contract.initPeriod(inFactors);
             // todo(sku): the following lines are required only if initPeriodClaims() has a non trivial implementation for this contract, avoid!
