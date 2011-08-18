@@ -78,6 +78,7 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
         cededPacket.segment = packet.segment;
         cededPacket.reinsuranceContract = contract;
         cededPacket.original = packet;
+        cededPacket.setDate(packet.getDate());
         return cededPacket;
     }
 

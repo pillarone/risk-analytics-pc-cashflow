@@ -97,7 +97,11 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
             List<UnderwritingInfoPacket> modifiedUnderwritingInfoPackets = new ArrayList<UnderwritingInfoPacket>();
             for (DateFactors dateFactors : dateFactorsList) {
                 if (policyFactors == null && premiumFactors == null) {
-                    modifiedUnderwritingInfoPackets.addAll(underwritingInfos);
+                    for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
+                        UnderwritingInfoPacket modifiedUnderwritingInfo = underwritingInfo.withFactorsApplied(1, 1);
+                        modifiedUnderwritingInfo.setDate(periodScope.getCurrentPeriodStartDate());
+                        modifiedUnderwritingInfoPackets.add(modifiedUnderwritingInfo);
+                    }
                 }
                 else {
                     Double policyFactor = IndexUtils.aggregateFactor(policyFactors, dateFactors.getDate());
@@ -105,6 +109,7 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
                     for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
                         UnderwritingInfoPacket modifiedUnderwritingInfo = underwritingInfo.withFactorsApplied(policyFactor, premiumFactor);
                         modifiedUnderwritingInfo.applyPattern(positiveWrittenAmount, dateFactors.getFactorIncremental());
+                        modifiedUnderwritingInfo.setDate(periodScope.getCurrentPeriodStartDate());
                         modifiedUnderwritingInfoPackets.add(modifiedUnderwritingInfo);
                     }
 
@@ -132,13 +137,18 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
             List<Factors> policyFactors = IndexUtils.filterFactors(inFactors, parmPolicyIndices);
             List<Factors> premiumFactors = IndexUtils.filterFactors(inFactors, parmPremiumIndices);
             if (policyFactors == null && premiumFactors == null) {
-                outUnderwritingInfo.addAll(underwritingInfos);
+                for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
+                    UnderwritingInfoPacket modifiedUnderwritingInfo = underwritingInfo.withFactorsApplied(1, 1);
+                    modifiedUnderwritingInfo.setDate(periodScope.getCurrentPeriodStartDate());
+                    outUnderwritingInfo.add(modifiedUnderwritingInfo);
+                }
             }
             else {
                 Double policyFactor = IndexUtils.aggregateFactor(policyFactors, currentPeriodStartDate);
                 Double premiumFactor = IndexUtils.aggregateFactor(premiumFactors, currentPeriodStartDate);
                 for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
                     UnderwritingInfoPacket modifiedUnderwritingInfo = underwritingInfo.withFactorsApplied(policyFactor, premiumFactor);
+                    modifiedUnderwritingInfo.setDate(periodScope.getCurrentPeriodStartDate());
                     outUnderwritingInfo.add(modifiedUnderwritingInfo);
                 }
                 if (isSenderWired(outPolicyIndexApplied)) {
