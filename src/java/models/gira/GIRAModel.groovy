@@ -146,7 +146,10 @@ class GIRAModel extends StochasticModel {
     private Period lastPatternPeriod() {
         Period maxPeriods = Period.months(0)
         if (globalParameters.isRuntimeTrivialPatterns()) return maxPeriods
-        
+        if (globalParameters.parmProjection.periodNumberRestricted()) {
+            maxPeriods = Period.months(globalParameters.projectionPeriods() * 12)
+        }
+
         Map<String, Period> claimsGeneratorPatternLengths = new HashMap<String, Period>()
         for (Pattern pattern: patterns.subPayoutPatterns.componentList) {
             Period period = pattern.parmPattern.getPattern(IPayoutPatternMarker.class).getLastCumulativePeriod()
