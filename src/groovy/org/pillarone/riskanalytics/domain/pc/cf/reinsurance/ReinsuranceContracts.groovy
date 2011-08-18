@@ -87,8 +87,10 @@ class ReinsuranceContracts extends DynamicComposedComponent {
         else {
             wireTrivialContractsOnly()
         }
-        println contractsBasedOnContracts
-        println contractsBasedOnCompanies
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(contractsBasedOnContracts)
+            LOG.debug(contractsBasedOnCompanies)
+        }
     }
 
     private void wireContractsBasedOnGross() {
