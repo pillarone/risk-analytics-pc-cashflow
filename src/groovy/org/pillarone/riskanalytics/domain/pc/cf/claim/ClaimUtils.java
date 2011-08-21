@@ -91,7 +91,10 @@ public class ClaimUtils {
                     }
                 }
                 ClaimRoot baseClaim = new ClaimRoot(ultimate, claims.get(0).getBaseClaim());
-                int updatePeriod = claims.get(0).getUpdatePeriod();
+                int updatePeriod = 0;
+                if (claims.get(0).getUpdatePeriod() != null) {
+                    updatePeriod = claims.get(0).getUpdatePeriod();
+                }
                 ClaimCashflowPacket aggregateClaim = new ClaimCashflowPacket(baseClaim, ultimate, paidIncremental, paidCumulated,
                         reportedIncremental, reportedCumulated, latestReserves, null, mostRecentClaimUpdate, updatePeriod);
                 aggregateClaim.setAppliedIndexValue(appliedIndex);

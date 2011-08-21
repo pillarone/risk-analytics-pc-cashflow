@@ -291,10 +291,12 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private void splitCededClaimsByCounterParty() {
         if (isSenderWired(outClaimsInward)) {
             for (ClaimCashflowPacket cededClaim : outClaimsCeded) {
-                for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.getFactors(cededClaim.getUpdateDate()).entrySet()) {
-                    ClaimCashflowPacket counterPartyCededClaim = ClaimUtils.scale(cededClaim, -legalEntityAndFactor.getValue());
-                    counterPartyCededClaim.setMarker(legalEntityAndFactor.getKey());
-                    outClaimsInward.add(counterPartyCededClaim);
+                if (ClaimUtils.notTrivialValues(cededClaim)) {
+                    for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.getFactors(cededClaim.getUpdateDate()).entrySet()) {
+                        ClaimCashflowPacket counterPartyCededClaim = ClaimUtils.scale(cededClaim, -legalEntityAndFactor.getValue());
+                        counterPartyCededClaim.setMarker(legalEntityAndFactor.getKey());
+                        outClaimsInward.add(counterPartyCededClaim);
+                    }
                 }
             }
         }

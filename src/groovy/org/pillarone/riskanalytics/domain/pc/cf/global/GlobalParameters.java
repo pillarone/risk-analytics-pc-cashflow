@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.core.parameterization.global.Global;
 public class GlobalParameters extends GlobalParameterComponent {
 
     private DateTime parmProjectionStartDate = new DateTime(2011,1,1,0,0,0,0);
+    private IProjectionPeriodStrategy parmProjection = ProjectionPeriodType.getDefault();
     private boolean parmGenerateNewClaimsInFirstPeriodOnly = true;
     private boolean runtimeTrivialPatterns = false;
     private boolean runtimeTrivialIndices = false;
@@ -32,6 +33,11 @@ public class GlobalParameters extends GlobalParameterComponent {
     @Global(identifier = "trivialIndices")
     public boolean trivialIndices() {
         return isRuntimeTrivialIndices();
+    }
+
+    @Global(identifier = "projectionPeriods")
+    public Integer projectionPeriods() {
+        return parmProjection.projectionPeriods();
     }
 
     public boolean isParmGenerateNewClaimsInFirstPeriodOnly() {
@@ -64,5 +70,13 @@ public class GlobalParameters extends GlobalParameterComponent {
 
     public void setRuntimeTrivialIndices(boolean runtimeTrivialIndices) {
         this.runtimeTrivialIndices = runtimeTrivialIndices;
+    }
+
+    public IProjectionPeriodStrategy getParmProjection() {
+        return parmProjection;
+    }
+
+    public void setParmProjection(IProjectionPeriodStrategy parmProjection) {
+        this.parmProjection = parmProjection;
     }
 }
