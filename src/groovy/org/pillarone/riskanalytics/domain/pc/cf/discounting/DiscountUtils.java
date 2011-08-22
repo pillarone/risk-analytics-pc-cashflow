@@ -2,13 +2,16 @@ package org.pillarone.riskanalytics.domain.pc.cf.discounting;
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
+import org.pillarone.riskanalytics.core.output.QuantilePerspective;
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
+import org.pillarone.riskanalytics.core.util.MathUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.Segment;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -137,6 +140,39 @@ public class DiscountUtils {
             netPresentValues.period = 0;
             outNetPresentValues.add(netPresentValues);
         }
+    }
+
+
+    /**
+     * Computes the discounted VaR from a sample corresponding to a predefined period. Note that the input is the yearly interest rate and not the
+     * discount rate, where the relation between discount rate d and interest rate is given by d=i/(1+i).
+     *
+     * @param values
+     * @param quantileLevel
+     * @param perspective
+     * @param yearlyInterestRate
+     * @param projectionStart
+     * @param endOfConsideredPeriod
+     * @return discountedVaR
+     */
+    public static double calculateDiscountedVaR(double[] values, double quantileLevel, QuantilePerspective perspective,
+                                                double yearlyInterestRate, DateTime projectionStart, DateTime endOfConsideredPeriod) {
+        double vaR = MathUtils.calculateVar(values, quantileLevel, perspective);
+        double interestRate = DateTimeUtilities.getInterestRateForTimeInterval(yearlyInterestRate, projectionStart, endOfConsideredPeriod);
+        double discountedVaR = vaR / (1 + interestRate);
+        return discountedVaR;
+    }
+
+    public static double getRiskMargin(Map<DateTime,double[]> valuesPerDate, double quantileLevel, QuantilePerspective perspective,
+                                       double yearlyInterestRate, DateTime projectionStart, double costOfCapital) {
+
+        double aggregatedVaRs = 0;
+
+        for (Map.Entry<DateTime, double[]> valuesAtDate : valuesPerDate.entrySet()){
+            aggregatedVaRs += calculateDiscountedVaR(valuesAtDate.getValue(), quantileLevel, perspective, yearlyInterestRate,projectionStart, valuesAtDate.getKey());
+        }
+        double riskMargin = aggregatedVaRs*costOfCapital;
+        return riskMargin;
     }
 
 }
