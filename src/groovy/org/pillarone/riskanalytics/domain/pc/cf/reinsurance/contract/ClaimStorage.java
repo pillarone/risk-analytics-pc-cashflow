@@ -4,6 +4,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 
@@ -26,7 +27,12 @@ public class ClaimStorage {
     private double cumulatedStabilizedValue;
 
     public ClaimStorage(ClaimCashflowPacket claim) {
-        reference = claim.getBaseClaim();
+        if (claim.getNominalUltimate() > 0) {
+            reference = ClaimUtils.scale(claim.getBaseClaim(), -1);
+        }
+        else {
+            reference = claim.getBaseClaim();
+        }
     }
 
     public void addIncrements(ClaimCashflowPacket claim) {

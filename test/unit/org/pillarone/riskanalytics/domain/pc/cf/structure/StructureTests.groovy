@@ -13,6 +13,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimTypeSelectionTableCon
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
+import org.joda.time.DateTime
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -21,6 +22,8 @@ class StructureTests extends GroovyTestCase {
 
     Structure structure
 
+    DateTime date20110101 = new DateTime(2011, 1, 1, 0, 0, 0, 0)
+
     Segment segmentMotor = new Segment(name: 'motor')
     Segment segmentMotorHull = new Segment(name: 'motor hull')
     Segment segmentAccident = new Segment(name: 'accident')
@@ -28,11 +31,11 @@ class StructureTests extends GroovyTestCase {
     ClaimsGenerator perilMotorHull = new ClaimsGenerator(name: "motor hull")
     ClaimsGenerator perilAccident = new ClaimsGenerator(name: "accident")
     ClaimRoot baseClaimMotor100 = new ClaimRoot(100d, ClaimType.ATTRITIONAL, null, null)
-    ClaimCashflowPacket claimMotor100 = new ClaimCashflowPacket(baseClaimMotor100)
+    ClaimCashflowPacket claimMotor100 = new ClaimCashflowPacket(baseClaimMotor100, 100, 100, 100, 100, 100, 0, null, date20110101, 0)
     ClaimRoot baseClaimMotorHull500 = new ClaimRoot(500d, ClaimType.SINGLE, null, null)
-    ClaimCashflowPacket claimMotorHull500 = new ClaimCashflowPacket(baseClaimMotorHull500)
+    ClaimCashflowPacket claimMotorHull500 = new ClaimCashflowPacket(baseClaimMotorHull500, 500, 500, 500, 500, 500, 0, null, date20110101, 0)
     ClaimRoot baseClaimAccident = new ClaimRoot(80d, ClaimType.EVENT, null, null)
-    ClaimCashflowPacket claimAccident80 = new ClaimCashflowPacket(baseClaimAccident)
+    ClaimCashflowPacket claimAccident80 = new ClaimCashflowPacket(baseClaimAccident, 80, 80, 80, 80, 80, 0, null, date20110101, 0)
     UnderwritingInfoPacket underwritingInfoMotor50 = new UnderwritingInfoPacket(segment: segmentMotor, premiumWritten: 50)
     UnderwritingInfoPacket underwritingInfoMotorHull40 = new UnderwritingInfoPacket(segment: segmentMotorHull, premiumWritten: 40)
     UnderwritingInfoPacket underwritingInfoAccident30 = new UnderwritingInfoPacket(segment: segmentAccident, premiumWritten: 30)

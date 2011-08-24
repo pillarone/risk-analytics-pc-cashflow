@@ -32,7 +32,7 @@ public class CXLContract extends XLContract {
                        double aggregateLimit, IStabilizationStrategy stabilization,
                        List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy riPremiumSplit) {
         super(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit, stabilization,
-              reinstatementPremiumFactors, riPremiumSplit);
+                reinstatementPremiumFactors, riPremiumSplit);
     }
 
     public void initPeriodClaims(List<ClaimCashflowPacket> grossClaims) {
@@ -99,7 +99,7 @@ public class CXLContract extends XLContract {
             add(grossClaim, cededClaim);
             return cededClaim;
         }
-        return new ClaimCashflowPacket();
+        return ClaimUtils.getCededClaim(grossClaim, storage, 0, 0, 0, false);
     }
 
     protected boolean isClaimTypeCovered(ClaimCashflowPacket grossClaim) {

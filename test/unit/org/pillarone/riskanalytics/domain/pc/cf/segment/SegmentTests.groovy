@@ -226,23 +226,11 @@ class SegmentTests extends GroovyTestCase {
         assertEquals "ceded motor premium written", -54, segment.outUnderwritingInfoCeded[1].premiumWritten
         assertEquals "ceded motor premium paid", -54, segment.outUnderwritingInfoCeded[1].premiumPaid
 
-        assertEquals "#net claims", 4, segment.outClaimsNet.size()
-        assertEquals "net marine peril", marineClaimsGenerator, segment.outClaimsNet[0].peril()
+        assertEquals "#net claims", 1, segment.outClaimsNet.size()
+        assertEquals "net marine peril", null, segment.outClaimsNet[0].peril()
         assertEquals "net marine segment", segment, segment.outClaimsNet[0].segment()
-        assertEquals "net marine ultimate", -800, segment.outClaimsNet[0].ultimate()
-        assertEquals "net marine paid incremental", -160, segment.outClaimsNet[0].paidIncrementalIndexed
-        assertEquals "net motor peril", motorClaimsGenerator, segment.outClaimsNet[1].peril()
-        assertEquals "net motor segment", segment, segment.outClaimsNet[1].segment()
-        assertEquals "net motor ultimate", -200, segment.outClaimsNet[1].ultimate()
-        assertEquals "net motor paid incremental", -80, segment.outClaimsNet[1].paidIncrementalIndexed
-        assertEquals "net marine reserve", marineReservesGenerator, segment.outClaimsNet[2].reserve()
-        assertEquals "net marine reserve segment", segment, segment.outClaimsNet[2].segment()
-        assertEquals "net marine reserve ultimate", -1800, segment.outClaimsNet[2].ultimate()
-        assertEquals "net marine reserve paid incremental", -180, segment.outClaimsNet[2].paidIncrementalIndexed
-        assertEquals "net motor reserve", motorReservesGenerator, segment.outClaimsNet[3].reserve()
-        assertEquals "net motor reserve segment", segment, segment.outClaimsNet[3].segment()
-        assertEquals "net motor reserve ultimate", -270, segment.outClaimsNet[3].ultimate()
-        assertEquals "net motor paid reserve incremental", -90, segment.outClaimsNet[3].paidIncrementalIndexed
+        assertEquals "net marine ultimate", -3070, segment.outClaimsNet[0].ultimate()
+        assertEquals "net marine paid incremental", -510, segment.outClaimsNet[0].paidIncrementalIndexed
 
         assertEquals "#net underwriting info", 2, segment.outUnderwritingInfoNet.size()
         assertEquals "net marine riskBand", marineRisk, segment.outUnderwritingInfoNet[0].riskBand()

@@ -198,7 +198,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             claimsHistories = new HashMap<IClaimRoot, ClaimStorage>();
             periodStore.put(CLAIM_HISTORY, claimsHistories);
             for (ClaimCashflowPacket claim : inClaims) {
-                ClaimStorage claimStorage = claimsHistories.get(claim.getBaseClaim());
+                ClaimStorage claimStorage = claimsHistories.get(claim.getKeyClaim());
                 int occurrencePeriod = claim.occurrencePeriod(periodCounter);
                 if (claimStorage == null) {
                     contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, currentPeriod, claimsHistories,
@@ -215,7 +215,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         else {
             for (ClaimCashflowPacket claim : inClaims) {
                 int occurrencePeriod = claim.occurrencePeriod(periodCounter);
-                ClaimStorage claimStorage = claimsHistories.get(claim.getBaseClaim());
+                ClaimStorage claimStorage = claimsHistories.get(claim.getKeyClaim());
                 if (currentPeriod == occurrencePeriod && claimStorage == null) {
                     contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, currentPeriod, claimsHistories,
                             currentPeriodGrossClaims));
@@ -241,7 +241,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
                             List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims) {
         IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, occurrencePeriod - currentPeriod);
         ClaimStorage claimStorage = new ClaimStorage(claim);
-        claimsHistories.put(claim.getBaseClaim(), claimStorage);
+        claimsHistories.put(claim.getKeyClaim(), claimStorage);
         ClaimHistoryAndApplicableContract claimWithHistory = new ClaimHistoryAndApplicableContract(claim, claimStorage, contract);
         currentPeriodGrossClaims.add(claimWithHistory);
         return contract;

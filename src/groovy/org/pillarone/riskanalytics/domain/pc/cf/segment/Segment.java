@@ -21,12 +21,12 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPa
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion;
 import org.pillarone.riskanalytics.domain.utils.constraint.ReservePortion;
 import org.pillarone.riskanalytics.domain.utils.constraint.UnderwritingPortion;
-import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
-import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.*;
 
 import java.util.*;
 
@@ -56,6 +56,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     private PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
 
     private PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    /** contains one aggregate net claim only */
     private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<DiscountedValuesPacket> outDiscountedValues = new PacketList<DiscountedValuesPacket>(DiscountedValuesPacket.class);
@@ -146,7 +147,11 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     private void calculateNetClaims() {
         if (isSenderWired(outClaimsNet)) {
-            outClaimsNet.addAll(ClaimUtils.calculateNetClaims(outClaimsGross, inClaimsCeded));
+            ClaimCashflowPacket netClaim = ClaimUtils.calculateNetClaim(outClaimsGross, outClaimsCeded);
+            netClaim.removeMarker(IPerilMarker.class);
+            netClaim.removeMarker(IReserveMarker.class);
+            netClaim.removeMarker(IReinsuranceContractMarker.class);
+            outClaimsNet.add(netClaim);
         }
     }
 
