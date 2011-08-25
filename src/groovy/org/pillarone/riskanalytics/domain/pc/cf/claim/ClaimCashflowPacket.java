@@ -225,7 +225,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return nominalUltimate;
     }
 
-    public double developmentResult() {
+    public double developmentResultCumulative() {
         return baseClaim.hasTrivialPayout() ? 0 : developedUltimate() - nominalUltimate;
     }
 
@@ -342,7 +342,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         valuesToSave.put(REPORTED_INDEXED, reportedIncrementalIndexed);
         valuesToSave.put(IBNR_INDEXED, ibnrIndexed());
         valuesToSave.put(OUTSTANDING_INDEXED, outstandingIndexed());
-        valuesToSave.put(DEVELOPED_RESULT_INDEXED, developmentResult());
+        valuesToSave.put(DEVELOPED_RESULT_INDEXED, developmentResultCumulative());
         valuesToSave.put(APPLIED_INDEX_VALUE, appliedIndexValue);
         return valuesToSave;
     }

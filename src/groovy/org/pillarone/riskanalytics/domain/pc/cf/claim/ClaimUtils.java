@@ -187,7 +187,7 @@ public class ClaimUtils {
         double cededReportedIncremental = grossClaim.getReportedIncrementalIndexed() * scaleFactorReported;
         storage.update(cededPaidIncremental, BasedOnClaimProperty.PAID);
         storage.update(cededReportedIncremental, BasedOnClaimProperty.REPORTED);
-        double cededReserves = storage.cededReserves() + grossClaim.developmentResult() * scaleFactorUltimate;
+        double cededReserves = storage.cededReserves() + grossClaim.developmentResultCumulative() * scaleFactorUltimate;
         ExposureInfo cededExposureInfo = adjustExposureInfo && grossClaim.getExposureInfo() != null
                 ? grossClaim.getExposureInfo().withScale(scaleFactorUltimate) : grossClaim.getExposureInfo();
         ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(
@@ -219,6 +219,11 @@ public class ClaimUtils {
     public static ClaimCashflowPacket getNetClaim(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim) {
         if (cededClaim == null) {
             return (ClaimCashflowPacket) grossClaim.clone();
+        }
+        else if (grossClaim == null) {
+            DateTime occurrenceDate = cededClaim.getOccurrenceDate();
+            IClaimRoot baseClaim = new ClaimRoot(0, ClaimType.AGGREGATED, occurrenceDate, occurrenceDate);
+            return new ClaimCashflowPacket(baseClaim, 0, 0, 0, 0, 0, 0, null, occurrenceDate, cededClaim.getUpdatePeriod());
         }
         else {
             boolean isProportionalContract = cededClaim.reinsuranceContract() != null && cededClaim.reinsuranceContract().isProportionalContract();
