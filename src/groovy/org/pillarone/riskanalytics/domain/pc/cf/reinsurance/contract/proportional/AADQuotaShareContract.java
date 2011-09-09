@@ -19,8 +19,8 @@ public class AADQuotaShareContract extends QuotaShareContract {
     private DoubleValue annualAggregateDeductibleReported = new DoubleValue();
 
 
-    public AADQuotaShareContract(double quotaShare, ICommission commission, AadLimitStrategy limit, ProportionalPremiumBase premiumBase) {
-        super(quotaShare, commission, premiumBase);
+    public AADQuotaShareContract(double quotaShare, ICommission commission, AadLimitStrategy limit) {
+        super(quotaShare, commission);
         double annualAggregateDeductible = limit.getAAD();
         annualAggregateDeductibleUltimate.value = annualAggregateDeductible;
         annualAggregateDeductiblePaid.value = annualAggregateDeductible;

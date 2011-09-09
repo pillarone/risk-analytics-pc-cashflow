@@ -24,7 +24,6 @@ public class SurplusContractStrategy extends AbstractParameterObject implements 
     private double defaultCededLossShare;
 
     private ICommissionStrategy commission;
-    private ProportionalPremiumBase premiumBase;
 
 
     public ReinsuranceContractType getType() {
@@ -37,17 +36,15 @@ public class SurplusContractStrategy extends AbstractParameterObject implements 
         params.put(LINES, lines);
         params.put(DEFAULTCEDEDLOSSSHARE, defaultCededLossShare);
         params.put(COMMISSION, commission);
-        params.put(PREMIUM_BASE, premiumBase);
         return params;
     }
 
     public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets) {
-        return new SurplusContract(retention, lines, defaultCededLossShare, commission.getCalculator(), premiumBase);
+        return new SurplusContract(retention, lines, defaultCededLossShare, commission.getCalculator());
     }
 
     public static final String RETENTION = "retention";
     public static final String LINES = "lines";
     public static final String DEFAULTCEDEDLOSSSHARE = "default ceded loss share";
     public static final String COMMISSION = "commission";
-    public static final String PREMIUM_BASE = "premiumBase";
 }

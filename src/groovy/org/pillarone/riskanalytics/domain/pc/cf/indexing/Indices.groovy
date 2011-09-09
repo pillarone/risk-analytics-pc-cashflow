@@ -14,11 +14,11 @@ class Indices extends ComposedComponent {
     PacketList<FactorsPacket> outFactors = new PacketList<FactorsPacket>(FactorsPacket)
     PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream)
 
-    SeverityIndices subSeverityIndices = new SeverityIndices()
-    ReservesIndices subReservesIndices = new ReservesIndices()
     FrequencyIndices subFrequencyIndices = new FrequencyIndices()
+    SeverityIndices subSeverityIndices = new SeverityIndices()
     PolicyIndices subPolicyIndices = new PolicyIndices()
     PremiumIndices subPremiumIndices = new PremiumIndices()
+    ReservesIndices subReservesIndices = new ReservesIndices()
 
     @Override
     void wire() {

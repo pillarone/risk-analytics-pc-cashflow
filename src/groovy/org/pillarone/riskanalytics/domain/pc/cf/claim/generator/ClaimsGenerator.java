@@ -37,7 +37,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
 
     private PeriodScope periodScope;
     private PeriodStore periodStore;
-    private boolean globalGenerateNewClaimsInFirstPeriodOnly = true;
+    private boolean globalRunOffAfterFirstPeriod  = true;
 
     private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     private PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket.class);
@@ -120,15 +120,15 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     }
 
     private boolean generateNewClaims() {
-        return globalGenerateNewClaimsInFirstPeriodOnly
+        return globalRunOffAfterFirstPeriod
                 && periodScope.isFirstPeriod()
-                || !globalGenerateNewClaimsInFirstPeriodOnly;
+                || !globalRunOffAfterFirstPeriod;
     }
 
     private void developClaimsOfFormerPeriods(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter, List<Factors> factors) {
         if (!periodScope.isFirstPeriod()) {
             int currentPeriod = periodScope.getCurrentPeriod();
-            int latestFormerPeriodWithNewClaims = globalGenerateNewClaimsInFirstPeriodOnly ? 0 : currentPeriod - 1;
+            int latestFormerPeriodWithNewClaims = globalRunOffAfterFirstPeriod ? 0 : currentPeriod - 1;
             for (int period = 0; period <= latestFormerPeriodWithNewClaims; period++) {
                 int periodOffset = currentPeriod - period;
                 List<GrossClaimRoot> grossClaimRoots = (List<GrossClaimRoot>) periodStore.get(GROSS_CLAIMS, -periodOffset);
@@ -212,13 +212,14 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
 
     /**
      * this property is overwritten by the value set in GlobalParameters
+     * @return
      */
-    public boolean isGlobalGenerateNewClaimsInFirstPeriodOnly() {
-        return globalGenerateNewClaimsInFirstPeriodOnly;
+    public boolean isGlobalRunOffAfterFirstPeriod() {
+        return globalRunOffAfterFirstPeriod;
     }
 
-    public void setGlobalGenerateNewClaimsInFirstPeriodOnly(boolean globalGenerateNewClaimsInFirstPeriodOnly) {
-        this.globalGenerateNewClaimsInFirstPeriodOnly = globalGenerateNewClaimsInFirstPeriodOnly;
+    public void setGlobalRunOffAfterFirstPeriod (boolean globalRunOffAfterFirstPeriod ) {
+        this.globalRunOffAfterFirstPeriod  = globalRunOffAfterFirstPeriod;
     }
 
     public PacketList<FactorsPacket> getInFactors() {

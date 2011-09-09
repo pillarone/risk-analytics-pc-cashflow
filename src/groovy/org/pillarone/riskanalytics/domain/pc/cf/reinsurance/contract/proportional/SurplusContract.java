@@ -23,12 +23,11 @@ public class SurplusContract extends AbstractProportionalReinsuranceContract {
     private double defaultCededLossShare;
 
 
-    public SurplusContract(double retention, double lines, double defaultCededLossShare, ICommission commission, ProportionalPremiumBase premiumBase) {
+    public SurplusContract(double retention, double lines, double defaultCededLossShare, ICommission commission) {
         this.retention = retention;
         this.lines = lines;
         this.defaultCededLossShare = defaultCededLossShare;
         this.commission = commission;
-        this.premiumBase = premiumBase;
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {

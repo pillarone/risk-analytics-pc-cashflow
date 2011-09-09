@@ -21,7 +21,6 @@ public class QuotaShareContractStrategy extends AbstractParameterObject implemen
     private double quotaShare;
     private ILimitStrategy limit;
     private ICommissionStrategy commission;
-    private ProportionalPremiumBase premiumBase;
 
 
     public ReinsuranceContractType getType() {
@@ -33,22 +32,21 @@ public class QuotaShareContractStrategy extends AbstractParameterObject implemen
         params.put(QUOTASHARE, quotaShare);
         params.put(LIMIT, limit);
         params.put(COMMISSION, commission);
-        params.put(PREMIUM_BASE, premiumBase);
         return params;
     }
 
     public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets) {
         if (limit instanceof NoneLimitStrategy) {
-            return new QuotaShareContract(quotaShare, commission.getCalculator(), premiumBase);
+            return new QuotaShareContract(quotaShare, commission.getCalculator());
         }
         else if (limit instanceof AalLimitStrategy) {
-            return new AALQuotaShareContract(quotaShare, commission.getCalculator(), (AalLimitStrategy) limit, premiumBase);
+            return new AALQuotaShareContract(quotaShare, commission.getCalculator(), (AalLimitStrategy) limit);
         }
         else if (limit instanceof AadLimitStrategy) {
-            return new AADQuotaShareContract(quotaShare, commission.getCalculator(), (AadLimitStrategy) limit, premiumBase);
+            return new AADQuotaShareContract(quotaShare, commission.getCalculator(), (AadLimitStrategy) limit);
         }
         else if (limit instanceof AalAadLimitStrategy) {
-            return new AALAADQuotaShareContract(quotaShare, commission.getCalculator(), (AalAadLimitStrategy) limit, premiumBase);
+            return new AALAADQuotaShareContract(quotaShare, commission.getCalculator(), (AalAadLimitStrategy) limit);
         }
         else {
             throw new NotImplementedException(limit + " not implemented.");
@@ -58,5 +56,4 @@ public class QuotaShareContractStrategy extends AbstractParameterObject implemen
     public static final String QUOTASHARE = "quotaShare";
     public static final String LIMIT = "limit";
     public static final String COMMISSION = "commission";
-    public static final String PREMIUM_BASE = "premiumBase";
 }

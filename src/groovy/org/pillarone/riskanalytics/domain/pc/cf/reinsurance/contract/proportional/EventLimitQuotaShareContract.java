@@ -19,8 +19,8 @@ public class EventLimitQuotaShareContract extends QuotaShareContract {
     private DoubleValue eventLimitReported = new DoubleValue();
 
 
-    public EventLimitQuotaShareContract(double quotaShare, ICommission commission, EventLimitStrategy limit, ProportionalPremiumBase premiumBase) {
-        super(quotaShare, commission, premiumBase);
+    public EventLimitQuotaShareContract(double quotaShare, ICommission commission, EventLimitStrategy limit) {
+        super(quotaShare, commission);
         double eventLimit = limit.getEventLimit();
         eventLimitUltimate.value = eventLimit;
         eventLimitPaid.value = eventLimit;

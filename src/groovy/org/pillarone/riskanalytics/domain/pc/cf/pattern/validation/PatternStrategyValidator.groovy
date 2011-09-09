@@ -17,7 +17,6 @@ import org.pillarone.riskanalytics.core.simulation.item.parameter.ConstrainedStr
 import org.joda.time.Period
 import org.pillarone.riskanalytics.domain.utils.validation.ParameterValidationImpl
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PayoutReportingCombinedPatternStrategyType
-import sun.misc.RegexpPool
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com

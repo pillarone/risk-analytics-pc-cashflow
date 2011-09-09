@@ -43,7 +43,7 @@ class GIRAModel extends StochasticModel {
     GlobalParameters globalParameters
     CreditDefault creditDefault
     Indices indices
-    Discountings discountings
+    Discountings discounting
     Patterns patterns
     UnderwritingSegments underwritingSegments
     ClaimsGenerators claimsGenerators
@@ -61,7 +61,7 @@ class GIRAModel extends StochasticModel {
         creditDefault = new CreditDefault()
         underwritingSegments = new UnderwritingSegments()
         indices = new Indices()
-        discountings = new Discountings()
+        discounting = new Discountings()
         patterns = new Patterns()
         claimsGenerators = new ClaimsGenerators()
         reservesGenerators = new ReservesGenerators()
@@ -91,7 +91,7 @@ class GIRAModel extends StochasticModel {
         reservesGenerators.inFactors = indices.outFactors
         reservesGenerators.inPatterns = patterns.outPatterns
         indices.inEventSeverities = dependencies.outEventSeverities
-        discountings.inEventSeverities = dependencies.outEventSeverities
+        discounting.inEventSeverities = dependencies.outEventSeverities
         if (segments.subComponentCount() == 0) {
             reinsuranceContracts.inClaims = claimsGenerators.outClaims
             reinsuranceContracts.inClaims = reservesGenerators.outReserves
@@ -109,7 +109,7 @@ class GIRAModel extends StochasticModel {
             // todo(jwa): change inReserves to inClaims as soon as PMO-1733 is solved
             segments.inReserves = reservesGenerators.outReserves
             segments.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
-            segments.inFactors = discountings.outFactors
+            segments.inFactors = discounting.outFactors
             reinsuranceContracts.inClaims = segments.outClaimsGross
             reinsuranceContracts.inUnderwritingInfo = segments.outUnderwritingInfoGross
             segments.inClaimsCeded = reinsuranceContracts.outClaimsCeded

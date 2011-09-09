@@ -17,7 +17,7 @@ components {
 		}
 	}
 	globalParameters {
-		parmGenerateNewClaimsInFirstPeriodOnly[0]=true
+		parmRunOffAfterFirstPeriod[0]=true
 		parmProjectionStartDate[0]=new org.joda.time.DateTime(2011, 1, 1, 0, 0, 0, 0)
 	}
 }

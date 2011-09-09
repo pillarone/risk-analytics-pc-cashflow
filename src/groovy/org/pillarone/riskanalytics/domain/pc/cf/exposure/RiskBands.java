@@ -54,7 +54,7 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
     private PacketList<SingleValuePacket> outPolicyIndexApplied = new PacketList<SingleValuePacket>(SingleValuePacket.class);
     private PacketList<SingleValuePacket> outPremiumIndexApplied = new PacketList<SingleValuePacket>(SingleValuePacket.class);
 
-    private boolean globalGenerateNewClaimsInFirstPeriodOnly = true;
+    private boolean globalRunOffAfterFirstPeriod = true;
     private ConstrainedString parmPremiumPattern = new ConstrainedString(IPremiumPatternMarker.class, "");
     private ConstrainedMultiDimensionalParameter parmPolicyIndices = new ConstrainedMultiDimensionalParameter(
             Collections.emptyList(), PolicyIndexSelectionTableConstraints.COLUMN_TITLES,
@@ -87,9 +87,9 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
     }
 
     private void newBusinessInCurrentPeriod(List<UnderwritingInfoPacket> underwritingInfos, PatternPacket premiumPattern, PeriodScope periodScope) {
-        if (globalGenerateNewClaimsInFirstPeriodOnly
+        if (globalRunOffAfterFirstPeriod
                 && iterationScope.getPeriodScope().isFirstPeriod()
-                || !globalGenerateNewClaimsInFirstPeriodOnly) {
+                || !globalRunOffAfterFirstPeriod) {
             List<DateFactors> dateFactorsList = premiumPattern.getDateFactorsForCurrentPeriod(periodScope.getPeriodCounter());
             List<Factors> policyFactors = IndexUtils.filterFactors(inFactors, parmPolicyIndices);
             List<Factors> premiumFactors = IndexUtils.filterFactors(inFactors, parmPremiumIndices);
@@ -130,9 +130,9 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
     }
 
     private void newBusinessInCurrentPeriod(List<UnderwritingInfoPacket> underwritingInfos, PeriodScope periodScope) {
-        if (globalGenerateNewClaimsInFirstPeriodOnly
+        if (globalRunOffAfterFirstPeriod
                 && iterationScope.getPeriodScope().isFirstPeriod()
-                || !globalGenerateNewClaimsInFirstPeriodOnly) {
+                || !globalRunOffAfterFirstPeriod) {
             DateTime currentPeriodStartDate = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
             List<Factors> policyFactors = IndexUtils.filterFactors(inFactors, parmPolicyIndices);
             List<Factors> premiumFactors = IndexUtils.filterFactors(inFactors, parmPremiumIndices);
@@ -164,7 +164,7 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
     private void calculatePremiumPaidForBusinessOfPreviousPeriods(PatternPacket premiumPattern, PeriodScope periodScope) {
         if (!periodScope.isFirstPeriod() && !premiumPattern.isTrivial()) {
             int currentPeriod = periodScope.getCurrentPeriod();
-            int latestFormerPeriodWithNewClaims = globalGenerateNewClaimsInFirstPeriodOnly ? 0 : currentPeriod - 1;
+            int latestFormerPeriodWithNewClaims = globalRunOffAfterFirstPeriod ? 0 : currentPeriod - 1;
             for (int period = 0; period <= latestFormerPeriodWithNewClaims; period++) {
                 int periodOffset = currentPeriod - period;
                 List<UnderwritingInfoPacket> underwritingInfos = (List<UnderwritingInfoPacket>) periodStore.get(UNDERWRITING_INFOS, -periodOffset);
@@ -311,12 +311,12 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
         this.parmPremiumPattern = parmPremiumPattern;
     }
 
-    public boolean isGlobalGenerateNewClaimsInFirstPeriodOnly() {
-        return globalGenerateNewClaimsInFirstPeriodOnly;
+    public boolean isGlobalRunOffAfterFirstPeriod() {
+        return globalRunOffAfterFirstPeriod;
     }
 
-    public void setGlobalGenerateNewClaimsInFirstPeriodOnly(boolean globalGenerateNewClaimsInFirstPeriodOnly) {
-        this.globalGenerateNewClaimsInFirstPeriodOnly = globalGenerateNewClaimsInFirstPeriodOnly;
+    public void setGlobalRunOffAfterFirstPeriod(boolean globalRunOffAfterFirstPeriod) {
+        this.globalRunOffAfterFirstPeriod = globalRunOffAfterFirstPeriod;
     }
 
     public PeriodStore getPeriodStore() {

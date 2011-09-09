@@ -44,7 +44,7 @@ components {
 		parmDefaultCCC[0]=0.04175
 	}
 	globalParameters {
-		parmGenerateNewClaimsInFirstPeriodOnly[0]=true
+		parmRunOffAfterFirstPeriod[0]=true
 		parmProjection[0]=org.pillarone.riskanalytics.domain.pc.cf.global.ProjectionPeriodType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.global.ProjectionPeriodType.COMPLETEROLLOUT, [:])
 		parmProjectionStartDate[0]=new org.joda.time.DateTime(2011, 1, 1, 0, 0, 0, 0)
 	}

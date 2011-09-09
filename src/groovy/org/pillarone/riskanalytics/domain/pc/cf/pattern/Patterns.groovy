@@ -12,11 +12,11 @@ class Patterns extends ComposedComponent {
 
     PacketList<PatternPacket> outPatterns = new PacketList<PatternPacket>(PatternPacket)
 
-    PayoutReportingCombinedPatterns subPayoutAndReportingPatterns = new PayoutReportingCombinedPatterns()
-    PayoutPatterns subPayoutPatterns = new PayoutPatterns()
-    ReportingPatterns subReportingPatterns = new ReportingPatterns()
-    RecoveryPatterns subRecoveryPatterns = new RecoveryPatterns()
     PremiumPatterns subPremiumPatterns = new PremiumPatterns()
+    ReportingPatterns subReportingPatterns = new ReportingPatterns()
+    PayoutPatterns subPayoutPatterns = new PayoutPatterns()
+    PayoutReportingCombinedPatterns subPayoutAndReportingPatterns = new PayoutReportingCombinedPatterns()
+    RecoveryPatterns subRecoveryPatterns = new RecoveryPatterns()
 
     @Override protected void doCalculation() {
         subPayoutAndReportingPatterns.start()

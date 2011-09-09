@@ -11,7 +11,7 @@ public class GlobalParameters extends GlobalParameterComponent {
 
     private DateTime parmProjectionStartDate = new DateTime(2011,1,1,0,0,0,0);
     private IProjectionPeriodStrategy parmProjection = ProjectionPeriodType.getDefault();
-    private boolean parmGenerateNewClaimsInFirstPeriodOnly = true;
+    private boolean parmRunOffAfterFirstPeriod = true;
     private boolean runtimeTrivialPatterns = false;
     private boolean runtimeTrivialIndices = false;
 
@@ -20,9 +20,9 @@ public class GlobalParameters extends GlobalParameterComponent {
         return parmProjectionStartDate;
     }
 
-    @Global(identifier = "generateNewClaimsInFirstPeriodOnly")
-    public boolean generateNewClaimsInFirstPeriodOnly() {
-        return parmGenerateNewClaimsInFirstPeriodOnly;
+    @Global(identifier = "runOffAfterFirstPeriod")
+    public boolean runOffAfterFirstPeriod() {
+        return parmRunOffAfterFirstPeriod;
     }
 
     @Global(identifier = "trivialPatterns")
@@ -40,12 +40,12 @@ public class GlobalParameters extends GlobalParameterComponent {
         return parmProjection.projectionPeriods();
     }
 
-    public boolean isParmGenerateNewClaimsInFirstPeriodOnly() {
-        return parmGenerateNewClaimsInFirstPeriodOnly;
+    public boolean isParmRunOffAfterFirstPeriod() {
+        return parmRunOffAfterFirstPeriod;
     }
 
-    public void setParmGenerateNewClaimsInFirstPeriodOnly(boolean parmGenerateNewClaimsInFirstPeriodOnly) {
-        this.parmGenerateNewClaimsInFirstPeriodOnly = parmGenerateNewClaimsInFirstPeriodOnly;
+    public void setParmRunOffAfterFirstPeriod(boolean parmRunOffAfterFirstPeriod) {
+        this.parmRunOffAfterFirstPeriod = parmRunOffAfterFirstPeriod;
     }
 
     public DateTime getParmProjectionStartDate() {
