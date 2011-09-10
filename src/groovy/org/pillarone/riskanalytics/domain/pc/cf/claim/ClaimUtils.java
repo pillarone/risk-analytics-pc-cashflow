@@ -217,7 +217,7 @@ public class ClaimUtils {
      * @return
      */
     public static ClaimCashflowPacket getNetClaim(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim) {
-        if (cededClaim == null) {
+        if (cededClaim == null || cededClaim.getUpdateDate() == null) {
             return (ClaimCashflowPacket) grossClaim.clone();
         }
         else if (grossClaim == null) {
