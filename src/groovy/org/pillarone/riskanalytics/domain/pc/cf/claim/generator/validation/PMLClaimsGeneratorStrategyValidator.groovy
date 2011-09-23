@@ -73,6 +73,11 @@ class PMLClaimsGeneratorStrategyValidator implements IParameterizationValidator 
                     return [ValidationType.ERROR, "pml.strategy.error.returnPeriods.not.increasing", i, returnPeriods[i - 1], returnPeriods[i]]
                 }
             }
+            for (int i = 0; i < returnPeriods.length; i++) {
+                if (returnPeriods[i] <= 0) {
+                    return [ValidationType.ERROR, "pml.strategy.error.returnPeriods.strictly.positive", i, returnPeriods[i]]
+                }
+            }
             return true
         }
         validationService.register(ClaimsGeneratorType.PML) {Map type ->
@@ -88,6 +93,11 @@ class PMLClaimsGeneratorStrategyValidator implements IParameterizationValidator 
             for (int i = 1; i < claims.length; i++) {
                 if (claims[i - 1] > claims[i]) {
                     return [ValidationType.ERROR, "pml.strategy.error.claims.not.increasing", i, claims[i - 1], claims[i]]
+                }
+            }
+            for (int i = 0; i < claims.length; i++) {
+                if (claims[i] <= 0) {
+                    return [ValidationType.ERROR, "pml.strategy.error.claims.strictly.positive", i, claims[i]]
                 }
             }
             return true
