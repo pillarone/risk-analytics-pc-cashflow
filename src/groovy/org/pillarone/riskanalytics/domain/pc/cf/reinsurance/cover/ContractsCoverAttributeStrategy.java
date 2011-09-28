@@ -1,12 +1,9 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover;
 
-import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract;
 
 import java.util.ArrayList;
 import java.util.HashMap;

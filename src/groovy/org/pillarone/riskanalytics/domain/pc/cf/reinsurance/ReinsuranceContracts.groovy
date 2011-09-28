@@ -32,7 +32,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-// todo(sku): diamond cover, GNPI, mixing contract and company cover allowed?
+// todo(sku): diamond cover, mixing contract and company cover allowed?
 class ReinsuranceContracts extends DynamicComposedComponent {
 
     static Log LOG = LogFactory.getLog(ReinsuranceContracts)
@@ -74,7 +74,6 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     void wire() {
         if (noneTrivialContracts()) {
             init()
-            replicateInChannels this, 'inUnderwritingInfo'
             replicateInChannels this, 'inFactors'
             replicateInChannels this, 'inLegalEntityDefault'
             replicateOutChannels this, 'outClaimsInward'
@@ -96,6 +95,7 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     private void wireContractsBasedOnGross() {
         for (ReinsuranceContract contract : contractsBasedOnGrossClaims) {
             doWire PortReplicatorCategory, contract, 'inClaims', this, 'inClaims'
+            doWire PortReplicatorCategory, contract, 'inUnderwritingInfo', this, 'inUnderwritingInfo'
         }
     }
 
@@ -104,9 +104,11 @@ class ReinsuranceContracts extends DynamicComposedComponent {
             for (ReinsuranceContractAndBase contractAndBase : contractCoveredByContracts.value) {
                 if (contractAndBase.contractBase.equals(ReinsuranceContractBase.CEDED)) {
                     doWire WC, contractCoveredByContracts.key, 'inClaims', contractAndBase.reinsuranceContract, 'outClaimsCeded'
+                    doWire WC, contractCoveredByContracts.key, 'inUnderwritingInfo', contractAndBase.reinsuranceContract, 'outUnderwritingInfoCeded'
                 }
                 else {
                     doWire WC, contractCoveredByContracts.key, 'inClaims', contractAndBase.reinsuranceContract, 'outClaimsNet'
+                    doWire WC, contractCoveredByContracts.key, 'inUnderwritingInfo', contractAndBase.reinsuranceContract, 'outUnderwritingInfoGNPI'
                 }
             }
         }
@@ -120,6 +122,7 @@ class ReinsuranceContracts extends DynamicComposedComponent {
                     for (ILegalEntityMarker legalEntity : coveredLegalEntities) {
                         for (ReinsuranceContract preceedingContract : inwardLegalEntity.get(legalEntity)) {
                             doWire WC, contract, 'inClaims', preceedingContract, 'outClaimsInward'
+                            doWire WC, contract, 'inUnderwritingInfo', preceedingContract, 'outUnderwritingInfoInward'
                         }
                     }
                 }

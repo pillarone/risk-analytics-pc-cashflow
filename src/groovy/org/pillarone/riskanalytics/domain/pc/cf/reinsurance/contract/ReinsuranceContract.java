@@ -44,8 +44,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private PeriodStore periodStore;
 
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    /** PMO-1635: gets GNPI underwriting info always */
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<UnderwritingInfoPacket> inUnderwritingInfoGNPI = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket.class);
     private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     private PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
@@ -352,10 +352,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     }
 
     private void processUnderwritingInfoGNPI() {
-        if (isReceiverWired(inUnderwritingInfoGNPI) && isSenderWired(outUnderwritingInfoGNPI)) {
-            calculateUnderwritingInfoGNPI(inUnderwritingInfoGNPI);
-        }
-        else if (isSenderWired(outUnderwritingInfoGNPI)) {
+        if (isSenderWired(outUnderwritingInfoGNPI)) {
             calculateUnderwritingInfoGNPI(inUnderwritingInfo);
         }
     }
@@ -368,12 +365,12 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
                         outUnderwritingInfoGNPI.add(baseUnderwritingInfos.get(i).getNet(outUnderwritingInfoCeded.get(i), true));
                     }
                     else {
-                        throw new RuntimeException("original claims mismatch.");
+                        throw new RuntimeException("original uw info mismatch.");
                     }
                 }
             }
             else {
-                throw new RuntimeException("different number of incoming GNPI and ceded claims.");
+                throw new RuntimeException("different number of incoming GNPI and ceded uw info.");
             }
         }
         else {
@@ -579,13 +576,5 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     public void setOutUnderwritingInfoGNPI(PacketList<UnderwritingInfoPacket> outUnderwritingInfoGNPI) {
         this.outUnderwritingInfoGNPI = outUnderwritingInfoGNPI;
-    }
-
-    public PacketList<UnderwritingInfoPacket> getInUnderwritingInfoGNPI() {
-        return inUnderwritingInfoGNPI;
-    }
-
-    public void setInUnderwritingInfoGNPI(PacketList<UnderwritingInfoPacket> inUnderwritingInfoGNPI) {
-        this.inUnderwritingInfoGNPI = inUnderwritingInfoGNPI;
     }
 }
