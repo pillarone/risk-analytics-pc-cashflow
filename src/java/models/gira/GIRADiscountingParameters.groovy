@@ -62,4 +62,4 @@ components {
 	}
 }
 comments=["""[path:'GIRA', period:-1, lastChange:new org.joda.time.DateTime(1317193484189),user:null, comment: \"\"\"change to new yield curve\"\"\", tags:(['version'] as Set)]"""]
-tags=["LOCKED"]
+tags=[]
