@@ -19,14 +19,17 @@ public class InwardLegalEntitiesCoverAttributeStrategy extends AbstractParameter
         implements ICoverAttributeStrategy, ILegalEntityCover {
 
     private ComboBoxTableMultiDimensionalParameter legalEntities;
+    /** this property has no effect within the covered methods but is used for the wiring */
+    private ActiveReMode activeReMode;
 
     public IParameterObjectClassifier getType() {
         return CoverAttributeStrategyType.INWARDLEGALENTITIES;
     }
 
     public Map getParameters() {
-        Map<String, ComboBoxTableMultiDimensionalParameter> parameters = new HashMap<String, ComboBoxTableMultiDimensionalParameter>(1);
+        Map<String, Object> parameters = new HashMap<String, Object>(2);
         parameters.put("legalEntities", legalEntities);
+        parameters.put("activeReMode", activeReMode);
         return parameters;
     }
 

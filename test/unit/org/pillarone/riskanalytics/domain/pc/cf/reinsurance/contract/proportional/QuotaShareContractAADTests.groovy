@@ -16,6 +16,10 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.Reinsurance
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.LimitStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.FilterStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
+import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -50,8 +54,13 @@ class QuotaShareContractAADTests extends GroovyTestCase {
                         'limit': LimitStrategyType.getStrategy(LimitStrategyType.AAD, ['aad' : aad]),
                         'commission': CommissionStrategyType.getNoCommission()
                 ]),
+                parmCover : CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS, [filter: FilterStrategyType.getDefault()]),
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0])
+    }
+
+    void setUp() {
+        ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
     }
 
     /** three claims without development */

@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,18 +13,14 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AllCoverAttributeStrategy extends AbstractParameterObject implements ICoverAttributeStrategy {
-
-    private IncludeType reserves = IncludeType.NOTINCLUDED;
+public class AllFilterStrategy extends AbstractParameterObject implements ICoverAttributeStrategy {
 
     public IParameterObjectClassifier getType() {
-        return CoverAttributeStrategyType.NONE;
+        return FilterStrategyType.ALL;
     }
 
     public Map getParameters() {
-        Map<String, IncludeType> parameters = new HashMap<String, IncludeType>(1);
-        parameters.put("reserves", reserves);
-        return parameters;
+        return Collections.emptyMap();
     }
 
     public List<ClaimCashflowPacket> coveredClaims(List<ClaimCashflowPacket> source) {

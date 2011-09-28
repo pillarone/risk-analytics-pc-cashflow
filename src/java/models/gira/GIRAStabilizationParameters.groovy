@@ -1,11 +1,9 @@
 package models.gira
 
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.XLPremiumBase
-
 model=models.gira.GIRAModel
 periodCount=1
 displayName='XL Stabilization'
-applicationVersion='1.4-ALPHA-6.2'
+applicationVersion='1.4-BETA-8'
 periodLabels=["2011-01-01","2012-01-01","2013-01-01","2014-01-01","2015-01-01"]
 components {
 	claimsGenerators {
@@ -18,9 +16,21 @@ components {
 			parmUnderwritingSegments[0]=new org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([[""]]),["Underwriting Information"], org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker)
 		}
 	}
+	creditDefault {
+		parmDefaultA[0]=5.0E-4
+		parmDefaultAA[0]=1.0E-4
+		parmDefaultAAA[0]=2.0E-5
+		parmDefaultB[0]=0.04175
+		parmDefaultBB[0]=0.012
+		parmDefaultBBB[0]=0.0024
+		parmDefaultC[0]=0.04175
+		parmDefaultCC[0]=0.04175
+		parmDefaultCCC[0]=0.04175
+	}
 	globalParameters {
-		parmRunOffAfterFirstPeriod[0]=true
+		parmProjection[0]=org.pillarone.riskanalytics.domain.pc.cf.global.ProjectionPeriodType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.global.ProjectionPeriodType.COMPLETEROLLOUT, [:])
 		parmProjectionStartDate[0]=new org.joda.time.DateTime(2011, 1, 1, 0, 0, 0, 0)
+		parmRunOffAfterFirstPeriod[0]=true
 	}
 	indices {
 		subSeverityIndices {
@@ -41,8 +51,8 @@ components {
 	}
 	reinsuranceContracts {
 		subXL {
-			parmContractStrategy[0]=org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType.WXL, ["limit":1000.0,"stabilization":org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationStrategyType.FULL, ["stabilizationBasedOn":org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationBasedOn.PAID,"inflationIndices":new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([["clause inflation", "superimposed inflation"], ["CONTINUOUS", "CONTINUOUS"], ["FIXED_DATE", "DATE_OF_LOSS"], [new org.joda.time.DateTime(2010,6,30,0,0,0,0), new org.joda.time.DateTime(2011,1,1,0,0,0,0)]]),["Index","Index Mode","Base Date Mode","Date"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('SEVERITY_INDEX_SELECTION')),]),"reinstatementPremiums":new org.pillarone.riskanalytics.core.parameterization.TableMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([[0.0]]),["Reinstatement Premium"]),"riPremiumSplit":org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.PremiumAllocationType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.PremiumAllocationType.PREMIUM_SHARES, [:]),"aggregateLimit":1000.0,"premium":0.0,"premiumBase":XLPremiumBase.ABSOLUTE,"aggregateDeductible":0.0,"attachmentPoint":500.0,])
-			parmCover[0]=org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType.ALL, ["reserves":org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.IncludeType.NOTINCLUDED,])
+			parmContractStrategy[0]=org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType.WXL, ["limit":1000.0,"stabilization":org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationStrategyType.FULL, ["stabilizationBasedOn":org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationBasedOn.PAID,"inflationIndices":new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([["clause inflation", "superimposed inflation"], ["CONTINUOUS", "CONTINUOUS"], ["FIXED_DATE", "DATE_OF_LOSS"], [new org.joda.time.DateTime(2010,6,30,0,0,0,0), new org.joda.time.DateTime(2011,1,1,0,0,0,0)]]),["Index","Index Mode","Base Date Mode","Date"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('SEVERITY_INDEX_SELECTION')),]),"reinstatementPremiums":new org.pillarone.riskanalytics.core.parameterization.TableMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([[0.0]]),["Reinstatement Premium"]),"riPremiumSplit":org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.PremiumAllocationType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.PremiumAllocationType.PREMIUM_SHARES, [:]),"aggregateLimit":1000.0,"premium":0.0,"premiumBase":org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.XLPremiumBase.ABSOLUTE,"aggregateDeductible":0.0,"attachmentPoint":500.0,])
+			parmCover[0]=org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType.ORIGINALCLAIMS, ["filter":org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.FilterStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.FilterStrategyType.ALL, [:]),])
 			parmCoveredPeriod[0]=org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType.ONEYEAR, [:])
 			parmReinsurers[0]=new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([[]]),["Reinsurer","Covered Portion"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('LEGAL_ENTITY_PORTION'))
 		}

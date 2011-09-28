@@ -165,11 +165,9 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     }
 
     private boolean isGrossCover(ReinsuranceContract contract) {
-        return (contract.parmCover.getType().equals(CoverAttributeStrategyType.ALL)
-                || contract.parmCover.getType().equals(CoverAttributeStrategyType.GROSSPERILS)
-                || contract.parmCover.getType().equals(CoverAttributeStrategyType.GROSSSEGMENTS)
-                || contract.parmCover.getType().equals(CoverAttributeStrategyType.GROSSPERILSSEGMENTS)
-                || contract.parmCover.getType().equals(CoverAttributeStrategyType.GROSSLEGALENTITIES))
+        // todo(sku): restrict for specific ActiveReMode!
+        return (contract.parmCover.getType().equals(CoverAttributeStrategyType.ORIGINALCLAIMS)
+                || contract.parmCover.getType().equals(CoverAttributeStrategyType.INWARDLEGALENTITIES))
     }
 
     private boolean isContractCover(ReinsuranceContract contract) {

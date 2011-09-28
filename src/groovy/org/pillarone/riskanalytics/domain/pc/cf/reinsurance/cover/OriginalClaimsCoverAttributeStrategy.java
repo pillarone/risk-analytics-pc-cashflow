@@ -12,25 +12,25 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AllCoverAttributeStrategy extends AbstractParameterObject implements ICoverAttributeStrategy {
+public class OriginalClaimsCoverAttributeStrategy extends AbstractParameterObject implements ICoverAttributeStrategy {
 
-    private IncludeType reserves = IncludeType.NOTINCLUDED;
+    private ICoverAttributeStrategy filter;
 
     public IParameterObjectClassifier getType() {
-        return CoverAttributeStrategyType.NONE;
+        return CoverAttributeStrategyType.ORIGINALCLAIMS;
     }
 
     public Map getParameters() {
-        Map<String, IncludeType> parameters = new HashMap<String, IncludeType>(1);
-        parameters.put("reserves", reserves);
+        Map<String, ICoverAttributeStrategy> parameters = new HashMap<String, ICoverAttributeStrategy>(1);
+        parameters.put("filter", filter);
         return parameters;
     }
 
     public List<ClaimCashflowPacket> coveredClaims(List<ClaimCashflowPacket> source) {
-        return source;
+        return filter.coveredClaims(source);
     }
 
     public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source) {
-        return source;
+        return filter.coveredUnderwritingInfo(source);
     }
 }

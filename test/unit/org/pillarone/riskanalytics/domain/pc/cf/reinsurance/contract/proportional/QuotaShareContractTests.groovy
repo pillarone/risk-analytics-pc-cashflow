@@ -18,6 +18,10 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.FilterStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
+import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -52,8 +56,13 @@ class QuotaShareContractTests extends GroovyTestCase {
                                     'profitCommissionRatio' : 0.2d, 'commissionRatio' : 0.1d, 'costRatio' : 0.1d,
                                     'lossCarriedForwardEnabled' : false, 'initialLossCarriedForward' : 0d,
                                     'useClaims': BasedOnClaimProperty.REPORTED])]),
+                parmCover : CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS, [filter: FilterStrategyType.getDefault()]),
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0])
+    }
+
+    void setUp() {
+        ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
     }
 
     /** claims occur in different periods, make sure both get the whole AAL or more generally a new contract instance */

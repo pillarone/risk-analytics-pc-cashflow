@@ -18,15 +18,14 @@ import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimen
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.segment.Segment
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.GrossPerilsCoverAttributeStrategy
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker
-
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.GrossSegmentsCoverAttributeStrategy
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
 import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.FilterStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.OriginalClaimsCoverAttributeStrategy
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -56,6 +55,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
                         'limit': LimitStrategyType.getDefault(),
                         'commission': CommissionStrategyType.getNoCommission()
                 ]),
+                parmCover : CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS, [filter: FilterStrategyType.getDefault()]),
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0])
     }
@@ -323,9 +323,11 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, date20110101)
         IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
-        quotaShare20.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.GROSSPERILS,
-                ['perils': new ComboBoxTableMultiDimensionalParameter(['motor'], ['Perils'], IPerilMarker)])
-        ((GrossPerilsCoverAttributeStrategy) quotaShare20.parmCover).perils.comboBoxValues['motor'] = perilMotor
+        quotaShare20.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS,
+                ["filter":FilterStrategyType.getStrategy(FilterStrategyType.PERILS,
+                    ['perils':new ComboBoxTableMultiDimensionalParameter([['motor']],['Covered Perils'], IPerilMarker),]),])
+        quotaShare20.name = 'marine'
+        ((OriginalClaimsCoverAttributeStrategy) quotaShare20.parmCover).filter.perils.comboBoxValues['motor'] = perilMotor
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
@@ -344,10 +346,11 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
 
-        quotaShare20.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.GROSSPERILS,
-                ['perils': new ComboBoxTableMultiDimensionalParameter(['motor','motor hull'], ['Perils'], IPerilMarker)])
-        ((GrossPerilsCoverAttributeStrategy) quotaShare20.parmCover).perils.comboBoxValues['motor'] = perilMotor
-        ((GrossPerilsCoverAttributeStrategy) quotaShare20.parmCover).perils.comboBoxValues['motor hull'] = perilMotorHull
+        quotaShare20.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS,
+                ["filter":FilterStrategyType.getStrategy(FilterStrategyType.PERILS,
+                    ['perils':new ComboBoxTableMultiDimensionalParameter([['motor','motor hull']],['Covered Perils'], IPerilMarker),]),])
+        ((OriginalClaimsCoverAttributeStrategy) quotaShare20.parmCover).filter.perils.comboBoxValues['motor'] = perilMotor
+        ((OriginalClaimsCoverAttributeStrategy) quotaShare20.parmCover).filter.perils.comboBoxValues['motor hull'] = perilMotorHull
 
         quotaShare20.inClaims.addAll(claimsMotor)
         quotaShare20.inClaims.addAll(claimsMotorHull)
@@ -364,10 +367,10 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, date20110101)
         IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
-        quotaShare20.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.GROSSSEGMENTS,
-                ['segments': new ComboBoxTableMultiDimensionalParameter(['motor'], ['Segments'], ISegmentMarker)])
-        ((GrossSegmentsCoverAttributeStrategy) quotaShare20.parmCover).segments.comboBoxValues['motor'] = segmentMotor
-
+        quotaShare20.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS,
+                ["filter":FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS,
+                    ['segments':new ComboBoxTableMultiDimensionalParameter([['motor']],['Segments'], ISegmentMarker),]),])
+        ((OriginalClaimsCoverAttributeStrategy) quotaShare20.parmCover).filter.segments.comboBoxValues['motor'] = segmentMotor
         GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
 
@@ -394,10 +397,11 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
 
-        quotaShare20.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.GROSSSEGMENTS,
-                ['segments': new ComboBoxTableMultiDimensionalParameter(['motor','motor hull'], ['Segments'], ISegmentMarker)])
-        ((GrossSegmentsCoverAttributeStrategy) quotaShare20.parmCover).segments.comboBoxValues['motor'] = segmentMotor
-        ((GrossSegmentsCoverAttributeStrategy) quotaShare20.parmCover).segments.comboBoxValues['motor hull'] = segmentMotorHull
+        quotaShare20.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS,
+                ["filter":FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS,
+                    ['segments':new ComboBoxTableMultiDimensionalParameter([['motor','motor hull']],['Segments'], ISegmentMarker),]),])
+        ((OriginalClaimsCoverAttributeStrategy) quotaShare20.parmCover).filter.segments.comboBoxValues['motor'] = segmentMotor
+        ((OriginalClaimsCoverAttributeStrategy) quotaShare20.parmCover).filter.segments.comboBoxValues['motor hull'] = segmentMotorHull
 
         quotaShare20.inClaims.addAll(claimsMotor)
         quotaShare20.inClaims.addAll(claimsMotorHull)
