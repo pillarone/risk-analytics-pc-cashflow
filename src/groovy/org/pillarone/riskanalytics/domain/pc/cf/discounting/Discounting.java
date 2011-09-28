@@ -16,6 +16,7 @@ public class Discounting extends Component implements IDiscountMarker, ICorrelat
 
     private PeriodScope periodScope;
 
+    /** events have only an effect in combination with stochastic indices selected */
     private PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
     private PacketList<FactorsPacket> outFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
 

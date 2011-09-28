@@ -1,37 +1,30 @@
 package models.gira
 
-import org.pillarone.riskanalytics.core.model.StochasticModel
-import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
-import org.pillarone.riskanalytics.core.simulation.LimitedContinuousPeriodCounter
-
-
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.joda.time.DateTime
 import org.joda.time.Period
+import org.pillarone.riskanalytics.core.model.StochasticModel
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
+import org.pillarone.riskanalytics.core.simulation.LimitedContinuousPeriodCounter
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerators
+import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.CreditDefault
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.Dependencies
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventGenerators
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountingYieldCurves
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingSegments
 import org.pillarone.riskanalytics.domain.pc.cf.global.GlobalParameters
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Indices
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ReinsuranceContracts
-import org.pillarone.riskanalytics.domain.pc.cf.segment.Segments
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.Patterns
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerators
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.Pattern
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.PayoutReportingCombinedPattern
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPremiumPatternMarker
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerators
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntities
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ReinsuranceContracts
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerator
-import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerators
+import org.pillarone.riskanalytics.domain.pc.cf.segment.Segments
 import org.pillarone.riskanalytics.domain.pc.cf.structure.Structures
-import org.pillarone.riskanalytics.domain.pc.cf.discounting.Discountings
-import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.CreditDefault
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.*
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -43,7 +36,7 @@ class GIRAModel extends StochasticModel {
     GlobalParameters globalParameters
     CreditDefault creditDefault
     Indices indices
-    Discountings discounting
+    DiscountingYieldCurves discounting
     Patterns patterns
     UnderwritingSegments underwritingSegments
     ClaimsGenerators claimsGenerators
@@ -61,7 +54,7 @@ class GIRAModel extends StochasticModel {
         creditDefault = new CreditDefault()
         underwritingSegments = new UnderwritingSegments()
         indices = new Indices()
-        discounting = new Discountings()
+        discounting = new DiscountingYieldCurves()
         patterns = new Patterns()
         claimsGenerators = new ClaimsGenerators()
         reservesGenerators = new ReservesGenerators()
@@ -73,6 +66,7 @@ class GIRAModel extends StochasticModel {
         structures = new Structures()
 
         addStartComponent creditDefault
+        addStartComponent discounting
         addStartComponent patterns
         addStartComponent dependencies
         addStartComponent eventGenerators
@@ -91,7 +85,6 @@ class GIRAModel extends StochasticModel {
         reservesGenerators.inFactors = indices.outFactors
         reservesGenerators.inPatterns = patterns.outPatterns
         indices.inEventSeverities = dependencies.outEventSeverities
-        discounting.inEventSeverities = dependencies.outEventSeverities
         if (segments.subComponentCount() == 0) {
             reinsuranceContracts.inClaims = claimsGenerators.outClaims
             reinsuranceContracts.inClaims = reservesGenerators.outReserves

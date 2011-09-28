@@ -25,6 +25,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.dependency.validation.MultiplePr
 import org.pillarone.riskanalytics.core.output.aggregation.PacketAggregatorRegistry
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimPacketAggregator
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.YieldCurveTableConstraints
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -76,6 +77,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new DoubleConstraints())
         ConstraintsFactory.registerConstraint(new DateTimeConstraints())
         ConstraintsFactory.registerConstraint(new ClaimTypeSelectionTableConstraints())
+        ConstraintsFactory.registerConstraint(new YieldCurveTableConstraints())
 
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
         ValidatorRegistry.addValidator(new PatternStrategyValidator())
