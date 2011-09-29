@@ -8,7 +8,6 @@ iteration	period	valueIndex	path	field	value
 1	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.0
 1	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-100.0
 1	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-100.0
-1	0	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0
 1	1	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 1	1	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-3.200000000000003
 1	1	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.04
@@ -18,7 +17,6 @@ iteration	period	valueIndex	path	field	value
 1	1	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.8
 1	1	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-3.200000000000003
 1	1	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-1	1	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.04
 1	2	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 1	2	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-4.447999999999993
 1	2	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0608
@@ -28,7 +26,6 @@ iteration	period	valueIndex	path	field	value
 1	2	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-21.216000000000008
 1	2	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-1.2479999999999905
 1	2	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-1	2	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0608
 1	3	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 1	3	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-6.569599999999994
 1	3	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.11384
@@ -38,7 +35,6 @@ iteration	period	valueIndex	path	field	value
 1	3	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.276799999999994
 1	3	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-2.121600000000001
 1	3	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-1	3	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.11384
 1	4	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 1	4	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-7.237904
 1	4	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.1472552
@@ -48,7 +44,6 @@ iteration	period	valueIndex	path	field	value
 1	4	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.945103999999997
 1	4	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.6683040000000062
 1	4	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-1	4	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.1472552
 2	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
 2	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
 2	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0
@@ -58,7 +53,6 @@ iteration	period	valueIndex	path	field	value
 2	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.0
 2	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-100.0
 2	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-100.0
-2	0	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0
 2	1	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 2	1	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-3.200000000000003
 2	1	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.04
@@ -68,7 +62,6 @@ iteration	period	valueIndex	path	field	value
 2	1	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.8
 2	1	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-3.200000000000003
 2	1	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-2	1	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.04
 2	2	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 2	2	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-4.447999999999993
 2	2	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0608
@@ -78,7 +71,6 @@ iteration	period	valueIndex	path	field	value
 2	2	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-21.216000000000008
 2	2	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-1.2479999999999905
 2	2	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-2	2	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0608
 2	3	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 2	3	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-6.569599999999994
 2	3	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.11384
@@ -88,7 +80,6 @@ iteration	period	valueIndex	path	field	value
 2	3	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.276799999999994
 2	3	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-2.121600000000001
 2	3	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-2	3	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.11384
 2	4	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 2	4	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-7.237904
 2	4	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.1472552
@@ -98,7 +89,6 @@ iteration	period	valueIndex	path	field	value
 2	4	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.945103999999997
 2	4	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.6683040000000062
 2	4	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-2	4	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.1472552
 3	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
 3	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
 3	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0
@@ -108,7 +98,6 @@ iteration	period	valueIndex	path	field	value
 3	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.0
 3	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-100.0
 3	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-100.0
-3	0	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0
 3	1	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 3	1	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-3.200000000000003
 3	1	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.04
@@ -118,7 +107,6 @@ iteration	period	valueIndex	path	field	value
 3	1	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.8
 3	1	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-3.200000000000003
 3	1	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-3	1	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.04
 3	2	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 3	2	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-4.447999999999993
 3	2	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0608
@@ -128,7 +116,6 @@ iteration	period	valueIndex	path	field	value
 3	2	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-21.216000000000008
 3	2	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-1.2479999999999905
 3	2	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-3	2	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0608
 3	3	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 3	3	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-6.569599999999994
 3	3	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.11384
@@ -138,7 +125,6 @@ iteration	period	valueIndex	path	field	value
 3	3	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.276799999999994
 3	3	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-2.121600000000001
 3	3	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-3	3	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.11384
 3	4	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 3	4	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-7.237904
 3	4	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.1472552
@@ -148,7 +134,6 @@ iteration	period	valueIndex	path	field	value
 3	4	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.945103999999997
 3	4	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.6683040000000062
 3	4	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-3	4	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.1472552
 4	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
 4	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
 4	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0
@@ -158,7 +143,6 @@ iteration	period	valueIndex	path	field	value
 4	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.0
 4	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-100.0
 4	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-100.0
-4	0	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0
 4	1	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 4	1	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-3.200000000000003
 4	1	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.04
@@ -168,7 +152,6 @@ iteration	period	valueIndex	path	field	value
 4	1	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.8
 4	1	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-3.200000000000003
 4	1	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-4	1	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.04
 4	2	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 4	2	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-4.447999999999993
 4	2	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0608
@@ -178,7 +161,6 @@ iteration	period	valueIndex	path	field	value
 4	2	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-21.216000000000008
 4	2	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-1.2479999999999905
 4	2	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-4	2	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0608
 4	3	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 4	3	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-6.569599999999994
 4	3	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.11384
@@ -188,7 +170,6 @@ iteration	period	valueIndex	path	field	value
 4	3	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.276799999999994
 4	3	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-2.121600000000001
 4	3	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-4	3	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.11384
 4	4	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 4	4	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-7.237904
 4	4	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.1472552
@@ -198,7 +179,6 @@ iteration	period	valueIndex	path	field	value
 4	4	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.945103999999997
 4	4	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.6683040000000062
 4	4	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-4	4	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.1472552
 5	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
 5	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
 5	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0
@@ -208,7 +188,6 @@ iteration	period	valueIndex	path	field	value
 5	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.0
 5	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-100.0
 5	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-100.0
-5	0	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0
 5	1	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 5	1	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-3.200000000000003
 5	1	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.04
@@ -218,7 +197,6 @@ iteration	period	valueIndex	path	field	value
 5	1	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.8
 5	1	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-3.200000000000003
 5	1	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-5	1	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.04
 5	2	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 5	2	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-4.447999999999993
 5	2	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0608
@@ -228,7 +206,6 @@ iteration	period	valueIndex	path	field	value
 5	2	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-21.216000000000008
 5	2	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-1.2479999999999905
 5	2	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-5	2	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0608
 5	3	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 5	3	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-6.569599999999994
 5	3	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.11384
@@ -238,7 +215,6 @@ iteration	period	valueIndex	path	field	value
 5	3	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.276799999999994
 5	3	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-2.121600000000001
 5	3	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-5	3	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.11384
 5	4	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 5	4	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-7.237904
 5	4	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.1472552
@@ -248,7 +224,6 @@ iteration	period	valueIndex	path	field	value
 5	4	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.945103999999997
 5	4	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.6683040000000062
 5	4	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-5	4	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.1472552
 6	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
 6	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
 6	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0
@@ -258,7 +233,6 @@ iteration	period	valueIndex	path	field	value
 6	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.0
 6	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-100.0
 6	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-100.0
-6	0	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0
 6	1	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 6	1	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-3.200000000000003
 6	1	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.04
@@ -268,7 +242,6 @@ iteration	period	valueIndex	path	field	value
 6	1	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.8
 6	1	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-3.200000000000003
 6	1	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-6	1	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.04
 6	2	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 6	2	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-4.447999999999993
 6	2	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0608
@@ -278,7 +251,6 @@ iteration	period	valueIndex	path	field	value
 6	2	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-21.216000000000008
 6	2	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-1.2479999999999905
 6	2	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-6	2	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0608
 6	3	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 6	3	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-6.569599999999994
 6	3	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.11384
@@ -288,7 +260,6 @@ iteration	period	valueIndex	path	field	value
 6	3	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.276799999999994
 6	3	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-2.121600000000001
 6	3	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-6	3	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.11384
 6	4	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 6	4	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-7.237904
 6	4	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.1472552
@@ -298,7 +269,6 @@ iteration	period	valueIndex	path	field	value
 6	4	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.945103999999997
 6	4	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.6683040000000062
 6	4	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-6	4	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.1472552
 7	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
 7	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
 7	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0
@@ -308,7 +278,6 @@ iteration	period	valueIndex	path	field	value
 7	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.0
 7	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-100.0
 7	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-100.0
-7	0	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0
 7	1	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 7	1	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-3.200000000000003
 7	1	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.04
@@ -318,7 +287,6 @@ iteration	period	valueIndex	path	field	value
 7	1	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.8
 7	1	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-3.200000000000003
 7	1	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-7	1	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.04
 7	2	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 7	2	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-4.447999999999993
 7	2	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0608
@@ -328,7 +296,6 @@ iteration	period	valueIndex	path	field	value
 7	2	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-21.216000000000008
 7	2	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-1.2479999999999905
 7	2	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-7	2	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0608
 7	3	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 7	3	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-6.569599999999994
 7	3	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.11384
@@ -338,7 +305,6 @@ iteration	period	valueIndex	path	field	value
 7	3	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.276799999999994
 7	3	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-2.121600000000001
 7	3	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-7	3	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.11384
 7	4	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 7	4	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-7.237904
 7	4	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.1472552
@@ -348,7 +314,6 @@ iteration	period	valueIndex	path	field	value
 7	4	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.945103999999997
 7	4	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.6683040000000062
 7	4	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-7	4	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.1472552
 8	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
 8	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
 8	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0
@@ -358,7 +323,6 @@ iteration	period	valueIndex	path	field	value
 8	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.0
 8	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-100.0
 8	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-100.0
-8	0	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0
 8	1	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 8	1	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-3.200000000000003
 8	1	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.04
@@ -368,7 +332,6 @@ iteration	period	valueIndex	path	field	value
 8	1	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.8
 8	1	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-3.200000000000003
 8	1	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-8	1	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.04
 8	2	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 8	2	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-4.447999999999993
 8	2	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0608
@@ -378,7 +341,6 @@ iteration	period	valueIndex	path	field	value
 8	2	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-21.216000000000008
 8	2	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-1.2479999999999905
 8	2	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-8	2	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0608
 8	3	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 8	3	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-6.569599999999994
 8	3	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.11384
@@ -388,7 +350,6 @@ iteration	period	valueIndex	path	field	value
 8	3	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.276799999999994
 8	3	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-2.121600000000001
 8	3	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-8	3	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.11384
 8	4	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 8	4	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-7.237904
 8	4	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.1472552
@@ -398,7 +359,6 @@ iteration	period	valueIndex	path	field	value
 8	4	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.945103999999997
 8	4	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.6683040000000062
 8	4	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-8	4	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.1472552
 9	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
 9	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
 9	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0
@@ -408,7 +368,6 @@ iteration	period	valueIndex	path	field	value
 9	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.0
 9	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-100.0
 9	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-100.0
-9	0	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0
 9	1	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 9	1	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-3.200000000000003
 9	1	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.04
@@ -418,7 +377,6 @@ iteration	period	valueIndex	path	field	value
 9	1	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.8
 9	1	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-3.200000000000003
 9	1	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-9	1	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.04
 9	2	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 9	2	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-4.447999999999993
 9	2	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0608
@@ -428,7 +386,6 @@ iteration	period	valueIndex	path	field	value
 9	2	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-21.216000000000008
 9	2	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-1.2479999999999905
 9	2	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-9	2	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0608
 9	3	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 9	3	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-6.569599999999994
 9	3	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.11384
@@ -438,7 +395,6 @@ iteration	period	valueIndex	path	field	value
 9	3	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.276799999999994
 9	3	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-2.121600000000001
 9	3	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-9	3	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.11384
 9	4	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 9	4	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-7.237904
 9	4	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.1472552
@@ -448,7 +404,6 @@ iteration	period	valueIndex	path	field	value
 9	4	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.945103999999997
 9	4	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.6683040000000062
 9	4	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-9	4	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.1472552
 10	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
 10	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
 10	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0
@@ -458,7 +413,6 @@ iteration	period	valueIndex	path	field	value
 10	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.0
 10	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-100.0
 10	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-100.0
-10	0	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0
 10	1	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 10	1	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-3.200000000000003
 10	1	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.04
@@ -468,7 +422,6 @@ iteration	period	valueIndex	path	field	value
 10	1	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-20.8
 10	1	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-3.200000000000003
 10	1	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-10	1	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.04
 10	2	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 10	2	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-4.447999999999993
 10	2	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.0608
@@ -478,7 +431,6 @@ iteration	period	valueIndex	path	field	value
 10	2	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-21.216000000000008
 10	2	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-1.2479999999999905
 10	2	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-10	2	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.0608
 10	3	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 10	3	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-6.569599999999994
 10	3	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.11384
@@ -488,7 +440,6 @@ iteration	period	valueIndex	path	field	value
 10	3	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.276799999999994
 10	3	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-2.121600000000001
 10	3	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-10	3	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.11384
 10	4	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	0.0
 10	4	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	-7.237904
 10	4	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	1.1472552
@@ -498,4 +449,3 @@ iteration	period	valueIndex	path	field	value
 10	4	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-22.945103999999997
 10	4	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.6683040000000062
 10	4	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	0.0
-10	4	0	GIRA:claimsGenerators:subMarine:outSeverityIndicesApplied	value	1.1472552

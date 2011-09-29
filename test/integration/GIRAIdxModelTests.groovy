@@ -14,11 +14,11 @@ class GIRAIdxModelTests extends ModelTest {
 
     @Override
     String getResultConfigurationFileName() {
-        'GIRAAggregateResultConfiguration'
+        'GIRAAggregateNoIdxResultConfiguration'
     }
 
     String getResultConfigurationDisplayName() {
-        'Aggregate Gross Claims'
+        'Aggregate Gross Claims without Index Collection'
     }
 
     @Override
