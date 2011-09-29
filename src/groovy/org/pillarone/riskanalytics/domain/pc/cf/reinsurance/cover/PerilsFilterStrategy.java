@@ -52,9 +52,8 @@ public class PerilsFilterStrategy extends AbstractParameterObject implements ICo
         return filteredClaims;
     }
 
-    // todo(sku): think about deriving covered uw info indirectly
+    // todo(sku): not really working for uwInfo as it has no peril tag
     public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source) {
-        source.clear();
-        return null;
+        return source;
     }
 }

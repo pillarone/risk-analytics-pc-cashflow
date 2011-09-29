@@ -53,10 +53,24 @@ public class ContractsCoverAttributeStrategy extends AbstractParameterObject imp
         return filteredClaims;
     }
 
-    // todo(sku): think about deriving covered uw info indirectly
     public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source) {
-        source.clear();
-        return null;
+        List<UnderwritingInfoPacket> filteredUwInfo = new ArrayList<UnderwritingInfoPacket>();
+        List coveredContracts = getCoveredReinsuranceContracts();
+        for (UnderwritingInfoPacket uwInfo : source) {
+            if (coveredContracts.contains(uwInfo.reinsuranceContract())) {
+                filteredUwInfo.add(uwInfo);
+            }
+        }
+        filteredUwInfo = filter.coveredUnderwritingInfo(filteredUwInfo);
+        if (filteredUwInfo.size() == 0) {
+            filteredUwInfo.add(new UnderwritingInfoPacket());
+            source.clear();
+        }
+        else {
+            source.clear();
+            source.addAll(filteredUwInfo);
+        }
+        return filteredUwInfo;
     }
 
     protected ConstrainedMultiDimensionalParameter contracts;

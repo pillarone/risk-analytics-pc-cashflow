@@ -182,15 +182,15 @@ class ReinsuranceContractsTests extends GroovyTestCase {
 
         ReinsuranceContract quotaShareMarine = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
         quotaShareMarine.name = 'marine'
-        quotaShareMarine.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.INWARDLEGALENTITIES,
-                ['activeReMode' : ActiveReMode.ORIGINALCLAIMS,
+        quotaShareMarine.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.LEGALENTITIES,
+                ['legalEntityCoverMode' : LegalEntityCoverMode.ORIGINALCLAIMS,
                  'legalEntities' : new ComboBoxTableMultiDimensionalParameter([['marine']],['Covered Legal Entities'], ILegalEntityMarker),])
         IPeriodCounter periodCounter = quotaShareMarine.iterationScope.periodScope.periodCounter
         ((InwardLegalEntitiesCoverAttributeStrategy) quotaShareMarine.parmCover).legalEntities.comboBoxValues['marine'] = marine
 
         ReinsuranceContract quotaShareMotor = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
-        quotaShareMotor.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.INWARDLEGALENTITIES,
-                ['activeReMode' : ActiveReMode.ORIGINALCLAIMS,
+        quotaShareMotor.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.LEGALENTITIES,
+                ['legalEntityCoverMode' : LegalEntityCoverMode.ORIGINALCLAIMS,
                  'legalEntities':new ComboBoxTableMultiDimensionalParameter([['motor']],['Covered Legal Entities'], ILegalEntityMarker),])
         quotaShareMotor.name = 'motor'
         ((InwardLegalEntitiesCoverAttributeStrategy) quotaShareMotor.parmCover).legalEntities.comboBoxValues['motor'] = motor
@@ -424,9 +424,9 @@ class ReinsuranceContractsTests extends GroovyTestCase {
 
         ReinsuranceContract quotaShareMarine = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
         quotaShareMarine.name = 'marine'
-        quotaShareMarine.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.INWARDLEGALENTITIES,
+        quotaShareMarine.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.LEGALENTITIES,
                 ['legalEntities':new ComboBoxTableMultiDimensionalParameter([['marine']],['Legal Entities'], ILegalEntityMarker),
-                 'activeReMode': ActiveReMode.INWARD])
+                 'legalEntityCoverMode': LegalEntityCoverMode.ORIGINALCLAIMS])
         ((InwardLegalEntitiesCoverAttributeStrategy) quotaShareMarine.parmCover).legalEntities.comboBoxValues['marine'] = marine
         quotaShareMarine.parmReinsurers = new ConstrainedMultiDimensionalParameter(
                 [['motor'], [0.8d]],

@@ -23,13 +23,13 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
                             [ReinsuranceContractBasedOn.CONTRACT, ReinsuranceContractBasedOn.BASED_ON],
                             ConstraintsFactory.getConstraints(ReinsuranceContractBasedOn.IDENTIFIER)),
                     'filter': FilterStrategyType.getDefault()])
-    public static final CoverAttributeStrategyType INWARDLEGALENTITIES = new CoverAttributeStrategyType(
-            'inward legal entities', 'INWARDLEGALENTITIES',
-            ['legalEntities':new ComboBoxTableMultiDimensionalParameter([], ['Covered Legal Entities'], ILegalEntityMarker),
-             'activeReMode': ActiveReMode.INWARD])
+    public static final CoverAttributeStrategyType LEGALENTITIES = new CoverAttributeStrategyType(
+            'legal entities', 'LEGALENTITIES',
+            ['legalEntities':new ComboBoxTableMultiDimensionalParameter([], ['Legal Entities'], ILegalEntityMarker),
+             'legalEntityCoverMode': LegalEntityCoverMode.INWARD])
 
 
-    public static final all = [NONE, ORIGINALCLAIMS, CONTRACTS, INWARDLEGALENTITIES]
+    public static final all = [NONE, ORIGINALCLAIMS, CONTRACTS, LEGALENTITIES]
 
 
     protected static Map types = [:]
@@ -75,10 +75,10 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
                         contracts: (ConstrainedMultiDimensionalParameter) parameters['contracts'],
                         filter: parameters['filter'])
                 break
-            case CoverAttributeStrategyType.INWARDLEGALENTITIES:
+            case CoverAttributeStrategyType.LEGALENTITIES:
                 coverStrategy = new InwardLegalEntitiesCoverAttributeStrategy(
                         legalEntities: (ComboBoxTableMultiDimensionalParameter) parameters['legalEntities'],
-                        activeReMode: (ActiveReMode) parameters['activeReMode'])
+                        legalEntityCoverMode: (LegalEntityCoverMode) parameters['legalEntityCoverMode'])
                 break
         }
         return coverStrategy;

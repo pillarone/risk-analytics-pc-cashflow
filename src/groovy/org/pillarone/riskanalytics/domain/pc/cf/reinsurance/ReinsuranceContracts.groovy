@@ -117,7 +117,7 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     private void wireContractsIncludingInwardBusiness() {
         if (contractsBasedOnCompanies.nodes.size() > 0) {
             for (ReinsuranceContract contract : contractsBasedOnCompanies) {
-                if (contract.parmCover.getType().equals(CoverAttributeStrategyType.INWARDLEGALENTITIES)) {
+                if (contract.parmCover.getType().equals(CoverAttributeStrategyType.LEGALENTITIES)) {
                     List<ILegalEntityMarker> coveredLegalEntities = ((InwardLegalEntitiesCoverAttributeStrategy) contract.parmCover).getCoveredLegalEntities();
                     for (ILegalEntityMarker legalEntity : coveredLegalEntities) {
                         for (ReinsuranceContract preceedingContract : inwardLegalEntity.get(legalEntity)) {
@@ -133,6 +133,10 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     private void init() {
         initContractMap()
         for (ReinsuranceContract contract : componentList) {
+            List<LegalEntity> reinsurers = contract.parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX)
+            for (LegalEntity reinsurer : reinsurers) {
+                inwardLegalEntity.put(reinsurer, contract)
+            }
             if (isGrossCover(contract)) {
                 contractsBasedOnGrossClaims << contract
             }
@@ -145,16 +149,17 @@ class ReinsuranceContracts extends DynamicComposedComponent {
                 }
             }
             else if (isLegalEntityCover(contract)) {
-                List<ILegalEntityMarker> coveredContracts = ((ILegalEntityCover) contract).getCoveredLegalEntities()
+                // todo(sku): fix! need to collect preceeding contracts covering LE and probably gross peril
+                List<ILegalEntityMarker> coveredLegalEntities = ((ILegalEntityCover) contract.parmCover).getCoveredLegalEntities()
                 contractsBasedOnCompanies.createNode(contract.name)
-                for (IReinsuranceContractMarker coveredContract : coveredContracts) {
-                    contractsBasedOnCompanies.addRelation(contract.name, coveredContract.name)
+                for (ILegalEntityCover coveredLegalEntity : coveredLegalEntities) {
+                    List<IReinsuranceContractMarker> coveredContracts = inwardLegalEntity.get(coveredLegalEntity);
+                    for (IReinsuranceContractMarker coveredContract : coveredContracts) {
+                        contractsBasedOnCompanies.addRelation(contract.name, coveredContract.name);
+                    }
                 }
             }
-            List<LegalEntity> reinsurers = contract.parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX)
-            for (LegalEntity reinsurer : reinsurers) {
-                inwardLegalEntity.put(reinsurer, contract)
-            }
+
         }
     }
 
@@ -165,9 +170,9 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     }
 
     private boolean isGrossCover(ReinsuranceContract contract) {
-        // todo(sku): restrict for specific ActiveReMode!
-        return (contract.parmCover.getType().equals(CoverAttributeStrategyType.ORIGINALCLAIMS)
-                || contract.parmCover.getType().equals(CoverAttributeStrategyType.INWARDLEGALENTITIES))
+        boolean isGrossLegalEntitiyCover = (contract.parmCover.getType().equals(CoverAttributeStrategyType.LEGALENTITIES)
+                && ((InwardLegalEntitiesCoverAttributeStrategy) contract.parmCover).legalEntityCoverMode.equals(LegalEntityCoverMode.ORIGINALCLAIMS))
+        return (isGrossLegalEntitiyCover || contract.parmCover.getType().equals(CoverAttributeStrategyType.ORIGINALCLAIMS))
     }
 
     private boolean isContractCover(ReinsuranceContract contract) {

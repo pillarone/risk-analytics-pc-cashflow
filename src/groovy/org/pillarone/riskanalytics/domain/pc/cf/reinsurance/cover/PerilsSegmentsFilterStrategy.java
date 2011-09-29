@@ -68,7 +68,21 @@ public class PerilsSegmentsFilterStrategy extends AbstractParameterObject implem
 
     // todo(sku): think about deriving covered uw info indirectly
     public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source) {
-        source.clear();
-        return null;
+        List<UnderwritingInfoPacket> filteredUwInfo = new ArrayList<UnderwritingInfoPacket>();
+        List coveredSegments = getCoveredSegments();
+        for (UnderwritingInfoPacket uwInfo : source) {
+            if (coveredSegments.contains(uwInfo.segment())) {
+                filteredUwInfo.add(uwInfo);
+            }
+        }
+        if (filteredUwInfo.size() == 0) {
+            filteredUwInfo.add(new UnderwritingInfoPacket());
+            source.clear();
+        }
+        else {
+            source.clear();
+            source.addAll(filteredUwInfo);
+        }
+        return filteredUwInfo;
     }
 }

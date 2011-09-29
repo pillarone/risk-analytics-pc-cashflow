@@ -16,6 +16,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket;
@@ -308,7 +309,10 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         Set<IReinsuranceContract> contracts = new HashSet<IReinsuranceContract>();
         if (!inUnderwritingInfo.isEmpty()) {
             for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
-                int inceptionPeriod = underwritingInfo.getExposure().getInceptionPeriod();
+                int inceptionPeriod = currentPeriod;
+                if (underwritingInfo.getExposure() != null) {
+                    inceptionPeriod = underwritingInfo.getExposure().getInceptionPeriod();
+                }
                 IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, inceptionPeriod - currentPeriod);
                 contracts.add(contract);
                 contract.add(underwritingInfo);
@@ -374,7 +378,11 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             }
         }
         else {
-            outUnderwritingInfoGNPI.addAll(baseUnderwritingInfos);
+            for (UnderwritingInfoPacket underwritingInfo : baseUnderwritingInfos) {
+                UnderwritingInfoPacket clone = (UnderwritingInfoPacket) underwritingInfo.clone();
+                clone.setMarker(this);
+                outUnderwritingInfoGNPI.add(clone);
+            }
         }
     }
 

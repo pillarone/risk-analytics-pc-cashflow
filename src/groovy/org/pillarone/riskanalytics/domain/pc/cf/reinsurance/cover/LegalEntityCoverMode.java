@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public enum ActiveReMode {
+public enum LegalEntityCoverMode {
     INWARD, INWARDANDORIGINALCLAIMS, ORIGINALCLAIMS;
 
      public Object getConstructionString(Map parameters) {

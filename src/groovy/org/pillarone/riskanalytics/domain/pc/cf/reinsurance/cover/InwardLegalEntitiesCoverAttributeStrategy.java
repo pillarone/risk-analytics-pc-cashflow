@@ -19,17 +19,16 @@ public class InwardLegalEntitiesCoverAttributeStrategy extends AbstractParameter
         implements ICoverAttributeStrategy, ILegalEntityCover {
 
     private ComboBoxTableMultiDimensionalParameter legalEntities;
-    /** this property has no effect within the covered methods but is used for the wiring */
-    private ActiveReMode activeReMode;
+    private LegalEntityCoverMode legalEntityCoverMode;
 
     public IParameterObjectClassifier getType() {
-        return CoverAttributeStrategyType.INWARDLEGALENTITIES;
+        return CoverAttributeStrategyType.LEGALENTITIES;
     }
 
     public Map getParameters() {
         Map<String, Object> parameters = new HashMap<String, Object>(2);
         parameters.put("legalEntities", legalEntities);
-        parameters.put("activeReMode", activeReMode);
+        parameters.put("legalEntityCoverMode", legalEntityCoverMode);
         return parameters;
     }
 
@@ -56,9 +55,27 @@ public class InwardLegalEntitiesCoverAttributeStrategy extends AbstractParameter
         return filteredClaims;
     }
 
-    // todo(sku): think about deriving covered uw info indirectly
     public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source) {
-        source.clear();
-        return null;
+        List<UnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
+        List coveredLegalEntities = getCoveredLegalEntities();
+        for (UnderwritingInfoPacket uwInfo : source) {
+            if (coveredLegalEntities.contains(uwInfo.legalEntity())) {
+                filteredUnderwritingInfo.add(uwInfo);
+            }
+        }
+        if (filteredUnderwritingInfo.size() == 0) {
+            filteredUnderwritingInfo.add(new UnderwritingInfoPacket());
+            source.clear();
+        }
+        else {
+            source.clear();
+            source.addAll(filteredUnderwritingInfo);
+        }
+        return filteredUnderwritingInfo;
+    }
+
+    /** this property has no effect within the covered methods but is used for the wiring */
+    public LegalEntityCoverMode getLegalEntityCoverMode() {
+        return legalEntityCoverMode;
     }
 }
