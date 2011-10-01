@@ -26,6 +26,8 @@ import org.pillarone.riskanalytics.core.output.aggregation.PacketAggregatorRegis
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimPacketAggregator
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.YieldCurveTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceCollectingModeStrategy
+import org.pillarone.riskanalytics.core.output.CollectingModeFactory
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -99,6 +101,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.RESOURCE, "org.pillarone.riskanalytics.domain.pc.cf.exceptionResources")
 
         PacketAggregatorRegistry.registerAggregator(ClaimCashflowPacket, new ClaimPacketAggregator())
+        CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceCollectingModeStrategy())
     }
 
     def onChange = { event ->
