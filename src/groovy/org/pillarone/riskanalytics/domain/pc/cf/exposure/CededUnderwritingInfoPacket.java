@@ -58,7 +58,7 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
         cededPacket.original = packet.original;
         cededPacket.segment = packet.segment;
         cededPacket.reinsuranceContract = contract;
-        cededPacket.original = packet;
+//        cededPacket.original = packet;
         return cededPacket;
     }
 
@@ -73,11 +73,11 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
         cededPacket.sumInsured = 0;
         cededPacket.maxSumInsured = 0;
         cededPacket.exposure = packet.exposure;
-        cededPacket.original = packet;
+        cededPacket.original = packet.original;
         cededPacket.setRiskBand(packet.riskBand());
         cededPacket.segment = packet.segment;
         cededPacket.reinsuranceContract = contract;
-        cededPacket.original = packet;
+//        cededPacket.original = packet;
         cededPacket.setDate(packet.getDate());
         return cededPacket;
     }
@@ -101,28 +101,18 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
      * @param other
      * @return UnderwritingInfo packet with resulting fields
      */
-    public CededUnderwritingInfoPacket plus(CededUnderwritingInfoPacket other) {
-        if (other == null) return this;
-        sumInsured = (numberOfPolicies * sumInsured + other.numberOfPolicies * other.sumInsured);
-        numberOfPolicies += other.numberOfPolicies;
-        if (numberOfPolicies > 0) {
-            sumInsured = sumInsured / numberOfPolicies;
-        }
-        maxSumInsured = Math.max(maxSumInsured, other.maxSumInsured);
-        if (exposure != other.exposure) {
-            exposure = null;
-        }
-        if (original != other.original) {
-            original = null;
-        }
-        premiumPaid += other.premiumPaid;
-        premiumPaidFixed += other.premiumPaidFixed;
-        premiumPaidVariable += other.premiumPaidVariable;
-        premiumWritten += other.premiumWritten;
-        commission += other.commission;
-        commissionFixed += other.commissionFixed;
-        commissionVariable += other.commissionVariable;
+    public UnderwritingInfoPacket plus(UnderwritingInfoPacket other) {
+        super.plus(other);
+        premiumPaidFixed += ((CededUnderwritingInfoPacket) other).premiumPaidFixed;
+        premiumPaidVariable += ((CededUnderwritingInfoPacket) other).premiumPaidVariable;
+        commission += ((CededUnderwritingInfoPacket) other).commission;
+        commissionFixed += ((CededUnderwritingInfoPacket) other).commissionFixed;
+        commissionVariable += ((CededUnderwritingInfoPacket) other).commissionVariable;
         return this;
+    }
+
+    public CededUnderwritingInfoPacket plus(CededUnderwritingInfoPacket other) {
+        return (CededUnderwritingInfoPacket) plus((UnderwritingInfoPacket) other);
     }
 
     public void adjustCommissionProperties(double commissionFactor, double fixedCommissionFactor,

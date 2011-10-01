@@ -180,6 +180,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                 int row = parmUnderwritingPortions.getColumnByName(UNDERWRITING).indexOf(originName);
                 if (row > -1 && (dateOfDefault == null || dateOfDefault.isAfter(underwritingInfo.getDate()))) {
                     UnderwritingInfoPacket lobUnderwritingInfo = (UnderwritingInfoPacket) underwritingInfo.copy();
+                    lobUnderwritingInfo.setOriginal(lobUnderwritingInfo);
                     double segmentPortion = InputFormatConverter.getDouble(parmUnderwritingPortions.getValueAt(row + 1, portionColumn));
                     lobUnderwritingInfo.setPremiumWritten(lobUnderwritingInfo.getPremiumWritten() * segmentPortion);
                     lobUnderwritingInfo.setPremiumPaid(lobUnderwritingInfo.getPremiumPaid() * segmentPortion);

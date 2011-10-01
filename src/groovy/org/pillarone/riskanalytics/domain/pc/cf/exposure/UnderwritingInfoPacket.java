@@ -33,6 +33,7 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
 
     public UnderwritingInfoPacket() {
         super();
+        original = this;
     }
 
     /**

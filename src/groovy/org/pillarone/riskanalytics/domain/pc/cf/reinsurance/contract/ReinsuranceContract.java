@@ -16,7 +16,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket;
@@ -73,6 +72,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private IReinsuranceContractStrategy parmContractStrategy = ReinsuranceContractType.getDefault();
 
     private CounterPartyState counterPartyFactors;
+    private boolean isProportionalContract = false;
 
     @Override
     protected void doCalculation() {
@@ -249,6 +249,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     }
 
     private void initContracts(Set<IReinsuranceContract> contracts) {
+        initProportionalContract(contracts);
         for (IReinsuranceContract contract : contracts) {
             contract.initPeriod(inFactors);
             // todo(sku): the following lines are required only if initPeriodClaims() has a non trivial implementation for this contract, avoid!
@@ -365,6 +366,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         if (isProportionalContract()) {
             if (baseUnderwritingInfos.size() == outUnderwritingInfoCeded.size()) {
                 for (int i = 0; i < baseUnderwritingInfos.size(); i++) {
+                    // todo(sku): this implementation is dangerous: it assumes the same order of in and out uw info items
                     if (baseUnderwritingInfos.get(i).getOriginal().equals(outUnderwritingInfoCeded.get(i).getOriginal())) {
                         outUnderwritingInfoGNPI.add(baseUnderwritingInfos.get(i).getNet(outUnderwritingInfoCeded.get(i), true));
                     }
@@ -541,8 +543,12 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         this.outUnderwritingInfoGross = outUnderwritingInfoGross;
     }
 
+    public void initProportionalContract(Set<IReinsuranceContract> contracts) {
+        isProportionalContract = !contracts.isEmpty() && contracts.iterator().next() instanceof IPropReinsuranceContract;
+    }
+
     public boolean isProportionalContract() {
-        return parmContractStrategy instanceof IPropReinsuranceContract;
+        return isProportionalContract;
     }
 
     public PacketList<FactorsPacket> getInFactors() {
