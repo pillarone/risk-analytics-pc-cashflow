@@ -48,6 +48,7 @@ public class ReinstatementsAndLimitStore {
     }
 
     private double getReinstatementPremiumFactor(int reinstatementLevel) {
+        if (reinstatementPremiumFactors.size() == 0) return 0;
         reinstatementLevel = Math.min(reinstatementLevel, reinstatementPremiumFactors.size() - 1);
         return reinstatementPremiumFactors.get(reinstatementLevel);
     }
