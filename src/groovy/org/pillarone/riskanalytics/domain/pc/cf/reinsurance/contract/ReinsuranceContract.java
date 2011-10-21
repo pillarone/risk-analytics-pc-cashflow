@@ -11,11 +11,13 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimPacketAggregator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket;
@@ -90,6 +92,13 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         splitCededUnderwritingInfoByCounterParty();
         processUnderwritingInfoGNPI();
         discountClaims();
+        fillContractFinancials();
+    }
+
+    private void fillContractFinancials() {
+        ContractFinancialsPacket contractFinancials = new ContractFinancialsPacket(outClaimsCeded, outClaimsNet,
+                outUnderwritingInfoCeded, outUnderwritingInfoNet);
+        outContractFinancials.add(contractFinancials);
     }
 
     private void initSimulation() {

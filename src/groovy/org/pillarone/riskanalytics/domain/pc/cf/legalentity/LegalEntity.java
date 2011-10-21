@@ -14,6 +14,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPa
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IRecoveryPatternMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.constant.Rating;
@@ -53,6 +54,8 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoReinsurer = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+
+    private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
 
     private static final String PHASE_DEFAULT = "Phase Default";
     private static final String PHASE_GROSS = "Phase Gross";
@@ -120,8 +123,16 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
 
             outClaimsNet.add(ClaimUtils.calculateNetClaim(outClaimsGross, outClaimsCeded));
             outUnderwritingInfoNet.addAll(UnderwritingInfoUtils.calculateNetUnderwritingInfo(outUnderwritingInfoGross, outUnderwritingInfoCeded));
+            fillContractFinancials();
         }
     }
+
+    private void fillContractFinancials() {
+        ContractFinancialsPacket contractFinancials = new ContractFinancialsPacket(outClaimsCeded, outClaimsNet,
+                outUnderwritingInfoCeded, outUnderwritingInfoNet);
+        outContractFinancials.add(contractFinancials);
+    }
+
 
     private boolean avoidVoidClaimList(PacketList<ClaimCashflowPacket> packetList) {
         if (packetList.isEmpty()) {
@@ -183,6 +194,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
         setTransmitterPhaseOutput(outUnderwritingInfoReinsurer, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_NET);
+        setTransmitterPhaseOutput(outContractFinancials, PHASE_NET);
     }
 
     public Rating getParmRating() {
@@ -359,5 +371,13 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
 
     public void setInDefaultProbabilities(PacketList<DefaultProbabilities> inDefaultProbabilities) {
         this.inDefaultProbabilities = inDefaultProbabilities;
+    }
+
+    public PacketList<ContractFinancialsPacket> getOutContractFinancials() {
+        return outContractFinancials;
+    }
+
+    public void setOutContractFinancials(PacketList<ContractFinancialsPacket> outContractFinancials) {
+        this.outContractFinancials = outContractFinancials;
     }
 }

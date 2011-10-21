@@ -21,6 +21,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPa
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion;
@@ -65,6 +66,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
+    private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
 
     private ConstrainedString parmCompany = new ConstrainedString(ILegalEntityMarker.class, "");
     private ConstrainedMultiDimensionalParameter parmClaimsPortions = new ConstrainedMultiDimensionalParameter(
@@ -111,8 +113,15 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                     DiscountUtils.getDiscountedNetValuesAndFillOutChannels(outClaimsCeded, outClaimsNet, outDiscountedValues,
                             outNetPresentValues, periodStore, iterationScope);
                 }
+                fillContractFinancials();
             }
         }
+    }
+
+    private void fillContractFinancials() {
+        ContractFinancialsPacket contractFinancials = new ContractFinancialsPacket(outClaimsCeded, outClaimsNet,
+                outUnderwritingInfoCeded, outUnderwritingInfoNet);
+        outContractFinancials.add(contractFinancials);
     }
 
     private boolean defaultNotBeforeCurrentPeriodStart() {
@@ -257,7 +266,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         return isSenderWired(outDiscountedValues) && inFactors.size() > 0;
     }
 
-   public void allocateChannelsToPhases() {
+    public void allocateChannelsToPhases() {
         setTransmitterPhaseInput(inClaims, PHASE_GROSS);
         setTransmitterPhaseInput(inReserves, PHASE_GROSS);
         setTransmitterPhaseInput(inUnderwritingInfo, PHASE_GROSS);
@@ -274,6 +283,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         setTransmitterPhaseOutput(outNetPresentValues, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_NET);
+        setTransmitterPhaseOutput(outContractFinancials, PHASE_NET);
     }
 
     @Override
@@ -455,5 +465,13 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     public void setInLegalEntityDefault(PacketList<LegalEntityDefault> inLegalEntityDefault) {
         this.inLegalEntityDefault = inLegalEntityDefault;
+    }
+
+    public PacketList<ContractFinancialsPacket> getOutContractFinancials() {
+        return outContractFinancials;
+    }
+
+    public void setOutContractFinancials(PacketList<ContractFinancialsPacket> outContractFinancials) {
+        this.outContractFinancials = outContractFinancials;
     }
 }
