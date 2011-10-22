@@ -54,7 +54,6 @@ public class ContractFinancialsPacket extends MultiValuePacket {
         updateDependingProperties();
     }
 
-    @Override
     public void updateDependingProperties() {
         updateContractResult();
         updatePrimaryResult();
@@ -67,7 +66,7 @@ public class ContractFinancialsPacket extends MultiValuePacket {
 
     public void setCededPremium(double cededPremium) {
         this.cededPremium = cededPremium;
-        setResultingCosts();
+        updateContractResult();
     }
 
     public double getCededClaim() {
@@ -76,7 +75,7 @@ public class ContractFinancialsPacket extends MultiValuePacket {
 
     public void setCededClaim(double cededClaim) {
         this.cededClaim = cededClaim;
-        setResultingCosts();
+        updateContractResult();
     }
 
     public double getContractResult() {
@@ -88,9 +87,6 @@ public class ContractFinancialsPacket extends MultiValuePacket {
         contractResult = cededPremium + cededClaim + cededCommission;
     }
 
-    private void setResultingCosts() {
-        updateContractResult();
-    }
     public void setContractResult(double contractResult) {
         this.contractResult = contractResult;
     }
@@ -101,7 +97,7 @@ public class ContractFinancialsPacket extends MultiValuePacket {
 
     public void setCededCommission(double cededCommission) {
         this.cededCommission = cededCommission;
-        setResultingCosts();
+        updateContractResult();
         updatePrimaryResult();
     }
 
@@ -110,21 +106,12 @@ public class ContractFinancialsPacket extends MultiValuePacket {
         return cededLossRatio;
     }
 
-    public void setCededLossRatio(double cededLossRatio) {
-        updateCededLossRatio();
-    }
-
     private void updateCededLossRatio() {
         this.cededLossRatio = cededPremium == 0d ? 0d : cededClaim / cededPremium;
     }
 
     public double getPrimaryResult() {
-        setPrimaryResult(0d);
         return primaryResult;
-    }
-
-    public void setPrimaryResult(double primaryResult) {
-        updatePrimaryResult();
     }
 
     private void updatePrimaryResult() {
@@ -147,5 +134,13 @@ public class ContractFinancialsPacket extends MultiValuePacket {
     public void setNetClaim(double netClaim) {
         this.netClaim = netClaim;
         updatePrimaryResult();
+    }
+
+    public void setPrimaryResult(double primaryResult) {
+        this.primaryResult = primaryResult;
+    }
+
+    public void setCededLossRatio(double cededLossRatio) {
+        this.cededLossRatio = cededLossRatio;
     }
 }
