@@ -28,7 +28,7 @@ class GIRACompanyModelTests extends ModelTest {
         'Multi Company'
     }
 
-//    protected boolean shouldCompareResults() {
-//        true
-//    }
+    protected boolean shouldCompareResults() {
+        true
+    }
 }

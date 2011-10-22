@@ -41,8 +41,7 @@ class LegalEntities extends DynamicMultiPhaseComposedComponent {
     PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
 
     private static final String PHASE_DEFAULT = "Phase Default";
-    private static final String PHASE_GROSS = "Phase Gross";
-    private static final String PHASE_NET = "Phase Net";
+    private static final String PHASE_CALC = "Phase Calculation";
 
     public LegalEntity createDefaultSubComponent(){
         new LegalEntity(parmRating: Rating.NO_DEFAULT)
@@ -59,23 +58,23 @@ class LegalEntities extends DynamicMultiPhaseComposedComponent {
         setTransmitterPhaseInput(inDefaultProbabilities, PHASE_DEFAULT)
         setTransmitterPhaseOutput(outLegalEntityDefault, PHASE_DEFAULT)
 
-        setTransmitterPhaseInput(inClaims, PHASE_GROSS)
-        setTransmitterPhaseInput(inUnderwritingInfo, PHASE_GROSS)
-        setTransmitterPhaseOutput(outClaimsGross, PHASE_GROSS)
-        setTransmitterPhaseOutput(outUnderwritingInfoGross, PHASE_GROSS)
+        setTransmitterPhaseInput(inClaims, PHASE_CALC)
+        setTransmitterPhaseInput(inUnderwritingInfo, PHASE_CALC)
+        setTransmitterPhaseOutput(outClaimsGross, PHASE_CALC)
+        setTransmitterPhaseOutput(outUnderwritingInfoGross, PHASE_CALC)
 
-        setTransmitterPhaseInput(inClaimsCeded, PHASE_NET)
-        setTransmitterPhaseInput(inClaimsInward, PHASE_NET)
-        setTransmitterPhaseInput(inUnderwritingInfoCeded, PHASE_NET)
-        setTransmitterPhaseInput(inUnderwritingInfoInward, PHASE_NET)
-        setTransmitterPhaseOutput(outClaimsPrimaryInsurer, PHASE_NET)
-        setTransmitterPhaseOutput(outClaimsReinsurer, PHASE_NET)
-        setTransmitterPhaseOutput(outClaimsCeded, PHASE_NET)
-        setTransmitterPhaseOutput(outClaimsNet, PHASE_NET)
-        setTransmitterPhaseOutput(outUnderwritingInfoPrimeryInsurer, PHASE_NET)
-        setTransmitterPhaseOutput(outUnderwritingInfoReinsurer, PHASE_NET)
-        setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_NET)
-        setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_NET)
+        setTransmitterPhaseInput(inClaimsCeded, PHASE_CALC)
+        setTransmitterPhaseInput(inClaimsInward, PHASE_CALC)
+        setTransmitterPhaseInput(inUnderwritingInfoCeded, PHASE_CALC)
+        setTransmitterPhaseInput(inUnderwritingInfoInward, PHASE_CALC)
+        setTransmitterPhaseOutput(outClaimsPrimaryInsurer, PHASE_CALC)
+        setTransmitterPhaseOutput(outClaimsReinsurer, PHASE_CALC)
+        setTransmitterPhaseOutput(outClaimsCeded, PHASE_CALC)
+        setTransmitterPhaseOutput(outClaimsNet, PHASE_CALC)
+        setTransmitterPhaseOutput(outUnderwritingInfoPrimeryInsurer, PHASE_CALC)
+        setTransmitterPhaseOutput(outUnderwritingInfoReinsurer, PHASE_CALC)
+        setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_CALC)
+        setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_CALC)
     }
 
     @Override

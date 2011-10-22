@@ -58,8 +58,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
 
     private static final String PHASE_DEFAULT = "Phase Default";
-    private static final String PHASE_GROSS = "Phase Gross";
-    private static final String PHASE_NET = "Phase Net";
+    private static final String PHASE_CALC = "Phase Calculation";
 
     private IRandomNumberGenerator generator = RandomNumberGeneratorFactory.getBinomialGenerator();
     private IRandomNumberGenerator dateGenerator = RandomNumberGeneratorFactory.getUniformGenerator();
@@ -74,7 +73,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
             DateTime dateOfDefault = defaultOfReinsurer(inDefaultProbabilities.get(0).getDefaultProbability(parmRating));
             outLegalEntityDefault.add(new LegalEntityDefault(this, dateOfDefault));
         }
-        if (phase.equals(PHASE_GROSS)) {
+        if (phase.equals(PHASE_CALC)) {
             for (ClaimCashflowPacket grossClaim : inClaims) {
                 if (grossClaim.legalEntity().equals(this)) {
                     outClaimsPrimaryInsurer.add(grossClaim);
@@ -90,8 +89,6 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
             }
             avoidVoidUnderwritingInfoList(outUnderwritingInfoPrimeryInsurer);
             outUnderwritingInfoGross.addAll(outUnderwritingInfoPrimeryInsurer);
-        }
-        if (phase.equals(PHASE_NET)) {
             for (ClaimCashflowPacket cededClaim : inClaimsCeded) {
                 if (cededClaim.legalEntity().equals(this)) {
                     outClaimsCeded.add(cededClaim);
@@ -177,24 +174,24 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
         setTransmitterPhaseInput(inDefaultProbabilities, PHASE_DEFAULT);
         setTransmitterPhaseOutput(outLegalEntityDefault, PHASE_DEFAULT);
 
-        setTransmitterPhaseInput(inClaims, PHASE_GROSS);
-        setTransmitterPhaseInput(inUnderwritingInfo, PHASE_GROSS);
-        setTransmitterPhaseOutput(outClaimsGross, PHASE_NET);   // as it is filled in gross and net phase
-        setTransmitterPhaseOutput(outClaimsPrimaryInsurer, PHASE_NET);
-        setTransmitterPhaseOutput(outUnderwritingInfoGross, PHASE_NET);
-        setTransmitterPhaseOutput(outUnderwritingInfoPrimeryInsurer, PHASE_NET);
+        setTransmitterPhaseInput(inClaims, PHASE_CALC);
+        setTransmitterPhaseInput(inUnderwritingInfo, PHASE_CALC);
+        setTransmitterPhaseOutput(outClaimsGross, PHASE_CALC);
+        setTransmitterPhaseOutput(outClaimsPrimaryInsurer, PHASE_CALC);
+        setTransmitterPhaseOutput(outUnderwritingInfoGross, PHASE_CALC);
+        setTransmitterPhaseOutput(outUnderwritingInfoPrimeryInsurer, PHASE_CALC);
 
-        setTransmitterPhaseInput(inClaimsCeded, PHASE_NET);
-        setTransmitterPhaseInput(inClaimsInward, PHASE_NET);
-        setTransmitterPhaseInput(inUnderwritingInfoCeded, PHASE_NET);
-        setTransmitterPhaseInput(inUnderwritingInfoInward, PHASE_NET);
-        setTransmitterPhaseOutput(outClaimsReinsurer, PHASE_NET);
-        setTransmitterPhaseOutput(outClaimsCeded, PHASE_NET);
-        setTransmitterPhaseOutput(outClaimsNet, PHASE_NET);
-        setTransmitterPhaseOutput(outUnderwritingInfoReinsurer, PHASE_NET);
-        setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_NET);
-        setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_NET);
-        setTransmitterPhaseOutput(outContractFinancials, PHASE_NET);
+        setTransmitterPhaseInput(inClaimsCeded, PHASE_CALC);
+        setTransmitterPhaseInput(inClaimsInward, PHASE_CALC);
+        setTransmitterPhaseInput(inUnderwritingInfoCeded, PHASE_CALC);
+        setTransmitterPhaseInput(inUnderwritingInfoInward, PHASE_CALC);
+        setTransmitterPhaseOutput(outClaimsReinsurer, PHASE_CALC);
+        setTransmitterPhaseOutput(outClaimsCeded, PHASE_CALC);
+        setTransmitterPhaseOutput(outClaimsNet, PHASE_CALC);
+        setTransmitterPhaseOutput(outUnderwritingInfoReinsurer, PHASE_CALC);
+        setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_CALC);
+        setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_CALC);
+        setTransmitterPhaseOutput(outContractFinancials, PHASE_CALC);
     }
 
     public Rating getParmRating() {
