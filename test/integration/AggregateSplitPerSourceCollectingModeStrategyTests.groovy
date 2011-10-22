@@ -170,7 +170,7 @@ class AggregateSplitPerSourceCollectingModeStrategyTests extends ModelTest {
                 'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:outUnderwritingInfoCeded',
                 'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:outUnderwritingInfoNet',
         ]
-        assertEquals '# of paths correct', paths.size(), collectedPaths.size() - 16
+        assertEquals '# of paths correct', paths.size(), collectedPaths.size() - 15
 
         for (int i = 0; i < collectedPaths.size(); i++) {
             if (collectedPaths[i].pathName.contains("subcomponents")) continue
