@@ -98,14 +98,32 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
         double cededFactorPaid = cededFactor(grossClaim.getPaidCumulatedIndexed(), grossClaim.getPaidIncrementalIndexed(),
                 BasedOnClaimProperty.PAID, storage, stabilizationFactor);
 
-        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, cededFactorUltimate,
+        ClaimCashflowPacket cededClaim;
+
+        // PMO-1856: positive stabilization factor after reporting pattern end
+        if (stabilizationFactor != 1 && cededFactorReported == 0 && grossClaim.getReportedIncrementalIndexed() == 0) {
+            double cededReportedValue = cededValue(grossClaim.getReportedCumulatedIndexed(),
+                BasedOnClaimProperty.REPORTED, storage, stabilizationFactor);
+            cededClaim = ClaimUtils.getCededClaimReportedAbsolute(grossClaim, storage, cededFactorUltimate,
+                cededReportedValue, cededFactorPaid, false);
+        }
+        else {
+            cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, cededFactorUltimate,
                 cededFactorReported, cededFactorPaid, false);
+        }
         add(grossClaim, cededClaim);
         return cededClaim;
     }
 
     private double cededFactor(double claimPropertyCumulated, double claimPropertyIncremental,
                                BasedOnClaimProperty claimPropertyBase, ClaimStorage storage,
+                               double stabilizationFactor) {
+
+        double cededAfterAAL = cededValue(claimPropertyCumulated, claimPropertyBase, storage, stabilizationFactor);
+        return claimPropertyIncremental == 0 ? 0 : cededAfterAAL / claimPropertyIncremental;
+    }
+
+    private double cededValue(double claimPropertyCumulated, BasedOnClaimProperty claimPropertyBase, ClaimStorage storage,
                                double stabilizationFactor) {
         double aggregateLimitValue = periodLimit.get(claimPropertyBase, stabilizationFactor);
         if (aggregateLimitValue > 0) {
@@ -116,7 +134,7 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
             double incrementalCeded = Math.max(0, cededAfterAAD - storage.getCumulatedCeded(claimPropertyBase));
             double cededAfterAAL = aggregateLimitValue > incrementalCeded ? incrementalCeded : aggregateLimitValue;
             periodLimit.plus(-cededAfterAAL, claimPropertyBase);
-            return claimPropertyIncremental == 0 ? 0 : cededAfterAAL / claimPropertyIncremental;
+            return cededAfterAAL;
         }
         else {
             return 0;

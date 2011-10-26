@@ -207,6 +207,43 @@ public class ClaimUtils {
         return cededClaim;
     }
 
+    /**
+     *
+     * @param grossClaim
+     * @param storage
+     * @param scaleFactorUltimate
+     * @param cededValueReported
+     * @param scaleFactorPaid
+     * @param adjustExposureInfo
+     * @return
+     */
+    public static ClaimCashflowPacket getCededClaimReportedAbsolute(ClaimCashflowPacket grossClaim, ClaimStorage storage, double scaleFactorUltimate,
+                                                    double cededValueReported, double scaleFactorPaid, boolean adjustExposureInfo) {
+        if (scaleFactorPaid == -0) { scaleFactorPaid = 0; }
+        storage.lazyInitCededClaimRoot(scaleFactorUltimate);
+        double cededPaidIncremental = grossClaim.getPaidIncrementalIndexed() * scaleFactorPaid;
+        storage.update(cededPaidIncremental, BasedOnClaimProperty.PAID);
+        storage.update(cededValueReported, BasedOnClaimProperty.REPORTED);
+        double cededReserves = storage.cededReserves() + grossClaim.developmentResultCumulative() * scaleFactorUltimate;
+        ExposureInfo cededExposureInfo = adjustExposureInfo && grossClaim.getExposureInfo() != null
+                ? grossClaim.getExposureInfo().withScale(scaleFactorUltimate) : grossClaim.getExposureInfo();
+        ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(
+                storage.getReferenceCeded(),
+                grossClaim.getKeyClaim(),
+                avoidNegativeZero(grossClaim.ultimate() * scaleFactorUltimate),
+                storage.getReferenceCeded().getUltimate(),
+                avoidNegativeZero(storage.getIncrementalPaidCeded()),
+                avoidNegativeZero(storage.getCumulatedCeded(BasedOnClaimProperty.PAID)),
+                avoidNegativeZero(storage.getIncrementalReportedCeded()),
+                avoidNegativeZero(storage.getCumulatedCeded(BasedOnClaimProperty.REPORTED)),
+                avoidNegativeZero(cededReserves),
+                cededExposureInfo,
+                grossClaim.getUpdateDate(),
+                grossClaim.getUpdatePeriod());
+        applyMarkers(grossClaim, cededClaim);
+        return cededClaim;
+    }
+
     public static double avoidNegativeZero(double value) {
         return value == -0 ? 0 : value;
     }
