@@ -33,9 +33,6 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
     private ThresholdStore periodAttachmentPoint;
     private ThresholdStore periodLimit;
 
-//    private double factor;
-    private double totalCededPremium;
-
     // todo(sku): check if reset is required!
     private AggregateEventClaimsStorage aggregateClaimStorage;
 
@@ -66,7 +63,7 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
         }
         for (ClaimCashflowPacket grossClaim : grossClaims) {
             if (aggregateClaimStorage == null) {
-                aggregateClaimStorage = new AggregateEventClaimsStorage(grossClaim);
+                aggregateClaimStorage = new AggregateEventClaimsStorage();
             }
             aggregateClaimStorage.add(grossClaim);
         }
@@ -98,8 +95,13 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
     private void cededFactor(BasedOnClaimProperty claimPropertyBase, AggregateEventClaimsStorage storage) {
         double aggregateLimitValue = periodLimit.get(claimPropertyBase);
         if (aggregateLimitValue > 0) {
-            double claimPropertyCumulated = storage.getCumulated(claimPropertyBase);
-            double claimPropertyIncremental = storage.getIncremental(claimPropertyBase);
+            double claimPropertyIncremental;
+            if (claimPropertyBase.equals(BasedOnClaimProperty.ULTIMATE)) {
+                claimPropertyIncremental = storage.getCumulated(claimPropertyBase);
+            }
+            else {
+                claimPropertyIncremental = storage.getIncremental(claimPropertyBase);
+            }
             double attachmentPoint = periodAttachmentPoint.get(claimPropertyBase);
             double limit = periodLimit.get(claimPropertyBase);
             double ceded = Math.min(Math.max(-claimPropertyIncremental - attachmentPoint, 0), limit);

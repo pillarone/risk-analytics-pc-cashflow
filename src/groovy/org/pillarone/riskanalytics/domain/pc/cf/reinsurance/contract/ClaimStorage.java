@@ -52,19 +52,6 @@ public class ClaimStorage {
         throw new NotImplementedException(claimProperty.toString());
     }
 
-    /**
-     * @param cumulatedPaidCeded
-     * @return incrementalPaidCeded
-     * @deprecated as results are not correct for 'truncated' (AAL) cumulatedPaidCeded values
-     */
-    @Deprecated
-    public double updatePaid(double cumulatedPaidCeded) {
-        if (cumulatedPaidCeded == 0) return 0;
-        double incrementalPaid = cumulatedPaidCeded - this.cumulatedPaidCeded;
-        this.cumulatedPaidCeded = cumulatedPaidCeded;
-        inrementalPaids.add(incrementalPaid);
-        return incrementalPaid;
-    }
 
     public void update(double incrementalCeded, BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
@@ -89,18 +76,6 @@ public class ClaimStorage {
         return incrementalReportedCeded;
     }
 
-    /**
-     * @param cumulatedReportedCeded
-     * @return incrementalReportedCeded
-     */
-    @Deprecated
-    public double updateReported(double cumulatedReportedCeded) {
-        if (cumulatedReportedCeded == 0) return 0;
-        double incrementalReported = cumulatedReportedCeded - this.cumulatedReportedCeded;
-        this.cumulatedReportedCeded = cumulatedReportedCeded;
-        inrementalReporteds.add(incrementalReported);
-        return incrementalReported;
-    }
 
     public double cededReserves() {
         return referenceCeded.getUltimate() - cumulatedPaidCeded;

@@ -41,7 +41,7 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
     protected ThresholdStore periodDeductible;
     protected ThresholdStore periodLimit;
 
-    private IStabilizationStrategy stabilization;
+    protected IStabilizationStrategy stabilization;
 
     /**
      * All provided values have to be absolute! Scaling is done within the parameter strategy.
