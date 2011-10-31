@@ -102,12 +102,14 @@ public class ClaimStorage {
         double indexFactor = stabilization.indexFactor(claim, periodCounter);
         double claimPaidIncremental = claim.getPaidIncrementalIndexed() / indexFactor;
         cumulatedStabilizedValue += claimPaidIncremental;
-        if (stabilization.basedOnPaid()) {
+        if (cumulatedStabilizedValue != 0 && stabilization.basedOnPaid()) {
             return claim.getPaidCumulatedIndexed() / cumulatedStabilizedValue;
         }
         else if (stabilization.basedOnReported()) {
             double outstanding = claim.outstandingIndexed() / indexFactor;
-            return (claim.getPaidCumulatedIndexed() + claim.outstandingIndexed()) / (cumulatedStabilizedValue + outstanding);
+            if (outstanding + cumulatedStabilizedValue != 0) {
+                return (claim.getPaidCumulatedIndexed() + claim.outstandingIndexed()) / (cumulatedStabilizedValue + outstanding);
+            }
         }
         return 1;
     }

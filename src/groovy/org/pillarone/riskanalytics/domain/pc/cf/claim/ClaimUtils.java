@@ -90,7 +90,13 @@ public class ClaimUtils {
                         latestReserves = claim.reservedIndexed();
                     }
                 }
-                ClaimRoot baseClaim = new ClaimRoot(ultimate, claims.get(0).getBaseClaim());
+                IClaimRoot baseClaim = null;
+                if (claims.get(0).getBaseClaim() instanceof GrossClaimRoot) {
+                    baseClaim = new GrossClaimRoot((GrossClaimRoot) claims.get(0).getBaseClaim());
+                }
+                else {
+                    baseClaim = new ClaimRoot(ultimate, claims.get(0).getBaseClaim());
+                }
                 int updatePeriod = 0;
                 if (claims.get(0).getUpdatePeriod() != null) {
                     updatePeriod = claims.get(0).getUpdatePeriod();

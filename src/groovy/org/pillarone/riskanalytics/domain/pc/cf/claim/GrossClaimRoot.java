@@ -41,6 +41,10 @@ public final class GrossClaimRoot implements IClaimRoot {
      */
     private int childCounter;
 
+    public GrossClaimRoot(GrossClaimRoot original) {
+        this(original.claimRoot.clone(), original.payoutPattern.clone(), original.reportingPattern.clone());
+    }
+
     public GrossClaimRoot(ClaimRoot claimRoot, PatternPacket payoutPattern, PatternPacket reportingPattern) {
         this(payoutPattern, reportingPattern);
         this.claimRoot = claimRoot;

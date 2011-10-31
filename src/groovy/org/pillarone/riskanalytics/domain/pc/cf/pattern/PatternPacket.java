@@ -106,7 +106,7 @@ public class PatternPacket extends Packet implements Cloneable {
                 previousDate = date;
                 previousCumulativeValue = cumulativeValues.get(devPeriod);
             }
-            else if (date.isAfter(periodCounter.getCurrentPeriodEnd())) {
+            else if (!date.isBefore(periodCounter.getCurrentPeriodEnd())) {
                 previousBeforeLastElement = true;
                 break;
             }

@@ -24,7 +24,7 @@ iteration	period	valueIndex	path	field	value
 1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	199.7198712452921
 1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	42.79711526684832
 1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	0.0
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	-49.127181957682296
 1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
 1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	0.0
 1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	0.0
@@ -57,7 +57,7 @@ iteration	period	valueIndex	path	field	value
 2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	199.7198712452921
 2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	42.79711526684832
 2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	0.0
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	-49.127181957682296
 2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
 2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	0.0
 2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	0.0
@@ -90,7 +90,7 @@ iteration	period	valueIndex	path	field	value
 3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	199.7198712452921
 3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	42.79711526684832
 3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	0.0
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	-49.127181957682296
 3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
 3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	0.0
 3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	0.0
@@ -123,7 +123,7 @@ iteration	period	valueIndex	path	field	value
 4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	199.7198712452921
 4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	42.79711526684832
 4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	0.0
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	-49.127181957682296
 4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
 4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	0.0
 4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	0.0
@@ -156,7 +156,7 @@ iteration	period	valueIndex	path	field	value
 5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	199.7198712452921
 5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	42.79711526684832
 5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	0.0
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	-49.127181957682296
 5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
 5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	0.0
 5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	0.0
@@ -189,7 +189,7 @@ iteration	period	valueIndex	path	field	value
 6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	199.7198712452921
 6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	42.79711526684832
 6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	0.0
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	-49.127181957682296
 6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
 6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	0.0
 6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	0.0
@@ -222,7 +222,7 @@ iteration	period	valueIndex	path	field	value
 7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	199.7198712452921
 7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	42.79711526684832
 7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	0.0
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	-49.127181957682296
 7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
 7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	0.0
 7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	0.0
@@ -255,7 +255,7 @@ iteration	period	valueIndex	path	field	value
 8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	199.7198712452921
 8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	42.79711526684832
 8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	0.0
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	-49.127181957682296
 8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
 8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	0.0
 8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	0.0
@@ -288,7 +288,7 @@ iteration	period	valueIndex	path	field	value
 9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	199.7198712452921
 9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	42.79711526684832
 9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	0.0
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	-49.127181957682296
 9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
 9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	0.0
 9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	0.0
@@ -321,7 +321,7 @@ iteration	period	valueIndex	path	field	value
 10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	199.7198712452921
 10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	42.79711526684832
 10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	0.0
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	-49.127181957682296
 10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
 10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	0.0
 10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	0.0
