@@ -32,7 +32,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.1.20"
+    def version = "0.1.21"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
