@@ -280,6 +280,11 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
      */
     private void calculateCededClaims(IPeriodCounter periodCounter) {
         List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
+        Map<IClaimRoot, IClaimRoot> netBaseClaimPerGrossClaim = (Map<IClaimRoot, IClaimRoot>) periodStore.get(NET_BASE_CLAIMS);
+        if (netBaseClaimPerGrossClaim == null) {
+            netBaseClaimPerGrossClaim = new HashMap<IClaimRoot, IClaimRoot>();
+            periodStore.put(NET_BASE_CLAIMS, netBaseClaimPerGrossClaim);
+        }
         for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
             ClaimCashflowPacket cededClaim = grossClaim.getCededClaim(periodCounter);
             double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(grossClaim.getUpdateDate());
@@ -293,10 +298,19 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
                 outClaimsGross.add(grossClaim.getGrossClaim());
             }
             if (isSenderWired(outClaimsNet)) {
-                ClaimCashflowPacket netClaim = ClaimUtils.getNetClaim(grossClaim.getGrossClaim(), cededClaim);
+                IClaimRoot netBaseClaim = netBaseClaimPerGrossClaim.get(grossClaim.getGrossClaim().getKeyClaim());
+                ClaimCashflowPacket netClaim;
+                if (netBaseClaim != null) {
+                    netClaim = ClaimUtils.getNetClaim(grossClaim.getGrossClaim(), cededClaim, netBaseClaim);
+                }
+                else {
+                    netClaim = ClaimUtils.getNetClaim(grossClaim.getGrossClaim(), cededClaim);
+                    netBaseClaimPerGrossClaim.put(grossClaim.getGrossClaim().getKeyClaim(), netClaim.getBaseClaim());
+                }
                 outClaimsNet.add(netClaim);
             }
         }
+        periodStore.put(NET_BASE_CLAIMS, netBaseClaimPerGrossClaim, 1);
     }
 
     private void splitCededClaimsByCounterParty() {
@@ -412,6 +426,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private static final String REINSURANCE_CONTRACT = "reinsurance contract";
     private static final String GROSS_CLAIMS = "gross claims";
     private static final String CLAIM_HISTORY = "claim history";
+    private static final String NET_BASE_CLAIMS = "net base claims";
 
     public IterationScope getIterationScope() {
         return iterationScope;
