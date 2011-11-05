@@ -44,7 +44,7 @@ public class ReinstatementsAndLimitStore {
     }
 
     private double usedLimit() {
-        return limitStore.threshold() - limitStore.get(BasedOnClaimProperty.PAID);
+        return limitStore.thresholdStabilized() - limitStore.get(BasedOnClaimProperty.PAID);
     }
 
     private double getReinstatementPremiumFactor(int reinstatementLevel) {

@@ -11,6 +11,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 public class ThresholdStore {
 
     private double threshold;
+    private double thresholdStabilizedCumulated;
 
     private double thresholdUltimate;
     private double thresholdReported;
@@ -22,6 +23,7 @@ public class ThresholdStore {
     }
 
     public void init() {
+        thresholdStabilizedCumulated = threshold;
         thresholdUltimate = threshold;
         thresholdReported = threshold;
         thresholdPaid = threshold;
@@ -41,16 +43,19 @@ public class ThresholdStore {
 
     public double get(BasedOnClaimProperty claimProperty, double stabilizationFactor) {
         if (stabilizationFactor == 1) return get(claimProperty);
-        double thresholdAdjusted = threshold * stabilizationFactor;
+        double thresholdStabilized = threshold * stabilizationFactor;
         switch (claimProperty) {
             case ULTIMATE:
-                thresholdUltimate = thresholdAdjusted - (threshold - thresholdUltimate);
+                thresholdUltimate = thresholdStabilized - (threshold - thresholdUltimate);
                 return thresholdUltimate;
             case REPORTED:
-                thresholdReported = thresholdAdjusted - (threshold - thresholdReported);
+                thresholdReported = thresholdStabilized - (threshold - thresholdReported);
                 return thresholdReported;
             case PAID:
-                thresholdPaid = thresholdAdjusted - (threshold - thresholdPaid);
+                double oldThresholdPaid = thresholdPaid;
+                thresholdPaid = thresholdStabilized - (threshold - thresholdPaid);
+                // updated for paid only as this property is used for reinstatement premium calculation
+                thresholdStabilizedCumulated += thresholdPaid - oldThresholdPaid;
                 return thresholdPaid;
         }
         throw new NotImplementedException(claimProperty.toString());
@@ -85,6 +90,7 @@ public class ThresholdStore {
     }
 
     public double threshold() { return threshold; }
+    public double thresholdStabilized() { return thresholdStabilizedCumulated; }
 
 
     @Override
