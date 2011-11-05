@@ -29,10 +29,12 @@ import org.pillarone.riskanalytics.domain.pc.cf.discounting.YieldCurveTableConst
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceCollectingModeStrategy
 import org.pillarone.riskanalytics.core.output.CollectingModeFactory
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.XLStrategyValidator
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacketAggregator
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.1.21"
+    def version = "0.1.22"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -104,6 +106,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.RESOURCE, "org.pillarone.riskanalytics.domain.pc.cf.exceptionResources")
 
         PacketAggregatorRegistry.registerAggregator(ClaimCashflowPacket, new ClaimPacketAggregator())
+        PacketAggregatorRegistry.registerAggregator(UnderwritingInfoPacket, new UnderwritingInfoPacketAggregator())
         CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceCollectingModeStrategy())
     }
 

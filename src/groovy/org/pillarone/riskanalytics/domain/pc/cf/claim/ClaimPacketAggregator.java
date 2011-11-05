@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class ClaimPacketAggregator implements IPacketAggregator<ClaimCashflowPacket> {
 
-    public ClaimCashflowPacket aggregate(PacketList packetList) {
+    public ClaimCashflowPacket aggregate(PacketList<ClaimCashflowPacket> packetList) {
         List<ClaimCashflowPacket> aggregateClaimsByBaseClaim = ClaimUtils.aggregateByBaseClaim(packetList);
         return ClaimUtils.sum(aggregateClaimsByBaseClaim, true);
     }

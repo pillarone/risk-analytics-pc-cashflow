@@ -104,11 +104,13 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
      */
     public UnderwritingInfoPacket plus(UnderwritingInfoPacket other) {
         super.plus(other);
-        premiumPaidFixed += ((CededUnderwritingInfoPacket) other).premiumPaidFixed;
-        premiumPaidVariable += ((CededUnderwritingInfoPacket) other).premiumPaidVariable;
-        commission += ((CededUnderwritingInfoPacket) other).commission;
-        commissionFixed += ((CededUnderwritingInfoPacket) other).commissionFixed;
-        commissionVariable += ((CededUnderwritingInfoPacket) other).commissionVariable;
+        if (other instanceof CededUnderwritingInfoPacket) {
+            premiumPaidFixed += ((CededUnderwritingInfoPacket) other).premiumPaidFixed;
+            premiumPaidVariable += ((CededUnderwritingInfoPacket) other).premiumPaidVariable;
+            commission += ((CededUnderwritingInfoPacket) other).commission;
+            commissionFixed += ((CededUnderwritingInfoPacket) other).commissionFixed;
+            commissionVariable += ((CededUnderwritingInfoPacket) other).commissionVariable;
+        }
         return this;
     }
 
