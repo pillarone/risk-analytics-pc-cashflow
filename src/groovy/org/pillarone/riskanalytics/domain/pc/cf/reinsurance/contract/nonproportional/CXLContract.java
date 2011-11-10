@@ -94,8 +94,8 @@ public class CXLContract extends XLContract {
                 double cededFactorReported = eventStorage.getCededFactorReported();
                 double cededFactorPaid = eventStorage.getCededFactorPaid();
 
-                ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, cededFactorUltimate,
-                        cededFactorReported, cededFactorPaid, false);
+                ClaimCashflowPacket cededClaim = cededClaimWithAdjustedReported(grossClaim, storage, cededFactorUltimate,
+                        stabilizationFactor, cededFactorReported, cededFactorPaid);
                 add(grossClaim, cededClaim);
                 return cededClaim;
             }

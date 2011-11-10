@@ -99,19 +99,27 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
                 BasedOnClaimProperty.PAID, storage, stabilizationFactor);
 
         ClaimCashflowPacket cededClaim;
+        cededClaim = cededClaimWithAdjustedReported(grossClaim, storage, cededFactorUltimate, stabilizationFactor,
+                cededFactorReported, cededFactorPaid);
 
-        // PMO-1856: positive stabilization factor after reporting pattern end
+        add(grossClaim, cededClaim);
+        return cededClaim;
+    }
+
+    protected ClaimCashflowPacket cededClaimWithAdjustedReported(ClaimCashflowPacket grossClaim, ClaimStorage storage,
+                                                               double cededFactorUltimate, double stabilizationFactor,
+                                                               double cededFactorReported, double cededFactorPaid) {
+        ClaimCashflowPacket cededClaim;// PMO-1856: positive stabilization factor after reporting pattern end
         if (stabilizationFactor != 1 && cededFactorReported == 0 && grossClaim.getReportedIncrementalIndexed() == 0) {
             double cededReportedValue = cededValue(grossClaim.getReportedCumulatedIndexed(),
                 BasedOnClaimProperty.REPORTED, storage, stabilizationFactor);
             cededClaim = ClaimUtils.getCededClaimReportedAbsolute(grossClaim, storage, cededFactorUltimate,
-                cededReportedValue, cededFactorPaid, false);
+                    cededReportedValue, cededFactorPaid, false);
         }
         else {
             cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, cededFactorUltimate,
                 cededFactorReported, cededFactorPaid, false);
         }
-        add(grossClaim, cededClaim);
         return cededClaim;
     }
 
