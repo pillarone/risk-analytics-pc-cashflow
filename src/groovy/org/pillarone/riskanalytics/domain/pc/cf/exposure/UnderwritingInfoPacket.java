@@ -94,7 +94,7 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
             case NUMBER_OF_POLICIES:
                 return numberOfPolicies;
             case SUM_INSURED:
-                return sumInsured;
+                return getSumInsured();
         }
         return 0;
     }
@@ -241,7 +241,11 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
     }
 
     public void setExposure(ExposureInfo exposure) {
-        this.exposure = exposure;
+        if (exposure != null) {
+            sumInsured = exposure.getSumInsured();
+            this.exposure = exposure;
+            maxSumInsured = exposure.getMaxSumInsured();
+        }
     }
 
     public UnderwritingInfoPacket getOriginal() {

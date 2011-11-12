@@ -40,7 +40,7 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
             ["quotaShare": 0d, "limit": LimitStrategyType.getDefault(),
              'commission': CommissionStrategyType.getNoCommission()])
     public static final ReinsuranceContractType SURPLUS = new ReinsuranceContractType("surplus", "SURPLUS",
-            ["retention": 0d, "lines": 0d, "defaultCededLossShare": 0d])
+            ["retention": 0d, "lines": 0d, "defaultCededLossShare": 0d, 'commission': CommissionStrategyType.getNoCommission()])
     public static final ReinsuranceContractType WXL = new ReinsuranceContractType("wxl", "WXL", [
             "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d, "aggregateLimit": 0d,
             "stabilization": StabilizationStrategyType.getDefault(),
@@ -81,7 +81,7 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
             "slAttachmentPoint": 0d, "slLimit": 0d, "goldorakSlThreshold": 0d,
             "reinstatementPremiums": new TableMultiDimensionalParameter([0.0], ['Reinstatement Premium'])])
 
-    public static final all = [QUOTASHARE, /*SURPLUS,*/ WXL, CXL,
+    public static final all = [QUOTASHARE, SURPLUS, WXL, CXL,
             WCXL, STOPLOSS, TRIVIAL/*, LOSSPORTFOLIOTRANSFER, ADVERSEDEVELOPMENTCOVER, GOLDORAK*/]
 
     protected static Map types = [:]

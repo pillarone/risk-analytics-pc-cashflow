@@ -45,6 +45,6 @@ public class SurplusContractStrategy extends AbstractParameterObject implements 
 
     public static final String RETENTION = "retention";
     public static final String LINES = "lines";
-    public static final String DEFAULTCEDEDLOSSSHARE = "default ceded loss share";
+    public static final String DEFAULTCEDEDLOSSSHARE = "defaultCededLossShare";
     public static final String COMMISSION = "commission";
 }

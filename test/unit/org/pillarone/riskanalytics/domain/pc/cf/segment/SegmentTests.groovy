@@ -32,6 +32,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.DeterministicIndexTable
 import org.pillarone.riskanalytics.core.wiring.WiringUtils
 import org.pillarone.riskanalytics.core.wiring.WireCategory
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountedValuesPacket
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -121,16 +123,20 @@ class SegmentTests extends GroovyTestCase {
 
         RiskBands marineRisk = new RiskBands(name: 'marine')
         UnderwritingInfoPacket marineUwInfo600 = new UnderwritingInfoPacket(
-                premiumWritten: 600, premiumPaid: 500, numberOfPolicies: 10, sumInsured: 10000, maxSumInsured: 15000, riskBand: marineRisk
+                premiumWritten: 600, premiumPaid: 500, numberOfPolicies: 10, riskBand: marineRisk
         )
+        marineUwInfo600.exposure = new ExposureInfo(new DateTime(2011, 1, 1, 0,0,0,0), 0, 10000, 15000, ExposureBase.ABSOLUTE)
+
         RiskBands motorRisk = new RiskBands(name: 'motor')
         UnderwritingInfoPacket motorUwInfo450 = new UnderwritingInfoPacket(
-                premiumWritten: 450, premiumPaid: 400, numberOfPolicies: 5, sumInsured: 1000, maxSumInsured: 2000, riskBand: motorRisk
+                premiumWritten: 450, premiumPaid: 400, numberOfPolicies: 5, riskBand: motorRisk
         )
+        motorUwInfo450.exposure = new ExposureInfo(new DateTime(2011, 1, 1, 0,0,0,0), 0, 1000, 2000, ExposureBase.ABSOLUTE)
         RiskBands paRisk = new RiskBands(name: 'pa')
         UnderwritingInfoPacket paUwInfo1000 = new UnderwritingInfoPacket(
-                premiumWritten: 1000, premiumPaid: 800, numberOfPolicies: 20, sumInsured: 1500, maxSumInsured: 5000, riskBand: paRisk
+                premiumWritten: 1000, premiumPaid: 800, numberOfPolicies: 20, riskBand: paRisk
         )
+        paUwInfo1000.exposure = new ExposureInfo(new DateTime(2011, 1, 1, 0,0,0,0), 0, 1500, 5000, ExposureBase.ABSOLUTE)
 
         segment.inClaims << marine1000 << motor500 << pa400
         segment.inUnderwritingInfo << marineUwInfo600 << motorUwInfo450 << paUwInfo1000

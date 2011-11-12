@@ -79,4 +79,16 @@ public class ExposureInfo {
     public void setExposureDefinition(ExposureBase exposureDefinition) {
         this.exposureDefinition = exposureDefinition;
     }
+
+    @Override
+    public String toString() {
+        String separator = ", ";
+        StringBuilder result = new StringBuilder();
+        result.append(sumInsured);
+        result.append(separator);
+        result.append(maxSumInsured);
+        result.append(separator);
+        result.append(exposureDefinition);
+        return result.toString();
+    }
 }
