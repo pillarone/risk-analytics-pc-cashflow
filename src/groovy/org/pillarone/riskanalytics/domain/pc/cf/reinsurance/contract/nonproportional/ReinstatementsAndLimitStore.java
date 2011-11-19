@@ -23,11 +23,10 @@ public class ReinstatementsAndLimitStore {
         maxReinstatements =  limit == 0d ? 0d : aggregateLimit / limit - 1;
     }
 
-    // todo(sku): ask awa if incremental calculation is necessary?
     public double calculateReinstatementPremiumFactor() {
         double usedReinstatements = usedReinstatmentsCumulated();
         double totalReinstatementPremiumFactor = 0d;
-        for (int i = 1; i <= usedReinstatements; i++) {
+        for (int i = 0; i < Math.floor(usedReinstatements); i++) {
             totalReinstatementPremiumFactor += getReinstatementPremiumFactor(i);
         }
         double partialReinstatement = usedReinstatements - Math.floor(usedReinstatements);
