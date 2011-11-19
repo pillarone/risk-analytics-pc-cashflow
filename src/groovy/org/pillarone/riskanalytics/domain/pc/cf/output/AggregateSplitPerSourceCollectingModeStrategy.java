@@ -73,7 +73,8 @@ public class AggregateSplitPerSourceCollectingModeStrategy implements ICollectin
 //                  todo(sku): remove
             }
         } else {
-            throw new NotImplementedException("AggregateSplitPerSourceCollectingModeStrategy.notImplemented");
+            String notImplemented = ResourceBundle.getBundle(RESOURCE_BUNDLE).getString("AggregateSplitPerSourceCollectingModeStrategy.notImplemented");
+            throw new NotImplementedException(notImplemented);
         }
         return null;
     }
@@ -160,30 +161,6 @@ public class AggregateSplitPerSourceCollectingModeStrategy implements ICollectin
                 addToMap(claim, lobPath, resultMap);
                 addToMap(claim, perilPath, resultMap);
             }
-//            if (claim.sender instanceof SegmentFilter) {
-//                addToMap(claim, perilPath, resultMap);
-//                addToMap(claim, lobPath, resultMap);
-//                addToMap(claim, contractPath, resultMap);
-//                if (perilPath != null && lobPath != null) {
-//                    PathMapping lobPerilPath = getPathMapping(claim, claim.segment(), SEGMENTS, claim.peril(), PERILS);
-//                    addToMap(claim, lobPerilPath, resultMap);
-//                }
-//                if (perilPath != null && contractPath != null) {
-//                    PathMapping contractPerilPath = getPathMapping(claim, claim.reinsuranceContract(), CONTRACTS,
-//                            claim.peril(), PERILS);
-//                    addToMap(claim, contractPerilPath, resultMap);
-//                }
-//                if (lobPath != null && contractPath != null) {
-//                    PathMapping lobContractPath = getPathMapping(claim, claim.segment(), SEGMENTS,
-//                            claim.reinsuranceContract(), CONTRACTS);
-//                    addToMap(claim, lobContractPath, resultMap);
-//                }
-//                if (perilPath != null && lobPath != null && contractPath != null) {
-//                    PathMapping lobContractPerilPath = getPathMapping(claim, claim.segment(), SEGMENTS,
-//                            claim.reinsuranceContract(), CONTRACTS, claim.peril(), PERILS);
-//                    addToMap(claim, lobContractPerilPath, resultMap);
-//                }
-//            }
         }
         return resultMap;
     }
@@ -261,16 +238,6 @@ public class AggregateSplitPerSourceCollectingModeStrategy implements ICollectin
             if (underwritingInfo.sender instanceof IReinsuranceContractMarker) {
                 addToMap(underwritingInfo, lobPath, resultMap);
             }
-//            if (underwritingInfo.sender instanceof SegmentFilter) {
-//                addToMap(underwritingInfo, contractPath, resultMap);
-//                addToMap(underwritingInfo, lobPath, resultMap);
-//                if (lobPath != null && contractPath != null) {
-//                    PathMapping lobContractPath = getPathMapping(underwritingInfo,
-//                            underwritingInfo.segment(), SEGMENTS,
-//                            underwritingInfo.reinsuranceContract(), CONTRACTS);
-//                    addToMap(underwritingInfo, lobContractPath, resultMap);
-//                }
-//            }
         }
         return resultMap;
     }
