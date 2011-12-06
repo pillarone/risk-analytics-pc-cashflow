@@ -24,5 +24,5 @@ public interface IClaimRoot {
     public boolean hasTrivialPayout();
     public boolean hasIBNR();
 
-    public ClaimRoot withScale(double scaleFactor);
+    public IClaimRoot withScale(double scaleFactor);
 }

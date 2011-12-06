@@ -51,7 +51,7 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
         this(ultimate, claimRoot.getClaimType(), claimRoot.getExposureStartDate(), claimRoot.getOccurrenceDate(), claimRoot.getEvent());
     }
 
-    public ClaimRoot withScale(double scaleFactor) {
+    public IClaimRoot withScale(double scaleFactor) {
         ClaimRoot packet = (ClaimRoot) clone();
         packet.ultimate = ultimate * scaleFactor;
         return packet;

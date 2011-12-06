@@ -240,8 +240,9 @@ public final class GrossClaimRoot implements IClaimRoot {
         return reportingPattern != null && !reportingPattern.isTrivial();
     }
 
-    public ClaimRoot withScale(double scaleFactor) {
-        return claimRoot.withScale(scaleFactor);
+    public IClaimRoot withScale(double scaleFactor) {
+        return new GrossClaimRoot((ClaimRoot) claimRoot.withScale(scaleFactor), payoutPattern, reportingPattern);
+//        return claimRoot.withScale(scaleFactor);
     }
 
     @Override
