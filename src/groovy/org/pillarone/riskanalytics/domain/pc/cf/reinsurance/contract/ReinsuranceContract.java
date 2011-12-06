@@ -338,8 +338,10 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
                     inceptionPeriod = underwritingInfo.getExposure().getInceptionPeriod();
                 }
                 IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, inceptionPeriod - currentPeriod);
-                contracts.add(contract);
-                contract.add(underwritingInfo);
+                if (contract != null) {
+                    contracts.add(contract);
+                    contract.add(underwritingInfo);
+                }
             }
         }
         else {
