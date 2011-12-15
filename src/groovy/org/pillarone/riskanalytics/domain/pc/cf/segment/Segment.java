@@ -120,11 +120,15 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     }
 
     private void fillContractFinancials() {
-        ContractFinancialsPacket contractFinancials = new ContractFinancialsPacket(outClaimsCeded, outClaimsNet,
+        if (isSenderWired(outContractFinancials)) {
+            ContractFinancialsPacket contractFinancials = new ContractFinancialsPacket(outClaimsCeded, outClaimsNet,
                 outUnderwritingInfoCeded, outUnderwritingInfoNet);
-        outContractFinancials.add(contractFinancials);
-        FinancialsPacket financials = new FinancialsPacket(outUnderwritingInfoNet, outUnderwritingInfoCeded, outClaimsNet);
-        outNetFinancials.add(financials);
+            outContractFinancials.add(contractFinancials);
+        }
+        else if (isSenderWired(outNetFinancials)) {
+            FinancialsPacket financials = new FinancialsPacket(outUnderwritingInfoNet, outUnderwritingInfoCeded, outClaimsNet);
+            outNetFinancials.add(financials);
+        }
     }
 
     private boolean defaultNotBeforeCurrentPeriodStart() {

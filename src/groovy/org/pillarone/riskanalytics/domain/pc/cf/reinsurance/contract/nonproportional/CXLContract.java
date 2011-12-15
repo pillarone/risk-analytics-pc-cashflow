@@ -118,7 +118,7 @@ public class CXLContract extends XLContract {
             cededFactor(BasedOnClaimProperty.ULTIMATE, storage, stabilizationFactor);
             cededFactor(BasedOnClaimProperty.REPORTED, storage, stabilizationFactor);
             cededFactor(BasedOnClaimProperty.PAID, storage, stabilizationFactor);
-            storage.printFactors();
+//            storage.printFactors();
             return storage;
     }
 
