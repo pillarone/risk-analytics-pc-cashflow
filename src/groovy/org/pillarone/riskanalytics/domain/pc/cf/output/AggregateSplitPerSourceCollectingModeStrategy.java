@@ -12,6 +12,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.ComposedMarkerKey;
+import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
@@ -161,6 +162,11 @@ public class AggregateSplitPerSourceCollectingModeStrategy implements ICollectin
                 addToMap(claim, lobPath, resultMap);
                 addToMap(claim, perilPath, resultMap);
             }
+            if (claim.sender instanceof ILegalEntityMarker) {
+                addToMap(claim, perilPath, resultMap);
+                addToMap(claim, contractPath, resultMap);
+                addToMap(claim, lobPath, resultMap);
+            }
         }
         return resultMap;
     }
@@ -236,6 +242,10 @@ public class AggregateSplitPerSourceCollectingModeStrategy implements ICollectin
                 addToMap(underwritingInfo, contractPath, resultMap);
             }
             if (underwritingInfo.sender instanceof IReinsuranceContractMarker) {
+                addToMap(underwritingInfo, lobPath, resultMap);
+            }
+            if (underwritingInfo.sender instanceof ILegalEntityMarker) {
+                addToMap(underwritingInfo, contractPath, resultMap);
                 addToMap(underwritingInfo, lobPath, resultMap);
             }
         }
