@@ -15,6 +15,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IRecoveryPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.constant.Rating;
@@ -56,6 +57,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
 
     private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
+    private PacketList<FinancialsPacket> outNetFinancials = new PacketList<FinancialsPacket>(FinancialsPacket.class);
 
     private static final String PHASE_DEFAULT = "Phase Default";
     private static final String PHASE_CALC = "Phase Calculation";
@@ -128,6 +130,8 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
         ContractFinancialsPacket contractFinancials = new ContractFinancialsPacket(outClaimsCeded, outClaimsNet,
                 outUnderwritingInfoCeded, outUnderwritingInfoNet);
         outContractFinancials.add(contractFinancials);
+        FinancialsPacket financials = new FinancialsPacket(outUnderwritingInfoNet, outUnderwritingInfoCeded, outClaimsNet);
+        outNetFinancials.add(financials);
     }
 
 
@@ -192,6 +196,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
         setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_CALC);
         setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_CALC);
         setTransmitterPhaseOutput(outContractFinancials, PHASE_CALC);
+        setTransmitterPhaseOutput(outNetFinancials, PHASE_CALC);
     }
 
     public Rating getParmRating() {
@@ -376,5 +381,13 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
 
     public void setOutContractFinancials(PacketList<ContractFinancialsPacket> outContractFinancials) {
         this.outContractFinancials = outContractFinancials;
+    }
+
+    public PacketList<FinancialsPacket> getOutNetFinancials() {
+        return outNetFinancials;
+    }
+
+    public void setOutNetFinancials(PacketList<FinancialsPacket> outNetFinancials) {
+        this.outNetFinancials = outNetFinancials;
     }
 }

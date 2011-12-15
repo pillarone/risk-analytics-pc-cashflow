@@ -67,6 +67,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
     private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
+    private PacketList<FinancialsPacket> outNetFinancials = new PacketList<FinancialsPacket>(FinancialsPacket.class);
 
     private ConstrainedString parmCompany = new ConstrainedString(ILegalEntityMarker.class, "");
     private ConstrainedMultiDimensionalParameter parmClaimsPortions = new ConstrainedMultiDimensionalParameter(
@@ -122,6 +123,8 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         ContractFinancialsPacket contractFinancials = new ContractFinancialsPacket(outClaimsCeded, outClaimsNet,
                 outUnderwritingInfoCeded, outUnderwritingInfoNet);
         outContractFinancials.add(contractFinancials);
+        FinancialsPacket financials = new FinancialsPacket(outUnderwritingInfoNet, outUnderwritingInfoCeded, outClaimsNet);
+        outNetFinancials.add(financials);
     }
 
     private boolean defaultNotBeforeCurrentPeriodStart() {
@@ -284,6 +287,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_NET);
         setTransmitterPhaseOutput(outContractFinancials, PHASE_NET);
+        setTransmitterPhaseOutput(outNetFinancials, PHASE_NET);
     }
 
     @Override
@@ -473,5 +477,13 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     public void setOutContractFinancials(PacketList<ContractFinancialsPacket> outContractFinancials) {
         this.outContractFinancials = outContractFinancials;
+    }
+
+    public PacketList<FinancialsPacket> getOutNetFinancials() {
+        return outNetFinancials;
+    }
+
+    public void setOutNetFinancials(PacketList<FinancialsPacket> outNetFinancials) {
+        this.outNetFinancials = outNetFinancials;
     }
 }
