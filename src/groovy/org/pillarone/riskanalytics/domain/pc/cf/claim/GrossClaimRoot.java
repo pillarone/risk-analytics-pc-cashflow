@@ -42,7 +42,11 @@ public final class GrossClaimRoot implements IClaimRoot {
     private int childCounter;
 
     public GrossClaimRoot(GrossClaimRoot original) {
-        this(original.claimRoot.clone(), original.payoutPattern.clone(), original.reportingPattern.clone());
+        claimRoot = original.claimRoot.clone();
+        payoutPattern = original.payoutPattern.clone();
+        if (original.reportingPattern != null) {
+            reportingPattern = original.reportingPattern.clone();
+        }
     }
 
     public GrossClaimRoot(ClaimRoot claimRoot, PatternPacket payoutPattern, PatternPacket reportingPattern) {
