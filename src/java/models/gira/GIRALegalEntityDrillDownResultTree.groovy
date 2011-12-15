@@ -4,18 +4,12 @@ package models.gira
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 model = GIRAModel
-displayName = "Legal Entity"
+displayName = "Legal Entity, Drill Down"
 
 mappings = {
     GIRA {
         "legalEntities" {
-            "[%legalEntity%]" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netCashflow", {
-                "financialsNetCashflow" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netCashflow", {
-                    "lossRatio" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:lossRatio"
-                    "premium" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netPremiumPaid"
-                    "commission" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:commission"
-                    "claim" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netClaimPaid"
-                }
+            "[%legalEntity%]" {
                 "claimsNet" {
                     "ultimate" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:ultimate"
                     "reportedIncrementalIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:reportedIncrementalIndexed"
@@ -25,8 +19,22 @@ mappings = {
                     "reservesIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:reservesIndexed"
                     "claimsGross" {
                         "ultimate" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:ultimate", {
-                            "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:ultimate"
-                            "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:ultimate"
+                            "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:ultimate", {
+                                "byPeril" {
+                                    "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:ultimate"
+                                }
+                                "bySegment" {
+                                    "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:ultimate"
+                                }
+                            }
+                            "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:ultimate", {
+                                "byPeril" {
+                                    "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:ultimate"
+                                }
+                                "bySegment" {
+                                    "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:ultimate"
+                                }
+                            }
                         }
                         "reportedIncrementalIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:reportedIncrementalIndexed", {
                             "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed"
@@ -50,7 +58,17 @@ mappings = {
                         }
                     }
                     "claimsCeded" {
-                        "ultimate" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:ultimate"
+                        "ultimate" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:ultimate", {
+                            "byPeril" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:ultimate"
+                            }
+                            "bySegment" {
+                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:ultimate"
+                            }
+                            "byContract" {
+                                "[%contract%]" "GIRA:legalEntities:[%legalEntity%]:reinsuranceContracts:[%contract%]:outClaimsCeded:ultimate"
+                            }
+                        }
                         "reportedIncrementalIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:reportedIncrementalIndexed"
                         "paidIncrementalIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:paidIncrementalIndexed"
                         "outstandingIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:outstandingIndexed"
