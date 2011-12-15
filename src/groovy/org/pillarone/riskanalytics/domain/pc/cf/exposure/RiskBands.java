@@ -99,6 +99,7 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
                 if (policyFactors == null && premiumFactors == null) {
                     for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
                         UnderwritingInfoPacket modifiedUnderwritingInfo = underwritingInfo.withFactorsApplied(1, 1);
+                        modifiedUnderwritingInfo.applyPattern(positiveWrittenAmount, dateFactors.getFactorIncremental());
                         modifiedUnderwritingInfo.setDate(periodScope.getCurrentPeriodStartDate());
                         modifiedUnderwritingInfoPackets.add(modifiedUnderwritingInfo);
                     }
