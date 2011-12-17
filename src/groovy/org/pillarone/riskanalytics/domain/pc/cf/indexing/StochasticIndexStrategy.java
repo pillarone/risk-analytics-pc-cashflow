@@ -60,12 +60,17 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
     }
 
     private void lazyInitGenerator(PeriodScope periodScope) {
-        if (periodScope.isFirstPeriod()) {
-            previousPeriodFactor = 1d;
-            factors = new FactorsPacket(periodScope.getCurrentPeriodStartDate(), 1);
-        }
         if (indexGenerator == null) {
             indexGenerator = RandomNumberGeneratorFactory.getGenerator(distribution);
+        }
+        if (periodScope.isFirstPeriod()) {
+            if (startDate.isBefore(periodScope.getCurrentPeriodStartDate())) {
+                previousPeriodFactor = 1 + indexGenerator.nextValue().doubleValue();
+            }
+            else {
+                previousPeriodFactor = 1d;
+            }
+            factors = new FactorsPacket(periodScope.getCurrentPeriodStartDate(), previousPeriodFactor);
         }
     }
 
