@@ -37,6 +37,7 @@ public class CounterPartyState {
         if (!initialSetting) {
             initialStateModified |= !initialSetting;
         }
+        updateAggregateFactor(validAsOf);
     }
 
     /**
@@ -45,24 +46,29 @@ public class CounterPartyState {
      * @param validAsOf update counterPartyFactors for this date
      */
     private void updateAggregateFactor(DateTime validAsOf) {
-        if (updateAggregateFactorRequired.get(validAsOf) == null) return;
-        updateAggregateFactorRequired.put(validAsOf, false);
-        double totalCoveredPortion = 0;
-        for (TreeMap<DateTime, Double> entry : counterPartyFactors.values()) {
-            if (entry.floorEntry(validAsOf) != null) {
-                totalCoveredPortion += entry.floorEntry(validAsOf).getValue();
-            }
+        if (updateAggregateFactorRequired.get(validAsOf) != null) {
+            updateAggregateFactorRequired.put(validAsOf, false);
         }
-        if (totalCoveredPortion > 1) {
+        if (updateAggregateFactorRequired.get(validAsOf) != null || coveredByReinsurersByDate.isEmpty()) {
+            double totalCoveredPortion = 0;
             for (TreeMap<DateTime, Double> entry : counterPartyFactors.values()) {
-                entry.put(validAsOf, entry.floorEntry(validAsOf).getValue() / totalCoveredPortion);
+                if (entry.floorEntry(validAsOf) != null) {
+                    totalCoveredPortion += entry.floorEntry(validAsOf).getValue();
+                }
             }
+            if (totalCoveredPortion > 1) {
+                for (TreeMap<DateTime, Double> entry : counterPartyFactors.values()) {
+                    entry.put(validAsOf, entry.floorEntry(validAsOf).getValue() / totalCoveredPortion);
+                }
+            }
+            coveredByReinsurersByDate.put(validAsOf, totalCoveredPortion);
+            allCounterPartiesDefaultAsOf = totalCoveredPortion == 0 ? validAsOf : null;
         }
-        coveredByReinsurersByDate.put(validAsOf, totalCoveredPortion);
-        allCounterPartiesDefaultAsOf = totalCoveredPortion == 0 ? validAsOf : null;
     }
 
     public double getCoveredByReinsurers(DateTime validAsOf) {
+        // no counter parties and cover portions are defined
+        if (counterPartyFactors.isEmpty()) return 1d;
         updateAggregateFactor(validAsOf);
         if (coveredByReinsurersByDate.isEmpty()) return 1d;
         if (coveredByReinsurersByDate.floorEntry(validAsOf) == null) {
