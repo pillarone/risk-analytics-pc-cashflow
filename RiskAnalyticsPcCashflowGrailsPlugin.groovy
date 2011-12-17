@@ -31,6 +31,7 @@ import org.pillarone.riskanalytics.core.output.CollectingModeFactory
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.XLStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacketAggregator
+import org.pillarone.riskanalytics.domain.utils.constraint.SegmentPortion
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -83,6 +84,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new DateTimeConstraints())
         ConstraintsFactory.registerConstraint(new ClaimTypeSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new YieldCurveTableConstraints())
+        ConstraintsFactory.registerConstraint(new SegmentPortion())
 
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
         ValidatorRegistry.addValidator(new PatternStrategyValidator())
