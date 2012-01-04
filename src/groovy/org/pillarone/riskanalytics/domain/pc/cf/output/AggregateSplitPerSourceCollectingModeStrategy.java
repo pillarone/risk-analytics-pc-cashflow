@@ -75,7 +75,7 @@ public class AggregateSplitPerSourceCollectingModeStrategy implements ICollectin
             }
         } else {
             String notImplemented = ResourceBundle.getBundle(RESOURCE_BUNDLE).getString("AggregateSplitPerSourceCollectingModeStrategy.notImplemented");
-            throw new NotImplementedException(notImplemented);
+            throw new NotImplementedException(notImplemented + "\n(" + packetCollector.getPath() + ")");
         }
         return null;
     }
