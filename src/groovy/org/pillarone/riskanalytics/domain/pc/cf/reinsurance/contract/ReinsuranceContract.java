@@ -15,6 +15,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimPacketAggregator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault;
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountedValuesPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.NetPresentValuesPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
@@ -64,6 +67,9 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
     private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
     private PacketList<CommissionPacket> outCommission = new PacketList<CommissionPacket>(CommissionPacket.class);
+    private PacketList<DiscountedValuesPacket> outDiscountedValues = new PacketList<DiscountedValuesPacket>(DiscountedValuesPacket.class);
+    private PacketList<NetPresentValuesPacket> outNetPresentValues = new PacketList<NetPresentValuesPacket>(NetPresentValuesPacket.class);
+
 
 
     private ConstrainedMultiDimensionalParameter parmReinsurers = new ConstrainedMultiDimensionalParameter(
@@ -86,12 +92,13 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         updateContractParameters();
         Set<IReinsuranceContract> contracts = fillGrossClaims();
         initContracts(contracts);
-        calculateCededClaims(iterationScope.getPeriodScope().getPeriodCounter());
+        IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
+        calculateCededClaims(periodCounter);
         splitCededClaimsByCounterParty();
         processUnderwritingInfo();
         splitCededUnderwritingInfoByCounterParty();
         processUnderwritingInfoGNPI();
-        discountClaims();
+        discountClaims(periodCounter);
         fillContractFinancials();
     }
 
@@ -294,10 +301,12 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             ClaimUtils.applyMarkers(grossClaim.getGrossClaim(), cededClaim);
             cededClaim.setMarker(this);
             outClaimsCeded.add(cededClaim);
-            if (isSenderWired(outClaimsGross)) {
+            if (isSenderWired(outClaimsGross) || isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues)) {
+                // fill outClaimsGross temporarily if discounting or net present values are calculated as they are relaying on it
                 outClaimsGross.add(grossClaim.getGrossClaim());
             }
-            if (isSenderWired(outClaimsNet)) {
+            if (isSenderWired(outClaimsNet) || isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues)) {
+                // fill outClaimsNet temporarily if discounting or net present values are calculated as they are relaying on it
                 IClaimRoot netBaseClaim = netBaseClaimPerGrossClaim.get(grossClaim.getGrossClaim().getKeyClaim());
                 ClaimCashflowPacket netClaim;
                 if (netBaseClaim != null) {
@@ -414,8 +423,18 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     }
 
 
-    private void discountClaims() {
-        // use utility method as discounting is required in several places
+    private void discountClaims(IPeriodCounter periodCounter) {
+        if (isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues)) {
+            DiscountUtils.getDiscountedGrossValues(outClaimsGross, periodStore, periodCounter);
+            DiscountUtils.getDiscountedNetValuesAndFillOutChannels(outClaimsCeded, outClaimsNet, outDiscountedValues,
+                    outNetPresentValues, periodStore, iterationScope);
+            if (!isSenderWired(outClaimsGross)) {
+                outClaimsGross.clear();
+            }
+            if (!isSenderWired(outClaimsNet)) {
+                outClaimsNet.clear();
+            }
+        }
     }
 
     private boolean isCurrentPeriodCovered() {
@@ -616,5 +635,21 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     public void setOutUnderwritingInfoGNPI(PacketList<UnderwritingInfoPacket> outUnderwritingInfoGNPI) {
         this.outUnderwritingInfoGNPI = outUnderwritingInfoGNPI;
+    }
+
+    public PacketList<DiscountedValuesPacket> getOutDiscountedValues() {
+        return outDiscountedValues;
+    }
+
+    public void setOutDiscountedValues(PacketList<DiscountedValuesPacket> outDiscountedValues) {
+        this.outDiscountedValues = outDiscountedValues;
+    }
+
+    public PacketList<NetPresentValuesPacket> getOutNetPresentValues() {
+        return outNetPresentValues;
+    }
+
+    public void setOutNetPresentValues(PacketList<NetPresentValuesPacket> outNetPresentValues) {
+        this.outNetPresentValues = outNetPresentValues;
     }
 }

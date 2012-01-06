@@ -52,17 +52,33 @@ public class DiscountUtils {
         return 1d / productFactor;
     }
 
-    public static double getSumOfDiscountedIncrementalPaids(List<ClaimCashflowPacket> claims, List<Factors> factors, IPeriodCounter periodCounter) {
+    private static double getSumOfDiscountedIncrementalPaids(List<ClaimCashflowPacket> claims, List<Factors> factors, IPeriodCounter periodCounter) {
         double discountedIncrementalPaid = 0d;
         for (ClaimCashflowPacket claim : claims) {
             DateTime date = claim.getUpdateDate();
+            claim.setDiscountFactors(factors);
             double discountFactor = getDiscountFactor(factors, date, periodCounter);
             discountedIncrementalPaid += claim.getPaidIncrementalIndexed() * discountFactor;
         }
         return discountedIncrementalPaid;
     }
 
-    public static double getDiscountedReservedAtEndOfPeriod(List<ClaimCashflowPacket> claims, List<Factors> factors, IPeriodCounter periodCounter) {
+    /**
+     * @param claims need a none trivial
+     * @param periodCounter
+     * @return
+     */
+    private static double getSumOfDiscountedIncrementalPaids(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter) {
+        double discountedIncrementalPaid = 0d;
+        for (ClaimCashflowPacket claim : claims) {
+            DateTime date = claim.getUpdateDate();
+            double discountFactor = getDiscountFactor(claim.getDiscountFactors(), date, periodCounter);
+            discountedIncrementalPaid += claim.getPaidIncrementalIndexed() * discountFactor;
+        }
+        return discountedIncrementalPaid;
+    }
+
+    private static double getDiscountedReservedAtEndOfPeriod(List<ClaimCashflowPacket> claims, List<Factors> factors, IPeriodCounter periodCounter) {
         Map<IClaimRoot, ClaimCashflowPacket> latestCashflowPerBaseClaim = new HashMap<IClaimRoot, ClaimCashflowPacket>();
         for (ClaimCashflowPacket claim : claims) {
             ClaimCashflowPacket latestCashflow = latestCashflowPerBaseClaim.get(claim.getBaseClaim());
@@ -74,6 +90,25 @@ public class DiscountUtils {
         double discountedReserved = 0d;
         for (ClaimCashflowPacket claim : latestCashflowPerBaseClaim.values()) {
             DateTime date = claim.getUpdateDate();
+            double discountFactor = getDiscountFactor(factors, date, periodCounter);
+            discountedReserved += claim.reservedIndexed() * discountFactor;
+        }
+        return discountedReserved;
+    }
+
+    private static double getDiscountedReservedAtEndOfPeriod(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter) {
+        Map<IClaimRoot, ClaimCashflowPacket> latestCashflowPerBaseClaim = new HashMap<IClaimRoot, ClaimCashflowPacket>();
+        for (ClaimCashflowPacket claim : claims) {
+            ClaimCashflowPacket latestCashflow = latestCashflowPerBaseClaim.get(claim.getBaseClaim());
+            if (latestCashflow == null || claim.getUpdateDate().isAfter(latestCashflow.getUpdateDate())) {
+                latestCashflow = claim;
+                latestCashflowPerBaseClaim.put(claim.getBaseClaim(), latestCashflow);
+            }
+        }
+        double discountedReserved = 0d;
+        for (ClaimCashflowPacket claim : latestCashflowPerBaseClaim.values()) {
+            DateTime date = claim.getUpdateDate();
+            List<Factors> factors = claim.getDiscountFactors();
             double discountFactor = getDiscountFactor(factors, date, periodCounter);
             discountedReserved += claim.reservedIndexed() * discountFactor;
         }
@@ -105,31 +140,40 @@ public class DiscountUtils {
         periodStore.put(Segment.DISCOUNTED_RESERVED_GROSS, discountedReservedGross);
     }
 
+    public static void getDiscountedGrossValues(List<ClaimCashflowPacket> claims, PeriodStore periodStore, IPeriodCounter periodCounter) {
+        double discountedIncrementalPaidGross = DiscountUtils.getSumOfDiscountedIncrementalPaids(claims, periodCounter);
+        double discountedReservedGross = DiscountUtils.getDiscountedReservedAtEndOfPeriod(claims, periodCounter);
+        double startNetPresentValueGross = periodStore.exists(Segment.NET_PRESENT_VALUE_GROSS) ? (Double) periodStore.get(Segment.NET_PRESENT_VALUE_GROSS, -1) : 0d;
+        double endNetPresentValueGross = startNetPresentValueGross + discountedIncrementalPaidGross;
+        periodStore.put(Segment.NET_PRESENT_VALUE_GROSS, endNetPresentValueGross);
+        periodStore.put(Segment.DISCOUNTED_INCREMENTAL_PAID_GROSS, discountedIncrementalPaidGross);
+        periodStore.put(Segment.DISCOUNTED_RESERVED_GROSS, discountedReservedGross);
+    }
+
     public static void getDiscountedNetValuesAndFillOutChannels(List<ClaimCashflowPacket> claimsCeded,
                                                                 List<ClaimCashflowPacket> claimsNet,
                                                                 List<DiscountedValuesPacket> outDiscountedValues,
                                                                 List<NetPresentValuesPacket> outNetPresentValues,
                                                                 PeriodStore periodStore, IterationScope iterationScope) {
         IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
-        List<Factors> factors = (List<Factors>) periodStore.get(Segment.FILTERED_FACTORS, 0);
         double discountedIncrementalPaidGross = (Double) periodStore.get(Segment.DISCOUNTED_INCREMENTAL_PAID_GROSS, 0);
-        double discountedIncrementalPaidCeded = DiscountUtils.getSumOfDiscountedIncrementalPaids(claimsCeded, factors, periodCounter);
-        double discountedIncrementalPaidNet = DiscountUtils.getSumOfDiscountedIncrementalPaids(claimsNet, factors, periodCounter);
+        double discountedIncrementalPaidCeded = DiscountUtils.getSumOfDiscountedIncrementalPaids(claimsCeded, periodCounter);
+        double discountedIncrementalPaidNet = DiscountUtils.getSumOfDiscountedIncrementalPaids(claimsNet, periodCounter);
         double discountedReservedGross = (Double) periodStore.get(Segment.DISCOUNTED_RESERVED_GROSS, 0);
-        double discountedReservedCeded = DiscountUtils.getDiscountedReservedAtEndOfPeriod(claimsCeded, factors, periodCounter);
-        double discountedReservedNet = DiscountUtils.getDiscountedReservedAtEndOfPeriod(claimsNet, factors, periodCounter);
-
-        double startNetPresentValueCeded = periodStore.exists(Segment.NET_PRESENT_VALUE_CEDED) ? (Double) periodStore.get(Segment.NET_PRESENT_VALUE_CEDED, -1) : 0d;
-        double startNetPresentValueNet = periodStore.exists(Segment.NET_PRESENT_VALUE_NET) ? (Double) periodStore.get(Segment.NET_PRESENT_VALUE_NET, -1) : 0d;
-        double endNetPresentValueCeded = startNetPresentValueCeded + discountedIncrementalPaidCeded;
-        double endNetPresentValueNet = startNetPresentValueNet + discountedIncrementalPaidNet;
-        periodStore.put(Segment.NET_PRESENT_VALUE_CEDED, endNetPresentValueCeded);
-        periodStore.put(Segment.NET_PRESENT_VALUE_NET, endNetPresentValueNet);
+        double discountedReservedCeded = DiscountUtils.getDiscountedReservedAtEndOfPeriod(claimsCeded, periodCounter);
+        double discountedReservedNet = DiscountUtils.getDiscountedReservedAtEndOfPeriod(claimsNet, periodCounter);
 
         DiscountedValuesPacket discountedValues = DiscountUtils.getDiscountedValuesPacket(discountedIncrementalPaidGross,
                 discountedIncrementalPaidCeded, discountedIncrementalPaidNet, discountedReservedGross,
                 discountedReservedCeded, discountedReservedNet);
         outDiscountedValues.add(discountedValues);
+
+        double startNetPresentValueCeded = periodStore.exists(Segment.NET_PRESENT_VALUE_CEDED) ? (Double) periodStore.get(Segment.NET_PRESENT_VALUE_CEDED, -1) : 0d;
+        double endNetPresentValueCeded = startNetPresentValueCeded + discountedValues.getDiscountedPaidIncrementalCeded();
+        periodStore.put(Segment.NET_PRESENT_VALUE_CEDED, endNetPresentValueCeded);
+        double startNetPresentValueNet = periodStore.exists(Segment.NET_PRESENT_VALUE_NET) ? (Double) periodStore.get(Segment.NET_PRESENT_VALUE_NET, -1) : 0d;
+        double endNetPresentValueNet = startNetPresentValueNet + discountedValues.getDiscountedPaidIncrementalNet();
+        periodStore.put(Segment.NET_PRESENT_VALUE_NET, endNetPresentValueNet);
 
         int period = iterationScope.getPeriodScope().getCurrentPeriod();
         if (period + 1 == iterationScope.getNumberOfPeriods()) {

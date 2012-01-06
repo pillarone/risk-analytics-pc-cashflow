@@ -6,10 +6,15 @@ import org.pillarone.riskanalytics.core.components.MultiPhaseComponent;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.DefaultProbabilities;
 import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault;
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountedValuesPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.NetPresentValuesPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
@@ -58,6 +63,8 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
 
     private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
     private PacketList<FinancialsPacket> outNetFinancials = new PacketList<FinancialsPacket>(FinancialsPacket.class);
+    private PacketList<DiscountedValuesPacket> outDiscountedValues = new PacketList<DiscountedValuesPacket>(DiscountedValuesPacket.class);
+    private PacketList<NetPresentValuesPacket> outNetPresentValues = new PacketList<NetPresentValuesPacket>(NetPresentValuesPacket.class);
 
     private static final String PHASE_DEFAULT = "Phase Default";
     private static final String PHASE_CALC = "Phase Calculation";
@@ -66,7 +73,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     private IRandomNumberGenerator dateGenerator = RandomNumberGeneratorFactory.getUniformGenerator();
 
     private PeriodStore periodStore;
-    private PeriodScope periodScope;
+    private IterationScope iterationScope;
     private static final String IS_DEFAULT = "IS_DEFAULT";
 
     @Override
@@ -123,6 +130,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
             outClaimsNet.add(ClaimUtils.calculateNetClaim(outClaimsGross, outClaimsCeded));
             outUnderwritingInfoNet.addAll(UnderwritingInfoUtils.calculateNetUnderwritingInfo(outUnderwritingInfoGross, outUnderwritingInfoCeded));
             fillContractFinancials();
+            discountClaims();
         }
     }
 
@@ -138,9 +146,19 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
         }
     }
 
+    private void discountClaims() {
+        if (isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues)) {
+            IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
+            DiscountUtils.getDiscountedGrossValues(outClaimsGross, periodStore, periodCounter);
+            DiscountUtils.getDiscountedNetValuesAndFillOutChannels(outClaimsCeded, outClaimsNet, outDiscountedValues,
+                    outNetPresentValues, periodStore, iterationScope);
+        }
+    }
+
 
     private boolean avoidVoidClaimList(PacketList<ClaimCashflowPacket> packetList) {
         if (packetList.isEmpty()) {
+            PeriodScope periodScope = iterationScope.getPeriodScope();
             DateTime startOfPeriod = periodScope.getCurrentPeriodStartDate();
             IClaimRoot baseClaim = new ClaimRoot(0, ClaimType.AGGREGATED, startOfPeriod, startOfPeriod);
             packetList.add(new ClaimCashflowPacket(baseClaim, 0, 0, 0, 0, 0, 0, null, startOfPeriod, periodScope.getCurrentPeriod()));
@@ -171,7 +189,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
             ((BinomialDist) generator.getDistribution()).setParams(1, probability);
             boolean isDefault = ((Integer) generator.nextValue()) == 1;
             if (isDefault) {
-                dateOfDefault = DateTimeUtilities.getDate(periodScope, dateGenerator.nextValue().doubleValue());
+                dateOfDefault = DateTimeUtilities.getDate(iterationScope.getPeriodScope(), dateGenerator.nextValue().doubleValue());
                 periodStore.put(IS_DEFAULT, dateOfDefault);
             }
         }
@@ -363,12 +381,12 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
         this.periodStore = periodStore;
     }
 
-    public PeriodScope getPeriodScope() {
-        return periodScope;
+    public IterationScope getIterationScope() {
+        return iterationScope;
     }
 
-    public void setPeriodScope(PeriodScope periodScope) {
-        this.periodScope = periodScope;
+    public void setIterationScope(IterationScope iterationScope) {
+        this.iterationScope = iterationScope;
     }
 
     public PacketList<DefaultProbabilities> getInDefaultProbabilities() {
@@ -393,5 +411,21 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
 
     public void setOutNetFinancials(PacketList<FinancialsPacket> outNetFinancials) {
         this.outNetFinancials = outNetFinancials;
+    }
+
+    public PacketList<DiscountedValuesPacket> getOutDiscountedValues() {
+        return outDiscountedValues;
+    }
+
+    public void setOutDiscountedValues(PacketList<DiscountedValuesPacket> outDiscountedValues) {
+        this.outDiscountedValues = outDiscountedValues;
+    }
+
+    public PacketList<NetPresentValuesPacket> getOutNetPresentValues() {
+        return outNetPresentValues;
+    }
+
+    public void setOutNetPresentValues(PacketList<NetPresentValuesPacket> outNetPresentValues) {
+        this.outNetPresentValues = outNetPresentValues;
     }
 }

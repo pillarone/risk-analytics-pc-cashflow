@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReserveMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
@@ -63,6 +64,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private IReinsuranceContractMarker reinsuranceContract;
     private ILegalEntityMarker legalEntity;
     private IReserveMarker reserve;
+
+    private List<Factors> discountFactors;
 
     /**
      * Used for 'zero' claims
@@ -448,5 +451,14 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     public IClaimRoot getKeyClaim() {
         return keyClaim;
+    }
+
+    /** property is normally set in the gross phase of the segment */
+    public List<Factors> getDiscountFactors() {
+        return discountFactors;
+    }
+
+    public void setDiscountFactors(List<Factors> discountFactors) {
+        this.discountFactors = discountFactors;
     }
 }

@@ -38,7 +38,7 @@ public class ClaimHistoryAndApplicableContract {
 
     public ClaimCashflowPacket getCededClaim(IPeriodCounter periodCounter) {
         if (claim.getNominalUltimate() > 0) {
-            // claim is positive is ceded claims are covered, inverting sign required
+            // claim is positive if ceded claims are covered, inverting sign required
             return contract.calculateClaimCeded(ClaimUtils.scale(claim, -1, true), storage, periodCounter);
         }
         else {

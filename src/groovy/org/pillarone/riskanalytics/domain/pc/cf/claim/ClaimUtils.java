@@ -17,7 +17,7 @@ import java.util.List;
 public class ClaimUtils {
 
     /**
-     * Adds up all claims and builds a corresponding new base claim. It's exposure info is null.
+     * Adds up all claims and builds a corresponding new base claim. It's exposure info and discount factor is null.
      * WARNING: if the updatePeriod of the first claim is not set the return claim has updatePeriod = 0.
      *
      * @param claims
@@ -124,6 +124,7 @@ public class ClaimUtils {
                     claim.getPaidIncrementalIndexed() * factor, claim.getPaidCumulatedIndexed() * factor,
                     claim.getReportedIncrementalIndexed() * factor, claim.getReportedCumulatedIndexed() * factor, scaledReserves,
                     claim.getExposureInfo(), claim.getUpdateDate(), claim.getUpdatePeriod());
+            scaledClaim.setDiscountFactors(claim.getDiscountFactors());
             applyMarkers(claim, scaledClaim);
             return scaledClaim;
         }
@@ -138,6 +139,7 @@ public class ClaimUtils {
                     claim.getPaidIncrementalIndexed() * factor, claim.getPaidCumulatedIndexed() * factor,
                     claim.getReportedIncrementalIndexed() * factor, claim.getReportedCumulatedIndexed() * factor, scaledReserves,
                     claim.getExposureInfo(), claim.getUpdateDate(), claim.getUpdatePeriod());
+            scaledClaim.setDiscountFactors(claim.getDiscountFactors());
             applyMarkers(claim, scaledClaim);
             return scaledClaim;
         }
@@ -162,6 +164,7 @@ public class ClaimUtils {
                     claim.getPaidIncrementalIndexed() * factor, claim.getPaidCumulatedIndexed() * factor,
                     claim.getReportedIncrementalIndexed() * factor, claim.getReportedCumulatedIndexed() * factor, scaledReserves,
                     claim.getExposureInfo(), claim.getUpdateDate(), claim.getUpdatePeriod());
+            scaledClaim.setDiscountFactors(claim.getDiscountFactors());
             applyMarkers(claim, scaledClaim);
             return scaledClaim;
         }
@@ -209,6 +212,7 @@ public class ClaimUtils {
                 cededExposureInfo,
                 grossClaim.getUpdateDate(),
                 grossClaim.getUpdatePeriod());
+        cededClaim.setDiscountFactors(grossClaim.getDiscountFactors());
         applyMarkers(grossClaim, cededClaim);
         return cededClaim;
     }
@@ -246,6 +250,7 @@ public class ClaimUtils {
                 cededExposureInfo,
                 grossClaim.getUpdateDate(),
                 grossClaim.getUpdatePeriod());
+        cededClaim.setDiscountFactors(grossClaim.getDiscountFactors());
         applyMarkers(grossClaim, cededClaim);
         return cededClaim;
     }
@@ -300,6 +305,7 @@ public class ClaimUtils {
                 netExposureInfo,
                 grossClaim.getUpdateDate(),
                 grossClaim.getUpdatePeriod());
+            netClaim.setDiscountFactors(grossClaim.getDiscountFactors());
             applyMarkers(cededClaim, netClaim);
             return netClaim;
         }
