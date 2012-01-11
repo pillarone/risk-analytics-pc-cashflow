@@ -14,6 +14,10 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternTableConstraints
 import org.pillarone.riskanalytics.domain.utils.validation.ParameterValidationServiceImpl
 
 /**
+ * Compared with the PatternStrategyValidator this validator does not ensure that the final value is 1 but restricts
+ * currently the pattern length to one and allows no delay as default and recovery logic in ReinsuranceContract can't
+ * cope with it.
+ *
  * @author jessika.walter (at) intuitive-collaboration (dot) com
  */
 class RecoveryPatternStrategyValidator implements IParameterizationValidator {
@@ -185,6 +189,27 @@ class RecoveryPatternStrategyValidator implements IParameterizationValidator {
                 }
             }
             return true
+        }
+        
+        validationService.register(PatternStrategyType.INCREMENTAL) { Map type ->
+            double[] months = type.incrementalPattern.getColumnByName(PatternTableConstraints.MONTHS)
+            if (months.size() > 1 || (months.size() > 0 && months[0] != 0)) {
+                return [ValidationType.ERROR, "default.and.recovery.implementation.allows.currently.one.undelayed.recovery.only"]
+            }
+        }
+
+        validationService.register(PatternStrategyType.CUMULATIVE) { Map type ->
+            double[] months = type.cumulativePattern.getColumnByName(PatternTableConstraints.MONTHS)
+            if (months.size() > 1 || (months.size() > 0 && months[0] != 0)) {
+                return [ValidationType.ERROR, "default.and.recovery.implementation.allows.currently.one.undelayed.recovery.only"]
+            }
+        }
+
+        validationService.register(PatternStrategyType.AGE_TO_AGE) { Map type ->
+            double[] months = type.ageToAgePattern.getColumnByName(PatternTableConstraints.MONTHS)
+            if (months.size() > 1 || (months.size() > 0 && months[0] != 0)) {
+                return [ValidationType.ERROR, "default.and.recovery.implementation.allows.currently.one.undelayed.recovery.only"]
+            }
         }
     }
 }

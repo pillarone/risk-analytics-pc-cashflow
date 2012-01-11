@@ -84,6 +84,7 @@ class GIRAModel extends StochasticModel {
         claimsGenerators.inEventFrequencies = eventGenerators.outEventFrequencies
         reservesGenerators.inFactors = indices.outFactors
         reservesGenerators.inPatterns = patterns.outPatterns
+        legalEntities.inPatterns = patterns.outPatterns
         indices.inEventSeverities = dependencies.outEventSeverities
         if (segments.subComponentCount() == 0) {
             reinsuranceContracts.inClaims = claimsGenerators.outClaims

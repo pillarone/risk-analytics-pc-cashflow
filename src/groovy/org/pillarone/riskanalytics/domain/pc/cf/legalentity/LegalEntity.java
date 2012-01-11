@@ -19,6 +19,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPa
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IRecoveryPatternMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
@@ -39,6 +41,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     private ConstrainedString parmRecoveryPattern = new ConstrainedString(IRecoveryPatternMarker.class, "");
 
     private PacketList<DefaultProbabilities> inDefaultProbabilities = new PacketList<DefaultProbabilities>(DefaultProbabilities.class);
+    private PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket.class);
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> inClaimsInward = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
@@ -80,7 +83,8 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     public void doCalculation(String phase) {
         if (phase.equals(PHASE_DEFAULT)) {
             DateTime dateOfDefault = defaultOfReinsurer(inDefaultProbabilities.get(0).getDefaultProbability(parmRating));
-            outLegalEntityDefault.add(new LegalEntityDefault(this, dateOfDefault));
+            PatternPacket recoveryPattern = PatternUtils.filterPattern(inPatterns, parmRecoveryPattern, IRecoveryPatternMarker.class);
+            outLegalEntityDefault.add(new LegalEntityDefault(this, dateOfDefault, recoveryPattern));
         }
         if (phase.equals(PHASE_CALC)) {
             for (ClaimCashflowPacket grossClaim : inClaims) {
@@ -198,6 +202,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
 
     public void allocateChannelsToPhases() {
         setTransmitterPhaseInput(inDefaultProbabilities, PHASE_DEFAULT);
+        setTransmitterPhaseInput(inPatterns, PHASE_DEFAULT);
         setTransmitterPhaseOutput(outLegalEntityDefault, PHASE_DEFAULT);
 
         setTransmitterPhaseInput(inClaims, PHASE_CALC);
@@ -427,5 +432,13 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
 
     public void setOutNetPresentValues(PacketList<NetPresentValuesPacket> outNetPresentValues) {
         this.outNetPresentValues = outNetPresentValues;
+    }
+
+    public PacketList<PatternPacket> getInPatterns() {
+        return inPatterns;
+    }
+
+    public void setInPatterns(PacketList<PatternPacket> inPatterns) {
+        this.inPatterns = inPatterns;
     }
 }

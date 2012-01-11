@@ -143,7 +143,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     }
 
     /**
-     * filter according to covered period and occurrence date of claim
+     * Filter according to covered period, occurrence date of claim and defaulting counter parties.
+     * All incoming claims are removed if there is no counter party left.
      */
     private void timeFilter() {
         DateTime noCoverAfter = counterPartyFactors.allCounterPartiesDefaultAfter();
@@ -173,7 +174,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             if (counterParties.contains(legalEntityDefault.getLegalEntity())) {
                 DateTime dateOfDefault = legalEntityDefault.getDateOfDefault();
                 if (dateOfDefault != null) {
-                    counterPartyFactors.addCounterPartyFactor(dateOfDefault, legalEntityDefault.getLegalEntity(), 0d, false);
+                    counterPartyFactors.addCounterPartyFactor(dateOfDefault, legalEntityDefault.getLegalEntity(),
+                            legalEntityDefault.getFirstInstantRecovery(), false);
                 }
             }
         }
@@ -296,7 +298,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             ClaimCashflowPacket cededClaim = grossClaim.getCededClaim(periodCounter);
             double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(grossClaim.getUpdateDate());
             if (coveredByReinsurers != 1) {
-                cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers);
+                cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers);     // todo(sku): wrong ibnr in second period for marine
             }
             ClaimUtils.applyMarkers(grossClaim.getGrossClaim(), cededClaim);
             cededClaim.setMarker(this);
