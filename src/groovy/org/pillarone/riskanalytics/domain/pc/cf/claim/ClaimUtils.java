@@ -118,7 +118,7 @@ public class ClaimUtils {
      */
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor) {
         if (notTrivialValues(claim)) {
-            double scaledUltimate = claim.ultimate() * factor;
+            double scaledUltimate = claim.developedUltimate() * factor;
             double scaledReserves = scaledUltimate - claim.getPaidCumulatedIndexed() * factor;
             ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(claim.getBaseClaim(), scaledUltimate,
                     claim.getPaidIncrementalIndexed() * factor, claim.getPaidCumulatedIndexed() * factor,
@@ -265,7 +265,10 @@ public class ClaimUtils {
      * @return
      */
     public static ClaimCashflowPacket getNetClaim(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim) {
-        if (cededClaim == null || cededClaim.getUpdateDate() == null) {
+        if (grossClaim == null && cededClaim == null) {
+            return null;
+        }
+        else if (cededClaim == null || cededClaim.getUpdateDate() == null) {
             return (ClaimCashflowPacket) grossClaim.clone();
         }
         else if (grossClaim == null) {
@@ -350,6 +353,7 @@ public class ClaimUtils {
 
     public static ClaimCashflowPacket calculateNetClaim(List<ClaimCashflowPacket> claimsGross,
                                                                List<ClaimCashflowPacket> claimsCeded) {
+        if (claimsGross.size() == 0 && claimsCeded.size() == 0) return null;
         List<ClaimCashflowPacket> aggregateClaimsCededByBaseClaim = ClaimUtils.aggregateByBaseClaim(claimsCeded);
         ClaimCashflowPacket claimCeded = ClaimUtils.sum(aggregateClaimsCededByBaseClaim, true);
         List<ClaimCashflowPacket> aggregateClaimsGrossByBaseClaim = ClaimUtils.aggregateByBaseClaim(claimsGross);

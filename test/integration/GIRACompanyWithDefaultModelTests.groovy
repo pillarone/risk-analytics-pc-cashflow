@@ -28,6 +28,11 @@ class GIRACompanyWithDefaultModelTests extends ModelTest {
         'Multi Company with Default'
     }
 
+    @Override
+    int getIterationCount() {
+        1
+    }
+
     protected boolean shouldCompareResults() {
 //        true
     }
