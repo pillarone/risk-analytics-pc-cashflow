@@ -9,7 +9,7 @@ import org.pillarone.riskanalytics.core.parameterization.global.Global;
  */
 public class GlobalParameters extends GlobalParameterComponent {
 
-    private DateTime parmProjectionStartDate = new DateTime(2011,1,1,0,0,0,0);
+    private DateTime parmProjectionStartDate = new DateTime(2012,1,1,0,0,0,0);
     private IProjectionPeriodStrategy parmProjection = ProjectionPeriodType.getDefault();
     private boolean parmRunOffAfterFirstPeriod = true;
     private boolean runtimeTrivialPatterns = false;
