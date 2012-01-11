@@ -224,6 +224,8 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
         setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_CALC);
         setTransmitterPhaseOutput(outContractFinancials, PHASE_CALC);
         setTransmitterPhaseOutput(outNetFinancials, PHASE_CALC);
+        setTransmitterPhaseOutput(outDiscountedValues, PHASE_CALC);
+        setTransmitterPhaseOutput(outNetPresentValues, PHASE_CALC);
     }
 
     public Rating getParmRating() {
