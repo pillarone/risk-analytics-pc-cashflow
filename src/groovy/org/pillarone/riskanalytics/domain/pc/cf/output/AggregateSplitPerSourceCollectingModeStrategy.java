@@ -31,7 +31,7 @@ public class AggregateSplitPerSourceCollectingModeStrategy implements ICollectin
     private static final String PERILS = "claimsGenerators";
     private static final String CONTRACTS = "reinsuranceContracts";
     private static final String SEGMENTS = "segments";
-    private static final String RESOURCE_BUNDLE = "org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceCollectingModeStrategyResources";
+    private static final String RESOURCE_BUNDLE = "org.pillarone.riskanalytics.domain.pc.cf.output.CollectingModeStrategyResources";
     private static final String PATH_SEPARATOR = ":";
     private String displayName;
 
@@ -311,5 +311,9 @@ public class AggregateSplitPerSourceCollectingModeStrategy implements ICollectin
 
     public void setPacketCollector(PacketCollector packetCollector) {
         this.packetCollector = packetCollector;
+    }
+
+    public boolean isCompatibleWith(Class packetClass) {
+        return ClaimCashflowPacket.class.isAssignableFrom(packetClass) || UnderwritingInfoPacket.class.isAssignableFrom(packetClass);
     }
 }
