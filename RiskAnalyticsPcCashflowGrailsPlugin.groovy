@@ -32,6 +32,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacketAggregator
 import org.pillarone.riskanalytics.domain.utils.constraint.SegmentPortion
+import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateClaimCollectingModeStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateReportedPaidClaimCollectingModeStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimatePaidClaimCollectingModeStrategy
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -110,6 +113,9 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         PacketAggregatorRegistry.registerAggregator(ClaimCashflowPacket, new ClaimPacketAggregator())
         PacketAggregatorRegistry.registerAggregator(UnderwritingInfoPacket, new UnderwritingInfoPacketAggregator())
         CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceCollectingModeStrategy())
+        CollectingModeFactory.registerStrategy(new AggregateUltimateClaimCollectingModeStrategy())
+        CollectingModeFactory.registerStrategy(new AggregateUltimateReportedPaidClaimCollectingModeStrategy())
+        CollectingModeFactory.registerStrategy(new AggregateUltimatePaidClaimCollectingModeStrategy())
     }
 
     def onChange = { event ->
