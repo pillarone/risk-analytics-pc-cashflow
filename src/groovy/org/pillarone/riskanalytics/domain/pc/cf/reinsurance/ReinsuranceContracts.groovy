@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance
 
 import org.pillarone.riskanalytics.core.wiring.WireCategory as WC
+import org.pillarone.riskanalytics.core.wiring.PortReplicatorCategory as PRC
 
 import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.ListMultimap
@@ -22,12 +23,12 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodS
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.utils.graph.Graph
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.*
-import org.pillarone.riskanalytics.core.wiring.PortReplicatorCategory
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
 import org.pillarone.riskanalytics.domain.utils.constant.ReinsuranceContractBase
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity
 import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.utils.graph.Node
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -51,13 +52,18 @@ class ReinsuranceContracts extends DynamicComposedComponent {
 
     private List contractsBasedOnGrossClaims = []
     private Graph contractsBasedOnContracts = new Graph()
-    private ListMultimap<ReinsuranceContract, ReinsuranceContractAndBase> contractCoveredBy = ArrayListMultimap.create()
+    /** key: covering contract, value: covered contract and based to be covered */
+    private ListMultimap<ReinsuranceContract, ReinsuranceContractAndBase> coverForContracts = ArrayListMultimap.create()
+    /** contains the relations between reinsurance contracts covering legal entities */
     private Graph contractsBasedOnCompanies = new Graph()
     private ListMultimap<ILegalEntityMarker, IReinsuranceContractMarker> coverForLegalEntity = ArrayListMultimap.create()
+    /** contains for each legal entity the contract where it acts as a counter party */
     private ListMultimap<ILegalEntityMarker, IReinsuranceContractMarker> inwardLegalEntity = ArrayListMultimap.create()
 
-    /** key: normalized contract name, value: contract instance */
+    /** key: technical contract name, value: contract instance */
     private Map<String, ReinsuranceContract> reinsuranceContracts = new HashMap<String, ReinsuranceContract>()
+    /** key: normalized contract name, value: contract instance */
+    private Map<String, ReinsuranceContract> reinsuranceContractNames = new HashMap<String, ReinsuranceContract>()
 
 
     public ReinsuranceContract createDefaultSubComponent(){
@@ -83,24 +89,28 @@ class ReinsuranceContracts extends DynamicComposedComponent {
             wireContractsIncludingInwardBusiness()
             wireProgramIndependentReplications()
         }
-        else {
-            wireTrivialContractsOnly()
-        }
         if (LOG.isDebugEnabled()) {
             LOG.debug(contractsBasedOnContracts)
             LOG.debug(contractsBasedOnCompanies)
         }
     }
 
+    /**
+     * in channels of contracts based on original (gross) claims can be wired directly with replicating in channels
+     */
     private void wireContractsBasedOnGross() {
         for (ReinsuranceContract contract : contractsBasedOnGrossClaims) {
-            doWire PortReplicatorCategory, contract, 'inClaims', this, 'inClaims'
-            doWire PortReplicatorCategory, contract, 'inUnderwritingInfo', this, 'inUnderwritingInfo'
+            doWire PRC, contract, 'inClaims', this, 'inClaims'
+            doWire PRC, contract, 'inUnderwritingInfo', this, 'inUnderwritingInfo'
         }
     }
 
+    /**
+     * The key entries of coverForContracts contains the covering contracts, the value the contracts to be covered by a
+     * contract and the base in order to select the correct channel. If net is covered the GNPI channel is wired.
+     */
     private void wireContractsBaseOnContracts() {
-        for (Map.Entry<ReinsuranceContract, ReinsuranceContractAndBase> contractCoveredByContracts: contractCoveredBy.entries()) {
+        for (Map.Entry<ReinsuranceContract, ReinsuranceContractAndBase> contractCoveredByContracts: coverForContracts.entries()) {
             for (ReinsuranceContractAndBase contractAndBase : contractCoveredByContracts.value) {
                 if (contractAndBase.contractBase.equals(ReinsuranceContractBase.CEDED)) {
                     doWire WC, contractCoveredByContracts.key, 'inClaims', contractAndBase.reinsuranceContract, 'outClaimsCeded'
@@ -115,19 +125,28 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     }
 
     private void wireContractsIncludingInwardBusiness() {
-        if (contractsBasedOnCompanies.nodes.size() > 0) {
-            for (ReinsuranceContract contract : contractsBasedOnCompanies) {
-                if (contract.parmCover.getType().equals(CoverAttributeStrategyType.LEGALENTITIES)) {
-                    List<ILegalEntityMarker> coveredLegalEntities = ((InwardLegalEntitiesCoverAttributeStrategy) contract.parmCover).getCoveredLegalEntities();
-                    for (ILegalEntityMarker legalEntity : coveredLegalEntities) {
-                        for (ReinsuranceContract preceedingContract : inwardLegalEntity.get(legalEntity)) {
-                            doWire WC, contract, 'inClaims', preceedingContract, 'outClaimsInward'
-                            doWire WC, contract, 'inUnderwritingInfo', preceedingContract, 'outUnderwritingInfoInward'
-                        }
-                    }
-                }
+        for (Node node : contractsBasedOnCompanies.nodes) {
+            ReinsuranceContract inContract = reinsuranceContracts[node.name]
+            for (Node coveredContractNode : node.parents) {
+                ReinsuranceContract precedingContract = reinsuranceContracts[coveredContractNode.name]
+                doWire WC, inContract, 'inClaims', precedingContract, 'outClaimsInward'
+                doWire WC, inContract, 'inUnderwritingInfo', precedingContract, 'outUnderwritingInfoInward'
             }
         }
+        
+//        if (contractsBasedOnCompanies.nodes.size() > 0) {
+//            for (ReinsuranceContract contract : contractsBasedOnCompanies) {
+//                if (contract.parmCover.getType().equals(CoverAttributeStrategyType.LEGALENTITIES)) {
+//                    List<ILegalEntityMarker> coveredLegalEntities = ((InwardLegalEntitiesCoverAttributeStrategy) contract.parmCover).getCoveredLegalEntities();
+//                    for (ILegalEntityMarker legalEntity : coveredLegalEntities) {
+//                        for (ReinsuranceContract preceedingContract : inwardLegalEntity.get(legalEntity)) {
+//                            doWire WC, contract, 'inClaims', preceedingContract, 'outClaimsInward'
+//                            doWire WC, contract, 'inUnderwritingInfo', preceedingContract, 'outUnderwritingInfoInward'
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     private void init() {
@@ -140,51 +159,64 @@ class ReinsuranceContracts extends DynamicComposedComponent {
             if (isGrossCover(contract)) {
                 contractsBasedOnGrossClaims << contract
             }
-            else if (isContractCover(contract)) {
-                List<ReinsuranceContractAndBase> coveredContracts = ((IContractCover) contract.parmCover).getCoveredReinsuranceContractsAndBase(reinsuranceContracts)
+        }
+        for (ReinsuranceContract contract : componentList) {
+            if (isContractCover(contract)) {
+                List<ReinsuranceContractAndBase> coveredContracts = ((IContractCover) contract.parmCover).getCoveredReinsuranceContractsAndBase(reinsuranceContractNames)
                 contractsBasedOnContracts.createNode(contract.name)
                 for (ReinsuranceContractAndBase coveredContract : coveredContracts) {
                     contractsBasedOnContracts.addRelation(contract.name, coveredContract.reinsuranceContract.name)
-                    contractCoveredBy.put(contract, coveredContract)
+                    coverForContracts.put(contract, coveredContract)
                 }
             }
-            else if (isLegalEntityCover(contract)) {
-                // todo(sku): fix! need to collect preceeding contracts covering LE and probably gross peril
+            else if (includesInwardCover(contract)) {
+                // todo(sku): fix! need to collect preceding contracts covering LE and probably gross peril
                 List<ILegalEntityMarker> coveredLegalEntities = ((ILegalEntityCover) contract.parmCover).getCoveredLegalEntities()
                 contractsBasedOnCompanies.createNode(contract.name)
-                for (ILegalEntityCover coveredLegalEntity : coveredLegalEntities) {
+                for (ILegalEntityMarker coveredLegalEntity : coveredLegalEntities) {
                     List<IReinsuranceContractMarker> coveredContracts = inwardLegalEntity.get(coveredLegalEntity);
                     for (IReinsuranceContractMarker coveredContract : coveredContracts) {
+                        contractsBasedOnCompanies.createNode(coveredContract.name)
                         contractsBasedOnCompanies.addRelation(contract.name, coveredContract.name);
                     }
                 }
             }
-
         }
     }
 
     private void initContractMap() {
         for (ReinsuranceContract contract: componentList) {
-            reinsuranceContracts.put(contract.normalizedName, contract)
+            reinsuranceContracts.put(contract.name, contract)
+            reinsuranceContractNames.put(contract.normalizedName, contract)
         }
     }
 
     private boolean isGrossCover(ReinsuranceContract contract) {
-        boolean isGrossLegalEntitiyCover = (contract.parmCover.getType().equals(CoverAttributeStrategyType.LEGALENTITIES)
-                && ((InwardLegalEntitiesCoverAttributeStrategy) contract.parmCover).legalEntityCoverMode.equals(LegalEntityCoverMode.ORIGINALCLAIMS))
+        boolean isGrossLegalEntitiyCover = getLegalEntityCoverMode(contract).equals(LegalEntityCoverMode.ORIGINALCLAIMS)
         return (isGrossLegalEntitiyCover || contract.parmCover.getType().equals(CoverAttributeStrategyType.ORIGINALCLAIMS))
     }
 
     private boolean isContractCover(ReinsuranceContract contract) {
         return contract.parmCover instanceof IContractCover
     }
+    
+    private LegalEntityCoverMode getLegalEntityCoverMode(ReinsuranceContract contract) {
+        if (!contract.parmCover.getType().equals(CoverAttributeStrategyType.LEGALENTITIES)) return null
+        return ((InwardLegalEntitiesCoverAttributeStrategy) contract.parmCover).legalEntityCoverMode
+    }
 
-    private boolean isLegalEntityCover(ReinsuranceContract contract) {
-        return contract.parmCover instanceof ILegalEntityCover
+    private boolean includesInwardCover(ReinsuranceContract contract) {
+        LegalEntityCoverMode legalEntityCoverMode = getLegalEntityCoverMode(contract)
+        return legalEntityCoverMode && !legalEntityCoverMode.equals(LegalEntityCoverMode.ORIGINALCLAIMS)
+    }
+
+    private boolean isInwardLegalEntityCover(ReinsuranceContract contract) {
+        return contract.parmCover instanceof ILegalEntityCover && contract.parmCover.getType().equals(CoverAttributeStrategyType)
     }
 
     /**
-     * includes all replicating wiring independent of a p14n
+     * All ceded information is wired directly to a replicating channel independently of specific reinsurance program.
+     * Includes all replicating wiring independent of a p14n.
      */
     private void wireProgramIndependentReplications () {
         replicateInChannels this, 'inReinsurersDefault'
@@ -208,20 +240,11 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     }
 
     /**
-     * directly wire incoming claims and underwriting information to its corresponding net channel
-     */
-    // todo(sku): how to deal with missing/trivial reinsurance contracts as net channels have to be removed? -> model level?
-    private void wireTrivialContractsOnly() {
-        LOG.debug 'wireTrivialContractsOnly()'
-//        doWire WC, this, 'outClaimsNet', this, 'inClaims'
-//        doWire WC, this, 'outUnderwritingInfoNet', this, 'inUnderwritingInfo'
-    }
-
-    /**
      * Helper method for wiring when sender or receiver are determined dynamically
      */
     public static void doWire(category, receiver, inChannelName, sender, outChannelName) {
         LOG.debug "$receiver.$inChannelName <- $sender.$outChannelName ($category)"
+        println "$receiver.$inChannelName <- $sender.$outChannelName ($category)"
         category.doSetProperty(receiver, inChannelName, category.doGetProperty(sender, outChannelName))
     }
 }

@@ -26,7 +26,7 @@ public class AllFilterStrategy extends AbstractParameterObject implements ICover
         return source;
     }
 
-    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source) {
+    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
         return source;
     }
 }

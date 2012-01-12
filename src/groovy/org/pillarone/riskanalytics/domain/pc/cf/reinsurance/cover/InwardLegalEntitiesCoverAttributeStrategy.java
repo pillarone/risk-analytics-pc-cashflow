@@ -55,7 +55,7 @@ public class InwardLegalEntitiesCoverAttributeStrategy extends AbstractParameter
         return filteredClaims;
     }
 
-    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source) {
+    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
         List<UnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
         List coveredLegalEntities = getCoveredLegalEntities();
         for (UnderwritingInfoPacket uwInfo : source) {

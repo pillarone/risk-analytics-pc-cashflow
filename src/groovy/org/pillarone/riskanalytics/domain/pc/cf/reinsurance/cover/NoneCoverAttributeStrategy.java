@@ -27,7 +27,7 @@ public class NoneCoverAttributeStrategy extends AbstractParameterObject implemen
         return null;
     }
 
-    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source) {
+    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
         source.clear();
         return null;
     }

@@ -425,8 +425,8 @@ class ReinsuranceContractsTests extends GroovyTestCase {
         ReinsuranceContract quotaShareMarine = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
         quotaShareMarine.name = 'marine'
         quotaShareMarine.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.LEGALENTITIES,
-                ['legalEntities':new ComboBoxTableMultiDimensionalParameter([['marine']],['Legal Entities'], ILegalEntityMarker),
-                 'legalEntityCoverMode': LegalEntityCoverMode.ORIGINALCLAIMS])
+                ['legalEntities': new ComboBoxTableMultiDimensionalParameter([['marine']], ['Legal Entities'], ILegalEntityMarker),
+                        'legalEntityCoverMode': LegalEntityCoverMode.ORIGINALCLAIMS])
         ((InwardLegalEntitiesCoverAttributeStrategy) quotaShareMarine.parmCover).legalEntities.comboBoxValues['marine'] = marine
         quotaShareMarine.parmReinsurers = new ConstrainedMultiDimensionalParameter(
                 [['motor'], [0.8d]],
@@ -435,27 +435,29 @@ class ReinsuranceContractsTests extends GroovyTestCase {
         quotaShareMarine.parmReinsurers.comboBoxValues[0] = ['motor': motor]
         IPeriodCounter periodCounter = quotaShareMarine.iterationScope.periodScope.periodCounter
 
-//        ReinsuranceContract quotaShareMotor = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
-//        quotaShareMotor.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.GROSSLEGALENTITIES,
-//                ['legalEntities':new ComboBoxTableMultiDimensionalParameter([['motor']],['Covered Legal Entities'], ILegalEntityMarker),])
-//        quotaShareMotor.name = 'motor'
-//        ((GrossLegalEntitiesCoverAttributeStrategy) quotaShareMotor.parmCover).legalEntities.comboBoxValues['motor'] = motor
+        ReinsuranceContract quotaShareMotor = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
+        quotaShareMotor.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.LEGALENTITIES,
+                ['legalEntities': new ComboBoxTableMultiDimensionalParameter([['motor']], ['Legal Entities'], ILegalEntityMarker),
+                        'legalEntityCoverMode': LegalEntityCoverMode.INWARD])
+        quotaShareMotor.name = 'motor'
+        ((InwardLegalEntitiesCoverAttributeStrategy) quotaShareMotor.parmCover).legalEntities.comboBoxValues['motor'] = motor
 
-         List<ClaimCashflowPacket> marineClaimsAttritional = grossClaims(periodCounter, [marine], 1000)
+        List<ClaimCashflowPacket> marineClaimsAttritional = grossClaims(periodCounter, [marine], 1000)
 //         List<ClaimCashflowPacket> marineClaimsSingle = grossClaims(periodCounter, [marine, singleMarine], 500)
 //         List<ClaimCashflowPacket> motorClaims = grossClaims(periodCounter, [motor, attritionalMotor], 400)
 
-         ReinsuranceContracts contracts = new ReinsuranceContracts()
-         contracts.addSubComponent(quotaShareMarine)
-         contracts.internalWiring()
-         contracts.inClaims.addAll(marineClaimsAttritional) // + marineClaimsSingle + motorClaims)
+        ReinsuranceContracts contracts = new ReinsuranceContracts()
+        contracts.addSubComponent(quotaShareMarine)
+        contracts.addSubComponent(quotaShareMotor)
+        contracts.internalWiring()
+        contracts.inClaims.addAll(marineClaimsAttritional) // + marineClaimsSingle + motorClaims)
 
-         List contractsCededClaims = new TestProbe(contracts, 'outClaimsCeded').result
-         List quotaShareMarineCededClaims = new TestProbe(quotaShareMarine, 'outClaimsCeded').result
+        List contractsCededClaims = new TestProbe(contracts, 'outClaimsCeded').result
+        List quotaShareMarineCededClaims = new TestProbe(quotaShareMarine, 'outClaimsCeded').result
 //         List quotaShareMarineAttritionalOnNetCededClaims = new TestProbe(quotaShareMarineAttritionalOnNet, 'outClaimsCeded').result
 //         List quotaShareMarineAttritionalOnCededCededClaims = new TestProbe(quotaShareMarineAttritionalOnCeded, 'outClaimsCeded').result
 
-         contracts.start()
+        contracts.start()
 
     }
 

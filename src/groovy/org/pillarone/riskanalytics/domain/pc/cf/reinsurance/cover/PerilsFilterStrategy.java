@@ -6,11 +6,9 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -52,8 +50,25 @@ public class PerilsFilterStrategy extends AbstractParameterObject implements ICo
         return filteredClaims;
     }
 
-    // todo(sku): not really working for uwInfo as it has no peril tag
-    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source) {
-        return source;
+    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
+        List<UnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
+        Set<ISegmentMarker> coveredSegments = new HashSet<ISegmentMarker>();
+        for (ClaimCashflowPacket claim : coveredGrossClaims) {
+            coveredSegments.add(claim.segment());
+        }
+        for (UnderwritingInfoPacket underwritingInfo: source) {
+            if (coveredSegments.contains(underwritingInfo.segment())) {
+                filteredUnderwritingInfo.add(underwritingInfo);
+            }
+        }
+        source.clear();
+        if (filteredUnderwritingInfo.size() == 0) {
+            filteredUnderwritingInfo.add(new UnderwritingInfoPacket());
+        }
+        else {
+            source.addAll(filteredUnderwritingInfo);
+        }
+        return filteredUnderwritingInfo;
+
     }
 }

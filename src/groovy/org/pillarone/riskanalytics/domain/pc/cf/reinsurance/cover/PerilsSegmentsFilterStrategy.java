@@ -9,10 +9,7 @@ import org.pillarone.riskanalytics.domain.utils.constant.LogicArguments;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -66,10 +63,12 @@ public class PerilsSegmentsFilterStrategy extends AbstractParameterObject implem
         return filteredClaims;
     }
 
-    // todo(sku): think about deriving covered uw info indirectly
-    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source) {
+    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
         List<UnderwritingInfoPacket> filteredUwInfo = new ArrayList<UnderwritingInfoPacket>();
-        List coveredSegments = getCoveredSegments();
+        Set<ISegmentMarker> coveredSegments = new HashSet<ISegmentMarker>(getCoveredSegments());
+        for (ClaimCashflowPacket claim : coveredGrossClaims) {
+            coveredSegments.add(claim.segment());
+        }
         for (UnderwritingInfoPacket uwInfo : source) {
             if (coveredSegments.contains(uwInfo.segment())) {
                 filteredUwInfo.add(uwInfo);

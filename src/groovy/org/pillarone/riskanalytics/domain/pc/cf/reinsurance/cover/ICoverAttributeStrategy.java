@@ -13,5 +13,5 @@ public interface ICoverAttributeStrategy extends IParameterObject {
 
     List<ClaimCashflowPacket> coveredClaims(List<ClaimCashflowPacket> source);
 
-    List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source);
+    List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims);
 }

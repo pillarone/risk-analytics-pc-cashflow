@@ -11,7 +11,6 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimPacketAggregator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault;
@@ -20,7 +19,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountedValuesPack
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.NetPresentValuesPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket;
@@ -40,7 +38,6 @@ import java.util.*;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-// todo(sku): apply recovery patterns
 public class ReinsuranceContract extends Component implements IReinsuranceContractMarker {
 
     private static Log LOG = LogFactory.getLog(ReinsuranceContract.class);
@@ -55,6 +52,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     private PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
 
+    /** Contains gross claims covered in the current periods according to their time and cover filter. This includes
+     *  gross claims for which there is no cover left or no cover available as the counter party has gone default. */
     private PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
@@ -186,7 +185,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
      */
     private void coverFilter() {
         parmCover.coveredClaims(inClaims);
-        parmCover.coveredUnderwritingInfo(inUnderwritingInfo);
+        parmCover.coveredUnderwritingInfo(inUnderwritingInfo, inClaims);
     }
 
     /**
@@ -329,7 +328,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             for (ClaimCashflowPacket cededClaim : outClaimsCeded) {
                 if (ClaimUtils.notTrivialValues(cededClaim)) {
                     for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.getFactors(cededClaim.getUpdateDate()).entrySet()) {
-                        ClaimCashflowPacket counterPartyCededClaim = ClaimUtils.scale(cededClaim, -legalEntityAndFactor.getValue());
+                        ClaimCashflowPacket counterPartyCededClaim = ClaimUtils.scale(cededClaim, -1d);
                         counterPartyCededClaim.setMarker(legalEntityAndFactor.getKey());
                         outClaimsInward.add(counterPartyCededClaim);
                     }

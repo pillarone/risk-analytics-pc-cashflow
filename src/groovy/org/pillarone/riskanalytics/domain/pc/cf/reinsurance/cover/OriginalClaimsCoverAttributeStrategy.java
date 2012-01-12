@@ -30,7 +30,7 @@ public class OriginalClaimsCoverAttributeStrategy extends AbstractParameterObjec
         return filter.coveredClaims(source);
     }
 
-    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source) {
-        return filter.coveredUnderwritingInfo(source);
+    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
+        return filter.coveredUnderwritingInfo(source, coveredGrossClaims);
     }
 }

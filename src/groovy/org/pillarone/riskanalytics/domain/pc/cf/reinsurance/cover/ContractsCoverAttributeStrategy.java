@@ -53,7 +53,7 @@ public class ContractsCoverAttributeStrategy extends AbstractParameterObject imp
         return filteredClaims;
     }
 
-    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source) {
+    public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
         List<UnderwritingInfoPacket> filteredUwInfo = new ArrayList<UnderwritingInfoPacket>();
         List coveredContracts = getCoveredReinsuranceContracts();
         for (UnderwritingInfoPacket uwInfo : source) {
@@ -61,7 +61,7 @@ public class ContractsCoverAttributeStrategy extends AbstractParameterObject imp
                 filteredUwInfo.add(uwInfo);
             }
         }
-        filteredUwInfo = filter.coveredUnderwritingInfo(filteredUwInfo);
+        filteredUwInfo = filter.coveredUnderwritingInfo(filteredUwInfo, coveredGrossClaims);
         if (filteredUwInfo.size() == 0) {
             filteredUwInfo.add(new UnderwritingInfoPacket());
             source.clear();

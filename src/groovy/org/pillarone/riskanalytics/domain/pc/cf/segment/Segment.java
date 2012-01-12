@@ -148,6 +148,17 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         return null;
     }
 
+    private double recovery(DateTime updateDate, DateTime dateOfDefault) {
+        if (dateOfDefault != null) {
+            for (LegalEntityDefault legalEntityDefault : inLegalEntityDefault) {
+                if (legalEntityDefault.getLegalEntity().equals(parmCompany.getSelectedComponent())) {
+                    return legalEntityDefault.getDateOfDefault().isAfter(updateDate) ? 1d : legalEntityDefault.getFirstInstantRecovery();
+                }
+            }
+        }
+        return 1d;
+    }
+
     private void initIteration(String phase) {
         if (phase.equals(PHASE_GROSS) && iterationScope.getPeriodScope().isFirstPeriod()) {
             incomingScaledBaseClaimMapping.clear();
@@ -194,10 +205,11 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
                 String originName = underwritingInfo.riskBand().getNormalizedName();
                 int row = parmUnderwritingPortions.getColumnByName(UNDERWRITING).indexOf(originName);
-                if (row > -1 && (dateOfDefault == null || dateOfDefault.isAfter(underwritingInfo.getDate()))) {
+                if (row > -1) {
                     UnderwritingInfoPacket lobUnderwritingInfo = (UnderwritingInfoPacket) underwritingInfo.copy();
                     lobUnderwritingInfo.setOriginal(lobUnderwritingInfo);
                     double segmentPortion = InputFormatConverter.getDouble(parmUnderwritingPortions.getValueAt(row + 1, portionColumn));
+                    segmentPortion *= recovery(lobUnderwritingInfo.getDate(), dateOfDefault);
                     lobUnderwritingInfo.setPremiumWritten(lobUnderwritingInfo.getPremiumWritten() * segmentPortion);
                     lobUnderwritingInfo.setPremiumPaid(lobUnderwritingInfo.getPremiumPaid() * segmentPortion);
                     lobUnderwritingInfo.setSumInsured(lobUnderwritingInfo.getSumInsured() * segmentPortion);
@@ -221,13 +233,14 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                 if (marketClaim.peril() != null) {
                     String originName = marketClaim.peril().getNormalizedName();
                     int row = parmClaimsPortions.getColumnByName(PERIL).indexOf(originName);
-                    if (row > -1 && (dateOfDefault == null || dateOfDefault.isAfter(marketClaim.getOccurrenceDate()))) {
+                    if (row > -1) {
                         ClaimCashflowPacket segmentClaim = (ClaimCashflowPacket) marketClaim.copy();
                         // PMO-750: claim mergers in reinsurance program won't work with reference to market claims
                         segmentClaim.origin = this;
                         segmentClaim.setMarker(this);
                         segmentClaim.setMarker((IComponentMarker) parmCompany.getSelectedComponent());
                         double scaleFactor = InputFormatConverter.getDouble(parmClaimsPortions.getValueAt(row + 1, portionColumn));
+                        scaleFactor *= recovery(segmentClaim.getUpdateDate(), dateOfDefault);
                         IClaimRoot scaledSegmentBaseClaim = incomingScaledBaseClaimMapping.get(marketClaim.getBaseClaim());
                         if (scaledSegmentBaseClaim == null) {
                             ClaimCashflowPacket scaledSegementClaim = ClaimUtils.scale(segmentClaim, scaleFactor, true);
@@ -261,6 +274,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                         segmentReserve.setMarker(this);
                         segmentReserve.setMarker((IComponentMarker) parmCompany.getSelectedComponent());
                         double scaleFactor = InputFormatConverter.getDouble(parmReservesPortions.getValueAt(row + 1, portionColumn));
+                        scaleFactor *= recovery(segmentReserve.getUpdateDate(), dateOfDefault);
                         segmentReserves.add(ClaimUtils.scale(segmentReserve, scaleFactor, true));
                     }
                 }
