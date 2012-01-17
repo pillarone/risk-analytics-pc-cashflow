@@ -39,12 +39,8 @@ public class PerilsFilterStrategy extends AbstractParameterObject implements ICo
                 filteredClaims.add(claim);
             }
         }
-        if (filteredClaims.size() == 0) {
-            filteredClaims.add(new ClaimCashflowPacket());
-            source.clear();
-        }
-        else {
-            source.clear();
+        source.clear();
+        if (!filteredClaims.isEmpty()) {
             source.addAll(filteredClaims);
         }
         return filteredClaims;
@@ -62,10 +58,7 @@ public class PerilsFilterStrategy extends AbstractParameterObject implements ICo
             }
         }
         source.clear();
-        if (filteredUnderwritingInfo.size() == 0) {
-            filteredUnderwritingInfo.add(new UnderwritingInfoPacket());
-        }
-        else {
+        if (!filteredUnderwritingInfo.isEmpty()) {
             source.addAll(filteredUnderwritingInfo);
         }
         return filteredUnderwritingInfo;

@@ -82,6 +82,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
      * @param claims
      * @param periodCounter
      * @param factors
+     * @return number of generated claims
      */
     private int generateClaimsOfCurrentPeriod(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter, List<Factors> factors) {
         if (generateNewClaims()) {

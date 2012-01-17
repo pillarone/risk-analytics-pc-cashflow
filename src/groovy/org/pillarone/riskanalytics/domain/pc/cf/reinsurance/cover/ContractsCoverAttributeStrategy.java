@@ -42,35 +42,27 @@ public class ContractsCoverAttributeStrategy extends AbstractParameterObject imp
             }
         }
         filteredClaims = filter.coveredClaims(filteredClaims);
-        if (filteredClaims.size() == 0) {
-            filteredClaims.add(new ClaimCashflowPacket());
-            source.clear();
-        }
-        else {
-            source.clear();
+        source.clear();
+        if (!filteredClaims.isEmpty()) {
             source.addAll(filteredClaims);
         }
         return filteredClaims;
     }
 
     public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
-        List<UnderwritingInfoPacket> filteredUwInfo = new ArrayList<UnderwritingInfoPacket>();
+        List<UnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
         List coveredContracts = getCoveredReinsuranceContracts();
         for (UnderwritingInfoPacket uwInfo : source) {
             if (coveredContracts.contains(uwInfo.reinsuranceContract())) {
-                filteredUwInfo.add(uwInfo);
+                filteredUnderwritingInfo.add(uwInfo);
             }
         }
-        filteredUwInfo = filter.coveredUnderwritingInfo(filteredUwInfo, coveredGrossClaims);
-        if (filteredUwInfo.size() == 0) {
-            filteredUwInfo.add(new UnderwritingInfoPacket());
-            source.clear();
+        filteredUnderwritingInfo = filter.coveredUnderwritingInfo(filteredUnderwritingInfo, coveredGrossClaims);
+        source.clear();
+        if (!filteredUnderwritingInfo.isEmpty()) {
+            source.addAll(filteredUnderwritingInfo);
         }
-        else {
-            source.clear();
-            source.addAll(filteredUwInfo);
-        }
-        return filteredUwInfo;
+        return filteredUnderwritingInfo;
     }
 
     protected ConstrainedMultiDimensionalParameter contracts;

@@ -48,7 +48,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     /** PMO-1635: gets GNPI underwriting info always */
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket.class);
+//    private PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket.class);
     private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     private PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
 
@@ -232,6 +232,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         }
         else {
             for (ClaimCashflowPacket claim : inClaims) {
+                System.out.println(periodCounter.getCurrentPeriodStart().toString());
                 int occurrencePeriod = claim.occurrencePeriod(periodCounter);
                 ClaimStorage claimStorage = claimsHistories.get(claim.getKeyClaim());
                 if (currentPeriod == occurrencePeriod && claimStorage == null) {
@@ -480,14 +481,6 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     public void setInUnderwritingInfo(PacketList<UnderwritingInfoPacket> inUnderwritingInfo) {
         this.inUnderwritingInfo = inUnderwritingInfo;
-    }
-
-    public PacketList<LegalEntityDefaultPacket> getInReinsurersDefault() {
-        return inReinsurersDefault;
-    }
-
-    public void setInReinsurersDefault(PacketList<LegalEntityDefaultPacket> inReinsurersDefault) {
-        this.inReinsurersDefault = inReinsurersDefault;
     }
 
     public PacketList<ClaimCashflowPacket> getOutClaimsNet() {

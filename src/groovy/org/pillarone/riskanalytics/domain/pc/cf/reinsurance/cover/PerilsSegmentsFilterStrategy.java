@@ -52,36 +52,28 @@ public class PerilsSegmentsFilterStrategy extends AbstractParameterObject implem
                 filteredClaims.add(claim);
             }
         }
-        if (filteredClaims.size() == 0) {
-            filteredClaims.add(new ClaimCashflowPacket());
-            source.clear();
-        }
-        else {
-            source.clear();
+        source.clear();
+        if (!filteredClaims.isEmpty()) {
             source.addAll(filteredClaims);
         }
         return filteredClaims;
     }
 
     public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
-        List<UnderwritingInfoPacket> filteredUwInfo = new ArrayList<UnderwritingInfoPacket>();
+        List<UnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
         Set<ISegmentMarker> coveredSegments = new HashSet<ISegmentMarker>(getCoveredSegments());
         for (ClaimCashflowPacket claim : coveredGrossClaims) {
             coveredSegments.add(claim.segment());
         }
         for (UnderwritingInfoPacket uwInfo : source) {
             if (coveredSegments.contains(uwInfo.segment())) {
-                filteredUwInfo.add(uwInfo);
+                filteredUnderwritingInfo.add(uwInfo);
             }
         }
-        if (filteredUwInfo.size() == 0) {
-            filteredUwInfo.add(new UnderwritingInfoPacket());
-            source.clear();
+        source.clear();
+        if (!filteredUnderwritingInfo.isEmpty()) {
+            source.addAll(filteredUnderwritingInfo);
         }
-        else {
-            source.clear();
-            source.addAll(filteredUwInfo);
-        }
-        return filteredUwInfo;
+        return filteredUnderwritingInfo;
     }
 }

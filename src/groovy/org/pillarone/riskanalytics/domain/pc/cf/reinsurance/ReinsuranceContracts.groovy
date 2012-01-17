@@ -40,7 +40,7 @@ class ReinsuranceContracts extends DynamicComposedComponent {
 
     PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
-    PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket)
+//    PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket)
     PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
     PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault)
 
@@ -219,7 +219,7 @@ class ReinsuranceContracts extends DynamicComposedComponent {
      * Includes all replicating wiring independent of a p14n.
      */
     private void wireProgramIndependentReplications () {
-        replicateInChannels this, 'inReinsurersDefault'
+//        replicateInChannels this, 'inReinsurersDefault'
         replicateOutChannels this, 'outCommission'
         replicateOutChannels this, 'outUnderwritingInfoCeded'
         replicateOutChannels this, 'outClaimsCeded'

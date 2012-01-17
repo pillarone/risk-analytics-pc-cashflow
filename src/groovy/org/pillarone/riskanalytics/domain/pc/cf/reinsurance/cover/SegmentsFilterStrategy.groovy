@@ -36,10 +36,7 @@ class SegmentsFilterStrategy extends AbstractParameterObject implements ICoverAt
             }
         }
         source.clear();
-        if (filteredClaims.size() == 0) {
-            filteredClaims.add(new ClaimCashflowPacket());
-        }
-        else {
+        if (!filteredClaims.isEmpty()) {
             source.addAll(filteredClaims);
         }
         return filteredClaims;
@@ -54,10 +51,7 @@ class SegmentsFilterStrategy extends AbstractParameterObject implements ICoverAt
             }
         }
         source.clear();
-        if (filteredUnderwritingInfo.size() == 0) {
-            filteredUnderwritingInfo.add(new UnderwritingInfoPacket());
-        }
-        else {
+        if (!filteredUnderwritingInfo.isEmpty()) {
             source.addAll(filteredUnderwritingInfo);
         }
         return filteredUnderwritingInfo;
