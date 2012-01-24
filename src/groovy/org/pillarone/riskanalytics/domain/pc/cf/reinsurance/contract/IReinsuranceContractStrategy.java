@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
 
 import java.util.List;
 
@@ -9,8 +10,15 @@ import java.util.List;
  */
 public interface IReinsuranceContractStrategy {
     /**
+     *
      * @param underwritingInfoPackets used for scaling relative contract parameters
+     * @param termDeductible
+     * @param termLimit
      * @return fully prepared contract
      */
-    IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets);
+    IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                     ThresholdStore termDeductible, ThresholdStore termLimit);
+
+    double getTermDeductible();
+    double getTermLimit();
 }

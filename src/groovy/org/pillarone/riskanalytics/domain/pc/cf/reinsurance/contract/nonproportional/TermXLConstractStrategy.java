@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public abstract class XLConstractStrategy extends AbstractParameterObject implements IReinsuranceContractStrategy {
+public abstract class TermXLConstractStrategy extends AbstractParameterObject implements IReinsuranceContractStrategy {
 
     /** Premium can be expressed as a fraction of a base quantity. */
     protected XLPremiumBase premiumBase;
@@ -31,8 +31,9 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
     protected double limit;
     protected double aggregateDeductible;
     protected double aggregateLimit;
+    protected double termDeductible = 0;
+    protected double termLimit = 0;
     protected IStabilizationStrategy stabilization;
-
 
     public Map getParameters() {
         Map params = new HashMap();
@@ -44,8 +45,18 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
         params.put(LIMIT, limit);
         params.put(AGGREGATE_DEDUCTIBLE, aggregateDeductible);
         params.put(AGGREGATE_LIMIT, aggregateLimit);
+        params.put(TERM_DEDUCTIBLE, termDeductible);
+        params.put(TERM_LIMIT, termLimit);
         params.put(STABILIZATION, stabilization);
         return params;
+    }
+
+    public double getTermDeductible() {
+        return termDeductible;
+    }
+
+    public double getTermLimit() {
+        return termLimit;
     }
 
     protected Double getCededPremiumFixed(List<UnderwritingInfoPacket> underwritingInfoPackets) {
@@ -67,14 +78,6 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
         return cededPremiumFixed;
     }
 
-    public double getTermDeductible() {
-        return 0;
-    }
-
-    public double getTermLimit() {
-        return 0;
-    }
-
     public static final String PREMIUM_BASE = "premiumBase";
     public static final String PREMIUM = "premium";
     public static final String PREMIUM_ALLOCATION = "riPremiumSplit";
@@ -83,5 +86,7 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
     public static final String LIMIT = "limit";
     public static final String AGGREGATE_DEDUCTIBLE = "aggregateDeductible";
     public static final String AGGREGATE_LIMIT = "aggregateLimit";
+    public static final String TERM_DEDUCTIBLE = "termDeductible";
+    public static final String TERM_LIMIT = "termLimit";
     public static final String STABILIZATION = "stabilization";
 }

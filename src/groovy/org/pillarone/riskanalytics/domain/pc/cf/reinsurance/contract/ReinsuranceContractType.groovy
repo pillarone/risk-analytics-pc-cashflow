@@ -30,6 +30,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproporti
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.TermWXLConstractStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.TermCXLConstractStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.TermWCXLConstractStrategy
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -61,6 +64,27 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
             "premiumBase": XLPremiumBase.ABSOLUTE, "premium": 0d,
             "reinstatementPremiums": new ConstrainedMultiDimensionalParameter([], ['Reinstatement Premium'],
                 ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
+            "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),])
+    public static final ReinsuranceContractType WXLTERM = new ReinsuranceContractType("wxl", "WXL", [
+            "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d, "aggregateLimit": 0d,
+            "termDeductible":0d, "termLimit":0d,"stabilization": StabilizationStrategyType.getDefault(),
+            "premiumBase": XLPremiumBase.ABSOLUTE, "premium": 0d,
+            "reinstatementPremiums": new ConstrainedMultiDimensionalParameter([], ['Reinstatement Premium'],
+                    ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
+            "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),])
+    public static final ReinsuranceContractType CXLTERM = new ReinsuranceContractType("cxl", "CXL", [
+            "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d, "aggregateLimit": 0d,
+            "termDeductible":0d, "termLimit":0d,"stabilization": StabilizationStrategyType.getDefault(),
+            "premiumBase": XLPremiumBase.ABSOLUTE, "premium": 0d,
+            "reinstatementPremiums": new ConstrainedMultiDimensionalParameter([], ['Reinstatement Premium'],
+                    ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
+            "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),])
+    public static final ReinsuranceContractType WCXLTERM = new ReinsuranceContractType("wcxl", "WCXL", [
+            "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d, "aggregateLimit": 0d,
+            "termDeductible":0d, "termLimit":0d,"stabilization": StabilizationStrategyType.getDefault(),
+            "premiumBase": XLPremiumBase.ABSOLUTE, "premium": 0d,
+            "reinstatementPremiums": new ConstrainedMultiDimensionalParameter([], ['Reinstatement Premium'],
+                    ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
             "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),])
     public static final ReinsuranceContractType STOPLOSS = new ReinsuranceContractType("stop loss", "STOPLOSS",
             ["stopLossContractBase": StopLossBase.ABSOLUTE, "attachmentPoint": 0d, "limit": 0d, "premium": 0d,
@@ -150,6 +174,48 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
                         limit: (double) parameters[WCXLConstractStrategy.LIMIT],
                         aggregateLimit: (double) parameters[WCXLConstractStrategy.AGGREGATE_LIMIT],
                         aggregateDeductible: (double) parameters[WCXLConstractStrategy.AGGREGATE_DEDUCTIBLE],
+                        premiumBase: (XLPremiumBase) parameters[WCXLConstractStrategy.PREMIUM_BASE],
+                        premium: (double) parameters[WCXLConstractStrategy.PREMIUM],
+                        riPremiumSplit: (IRIPremiumSplitStrategy) parameters[WCXLConstractStrategy.PREMIUM_ALLOCATION],
+                        reinstatementPremiums: (AbstractMultiDimensionalParameter) parameters[WCXLConstractStrategy.REINSTATEMENT_PREMIUMS],
+                        stabilization : (IStabilizationStrategy) parameters[WXLConstractStrategy.STABILIZATION])
+                break
+            case ReinsuranceContractType.WXLTERM:
+                return new TermWXLConstractStrategy(
+                        attachmentPoint: (double) parameters[WXLConstractStrategy.ATTACHMENT_POINT],
+                        limit: (double) parameters[WXLConstractStrategy.LIMIT],
+                        aggregateLimit: (double) parameters[WXLConstractStrategy.AGGREGATE_LIMIT],
+                        aggregateDeductible: (double) parameters[WXLConstractStrategy.AGGREGATE_DEDUCTIBLE],
+                        termDeductible: parameters[TermWXLConstractStrategy.TERM_DEDUCTIBLE],
+                        termLimit: parameters[TermWXLConstractStrategy.TERM_LIMIT],
+                        premiumBase: (XLPremiumBase) parameters[WXLConstractStrategy.PREMIUM_BASE],
+                        premium: (double) parameters[WXLConstractStrategy.PREMIUM],
+                        riPremiumSplit: (IRIPremiumSplitStrategy) parameters[WXLConstractStrategy.PREMIUM_ALLOCATION],
+                        reinstatementPremiums: (AbstractMultiDimensionalParameter) parameters[WXLConstractStrategy.REINSTATEMENT_PREMIUMS],
+                        stabilization : (IStabilizationStrategy) parameters[WXLConstractStrategy.STABILIZATION])
+                break
+            case ReinsuranceContractType.CXLTERM:
+                return new TermCXLConstractStrategy(
+                        attachmentPoint: (double) parameters[CXLConstractStrategy.ATTACHMENT_POINT],
+                        limit: (double) parameters[CXLConstractStrategy.LIMIT],
+                        aggregateLimit: (double) parameters[CXLConstractStrategy.AGGREGATE_LIMIT],
+                        aggregateDeductible: (double) parameters[CXLConstractStrategy.AGGREGATE_DEDUCTIBLE],
+                        termDeductible: parameters[TermCXLConstractStrategy.TERM_DEDUCTIBLE],
+                        termLimit: parameters[TermCXLConstractStrategy.TERM_LIMIT],
+                        premiumBase: (XLPremiumBase) parameters[CXLConstractStrategy.PREMIUM_BASE],
+                        premium: (double) parameters[CXLConstractStrategy.PREMIUM],
+                        riPremiumSplit: (IRIPremiumSplitStrategy) parameters[CXLConstractStrategy.PREMIUM_ALLOCATION],
+                        reinstatementPremiums: (AbstractMultiDimensionalParameter) parameters[CXLConstractStrategy.REINSTATEMENT_PREMIUMS],
+                        stabilization : (IStabilizationStrategy) parameters[WXLConstractStrategy.STABILIZATION])
+                break
+            case ReinsuranceContractType.WCXLTERM:
+                return new TermWCXLConstractStrategy(
+                        attachmentPoint: (double) parameters[WCXLConstractStrategy.ATTACHMENT_POINT],
+                        limit: (double) parameters[WCXLConstractStrategy.LIMIT],
+                        aggregateLimit: (double) parameters[WCXLConstractStrategy.AGGREGATE_LIMIT],
+                        aggregateDeductible: (double) parameters[WCXLConstractStrategy.AGGREGATE_DEDUCTIBLE],
+                        termDeductible: parameters[TermWXLConstractStrategy.TERM_DEDUCTIBLE],
+                        termLimit: parameters[TermWXLConstractStrategy.TERM_LIMIT],
                         premiumBase: (XLPremiumBase) parameters[WCXLConstractStrategy.PREMIUM_BASE],
                         premium: (double) parameters[WCXLConstractStrategy.PREMIUM],
                         riPremiumSplit: (IRIPremiumSplitStrategy) parameters[WCXLConstractStrategy.PREMIUM_ALLOCATION],

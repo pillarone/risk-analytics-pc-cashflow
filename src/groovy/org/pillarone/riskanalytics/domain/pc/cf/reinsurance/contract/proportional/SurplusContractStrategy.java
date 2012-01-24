@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy;
 
 import java.util.HashMap;
@@ -39,8 +40,16 @@ public class SurplusContractStrategy extends AbstractParameterObject implements 
         return params;
     }
 
-    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets) {
+    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets, ThresholdStore termDeductible, ThresholdStore termLimit) {
         return new SurplusContract(retention, lines, defaultCededLossShare, commission.getCalculator());
+    }
+
+    public double getTermDeductible() {
+        return 0;
+    }
+
+    public double getTermLimit() {
+        return 0;
     }
 
     public static final String RETENTION = "retention";

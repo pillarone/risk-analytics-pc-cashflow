@@ -10,16 +10,16 @@ import java.util.List;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class WCXLConstractStrategy extends XLConstractStrategy implements IReinsuranceContractStrategy {
+public class TermWCXLConstractStrategy extends XLConstractStrategy implements IReinsuranceContractStrategy {
 
     public ReinsuranceContractType getType() {
-        return ReinsuranceContractType.WCXL;
+        return ReinsuranceContractType.WCXLTERM;
     }
 
     public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets, ThresholdStore termDeductible, ThresholdStore termLimit) {
         double cededPremiumFixed = getCededPremiumFixed(underwritingInfoPackets);
         List<Double> reinstatementPremiumFactors = (List<Double>) reinstatementPremiums.getValues().get(0);
-        return new WCXLContract(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit,
-                stabilization, reinstatementPremiumFactors, riPremiumSplit);
+        return new TermWCXLContract(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit,
+                stabilization, reinstatementPremiumFactors, riPremiumSplit, termDeductible, termLimit);
     }
 }

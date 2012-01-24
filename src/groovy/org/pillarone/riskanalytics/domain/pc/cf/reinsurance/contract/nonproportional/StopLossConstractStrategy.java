@@ -1,6 +1,5 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional;
 
-import org.pillarone.riskanalytics.core.parameterization.AbstractMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -44,7 +43,7 @@ public class StopLossConstractStrategy extends AbstractParameterObject implement
         return ReinsuranceContractType.STOPLOSS;
     }
 
-    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets) {
+    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets, ThresholdStore termDeductible, ThresholdStore termLimit) {
         double cededPremiumFixed = premium;
         double scaledAttachmentPoint = attachmentPoint;
         double scaledLimit = limit;
@@ -59,6 +58,14 @@ public class StopLossConstractStrategy extends AbstractParameterObject implement
                 break;
         }
         return new StopLossContract(cededPremiumFixed, scaledAttachmentPoint, scaledLimit, premiumAllocation);
+    }
+
+    public double getTermDeductible() {
+        return 0;
+    }
+
+    public double getTermLimit() {
+        return 0;
     }
 
     public static final String CONTRACT_BASE = "stopLossContractBase";

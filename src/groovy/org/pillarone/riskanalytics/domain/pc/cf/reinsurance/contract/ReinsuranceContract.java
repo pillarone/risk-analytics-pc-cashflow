@@ -21,9 +21,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPa
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity;
-import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.IPropReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.CommissionPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType;
@@ -48,7 +48,6 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     /** PMO-1635: gets GNPI underwriting info always */
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-//    private PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket.class);
     private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     private PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
 
@@ -80,6 +79,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     private CounterPartyState counterPartyFactors;
     private boolean isProportionalContract = false;
+    private ThresholdStore termDeductible;
+    private ThresholdStore termLimit;
 
     @Override
     protected void doCalculation() {
@@ -120,6 +121,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
 
     private void initIteration() {
         if (iterationScope.getPeriodScope().isFirstPeriod()) {
+            termDeductible = new ThresholdStore(parmContractStrategy.getTermDeductible());
+            termLimit = new ThresholdStore(parmContractStrategy.getTermLimit());
             if (counterPartyFactors.newInitializationRequired() || firstIterationAndPeriod()) {
                 DateTime validAsOf = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
                 List<LegalEntity> counterParties = parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX);
@@ -193,7 +196,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
      */
     private void updateContractParameters() {
         if (isCurrentPeriodCovered()) {
-            periodStore.put(REINSURANCE_CONTRACT, parmContractStrategy.getContract(inUnderwritingInfo));
+            periodStore.put(REINSURANCE_CONTRACT, parmContractStrategy.getContract(inUnderwritingInfo, termDeductible, termLimit));
         }
     }
 
@@ -232,7 +235,6 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         }
         else {
             for (ClaimCashflowPacket claim : inClaims) {
-                System.out.println(periodCounter.getCurrentPeriodStart().toString());
                 int occurrencePeriod = claim.occurrencePeriod(periodCounter);
                 ClaimStorage claimStorage = claimsHistories.get(claim.getKeyClaim());
                 if (currentPeriod == occurrencePeriod && claimStorage == null) {

@@ -131,7 +131,7 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
         return claimPropertyIncremental == 0 ? 0 : cededAfterAAL / claimPropertyIncremental;
     }
 
-    private double cededValue(double claimPropertyCumulated, BasedOnClaimProperty claimPropertyBase, ClaimStorage storage,
+    protected double cededValue(double claimPropertyCumulated, BasedOnClaimProperty claimPropertyBase, ClaimStorage storage,
                                double stabilizationFactor) {
         double aggregateLimitValue = periodLimit.get(claimPropertyBase, stabilizationFactor);
         if (aggregateLimitValue > 0) {
