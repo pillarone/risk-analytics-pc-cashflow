@@ -141,7 +141,7 @@ mappings = {
                     }
                     "premiumPaidNet" "GIRA:legalEntities:[%legalEntity%]:outUnderwritingInfoNet:premiumPaid", {
                         "gross" "GIRA:legalEntities:[%legalEntity%]:outUnderwritingInfoGross:premiumPaid", {
-                            "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outUnderwritingInfoGross:premiumWritten"
+                            "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outUnderwritingInfoGross:premiumPaid"
                         }
                         "ceded" "GIRA:legalEntities:[%legalEntity%]:outUnderwritingInfoCeded:premiumPaid", {
                             "fixed" "GIRA:legalEntities:[%legalEntity%]:outUnderwritingInfoCeded:premiumPaidFixed"
