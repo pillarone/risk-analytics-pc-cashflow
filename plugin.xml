@@ -9,6 +9,7 @@
     <resource>BuildConfig</resource>
     <resource>Config</resource>
     <resource>DataSource</resource>
+    <resource>PCCashflowBootStrap</resource>
     <resource>UrlMappings</resource>
   </resources>
   <dependencies />
