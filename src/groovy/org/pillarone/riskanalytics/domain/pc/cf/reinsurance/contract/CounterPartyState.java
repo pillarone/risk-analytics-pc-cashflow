@@ -66,9 +66,14 @@ public class CounterPartyState {
         }
     }
 
+    /**
+     * @param validAsOf
+     * @return current covered ratio respecting original contract shares, default and recovery of every single counter party
+     */
     public double getCoveredByReinsurers(DateTime validAsOf) {
         // no counter parties and cover portions are defined
         if (counterPartyFactors.isEmpty()) return 1d;
+        // a default might have occurred and therefore the aggregate factor might be lower
         updateAggregateFactor(validAsOf);
         if (coveredByReinsurersByDate.isEmpty()) return 1d;
         if (coveredByReinsurersByDate.floorEntry(validAsOf) == null) {
@@ -98,11 +103,16 @@ public class CounterPartyState {
         return initialStateModified;
     }
 
+    /**
+     * @param validAsOf
+     * @return adjusted factor for every counter party considering original weight and possible recovery rate
+     */
     public Map<ILegalEntityMarker, Double> getFactors(DateTime validAsOf) {
         Map<ILegalEntityMarker, Double> factors = new HashMap<ILegalEntityMarker, Double>();
+        double coveredByReinsurers = coveredByReinsurersByDate.isEmpty() ? 1 : getCoveredByReinsurers(validAsOf);
         for (Map.Entry<ILegalEntityMarker, TreeMap<DateTime, Double>> entry : counterPartyFactors.entrySet()) {
-            if (entry.getValue() != null && entry.getValue().floorEntry(validAsOf) != null) {
-                factors.put(entry.getKey(), entry.getValue().floorEntry(validAsOf).getValue());
+            if (entry.getValue() != null && entry.getValue().floorEntry(validAsOf) != null && coveredByReinsurers != 0d) {
+                factors.put(entry.getKey(), entry.getValue().floorEntry(validAsOf).getValue() / coveredByReinsurers);
             }
         }
         return factors;

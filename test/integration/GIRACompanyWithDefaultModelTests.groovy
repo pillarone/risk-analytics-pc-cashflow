@@ -12,11 +12,11 @@ class GIRACompanyWithDefaultModelTests extends ModelTest {
 
     @Override
     String getResultConfigurationFileName() {
-        'GIRAAggregateNoIdxResultConfiguration'
+        'GIRALegalEntityDrillDownResultConfiguration'
     }
 
     String getResultConfigurationDisplayName() {
-        'Aggregate Gross Claims without Index Collection'
+        'Legal Entity Drill Down'
     }
 
     @Override
@@ -34,6 +34,6 @@ class GIRACompanyWithDefaultModelTests extends ModelTest {
     }
 
     protected boolean shouldCompareResults() {
-//        true
+        true
     }
 }

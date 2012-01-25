@@ -134,9 +134,8 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     private boolean defaultNotBeforeCurrentPeriodStart() {
         if (dateOfDefault == null) {
             dateOfDefault = getDateOfDefault();
-            return dateOfDefault == null || dateOfDefault.isAfter(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
         }
-        return false;
+        return dateOfDefault == null || dateOfDefault.isAfter(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
     }
 
     private DateTime getDateOfDefault() {
