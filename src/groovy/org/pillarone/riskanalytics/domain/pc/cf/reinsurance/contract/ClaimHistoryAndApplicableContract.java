@@ -15,6 +15,7 @@ public class ClaimHistoryAndApplicableContract {
 
     public ClaimHistoryAndApplicableContract(ClaimCashflowPacket claim, ClaimStorage claimStorage, IReinsuranceContract contract) {
         if (claim.getNominalUltimate() > 0) {
+            // claim is positive if ceded claims are covered, inverting sign required
             this.claim = ClaimUtils.scale(claim, -1);
         }
         else {
@@ -37,13 +38,13 @@ public class ClaimHistoryAndApplicableContract {
     }
 
     public ClaimCashflowPacket getCededClaim(IPeriodCounter periodCounter) {
-        if (claim.getNominalUltimate() > 0) {
-            // claim is positive if ceded claims are covered, inverting sign required
-            return contract.calculateClaimCeded(ClaimUtils.scale(claim, -1, true), storage, periodCounter);
-        }
-        else {
+//        if (claim.getNominalUltimate() > 0) {
+//            // claim is positive if ceded claims are covered, inverting sign required
+//            return contract.calculateClaimCeded(ClaimUtils.scale(claim, -1, true), storage, periodCounter);
+//        }
+//        else {
             return contract.calculateClaimCeded(claim, storage, periodCounter);
-        }
+//        }
     }
 
     @Override

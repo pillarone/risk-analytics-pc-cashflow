@@ -118,8 +118,8 @@ public class ClaimUtils {
      */
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor) {
         if (notTrivialValues(claim)) {
-            double scaledUltimate = claim.developedUltimate() * factor;
-            double scaledReserves = scaledUltimate - claim.getPaidCumulatedIndexed() * factor;
+            double scaledUltimate = claim.ultimate() == 0d ? 0d : claim.developedUltimate() * factor;
+            double scaledReserves = (claim.developedUltimate() - claim.getPaidCumulatedIndexed()) * factor;
             ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(claim.getBaseClaim(), scaledUltimate,
                     claim.getPaidIncrementalIndexed() * factor, claim.getPaidCumulatedIndexed() * factor,
                     claim.getReportedIncrementalIndexed() * factor, claim.getReportedCumulatedIndexed() * factor, scaledReserves,
@@ -134,7 +134,7 @@ public class ClaimUtils {
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor, IClaimRoot scaledBaseClaim) {
         if (notTrivialValues(claim)) {
             double scaledReserves = (claim.developedUltimate() - claim.getPaidCumulatedIndexed()) * factor;
-            double scaledUltimate = claim.ultimate() * factor;
+            double scaledUltimate = claim.ultimate() == 0d ? 0d : claim.developedUltimate() * factor;
             ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(scaledBaseClaim, scaledUltimate,
                     claim.getPaidIncrementalIndexed() * factor, claim.getPaidCumulatedIndexed() * factor,
                     claim.getReportedIncrementalIndexed() * factor, claim.getReportedCumulatedIndexed() * factor, scaledReserves,
@@ -159,7 +159,7 @@ public class ClaimUtils {
         if (notTrivialValues(claim)) {
             double scaledReserves = (claim.developedUltimate() - claim.getPaidCumulatedIndexed()) * factor;
             IClaimRoot scaledBaseClaim = claim.getBaseClaim().withScale(factor);
-            double scaledUltimate = claim.ultimate() * factor;
+            double scaledUltimate = claim.ultimate() == 0d ? 0d : claim.developedUltimate() * factor;
             ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(scaledBaseClaim, scaledUltimate,
                     claim.getPaidIncrementalIndexed() * factor, claim.getPaidCumulatedIndexed() * factor,
                     claim.getReportedIncrementalIndexed() * factor, claim.getReportedCumulatedIndexed() * factor, scaledReserves,

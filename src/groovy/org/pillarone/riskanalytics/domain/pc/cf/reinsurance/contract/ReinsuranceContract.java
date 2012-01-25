@@ -78,7 +78,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     private IReinsuranceContractStrategy parmContractStrategy = ReinsuranceContractType.getDefault();
 
     private CounterPartyState counterPartyFactors;
-    private boolean isProportionalContract = false;
+    private Boolean isProportionalContract;
     private ThresholdStore termDeductible;
     private ThresholdStore termLimit;
 
@@ -91,6 +91,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         filterInChannels();
         updateContractParameters();
         Set<IReinsuranceContract> contracts = fillGrossClaims();
+        initPeriod(contracts);
         initContracts(contracts);
         IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
         calculateCededClaims(periodCounter);
@@ -135,6 +136,24 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         }
     }
 
+    private void initPeriod(Set<IReinsuranceContract> contracts) {
+        initProportionalContract(contracts);
+        if (isProportionalContract) {
+            int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
+            for (int period = 0; period < currentPeriod; period++) {
+                IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, -currentPeriod + period);
+                if (contract != null) {
+                    // for all proportional contracts underwriting info of preceding periods needs to be clear
+                    contract.initPeriod(inFactors);
+                }
+            }
+        }
+        else {
+            for (IReinsuranceContract contract : contracts) {
+                contract.initPeriod(inFactors);
+            }
+        }
+    }
 
     /**
      * filter according to covered period and covered claims generators, segments and companies
@@ -258,8 +277,8 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     }
 
     private IReinsuranceContract newClaimOccurredInCurrentPeriod(ClaimCashflowPacket claim, int occurrencePeriod,
-                            int currentPeriod, Map<IClaimRoot, ClaimStorage> claimsHistories,
-                            List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims) {
+                                                                 int currentPeriod, Map<IClaimRoot, ClaimStorage> claimsHistories,
+                                                                 List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims) {
         IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, occurrencePeriod - currentPeriod);
         ClaimStorage claimStorage = new ClaimStorage(claim);
         claimsHistories.put(claim.getKeyClaim(), claimStorage);
@@ -269,9 +288,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     }
 
     private void initContracts(Set<IReinsuranceContract> contracts) {
-        initProportionalContract(contracts);
         for (IReinsuranceContract contract : contracts) {
-            contract.initPeriod(inFactors);
             // todo(sku): the following lines are required only if initPeriodClaims() has a non trivial implementation for this contract, avoid!
             List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
             List<ClaimCashflowPacket> contractGrossClaims = new ArrayList<ClaimCashflowPacket>();
@@ -331,7 +348,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
             for (ClaimCashflowPacket cededClaim : outClaimsCeded) {
                 if (ClaimUtils.notTrivialValues(cededClaim)) {
                     for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.getFactors(cededClaim.getUpdateDate()).entrySet()) {
-                        ClaimCashflowPacket counterPartyCededClaim = ClaimUtils.scale(cededClaim, -1d);
+                        ClaimCashflowPacket counterPartyCededClaim = ClaimUtils.scale(cededClaim, -legalEntityAndFactor.getValue());
                         counterPartyCededClaim.setMarker(legalEntityAndFactor.getKey());
                         outClaimsInward.add(counterPartyCededClaim);
                     }
@@ -447,7 +464,7 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
         return parmCoveredPeriod.isCovered(periodStart) || parmCoveredPeriod.isCovered(periodEnd);
     }
 
-// periodStore keys
+    // periodStore keys
     private static final String REINSURANCE_CONTRACT = "reinsurance contract";
     private static final String GROSS_CLAIMS = "gross claims";
     private static final String CLAIM_HISTORY = "claim history";
@@ -585,7 +602,9 @@ public class ReinsuranceContract extends Component implements IReinsuranceContra
     }
 
     public void initProportionalContract(Set<IReinsuranceContract> contracts) {
-        isProportionalContract = !contracts.isEmpty() && contracts.iterator().next() instanceof IPropReinsuranceContract;
+        if (isProportionalContract == null) {
+            isProportionalContract = !contracts.isEmpty() && contracts.iterator().next() instanceof IPropReinsuranceContract;
+        }
     }
 
     public boolean isProportionalContract() {
