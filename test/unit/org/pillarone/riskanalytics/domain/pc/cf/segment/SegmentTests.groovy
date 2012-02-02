@@ -78,7 +78,6 @@ class SegmentTests extends GroovyTestCase {
             true, periodScope, motorReservesGenerator)
     ClaimCashflowPacket paReserve800 = getClaimCashflowPacket(null, -800, -200, projectionStart, projectionStart,
             true, periodScope, paReservesGenerator)
-    // todo(jwa): test cases for reservedIndexed values over several periods (seem to be incorrect, see PMO-1730)
 
     void setUp() {
         ConstraintsFactory.registerConstraint(new DeterministicIndexTableConstraints())
@@ -290,7 +289,7 @@ class SegmentTests extends GroovyTestCase {
 
     private ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, double quotaShare) {
         ClaimStorage storage = new ClaimStorage(grossClaim)
-        storage.lazyInitCededClaimRoot(quotaShare)
+        storage.lazyInitCededClaimRoot(-quotaShare)
         return ClaimUtils.getCededClaim(grossClaim, storage, -quotaShare, -quotaShare, -quotaShare, false);
     }
 

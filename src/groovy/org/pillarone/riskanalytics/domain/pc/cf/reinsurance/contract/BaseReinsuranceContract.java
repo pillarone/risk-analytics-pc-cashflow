@@ -285,7 +285,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             ClaimCashflowPacket cededClaim = grossClaim.getCededClaim(periodCounter);
             double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(grossClaim.getUpdateDate());
             if (coveredByReinsurers != 1) {
-                cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers);     // todo(sku): wrong ibnr in second period for marine
+                cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers);
             }
             ClaimUtils.applyMarkers(grossClaim.getGrossClaim(), cededClaim);
             cededClaim.setMarker(this);
@@ -316,7 +316,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             for (ClaimCashflowPacket cededClaim : outClaimsCeded) {
                 if (ClaimUtils.notTrivialValues(cededClaim)) {
                     for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.getFactors(cededClaim.getUpdateDate()).entrySet()) {
-                        ClaimCashflowPacket counterPartyCededClaim = ClaimUtils.scale(cededClaim, -legalEntityAndFactor.getValue());
+                        ClaimCashflowPacket counterPartyCededClaim = ClaimUtils.scale(cededClaim, -legalEntityAndFactor.getValue(), true, true);
                         counterPartyCededClaim.setMarker(legalEntityAndFactor.getKey());
                         outClaimsInward.add(counterPartyCededClaim);
                     }

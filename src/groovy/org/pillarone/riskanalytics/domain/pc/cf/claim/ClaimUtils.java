@@ -117,28 +117,21 @@ public class ClaimUtils {
      * @return new ClaimCashflowPacket()
      */
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor) {
-        if (notTrivialValues(claim)) {
-            double scaledUltimate = claim.ultimate() == 0d ? 0d : claim.developedUltimate() * factor;
-            double scaledReserves = (claim.developedUltimate() - claim.getPaidCumulatedIndexed()) * factor;
-            ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(claim.getBaseClaim(), scaledUltimate,
-                    claim.getPaidIncrementalIndexed() * factor, claim.getPaidCumulatedIndexed() * factor,
-                    claim.getReportedIncrementalIndexed() * factor, claim.getReportedCumulatedIndexed() * factor, scaledReserves,
-                    claim.getExposureInfo(), claim.getUpdateDate(), claim.getUpdatePeriod());
-            scaledClaim.setDiscountFactors(claim.getDiscountFactors());
-            applyMarkers(claim, scaledClaim);
-            return scaledClaim;
-        }
-        return claim;
+        return scale(claim, factor, claim.getBaseClaim(), true);
     }
 
-    public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor, IClaimRoot scaledBaseClaim) {
+    public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor, IClaimRoot scaledBaseClaim, boolean keepKeyClaim) {
         if (notTrivialValues(claim)) {
             double scaledReserves = (claim.developedUltimate() - claim.getPaidCumulatedIndexed()) * factor;
             double scaledUltimate = claim.ultimate() == 0d ? 0d : claim.developedUltimate() * factor;
-            ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(scaledBaseClaim, scaledUltimate,
-                    claim.getPaidIncrementalIndexed() * factor, claim.getPaidCumulatedIndexed() * factor,
-                    claim.getReportedIncrementalIndexed() * factor, claim.getReportedCumulatedIndexed() * factor, scaledReserves,
-                    claim.getExposureInfo(), claim.getUpdateDate(), claim.getUpdatePeriod());
+            double scaledPaidIncremental = claim.getPaidIncrementalIndexed() == 0d ? 0d : claim.getPaidIncrementalIndexed() * factor;
+            double scaledPaidCumulated = claim.getPaidCumulatedIndexed() == 0d ? 0d : claim.getPaidCumulatedIndexed() * factor;
+            double scaledReportedIncremental = claim.getReportedIncrementalIndexed() == 0d ? 0d : claim.getReportedIncrementalIndexed() * factor;
+            double scaledReportedCumulated = claim.getReportedCumulatedIndexed() == 0d ? 0d : claim.getReportedCumulatedIndexed() * factor;
+            IClaimRoot keyClaim = keepKeyClaim ? claim.getKeyClaim() : scaledBaseClaim;
+            ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(scaledBaseClaim, keyClaim, scaledUltimate,
+                    scaledPaidIncremental, scaledPaidCumulated, scaledReportedIncremental, scaledReportedCumulated,
+                    scaledReserves, claim.getExposureInfo(), claim.getUpdateDate(), claim.getUpdatePeriod());
             scaledClaim.setDiscountFactors(claim.getDiscountFactors());
             applyMarkers(claim, scaledClaim);
             return scaledClaim;
@@ -152,21 +145,14 @@ public class ClaimUtils {
      * @param claim
      * @param factor
      * @param scaleBaseClaim
+     * @param keepKeyClaim
      * @return
      */
-    public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor, boolean scaleBaseClaim) {
+    public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor, boolean scaleBaseClaim, boolean keepKeyClaim) {
         if (!scaleBaseClaim) return scale(claim, factor);
         if (notTrivialValues(claim)) {
-            double scaledReserves = (claim.developedUltimate() - claim.getPaidCumulatedIndexed()) * factor;
             IClaimRoot scaledBaseClaim = claim.getBaseClaim().withScale(factor);
-            double scaledUltimate = claim.ultimate() == 0d ? 0d : claim.developedUltimate() * factor;
-            ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(scaledBaseClaim, scaledUltimate,
-                    claim.getPaidIncrementalIndexed() * factor, claim.getPaidCumulatedIndexed() * factor,
-                    claim.getReportedIncrementalIndexed() * factor, claim.getReportedCumulatedIndexed() * factor, scaledReserves,
-                    claim.getExposureInfo(), claim.getUpdateDate(), claim.getUpdatePeriod());
-            scaledClaim.setDiscountFactors(claim.getDiscountFactors());
-            applyMarkers(claim, scaledClaim);
-            return scaledClaim;
+            return scale(claim, factor, scaledBaseClaim, keepKeyClaim);
         }
         return claim;
     }

@@ -59,7 +59,7 @@ public class LossPortfolioTransferContract extends AbstractProportionalReinsuran
      * @return has a negative sign as claimProperty is negative
      */
     private double adjustedQuote(double claimProperty, DoubleValue annualAggregateLimit) {
-        if (claimProperty == 0) return 1;
+        if (claimProperty == 0) return -1;
         Double cededClaimProperty = Math.min(claimProperty * -cededShare, annualAggregateLimit.value);
         annualAggregateLimit.minus(cededClaimProperty);
         return (cededClaimProperty / claimProperty);

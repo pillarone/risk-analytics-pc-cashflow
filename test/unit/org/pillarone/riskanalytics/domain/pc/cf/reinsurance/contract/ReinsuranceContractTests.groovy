@@ -26,6 +26,10 @@ import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionCo
 import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.FilterStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.OriginalClaimsCoverAttributeStrategy
+import org.pillarone.riskanalytics.core.util.TestProbe
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -439,5 +443,163 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
     void testUnderwritingGNPIonGNPIProportional() {
 
+    }
+
+    void testGrossCoverCorrectSigns() {
+        ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, date20110101)
+        LegalEntity earthRe = new LegalEntity(name: 'earth re')
+        quotaShare20.parmReinsurers = new ConstrainedMultiDimensionalParameter([[earthRe.name], [1d]],
+                ["Reinsurer","Covered Portion"], ConstraintsFactory.getConstraints('LEGAL_ENTITY_PORTION'))
+        TestProbe inwardClaims = new TestProbe(quotaShare20, "outClaimsInward")
+        TestProbe inwardUnderwritingInfo = new TestProbe(quotaShare20, "outUnderwritingInfoInward")
+        quotaShare20.parmReinsurers.comboBoxValues[0] = [(earthRe.name) : earthRe]
+        IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
+
+        GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
+                date20110418, date20110701, annualPayoutPattern, annualReportingPatternInclFirst)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
+
+        Segment segmentMotor = new Segment(name: 'motor')
+        UnderwritingInfoPacket underwritingInfoMotor = new UnderwritingInfoPacket(segment: segmentMotor,
+                premiumWritten: 1000, premiumPaid: 800, numberOfPolicies: 10, sumInsured: 10000, maxSumInsured: 5000,
+                exposure: new ExposureInfo(date20110101, periodCounter), date:  date20110101)
+        quotaShare20.inUnderwritingInfo << underwritingInfoMotor
+
+        quotaShare20.inClaims.addAll(claims)
+
+        quotaShare20.doCalculation()
+        assertEquals 'number of ceded claims', 1, quotaShare20.outClaimsCeded.size()
+        assertEquals 'P0 ceded ultimate', 200, quotaShare20.outClaimsCeded[0].ultimate()
+        assertEquals 'P0 ceded nominal ultimate', 200, quotaShare20.outClaimsCeded[0].nominalUltimate
+        assertEquals 'P0 ceded reported incremental', 60, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P0 ceded reported cumulated', 60, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed
+        assertEquals 'P0 ceded paid incremental', 0, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed
+        assertEquals 'P0 ceded paid cumulated', 0, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed
+        assertEquals 'P0 ceded reservedIndexed', 200, quotaShare20.outClaimsCeded[0].reservedIndexed()
+        assertEquals 'P0 ceded outstandingIndexed', 60, quotaShare20.outClaimsCeded[0].outstandingIndexed()
+        assertEquals 'P0 ceded ibnrIndexed', 140, quotaShare20.outClaimsCeded[0].ibnrIndexed()
+
+        assertEquals 'P0 inward ultimate', -200, quotaShare20.outClaimsInward[0].ultimate()
+        assertEquals 'P0 inward nominal ultimate', -200, quotaShare20.outClaimsInward[0].nominalUltimate
+        assertEquals 'P0 inward reported incremental', -60, quotaShare20.outClaimsInward[0].reportedIncrementalIndexed
+        assertEquals 'P0 inward reported cumulated', -60, quotaShare20.outClaimsInward[0].reportedCumulatedIndexed
+        assertEquals 'P0 inward paid incremental', 0d, quotaShare20.outClaimsInward[0].paidIncrementalIndexed
+        assertEquals 'P0 inward paid cumulated', 0d, quotaShare20.outClaimsInward[0].paidCumulatedIndexed
+        assertEquals 'P0 inward reservedIndexed', -200, quotaShare20.outClaimsInward[0].reservedIndexed()
+        assertEquals 'P0 inward outstandingIndexed', -60, quotaShare20.outClaimsInward[0].outstandingIndexed()
+        assertEquals 'P0 inward ibnrIndexed', -140, quotaShare20.outClaimsInward[0].ibnrIndexed()
+
+        assertEquals 'P0 ceded premium written', -200, quotaShare20.outUnderwritingInfoCeded[0].premiumWritten
+        assertEquals 'P0 inward premium written', 200, quotaShare20.outUnderwritingInfoInward[0].premiumWritten
+        assertEquals 'P0 net premium written', 800, quotaShare20.outUnderwritingInfoNet[0].premiumWritten
+        assertEquals 'P0 ceded premium written', -160, quotaShare20.outUnderwritingInfoCeded[0].premiumPaid
+        assertEquals 'P0 inward premium written', 160, quotaShare20.outUnderwritingInfoInward[0].premiumPaid
+        assertEquals 'P0 net premium written', 640, quotaShare20.outUnderwritingInfoNet[0].premiumPaid
+
+
+        quotaShare20.reset()
+        quotaShare20.iterationScope.periodScope.prepareNextPeriod()
+        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        quotaShare20.inClaims.addAll(claims)
+        quotaShare20.doCalculation()
+
+        assertEquals 'number of ceded claims', 1, quotaShare20.outClaimsCeded.size()
+        assertEquals 'P1 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
+        assertEquals 'P1 ceded nominal ultimate', 200, quotaShare20.outClaimsCeded[0].nominalUltimate
+        assertEquals 'P1 ceded reported incremental', 60, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P1 ceded reported cumulated', 120, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed
+        assertEquals 'P1 ceded paid incremental', 80, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed
+        assertEquals 'P1 ceded paid cumulated', 80, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed
+        assertEquals 'P1 ceded reservedIndexed', 120, quotaShare20.outClaimsCeded[0].reservedIndexed()
+        assertEquals 'P1 ceded outstandingIndexed', 40, quotaShare20.outClaimsCeded[0].outstandingIndexed()
+        assertEquals 'P1 ceded ibnrIndexed', 80, quotaShare20.outClaimsCeded[0].ibnrIndexed()
+        assertEquals 'P1 inward ultimate', 0, quotaShare20.outClaimsInward[0].ultimate()
+        assertEquals 'P1 inward nominal ultimate', -200, quotaShare20.outClaimsInward[0].nominalUltimate
+        assertEquals 'P1 inward reported incremental', -60, quotaShare20.outClaimsInward[0].reportedIncrementalIndexed
+        assertEquals 'P1 inward reported cumulated', -120, quotaShare20.outClaimsInward[0].reportedCumulatedIndexed
+        assertEquals 'P1 inward paid incremental', -80, quotaShare20.outClaimsInward[0].paidIncrementalIndexed
+        assertEquals 'P1 inward paid cumulated', -80, quotaShare20.outClaimsInward[0].paidCumulatedIndexed
+        assertEquals 'P1 inward reservedIndexed', -120, quotaShare20.outClaimsInward[0].reservedIndexed()
+        assertEquals 'P1 inward outstandingIndexed', -40, quotaShare20.outClaimsInward[0].outstandingIndexed()
+        assertEquals 'P1 inward ibnrIndexed', -80, quotaShare20.outClaimsInward[0].ibnrIndexed()
+    }
+
+    void testCededCoverCorrectSigns() {
+        ReinsuranceContract quotaShare20 = getQuotaShareContract(0.2, date20110101)
+        LegalEntity earthRe = new LegalEntity(name: 'earth re')
+        quotaShare20.parmReinsurers = new ConstrainedMultiDimensionalParameter([[earthRe.name], [1d]],
+                ["Reinsurer","Covered Portion"], ConstraintsFactory.getConstraints('LEGAL_ENTITY_PORTION'))
+        TestProbe inwardClaims = new TestProbe(quotaShare20, "outClaimsInward")
+        TestProbe inwardUnderwritingInfo = new TestProbe(quotaShare20, "outUnderwritingInfoInward")
+        quotaShare20.parmReinsurers.comboBoxValues[0] = [(earthRe.name) : earthRe]
+        IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
+
+        GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
+                date20110418, date20110701, annualPayoutPattern, annualReportingPatternInclFirst)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
+
+        Segment segmentMotor = new Segment(name: 'motor')
+        CededUnderwritingInfoPacket underwritingInfoMotor = new CededUnderwritingInfoPacket(segment: segmentMotor,
+                premiumWritten: -1000, premiumPaid: -800, numberOfPolicies: 10, sumInsured: 10000, maxSumInsured: 5000,
+                exposure: new ExposureInfo(date20110101, periodCounter), date:  date20110101)
+        quotaShare20.inUnderwritingInfo << underwritingInfoMotor
+
+        quotaShare20.inClaims.addAll(claims)
+
+        quotaShare20.doCalculation()
+        assertEquals 'number of ceded claims', 1, quotaShare20.outClaimsCeded.size()
+        assertEquals 'P0 ceded ultimate', 200, quotaShare20.outClaimsCeded[0].ultimate()
+        assertEquals 'P0 ceded nominal ultimate', 200, quotaShare20.outClaimsCeded[0].nominalUltimate
+        assertEquals 'P0 ceded reported incremental', 60, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P0 ceded reported cumulated', 60, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed
+        assertEquals 'P0 ceded paid incremental', 0, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed
+        assertEquals 'P0 ceded paid cumulated', 0, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed
+        assertEquals 'P0 ceded reservedIndexed', 200, quotaShare20.outClaimsCeded[0].reservedIndexed()
+        assertEquals 'P0 ceded outstandingIndexed', 60, quotaShare20.outClaimsCeded[0].outstandingIndexed()
+        assertEquals 'P0 ceded ibnrIndexed', 140, quotaShare20.outClaimsCeded[0].ibnrIndexed()
+
+        assertEquals 'P0 inward ultimate', -200, quotaShare20.outClaimsInward[0].ultimate()
+        assertEquals 'P0 inward nominal ultimate', -200, quotaShare20.outClaimsInward[0].nominalUltimate
+        assertEquals 'P0 inward reported incremental', -60, quotaShare20.outClaimsInward[0].reportedIncrementalIndexed
+        assertEquals 'P0 inward reported cumulated', -60, quotaShare20.outClaimsInward[0].reportedCumulatedIndexed
+        assertEquals 'P0 inward paid incremental', 0d, quotaShare20.outClaimsInward[0].paidIncrementalIndexed
+        assertEquals 'P0 inward paid cumulated', 0d, quotaShare20.outClaimsInward[0].paidCumulatedIndexed
+        assertEquals 'P0 inward reservedIndexed', -200, quotaShare20.outClaimsInward[0].reservedIndexed()
+        assertEquals 'P0 inward outstandingIndexed', -60, quotaShare20.outClaimsInward[0].outstandingIndexed()
+        assertEquals 'P0 inward ibnrIndexed', -140, quotaShare20.outClaimsInward[0].ibnrIndexed()
+
+        assertEquals 'P0 ceded premium written', -200, quotaShare20.outUnderwritingInfoCeded[0].premiumWritten
+        assertEquals 'P0 inward premium written', 200, quotaShare20.outUnderwritingInfoInward[0].premiumWritten
+        assertEquals 'P0 net premium written', 800, quotaShare20.outUnderwritingInfoNet[0].premiumWritten
+        assertEquals 'P0 ceded premium written', -160, quotaShare20.outUnderwritingInfoCeded[0].premiumPaid
+        assertEquals 'P0 inward premium written', 160, quotaShare20.outUnderwritingInfoInward[0].premiumPaid
+        assertEquals 'P0 net premium written', 640, quotaShare20.outUnderwritingInfoNet[0].premiumPaid
+
+
+        quotaShare20.reset()
+        quotaShare20.iterationScope.periodScope.prepareNextPeriod()
+        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        quotaShare20.inClaims.addAll(claims)
+        quotaShare20.doCalculation()
+
+        assertEquals 'number of ceded claims', 1, quotaShare20.outClaimsCeded.size()
+        assertEquals 'P1 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
+        assertEquals 'P1 ceded nominal ultimate', 200, quotaShare20.outClaimsCeded[0].nominalUltimate
+        assertEquals 'P1 ceded reported incremental', 60, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P1 ceded reported cumulated', 120, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed
+        assertEquals 'P1 ceded paid incremental', 80, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed
+        assertEquals 'P1 ceded paid cumulated', 80, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed
+        assertEquals 'P1 ceded reservedIndexed', 120, quotaShare20.outClaimsCeded[0].reservedIndexed()
+        assertEquals 'P1 ceded outstandingIndexed', 40, quotaShare20.outClaimsCeded[0].outstandingIndexed()
+        assertEquals 'P1 ceded ibnrIndexed', 80, quotaShare20.outClaimsCeded[0].ibnrIndexed()
+        assertEquals 'P1 inward ultimate', 0, quotaShare20.outClaimsInward[0].ultimate()
+        assertEquals 'P1 inward nominal ultimate', -200, quotaShare20.outClaimsInward[0].nominalUltimate
+        assertEquals 'P1 inward reported incremental', -60, quotaShare20.outClaimsInward[0].reportedIncrementalIndexed
+        assertEquals 'P1 inward reported cumulated', -120, quotaShare20.outClaimsInward[0].reportedCumulatedIndexed
+        assertEquals 'P1 inward paid incremental', -80, quotaShare20.outClaimsInward[0].paidIncrementalIndexed
+        assertEquals 'P1 inward paid cumulated', -80, quotaShare20.outClaimsInward[0].paidCumulatedIndexed
+        assertEquals 'P1 inward reservedIndexed', -120, quotaShare20.outClaimsInward[0].reservedIndexed()
+        assertEquals 'P1 inward outstandingIndexed', -40, quotaShare20.outClaimsInward[0].outstandingIndexed()
+        assertEquals 'P1 inward ibnrIndexed', -80, quotaShare20.outClaimsInward[0].ibnrIndexed()
     }
 }

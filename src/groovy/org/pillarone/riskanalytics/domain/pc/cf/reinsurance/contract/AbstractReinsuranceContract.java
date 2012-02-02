@@ -35,6 +35,13 @@ abstract public class AbstractReinsuranceContract implements IReinsuranceContrac
     }
 
     public void add(UnderwritingInfoPacket grossUnderwritingInfo) {
-        grossUwInfos.add(grossUnderwritingInfo);
+//        if (grossUnderwritingInfo.getPremiumWritten() + grossUnderwritingInfo.getPremiumPaid() < 0) {
+        if (grossUnderwritingInfo instanceof CededUnderwritingInfoPacket) {
+            UnderwritingInfoPacket convertedPacket = new UnderwritingInfoPacket((CededUnderwritingInfoPacket) grossUnderwritingInfo, -1);
+            grossUwInfos.add(convertedPacket);
+        }
+        else {
+            grossUwInfos.add(grossUnderwritingInfo);
+        }
     }
 }

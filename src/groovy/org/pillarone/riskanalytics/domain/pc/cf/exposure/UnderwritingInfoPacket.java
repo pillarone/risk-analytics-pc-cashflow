@@ -35,6 +35,26 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
         super();
         original = this;
     }
+    
+    public UnderwritingInfoPacket(CededUnderwritingInfoPacket packet) {
+        this(packet, 1d);
+    }
+
+    public UnderwritingInfoPacket(CededUnderwritingInfoPacket packet, double sign) {
+        this();
+        premiumWritten = packet.premiumWritten * sign;
+        premiumPaid = packet.premiumPaid * sign;
+        numberOfPolicies = packet.numberOfPolicies;
+        sumInsured = packet.sumInsured;
+        maxSumInsured = packet.maxSumInsured;
+        exposure = packet.exposure;
+        inceptionPeriod = packet.inceptionPeriod;
+        riskBand = packet.riskBand();
+        segment = packet.segment();
+        reinsuranceContract = packet.reinsuranceContract();
+        legalEntity = packet.legalEntity();
+        setDate(packet.getDate());
+    }
 
     /**
      * @param policyFactor

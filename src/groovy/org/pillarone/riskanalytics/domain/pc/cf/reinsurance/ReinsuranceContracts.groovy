@@ -47,7 +47,7 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> outClaimsInward = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
-    PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoInward = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
+    PacketList<UnderwritingInfoPacket> outUnderwritingInfoInward = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<CommissionPacket> outCommission = new PacketList<CommissionPacket>(CommissionPacket)
 
     private List contractsBasedOnGrossClaims = []

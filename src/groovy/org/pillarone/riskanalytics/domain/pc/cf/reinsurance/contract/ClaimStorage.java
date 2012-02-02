@@ -82,11 +82,14 @@ public class ClaimStorage {
     }
 
     /**
-     * @param cededShare should be negative
+     * @param cededShare has to be negative
      * @return
      */
     public IClaimRoot lazyInitCededClaimRoot(double cededShare) {
-        referenceCeded = referenceCeded == null ? reference.withScale(cededShare) : referenceCeded;
+        referenceCeded = referenceCeded == null ? reference.withScale(cededShare * -Math.signum(reference.getUltimate())) : referenceCeded;
+        if (referenceCeded.getUltimate() < 0 || cededShare > 0) {
+            throw new IllegalArgumentException("cededShare has to be negative and the ultimate of a ceded reference claim positive");
+        }
         return referenceCeded;
     }
 

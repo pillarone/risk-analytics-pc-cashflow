@@ -60,7 +60,7 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
      * @return has a negative sign as claimProperty is negative
      */
     private double adjustedQuote(double claimProperty, DoubleValue annualAggregateLimit, DoubleValue annualAggregateDeductible) {
-        if (claimProperty == 0) return 1;
+        if (claimProperty == 0) return -1;
         double claimPropertyAfterAAD = Math.max(claimProperty - annualAggregateDeductible.value, 0);
         double aadReduction = claimProperty - claimPropertyAfterAAD;
         annualAggregateDeductible.minus(aadReduction);

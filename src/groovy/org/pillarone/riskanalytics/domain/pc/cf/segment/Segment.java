@@ -257,12 +257,12 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                         scaleFactor *= recovery(segmentClaim.getUpdateDate(), dateOfDefault);
                         IClaimRoot scaledSegmentBaseClaim = incomingScaledBaseClaimMapping.get(marketClaim.getBaseClaim());
                         if (scaledSegmentBaseClaim == null) {
-                            ClaimCashflowPacket scaledSegementClaim = ClaimUtils.scale(segmentClaim, scaleFactor, true);
+                            ClaimCashflowPacket scaledSegementClaim = ClaimUtils.scale(segmentClaim, scaleFactor, true, false);
                             incomingScaledBaseClaimMapping.put(marketClaim.getBaseClaim(), scaledSegementClaim.getBaseClaim());
                             segmentClaims.add(scaledSegementClaim);
                         }
                         else {
-                            ClaimCashflowPacket scaledSegementClaim = ClaimUtils.scale(segmentClaim, scaleFactor, scaledSegmentBaseClaim);
+                            ClaimCashflowPacket scaledSegementClaim = ClaimUtils.scale(segmentClaim, scaleFactor, scaledSegmentBaseClaim, false);
                             segmentClaims.add(scaledSegementClaim);
                         }
                     }
@@ -289,7 +289,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                         segmentReserve.setMarker((IComponentMarker) parmCompany.getSelectedComponent());
                         double scaleFactor = InputFormatConverter.getDouble(parmReservesPortions.getValueAt(row + 1, portionColumn));
                         scaleFactor *= recovery(segmentReserve.getUpdateDate(), dateOfDefault);
-                        segmentReserves.add(ClaimUtils.scale(segmentReserve, scaleFactor, true));
+                        segmentReserves.add(ClaimUtils.scale(segmentReserve, scaleFactor, true, false));
                     }
                 }
             }

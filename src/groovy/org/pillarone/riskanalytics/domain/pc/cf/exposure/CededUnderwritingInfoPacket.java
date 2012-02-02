@@ -58,6 +58,19 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
         return modified;
     }
 
+    /**
+     * @param policyFactor
+     * @param premiumFactor
+     * @return creates a cloned instance with numberOfPolicies and premiumWritten according to parameters
+     */
+    public UnderwritingInfoPacket withFactorsApplied(double policyFactor, double premiumFactor) {
+        UnderwritingInfoPacket modified = new UnderwritingInfoPacket(this);
+        modified.numberOfPolicies *= policyFactor;
+        modified.premiumWritten *= premiumFactor;
+        modified.premiumPaid *= premiumFactor;
+        return modified;
+    }
+
     public static CededUnderwritingInfoPacket deriveCededPacket(UnderwritingInfoPacket packet,
                                                                 IReinsuranceContractMarker contract) {
         CededUnderwritingInfoPacket cededPacket = new CededUnderwritingInfoPacket();
@@ -71,7 +84,6 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
         cededPacket.original = packet.original;
         cededPacket.segment = packet.segment;
         cededPacket.reinsuranceContract = contract;
-//        cededPacket.original = packet;
         cededPacket.setDate(packet.getDate());
         return cededPacket;
     }
