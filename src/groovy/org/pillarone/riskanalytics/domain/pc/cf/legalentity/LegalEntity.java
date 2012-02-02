@@ -44,11 +44,15 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     private PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket.class);
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    private PacketList<ClaimCashflowPacket> inClaimsCeded2 = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> inClaimsInward = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    private PacketList<ClaimCashflowPacket> inClaimsInward2 = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
 
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
+    private PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded2 = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfoInward = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    private PacketList<UnderwritingInfoPacket> inUnderwritingInfoInward2 = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
 
     private PacketList<LegalEntityDefault> outLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
 
@@ -107,8 +111,18 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
                     outClaimsCeded.add(cededClaim);
                 }
             }
+            for (ClaimCashflowPacket cededClaim : inClaimsCeded2) {
+                if (cededClaim.legalEntity().equals(this)) {
+                    outClaimsCeded.add(cededClaim);
+                }
+            }
             avoidVoidClaimList(outClaimsCeded);
             for (ClaimCashflowPacket inwardClaim : inClaimsInward) {
+                if (inwardClaim.legalEntity().equals(this)) {
+                    outClaimsReinsurer.add(inwardClaim);
+                }
+            }
+            for (ClaimCashflowPacket inwardClaim : inClaimsInward2) {
                 if (inwardClaim.legalEntity().equals(this)) {
                     outClaimsReinsurer.add(inwardClaim);
                 }
@@ -121,8 +135,19 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
                     outUnderwritingInfoCeded.add(cededUnderwritingInfo);
                 }
             }
+            for (CededUnderwritingInfoPacket cededUnderwritingInfo : inUnderwritingInfoCeded2) {
+                if (cededUnderwritingInfo.legalEntity().equals(this)) {
+                    outUnderwritingInfoCeded.add(cededUnderwritingInfo);
+                }
+            }
             avoidVoidCededUnderwritingInfoList(outUnderwritingInfoCeded);
             for (UnderwritingInfoPacket inwardUnderwritingInfo : inUnderwritingInfoInward) {
+                if (inwardUnderwritingInfo.legalEntity().equals(this)) {
+
+                    outUnderwritingInfoReinsurer.add(inwardUnderwritingInfo);
+                }
+            }
+            for (UnderwritingInfoPacket inwardUnderwritingInfo : inUnderwritingInfoInward2) {
                 if (inwardUnderwritingInfo.legalEntity().equals(this)) {
 
                     outUnderwritingInfoReinsurer.add(inwardUnderwritingInfo);
@@ -213,9 +238,13 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
         setTransmitterPhaseOutput(outUnderwritingInfoPrimeryInsurer, PHASE_CALC);
 
         setTransmitterPhaseInput(inClaimsCeded, PHASE_CALC);
+        setTransmitterPhaseInput(inClaimsCeded2, PHASE_CALC);
         setTransmitterPhaseInput(inClaimsInward, PHASE_CALC);
+        setTransmitterPhaseInput(inClaimsInward2, PHASE_CALC);
         setTransmitterPhaseInput(inUnderwritingInfoCeded, PHASE_CALC);
+        setTransmitterPhaseInput(inUnderwritingInfoCeded2, PHASE_CALC);
         setTransmitterPhaseInput(inUnderwritingInfoInward, PHASE_CALC);
+        setTransmitterPhaseInput(inUnderwritingInfoInward2, PHASE_CALC);
         setTransmitterPhaseOutput(outClaimsReinsurer, PHASE_CALC);
         setTransmitterPhaseOutput(outClaimsCeded, PHASE_CALC);
         setTransmitterPhaseOutput(outClaimsNet, PHASE_CALC);
@@ -442,5 +471,37 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
 
     public void setInPatterns(PacketList<PatternPacket> inPatterns) {
         this.inPatterns = inPatterns;
+    }
+
+    public PacketList<ClaimCashflowPacket> getInClaimsCeded2() {
+        return inClaimsCeded2;
+    }
+
+    public void setInClaimsCeded2(PacketList<ClaimCashflowPacket> inClaimsCeded2) {
+        this.inClaimsCeded2 = inClaimsCeded2;
+    }
+
+    public PacketList<ClaimCashflowPacket> getInClaimsInward2() {
+        return inClaimsInward2;
+    }
+
+    public void setInClaimsInward2(PacketList<ClaimCashflowPacket> inClaimsInward2) {
+        this.inClaimsInward2 = inClaimsInward2;
+    }
+
+    public PacketList<CededUnderwritingInfoPacket> getInUnderwritingInfoCeded2() {
+        return inUnderwritingInfoCeded2;
+    }
+
+    public void setInUnderwritingInfoCeded2(PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded2) {
+        this.inUnderwritingInfoCeded2 = inUnderwritingInfoCeded2;
+    }
+
+    public PacketList<UnderwritingInfoPacket> getInUnderwritingInfoInward2() {
+        return inUnderwritingInfoInward2;
+    }
+
+    public void setInUnderwritingInfoInward2(PacketList<UnderwritingInfoPacket> inUnderwritingInfoInward2) {
+        this.inUnderwritingInfoInward2 = inUnderwritingInfoInward2;
     }
 }

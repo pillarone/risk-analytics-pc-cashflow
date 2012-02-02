@@ -10,10 +10,28 @@ components {
 			outSeverityIndicesApplied = "SINGLE"
 		}
 	}
-    reservesGenerators {
+	reservesGenerators {
 		subsubcomponents {
+			outNominalUltimates = "AGGREGATED"
 			outReserves = "AGGREGATED"
-            outNominalUltimates = "AGGREGATED"
+		}
+	}
+	retrospectiveReinsurance {
+		subsubcomponents {
+			outClaimsCeded = "AGGREGATED"
+			outClaimsGross = "AGGREGATED"
+			outClaimsNet = "AGGREGATED"
+			outUnderwritingInfoCeded = "AGGREGATED"
+		}
+	}
+	structures {
+		subsubcomponents {
+			outClaimsCeded = "AGGREGATED"
+			outClaimsGross = "AGGREGATED"
+			outClaimsNet = "AGGREGATED"
+			outUnderwritingInfoCeded = "AGGREGATED"
+			outUnderwritingInfoGross = "AGGREGATED"
+			outUnderwritingInfoNet = "AGGREGATED"
 		}
 	}
 	underwritingSegments {
@@ -21,16 +39,6 @@ components {
 			outPolicyIndexApplied = "AGGREGATED"
 			outPremiumIndexApplied = "AGGREGATED"
 			outUnderwritingInfo = "AGGREGATED"
-		}
-	}
-    structures {
-		subsubcomponents {
-			outClaimsGross= "AGGREGATED"
-            outClaimsNet= "AGGREGATED"
-            outClaimsCeded= "AGGREGATED"
-            outUnderwritingInfoGross = "AGGREGATED"
-            outUnderwritingInfoNet = "AGGREGATED"
-            outUnderwritingInfoCeded = "AGGREGATED"
 		}
 	}
 }

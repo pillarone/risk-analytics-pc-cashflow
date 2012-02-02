@@ -50,8 +50,8 @@ class ReserveCalculationType extends AbstractParameterObjectClassifier {
     static IReserveCalculationStrategy getDefault() {
         return new FixedUltimateReserveCalculationStrategy(
                 ultimateAtReportingDate: 0d,
-                reportingDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
-                averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0))
+                reportingDate: new DateTime(2012, 1, 1, 0, 0, 0, 0),
+                averageInceptionDate: new DateTime(2011, 1, 1, 0, 0, 0, 0))
     }
 
     static IReserveCalculationStrategy getStrategy(ReserveCalculationType type, Map parameters) {

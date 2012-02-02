@@ -25,6 +25,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.segment.Segments
 import org.pillarone.riskanalytics.domain.pc.cf.structure.Structures
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.*
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.RetrospectiveReinsuranceContracts
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -46,6 +47,7 @@ class GIRAModel extends StochasticModel {
     LegalEntities legalEntities
     Segments segments
     ReinsuranceContracts reinsuranceContracts
+    RetrospectiveReinsuranceContracts retrospectiveReinsurance
     Structures structures
 
     @Override
@@ -63,6 +65,7 @@ class GIRAModel extends StochasticModel {
         legalEntities = new LegalEntities()
         segments = new Segments()
         reinsuranceContracts = new ReinsuranceContracts()
+        retrospectiveReinsurance = new RetrospectiveReinsuranceContracts()
         structures = new Structures()
 
         addStartComponent creditDefault
@@ -91,16 +94,21 @@ class GIRAModel extends StochasticModel {
             reinsuranceContracts.inClaims = reservesGenerators.outReserves
             reinsuranceContracts.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
             reinsuranceContracts.inFactors = indices.outFactors
+            retrospectiveReinsurance.inClaims = claimsGenerators.outClaims
+            retrospectiveReinsurance.inClaims = reservesGenerators.outReserves
+            retrospectiveReinsurance.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
             if (structures.subComponentCount() > 0) {
                 structures.inClaimsGross = claimsGenerators.outClaims
                 structures.inClaimsCeded = reinsuranceContracts.outClaimsCeded
+                structures.inClaimsCeded = retrospectiveReinsurance.outClaimsCeded
                 structures.inUnderwritingInfoGross = underwritingSegments.outUnderwritingInfo
                 structures.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
+                structures.inUnderwritingInfoCeded = retrospectiveReinsurance.outUnderwritingInfoCeded
             }
         }
         else {
             segments.inClaims = claimsGenerators.outClaims
-            // todo(jwa): change inReserves to inClaims as soon as PMO-1733 is solved
+            // todo: change inReserves to inClaims as soon as PMO-1733 is solved
             segments.inReserves = reservesGenerators.outReserves
             segments.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
             segments.inFactors = discounting.outFactors
@@ -108,6 +116,12 @@ class GIRAModel extends StochasticModel {
             reinsuranceContracts.inUnderwritingInfo = segments.outUnderwritingInfoGross
             segments.inClaimsCeded = reinsuranceContracts.outClaimsCeded
             segments.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
+            retrospectiveReinsurance.inClaims = segments.outClaimsGross
+            retrospectiveReinsurance.inUnderwritingInfo = segments.outUnderwritingInfoGross
+            // todo: change inReserves to inClaims as soon as PMO-1733 is solved
+            segments.inReservesCeded = retrospectiveReinsurance.outClaimsCeded
+            // todo: change inReserves to inClaims as soon as PMO-1733 is solved
+            segments.inUnderwritingInfoCeded2 = retrospectiveReinsurance.outUnderwritingInfoCeded
             if (structures.subComponentCount() > 0) {
                 structures.inClaimsGross = segments.outClaimsGross
                 structures.inClaimsCeded = segments.outClaimsCeded
@@ -118,12 +132,17 @@ class GIRAModel extends StochasticModel {
                 legalEntities.inDefaultProbabilities = creditDefault.outDefaultProbabilities
                 segments.inLegalEntityDefault = legalEntities.outLegalEntityDefault
                 reinsuranceContracts.inLegalEntityDefault = legalEntities.outLegalEntityDefault
+                retrospectiveReinsurance.inLegalEntityDefault = legalEntities.outLegalEntityDefault
                 legalEntities.inClaims = segments.outClaimsGross
                 legalEntities.inUnderwritingInfo = segments.outUnderwritingInfoGross
                 legalEntities.inClaimsCeded = reinsuranceContracts.outClaimsCeded
                 legalEntities.inClaimsInward = reinsuranceContracts.outClaimsInward
                 legalEntities.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
                 legalEntities.inUnderwritingInfoInward = reinsuranceContracts.outUnderwritingInfoInward
+                legalEntities.inClaimsCeded2 = retrospectiveReinsurance.outClaimsCeded
+                legalEntities.inClaimsInward2 = retrospectiveReinsurance.outClaimsInward
+                legalEntities.inUnderwritingInfoCeded2 = retrospectiveReinsurance.outUnderwritingInfoCeded
+                legalEntities.inUnderwritingInfoInward2 = retrospectiveReinsurance.outUnderwritingInfoInward
             }
         }
     }

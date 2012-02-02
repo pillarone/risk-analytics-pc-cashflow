@@ -33,12 +33,25 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
      * @return creates a cloned instance with numberOfPolicies and premiumWritten according to parameters
      */
     public CededUnderwritingInfoPacket withFactorsApplied(double policyFactor, double premiumFactor, double commissionFactor) {
+        return withFactorsApplied(policyFactor, premiumFactor, premiumFactor, commissionFactor);
+    }
+
+    /**
+     *
+     * @param policyFactor
+     * @param premiumWrittenFactor
+     * @param premiumPaidFactor
+     * @param commissionFactor
+     * @return creates a cloned instance with numberOfPolicies and premiumWritten according to parameters
+     */
+    public CededUnderwritingInfoPacket withFactorsApplied(double policyFactor, double premiumWrittenFactor,
+                                                          double premiumPaidFactor, double commissionFactor) {
         CededUnderwritingInfoPacket modified = (CededUnderwritingInfoPacket) this.clone();
         modified.numberOfPolicies *= policyFactor;
-        modified.premiumWritten *= premiumFactor;
-        modified.premiumPaid *= premiumFactor;
-        modified.premiumPaidFixed *= premiumFactor;
-        modified.premiumPaidVariable *= premiumFactor;
+        modified.premiumWritten *= premiumWrittenFactor;
+        modified.premiumPaid *= premiumPaidFactor;
+        modified.premiumPaidFixed *= premiumPaidFactor;
+        modified.premiumPaidVariable *= premiumPaidFactor;
         modified.commission *= commissionFactor;
         modified.commissionFixed *= commissionFactor;
         modified.commissionVariable *= commissionFactor;
@@ -78,7 +91,6 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
         cededPacket.setRiskBand(packet.riskBand());
         cededPacket.segment = packet.segment;
         cededPacket.reinsuranceContract = contract;
-//        cededPacket.original = packet;
         cededPacket.setDate(packet.getDate());
         return cededPacket;
     }
@@ -87,6 +99,13 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
                                                     double policyFactor, double premiumFactor, double commissionFactor) {
         CededUnderwritingInfoPacket cededPacket = deriveCededPacket(packet, contract);
         return cededPacket.withFactorsApplied(policyFactor, premiumFactor, commissionFactor);
+    }
+
+    public static CededUnderwritingInfoPacket scale(UnderwritingInfoPacket packet, IReinsuranceContractMarker contract,
+                                                    double policyFactor, double premiumWrittenFactor,
+                                                    double premiumPaidFactor, double commissionFactor) {
+        CededUnderwritingInfoPacket cededPacket = deriveCededPacket(packet, contract);
+        return cededPacket.withFactorsApplied(policyFactor, premiumWrittenFactor, premiumPaidFactor, commissionFactor);
     }
 
     public void setCommission(double fixed, double variable) {

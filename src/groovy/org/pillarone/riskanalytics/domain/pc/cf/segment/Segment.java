@@ -47,11 +47,16 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     public static final String FILTERED_FACTORS = "filteredFactors";
 
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
-    // todo(jwa): remove inReserves as soon as PMO-1733 is solved (and collect within inClaims)
+    // todo: remove inReserves as soon as PMO-1733 is solved (and collect within inClaims)
     private PacketList<ClaimCashflowPacket> inReserves = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    // todo: remove inReserves as soon as PMO-1733 is solved (and collect within inClaimsCeded)
+    private PacketList<ClaimCashflowPacket> inReservesCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded
+            = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
+    // todo: remove inReserves as soon as PMO-1733 is solved (and collect within inUnderwritingInfoCeded)
+    private PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded2
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
     private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     private PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
@@ -187,10 +192,20 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                 outUnderwritingInfoCeded.add(underwritingInfo);
             }
         }
+        for (CededUnderwritingInfoPacket underwritingInfo : inUnderwritingInfoCeded2) {
+            if (underwritingInfo.segment().equals(this)) {
+                outUnderwritingInfoCeded.add(underwritingInfo);
+            }
+        }
     }
 
     private void filterCededClaims() {
         for (ClaimCashflowPacket claim : inClaimsCeded) {
+            if (claim.segment().equals(this)) {
+                outClaimsCeded.add(claim);
+            }
+        }
+        for (ClaimCashflowPacket claim : inReservesCeded) {
             if (claim.segment().equals(this)) {
                 outClaimsCeded.add(claim);
             }
@@ -296,7 +311,9 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         setTransmitterPhaseOutput(outUnderwritingInfoGross, PHASE_GROSS);
 
         setTransmitterPhaseInput(inClaimsCeded, PHASE_NET);
+        setTransmitterPhaseInput(inReservesCeded, PHASE_NET);
         setTransmitterPhaseInput(inUnderwritingInfoCeded, PHASE_NET);
+        setTransmitterPhaseInput(inUnderwritingInfoCeded2, PHASE_NET);
         setTransmitterPhaseOutput(outClaimsNet, PHASE_NET);
         setTransmitterPhaseOutput(outClaimsCeded, PHASE_NET);
         setTransmitterPhaseOutput(outDiscountedValues, PHASE_NET);
@@ -502,5 +519,21 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     public void setOutNetFinancials(PacketList<FinancialsPacket> outNetFinancials) {
         this.outNetFinancials = outNetFinancials;
+    }
+
+    public PacketList<ClaimCashflowPacket> getInReservesCeded() {
+        return inReservesCeded;
+    }
+
+    public void setInReservesCeded(PacketList<ClaimCashflowPacket> inReservesCeded) {
+        this.inReservesCeded = inReservesCeded;
+    }
+
+    public PacketList<CededUnderwritingInfoPacket> getInUnderwritingInfoCeded2() {
+        return inUnderwritingInfoCeded2;
+    }
+
+    public void setInUnderwritingInfoCeded2(PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded2) {
+        this.inUnderwritingInfoCeded2 = inUnderwritingInfoCeded2;
     }
 }

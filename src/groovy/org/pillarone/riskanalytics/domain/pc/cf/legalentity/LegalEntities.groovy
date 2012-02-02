@@ -22,11 +22,15 @@ class LegalEntities extends DynamicMultiPhaseComposedComponent {
 
     PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
+    PacketList<ClaimCashflowPacket> inClaimsCeded2 = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> inClaimsInward = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
+    PacketList<ClaimCashflowPacket> inClaimsInward2 = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
 
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
+    PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded2 = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
     PacketList<UnderwritingInfoPacket> inUnderwritingInfoInward = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
+    PacketList<UnderwritingInfoPacket> inUnderwritingInfoInward2 = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
 
     PacketList<LegalEntityDefault> outLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault)
 
@@ -67,9 +71,13 @@ class LegalEntities extends DynamicMultiPhaseComposedComponent {
         setTransmitterPhaseOutput(outUnderwritingInfoGross, PHASE_CALC)
 
         setTransmitterPhaseInput(inClaimsCeded, PHASE_CALC)
+        setTransmitterPhaseInput(inClaimsCeded2, PHASE_CALC)
         setTransmitterPhaseInput(inClaimsInward, PHASE_CALC)
+        setTransmitterPhaseInput(inClaimsInward2, PHASE_CALC)
         setTransmitterPhaseInput(inUnderwritingInfoCeded, PHASE_CALC)
+        setTransmitterPhaseInput(inUnderwritingInfoCeded2, PHASE_CALC)
         setTransmitterPhaseInput(inUnderwritingInfoInward, PHASE_CALC)
+        setTransmitterPhaseInput(inUnderwritingInfoInward2, PHASE_CALC)
         setTransmitterPhaseOutput(outClaimsPrimaryInsurer, PHASE_CALC)
         setTransmitterPhaseOutput(outClaimsReinsurer, PHASE_CALC)
         setTransmitterPhaseOutput(outClaimsCeded, PHASE_CALC)
@@ -86,10 +94,14 @@ class LegalEntities extends DynamicMultiPhaseComposedComponent {
         replicateInChannels this, 'inPatterns'
         replicateInChannels this, 'inClaims'
         replicateInChannels this, 'inClaimsCeded'
+        replicateInChannels this, 'inClaimsCeded2'
         replicateInChannels this, 'inClaimsInward'
+        replicateInChannels this, 'inClaimsInward2'
         replicateInChannels this, 'inUnderwritingInfo'
         replicateInChannels this, 'inUnderwritingInfoCeded'
+        replicateInChannels this, 'inUnderwritingInfoCeded2'
         replicateInChannels this, 'inUnderwritingInfoInward'
+        replicateInChannels this, 'inUnderwritingInfoInward2'
         replicateOutChannels this, 'outLegalEntityDefault'
         replicateOutChannels this, 'outClaimsGross'
         replicateOutChannels this, 'outClaimsPrimaryInsurer'
