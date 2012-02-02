@@ -49,7 +49,8 @@ public class ReservesGenerator extends Component implements IReserveMarker {
         PatternPacket payoutPattern = getPayoutPattern();
         PatternPacket reportingPattern = getReportingPattern();
 
-        double ultimateAtReportingDate = parmUltimateEstimationMethod.getUltimate(payoutPattern, reportingPattern);
+        double ultimateAtReportingDate = -parmUltimateEstimationMethod.getUltimate(payoutPattern, reportingPattern);
+        ultimateAtReportingDate = ultimateAtReportingDate == -0 ? 0 : ultimateAtReportingDate;
         DateTime averageInceptionDate = parmUltimateEstimationMethod.getAverageInceptionDate();
 
         GrossClaimRoot baseClaim;
