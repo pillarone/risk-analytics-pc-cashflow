@@ -40,7 +40,7 @@ public class LossPortfolioTransferContract extends AbstractProportionalReinsuran
             cededBaseClaim = storage.getCededClaimRoot();
         }
         else {
-            quotaShareUltimate = adjustedQuote(grossClaim.ultimate(), annualAggregateLimitUltimate);
+            quotaShareUltimate = adjustedQuote(grossClaim.nominalUltimate(), annualAggregateLimitUltimate);
             cededBaseClaim = storage.lazyInitCededClaimRoot(quotaShareUltimate);
         }
 

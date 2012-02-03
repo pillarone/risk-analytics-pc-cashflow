@@ -40,7 +40,7 @@ public class InwardLegalEntitiesCoverAttributeStrategy extends AbstractParameter
         List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
         List coveredLegalEntities = getCoveredLegalEntities();
         for (ClaimCashflowPacket claim : source) {
-            if (coveredLegalEntities.contains(claim.legalEntity())) {
+            if (coveredLegalEntities.contains(claim.legalEntity()) && claim.reserve() == null) {
                 filteredClaims.add(claim);
             }
         }

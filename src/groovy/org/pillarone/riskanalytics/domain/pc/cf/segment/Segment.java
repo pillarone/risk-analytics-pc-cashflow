@@ -86,6 +86,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             Arrays.asList(""), Arrays.asList("Discount Index"), IDiscountMarker.class);
 
     private Map<IClaimRoot, IClaimRoot> incomingScaledBaseClaimMapping = new HashMap<IClaimRoot, IClaimRoot>();
+    private Map<IClaimRoot, IClaimRoot> incomingScaledBaseReservesMapping = new HashMap<IClaimRoot, IClaimRoot>();
 
     private static final String PERIL = "Claims Generator";
     private static final String RESERVE = "Reserves Generator";
@@ -166,6 +167,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     private void initIteration(String phase) {
         if (phase.equals(PHASE_GROSS) && iterationScope.getPeriodScope().isFirstPeriod()) {
             incomingScaledBaseClaimMapping.clear();
+            incomingScaledBaseReservesMapping.clear();
             dateOfDefault = null;
         }
     }
@@ -281,7 +283,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                 if (marketClaim.reserve() != null) {
                     String originName = marketClaim.reserve().getNormalizedName();
                     int row = parmReservesPortions.getColumnByName(RESERVE).indexOf(originName);
-                    if (row > -1 && (dateOfDefault == null || dateOfDefault.isAfter(marketClaim.getOccurrenceDate()))) {
+                    if (row > -1) {
                         ClaimCashflowPacket segmentReserve = (ClaimCashflowPacket) marketClaim.copy();
                         // PMO-750: claim mergers in reinsurance program won't work with reference to market claims
                         segmentReserve.origin = this;
@@ -289,7 +291,16 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                         segmentReserve.setMarker((IComponentMarker) parmCompany.getSelectedComponent());
                         double scaleFactor = InputFormatConverter.getDouble(parmReservesPortions.getValueAt(row + 1, portionColumn));
                         scaleFactor *= recovery(segmentReserve.getUpdateDate(), dateOfDefault);
-                        segmentReserves.add(ClaimUtils.scale(segmentReserve, scaleFactor, true, false));
+                        IClaimRoot scaledSegmentBaseReserve = incomingScaledBaseReservesMapping.get(marketClaim.getBaseClaim());
+                        if (scaledSegmentBaseReserve == null) {
+                            ClaimCashflowPacket scaledSegementClaim = ClaimUtils.scale(segmentReserve, scaleFactor, true, false);
+                            incomingScaledBaseReservesMapping.put(marketClaim.getBaseClaim(), scaledSegementClaim.getBaseClaim());
+                            segmentReserves.add(scaledSegementClaim);
+                        }
+                        else {
+                            ClaimCashflowPacket scaledSegementClaim = ClaimUtils.scale(segmentReserve, scaleFactor, scaledSegmentBaseReserve, false);
+                            segmentReserves.add(scaledSegementClaim);
+                        }
                     }
                 }
             }

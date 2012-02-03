@@ -31,7 +31,7 @@ class SegmentsFilterStrategy extends AbstractParameterObject implements ICoverAt
         List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
         List coveredSegments = getCoveredSegments();
         for (ClaimCashflowPacket claim : source) {
-            if (coveredSegments.contains(claim.segment())) {
+            if (coveredSegments.contains(claim.segment()) && claim.reserve() == null) {
                 filteredClaims.add(claim);
             }
         }

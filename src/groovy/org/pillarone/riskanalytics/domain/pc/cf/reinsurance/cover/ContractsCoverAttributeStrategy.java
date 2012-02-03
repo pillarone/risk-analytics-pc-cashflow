@@ -37,7 +37,7 @@ public class ContractsCoverAttributeStrategy extends AbstractParameterObject imp
         List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
         List coveredContracts = getCoveredReinsuranceContracts();
         for (ClaimCashflowPacket claim : source) {
-            if (coveredContracts.contains(claim.reinsuranceContract())) {
+            if (coveredContracts.contains(claim.reinsuranceContract()) && claim.reserve() == null) {
                 filteredClaims.add(claim);
             }
         }

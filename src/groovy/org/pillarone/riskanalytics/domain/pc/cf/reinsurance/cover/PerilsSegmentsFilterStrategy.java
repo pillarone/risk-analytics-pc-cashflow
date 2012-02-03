@@ -45,10 +45,10 @@ public class PerilsSegmentsFilterStrategy extends AbstractParameterObject implem
         List coveredPerils = getCoveredPerils();
         List coveredSegments = getCoveredSegments();
         for (ClaimCashflowPacket claim : source) {
-            if ((connection == LogicArguments.AND
+            if (claim.reserve() == null && ((connection == LogicArguments.AND
                     && coveredPerils.contains(claim.peril()) && coveredSegments.contains(claim.segment()))
                 || (connection == LogicArguments.OR
-                    && coveredPerils.contains(claim.peril()) || coveredSegments.contains(claim.segment()))) {
+                    && coveredPerils.contains(claim.peril()) || coveredSegments.contains(claim.segment())))) {
                 filteredClaims.add(claim);
             }
         }

@@ -4,7 +4,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.ModelTest
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class GIRARetroModelTests extends ModelTest {
+class GIRARetroWithPatternModelTests extends ModelTest {
 
     Class getModelClass() {
         GIRAModel
@@ -21,11 +21,11 @@ class GIRARetroModelTests extends ModelTest {
 
     @Override
     String getParameterFileName() {
-        'GIRARetroParameters'
+        'GIRARetroWithPatternParameters'
     }
 
     String getParameterDisplayName() {
-        'Retro'
+        'Retro with Pattern'
     }
 
     protected boolean shouldCompareResults() {
