@@ -43,7 +43,8 @@ public class StopLossConstractStrategy extends AbstractParameterObject implement
         return ReinsuranceContractType.STOPLOSS;
     }
 
-    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets, ThresholdStore termDeductible, ThresholdStore termLimit) {
+    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                            ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
         double cededPremiumFixed = premium;
         double scaledAttachmentPoint = attachmentPoint;
         double scaledLimit = limit;

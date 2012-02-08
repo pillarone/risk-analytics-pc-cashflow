@@ -52,8 +52,8 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
     }
 
     @Override
-    public void initPeriod(List<FactorsPacket> inFactors) {
-        super.initPeriod(inFactors);
+    public void initPeriod(int period, List<FactorsPacket> inFactors) {
+        super.initPeriod(period, inFactors);
     }
 
     @Override

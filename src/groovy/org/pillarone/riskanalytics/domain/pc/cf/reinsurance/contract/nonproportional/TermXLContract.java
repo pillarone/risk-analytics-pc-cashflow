@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional;
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
@@ -19,7 +20,7 @@ import java.util.List;
 public class TermXLContract extends XLContract implements INonPropReinsuranceContract {
 
     protected ThresholdStore termDeductible;
-    protected ThresholdStore termLimit;
+    protected EqualUsagePerPeriodThresholdStore termLimit;
 
 
     /**
@@ -38,18 +39,24 @@ public class TermXLContract extends XLContract implements INonPropReinsuranceCon
     public TermXLContract(double cededPremiumFixed, double attachmentPoint, double limit, double aggregateDeductible,
                           double aggregateLimit, IStabilizationStrategy stabilization,
                           List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy riPremiumSplit,
-                          ThresholdStore termDeductible, ThresholdStore termLimit) {
+                          ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
         super(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit, stabilization,
                 reinstatementPremiumFactors, riPremiumSplit);
         this.termDeductible = termDeductible;
         this.termLimit = termLimit;
     }
 
+    @Override
+    public void initPeriod(int period, List<FactorsPacket> inFactors) {
+        termLimit.initPeriod(period);
+    }
+
     protected double cededValue(double claimPropertyCumulated, BasedOnClaimProperty claimPropertyBase, ClaimStorage storage,
                                double stabilizationFactor) {
         double aggregateLimitValue = periodLimit.get(claimPropertyBase, stabilizationFactor);
         if (aggregateLimitValue > 0) {
-            double termLimitValue = termLimit.get(claimPropertyBase, stabilizationFactor);
+            int occurrencePeriod = storage.getReference().getOccurrencePeriod(null);
+            double termLimitValue = termLimit.get(claimPropertyBase, stabilizationFactor, occurrencePeriod);
             if (termLimitValue > 0) {
                 double ceded = Math.min(Math.max(-claimPropertyCumulated - attachmentPoint * stabilizationFactor, 0), limit * stabilizationFactor);
 
@@ -65,7 +72,7 @@ public class TermXLContract extends XLContract implements INonPropReinsuranceCon
                 double cededAfterAAL = aggregateLimitValue > incrementalCeded ? incrementalCeded : aggregateLimitValue;
                 periodLimit.plus(-cededAfterAAL, claimPropertyBase);
                 double cededAfterTermLimit = termLimitValue > cededAfterAAL ? cededAfterAAL : termLimitValue;
-                termLimit.plus(-cededAfterTermLimit, claimPropertyBase);
+                termLimit.plus(-cededAfterTermLimit, claimPropertyBase, occurrencePeriod);
                 return cededAfterTermLimit;
             }
             return 0;

@@ -50,8 +50,8 @@ public class AdverseDevelopmentCoverContract extends AbstractReinsuranceContract
     }
 
     @Override
-    public void initPeriod(List<FactorsPacket> inFactors) {
-        super.initPeriod(inFactors);
+    public void initPeriod(int period, List<FactorsPacket> inFactors) {
+        super.initPeriod(period, inFactors);
     }
 
     @Override

@@ -16,7 +16,8 @@ public class TermCXLConstractStrategy extends TermXLConstractStrategy implements
         return ReinsuranceContractType.CXLTERM;
     }
 
-    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets, ThresholdStore termDeductible, ThresholdStore termLimit) {
+    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                            ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
         double cededPremiumFixed = getCededPremiumFixed(underwritingInfoPackets);
         List<Double> reinstatementPremiumFactors = (List<Double>) reinstatementPremiums.getValues().get(0);
         return new TermCXLContract(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit,

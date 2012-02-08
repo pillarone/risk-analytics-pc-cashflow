@@ -71,8 +71,8 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
      * reinitialization of the deductibles is required as calculations are base on cumulated values in XL contracts
      */
     @Override
-    public void initPeriod(List<FactorsPacket> inFactors) {
-        super.initPeriod(inFactors);
+    public void initPeriod(int period, List<FactorsPacket> inFactors) {
+        super.initPeriod(period, inFactors);
         periodDeductible.init();
         stabilization.mergeFactors(inFactors);
     }

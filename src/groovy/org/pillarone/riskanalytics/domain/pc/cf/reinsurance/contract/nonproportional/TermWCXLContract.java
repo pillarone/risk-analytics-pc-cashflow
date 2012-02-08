@@ -25,7 +25,7 @@ public class TermWCXLContract extends TermCXLContract {
     public TermWCXLContract(double cededPremiumFixed, double attachmentPoint, double limit, double aggregateDeductible,
                             double aggregateLimit, IStabilizationStrategy stabilization,
                             List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy premiumAllocation,
-                            ThresholdStore termDeductible, ThresholdStore termLimit) {
+                            ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
         super(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit,
                 stabilization, reinstatementPremiumFactors, premiumAllocation, termDeductible, termLimit);
     }

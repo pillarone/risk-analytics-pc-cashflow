@@ -128,19 +128,19 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
 
     private void initPeriod(Set<IReinsuranceContract> contracts) {
         initProportionalContract(contracts);
+        int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
         if (isProportionalContract) {
-            int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
             for (int period = 0; period < currentPeriod; period++) {
                 IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, -currentPeriod + period);
                 if (contract != null) {
                     // for all proportional contracts underwriting info of preceding periods needs to be clear
-                    contract.initPeriod(inFactors);
+                    contract.initPeriod(currentPeriod, inFactors);
                 }
             }
         }
         else {
             for (IReinsuranceContract contract : contracts) {
-                contract.initPeriod(inFactors);
+                contract.initPeriod(currentPeriod, inFactors);
             }
         }
     }

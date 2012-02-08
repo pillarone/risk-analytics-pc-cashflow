@@ -20,8 +20,8 @@ abstract public class AbstractProportionalReinsuranceContract extends AbstractRe
     private boolean isStartCoverPeriod = true;
 
     @Override
-    public void initPeriod(List<FactorsPacket> inFactors) {
-        super.initPeriod(inFactors);    //To change body of overridden methods use File | Settings | File Templates.
+    public void initPeriod(int period, List<FactorsPacket> inFactors) {
+        super.initPeriod(period, inFactors);    //To change body of overridden methods use File | Settings | File Templates.
         grossUwInfos.clear();
         cededUwInfos.clear();
     }

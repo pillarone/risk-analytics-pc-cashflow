@@ -16,7 +16,8 @@ public class WCXLConstractStrategy extends XLConstractStrategy implements IReins
         return ReinsuranceContractType.WCXL;
     }
 
-    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets, ThresholdStore termDeductible, ThresholdStore termLimit) {
+    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                            ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
         double cededPremiumFixed = getCededPremiumFixed(underwritingInfoPackets);
         List<Double> reinstatementPremiumFactors = (List<Double>) reinstatementPremiums.getValues().get(0);
         return new WCXLContract(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit,

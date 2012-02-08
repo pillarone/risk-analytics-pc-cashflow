@@ -36,7 +36,7 @@ public class TermCXLContract extends TermXLContract {
     public TermCXLContract(double cededPremiumFixed, double attachmentPoint, double limit, double aggregateDeductible,
                            double aggregateLimit, IStabilizationStrategy stabilization,
                            List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy riPremiumSplit,
-                           ThresholdStore termDeductible, ThresholdStore termLimit) {
+                           ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
         super(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit, stabilization,
                 reinstatementPremiumFactors, riPremiumSplit, termDeductible, termLimit);
     }

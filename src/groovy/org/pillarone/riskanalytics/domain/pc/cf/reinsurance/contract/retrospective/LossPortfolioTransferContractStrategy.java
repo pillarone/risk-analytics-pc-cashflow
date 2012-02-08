@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.RetrospectiveReinsuranceContractType;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.EqualUsagePerPeriodThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
 
 import java.util.HashMap;
@@ -33,7 +34,7 @@ public class LossPortfolioTransferContractStrategy extends AbstractParameterObje
     }
 
     public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets,
-                                            ThresholdStore termDeductible, ThresholdStore termLimit) {
+                                            ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
         return new LossPortfolioTransferContract(cededShare, limit, reinsurancePremium);
     }
 

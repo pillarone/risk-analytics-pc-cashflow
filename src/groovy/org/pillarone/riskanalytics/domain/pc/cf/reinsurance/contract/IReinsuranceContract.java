@@ -17,9 +17,10 @@ import java.util.List;
 public interface IReinsuranceContract {
 
     /** used to reset deductibles, limits if required
+     * @param period
      * @param inFactors
      */
-    void initPeriod(List<FactorsPacket> inFactors);
+    void initPeriod(int period, List<FactorsPacket> inFactors);
 
 
     void add(UnderwritingInfoPacket grossUnderwritingInfo);

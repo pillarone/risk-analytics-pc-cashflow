@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.EqualUsagePerPeriodThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.IPeriodStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType;
@@ -19,7 +20,7 @@ public class ReinsuranceContract extends BaseReinsuranceContract implements IRei
     private IPeriodStrategy parmCoveredPeriod = PeriodStrategyType.getDefault();
     private IReinsuranceContractStrategy parmContractStrategy = ReinsuranceContractType.getDefault();
     private ThresholdStore termDeductible;
-    private ThresholdStore termLimit;
+    private EqualUsagePerPeriodThresholdStore termLimit;
 
     protected void initSimulation() {
         super.initSimulation();
@@ -33,7 +34,7 @@ public class ReinsuranceContract extends BaseReinsuranceContract implements IRei
         super.initIteration();
         if (iterationScope.getPeriodScope().isFirstPeriod()) {
             termDeductible = new ThresholdStore(parmContractStrategy.getTermDeductible());
-            termLimit = new ThresholdStore(parmContractStrategy.getTermLimit());
+            termLimit = new EqualUsagePerPeriodThresholdStore(parmContractStrategy.getTermLimit());
         }
     }
 
