@@ -207,7 +207,12 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             periodStore.put(CLAIM_HISTORY, claimsHistories);
             for (ClaimCashflowPacket claim : inClaims) {
                 ClaimStorage claimStorage = claimsHistories.get(claim.getKeyClaim());
-                int occurrencePeriod = claim.occurrencePeriod(periodCounter);
+                // PMO-1963: calculation of an occurrence period before the projection start does not work
+                //           as current retrospective contracts don't cover specific periods all is mapped to period 0
+                int occurrencePeriod = 0;
+                if (claim.reserve() == null) {
+                    occurrencePeriod = claim.occurrencePeriod(periodCounter);
+                }
                 if (claimStorage == null) {
                     contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, currentPeriod, claimsHistories,
                             currentPeriodGrossClaims));
@@ -222,7 +227,12 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         }
         else {
             for (ClaimCashflowPacket claim : inClaims) {
-                int occurrencePeriod = claim.occurrencePeriod(periodCounter);
+                // PMO-1963: calculation of an occurrence period before the projection start does not work
+                //           as current retrospective contracts don't cover specific periods all is mapped to period 0
+                int occurrencePeriod = 0;
+                if (claim.reserve() == null) {
+                    occurrencePeriod = claim.occurrencePeriod(periodCounter);
+                }
                 ClaimStorage claimStorage = claimsHistories.get(claim.getKeyClaim());
                 if (currentPeriod == occurrencePeriod && claimStorage == null) {
                     contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, currentPeriod, claimsHistories,
