@@ -75,6 +75,7 @@ environments {
         ExceptionSafeOut = System.out
         resultBulkInsert = org.pillarone.riskanalytics.core.output.batch.results.GenericBulkInsert
         calculationBulkInsert = GenericBulkInsert
+        grails.project.compile.verbose=true
         keyFiguresToCalculate = [
                 'stdev': true,
                 'percentile': [0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0],
@@ -93,7 +94,9 @@ environments {
             }
             info()
             debug 'org.pillarone.riskanalytics.domain.pc.cf'
-            warn()
+
+            warn 'org.grails.plugins.excelimport.DefaultImportCellCollector',
+                 'org.grails.plugins.excelimport.ExcelImportUtils'
         }
     }
     mysql {
@@ -146,7 +149,7 @@ log4j = {
     }
     root {
         error 'stdout', 'file'
-        additivity = false
+        additivity = true
     }
     error 'org.codehaus.groovy.grails.web.servlet',  //  controllers
             'org.codehaus.groovy.grails.web.pages', //  GSP

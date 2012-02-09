@@ -73,6 +73,10 @@
 
 
     <target name="test" depends="init" description="--> Run a Grails applications unit tests">
+        <delete failonerror="false">
+            <fileset dir="test/data/spreadsheets/validationfailed" includes="**/*"/>
+        </delete>
+        <mkdir dir="test/data/spreadsheets/validationfailed"/>
         <exec executable="${grails}" failonerror="true" resolveexecutable="true">
             <arg value="test-app"/>
             <arg value="-coverage"/>
