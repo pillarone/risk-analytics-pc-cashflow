@@ -21,16 +21,13 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IRecoveryPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket;
+import org.pillarone.riskanalytics.domain.utils.constant.Rating;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
-import org.pillarone.riskanalytics.domain.utils.constant.Rating;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 import umontreal.iro.lecuyer.probdist.BinomialDist;
-
-import java.util.Map;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -68,7 +65,6 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
 
-    private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
     private PacketList<FinancialsPacket> outNetFinancials = new PacketList<FinancialsPacket>(FinancialsPacket.class);
     private PacketList<DiscountedValuesPacket> outDiscountedValues = new PacketList<DiscountedValuesPacket>(DiscountedValuesPacket.class);
     private PacketList<NetPresentValuesPacket> outNetPresentValues = new PacketList<NetPresentValuesPacket>(NetPresentValuesPacket.class);
@@ -164,12 +160,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     }
 
     private void fillContractFinancials() {
-        if (isSenderWired(outContractFinancials)) {
-            ContractFinancialsPacket contractFinancials = new ContractFinancialsPacket(outClaimsCeded, outClaimsNet,
-                outUnderwritingInfoCeded, outUnderwritingInfoNet);
-            outContractFinancials.add(contractFinancials);
-        }
-        else if (isSenderWired(outNetFinancials)) {
+        if (isSenderWired(outNetFinancials)) {
             FinancialsPacket financials = new FinancialsPacket(outUnderwritingInfoNet, outUnderwritingInfoCeded, outClaimsNet);
             outNetFinancials.add(financials);
         }
@@ -251,7 +242,6 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
         setTransmitterPhaseOutput(outUnderwritingInfoReinsurer, PHASE_CALC);
         setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_CALC);
         setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_CALC);
-        setTransmitterPhaseOutput(outContractFinancials, PHASE_CALC);
         setTransmitterPhaseOutput(outNetFinancials, PHASE_CALC);
         setTransmitterPhaseOutput(outDiscountedValues, PHASE_CALC);
         setTransmitterPhaseOutput(outNetPresentValues, PHASE_CALC);
@@ -431,14 +421,6 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
 
     public void setInDefaultProbabilities(PacketList<DefaultProbabilities> inDefaultProbabilities) {
         this.inDefaultProbabilities = inDefaultProbabilities;
-    }
-
-    public PacketList<ContractFinancialsPacket> getOutContractFinancials() {
-        return outContractFinancials;
-    }
-
-    public void setOutContractFinancials(PacketList<ContractFinancialsPacket> outContractFinancials) {
-        this.outContractFinancials = outContractFinancials;
     }
 
     public PacketList<FinancialsPacket> getOutNetFinancials() {

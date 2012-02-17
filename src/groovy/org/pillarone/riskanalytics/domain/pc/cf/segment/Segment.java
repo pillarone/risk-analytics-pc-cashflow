@@ -1,7 +1,5 @@
 package org.pillarone.riskanalytics.domain.pc.cf.segment;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.components.MultiPhaseComponent;
@@ -14,15 +12,18 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault;
-import org.pillarone.riskanalytics.domain.pc.cf.discounting.*;
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountedValuesPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.IDiscountMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.NetPresentValuesPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion;
 import org.pillarone.riskanalytics.domain.utils.constraint.ReservePortion;
@@ -71,7 +72,6 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
-    private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
     private PacketList<FinancialsPacket> outNetFinancials = new PacketList<FinancialsPacket>(FinancialsPacket.class);
 
     private ConstrainedString parmCompany = new ConstrainedString(ILegalEntityMarker.class, "");
@@ -126,12 +126,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     }
 
     private void fillContractFinancials() {
-        if (isSenderWired(outContractFinancials)) {
-            ContractFinancialsPacket contractFinancials = new ContractFinancialsPacket(outClaimsCeded, outClaimsNet,
-                outUnderwritingInfoCeded, outUnderwritingInfoNet);
-            outContractFinancials.add(contractFinancials);
-        }
-        else if (isSenderWired(outNetFinancials)) {
+        if (isSenderWired(outNetFinancials)) {
             FinancialsPacket financials = new FinancialsPacket(outUnderwritingInfoNet, outUnderwritingInfoCeded, outClaimsNet);
             outNetFinancials.add(financials);
         }
@@ -331,7 +326,6 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         setTransmitterPhaseOutput(outNetPresentValues, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_NET);
-        setTransmitterPhaseOutput(outContractFinancials, PHASE_NET);
         setTransmitterPhaseOutput(outNetFinancials, PHASE_NET);
     }
 
@@ -514,14 +508,6 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     public void setInLegalEntityDefault(PacketList<LegalEntityDefault> inLegalEntityDefault) {
         this.inLegalEntityDefault = inLegalEntityDefault;
-    }
-
-    public PacketList<ContractFinancialsPacket> getOutContractFinancials() {
-        return outContractFinancials;
-    }
-
-    public void setOutContractFinancials(PacketList<ContractFinancialsPacket> outContractFinancials) {
-        this.outContractFinancials = outContractFinancials;
     }
 
     public PacketList<FinancialsPacket> getOutNetFinancials() {
