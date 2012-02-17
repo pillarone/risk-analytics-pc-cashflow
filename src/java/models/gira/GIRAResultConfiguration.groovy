@@ -1,7 +1,7 @@
 package models.gira
 
 model = models.gira.GIRAModel
-displayName = "Single Gross Claims"
+displayName = "Single Gross Claims, Reserves"
 components {
 	claimsGenerators {
 		subsubcomponents {
@@ -13,21 +13,6 @@ components {
 		subsubcomponents {
 			outReserves = "SINGLE"
             outNominalUltimates = "SINGLE"
-		}
-	}
-	underwritingSegments {
-		subsubcomponents {
-			outUnderwritingInfo = "AGGREGATED"
-		}
-	}
-    structures {
-		subsubcomponents {
-			outClaimsGross= "SINGLE"
-            outClaimsNet= "SINGLE"
-            outClaimsCeded= "SINGLE"
-            outUnderwritingInfoGross = "SINGLE"
-            outUnderwritingInfoNet = "SINGLE"
-            outUnderwritingInfoCeded = "SINGLE"
 		}
 	}
 }

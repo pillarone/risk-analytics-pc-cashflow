@@ -12,7 +12,7 @@ class GIRAPtfModelTests extends ModelTest {
 
     @Override
     String getResultConfigurationFileName() {
-        'GIRAAggregateResultConfiguration'
+        'TestGIRAAggregateResultConfiguration'
     }
 
     String getResultConfigurationDisplayName() {
@@ -21,7 +21,7 @@ class GIRAPtfModelTests extends ModelTest {
 
     @Override
     String getParameterFileName() {
-        'GIRAPtfParameters'
+        'TestGIRAPtfParameters'
     }
 
     String getParameterDisplayName() {

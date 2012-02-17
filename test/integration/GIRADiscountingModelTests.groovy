@@ -11,7 +11,7 @@ class GIRADiscountingModelTests extends ModelTest {
 
     @Override
     String getResultConfigurationFileName() {
-        'GIRAAggregateNoIdxResultConfiguration'
+        'TestGIRAAggregateNoIdxResultConfiguration'
     }
 
     String getResultConfigurationDisplayName() {
@@ -20,7 +20,7 @@ class GIRADiscountingModelTests extends ModelTest {
 
     @Override
     String getParameterFileName() {
-        'GIRADiscountingParameters'
+        'TestGIRADiscountingParameters'
     }
 
     String getParameterDisplayName() {

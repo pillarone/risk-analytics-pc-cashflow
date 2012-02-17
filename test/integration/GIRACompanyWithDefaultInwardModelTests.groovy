@@ -16,12 +16,12 @@ class GIRACompanyWithDefaultInwardModelTests extends ModelTest {
     }
 
     String getResultConfigurationDisplayName() {
-        'Legal Entity Drill Down'
+        'Legal Entity, Drill Down'
     }
 
     @Override
     String getParameterFileName() {
-        'GIRAMultiCompanyWithDefaultInwardParameters'
+        'TestGIRAMultiCompanyWithDefaultInwardParameters'
     }
 
     String getParameterDisplayName() {

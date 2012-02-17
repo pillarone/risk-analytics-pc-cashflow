@@ -1,7 +1,7 @@
 package models.gira
 
 model = models.gira.GIRAModel
-displayName = "Legal Entity Drill Down"
+displayName = "Legal Entity, Drill Down"
 components {
 	legalEntities {
 		subsubcomponents {
@@ -10,7 +10,9 @@ components {
 			outClaimsNet = "AGGREGATED"
 			outClaimsPrimaryInsurer = "SPLIT_PER_SOURCE"
 			outClaimsReinsurer = "SPLIT_PER_SOURCE"
+			outDiscountedValues = "AGGREGATED"
 			outNetFinancials = "AGGREGATED"
+			outNetPresentValues = "AGGREGATED"
 			outUnderwritingInfoCeded = "SPLIT_PER_SOURCE"
 			outUnderwritingInfoGross = "SPLIT_PER_SOURCE"
 			outUnderwritingInfoNet = "AGGREGATED"
