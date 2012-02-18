@@ -38,7 +38,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimatePaidClai
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.1.28"
+    def version = "0.2"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
