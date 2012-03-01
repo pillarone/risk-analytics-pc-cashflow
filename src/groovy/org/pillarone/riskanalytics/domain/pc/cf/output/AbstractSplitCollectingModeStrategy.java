@@ -1,0 +1,205 @@
+package org.pillarone.riskanalytics.domain.pc.cf.output;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.pillarone.riskanalytics.core.components.IComponentMarker;
+import org.pillarone.riskanalytics.core.output.*;
+import org.pillarone.riskanalytics.core.packets.Packet;
+import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.simulation.engine.MappingCache;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.utils.marker.ComposedMarkerKey;
+
+import java.util.*;
+
+/**
+ * Component has the same purpose as AggregateDrillDownCollectingModeStrategy in the property casualty plugin and a similar implementation
+ *
+ * @author stefan.kunz (at) intuitive-collaboration (dot) com
+ */
+abstract public class AbstractSplitCollectingModeStrategy implements ICollectingModeStrategy {
+
+    protected static Log LOG = LogFactory.getLog(AbstractSplitCollectingModeStrategy.class);
+
+    protected static final String RESOURCE_BUNDLE = "org.pillarone.riskanalytics.domain.pc.cf.output.CollectingModeStrategyResources";
+    protected static final String PATH_SEPARATOR = ":";
+    protected String displayName;
+
+    protected PacketCollector packetCollector;
+
+    // the following variables are used for caching purposes
+    protected SimulationRun simulationRun;
+    protected String componentPath;
+    protected Map<IComponentMarker, PathMapping> markerPaths;
+    protected Map<ComposedMarkerKey, PathMapping> markerComposedPaths;
+    protected MappingCache mappingCache;
+    protected int iteration = 0;
+    protected int period = 0;
+
+    protected void initSimulation() {
+        if (simulationRun != null) return;
+        simulationRun = packetCollector.getSimulationScope().getSimulation().getSimulationRun();
+        componentPath = getComponentPath();
+        markerPaths = new HashMap<IComponentMarker, PathMapping>();
+        markerComposedPaths = new HashMap<ComposedMarkerKey, PathMapping>();
+        mappingCache = packetCollector.getSimulationScope().getMappingCache();
+    }
+
+    abstract public List<SingleValueResultPOJO> collect(PacketList packets);
+
+    /**
+     * Create a SingleValueResult object for each packetValue.
+     * Information about current simulation is gathered from the scopes.
+     * The key of the value map is the path.
+     *
+     * @param packets
+     * @return
+     * @throws IllegalAccessException
+     */
+    protected List<SingleValueResultPOJO> createSingleValueResults(Map<PathMapping, Packet> packets) throws IllegalAccessException {
+        List<SingleValueResultPOJO> singleValueResults = new ArrayList<SingleValueResultPOJO>(packets.size());
+        boolean firstPath = true;
+        for (Map.Entry<PathMapping, Packet> packetEntry : packets.entrySet()) {
+            PathMapping path = packetEntry.getKey();
+            Packet packet = packetEntry.getValue();
+            for (Map.Entry<String, Number> field : packet.getValuesToSave().entrySet()) {
+                String fieldName = field.getKey();
+                Double value = (Double) field.getValue();
+                if (value == Double.NaN || value == Double.NEGATIVE_INFINITY || value == Double.POSITIVE_INFINITY) {
+                    if (LOG.isErrorEnabled()) {
+                        StringBuilder message = new StringBuilder();
+                        message.append(value).append(" collected at ").append(packetCollector.getPath());
+                        message.append(" (period ").append(period).append(") in iteration ");
+                        message.append(iteration).append(" - ignoring.");
+                        LOG.error(message);
+                    }
+                    continue;
+                }
+                SingleValueResultPOJO result = new SingleValueResultPOJO();
+                result.setSimulationRun(simulationRun);
+                result.setIteration(iteration);
+                result.setPeriod(period);
+                result.setPath(path);
+                if (firstPath) {    // todo(sku): might be completely removed
+                    result.setCollector(mappingCache.lookupCollector("AGGREGATED"));
+                }
+                else {
+                    result.setCollector(mappingCache.lookupCollector(getIdentifier()));
+                }
+                result.setField(mappingCache.lookupField(fieldName));
+                result.setValueIndex(0);
+                result.setValue(value);
+                singleValueResults.add(result);
+            }
+            firstPath = false;
+        }
+        return singleValueResults;
+    }
+
+    protected PathMapping getPathMapping(Packet packet, IComponentMarker marker, String pathExtensionPrefix) {
+        PathMapping path = markerPaths.get(marker);
+        if (marker != null && path == null) {
+            String pathExtension = pathExtensionPrefix + PATH_SEPARATOR + marker.getName();
+            String pathExtended = getExtendedPath(packet, pathExtension);
+            path = mappingCache.lookupPath(pathExtended);
+            markerPaths.put(marker, path);
+        }
+        return path;
+    }
+
+    protected PathMapping getPathMapping(Packet packet,
+                                       IComponentMarker firstMarker, String firstPathExtensionPrefix,
+                                       IComponentMarker secondMarker, String secondPathExtensionPrefix) {
+        ComposedMarkerKey pair = new ComposedMarkerKey(firstMarker, secondMarker);
+        PathMapping path = markerComposedPaths.get(pair);
+        if (firstMarker != null && path == null) {
+            String pathExtension = firstPathExtensionPrefix + PATH_SEPARATOR + firstMarker.getName()
+                    + PATH_SEPARATOR + secondPathExtensionPrefix + PATH_SEPARATOR + secondMarker.getName();
+            String pathExtended = getExtendedPath(packet, pathExtension);
+            path = mappingCache.lookupPath(pathExtended);
+            markerComposedPaths.put(pair, path);
+        }
+        return path;
+    }
+
+    protected PathMapping getPathMapping(Packet packet,
+                                       IComponentMarker firstMarker, String firstPathExtensionPrefix,
+                                       IComponentMarker secondMarker, String secondPathExtensionPrefix,
+                                       IComponentMarker thirdMarker, String thirdPathExtensionPrefix) {
+        ComposedMarkerKey pair = new ComposedMarkerKey(firstMarker, secondMarker, thirdMarker);
+        PathMapping path = markerComposedPaths.get(pair);
+        if (firstMarker != null && path == null) {
+            String pathExtension = firstPathExtensionPrefix + PATH_SEPARATOR + firstMarker.getName()
+                    + PATH_SEPARATOR + secondPathExtensionPrefix + PATH_SEPARATOR + secondMarker.getName()
+                    + PATH_SEPARATOR + thirdPathExtensionPrefix + PATH_SEPARATOR + thirdMarker.getName();
+            String pathExtended = getExtendedPath(packet, pathExtension);
+            path = mappingCache.lookupPath(pathExtended);
+            markerComposedPaths.put(pair, path);
+        }
+        return path;
+    }
+
+    protected String getComponentPath() {
+        int separatorPositionBeforeChannel = packetCollector.getPath().lastIndexOf(":");
+        return packetCollector.getPath().substring(0, separatorPositionBeforeChannel);
+    }
+
+    protected void addToMap(ClaimCashflowPacket claim, PathMapping path, Map<PathMapping, Packet> resultMap) {
+        if (path == null) return;
+        if (resultMap.containsKey(path)) {
+            ClaimCashflowPacket aggregateClaim = (ClaimCashflowPacket) resultMap.get(path);
+            List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
+            claims.add(aggregateClaim);
+            claims.add(claim);
+            resultMap.put(path, ClaimUtils.sum(claims, true));
+        } else {
+            ClaimCashflowPacket clonedClaim = (ClaimCashflowPacket) claim.copy();
+            resultMap.put(path, clonedClaim);
+        }
+    }
+
+    protected void addToMap(UnderwritingInfoPacket underwritingInfo, PathMapping path, Map<PathMapping, Packet> resultMap) {
+        if (path == null) return;
+        if (resultMap.containsKey(path)) {
+            UnderwritingInfoPacket aggregateUnderwritingInfo = (UnderwritingInfoPacket) resultMap.get(path);
+            aggregateUnderwritingInfo.plus(underwritingInfo);
+            resultMap.put(path, aggregateUnderwritingInfo);
+        } else {
+            UnderwritingInfoPacket clonedUnderwritingInfo = (UnderwritingInfoPacket) underwritingInfo.copy();
+            resultMap.put(path, clonedUnderwritingInfo);
+        }
+    }
+
+    protected String getExtendedPath(Packet packet, String pathExtension) {
+        if (pathExtension == null) return null;
+        StringBuilder composedPath = new StringBuilder(componentPath);
+        composedPath.append(PATH_SEPARATOR);
+        composedPath.append(pathExtension);
+        composedPath.append(PATH_SEPARATOR);
+        composedPath.append(packet.senderChannelName);
+        return composedPath.toString();
+    }
+
+    public String getDisplayName(Locale locale) {
+        if (displayName == null) {
+            displayName = ResourceBundle.getBundle(RESOURCE_BUNDLE, locale).getString("ICollectingModeStrategy." + getIdentifier());
+        }
+        return displayName;
+    }
+
+    abstract public String getIdentifier();
+
+    public PacketCollector getPacketCollector() {
+        return packetCollector;
+    }
+
+    public void setPacketCollector(PacketCollector packetCollector) {
+        this.packetCollector = packetCollector;
+    }
+
+    public boolean isCompatibleWith(Class packetClass) {
+        return ClaimCashflowPacket.class.isAssignableFrom(packetClass) || UnderwritingInfoPacket.class.isAssignableFrom(packetClass);
+    }
+}

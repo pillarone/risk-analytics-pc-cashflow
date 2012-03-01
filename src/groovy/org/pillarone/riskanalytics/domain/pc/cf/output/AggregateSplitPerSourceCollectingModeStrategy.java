@@ -3,15 +3,13 @@ package org.pillarone.riskanalytics.domain.pc.cf.output;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.pillarone.riskanalytics.core.components.IComponentMarker;
-import org.pillarone.riskanalytics.core.output.*;
+import org.pillarone.riskanalytics.core.output.ICollectingModeStrategy;
+import org.pillarone.riskanalytics.core.output.PathMapping;
+import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
 import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.core.packets.PacketList;
-import org.pillarone.riskanalytics.core.simulation.engine.MappingCache;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.utils.marker.ComposedMarkerKey;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
@@ -23,7 +21,7 @@ import java.util.*;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AggregateSplitPerSourceCollectingModeStrategy implements ICollectingModeStrategy {
+public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplitCollectingModeStrategy implements ICollectingModeStrategy {
 
     protected static Log LOG = LogFactory.getLog(AggregateSplitPerSourceCollectingModeStrategy.class);
 
@@ -31,29 +29,6 @@ public class AggregateSplitPerSourceCollectingModeStrategy implements ICollectin
     private static final String PERILS = "claimsGenerators";
     private static final String CONTRACTS = "reinsuranceContracts";
     private static final String SEGMENTS = "segments";
-    private static final String RESOURCE_BUNDLE = "org.pillarone.riskanalytics.domain.pc.cf.output.CollectingModeStrategyResources";
-    private static final String PATH_SEPARATOR = ":";
-    private String displayName;
-
-    private PacketCollector packetCollector;
-
-    // the following variables are used for caching purposes
-    private SimulationRun simulationRun;
-    private String componentPath;
-    private Map<IComponentMarker, PathMapping> markerPaths;
-    private Map<ComposedMarkerKey, PathMapping> markerComposedPaths;
-    private MappingCache mappingCache;
-    private int iteration = 0;
-    private int period = 0;
-
-    private void initSimulation() {
-        if (simulationRun != null) return;
-        simulationRun = packetCollector.getSimulationScope().getSimulation().getSimulationRun();
-        componentPath = getComponentPath();
-        markerPaths = new HashMap<IComponentMarker, PathMapping>();
-        markerComposedPaths = new HashMap<ComposedMarkerKey, PathMapping>();
-        mappingCache = packetCollector.getSimulationScope().getMappingCache();
-    }
 
     public List<SingleValueResultPOJO> collect(PacketList packets) {
         initSimulation();
@@ -81,59 +56,10 @@ public class AggregateSplitPerSourceCollectingModeStrategy implements ICollectin
     }
 
     /**
-     * Create a SingleValueResult object for each packetValue.
-     * Information about current simulation is gathered from the scopes.
-     * The key of the value map is the path.
-     *
-     * @param packets
-     * @return
-     * @throws IllegalAccessException
-     */
-    private List<SingleValueResultPOJO> createSingleValueResults(Map<PathMapping, Packet> packets) throws IllegalAccessException {
-        List<SingleValueResultPOJO> singleValueResults = new ArrayList<SingleValueResultPOJO>(packets.size());
-        boolean firstPath = true;
-        for (Map.Entry<PathMapping, Packet> packetEntry : packets.entrySet()) {
-            PathMapping path = packetEntry.getKey();
-            Packet packet = packetEntry.getValue();
-            for (Map.Entry<String, Number> field : packet.getValuesToSave().entrySet()) {
-                String fieldName = field.getKey();
-                Double value = (Double) field.getValue();
-                if (value == Double.NaN || value == Double.NEGATIVE_INFINITY || value == Double.POSITIVE_INFINITY) {
-                    if (LOG.isErrorEnabled()) {
-                        StringBuilder message = new StringBuilder();
-                        message.append(value).append(" collected at ").append(packetCollector.getPath());
-                        message.append(" (period ").append(period).append(") in iteration ");
-                        message.append(iteration).append(" - ignoring.");
-                        LOG.error(message);
-                    }
-                    continue;
-                }
-                SingleValueResultPOJO result = new SingleValueResultPOJO();
-                result.setSimulationRun(simulationRun);
-                result.setIteration(iteration);
-                result.setPeriod(period);
-                result.setPath(path);
-                if (firstPath) {    // todo(sku): might be completely removed
-                    result.setCollector(mappingCache.lookupCollector("AGGREGATED"));
-                }
-                else {
-                    result.setCollector(mappingCache.lookupCollector(IDENTIFIER));
-                }
-                result.setField(mappingCache.lookupField(fieldName));
-                result.setValueIndex(0);
-                result.setValue(value);
-                singleValueResults.add(result);
-            }
-            firstPath = false;
-        }
-        return singleValueResults;
-    }
-
-    /**
      * @param claims
      * @return a map with paths as key
      */
-    private Map<PathMapping, Packet> aggregateClaims(List<ClaimCashflowPacket> claims) {
+    protected Map<PathMapping, Packet> aggregateClaims(List<ClaimCashflowPacket> claims) {
         // has to be a LinkedHashMap to make sure the shortest path is the first in the map and gets AGGREGATED as collecting mode
         Map<PathMapping, Packet> resultMap = new LinkedHashMap<PathMapping, Packet>(claims.size());
         if (claims == null || claims.size() == 0) {
@@ -171,55 +97,11 @@ public class AggregateSplitPerSourceCollectingModeStrategy implements ICollectin
         return resultMap;
     }
 
-    private PathMapping getPathMapping(Packet packet, IComponentMarker marker, String pathExtensionPrefix) {
-        PathMapping path = markerPaths.get(marker);
-        if (marker != null && path == null) {
-            String pathExtension = pathExtensionPrefix + PATH_SEPARATOR + marker.getName();
-            String pathExtended = getExtendedPath(packet, pathExtension);
-            path = mappingCache.lookupPath(pathExtended);
-            markerPaths.put(marker, path);
-        }
-        return path;
-    }
-
-    private PathMapping getPathMapping(Packet packet,
-                                       IComponentMarker firstMarker, String firstPathExtensionPrefix,
-                                       IComponentMarker secondMarker, String secondPathExtensionPrefix) {
-        ComposedMarkerKey pair = new ComposedMarkerKey(firstMarker, secondMarker);
-        PathMapping path = markerComposedPaths.get(pair);
-        if (firstMarker != null && path == null) {
-            String pathExtension = firstPathExtensionPrefix + PATH_SEPARATOR + firstMarker.getName()
-                    + PATH_SEPARATOR + secondPathExtensionPrefix + PATH_SEPARATOR + secondMarker.getName();
-            String pathExtended = getExtendedPath(packet, pathExtension);
-            path = mappingCache.lookupPath(pathExtended);
-            markerComposedPaths.put(pair, path);
-        }
-        return path;
-    }
-
-    private PathMapping getPathMapping(Packet packet,
-                                       IComponentMarker firstMarker, String firstPathExtensionPrefix,
-                                       IComponentMarker secondMarker, String secondPathExtensionPrefix,
-                                       IComponentMarker thirdMarker, String thirdPathExtensionPrefix) {
-        ComposedMarkerKey pair = new ComposedMarkerKey(firstMarker, secondMarker, thirdMarker);
-        PathMapping path = markerComposedPaths.get(pair);
-        if (firstMarker != null && path == null) {
-            String pathExtension = firstPathExtensionPrefix + PATH_SEPARATOR + firstMarker.getName()
-                    + PATH_SEPARATOR + secondPathExtensionPrefix + PATH_SEPARATOR + secondMarker.getName()
-                    + PATH_SEPARATOR + thirdPathExtensionPrefix + PATH_SEPARATOR + thirdMarker.getName();
-            String pathExtended = getExtendedPath(packet, pathExtension);
-            path = mappingCache.lookupPath(pathExtended);
-            markerComposedPaths.put(pair, path);
-        }
-        return path;
-    }
-
-
     /**
      * @param underwritingInfos
      * @return a map with paths as key
      */
-    private Map<PathMapping, Packet> aggregateUnderwritingInfo(List<UnderwritingInfoPacket> underwritingInfos) {
+    protected Map<PathMapping, Packet> aggregateUnderwritingInfo(List<UnderwritingInfoPacket> underwritingInfos) {
         Map<PathMapping, Packet> resultMap = new HashMap<PathMapping, Packet>(underwritingInfos.size());
         if (underwritingInfos == null || underwritingInfos.size() == 0) {
             return resultMap;
@@ -252,68 +134,8 @@ public class AggregateSplitPerSourceCollectingModeStrategy implements ICollectin
         return resultMap;
     }
 
-    private String getComponentPath() {
-        int separatorPositionBeforeChannel = packetCollector.getPath().lastIndexOf(":");
-        return packetCollector.getPath().substring(0, separatorPositionBeforeChannel);
-    }
-
-    private void addToMap(ClaimCashflowPacket claim, PathMapping path, Map<PathMapping, Packet> resultMap) {
-        if (path == null) return;
-        if (resultMap.containsKey(path)) {
-            ClaimCashflowPacket aggregateClaim = (ClaimCashflowPacket) resultMap.get(path);
-            List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
-            claims.add(aggregateClaim);
-            claims.add(claim);
-            resultMap.put(path, ClaimUtils.sum(claims, true));
-        } else {
-            ClaimCashflowPacket clonedClaim = (ClaimCashflowPacket) claim.copy();
-//            clonedClaim.setClaimType(ClaimType.AGGREGATED);
-            resultMap.put(path, clonedClaim);
-        }
-    }
-
-    private void addToMap(UnderwritingInfoPacket underwritingInfo, PathMapping path, Map<PathMapping, Packet> resultMap) {
-        if (path == null) return;
-        if (resultMap.containsKey(path)) {
-            UnderwritingInfoPacket aggregateUnderwritingInfo = (UnderwritingInfoPacket) resultMap.get(path);
-            aggregateUnderwritingInfo.plus(underwritingInfo);
-            resultMap.put(path, aggregateUnderwritingInfo);
-        } else {
-            UnderwritingInfoPacket clonedUnderwritingInfo = (UnderwritingInfoPacket) underwritingInfo.copy();
-            resultMap.put(path, clonedUnderwritingInfo);
-        }
-    }
-
-    private String getExtendedPath(Packet packet, String pathExtension) {
-        if (pathExtension == null) return null;
-        StringBuilder composedPath = new StringBuilder(componentPath);
-        composedPath.append(PATH_SEPARATOR);
-        composedPath.append(pathExtension);
-        composedPath.append(PATH_SEPARATOR);
-        composedPath.append(packet.senderChannelName);
-        return composedPath.toString();
-    }
-
-    public String getDisplayName(Locale locale) {
-        if (displayName == null) {
-            displayName = ResourceBundle.getBundle(RESOURCE_BUNDLE, locale).getString("ICollectingModeStrategy." + IDENTIFIER);
-        }
-        return displayName;
-    }
-
+    @Override
     public String getIdentifier() {
         return IDENTIFIER;
-    }
-
-    public PacketCollector getPacketCollector() {
-        return packetCollector;
-    }
-
-    public void setPacketCollector(PacketCollector packetCollector) {
-        this.packetCollector = packetCollector;
-    }
-
-    public boolean isCompatibleWith(Class packetClass) {
-        return ClaimCashflowPacket.class.isAssignableFrom(packetClass) || UnderwritingInfoPacket.class.isAssignableFrom(packetClass);
     }
 }
