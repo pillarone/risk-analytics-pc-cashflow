@@ -19,6 +19,7 @@ public class ReinsuranceContract extends BaseReinsuranceContract implements IRei
 
     private IPeriodStrategy parmCoveredPeriod = PeriodStrategyType.getDefault();
     private IReinsuranceContractStrategy parmContractStrategy = ReinsuranceContractType.getDefault();
+    private Boolean parmVirtual = Boolean.FALSE;
     private ThresholdStore termDeductible;
     private EqualUsagePerPeriodThresholdStore termLimit;
 
@@ -92,5 +93,13 @@ public class ReinsuranceContract extends BaseReinsuranceContract implements IRei
 
     public void setParmCoveredPeriod(IPeriodStrategy parmCoveredPeriod) {
         this.parmCoveredPeriod = parmCoveredPeriod;
+    }
+
+    public Boolean getParmVirtual() {
+        return parmVirtual;
+    }
+
+    public void setParmVirtual(Boolean parmVirtual) {
+        this.parmVirtual = parmVirtual;
     }
 }

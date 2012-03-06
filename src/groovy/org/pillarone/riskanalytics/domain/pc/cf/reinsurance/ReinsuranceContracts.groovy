@@ -219,10 +219,13 @@ class ReinsuranceContracts extends DynamicComposedComponent {
      * Includes all replicating wiring independent of a p14n.
      */
     private void wireProgramIndependentReplications () {
-//        replicateInChannels this, 'inReinsurersDefault'
         replicateOutChannels this, 'outCommission'
-        replicateOutChannels this, 'outUnderwritingInfoCeded'
-        replicateOutChannels this, 'outClaimsCeded'
+        for (ReinsuranceContract contract : componentList) {
+            if (!contract.getParmVirtual()) {
+                doWire PRC, this, 'outUnderwritingInfoCeded', contract, 'outUnderwritingInfoCeded'
+                doWire PRC, this, 'outClaimsCeded', contract, 'outClaimsCeded'
+            }
+        }
     }
 
     /**
