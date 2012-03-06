@@ -231,11 +231,11 @@ class SegmentTests extends GroovyTestCase {
         assertEquals "ceded motor premium written", -54, segment.outUnderwritingInfoCeded[1].premiumWritten
         assertEquals "ceded motor premium paid", -54, segment.outUnderwritingInfoCeded[1].premiumPaid
 
-        assertEquals "#net claims", 1, segment.outClaimsNet.size()
-        assertEquals "net marine peril", null, segment.outClaimsNet[0].peril()
+        assertEquals "#net claims", 4, segment.outClaimsNet.size()
+        assertEquals "net marine peril", marineClaimsGenerator, segment.outClaimsNet[0].peril()
         assertEquals "net marine segment", segment, segment.outClaimsNet[0].segment()
-        assertEquals "net marine ultimate", -3070, segment.outClaimsNet[0].ultimate()
-        assertEquals "net marine paid incremental", -510, segment.outClaimsNet[0].paidIncrementalIndexed
+        assertEquals "net marine ultimate", -3070, segment.outClaimsNet*.ultimate().sum()
+        assertEquals "net marine paid incremental", -510, segment.outClaimsNet*.paidIncrementalIndexed.sum()
 
         assertEquals "#net underwriting info", 2, segment.outUnderwritingInfoNet.size()
         assertEquals "net marine riskBand", marineRisk, segment.outUnderwritingInfoNet[0].riskBand()

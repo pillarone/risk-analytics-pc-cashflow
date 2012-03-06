@@ -58,7 +58,6 @@ class AggregateSplitPerSourceCollectingModeStrategyTests extends ModelTest {
 
     void correctPaths() {
         def collectedPaths = PathMapping.list()     //.sort{ it.pathName }
-        // don't count paths containing subcomponents
         List<String> paths = [
                 'GIRA:segments:outClaimsGross',
                 'GIRA:segments:outClaimsCeded',
@@ -76,12 +75,15 @@ class AggregateSplitPerSourceCollectingModeStrategyTests extends ModelTest {
                 'GIRA:segments:subMotorHull:claimsGenerators:subMotorHullAttritional:outClaimsCeded',
                 'GIRA:segments:subMotorHull:claimsGenerators:subMotorHullSingle:outClaimsCeded',
                 'GIRA:segments:subMotorHull:claimsGenerators:subMotorHullSingle:outClaimsGross',
+                'GIRA:segments:subMotorHull:claimsGenerators:subMotorHullAttritional:outClaimsNet',
+                'GIRA:segments:subMotorHull:claimsGenerators:subMotorHullSingle:outClaimsNet',
 
                 'GIRA:segments:subMotorHull:reinsuranceContracts:subMotorHullWxl:outUnderwritingInfoCeded',
                 'GIRA:segments:subMotorHull:outUnderwritingInfoGross',
                 'GIRA:segments:subMotorHull:outUnderwritingInfoCeded',
                 'GIRA:segments:subMotorHull:outUnderwritingInfoNet',
                 'GIRA:segments:subMotorHull:reinsuranceContracts:subMotorHullWxl:outClaimsCeded',
+                'GIRA:segments:subMotorHull:reinsuranceContracts:subMotorHullWxl:outClaimsNet',
 
                 'GIRA:segments:subProperty:outClaimsGross',
                 'GIRA:segments:subProperty:outClaimsCeded',
@@ -92,15 +94,18 @@ class AggregateSplitPerSourceCollectingModeStrategyTests extends ModelTest {
                 'GIRA:segments:subProperty:claimsGenerators:subPropertyEarthquake:outClaimsCeded',
                 'GIRA:segments:subProperty:claimsGenerators:subPropertySingle:outClaimsGross',
                 'GIRA:segments:subProperty:claimsGenerators:subPropertySingle:outClaimsCeded',
+                'GIRA:segments:subProperty:claimsGenerators:subPropertyAttritional:outClaimsNet',
+                'GIRA:segments:subProperty:claimsGenerators:subPropertyEarthquake:outClaimsNet',
+                'GIRA:segments:subProperty:claimsGenerators:subPropertySingle:outClaimsNet',
                 'GIRA:segments:subProperty:reinsuranceContracts:subPropertyQuotaShare:outClaimsCeded',
                 'GIRA:segments:subProperty:reinsuranceContracts:subPropertyCxl:outClaimsCeded',
+                'GIRA:segments:subProperty:reinsuranceContracts:subPropertyCxl:outClaimsNet',
 
                 'GIRA:segments:subProperty:outUnderwritingInfoGross',
                 'GIRA:segments:subProperty:outUnderwritingInfoCeded',
                 'GIRA:segments:subProperty:outUnderwritingInfoNet',
                 'GIRA:segments:subProperty:reinsuranceContracts:subPropertyQuotaShare:outUnderwritingInfoCeded',
                 'GIRA:segments:subProperty:reinsuranceContracts:subPropertyCxl:outUnderwritingInfoCeded',
-
 
                 'GIRA:reinsuranceContracts:subMotorHullWxl:outClaimsGross',
                 'GIRA:reinsuranceContracts:subMotorHullWxl:outClaimsCeded',
@@ -170,6 +175,7 @@ class AggregateSplitPerSourceCollectingModeStrategyTests extends ModelTest {
                 'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:outUnderwritingInfoCeded',
                 'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:outUnderwritingInfoNet',
         ]
+        // don't count paths containing subcomponents
         assertEquals '# of paths correct', paths.size(), collectedPaths.size() - 15
 
         for (int i = 0; i < collectedPaths.size(); i++) {

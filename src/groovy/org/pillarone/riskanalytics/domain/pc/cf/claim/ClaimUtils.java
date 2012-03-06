@@ -326,10 +326,10 @@ public class ClaimUtils {
         List<ClaimCashflowPacket> claimsNet = new ArrayList<ClaimCashflowPacket>();
         ListMultimap<IClaimRoot, ClaimCashflowPacket> aggregateCededClaimPerRoot = ArrayListMultimap.create();
         for (ClaimCashflowPacket cededClaim : claimsCeded) {
-            aggregateCededClaimPerRoot.put(cededClaim.getBaseClaim(), (ClaimCashflowPacket) cededClaim.copy());
+            aggregateCededClaimPerRoot.put(cededClaim.getKeyClaim(), (ClaimCashflowPacket) cededClaim.copy());
         }
         for (ClaimCashflowPacket grossClaim : claimsGross) {
-            List<ClaimCashflowPacket> cededClaims = aggregateCededClaimPerRoot.get(grossClaim.getBaseClaim());
+            List<ClaimCashflowPacket> cededClaims = aggregateCededClaimPerRoot.get(grossClaim.getKeyClaim());
             ClaimCashflowPacket aggregateCededClaim = sum(cededClaims, true);
             ClaimCashflowPacket netClaim = getNetClaim(grossClaim, aggregateCededClaim);
             claimsNet.add(netClaim);
