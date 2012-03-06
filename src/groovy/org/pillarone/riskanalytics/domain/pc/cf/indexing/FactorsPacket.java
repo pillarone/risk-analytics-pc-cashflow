@@ -44,6 +44,14 @@ public class FactorsPacket extends Packet {
         Map.Entry<DateTime, Double> floorEntry = getFactorsPerDate().floorEntry(date);
         Map.Entry<DateTime, Double> ceilingEntry = getFactorsPerDate().ceilingEntry(date);
 
+        if (getFactorsPerDate().size() == 1) {
+            if (floorEntry != null) {
+                return floorEntry.getValue();
+            }
+            else if (ceilingEntry != null) {
+                return ceilingEntry.getValue();
+            }
+        }
         if (ceilingEntry == null) {
             ceilingEntry = floorEntry;
             floorEntry = getFactorsPerDate().floorEntry(floorEntry.getKey().minusDays(1));
