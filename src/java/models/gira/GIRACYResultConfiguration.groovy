@@ -43,7 +43,7 @@ components {
 	reservesGenerators {
 		subsubcomponents {
 			outNominalUltimates = "AGGREGATED"
-			outReserves = "AGGREGATED"
+			outReserves = "SPLIT_BY_INCEPTION_DATE"
 		}
 	}
 	retrospectiveReinsurance {
@@ -61,9 +61,9 @@ components {
 	}
 	segments {
 		subsubcomponents {
-			outClaimsCeded = "AGGREGATED"
-			outClaimsGross = "AGGREGATED"
-			outClaimsNet = "AGGREGATED"
+			outClaimsCeded = "SPLIT_BY_INCEPTION_DATE"
+			outClaimsGross = "SPLIT_BY_INCEPTION_DATE"
+			outClaimsNet = "SPLIT_BY_INCEPTION_DATE"
 			outDiscountedValues = "AGGREGATED"
 			outNetFinancials = "AGGREGATED"
 			outNetPresentValues = "AGGREGATED"

@@ -232,6 +232,14 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return baseClaim.hasTrivialPayout() ? 0 : developedUltimate() - nominalUltimate;
     }
 
+    public double premiumRisk() {
+        return ultimate() == 0d ? 0 : reportedIncrementalIndexed + ibnrIndexed();
+    }
+
+    public double reserveRisk() {
+        return ultimate() != 0d ? 0 : reportedIncrementalIndexed + ibnrIndexed();
+    }
+
     /**
      * @param periodCounter
      * @return update period in the context of the simulation engine

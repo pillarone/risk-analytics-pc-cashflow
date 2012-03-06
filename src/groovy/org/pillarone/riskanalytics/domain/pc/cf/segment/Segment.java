@@ -175,11 +175,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
     private void calculateNetClaims() {
         if (isSenderWired(outClaimsNet) && !outClaimsGross.isEmpty()) {
-            ClaimCashflowPacket netClaim = ClaimUtils.calculateNetClaim(outClaimsGross, outClaimsCeded);
-            netClaim.removeMarker(IPerilMarker.class);
-            netClaim.removeMarker(IReserveMarker.class);
-            netClaim.removeMarker(IReinsuranceContractMarker.class);
-            outClaimsNet.add(netClaim);
+            outClaimsNet.addAll(ClaimUtils.calculateNetClaims(outClaimsGross, outClaimsCeded));
         }
     }
 

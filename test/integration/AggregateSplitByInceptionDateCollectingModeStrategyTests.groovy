@@ -50,10 +50,13 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
     void postSimulationEvaluation() {
         correctPaths()
         correctFields(['developedResultIndexed', 'appliedIndexValue', 'IBNRIndexed', 'reservesIndexed', 'outstandingIndexed',
-                'paidIncrementalIndexed', 'reportedIncrementalIndexed', 'ultimate', 'premiumWritten', 'premiumPaid',])
+                'paidIncrementalIndexed', 'reportedIncrementalIndexed', 'ultimate', 'premiumWritten', 'premiumPaid',
+                'reserveRisk', 'premiumRisk'])
         correctReportingClaimsResults()
         correctPaidClaimsResults()
         correctPremiumResults()
+        correctPremiumRiskResults()
+        correctReserveRiskResults()
     }
 
     void correctPaths() {
@@ -140,6 +143,43 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
         def results = SingleValueResult.list()
         for (SingleValueResult result : results) {
             if (result.field.fieldName == "paidIncrementalIndexed") {
+                assertEquals "${result.path.pathName}, P${result.period}", resultsPerPath.get(new PeriodPath(result)), result.value, 1E-8d
+            }
+        }
+    }
+
+    void correctReserveRiskResults() {
+        Map<PeriodPath, Double> resultsPerPath = new LinkedHashMap<PeriodPath, Double>()
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 0)]=null
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 0)]=null
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 1)]=-20000
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 1)]=-20000
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 2)]=-31000
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 2)]=-10000
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 2)]=-21000
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 3)]=-37500
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 3)]=-5000
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 3)]=-10500
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2014:outClaims', 3)]=-22000
+
+        def results = SingleValueResult.list()
+        for (SingleValueResult result : results) {
+            if (result.field.fieldName == "reserveRisk") {
+                assertEquals "${result.path.pathName}, P${result.period}", resultsPerPath.get(new PeriodPath(result)), result.value, 1E-8d
+            }
+        }
+    }
+
+    void correctPremiumRiskResults() {
+        Map<PeriodPath, Double> resultsPerPath = new LinkedHashMap<PeriodPath, Double>()
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 0)]=-100000
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 1)]=-105000
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 2)]=-110000
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 3)]=-115238.09523809524
+
+        def results = SingleValueResult.list()
+        for (SingleValueResult result : results) {
+            if (result.field.fieldName == "premiumRisk") {
                 assertEquals "${result.path.pathName}, P${result.period}", resultsPerPath.get(new PeriodPath(result)), result.value, 1E-8d
             }
         }
