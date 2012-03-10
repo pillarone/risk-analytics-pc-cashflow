@@ -71,6 +71,11 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
     private ICoverAttributeStrategy parmCover = CoverAttributeStrategyType.getDefault();
 
 
+    /** This object is filled with the initial counter party factors according to parmReinsurers */
+    protected CounterPartyState counterPartyFactorsInit;
+    /** Contains the covered ratio per counter party and date for a whole iteration. Before every iteration it is re-filled
+     *  according to counterPartyFactorsInit. Whenever a default occurs, the factor of that specific counter party and
+     *  the overall factor have to be adjusted (updateCounterPartyFactors()). */
     protected CounterPartyState counterPartyFactors;
     private Boolean isProportionalContract;
 
@@ -102,9 +107,17 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         outContractFinancials.add(contractFinancials);
     }
 
+    /** initialize counterPartyFactorsInit */
     protected void initSimulation() {
         if (firstIterationAndPeriod()) {
-            counterPartyFactors = new CounterPartyState();
+            counterPartyFactorsInit = new CounterPartyState();
+            DateTime validAsOf = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
+            List<LegalEntity> counterParties = parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX);
+            for (int row = parmReinsurers.getTitleRowCount(); row < parmReinsurers.getRowCount(); row++) {
+                ILegalEntityMarker legalEntity = counterParties.get(row - 1);
+                double coveredPortion = (Double) parmReinsurers.getValueAt(row, LegalEntityPortionConstraints.PORTION_COLUMN_INDEX);
+                counterPartyFactorsInit.addCounterPartyFactor(validAsOf, legalEntity, coveredPortion, true);
+            }
         }
     }
 
@@ -112,17 +125,10 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         return iterationScope.isFirstIteration() && iterationScope.getPeriodScope().isFirstPeriod();
     }
 
+    /** reset counterPartyFactors */
     protected void initIteration() {
         if (iterationScope.getPeriodScope().isFirstPeriod()) {
-            if (counterPartyFactors.newInitializationRequired() || firstIterationAndPeriod()) {
-                DateTime validAsOf = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
-                List<LegalEntity> counterParties = parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX);
-                for (int row = parmReinsurers.getTitleRowCount(); row < parmReinsurers.getRowCount(); row++) {
-                    ILegalEntityMarker legalEntity = counterParties.get(row - 1);
-                    double coveredPortion = (Double) parmReinsurers.getValueAt(row, LegalEntityPortionConstraints.PORTION_COLUMN_INDEX);
-                    counterPartyFactors.addCounterPartyFactor(validAsOf, legalEntity, coveredPortion, true);
-                }
-            }
+            counterPartyFactors = new CounterPartyState(counterPartyFactorsInit);
         }
     }
 

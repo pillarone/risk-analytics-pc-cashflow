@@ -3,11 +3,11 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
+ * Contains/Updates the time series of cover ratios for all counter parties
+ *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class CounterPartyState {
@@ -18,12 +18,26 @@ public class CounterPartyState {
     private boolean initialStateModified = false;
     private Map<DateTime, Boolean> updateAggregateFactorRequired;
     private DateTime allCounterPartiesDefaultAsOf = null;
+    private DateTime initializationDate;
 
     public CounterPartyState() {
         initialStateModified = false;
         counterPartyFactors = new HashMap<ILegalEntityMarker, TreeMap<DateTime, Double>>();
         coveredByReinsurersByDate = new TreeMap<DateTime, Double>();
         updateAggregateFactorRequired = new HashMap<DateTime, Boolean>();
+    }
+
+    /**
+     * copy c'tor
+     * @param counterPartyState
+     */
+    public CounterPartyState(CounterPartyState counterPartyState) {
+        this();
+        initializationDate = counterPartyState.initializationDate;
+        for (ILegalEntityMarker counterParty : counterPartyState.getCounterParties()) {
+            double factor = counterPartyState.getCoveredByReinsurer(initializationDate, counterParty);
+            addCounterPartyFactor(initializationDate, counterParty, factor, true);
+        }
     }
 
     public void addCounterPartyFactor(DateTime validAsOf, ILegalEntityMarker counterParty, double factor, boolean initialSetting) {
@@ -36,6 +50,9 @@ public class CounterPartyState {
         counterPartyFactorsByDate.put(validAsOf, factor);
         if (!initialSetting) {
             initialStateModified |= !initialSetting;
+        }
+        else {
+            initializationDate = validAsOf;
         }
         updateAggregateFactor(validAsOf);
     }
@@ -101,6 +118,10 @@ public class CounterPartyState {
 
     public boolean newInitializationRequired() {
         return initialStateModified;
+    }
+    
+    private Set<ILegalEntityMarker> getCounterParties() {
+        return counterPartyFactors.keySet();
     }
 
     /**
