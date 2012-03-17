@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.TrivialContract;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -58,5 +59,9 @@ public class ClaimHistoryAndApplicableContract {
 
     public boolean hasContract(IReinsuranceContract contract) {
         return contract == this.contract;
+    }
+
+    public boolean isTrivialContract() {
+        return contract instanceof TrivialContract;
     }
 }

@@ -6,6 +6,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -250,12 +251,15 @@ public class ClaimUtils {
      * @param cededClaim
      * @return
      */
-    public static ClaimCashflowPacket getNetClaim(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim) {
+    public static ClaimCashflowPacket getNetClaim(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim,
+                                                  IReinsuranceContractMarker contractMarker) {
         if (grossClaim == null && cededClaim == null) {
             return null;
         }
         else if (cededClaim == null || cededClaim.getUpdateDate() == null) {
-            return (ClaimCashflowPacket) grossClaim.clone();
+            ClaimCashflowPacket netClaim = (ClaimCashflowPacket) grossClaim.clone();
+            netClaim.setMarker(contractMarker);
+            return netClaim;
         }
         else if (grossClaim == null) {
             DateTime occurrenceDate = cededClaim.getOccurrenceDate();
@@ -263,13 +267,16 @@ public class ClaimUtils {
             return new ClaimCashflowPacket(baseClaim, 0, 0, 0, 0, 0, 0, null, occurrenceDate, cededClaim.getUpdatePeriod());
         }
         else {
-            return getNetClaim(grossClaim, cededClaim, getNetClaimRoot(grossClaim, cededClaim));
+            return getNetClaim(grossClaim, cededClaim, getNetClaimRoot(grossClaim, cededClaim), contractMarker);
         }
     }
 
-    public static ClaimCashflowPacket getNetClaim(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim, IClaimRoot netBaseClaim) {
+    public static ClaimCashflowPacket getNetClaim(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim, 
+                                                  IClaimRoot netBaseClaim, IReinsuranceContractMarker contractMarker) {
         if (cededClaim == null || cededClaim.getUpdateDate() == null) {
-            return (ClaimCashflowPacket) grossClaim.clone();
+            ClaimCashflowPacket netClaim = (ClaimCashflowPacket) grossClaim.clone();
+            netClaim.setMarker(contractMarker);
+            return netClaim;
         }
         else if (grossClaim == null) {
             DateTime occurrenceDate = cededClaim.getOccurrenceDate();
@@ -322,7 +329,8 @@ public class ClaimUtils {
         target.setMarker(source.reserve());
     }
 
-    public static List<ClaimCashflowPacket> calculateNetClaims(List<ClaimCashflowPacket> claimsGross, List<ClaimCashflowPacket> claimsCeded) {
+    public static List<ClaimCashflowPacket> calculateNetClaims(List<ClaimCashflowPacket> claimsGross,
+                                                               List<ClaimCashflowPacket> claimsCeded) {
         List<ClaimCashflowPacket> claimsNet = new ArrayList<ClaimCashflowPacket>();
         ListMultimap<IClaimRoot, ClaimCashflowPacket> aggregateCededClaimPerRoot = ArrayListMultimap.create();
         for (ClaimCashflowPacket cededClaim : claimsCeded) {
@@ -331,7 +339,7 @@ public class ClaimUtils {
         for (ClaimCashflowPacket grossClaim : claimsGross) {
             List<ClaimCashflowPacket> cededClaims = aggregateCededClaimPerRoot.get(grossClaim.getKeyClaim());
             ClaimCashflowPacket aggregateCededClaim = sum(cededClaims, true);
-            ClaimCashflowPacket netClaim = getNetClaim(grossClaim, aggregateCededClaim);
+            ClaimCashflowPacket netClaim = getNetClaim(grossClaim, aggregateCededClaim, null);
             claimsNet.add(netClaim);
         }
         return claimsNet;
@@ -344,7 +352,7 @@ public class ClaimUtils {
         ClaimCashflowPacket claimCeded = ClaimUtils.sum(aggregateClaimsCededByBaseClaim, true);
         List<ClaimCashflowPacket> aggregateClaimsGrossByBaseClaim = ClaimUtils.aggregateByBaseClaim(claimsGross);
         ClaimCashflowPacket claimGross = ClaimUtils.sum(aggregateClaimsGrossByBaseClaim, true);
-        return getNetClaim(claimGross, claimCeded);
+        return getNetClaim(claimGross, claimCeded, claimCeded.reinsuranceContract());
     }
 
 }

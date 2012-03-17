@@ -298,27 +298,30 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             periodStore.put(NET_BASE_CLAIMS, netBaseClaimPerGrossClaim);
         }
         for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
-            ClaimCashflowPacket cededClaim = grossClaim.getCededClaim(periodCounter);
-            double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(grossClaim.getUpdateDate());
-            if (coveredByReinsurers != 1) {
-                cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers);
-            }
-            ClaimUtils.applyMarkers(grossClaim.getGrossClaim(), cededClaim);
-            cededClaim.setMarker(this);
-            outClaimsCeded.add(cededClaim);
-            if (isSenderWired(outClaimsGross) || isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues)) {
-                // fill outClaimsGross temporarily if discounting or net present values are calculated as they are relaying on it
-                outClaimsGross.add(grossClaim.getGrossClaim());
+            ClaimCashflowPacket cededClaim = null;
+            if (!grossClaim.isTrivialContract()) {
+                cededClaim = grossClaim.getCededClaim(periodCounter);
+                double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(grossClaim.getUpdateDate());
+                if (coveredByReinsurers != 1) {
+                    cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers);
+                }
+                ClaimUtils.applyMarkers(grossClaim.getGrossClaim(), cededClaim);
+                cededClaim.setMarker(this);
+                outClaimsCeded.add(cededClaim);
+                if (isSenderWired(outClaimsGross) || isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues)) {
+                    // fill outClaimsGross temporarily if discounting or net present values are calculated as they are relaying on it
+                    outClaimsGross.add(grossClaim.getGrossClaim());
+                }
             }
             if (isSenderWired(outClaimsNet) || isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues)) {
                 // fill outClaimsNet temporarily if discounting or net present values are calculated as they are relaying on it
                 IClaimRoot netBaseClaim = netBaseClaimPerGrossClaim.get(grossClaim.getGrossClaim().getKeyClaim());
                 ClaimCashflowPacket netClaim;
                 if (netBaseClaim != null) {
-                    netClaim = ClaimUtils.getNetClaim(grossClaim.getGrossClaim(), cededClaim, netBaseClaim);
+                    netClaim = ClaimUtils.getNetClaim(grossClaim.getGrossClaim(), cededClaim, netBaseClaim, this);
                 }
                 else {
-                    netClaim = ClaimUtils.getNetClaim(grossClaim.getGrossClaim(), cededClaim);
+                    netClaim = ClaimUtils.getNetClaim(grossClaim.getGrossClaim(), cededClaim, this);
                     netBaseClaimPerGrossClaim.put(grossClaim.getGrossClaim().getKeyClaim(), netClaim.getBaseClaim());
                 }
                 outClaimsNet.add(netClaim);
