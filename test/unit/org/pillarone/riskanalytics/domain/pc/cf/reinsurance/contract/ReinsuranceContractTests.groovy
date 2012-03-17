@@ -30,6 +30,13 @@ import org.pillarone.riskanalytics.core.util.TestProbe
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.WXLConstractStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.XLPremiumBase
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy
+import org.pillarone.riskanalytics.core.parameterization.AbstractMultiDimensionalParameter
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.PremiumAllocationType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationStrategyType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -58,6 +65,26 @@ class ReinsuranceContractTests extends GroovyTestCase {
                         'quotaShare': quotaShare,
                         'limit': LimitStrategyType.getDefault(),
                         'commission': CommissionStrategyType.getNoCommission()
+                ]),
+                parmCover : CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS, [filter: FilterStrategyType.getDefault()]),
+                iterationScope: iterationScope,
+                periodStore: iterationScope.periodStores[0])
+    }
+
+    static ReinsuranceContract getWXLContract(double attachmentPoint, double limit, double aggregateLimit, double premium,
+                                             DateTime beginOfCover) {
+        IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
+        return new ReinsuranceContract(
+                parmContractStrategy : ReinsuranceContractType.getStrategy(ReinsuranceContractType.WXL, [
+                        attachmentPoint: attachmentPoint,
+                        limit: limit,
+                        aggregateLimit: aggregateLimit,
+                        aggregateDeductible: 0d,
+                        premiumBase: XLPremiumBase.ABSOLUTE,
+                        premium: premium,
+                        riPremiumSplit: PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
+                        reinstatementPremiums: new ConstrainedMultiDimensionalParameter([[]],["Reinstatement Premium"], ConstraintsFactory.getConstraints('DOUBLE')),
+                        stabilization : StabilizationStrategyType.getStrategy(StabilizationStrategyType.NONE, [:])
                 ]),
                 parmCover : CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS, [filter: FilterStrategyType.getDefault()]),
                 iterationScope: iterationScope,

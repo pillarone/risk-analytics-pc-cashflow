@@ -25,6 +25,10 @@ import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.*
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
+import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -461,11 +465,67 @@ class ReinsuranceContractsTests extends GroovyTestCase {
 
     }
 
-    private List<ClaimCashflowPacket> grossClaims(IPeriodCounter periodCounter, List<IComponentMarker> perils, double ultimate) {
-        GrossClaimRoot claimRoot = new GrossClaimRoot(-ultimate, ClaimType.AGGREGATED,
+    void testCoverOriginalAndContractCover() {
+        Segment marine = new Segment(name: 'marine')
+        ClaimsGenerator attritionalMarine = new ClaimsGenerator(name: 'attritional marine')
+
+        ReinsuranceContract xl500xs500 = ReinsuranceContractTests.getWXLContract(500, 500, 500, 200, date20110101)
+        xl500xs500.name = 'xl 500 xs 500'
+        xl500xs500.parmVirtual = true
+        ReinsuranceContract quoteOnXLNet = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
+        quoteOnXLNet.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.CONTRACTS,
+                ["contracts":new ConstrainedMultiDimensionalParameter([["xl 500 xs 500"], ["NET"]],["Covered Contracts","Based On"],
+                    ConstraintsFactory.getConstraints('RI_CONTRACT_BASEDON')),
+                 "filter":FilterStrategyType.getStrategy(FilterStrategyType.ALL, [:]),])
+        ((ContractsCoverAttributeStrategy) quoteOnXLNet.parmCover).contracts.comboBoxValues['xl 500 xs 500'] = xl500xs500
+        quoteOnXLNet.name = 'Quote on XL net'
+
+        IPeriodCounter periodCounter = xl500xs500.iterationScope.periodScope.periodCounter
+
+        ReinsuranceContracts contracts = new ReinsuranceContracts()
+        contracts.addSubComponent(xl500xs500)
+        contracts.addSubComponent(quoteOnXLNet)
+        contracts.internalWiring()
+        contracts.inClaims.addAll(grossClaims(periodCounter, [marine, attritionalMarine], 700d, ClaimType.SINGLE))
+        contracts.inUnderwritingInfo.addAll(grossUnderwritingInfo(1000d, marine, periodCounter))
+
+        List contractsCededClaims = new TestProbe(contracts, 'outClaimsCeded').result
+        List xl500xs500CededClaims = new TestProbe(xl500xs500, 'outClaimsCeded').result
+        List quoteOnXLNetCededClaims = new TestProbe(quoteOnXLNet, 'outClaimsCeded').result
+
+        List contractsCededUwInfo = new TestProbe(contracts, 'outUnderwritingInfoCeded').result
+        List xl500xs500CededUwInfo = new TestProbe(xl500xs500, 'outUnderwritingInfoCeded').result
+        List quoteOnXLNetCededUwInfo = new TestProbe(quoteOnXLNet, 'outUnderwritingInfoCeded').result
+
+        contracts.start()
+
+        assertEquals "number of covered claims", 1, contractsCededClaims.size()
+        assertEquals "number of covered claims XL 500 xs 500", 1, xl500xs500CededClaims.size()
+        assertEquals "number of covered claims quoteOnXLNet", 1, quoteOnXLNetCededClaims.size()
+        assertEquals "ceded claim value", 100, contractsCededClaims[0].ultimate()
+        assertEquals "ceded XL claim value", 200, xl500xs500CededClaims[0].ultimate()
+        assertEquals "ceded quote claim value", 100, quoteOnXLNetCededClaims[0].ultimate()
+
+        assertEquals "number of covered uw info", 1, contractsCededUwInfo.size()
+        assertEquals "number of covered uw info XL 500 xs 500", 1, xl500xs500CededUwInfo.size()
+        assertEquals "number of covered uw info quoteOnXLNet", 1, quoteOnXLNetCededUwInfo.size()
+        assertEquals "ceded uw info value", -200, contractsCededUwInfo[0].premiumWritten
+        assertEquals "ceded XL uw info value", -200, xl500xs500CededUwInfo[0].premiumWritten
+        // -200 as it is based on GNPI
+        assertEquals "ceded quote uw info value", -200, quoteOnXLNetCededUwInfo[0].premiumWritten
+
+    }
+
+    private List<ClaimCashflowPacket> grossClaims(IPeriodCounter periodCounter, List<IComponentMarker> perils, double ultimate, ClaimType claimType = ClaimType.AGGREGATED) {
+        GrossClaimRoot claimRoot = new GrossClaimRoot(-ultimate, claimType,
                 date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
         perils.each { peril -> claims*.setMarker(peril) }
         return claims
+    }
+    
+    private List<UnderwritingInfoPacket> grossUnderwritingInfo(double premium, ISegmentMarker segment, IPeriodCounter periodCounter) {
+        [new UnderwritingInfoPacket(segment: segment, premiumWritten: premium, premiumPaid: premium, numberOfPolicies: 1,
+                exposure: new ExposureInfo(date20110101, periodCounter))]
     }
 }
