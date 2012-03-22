@@ -231,4 +231,33 @@ class GIRAModel extends StochasticModel {
     public int maxNumberOfFullyDistinctPeriods() {
         1
     }
+
+    @Override
+    Closure createResultNavigatorMapping() {
+        return {
+            entities {
+                enclosedBy(prefix: ["legalEntities:sub"], suffix: [":"])
+            }
+            lob {
+                or {
+                    enclosedBy(prefix: ['segments:sub'], suffix: [':'])
+                    conditionedOn(value: 'Aggregate') {
+                        matching(toMatch: ["segments:(?!sub)"])
+                    }
+                }
+            }
+            peril {
+                enclosedBy(prefix: ["claimsGenerators:sub", "reservesGenerators:sub"], suffix: [":"])
+            }
+            reinsuranceContractType {
+                enclosedBy(prefix: ["reinsuranceContracts:sub", "retrospectiveReinsurance:sub"], suffix: [":"])
+            }
+            accountBasis {
+                matching(toMatch: ["Gross", "Ceded", "Net"])
+            }
+            keyfigure {
+                synonymousTo(category: "Field")
+            }
+        }
+    }
 }
