@@ -26,10 +26,6 @@ public class ClaimHistoryAndApplicableContract {
         this.contract = contract;
     }
 
-    public void updateIncrements() {
-        storage.addIncrements(claim);
-    }
-
     public DateTime getUpdateDate() {
         return claim.getUpdateDate();
     }

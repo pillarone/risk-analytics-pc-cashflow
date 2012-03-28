@@ -26,6 +26,8 @@ public final class GrossClaimRoot implements IClaimRoot {
     private static Log LOG = LogFactory.getLog(GrossClaimRoot.class);
 
     private ClaimRoot claimRoot;
+    private double remainingReserves;
+    private double previousIBNR;
 
     private PatternPacket payoutPattern;
     private PatternPacket reportingPattern;
@@ -98,8 +100,15 @@ public final class GrossClaimRoot implements IClaimRoot {
                     double payoutCumulatedFactor = payouts.get(payouts.size() - 1).getFactorCumulated();
                     double factor = manageFactor(factors, artificalPayoutDate, periodCounter, claimRoot.getOccurrenceDate());
                     double reserves = claimRoot.getUltimate() * (1 - payoutCumulatedFactor) * factor;
-                    ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, 0, 0, paidCumulatedIncludingAppliedFactors, reserves * factor,
-                            claimRoot.getExposureInfo(), artificalPayoutDate, periodCounter);
+                    double changeInReserves = reserves - remainingReserves;
+                    remainingReserves = reserves;
+                    double changeInIBNR = reserves - paidCumulatedIncludingAppliedFactors - previousIBNR;
+                    previousIBNR = reserves - paidCumulatedIncludingAppliedFactors;
+                    // todo(sku): why is the factor applied twice to reserves?
+                    ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, 0, 0, paidCumulatedIncludingAppliedFactors,
+                            reserves * factor, changeInReserves * factor, changeInIBNR * factor, claimRoot.getExposureInfo(),
+                            artificalPayoutDate, periodCounter);
+
                     currentPeriodClaims.add(cashflowPacket);
                 }
             }
@@ -111,6 +120,8 @@ public final class GrossClaimRoot implements IClaimRoot {
                     double payoutCumulatedFactor = payouts.get(i).getFactorCumulated();
                     double ultimate = claimRoot.getUltimate();
                     double reserves = ultimate * (1 - payoutCumulatedFactor) * factor;
+                    double changeInReserves = reserves - remainingReserves;
+                    remainingReserves = reserves;
                     double paidIncremental = ultimate * payoutIncrementalFactor;
                     double paidIncrementalIndexed = paidIncremental * factor;
                     double paidCumulated = ultimate * payoutCumulatedFactor;
@@ -119,7 +130,8 @@ public final class GrossClaimRoot implements IClaimRoot {
                     ClaimCashflowPacket cashflowPacket;
                     if (!hasIBNR() && !isReservesClaim && factor == 1) {
                         cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncrementalIndexed,
-                                paidCumulatedIndexed, reserves, claimRoot.getExposureInfo(), payoutDate, periodCounter);
+                                paidCumulatedIndexed, reserves, changeInReserves, 0, claimRoot.getExposureInfo(),
+                                payoutDate, periodCounter);
                         reportedCumulatedIncludingAppliedFactors = ultimate;
                     }
                     else {
@@ -129,9 +141,11 @@ public final class GrossClaimRoot implements IClaimRoot {
                         double reportedCumulatedIndexed = outstandingIndexed + paidCumulatedIndexed;
                         double reportedIncrementalIndexed = reportedCumulatedIndexed - reportedCumulatedIncludingAppliedFactors;
                         reportedCumulatedIncludingAppliedFactors = reportedCumulatedIndexed;
+                        double changeInIBNR = (reserves - reportedCumulatedIndexed + paidCumulatedIncludingAppliedFactors) - previousIBNR;
+                        previousIBNR = reserves - reportedCumulatedIndexed + paidCumulatedIncludingAppliedFactors;
                         cashflowPacket = new ClaimCashflowPacket(this, hasUltimate ? ultimate : 0d, paidIncrementalIndexed,
-                                paidCumulatedIndexed, reportedIncrementalIndexed, reportedCumulatedIndexed, reserves,
-                                claimRoot.getExposureInfo(), payoutDate, periodCounter);
+                                paidCumulatedIndexed, reportedIncrementalIndexed, reportedCumulatedIndexed, reserves, changeInReserves,
+                                changeInIBNR, claimRoot.getExposureInfo(), payoutDate, periodCounter);
                     }
                     cashflowPacket.setAppliedIndexValue(factor);
                     childCounter++;
@@ -144,9 +158,9 @@ public final class GrossClaimRoot implements IClaimRoot {
         else {
             double factor = manageFactor(factors, getOccurrenceDate(), periodCounter, claimRoot.getOccurrenceDate());
             double scaledUltimate = claimRoot.getUltimate() * factor;
-            ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, claimRoot.getUltimate(), scaledUltimate,
-                    scaledUltimate, scaledUltimate, scaledUltimate, 0, claimRoot.getExposureInfo(), getOccurrenceDate(),
-                    periodCounter);
+            ClaimCashflowPacket cashflowPacket = new ClaimCashflowPacket(this, claimRoot.getUltimate(),
+                    scaledUltimate, scaledUltimate, scaledUltimate, scaledUltimate, 0, 0, 0, claimRoot.getExposureInfo(),
+                    getOccurrenceDate(), periodCounter);
             currentPeriodClaims.add(cashflowPacket);
         }
         return currentPeriodClaims;

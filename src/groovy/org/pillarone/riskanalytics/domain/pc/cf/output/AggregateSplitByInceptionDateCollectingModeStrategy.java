@@ -127,8 +127,7 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
         for (ClaimCashflowPacket claim : claims) {
             if (claim.reserveRisk() != 0) {
                 // belongs to reserve risk
-                double developedUltimate = claim.getReportedIncrementalIndexed() + claim.ibnrIndexed();
-                totalReserveRisk += developedUltimate;
+                totalReserveRisk += claim.reserveRisk();
                 String periodLabel = inceptionPeriod(claim);
                 String pathExtension = PERIOD + PATH_SEPARATOR + periodLabel;
                 String pathExtended = getExtendedPath(claim, pathExtension);

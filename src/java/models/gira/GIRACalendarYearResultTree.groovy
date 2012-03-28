@@ -23,8 +23,14 @@ mappings = {
                 "IBNRIndexed" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:IBNRIndexed", {
                     "[%period%]" "GIRA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:IBNRIndexed"
                 }
+                "changesInIBNRIndexed" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:changesInIBNRIndexed", {
+                    "[%period%]" "GIRA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:changesInIBNRIndexed"
+                }
                 "reservesIndexed" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:reservesIndexed", {
                     "[%period%]" "GIRA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:reservesIndexed"
+                }
+                "changesInReservesIndexed" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:changesInReservesIndexed", {
+                    "[%period%]" "GIRA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:changesInReservesIndexed"
                 }
                 "increaseDueToIndex" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:developedResultIndexed", {
                     "[%period%]" "GIRA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:developedResultIndexed"

@@ -38,6 +38,8 @@ public class ClaimUtils {
         double reportedCumulated = 0;
         double reserves = 0;
         double appliedIndex = 1;
+        double changeInReservesIndexed = 0;
+        double changeInIBNRIndexed = 0;
         for (ClaimCashflowPacket claim : claims) {
             ultimate += claim.ultimate();
             paidIncremental += claim.getPaidIncrementalIndexed();
@@ -46,6 +48,8 @@ public class ClaimUtils {
             reportedCumulated += claim.getReportedCumulatedIndexed();
             reserves += claim.reservedIndexed();
             appliedIndex *= claim.getAppliedIndexValue();
+            changeInReservesIndexed += claim.getChangeInReservesIndexed();
+            changeInIBNRIndexed += claim.getChangeInIBNRIndexed();
         }
         ClaimRoot baseClaim = new ClaimRoot(ultimate, claims.get(0).getBaseClaim());
         DateTime updateDate = claims.get(0).getUpdateDate();
@@ -54,7 +58,7 @@ public class ClaimUtils {
             updatePeriod = claims.get(0).getUpdatePeriod();
         }
         ClaimCashflowPacket summedClaims = new ClaimCashflowPacket(baseClaim, ultimate, paidIncremental, paidCumulated,
-                reportedIncremental, reportedCumulated, reserves, null, updateDate, updatePeriod);
+                reportedIncremental, reportedCumulated, reserves, changeInReservesIndexed, changeInIBNRIndexed, null, updateDate, updatePeriod);
         applyMarkers(claims.get(0), summedClaims);
         summedClaims.setAppliedIndexValue(claims.size() == 0 ? 1d : Math.pow(appliedIndex, 1d / claims.size()));
         return summedClaims;
@@ -79,6 +83,8 @@ public class ClaimUtils {
                 DateTime mostRecentClaimUpdate = null;
                 double latestReserves = 0;
                 double appliedIndex = 1;
+                double changeInReservesIndexed = 0;
+                double changeInIBNRIndexed = 0;
                 for (ClaimCashflowPacket claim : claimsWithSameBaseClaim) {
                     ultimate += claim.ultimate();
                     paidIncremental += claim.getPaidIncrementalIndexed();
@@ -89,6 +95,8 @@ public class ClaimUtils {
                         reportedCumulated = claim.getReportedCumulatedIndexed();
                         paidCumulated = claim.getPaidCumulatedIndexed();
                         latestReserves = claim.reservedIndexed();
+                        changeInReservesIndexed += claim.getChangeInReservesIndexed();
+                        changeInIBNRIndexed += claim.getChangeInIBNRIndexed();
                     }
                 }
                 IClaimRoot baseClaim = null;
@@ -102,8 +110,9 @@ public class ClaimUtils {
                 if (claims.get(0).getUpdatePeriod() != null) {
                     updatePeriod = claims.get(0).getUpdatePeriod();
                 }
-                ClaimCashflowPacket aggregateClaim = new ClaimCashflowPacket(baseClaim, ultimate, paidIncremental, paidCumulated,
-                        reportedIncremental, reportedCumulated, latestReserves, null, mostRecentClaimUpdate, updatePeriod);
+                ClaimCashflowPacket aggregateClaim = new ClaimCashflowPacket(baseClaim, ultimate, paidIncremental,
+                        paidCumulated, reportedIncremental, reportedCumulated, latestReserves, changeInReservesIndexed,
+                        changeInIBNRIndexed, null, mostRecentClaimUpdate, updatePeriod);
                 aggregateClaim.setAppliedIndexValue(appliedIndex);
                 applyMarkers(claims.get(0), aggregateClaim);
                 aggregateByBaseClaim.add(aggregateClaim);
@@ -130,9 +139,12 @@ public class ClaimUtils {
             double scaledReportedIncremental = claim.getReportedIncrementalIndexed() == 0d ? 0d : claim.getReportedIncrementalIndexed() * factor;
             double scaledReportedCumulated = claim.getReportedCumulatedIndexed() == 0d ? 0d : claim.getReportedCumulatedIndexed() * factor;
             IClaimRoot keyClaim = keepKeyClaim ? claim.getKeyClaim() : scaledBaseClaim;
+            double scaledChangeInReserves = claim.getChangeInReservesIndexed() * factor;
+            double scaledChangeInIBNR = claim.getChangeInIBNRIndexed() * factor;
             ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(scaledBaseClaim, keyClaim, scaledUltimate,
                     scaledPaidIncremental, scaledPaidCumulated, scaledReportedIncremental, scaledReportedCumulated,
-                    scaledReserves, claim.getExposureInfo(), claim.getUpdateDate(), claim.getUpdatePeriod());
+                    scaledReserves, scaledChangeInReserves, scaledChangeInIBNR, claim.getExposureInfo(), claim.getUpdateDate(),
+                    claim.getUpdatePeriod());
             scaledClaim.setDiscountFactors(claim.getDiscountFactors());
             applyMarkers(claim, scaledClaim);
             return scaledClaim;
@@ -181,26 +193,14 @@ public class ClaimUtils {
         storage.lazyInitCededClaimRoot(scaleFactorUltimate);
         double cededPaidIncremental = grossClaim.getPaidIncrementalIndexed() * scaleFactorPaid;
         double cededReportedIncremental = grossClaim.getReportedIncrementalIndexed() * scaleFactorReported;
+        storage.update(grossClaim.ultimate() * scaleFactorUltimate, BasedOnClaimProperty.ULTIMATE);
         storage.update(cededPaidIncremental, BasedOnClaimProperty.PAID);
         storage.update(cededReportedIncremental, BasedOnClaimProperty.REPORTED);
-        double cededReserves = storage.cededReserves() + grossClaim.developmentResultCumulative() * scaleFactorUltimate;
         ExposureInfo cededExposureInfo = adjustExposureInfo && grossClaim.getExposureInfo() != null
                 ? grossClaim.getExposureInfo().withScale(scaleFactorUltimate) : grossClaim.getExposureInfo();
-        ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(
-                storage.getReferenceCeded(),
-                grossClaim.getKeyClaim(),
-                avoidNegativeZero(grossClaim.ultimate() * scaleFactorUltimate),
-                storage.getReferenceCeded().getUltimate(),
-                avoidNegativeZero(storage.getIncrementalPaidCeded()),
-                avoidNegativeZero(storage.getCumulatedCeded(BasedOnClaimProperty.PAID)),
-                avoidNegativeZero(storage.getIncrementalReportedCeded()),
-                avoidNegativeZero(storage.getCumulatedCeded(BasedOnClaimProperty.REPORTED)),
-                avoidNegativeZero(cededReserves),
-                cededExposureInfo,
-                grossClaim.getUpdateDate(),
-                grossClaim.getUpdatePeriod());
-        cededClaim.setDiscountFactors(grossClaim.getDiscountFactors());
+        ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(grossClaim, storage, cededExposureInfo);
         applyMarkers(grossClaim, cededClaim);
+        storage.setCumulatedUltimateDevelopedCeded(avoidNegativeZero(grossClaim.developmentResultCumulative() * scaleFactorUltimate));
         return cededClaim;
     }
 
@@ -219,26 +219,14 @@ public class ClaimUtils {
         if (scaleFactorPaid == -0) { scaleFactorPaid = 0; }
         storage.lazyInitCededClaimRoot(scaleFactorUltimate);
         double cededPaidIncremental = grossClaim.getPaidIncrementalIndexed() * scaleFactorPaid;
+        storage.update(grossClaim.ultimate() * scaleFactorUltimate, BasedOnClaimProperty.ULTIMATE);
         storage.update(cededPaidIncremental, BasedOnClaimProperty.PAID);
         storage.update(cededValueReported, BasedOnClaimProperty.REPORTED);
-        double cededReserves = storage.cededReserves() + grossClaim.developmentResultCumulative() * scaleFactorUltimate;
         ExposureInfo cededExposureInfo = adjustExposureInfo && grossClaim.getExposureInfo() != null
                 ? grossClaim.getExposureInfo().withScale(scaleFactorUltimate) : grossClaim.getExposureInfo();
-        ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(
-                storage.getReferenceCeded(),
-                grossClaim.getKeyClaim(),
-                avoidNegativeZero(grossClaim.ultimate() * scaleFactorUltimate),
-                storage.getReferenceCeded().getUltimate(),
-                avoidNegativeZero(storage.getIncrementalPaidCeded()),
-                avoidNegativeZero(storage.getCumulatedCeded(BasedOnClaimProperty.PAID)),
-                avoidNegativeZero(storage.getIncrementalReportedCeded()),
-                avoidNegativeZero(storage.getCumulatedCeded(BasedOnClaimProperty.REPORTED)),
-                avoidNegativeZero(cededReserves),
-                cededExposureInfo,
-                grossClaim.getUpdateDate(),
-                grossClaim.getUpdatePeriod());
-        cededClaim.setDiscountFactors(grossClaim.getDiscountFactors());
+        ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(grossClaim, storage, cededExposureInfo);
         applyMarkers(grossClaim, cededClaim);
+        storage.setCumulatedUltimateDevelopedCeded(grossClaim.developmentResultCumulative() * scaleFactorUltimate);
         return cededClaim;
     }
 
@@ -264,7 +252,7 @@ public class ClaimUtils {
         else if (grossClaim == null) {
             DateTime occurrenceDate = cededClaim.getOccurrenceDate();
             IClaimRoot baseClaim = new ClaimRoot(0, ClaimType.AGGREGATED, occurrenceDate, occurrenceDate);
-            return new ClaimCashflowPacket(baseClaim, 0, 0, 0, 0, 0, 0, null, occurrenceDate, cededClaim.getUpdatePeriod());
+            return new ClaimCashflowPacket(baseClaim, 0, 0, 0, 0, 0, 0, 0, 0, null, occurrenceDate, cededClaim.getUpdatePeriod());
         }
         else {
             return getNetClaim(grossClaim, cededClaim, getNetClaimRoot(grossClaim, cededClaim), contractMarker);
@@ -281,7 +269,7 @@ public class ClaimUtils {
         else if (grossClaim == null) {
             DateTime occurrenceDate = cededClaim.getOccurrenceDate();
             IClaimRoot baseClaim = new ClaimRoot(0, ClaimType.AGGREGATED, occurrenceDate, occurrenceDate);
-            return new ClaimCashflowPacket(baseClaim, 0, 0, 0, 0, 0, 0, null, occurrenceDate, cededClaim.getUpdatePeriod());
+            return new ClaimCashflowPacket(baseClaim, 0, 0, 0, 0, 0, 0, 0, 0, null, occurrenceDate, cededClaim.getUpdatePeriod());
         }
         else {
             boolean isProportionalContract = cededClaim.reinsuranceContract() != null && cededClaim.reinsuranceContract().isProportionalContract();
@@ -298,6 +286,8 @@ public class ClaimUtils {
                 grossClaim.getReportedIncrementalIndexed() + cededClaim.getReportedIncrementalIndexed(),
                 grossClaim.getReportedCumulatedIndexed() + cededClaim.getReportedCumulatedIndexed(),
                 grossClaim.reservedIndexed() + cededClaim.reservedIndexed(),
+                grossClaim.getChangeInReservesIndexed() + cededClaim.getChangeInReservesIndexed(),
+                grossClaim.getChangeInIBNRIndexed() + cededClaim.getChangeInIBNRIndexed(),
                 netExposureInfo,
                 grossClaim.getUpdateDate(),
                 grossClaim.getUpdatePeriod());

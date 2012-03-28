@@ -96,7 +96,6 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
             outClaimsGross.addAll(outClaimsPrimaryInsurer);
             for (UnderwritingInfoPacket grossUnderwritingInfo : inUnderwritingInfo) {
                 if (grossUnderwritingInfo.legalEntity().equals(this)) {
-
                     outUnderwritingInfoPrimeryInsurer.add(grossUnderwritingInfo);
                 }
             }
@@ -181,7 +180,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
             PeriodScope periodScope = iterationScope.getPeriodScope();
             DateTime startOfPeriod = periodScope.getCurrentPeriodStartDate();
             IClaimRoot baseClaim = new ClaimRoot(0, ClaimType.AGGREGATED, startOfPeriod, startOfPeriod);
-            packetList.add(new ClaimCashflowPacket(baseClaim, 0, 0, 0, 0, 0, 0, null, startOfPeriod, periodScope.getCurrentPeriod()));
+            packetList.add(new ClaimCashflowPacket(baseClaim, 0, 0, 0, 0, 0, 0, 0, 0, null, startOfPeriod, periodScope.getCurrentPeriod()));
             return true;
         }
         return false;

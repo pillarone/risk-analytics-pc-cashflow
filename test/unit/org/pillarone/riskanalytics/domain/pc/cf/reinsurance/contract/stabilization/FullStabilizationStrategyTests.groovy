@@ -58,7 +58,6 @@ class FullStabilizationStrategyTests extends GroovyTestCase {
 
         ClaimStorage storage = new ClaimStorage(claims[0])
         assertEquals "effect @06.04.2011", 1.0576923076923077, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
-        storage.addIncrements(claims[1])
         assertEquals "effect @06.07.2011", 1.2205769230769232, storage.stabilizationFactor(claims[1], stabilization, periodCounter)
 
         periodCounter.next()
@@ -66,7 +65,6 @@ class FullStabilizationStrategyTests extends GroovyTestCase {
         assertEquals "#claims 2012", 1, claims.size()
         assertEquals "claim reported, incremental @06.04.2012", 586.4081196581193, claims[0].reportedIncrementalIndexed
         assertEquals "claim paid, incremental @06.04.2012", 807.4893162393162, claims[0].paidIncrementalIndexed
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2012", 1.5492450142450143, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
 
         periodCounter.next()
@@ -74,7 +72,6 @@ class FullStabilizationStrategyTests extends GroovyTestCase {
         assertEquals "#claims 2013", 1, claims.size()
         assertEquals "claim reported, incremental @06.04.2013", 61.95299145299168, claims[0].reportedIncrementalIndexed
         assertEquals "claim paid, incremental @06.04.2013", 176.98611111111106, claims[0].paidIncrementalIndexed
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2013", 1.5807615995115996, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
 
         periodCounter.next()
@@ -82,7 +79,6 @@ class FullStabilizationStrategyTests extends GroovyTestCase {
         assertEquals "#claims 2014", 1, claims.size()
         assertEquals "claim reported, incremental @06.04.2014", 0, claims[0].reportedIncrementalIndexed
         assertEquals "claim paid, incremental @06.04.2014", 0, claims[0].paidIncrementalIndexed
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2013", 1.5807615995115996, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
 
         periodCounter.next()
@@ -90,7 +86,6 @@ class FullStabilizationStrategyTests extends GroovyTestCase {
         assertEquals "#claims 2015", 1, claims.size()
         assertEquals "claim reported, incremental @06.04.2015", 52.28525641025635, claims[0].reportedIncrementalIndexed
         assertEquals "claim paid, incremental @06.04.2015", 583.2435897435898, claims[0].paidIncrementalIndexed
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2015", 1.6897767094017095, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
     }
 
@@ -103,17 +98,14 @@ class FullStabilizationStrategyTests extends GroovyTestCase {
 
         ClaimStorage storage = new ClaimStorage(claims[0])
         assertEquals "effect @06.04.2011", 1.0576923076923077, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
-        storage.addIncrements(claims[1])
         assertEquals "effect @06.07.2011", 1.2364129273504274, storage.stabilizationFactor(claims[1], stabilization, periodCounter)
 
         periodCounter.next()
         claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2012", 1.5755384615384613, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
 
         periodCounter.next()
         claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2013", 1.6374914529914528, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
 
         periodCounter.next()
@@ -121,12 +113,10 @@ class FullStabilizationStrategyTests extends GroovyTestCase {
         assertEquals "#claims 2014", 1, claims.size()
         assertEquals "claim reported, incremental @06.04.2014", 0, claims[0].reportedIncrementalIndexed
         assertEquals "claim paid, incremental @06.04.2014", 0, claims[0].paidIncrementalIndexed
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2013", 1.6374914529914528, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
 
         periodCounter.next()
         claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2015", 1.6897767094017095, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
     }
 

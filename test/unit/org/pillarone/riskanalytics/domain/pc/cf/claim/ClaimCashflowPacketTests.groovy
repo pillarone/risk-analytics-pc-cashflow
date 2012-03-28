@@ -39,7 +39,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         ClaimRoot baseClaim = new ClaimRoot(ultimate, ClaimType.ATTRITIONAL, null, null)
         DateTime updateDate = new DateTime(2011,1,1,0,0,0,0)
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(updateDate, 1)
-        ClaimCashflowPacket claim = new ClaimCashflowPacket(baseClaim, ultimate, incrementalPaid, 0, 0, 0, 0, null, updateDate, periodCounter)
+        ClaimCashflowPacket claim = new ClaimCashflowPacket(baseClaim, ultimate, incrementalPaid, 0, 0, 0, 0, 0, 0, null, updateDate, periodCounter)
         if (contract != null) {
             claim.setMarker contract
         }
@@ -64,7 +64,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "paid cumulated", 1000, claims[0].paidCumulatedIndexed
         assertEquals "outstanding", 0, claims[0].outstandingIndexed()
         assertEquals "reservedIndexed", 0, claims[0].reservedIndexed()
+        assertEquals "changeInReservesIndexed", 0, claims[0].changeInReservesIndexed
         assertEquals "ibnrIndexed", 0, claims[0].ibnrIndexed()
+        assertEquals "changeInIBNRIndexed", 0, claims[0].changeInIBNRIndexed
     }
 
     void testPayoutPattern() {
@@ -85,7 +87,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period paid cumulated", 300, claims[claimNumber].paidCumulatedIndexed
         assertEquals "P$period outstandingIndexed", 700, claims[claimNumber].outstandingIndexed()
         assertEquals "P$period reservedIndexed", 700, claims[claimNumber].reservedIndexed()
+        assertEquals "P$period changeInReservesIndexed", 700, claims[claimNumber].changeInReservesIndexed
         assertEquals "P$period ibnrIndexed", 0, claims[claimNumber].ibnrIndexed()
+        assertEquals "P$period changeInIBNRIndexed", 0, claims[claimNumber].changeInIBNRIndexed
 
 
         period++
@@ -102,7 +106,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period paid cumulated", 600, claims[claimNumber].paidCumulatedIndexed
         assertEquals "P$period outstandingIndexed", 400, claims[claimNumber].outstandingIndexed()
         assertEquals "P$period reservedIndexed", 400, claims[claimNumber].reservedIndexed()
+        assertEquals "P$period changeInReservesIndexed", -300, claims[claimNumber].changeInReservesIndexed
         assertEquals "P$period ibnrIndexed", 0, claims[claimNumber].ibnrIndexed()
+        assertEquals "P$period changeInIBNRIndexed", 0, claims[claimNumber].changeInIBNRIndexed
 
 
         period++
@@ -119,7 +125,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period paid cumulated", 800, claims[claimNumber].paidCumulatedIndexed
         assertEquals "P$period outstandingIndexed", 200, claims[claimNumber].outstandingIndexed()
         assertEquals "P$period reservedIndexed", 200, claims[claimNumber].reservedIndexed(), EPSILON
+        assertEquals "P$period changeInReservesIndexed", -200, claims[claimNumber].changeInReservesIndexed, EPSILON
         assertEquals "P$period ibnrIndexed", 0, claims[claimNumber].ibnrIndexed(), EPSILON
+        assertEquals "P$period changeInIBNRIndexed", 0, claims[claimNumber].changeInIBNRIndexed
 
 
         period++
@@ -136,7 +144,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period paid cumulated", 980, claims[claimNumber].paidCumulatedIndexed
         assertEquals "P$period outstandingIndexed", 20, claims[claimNumber].outstandingIndexed()
         assertEquals "P$period reservedIndexed", 20, claims[claimNumber].reservedIndexed(), EPSILON
+        assertEquals "P$period changeInReservesIndexed", -180, claims[claimNumber].changeInReservesIndexed, EPSILON
         assertEquals "P$period ibnrIndexed", 0, claims[claimNumber].ibnrIndexed(), EPSILON
+        assertEquals "P$period changeInIBNRIndexed", 0, claims[claimNumber].changeInIBNRIndexed
 
 
         period++
@@ -153,7 +163,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period paid cumulated", 1000, claims[claimNumber].paidCumulatedIndexed
         assertEquals "P$period outstandingIndexed", 0, claims[claimNumber].outstandingIndexed()
         assertEquals "P$period reservedIndexed", 0, claims[claimNumber].reservedIndexed()
+        assertEquals "P$period changeInReservesIndexed", -20, claims[claimNumber].changeInReservesIndexed, EPSILON
         assertEquals "P$period ibnrIndexed", 0, claims[claimNumber].ibnrIndexed()
+        assertEquals "P$period changeInIBNRIndexed", 0, claims[claimNumber].changeInIBNRIndexed
     }
 
     void testWithIBNR() {
@@ -172,10 +184,11 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period developed result", 0, claims[claimNumber].developmentResultCumulative()
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
         assertEquals "P$period IBNR_INDEXED", 1000, claims[claimNumber].ibnrIndexed()
+        assertEquals "P$period changeInIBNRIndexed", 1000, claims[claimNumber].changeInIBNRIndexed
         assertEquals "P$period reservesIndexed", 1000, claims[claimNumber].reservedIndexed()
+        assertEquals "P$period changeInReservesIndexed", 1000, claims[claimNumber].changeInReservesIndexed
         assertEquals "P$period reported", 0, claims[claimNumber].reportedIncrementalIndexed
         assertEquals "P$period paid", 0, claims[claimNumber].paidIncrementalIndexed
-        assertEquals "P$period outstandingIndexed", 0, claims[claimNumber].outstandingIndexed()
         assertEquals "P$period outstandingIndexed", 0, claims[claimNumber].outstandingIndexed()
 
 
@@ -188,7 +201,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
         assertEquals "P$period developed result", 0, claims[claimNumber].developmentResultCumulative()
         assertEquals "P$period IBNR_INDEXED", 300, claims[claimNumber].ibnrIndexed()
+        assertEquals "P$period changeInIBNRIndexed", -700, claims[claimNumber].changeInIBNRIndexed
         assertEquals "P$period reservesIndexed", 600, claims[claimNumber].reservedIndexed()
+        assertEquals "P$period changeInReservesIndexed", -400, claims[claimNumber].changeInReservesIndexed
         assertEquals "P$period reported", 700, claims[claimNumber].reportedIncrementalIndexed
         assertEquals "P$period paid", 400, claims[claimNumber].paidIncrementalIndexed
         assertEquals "P$period outstandingIndexed", 300, claims[claimNumber].outstandingIndexed()
@@ -203,7 +218,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
         assertEquals "P$period developed result", 0, claims[claimNumber].developmentResultCumulative()
         assertEquals "P$period IBNR_INDEXED", 200, claims[claimNumber].ibnrIndexed(), EPSILON
+        assertEquals "P$period changeInIBNRIndexed", -100, claims[claimNumber].changeInIBNRIndexed, EPSILON
         assertEquals "P$period reservesIndexed", 300, claims[claimNumber].reservedIndexed(), EPSILON
+        assertEquals "P$period changeInReservesIndexed", -300, claims[claimNumber].changeInReservesIndexed, EPSILON
         assertEquals "P$period reported", 100, claims[claimNumber].reportedIncrementalIndexed, EPSILON
         assertEquals "P$period paid", 300, claims[claimNumber].paidIncrementalIndexed, EPSILON
         assertEquals "P$period outstandingIndexed", 100, claims[claimNumber].outstandingIndexed(), EPSILON
@@ -218,7 +235,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
         assertEquals "P$period developed result", 0, claims[claimNumber].developmentResultCumulative()
         assertEquals "P$period IBNR_INDEXED", 50, claims[claimNumber].ibnrIndexed(), EPSILON
+        assertEquals "P$period changeInIBNRIndexed", -150, claims[claimNumber].changeInIBNRIndexed, EPSILON
         assertEquals "P$period reservesIndexed", 150, claims[claimNumber].reservedIndexed(), EPSILON
+        assertEquals "P$period changeInReservesIndexed", -150, claims[claimNumber].changeInReservesIndexed, EPSILON
         assertEquals "P$period reported", 150, claims[claimNumber].reportedIncrementalIndexed, EPSILON
         assertEquals "P$period paid", 150, claims[claimNumber].paidIncrementalIndexed, EPSILON
         assertEquals "P$period outstandingIndexed", 100, claims[claimNumber].outstandingIndexed()
@@ -233,7 +252,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
         assertEquals "P$period developed result", 0, claims[claimNumber].developmentResultCumulative()
         assertEquals "P$period IBNR_INDEXED", 0, claims[claimNumber].ibnrIndexed()
+        assertEquals "P$period changeInIBNRIndexed", -50, claims[claimNumber].changeInIBNRIndexed, EPSILON
         assertEquals "P$period reservesIndexed", 0, claims[claimNumber].reservedIndexed()
+        assertEquals "P$period changeInReservesIndexed", -150, claims[claimNumber].changeInReservesIndexed, EPSILON
         assertEquals "P$period reported", 50, claims[claimNumber].reportedIncrementalIndexed, EPSILON
         assertEquals "P$period paid", 150, claims[claimNumber].paidIncrementalIndexed, EPSILON
         assertEquals "P$period outstandingIndexed", 0, claims[claimNumber].outstandingIndexed()
@@ -257,7 +278,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period developed result", 0, claims[claimNumber].developmentResultCumulative()
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
         assertEquals "P$period IBNR_INDEXED", 700, claims[claimNumber].ibnrIndexed()
+        assertEquals "P$period changeInIBNRIndexed", 700, claims[claimNumber].changeInIBNRIndexed
         assertEquals "P$period reservesIndexed", 1000, claims[claimNumber].reservedIndexed()
+        assertEquals "P$period changeInReservesIndexed", 1000, claims[claimNumber].changeInReservesIndexed
         assertEquals "P$period reported", 300, claims[claimNumber].reportedIncrementalIndexed
         assertEquals "P$period paid", 0, claims[claimNumber].paidIncrementalIndexed
         assertEquals "P$period outstandingIndexed", 300, claims[claimNumber].outstandingIndexed()
@@ -272,7 +295,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
         assertEquals "P$period developed result", 0, claims[claimNumber].developmentResultCumulative()
         assertEquals "P$period IBNR_INDEXED", 400, claims[claimNumber].ibnrIndexed()
+        assertEquals "P$period changeInIBNRIndexed", -300, claims[claimNumber].changeInIBNRIndexed
         assertEquals "P$period reservesIndexed", 600, claims[claimNumber].reservedIndexed()
+        assertEquals "P$period changeInReservesIndexed", -400, claims[claimNumber].changeInReservesIndexed
         assertEquals "P$period reported", 300, claims[claimNumber].reportedIncrementalIndexed
         assertEquals "P$period paid", 400, claims[claimNumber].paidIncrementalIndexed
         assertEquals "P$period outstandingIndexed", 200, claims[claimNumber].outstandingIndexed()
@@ -287,7 +312,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
         assertEquals "P$period developed result", 0, claims[claimNumber].developmentResultCumulative()
         assertEquals "P$period IBNR_INDEXED", 200, claims[claimNumber].ibnrIndexed(), EPSILON
+        assertEquals "P$period changeInIBNRIndexed", -200, claims[claimNumber].changeInIBNRIndexed, EPSILON
         assertEquals "P$period reservesIndexed", 300, claims[claimNumber].reservedIndexed(), EPSILON
+        assertEquals "P$period changeInReservesIndexed", -300, claims[claimNumber].changeInReservesIndexed, EPSILON
         assertEquals "P$period reported", 200, claims[claimNumber].reportedIncrementalIndexed, EPSILON
         assertEquals "P$period paid", 300, claims[claimNumber].paidIncrementalIndexed, EPSILON
         assertEquals "P$period outstandingIndexed", 100, claims[claimNumber].outstandingIndexed(), EPSILON
@@ -302,7 +329,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
         assertEquals "P$period developed result", 0, claims[claimNumber].developmentResultCumulative()
         assertEquals "P$period IBNR_INDEXED", 20, claims[claimNumber].ibnrIndexed(), EPSILON
+        assertEquals "P$period changeInIBNRIndexed", -180, claims[claimNumber].changeInIBNRIndexed, EPSILON
         assertEquals "P$period reservesIndexed", 150, claims[claimNumber].reservedIndexed(), EPSILON
+        assertEquals "P$period changeInReservesIndexed", -150, claims[claimNumber].changeInReservesIndexed, EPSILON
         assertEquals "P$period reported", 180, claims[claimNumber].reportedIncrementalIndexed, EPSILON
         assertEquals "P$period paid", 150, claims[claimNumber].paidIncrementalIndexed, EPSILON
         assertEquals "P$period outstandingIndexed", 130, claims[claimNumber].outstandingIndexed()
@@ -317,7 +346,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period developed ultimate", 1000, claims[claimNumber].developedUltimate()
         assertEquals "P$period developed result", 0, claims[claimNumber].developmentResultCumulative()
         assertEquals "P$period IBNR_INDEXED", 0, claims[claimNumber].ibnrIndexed()
-        assertEquals "P$period reservesIndexed", 0, claims[claimNumber].reservedIndexed()
+        assertEquals "P$period changeInIBNRIndexed", -20, claims[claimNumber].changeInIBNRIndexed, EPSILON
+        assertEquals "P$period reservesIndexed", 0, claims[claimNumber].reservedIndexed(), EPSILON
+        assertEquals "P$period changeInReservesIndexed", -150, claims[claimNumber].changeInReservesIndexed, EPSILON
         assertEquals "P$period reported", 20, claims[claimNumber].reportedIncrementalIndexed, EPSILON
         assertEquals "P$period paid", 150, claims[claimNumber].paidIncrementalIndexed, EPSILON
         assertEquals "P$period outstandingIndexed", 0, claims[claimNumber].outstandingIndexed()
@@ -348,18 +379,22 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period.0 reported", 735, claims[claimNumber].reportedIncrementalIndexed
         assertEquals "P$period.0 paid", 10.5, claims[claimNumber].paidIncrementalIndexed
         assertEquals "P$period.0 reservesIndexed", 1039.5, claims[claimNumber].reservedIndexed()
+        assertEquals "P$period.0 changeInReservesIndexed", 1039.5, claims[claimNumber].changeInReservesIndexed
         assertEquals "P$period.0 outstandingIndexed", 724.5, claims[claimNumber].outstandingIndexed()
         assertEquals "P$period.0 IBNR_INDEXED", 315, claims[claimNumber].ibnrIndexed()
-        // as the first pattern step is of lenght 3 months only, two claims fall in the same period
+        assertEquals "P$period.0 changeInIBNRIndexed", 315, claims[claimNumber].changeInIBNRIndexed
+        // as the first pattern step is of length 3 months only, two claims fall in the same period
         claimNumber++
         assertEquals "P$period.1 ultimate", 0, claims[claimNumber].ultimate()
         assertEquals "P$period.1 developed result", 149, claims[claimNumber].developmentResultCumulative()
         assertEquals "P$period.1 developed ultimate", 1149, claims[claimNumber].developedUltimate()
         assertEquals "P$period.1 reported", 184, claims[claimNumber].reportedIncrementalIndexed, EPSILON
         assertEquals "P$period.1 paid", 103.5, claims[claimNumber].paidIncrementalIndexed, EPSILON
-        assertEquals "P$period.1 reservesIndexed", 1035, claims[claimNumber].reservedIndexed()
+        assertEquals "P$period.1 reservesIndexed", 1035, claims[claimNumber].reservedIndexed(), EPSILON
+        assertEquals "P$period.1 changeInReservesIndexed", -4.5, claims[claimNumber].changeInReservesIndexed, EPSILON
         assertEquals "P$period.1 outstandingIndexed", 805, claims[claimNumber].outstandingIndexed(), EPSILON
         assertEquals "P$period.1 IBNR_INDEXED", 230, claims[claimNumber].ibnrIndexed(), EPSILON
+        assertEquals "P$period.1 changeInIBNRIndexed", -85, claims[claimNumber].changeInIBNRIndexed, EPSILON
 
 
         period++    // 1
@@ -375,8 +410,10 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period reported", 475, claims[claimNumber].reportedIncrementalIndexed, EPSILON
         assertEquals "P$period paid", 800, claims[claimNumber].paidIncrementalIndexed
         assertEquals "P$period reservesIndexed", 640, claims[claimNumber].reservedIndexed()
+        assertEquals "P$period changeInReservesIndexed", -395, claims[claimNumber].changeInReservesIndexed
         assertEquals "P$period outstandingIndexed", 480, claims[claimNumber].outstandingIndexed()
         assertEquals "P$period IBNR_INDEXED", 160, claims[claimNumber].ibnrIndexed()
+        assertEquals "P$period changeInIBNRIndexed", -70, claims[claimNumber].changeInIBNRIndexed, EPSILON
 
 
         period++    // 2
@@ -392,8 +429,10 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period reported", 228, claims[claimNumber].reportedIncrementalIndexed, EPSILON
         assertEquals "P$period paid", 177, claims[claimNumber].paidIncrementalIndexed, EPSILON
         assertEquals "P$period reservesIndexed", 531, claims[claimNumber].reservedIndexed(), EPSILON
+        assertEquals "P$period changeInReservesIndexed", -109, claims[claimNumber].changeInReservesIndexed, EPSILON
         assertEquals "P$period outstandingIndexed", 531, claims[claimNumber].outstandingIndexed(), EPSILON
         assertEquals "P$period IBNR_INDEXED", 0, claims[claimNumber].ibnrIndexed(), EPSILON
+        assertEquals "P$period changeInIBNRIndexed", -160, claims[claimNumber].changeInIBNRIndexed, EPSILON
 
 
         period++    // 3
@@ -411,8 +450,10 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period reported", 54, claims[claimNumber].reportedIncrementalIndexed
         assertEquals "P$period paid", 585, claims[claimNumber].paidIncrementalIndexed, EPSILON
         assertEquals "P$period reservesIndexed", 0, claims[claimNumber].reservedIndexed()
+        assertEquals "P$period changeInReservesIndexed", -531, claims[claimNumber].changeInReservesIndexed, EPSILON
         assertEquals "P$period outstandingIndexed", 0, claims[claimNumber].outstandingIndexed()
         assertEquals "P$period IBNR_INDEXED", 0, claims[claimNumber].ibnrIndexed()
+        assertEquals "P$period changeInIBNRIndexed", 0, claims[claimNumber].changeInIBNRIndexed
 
         println "paid incrementals summed up ${claims.paidIncrementalIndexed.sum()}"
         // todo(sku): discuss, is currently lower as changes are applied earlier than for paids

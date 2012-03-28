@@ -37,7 +37,7 @@ public class WXLContract extends XLContract {
         if (grossClaim.getBaseClaim().getClaimType().equals(ClaimType.SINGLE)) {
             return super.calculateClaimCeded(grossClaim, storage, periodCounter);
         }
-        return new ClaimCashflowPacket(grossClaim.getBaseClaim().withScale(0), grossClaim.getKeyClaim(), 0, 0, 0, 0, 0, 0, 0, null,
+        return new ClaimCashflowPacket(grossClaim.getBaseClaim().withScale(0), grossClaim.getKeyClaim(), 0, 0, 0, 0, 0, 0, 0, 0, 0, null,
                 grossClaim.getUpdateDate(), grossClaim.getUpdatePeriod());
     }
 

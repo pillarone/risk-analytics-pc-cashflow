@@ -100,20 +100,20 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
 
     void correctReportingClaimsResults() {
         Map<PeriodPath, Double> resultsPerPath = new LinkedHashMap<PeriodPath, Double>()
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 0)]=-80000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 0)]=-80000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 1)]=-94000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 1)]=-10000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 1)]=-84000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 2)]=-103500
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 2)]=-5000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 2)]=-10500
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2014:outClaims', 2)]=-88000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 3)]=-113440.47619047621
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 3)]=-5000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 3)]=-5250
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2014:outClaims', 3)]=-11000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2015:outClaims', 3)]=-92190.4761904762
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 0)]=-800
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 0)]=-800
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 1)]=-924
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 1)]=-108
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 1)]=-816
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 2)]=-997
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 2)]=-55
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 2)]=-110
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2014:outClaims', 2)]=-832
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 3)]=-1085
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 3)]=-55
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 3)]=-58
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2014:outClaims', 3)]=-116
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2015:outClaims', 3)]=-856
 
         def results = SingleValueResult.list()
         for (SingleValueResult result : results) {
@@ -125,20 +125,20 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
 
     void correctPaidClaimsResults() {
         Map<PeriodPath, Double> resultsPerPath = new LinkedHashMap<PeriodPath, Double>()
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 0)]=-40000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 0)]=-40000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 1)]=-72000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 1)]=-30000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 1)]=-42000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 2)]=-95500
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 2)]=-20000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 2)]=-31500
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2014:outClaims', 2)]=-44000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 3)]=-110095.23809523808
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 3)]=-10000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 3)]=-21000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2014:outClaims', 3)]=-33000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2015:outClaims', 3)]=-46095.23809523808
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 0)]=-500
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 0)]=-500
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 1)]=-765
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 1)]=-255
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 1)]=-510
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 2)]=-936
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 2)]=-156
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 2)]=-260
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2014:outClaims', 2)]=-520
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 3)]=-1070
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 3)]=-107
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 3)]=-160.5
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2014:outClaims', 3)]=-267.5
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2015:outClaims', 3)]=-535
 
         def results = SingleValueResult.list()
         for (SingleValueResult result : results) {
@@ -152,15 +152,15 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
         Map<PeriodPath, Double> resultsPerPath = new LinkedHashMap<PeriodPath, Double>()
         resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 0)]=null
         resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 0)]=null
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 1)]=-20000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 1)]=-20000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 2)]=-31000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 2)]=-10000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 2)]=-21000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 3)]=-37500
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 3)]=-5000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 3)]=-10500
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2014:outClaims', 3)]=-22000
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 1)]=-10d
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 1)]=-10d
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 2)]=-15d
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 2)]=-5d
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 2)]=-10d
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 3)]=-25.5d
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2012:outClaims', 3)]=-3d
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2013:outClaims', 3)]=-7.5d
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:period:2014:outClaims', 3)]=-15d
 
         def results = SingleValueResult.list()
         for (SingleValueResult result : results) {
@@ -172,10 +172,10 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
 
     void correctPremiumRiskResults() {
         Map<PeriodPath, Double> resultsPerPath = new LinkedHashMap<PeriodPath, Double>()
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 0)]=-100000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 1)]=-105000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 2)]=-110000
-        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 3)]=-115238.09523809524
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 0)]=-1000
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 1)]=-1020
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 2)]=-1040
+        resultsPerPath[new PeriodPath('GIRA:claimsGenerators:subMarine:outClaims', 3)]=-1070
 
         def results = SingleValueResult.list()
         for (SingleValueResult result : results) {
@@ -187,14 +187,14 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
 
     void correctPremiumResults() {
         Map<String, Double> resultsPerPath = new LinkedHashMap<String, Double>()
-        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:outUnderwritingInfo', 0)]=100000
-        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:period:2012:outUnderwritingInfo', 0)]=100000
-        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:outUnderwritingInfo', 1)]=105000
-        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:period:2013:outUnderwritingInfo', 1)]=105000
-        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:outUnderwritingInfo', 2)]=110000
-        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:period:2014:outUnderwritingInfo', 2)]=110000
-        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:outUnderwritingInfo', 3)]=115238.09523809524
-        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:period:2015:outUnderwritingInfo', 3)]=115238.09523809524
+        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:outUnderwritingInfo', 0)]=1000
+        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:period:2012:outUnderwritingInfo', 0)]=1000
+        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:outUnderwritingInfo', 1)]=1020
+        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:period:2013:outUnderwritingInfo', 1)]=1020
+        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:outUnderwritingInfo', 2)]=1040
+        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:period:2014:outUnderwritingInfo', 2)]=1040
+        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:outUnderwritingInfo', 3)]=1070
+        resultsPerPath[new PeriodPath('GIRA:underwritingSegments:subMarine:period:2015:outUnderwritingInfo', 3)]=1070
 
         def results = SingleValueResult.list()
         for (SingleValueResult result : results) {

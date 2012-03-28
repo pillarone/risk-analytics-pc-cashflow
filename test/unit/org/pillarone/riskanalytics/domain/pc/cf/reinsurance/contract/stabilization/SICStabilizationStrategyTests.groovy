@@ -52,27 +52,22 @@ class SICStabilizationStrategyTests extends GroovyTestCase {
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
         ClaimStorage storage = new ClaimStorage(claims[0])
         assertEquals "no effect @06.04.2011", 1.0, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
-        storage.addIncrements(claims[1])
         assertEquals "effect @06.07.2011", 1.132503033330954, storage.stabilizationFactor(claims[1], stabilization, periodCounter)
 
         periodCounter.next()
         claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2012", 1.4349801226812542, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
 
         periodCounter.next()
         claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2013", 1.4641001674848657, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
 
         periodCounter.next()
         claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2013", 1.4641001674848657, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
 
         periodCounter.next()
         claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2015", 1.5649313050574707, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
     }
 
@@ -85,17 +80,14 @@ class SICStabilizationStrategyTests extends GroovyTestCase {
 
         ClaimStorage storage = new ClaimStorage(claims[0])
         assertEquals "no effect @06.04.2011", 1.0, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
-        storage.addIncrements(claims[1])
         assertEquals "effect @06.07.2011", 1.145122444759103, storage.stabilizationFactor(claims[1], stabilization, periodCounter)
 
         periodCounter.next()
         claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2012", 1.4591332967635764, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
 
         periodCounter.next()
         claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2013", 1.5165090288513219, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
 
         periodCounter.next()
@@ -103,12 +95,10 @@ class SICStabilizationStrategyTests extends GroovyTestCase {
         assertEquals "#claims 2014", 1, claims.size()
         assertEquals "claim reported, incremental @06.04.2014", 0, claims[0].reportedIncrementalIndexed
         assertEquals "claim paid, incremental @06.04.2014", 0, claims[0].paidIncrementalIndexed
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2013", 1.5165090288513219, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
 
         periodCounter.next()
         claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
-        storage.addIncrements(claims[0])
         assertEquals "effect @06.04.2015", 1.5649313050574707, storage.stabilizationFactor(claims[0], stabilization, periodCounter)
     }
 

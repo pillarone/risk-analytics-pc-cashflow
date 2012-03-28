@@ -2,10 +2,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
+import static org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils.avoidNegativeZero;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 
 import java.util.ArrayList;
@@ -18,13 +16,19 @@ public class ClaimStorage {
     /** required in order to map with claim of previous period */
     private IClaimRoot reference;
     private IClaimRoot referenceCeded;
-    private List<Double> inrementalReporteds = new ArrayList<Double>();
-    private List<Double> inrementalPaids = new ArrayList<Double>();
+
+    /** required to calculate the ceded changeIn... properties */ 
+    private List<Double> cededReserves = new ArrayList<Double>();
+    private List<Double> cededIbnr = new ArrayList<Double>();
+     
     private double cumulatedReportedCeded;
     private double incrementalReportedCeded;
     private double cumulatedPaidCeded;
     private double incrementalPaidCeded;
     private double cumulatedStabilizedValue;
+    private double nominalUltimate;
+    private double ultimate;
+    private double cumulatedUltimateDevelopedCeded;
 
     public ClaimStorage(ClaimCashflowPacket claim) {
         if (claim.getNominalUltimate() > 0) {
@@ -35,15 +39,10 @@ public class ClaimStorage {
         }
     }
 
-    public void addIncrements(ClaimCashflowPacket claim) {
-        inrementalPaids.add(claim.getPaidIncrementalIndexed());
-        inrementalReporteds.add(claim.getReportedIncrementalIndexed());
-    }
-
     public double getCumulatedCeded(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
             case ULTIMATE:
-                return 0;
+                return ultimate;
             case REPORTED:
                 return cumulatedReportedCeded;
             case PAID:
@@ -54,18 +53,33 @@ public class ClaimStorage {
 
 
     public void update(double incrementalCeded, BasedOnClaimProperty claimProperty) {
+        incrementalCeded = avoidNegativeZero(incrementalCeded);
         switch (claimProperty) {
+            case ULTIMATE:
+                ultimate = incrementalCeded;
+                if (ultimate != 0) {
+                    nominalUltimate = ultimate;
+                }
+                if (referenceCeded.getClaimType().equals(ClaimType.AGGREGATED_RESERVES)) {
+                    nominalUltimate = referenceCeded.getUltimate();
+                }
+                break;
             case PAID:
                 incrementalPaidCeded = incrementalCeded;
-                inrementalPaids.add(incrementalCeded);
                 cumulatedPaidCeded += incrementalCeded;
+                cededReserves.add(cededReserves());
                 break;
             case REPORTED:
                 incrementalReportedCeded = incrementalCeded;
-                inrementalReporteds.add(incrementalCeded);
                 cumulatedReportedCeded += incrementalCeded;
+                cededIbnr.add(cededIBNR());
                 break;
         }
+    }
+
+    // todo(sku): investigate on the 'call' order for this function
+    public void setCumulatedUltimateDevelopedCeded(double cumulatedUltimateDevelopedCeded) {
+        this.cumulatedUltimateDevelopedCeded = cumulatedUltimateDevelopedCeded;
     }
 
     public double getIncrementalPaidCeded() {
@@ -76,9 +90,28 @@ public class ClaimStorage {
         return incrementalReportedCeded;
     }
 
-
     public double cededReserves() {
-        return referenceCeded.getUltimate() - cumulatedPaidCeded;
+        return nominalUltimate - cumulatedPaidCeded + cumulatedUltimateDevelopedCeded;
+    }
+
+    public double cededIBNR() {
+        return nominalUltimate - cumulatedReportedCeded;
+    }
+
+    public double changeInCededReserves() {
+        return cededReserves() - previousCededReserves();
+    }
+
+    public double changeInCededIBNR() {
+        return cededIBNR() - previousCededIBNR();
+    }
+
+    public double previousCededReserves() {
+        return (cededReserves.size() == 1) ? 0 : cededReserves.get(cededReserves.size() - 2);
+    }
+    
+    private double previousCededIBNR() {
+        return (cededIbnr.size() == 1) ? 0 : cededIbnr.get(cededIbnr.size() - 2);
     }
 
     /**
