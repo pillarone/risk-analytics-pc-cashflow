@@ -46,10 +46,10 @@ public final class GrossClaimRoot implements IClaimRoot {
     public GrossClaimRoot(GrossClaimRoot original) {
         claimRoot = original.claimRoot.clone();
         if (original.payoutPattern != null) {
-            payoutPattern = original.payoutPattern.clone();
+            payoutPattern = original.payoutPattern.clone().get();
         }
         if (original.reportingPattern != null) {
-            reportingPattern = original.reportingPattern.clone();
+            reportingPattern = original.reportingPattern.clone().get();
         }
     }
 
@@ -71,8 +71,8 @@ public final class GrossClaimRoot implements IClaimRoot {
     }
 
     public GrossClaimRoot(PatternPacket payoutPattern, PatternPacket reportingPattern) {
-        this.payoutPattern = payoutPattern;
-        this.reportingPattern = reportingPattern;
+        this.payoutPattern = payoutPattern != null ? payoutPattern.get() : null;
+        this.reportingPattern = reportingPattern != null ? reportingPattern.get() : null;
     }
 
     /**

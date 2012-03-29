@@ -8,6 +8,8 @@ import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.DateFactors;
+import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
+import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +24,7 @@ public class PatternPacket extends Packet implements Cloneable {
 
     protected List<Double> cumulativeValues;
     protected List<Period> cumulativePeriods;
+    private boolean stochasticHitPattern = false;
 
     /**
      * this field is required to enable different kinds of pattern within one mdp @see PayoutReportingCombinedPattern
@@ -35,6 +38,14 @@ public class PatternPacket extends Packet implements Cloneable {
         this.patternMarker = patternMarker;
         this.cumulativeValues = cumulativeValues;
         this.cumulativePeriods = cumulativePeriods;
+    }
+
+    public PatternPacket(Class<? extends IPatternMarker> patternMarker, List<Double> cumulativeValues, 
+                         List<Period> cumulativePeriods, boolean stochasticHitPattern) {
+        this.patternMarker = patternMarker;
+        this.cumulativeValues = cumulativeValues;
+        this.cumulativePeriods = cumulativePeriods;
+        this.stochasticHitPattern = stochasticHitPattern;
     }
 
     /**
@@ -74,16 +85,28 @@ public class PatternPacket extends Packet implements Cloneable {
         return synchronous;
     }
 
-//    public static boolean hasSameCumulativePeriods(PatternPacket payout, PatternPacket reporting, boolean payoutPatternMaybeLonger) {
-//        boolean sameSizeOrPayoutLonger = payout.size() >= reporting.size();
-//        boolean samePeriods = sameSizeOrPayoutLonger;
-//        if (sameSizeOrPayoutLonger) {
-//            for (int developmentPeriod = 0; samePeriods && developmentPeriod < reporting.size(); developmentPeriod++) {
-//                samePeriods = payout.incrementMonths(developmentPeriod).equals(reporting.incrementMonths(developmentPeriod));
-//            }
-//        }
-//        return samePeriods;
-//    }
+    /**
+     * @return same instance for non stochastic patterns, new instance for stochastic patterns
+     */
+    public PatternPacket get() {
+        if (stochasticHitPattern) {
+            // create a new instance with 0 for cumulative values below the hit probability and 1 if above
+            IRandomNumberGenerator randomNumberGenerator = RandomNumberGeneratorFactory.getUniformGenerator();
+            Double hitProbability = (Double) randomNumberGenerator.nextValue();
+            List<Double> adjustedCumulativeValues = new ArrayList<Double>();
+            for (Double cumulativeValue : cumulativeValues) {
+                if (cumulativeValue <= hitProbability) {
+                    adjustedCumulativeValues.add(0d);
+                } else {
+                    adjustedCumulativeValues.add(1d);
+                }
+            }
+            return new PatternPacket(patternMarker, adjustedCumulativeValues, cumulativePeriods, false);
+        }
+        else {
+            return this;
+        }
+    }
 
     /**
      * @param occurrenceDate
@@ -262,6 +285,7 @@ public class PatternPacket extends Packet implements Cloneable {
             for (int idx = 0; idx < size() && difference; idx++) {
                 difference = cumulativePeriods.get(idx).equals(((PatternPacket) obj).getCumulativePeriod(idx));
                 difference &= cumulativeValues.get(idx).equals(((PatternPacket) obj).getCumulativeValues().get(idx));
+                difference &= stochasticHitPattern == ((PatternPacket) obj).stochasticHitPattern;
             }
             return difference;
         }
@@ -278,6 +302,7 @@ public class PatternPacket extends Packet implements Cloneable {
         for (Double value : cumulativeValues) {
             builder.append(value);
         }
+        builder.append(stochasticHitPattern);
         return builder.toHashCode();
     }
 
@@ -291,6 +316,6 @@ public class PatternPacket extends Packet implements Cloneable {
         for (Period period : cumulativePeriods) {
             clonedCumulativePeriods.add(new Period(period));
         }
-        return new PatternPacket(patternMarker, clonedCumulativeValues, clonedCumulativePeriods);
+        return new PatternPacket(patternMarker, clonedCumulativeValues, clonedCumulativePeriods, stochasticHitPattern);
     }
 }

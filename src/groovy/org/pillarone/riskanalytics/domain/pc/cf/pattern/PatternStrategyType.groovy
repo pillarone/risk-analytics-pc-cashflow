@@ -24,12 +24,17 @@ class PatternStrategyType extends AbstractParameterObjectClassifier {
             ageToAgePattern :  new ConstrainedMultiDimensionalParameter([[0],[1d]], [PatternTableConstraints.MONTHS,LINK_RATIOS],
                     ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER)),
     ])
+    public static final PatternStrategyType HIT_PROBABILITY = new PatternStrategyType("hit probability", "HIT_PROBABILITY", [
+            stochasticHitPattern  :  new ConstrainedMultiDimensionalParameter([[0],[1d]], [PatternTableConstraints.MONTHS,INCREMENTS],
+                    ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER)),
+    ])
 
-    public static final all = [NONE, INCREMENTAL, CUMULATIVE, AGE_TO_AGE]
+    public static final all = [NONE, INCREMENTAL, CUMULATIVE, AGE_TO_AGE, HIT_PROBABILITY]
 
     public static final String INCREMENTS = "Increments";
     public static final String CUMULATIVE2 = "Cumulative";
-     public static final String LINK_RATIOS = "Link ratios";
+    public static final String STOCHASTIC_HIT_PROBABILITY = "Stochastic Hit Probability";
+    public static final String LINK_RATIOS = "Link ratios";
 
     protected static Map types = [:]
     static {
@@ -63,21 +68,24 @@ class PatternStrategyType extends AbstractParameterObjectClassifier {
         IPatternStrategy pattern;
         switch (type) {
             case PatternStrategyType.NONE:
-                pattern = new TrivialPatternStrategy()
+                return new TrivialPatternStrategy()
                 break
             case PatternStrategyType.INCREMENTAL:
-                pattern = new IncrementalPatternStrategy(
+                return new IncrementalPatternStrategy(
                         incrementalPattern : (ConstrainedMultiDimensionalParameter) parameters['incrementalPattern'])
                 break;
             case PatternStrategyType.CUMULATIVE:
-                pattern = new CumulativePatternStrategy(
+                return new CumulativePatternStrategy(
                         cumulativePattern : (ConstrainedMultiDimensionalParameter) parameters['cumulativePattern'])
                 break
             case PatternStrategyType.AGE_TO_AGE:
-                pattern = new AgeToAgePatternStrategy(
+                return new AgeToAgePatternStrategy(
                         ageToAgePattern : (ConstrainedMultiDimensionalParameter) parameters['ageToAgePattern'])
                 break
+            case PatternStrategyType.HIT_PROBABILITY:
+                return new StochasticHitPatternStrategy(
+                        stochasticHitPattern : (ConstrainedMultiDimensionalParameter) parameters['stochasticHitPattern'])
+
         }
-        return pattern
     }
 }

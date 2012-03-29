@@ -11,13 +11,10 @@ class PatternPacketTests extends GroovyTestCase {
 
     PatternPacket pattern
 
-
-    static PatternPacket getPattern(List<Integer> periods, List<Double> cumulativeValues) {
-        PatternPacket pattern0 = new PatternPacket()
-        pattern0.cumulativePeriods = []
-        periods.each { period -> pattern0.cumulativePeriods.add(Period.months(period)) }
-        pattern0.cumulativeValues = cumulativeValues
-        return pattern0
+    static PatternPacket getPattern(List<Integer> periods, List<Double> cumulativeValues, boolean stochasticPattern = false) {
+        protected List<Period> cumulativePeriods = [];
+        periods.each { period -> cumulativePeriods.add(Period.months(period)) }
+        return new PatternPacket(null, cumulativeValues, cumulativePeriods, stochasticPattern)
     }
 
     @Override protected void setUp() {
@@ -73,6 +70,32 @@ class PatternPacketTests extends GroovyTestCase {
         assertEquals 'increment months period 3', 12, pattern.incrementMonths(3)
         assertEquals 'increment months period 4', 12, pattern.incrementMonths(4)
         assertEquals 'increment months period 6', null, pattern.incrementMonths(6)
+    }
+    
+    void testGetSame() {
+        assertEquals "same instance for none stochastic patterns", pattern, pattern.get()
+    }
+    
+    void testGetDifferent() {
+        PatternPacket stochasticPattern = getPattern([0, 12, 24, 36, 48, 60, 72, 84, 96], [0d, 0.7d, 0.75d, 0.8d, 0.85d, 0.9d, 0.95d, 0.99d, 1.0d], true)
+        PatternPacket packetInstance1 = stochasticPattern.get()
+        PatternPacket packetInstance2 = stochasticPattern.get()
+        PatternPacket packetInstance3 = stochasticPattern.get()
+        assertNotSame "new instance for stochastic patterns", stochasticPattern, packetInstance1
+        assertNotSame "new instance for stochastic patterns", stochasticPattern, packetInstance2
+        assertNotSame "new instance for stochastic patterns", packetInstance1, packetInstance2
+
+        checkHitPattern(packetInstance1)
+        checkHitPattern(packetInstance2)
+        checkHitPattern(packetInstance3)
+    }
+
+    private checkHitPattern(PatternPacket packetInstance1) {
+        boolean hasHit = false
+        for (Double cumulativeValue: packetInstance1.cumulativeValues) {
+            hasHit |= cumulativeValue == 1
+            assertEquals "1 after hit", hasHit ? 1d : 0d, cumulativeValue
+        }
     }
 }
 
