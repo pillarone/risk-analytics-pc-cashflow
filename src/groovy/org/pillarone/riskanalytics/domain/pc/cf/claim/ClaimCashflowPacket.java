@@ -73,9 +73,9 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     /**
      * Used for 'zero' claims
      */
-    public ClaimCashflowPacket() {
-        this(new ClaimRoot(0, ClaimType.ATTRITIONAL, null, null));
-    }
+//    public ClaimCashflowPacket() {
+//        this(new ClaimRoot(0, ClaimType.ATTRITIONAL, null, null));
+//    }
 
     // todo(sku): safer c'tor required, currently used for ultimate modelling
     private ClaimCashflowPacket(IClaimRoot baseClaim) {

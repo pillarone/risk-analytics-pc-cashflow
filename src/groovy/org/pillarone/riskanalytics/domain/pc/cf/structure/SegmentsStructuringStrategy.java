@@ -40,9 +40,6 @@ public class SegmentsStructuringStrategy extends AbstractParameterObject impleme
                 filteredClaims.add(claim);
             }
         }
-        if (filteredClaims.size() == 0) {
-            filteredClaims.add(new ClaimCashflowPacket());
-        }
         return filteredClaims;
     }
 
@@ -54,11 +51,6 @@ public class SegmentsStructuringStrategy extends AbstractParameterObject impleme
                 filteredUnderwritingInfo.add(underwritingInfo);
             }
         }
-        if (filteredUnderwritingInfo.size()==0){
-            UnderwritingInfoPacket trivialPacket = new UnderwritingInfoPacket();
-            trivialPacket.setPremiumWritten(0d);
-            filteredUnderwritingInfo.add(trivialPacket);
-        }
         return filteredUnderwritingInfo;
     }
 
@@ -69,11 +61,6 @@ public class SegmentsStructuringStrategy extends AbstractParameterObject impleme
             if (filterCriteria.contains(underwritingInfo.segment())) {
                 filteredUnderwritingInfo.add(underwritingInfo);
             }
-        }
-        if (filteredUnderwritingInfo.size()==0){
-            CededUnderwritingInfoPacket trivialPacket = new CededUnderwritingInfoPacket();
-            trivialPacket.setPremiumWritten(0d);
-            filteredUnderwritingInfo.add(trivialPacket);
         }
         return filteredUnderwritingInfo;
     }

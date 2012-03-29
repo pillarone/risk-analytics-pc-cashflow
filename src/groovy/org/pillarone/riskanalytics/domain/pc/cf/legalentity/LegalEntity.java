@@ -92,14 +92,12 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
                     outClaimsPrimaryInsurer.add(grossClaim);
                 }
             }
-            avoidVoidClaimList(outClaimsPrimaryInsurer);
             outClaimsGross.addAll(outClaimsPrimaryInsurer);
             for (UnderwritingInfoPacket grossUnderwritingInfo : inUnderwritingInfo) {
                 if (grossUnderwritingInfo.legalEntity().equals(this)) {
                     outUnderwritingInfoPrimeryInsurer.add(grossUnderwritingInfo);
                 }
             }
-            avoidVoidUnderwritingInfoList(outUnderwritingInfoPrimeryInsurer);
             outUnderwritingInfoGross.addAll(outUnderwritingInfoPrimeryInsurer);
             for (ClaimCashflowPacket cededClaim : inClaimsCeded) {
                 if (cededClaim.legalEntity().equals(this)) {
@@ -111,7 +109,6 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
                     outClaimsCeded.add(cededClaim);
                 }
             }
-            avoidVoidClaimList(outClaimsCeded);
             for (ClaimCashflowPacket inwardClaim : inClaimsInward) {
                 if (inwardClaim.legalEntity().equals(this)) {
                     outClaimsReinsurer.add(inwardClaim);
@@ -122,7 +119,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
                     outClaimsReinsurer.add(inwardClaim);
                 }
             }
-            if (!avoidVoidClaimList(outClaimsReinsurer)) {
+            if (!outClaimsReinsurer.isEmpty()) {
                 outClaimsGross.addAll(outClaimsReinsurer);
             }
             for (CededUnderwritingInfoPacket cededUnderwritingInfo : inUnderwritingInfoCeded) {
@@ -135,7 +132,6 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
                     outUnderwritingInfoCeded.add(cededUnderwritingInfo);
                 }
             }
-            avoidVoidCededUnderwritingInfoList(outUnderwritingInfoCeded);
             for (UnderwritingInfoPacket inwardUnderwritingInfo : inUnderwritingInfoInward) {
                 if (inwardUnderwritingInfo.legalEntity().equals(this)) {
 
@@ -148,10 +144,12 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
                     outUnderwritingInfoReinsurer.add(inwardUnderwritingInfo);
                 }
             }
-            avoidVoidUnderwritingInfoList(outUnderwritingInfoReinsurer);
             outUnderwritingInfoGross.addAll(outUnderwritingInfoReinsurer);
 
-            outClaimsNet.add(ClaimUtils.calculateNetClaim(outClaimsGross, outClaimsCeded));
+            ClaimCashflowPacket netClaim = ClaimUtils.calculateNetClaim(outClaimsGross, outClaimsCeded);
+            if (netClaim != null) {
+                outClaimsNet.add(netClaim);
+            }
             outUnderwritingInfoNet.addAll(UnderwritingInfoUtils.calculateNetUnderwritingInfo(outUnderwritingInfoGross, outUnderwritingInfoCeded));
             fillContractFinancials();
             discountClaims();
@@ -172,34 +170,6 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
             DiscountUtils.getDiscountedNetValuesAndFillOutChannels(outClaimsCeded, outClaimsNet, outDiscountedValues,
                     outNetPresentValues, periodStore, iterationScope);
         }
-    }
-
-
-    private boolean avoidVoidClaimList(PacketList<ClaimCashflowPacket> packetList) {
-        if (packetList.isEmpty()) {
-            PeriodScope periodScope = iterationScope.getPeriodScope();
-            DateTime startOfPeriod = periodScope.getCurrentPeriodStartDate();
-            IClaimRoot baseClaim = new ClaimRoot(0, ClaimType.AGGREGATED, startOfPeriod, startOfPeriod);
-            packetList.add(new ClaimCashflowPacket(baseClaim, 0, 0, 0, 0, 0, 0, 0, 0, null, startOfPeriod, periodScope.getCurrentPeriod()));
-            return true;
-        }
-        return false;
-    }
-
-    private boolean avoidVoidUnderwritingInfoList(PacketList<UnderwritingInfoPacket> packetList) {
-        if (packetList.isEmpty()) {
-            packetList.add(new UnderwritingInfoPacket());
-            return true;
-        }
-        return false;
-    }
-
-    private boolean avoidVoidCededUnderwritingInfoList(PacketList<CededUnderwritingInfoPacket> packetList) {
-        if (packetList.isEmpty()) {
-            packetList.add(new CededUnderwritingInfoPacket());
-            return true;
-        }
-        return false;
     }
 
     private DateTime defaultOfReinsurer(double probability) {

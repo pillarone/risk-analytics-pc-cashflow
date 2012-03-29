@@ -37,9 +37,6 @@ public class ClaimTypesStructuringStrategy extends AbstractParameterObject imple
                 filteredClaims.add(claim);
            }
         }
-        if (filteredClaims.size() == 0){
-            filteredClaims.add(new ClaimCashflowPacket());
-        }
         return filteredClaims;
    }
 

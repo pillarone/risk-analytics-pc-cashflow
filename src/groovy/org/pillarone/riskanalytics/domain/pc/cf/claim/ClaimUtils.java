@@ -337,12 +337,18 @@ public class ClaimUtils {
 
     public static ClaimCashflowPacket calculateNetClaim(List<ClaimCashflowPacket> claimsGross,
                                                                List<ClaimCashflowPacket> claimsCeded) {
+        if (claimsGross == null && claimsCeded == null) return null;
         if (claimsGross.size() == 0 && claimsCeded.size() == 0) return null;
         List<ClaimCashflowPacket> aggregateClaimsCededByBaseClaim = ClaimUtils.aggregateByBaseClaim(claimsCeded);
         ClaimCashflowPacket claimCeded = ClaimUtils.sum(aggregateClaimsCededByBaseClaim, true);
         List<ClaimCashflowPacket> aggregateClaimsGrossByBaseClaim = ClaimUtils.aggregateByBaseClaim(claimsGross);
         ClaimCashflowPacket claimGross = ClaimUtils.sum(aggregateClaimsGrossByBaseClaim, true);
-        return getNetClaim(claimGross, claimCeded, claimCeded.reinsuranceContract());
+        if (claimCeded == null) {
+            return getNetClaim(claimGross, null, null);
+        }
+        else {
+            return getNetClaim(claimGross, claimCeded, claimCeded.reinsuranceContract());
+        }
     }
 
 }

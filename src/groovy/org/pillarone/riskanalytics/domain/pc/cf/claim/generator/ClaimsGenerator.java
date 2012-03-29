@@ -91,30 +91,24 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
             List<ClaimRoot> baseClaims = parmClaimsModel.calculateClaims(inUnderwritingInfo, uwFilterCriteria,
                     inEventSeverities, this, periodScope);
             baseClaims = parmClaimsModel.generateClaims(baseClaims, inUnderwritingInfo, uwFilterCriteria, inFactors, periodScope, inEventFrequencies, this);
-            if (baseClaims.isEmpty()) {
-                // avoid no claims in single iterations as this would produce wrong statistics
-                ClaimType claimType = parmClaimsModel.claimType();
-                DateTime exposureStartDate = periodScope.getCurrentPeriodStartDate();
-                EventPacket event = claimType.equals(ClaimType.AGGREGATED_EVENT) ? new EventPacket(exposureStartDate) : null;
-                DateTime occurrenceDate = periodScope.getCurrentPeriodStartDate();
-                baseClaims.add(new ClaimRoot(0, claimType, exposureStartDate, occurrenceDate , event));
-            }
-            baseClaims = parmAssociateExposureInfo.getAllocatedClaims(baseClaims, UnderwritingInfoUtils.filterUnderwritingInfo(inUnderwritingInfo, uwFilterCriteria));
+            if (!baseClaims.isEmpty()) {
+                baseClaims = parmAssociateExposureInfo.getAllocatedClaims(baseClaims, UnderwritingInfoUtils.filterUnderwritingInfo(inUnderwritingInfo, uwFilterCriteria));
 
-            PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
-            PatternPacket reportingPattern = PatternUtils.filterPattern(inPatterns, parmReportingPattern, IReportingPatternMarker.class);
-            PatternUtils.synchronizePatterns(payoutPattern, reportingPattern);
+                PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
+                PatternPacket reportingPattern = PatternUtils.filterPattern(inPatterns, parmReportingPattern, IReportingPatternMarker.class);
+                PatternUtils.synchronizePatterns(payoutPattern, reportingPattern);
 
-            List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
-            for (ClaimRoot baseClaim : baseClaims) {
-                GrossClaimRoot grossClaimRoot = new GrossClaimRoot(baseClaim, payoutPattern, reportingPattern);
-                if (!grossClaimRoot.hasTrivialPayout()) {
-                    // add claim only to period store if development is required
-                    grossClaimRoots.add(grossClaimRoot);
+                List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
+                for (ClaimRoot baseClaim : baseClaims) {
+                    GrossClaimRoot grossClaimRoot = new GrossClaimRoot(baseClaim, payoutPattern, reportingPattern);
+                    if (!grossClaimRoot.hasTrivialPayout()) {
+                        // add claim only to period store if development is required
+                        grossClaimRoots.add(grossClaimRoot);
+                    }
+                    claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, true));
                 }
-                claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, true));
+                periodStore.put(GROSS_CLAIMS, grossClaimRoots);
             }
-            periodStore.put(GROSS_CLAIMS, grossClaimRoots);
             return baseClaims.size();
         }
         return 0;

@@ -60,9 +60,6 @@ public class SegmentsPerilsStructuringStrategy extends AbstractParameterObject i
                 break;
 
         }
-        if (filteredClaims.size() == 0) {
-            filteredClaims.add(new ClaimCashflowPacket());
-        }
         return filteredClaims;
     }
 
@@ -74,11 +71,6 @@ public class SegmentsPerilsStructuringStrategy extends AbstractParameterObject i
                 filteredUnderwritingInfo.add(underwritingInfo);
             }
         }
-        if (filteredUnderwritingInfo.size() == 0 && !(connection.equals(LogicArguments.OR) && segments.getValuesAsObjects().size() == 0)) {
-            UnderwritingInfoPacket trivialPacket = new UnderwritingInfoPacket();
-            trivialPacket.setPremiumWritten(0d);
-            filteredUnderwritingInfo.add(trivialPacket);
-        }
         return filteredUnderwritingInfo;
     }
 
@@ -89,11 +81,6 @@ public class SegmentsPerilsStructuringStrategy extends AbstractParameterObject i
             if (segmentsFilterCriteria.contains(underwritingInfo.segment())) {
                 filteredUnderwritingInfo.add(underwritingInfo);
             }
-        }
-        if (filteredUnderwritingInfo.size() == 0 && !(connection.equals(LogicArguments.OR) && segments.getValuesAsObjects().size() == 0)) {
-            CededUnderwritingInfoPacket trivialPacket = new CededUnderwritingInfoPacket();
-            trivialPacket.setPremiumWritten(0d);
-            filteredUnderwritingInfo.add(trivialPacket);
         }
         return filteredUnderwritingInfo;
     }
