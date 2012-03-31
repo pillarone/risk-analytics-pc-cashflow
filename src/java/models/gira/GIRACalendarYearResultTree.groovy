@@ -83,6 +83,14 @@ mappings = {
                     "premium" "GIRA:segments:[%segment%]:outNetFinancials:netPremiumPaid"
                     "commission" "GIRA:segments:[%segment%]:outNetFinancials:commission"
                     "claim" "GIRA:segments:[%segment%]:outNetFinancials:netClaimPaid"
+                    "[%period%]" {
+                        "financialsNetCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:netCashflow", {
+                            "lossRatio" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:lossRatio"
+                            "premium" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:netPremiumPaid"
+                            "commission" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:commission"
+                            "claim" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:netClaimPaid"
+                        }
+                    }
                 }
                 "claimsNet" {
                     "ultimate" "GIRA:segments:[%segment%]:outClaimsNet:ultimate"
@@ -203,6 +211,14 @@ mappings = {
                 "premium" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netPremiumPaid"
                 "commission" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:commission"
                 "claim" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netClaimPaid"
+                "[%period%]" {
+                    "financialsNetCashflow" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outNetFinancials:netCashflow", {
+                        "lossRatio" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outNetFinancials:lossRatio"
+                        "premium" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outNetFinancials:netPremiumPaid"
+                        "commission" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outNetFinancials:commission"
+                        "claim" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:period:[%period%]:netClaimPaid"
+                    }
+                }
             }
         }
         "structures" {
@@ -311,6 +327,15 @@ mappings = {
         }
         "reinsurance" {
             "[%contract%]" {
+                "Financials" {
+                    "result" "GIRA:reinsuranceContracts:[%contract%]:outContractFinancials:contractResult", {
+                        "[%period%]" "GIRA:reinsuranceContracts:[%contract%]:period:[%period%]:outContractFinancials:contractResult", {
+                            "premium" "GIRA:reinsuranceContracts:[%contract%]:period:[%period%]:outContractFinancials:cededPremium"
+                            "commission" "GIRA:reinsuranceContracts:[%contract%]:period:[%period%]:outContractFinancials:cededCommission"
+                            "claim" "GIRA:reinsuranceContracts:[%contract%]:period:[%period%]:outContractFinancials:cededClaim"
+                        }
+                    }
+                }
                 "claimsNet" {
                     "ultimate" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:ultimate"
                     "reportedIncrementalIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:reportedIncrementalIndexed", {

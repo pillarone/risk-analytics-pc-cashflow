@@ -3,7 +3,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -17,6 +16,7 @@ public interface IClaimRoot {
     public DateTime getExposureStartDate();
     public DateTime getOccurrenceDate();
     public Integer getOccurrencePeriod(IPeriodCounter periodCounter);
+    public Integer getInceptionPeriod(IPeriodCounter periodCounter);
       /**
      * @return payout and reported pattern have the same period entries. True even if one of them is null
      */

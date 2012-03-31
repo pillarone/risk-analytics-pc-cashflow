@@ -237,6 +237,10 @@ public final class GrossClaimRoot implements IClaimRoot {
         return claimRoot.getOccurrencePeriod(periodCounter);
     }
 
+    public Integer getInceptionPeriod(IPeriodCounter periodCounter) {
+        return claimRoot.getInceptionPeriod(periodCounter);
+    }
+
     /**
      * @return payout and reported pattern have the same period entries. True even if one of them is null
      */

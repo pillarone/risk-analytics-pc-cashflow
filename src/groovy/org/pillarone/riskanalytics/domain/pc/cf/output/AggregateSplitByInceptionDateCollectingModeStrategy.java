@@ -10,6 +10,8 @@ import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket;
 
 import java.util.*;
 
@@ -99,10 +101,16 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     
     private String inceptionPeriod(Packet packet) {
         if (packet instanceof ClaimCashflowPacket) {
-            return String.valueOf(((ClaimCashflowPacket) packet).getOccurrenceDate().getYear());
+            return String.valueOf(((ClaimCashflowPacket) packet).getBaseClaim().getExposureStartDate().getYear());
         }
         else if (packet instanceof UnderwritingInfoPacket) {
             return String.valueOf(((UnderwritingInfoPacket) packet).getExposure().getInceptionDate().getYear());
+        }
+        else if (packet instanceof ContractFinancialsPacket) {
+            return String.valueOf(((ContractFinancialsPacket) packet).getInceptionDate().getYear());
+        }
+        else if (packet instanceof FinancialsPacket) {
+            return String.valueOf(((FinancialsPacket) packet).getInceptionDate().getYear());
         }
         else {
             throw new IllegalArgumentException("Packet type " + packet.getClass() + " is not supported.");
@@ -116,8 +124,36 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
         else if (packet instanceof UnderwritingInfoPacket) {
             addToMap((UnderwritingInfoPacket) packet, path, resultMap);
         }
+        else if (packet instanceof ContractFinancialsPacket) {
+            addToMap((ContractFinancialsPacket) packet, path, resultMap);
+        }
+        else if (packet instanceof FinancialsPacket) {
+            addToMap((FinancialsPacket) packet, path, resultMap);
+        }
         else {
             throw new IllegalArgumentException("Packet type " + packet.getClass() + " is not supported.");
+        }
+    }
+
+    protected void addToMap(ContractFinancialsPacket packet, PathMapping path, Map<PathMapping, Packet> resultMap) {
+        if (path == null) return;
+        if (resultMap.containsKey(path)) {
+            ContractFinancialsPacket aggregatePacket = (ContractFinancialsPacket) resultMap.get(path);
+            aggregatePacket.plus(packet);
+            resultMap.put(path, aggregatePacket);
+        } else {
+            resultMap.put(path, packet.copy());
+        }
+    }
+
+    protected void addToMap(FinancialsPacket packet, PathMapping path, Map<PathMapping, Packet> resultMap) {
+        if (path == null) return;
+        if (resultMap.containsKey(path)) {
+            FinancialsPacket aggregatePacket = (FinancialsPacket) resultMap.get(path);
+            aggregatePacket.plus(packet);
+            resultMap.put(path, aggregatePacket);
+        } else {
+            resultMap.put(path, packet.copy());
         }
     }
     
@@ -155,4 +191,9 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
         return IDENTIFIER;
     }
 
+    @Override
+    public boolean isCompatibleWith(Class packetClass) {
+        return super.isCompatibleWith(packetClass) || ContractFinancialsPacket.class.isAssignableFrom(packetClass)
+                || FinancialsPacket.class.isAssignableFrom(packetClass);
+    }
 }

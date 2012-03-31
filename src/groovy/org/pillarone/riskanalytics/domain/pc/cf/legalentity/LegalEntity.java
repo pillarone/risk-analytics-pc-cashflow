@@ -151,15 +151,15 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
                 outClaimsNet.add(netClaim);
             }
             outUnderwritingInfoNet.addAll(UnderwritingInfoUtils.calculateNetUnderwritingInfo(outUnderwritingInfoGross, outUnderwritingInfoCeded));
-            fillContractFinancials();
+            fillContractFinancials(iterationScope.getPeriodScope().getPeriodCounter());
             discountClaims();
         }
     }
 
-    private void fillContractFinancials() {
+    private void fillContractFinancials(IPeriodCounter periodCounter) {
         if (isSenderWired(outNetFinancials)) {
-            FinancialsPacket financials = new FinancialsPacket(outUnderwritingInfoNet, outUnderwritingInfoCeded, outClaimsNet);
-            outNetFinancials.add(financials);
+            outNetFinancials.addAll(FinancialsPacket.getFinancialsPacketsByInceptionPeriod(outUnderwritingInfoNet,
+                    outUnderwritingInfoCeded, outClaimsNet, periodCounter));
         }
     }
 

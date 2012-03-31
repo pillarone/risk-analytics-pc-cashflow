@@ -98,13 +98,14 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         splitCededUnderwritingInfoByCounterParty();
         processUnderwritingInfoGNPI();
         discountClaims(periodCounter);
-        fillContractFinancials();
+        fillContractFinancials(periodCounter);
     }
 
-    private void fillContractFinancials() {
-        ContractFinancialsPacket contractFinancials = new ContractFinancialsPacket(outClaimsCeded, outClaimsNet,
-                outUnderwritingInfoCeded, outUnderwritingInfoNet);
-        outContractFinancials.add(contractFinancials);
+    private void fillContractFinancials(IPeriodCounter periodCounter) {
+        if (isSenderWired(outContractFinancials)) {
+            outContractFinancials.addAll(ContractFinancialsPacket.getContractFinancialsPacketsByInceptionPeriod(outClaimsCeded,
+                outClaimsNet, outUnderwritingInfoCeded, outUnderwritingInfoNet, periodCounter));
+        }
     }
 
     /** initialize counterPartyFactorsInit */

@@ -3,6 +3,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.simulation.AfterSimulationEndException;
+import org.pillarone.riskanalytics.core.simulation.BeforeSimulationStartException;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
@@ -109,6 +111,25 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
             }
         }
         return occurrencePeriod;
+    }
+
+    /**
+     * @param periodCounter
+     * @return if exposure info is attached return its inception period, else the occurrence period
+     */
+    public Integer getInceptionPeriod(IPeriodCounter periodCounter) {
+        if (hasExposureInfo()) {
+            return exposure.getInceptionPeriod();
+        }
+        else if (exposureStartDate != null) {
+            try {
+                return periodCounter.belongsToPeriod(exposureStartDate);
+            }
+            catch (NotInProjectionHorizon ex) {
+                // use fail over by returning occurrence period
+            }
+        }
+        return getOccurrencePeriod(periodCounter);
     }
 
     public boolean hasSynchronizedPatterns() {
