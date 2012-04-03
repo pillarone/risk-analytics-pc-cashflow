@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface IStructuringStrategy extends IParameterObject {
 
-    List<ClaimCashflowPacket> filterClaims(List<ClaimCashflowPacket > claims);
+    List<ClaimCashflowPacket> filterClaims(List<ClaimCashflowPacket> claims);
     List<UnderwritingInfoPacket> filterUnderwritingInfos(List<UnderwritingInfoPacket> underwritingInfos);
     List<CededUnderwritingInfoPacket> filterUnderwritingInfosCeded(List<CededUnderwritingInfoPacket> underwritingInfos);
 }

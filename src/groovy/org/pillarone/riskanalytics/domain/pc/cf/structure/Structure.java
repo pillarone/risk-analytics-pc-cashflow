@@ -34,8 +34,10 @@ public class Structure extends Component {
         outClaimsGross.addAll(parmBasisOfStructures.filterClaims(inClaimsGross));
         outClaimsCeded.addAll(parmBasisOfStructures.filterClaims(inClaimsCeded));
         ClaimCashflowPacket netClaim = ClaimUtils.calculateNetClaim(outClaimsGross, outClaimsCeded);
-        netClaim.removeMarkers();
-        outClaimsNet.add(netClaim);
+        if (netClaim != null) {
+            netClaim.removeMarkers();
+            outClaimsNet.add(netClaim);
+        }
 
         outUnderwritingInfoGross.addAll(parmBasisOfStructures.filterUnderwritingInfos(inUnderwritingInfoGross));
         outUnderwritingInfoCeded.addAll(parmBasisOfStructures.filterUnderwritingInfosCeded(inUnderwritingInfoCeded));
