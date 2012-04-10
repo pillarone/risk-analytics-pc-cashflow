@@ -35,14 +35,18 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     public List<ClaimRoot> generateClaim(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                          ExposureBase severityBase, ClaimType claimType,
                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
+        lazyInitClaimsSizeGenerator();
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
         return generateClaims(severityScalingFactor, 1, periodScope);
     }
 
-    protected List<ClaimRoot> generateClaims(double scaleFactor, int claimNumber, PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaims(double scaleFactor, int claimNumber, PeriodScope periodScope) {
+        lazyInitClaimsSizeGenerator();
         return ClaimsGeneratorUtils.generateClaims(scaleFactor, claimSizeGenerator, dateGenerator, claimNumber,
                 claimType(), periodScope);
     }
+
+    abstract void lazyInitClaimsSizeGenerator();
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            ExposureBase severityBase, PeriodScope periodScope,
@@ -51,7 +55,7 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
         return calculateClaims(severityScalingFactor, periodScope, severities, events);
     }
 
-    protected List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope,
+    public List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope,
                                               List<Double> severities, List<EventPacket> events) {
         return ClaimsGeneratorUtils.calculateClaims(scaleFactor, modifiedClaimsSizeDistribution, claimType(), periodScope,
                 severities, events, shift);

@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
@@ -28,6 +30,8 @@ import java.util.*;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStrategy {
+
+    static Log LOG = LogFactory.getLog(PMLClaimsGeneratorStrategy.class);
 
     public static final String RETURN_PERIOD = "return period";
     public static final String MAX_CLAIM = "maximum claim";
@@ -69,6 +73,11 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
         setClaimsSizeGenerator(periodScope);
         setClaimNumberGenerator(periodScope);
         return generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, null, periodScope);
+    }
+
+    @Override
+    void lazyInitClaimsSizeGenerator() {
+        LOG.debug("This function shouldn't be called for PML claims!");
     }
 
     private void setClaimsSizeGenerator(PeriodScope periodScope) {

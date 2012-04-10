@@ -53,7 +53,6 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
         if (baseClaims.size() == 1) {
             return baseClaims;
         }
-        setGenerator(claimsSizeDistribution, claimsSizeModification);
         return generateClaim(uwInfos, uwInfosFilterCriteria, claimsSizeBase, ClaimType.ATTRITIONAL, null, periodScope);
     }
 
@@ -71,4 +70,8 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
         return ClaimType.ATTRITIONAL;
     }
 
+    @Override
+    void lazyInitClaimsSizeGenerator() {
+        setGenerator(claimsSizeDistribution, claimsSizeModification);
+    }
 }

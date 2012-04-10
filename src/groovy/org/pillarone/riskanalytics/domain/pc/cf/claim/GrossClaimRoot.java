@@ -53,6 +53,16 @@ public final class GrossClaimRoot implements IClaimRoot {
         }
     }
 
+    /**
+     * reportingPattern is left null
+     * @param claimRoot
+     * @param payoutPattern
+     */
+    public GrossClaimRoot(ClaimRoot claimRoot, PatternPacket payoutPattern) {
+        this(payoutPattern, null);
+        this.claimRoot = claimRoot;
+    }
+
     public GrossClaimRoot(ClaimRoot claimRoot, PatternPacket payoutPattern, PatternPacket reportingPattern) {
         this(payoutPattern, reportingPattern);
         this.claimRoot = claimRoot;
