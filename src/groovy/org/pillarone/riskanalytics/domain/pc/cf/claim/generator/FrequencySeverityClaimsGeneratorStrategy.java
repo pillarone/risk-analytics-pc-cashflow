@@ -62,14 +62,17 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
                                           List uwInfosFilterCriteria, List<FactorsPacket> factorPackets,
                                           PeriodScope periodScope, List<SystematicFrequencyPacket> systematicFrequencies,
                                           IPerilMarker filterCriteria) {
-
-        setGenerator(claimsSizeDistribution, claimsSizeModification);
         RandomFrequencyDistribution systematicFrequencyDistribution = ClaimsGeneratorUtils.extractFrequencyDistribution(systematicFrequencies, filterCriteria);
         setClaimNumberGenerator(FrequencyDistributionUtils.getIdiosyncraticDistribution(frequencyDistribution, systematicFrequencyDistribution),
                 frequencyModification);
         List<Factors> factors = IndexUtils.filterFactors(factorPackets, frequencyIndices);
         baseClaims.addAll(generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, frequencyBase, factors, periodScope));
         return baseClaims;
+    }
+
+    @Override
+    void lazyInitClaimsSizeGenerator() {
+        setGenerator(claimsSizeDistribution, claimsSizeModification);
     }
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
