@@ -53,7 +53,8 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 inFactors, this, periodScope);
             severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices());
         }
-        List<ClaimCashflowPacket> claims = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, periodCounter, severityFactors);
+        List<ClaimCashflowPacket> claims = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, parmActualClaims,
+                periodScope, severityFactors);
         developClaimsOfFormerPeriods(claims, periodCounter, severityFactors);
         setTechnicalProperties(claims);
         outClaims.addAll(claims);

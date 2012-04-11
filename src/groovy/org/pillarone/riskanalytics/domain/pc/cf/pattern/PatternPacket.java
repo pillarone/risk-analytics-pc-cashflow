@@ -38,14 +38,36 @@ public class PatternPacket extends Packet implements Cloneable {
         this.patternMarker = patternMarker;
         this.cumulativeValues = cumulativeValues;
         this.cumulativePeriods = cumulativePeriods;
+        checkIncreasingPeriodLengths();
     }
 
     public PatternPacket(Class<? extends IPatternMarker> patternMarker, List<Double> cumulativeValues, 
                          List<Period> cumulativePeriods, boolean stochasticHitPattern) {
-        this.patternMarker = patternMarker;
-        this.cumulativeValues = cumulativeValues;
-        this.cumulativePeriods = cumulativePeriods;
+        this(patternMarker, cumulativeValues, cumulativePeriods);
         this.stochasticHitPattern = stochasticHitPattern;
+    }
+
+    /**
+     * @param originalPattern used for the patternMarker and stochasticHitPattern property
+     * @param cumulativeValues
+     * @param cumulativePeriods
+     */
+    public PatternPacket(PatternPacket originalPattern, List<Double> cumulativeValues, List<Period> cumulativePeriods) {
+        this(originalPattern.patternMarker, cumulativeValues, cumulativePeriods, originalPattern.stochasticHitPattern);
+    }
+
+    /**
+     * throws an IllegalArgumentException if cumulativePeriods are not of increasing duration.
+     */
+    private void checkIncreasingPeriodLengths() {
+        DateTime reference = new DateTime(2010,1,1,0,0,0,0);
+        Period previousPeriod = Period.days(0);
+        for (Period period : cumulativePeriods) {
+            if (reference.plus(previousPeriod).isAfter(reference.plus(period))) {
+                throw new IllegalArgumentException("Periods need to be increasing!");
+            }
+            previousPeriod = period;
+        }
     }
 
     /**

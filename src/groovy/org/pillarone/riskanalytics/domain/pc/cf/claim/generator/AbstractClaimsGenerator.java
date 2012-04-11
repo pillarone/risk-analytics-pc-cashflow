@@ -23,6 +23,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.IAggregateActualClaimsStrategy;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.marker.ICorrelationMarker;
@@ -51,6 +52,7 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
     protected PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
 
     protected boolean globalDeterministicMode = false;
+    private DateTime globalUpdateDate;
 
     public static final String REAL_PERIOD = "Period (real number)";
     public static final String CLAIM_VALUE = "Claim value";
@@ -62,27 +64,33 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
 
     /**
      * Derives claim packets for the current period (periodCounter) by applying payout pattern and factors. If future
-     * payout will occur base claims written to the periodStore with key GROSS_CLAIMS
+     * payout will occur base claims are written to the periodStore with key GROSS_CLAIMS. For actual claims the
+     * payout pattern is adjusted according the already existing payout history.
      * @param baseClaims
      * @param parmPayoutPattern
-     * @param periodCounter needed to derive the payouts in the current period
+     * @param periodScope needed to derive the payouts in the current period
      * @param factors so far applied to the outstanding
      * @return claim packets of this period
      */
     protected List<ClaimCashflowPacket> claimsOfCurrentPeriod(List<ClaimRoot> baseClaims, ConstrainedString parmPayoutPattern,
-                                                IPeriodCounter periodCounter, List<Factors> factors) {
+                                                              IAggregateActualClaimsStrategy parmActualClaims,
+                                                              PeriodScope periodScope, List<Factors> factors) {
+        PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
+        List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
         List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
         if (!baseClaims.isEmpty()) {
-            PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
-            List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
+            int currentPeriod = periodScope.getCurrentPeriod();
             for (ClaimRoot baseClaim : baseClaims) {
-                GrossClaimRoot grossClaimRoot = new GrossClaimRoot(baseClaim, payoutPattern);
+                GrossClaimRoot grossClaimRoot = parmActualClaims.claimWithAdjustedPattern(baseClaim, currentPeriod,
+                        payoutPattern, periodScope.getPeriodCounter(), globalUpdateDate);
                 if (!grossClaimRoot.hasTrivialPayout()) {
                     // add claim only to period store if development in future periods is required
                     grossClaimRoots.add(grossClaimRoot);
                 }
-                claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, true));
+                claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodScope.getPeriodCounter(), factors, true));
             }
+        }
+        if (!grossClaimRoots.isEmpty()) {
             periodStore.put(GROSS_CLAIMS, grossClaimRoots);
         }
         return claims;
@@ -246,5 +254,13 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
 
     public void setGlobalDeterministicMode(boolean globalDeterministicMode) {
         this.globalDeterministicMode = globalDeterministicMode;
+    }
+
+    public DateTime getGlobalUpdateDate() {
+        return globalUpdateDate;
+    }
+
+    public void setGlobalUpdateDate(DateTime globalUpdateDate) {
+        this.globalUpdateDate = globalUpdateDate;
     }
 }
