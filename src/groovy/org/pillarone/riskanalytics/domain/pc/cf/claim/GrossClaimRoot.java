@@ -107,7 +107,10 @@ public final class GrossClaimRoot implements IClaimRoot {
                 if (claimRoot.getOccurrenceDate().plus(payoutPattern.getLastCumulativePeriod()).isAfter(periodCounter.getCurrentPeriodStart())) {
                     DateTime artificalPayoutDate = periodCounter.getCurrentPeriodStart();
                     payouts = payoutPattern.getDateFactorsTillStartOfCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter);
-                    double payoutCumulatedFactor = payouts.get(payouts.size() - 1).getFactorCumulated();
+                    double payoutCumulatedFactor = 0; // if there was no payout before the current period, avoid boundary exception
+                    if (payouts.size() > 0) {
+                        payoutCumulatedFactor = payouts.get(payouts.size() - 1).getFactorCumulated();
+                    }
                     double factor = manageFactor(factors, artificalPayoutDate, periodCounter, claimRoot.getOccurrenceDate());
                     double reserves = claimRoot.getUltimate() * (1 - payoutCumulatedFactor) * factor;
                     double changeInReserves = reserves - remainingReserves;

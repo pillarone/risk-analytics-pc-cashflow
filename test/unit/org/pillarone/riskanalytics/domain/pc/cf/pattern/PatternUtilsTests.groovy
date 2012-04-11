@@ -1,9 +1,34 @@
 package org.pillarone.riskanalytics.domain.pc.cf.pattern
 
+import org.joda.time.DateTime
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
+import org.pillarone.riskanalytics.core.simulation.TestPeriodCounterUtilities
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
+import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
+
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 class PatternUtilsTests extends GroovyTestCase {
+
+    public static final Double EPSILON = 1E-10
+
+    private static DateTime date20110630 = new DateTime(2011,6,30,0,0,0,0)
+    private static DateTime date20111231 = new DateTime(2011,12,31,0,0,0,0)
+    private static DateTime date20120630 = new DateTime(2012,6,30,0,0,0,0)
+    private static DateTime date20130731 = new DateTime(2013,7,31,0,0,0,0)
+    private static DateTime date20140731 = new DateTime(2014,7,31,0,0,0,0)
+    private static DateTime date20150731 = new DateTime(2015,7,31,0,0,0,0)
+    private static DateTime date20130331 = new DateTime(2013,3,31,0,0,0,0)
+    private static DateTime date20160731 = new DateTime(2016,7,31,0,0,0,0)
+    private static DateTime date20120401 = new DateTime(2012,4,1,0,0,0,0)
+    private static DateTime date20130401 = new DateTime(2013,4,1,0,0,0,0)
+    private static DateTime date20140801 = new DateTime(2014,8,1,0,0,0,0)
+    private static DateTime date20150801 = new DateTime(2015,8,1,0,0,0,0)
+    private static DateTime date20160801 = new DateTime(2016,8,1,0,0,0,0)
+    private static DateTime date20121215 = new DateTime(2012,12,15,0,0,0,0)
 
     void testSynchronizePatternsIdenticalPeriods() {
         PatternPacket payoutPattern = PatternPacketTests.getPattern([0, 3, 12, 24], [0d, 0.2d, 0.8d, 1d])
@@ -75,5 +100,149 @@ class PatternUtilsTests extends GroovyTestCase {
         assertEquals "payout pattern value after 9 months", payoutPattern.getCumulativeValues().get(1), payoutPattern.getCumulativeValues().get(2)
         assertEquals "payout pattern value after 15 months", payoutPattern.getCumulativeValues().get(3), payoutPattern.getCumulativeValues().get(4)
         assertEquals "reporting pattern value after 30 months", reportingPattern.getCumulativeValues().get(5), reportingPattern.getCumulativeValues().get(6)
+    }
+
+    void testAdjustedPattern() {
+        PatternPacket originalPattern = PatternPacketTests.getPattern([15, 27, 43, 55, 67], [0.2d, 0.45d, 0.75d, 0.95d, 1d])
+        DateTime periodStartDate = new DateTime(2011,1,1,0,0,0,0)
+        DateTime updateDate = new DateTime(2012,12,14,0,0,0,0)
+
+
+        TreeMap<DateTime, Double> claimUpdates = new TreeMap<DateTime, Double>()
+        claimUpdates.put(date20110630, 500d)
+        claimUpdates.put(date20111231, 1000d)
+        claimUpdates.put(date20120630, 1250d)
+        PatternPacket adjustedPattern = PatternUtils.adjustedPattern(originalPattern, claimUpdates, 15000d,
+                periodStartDate, updateDate)
+
+        int periods = 7
+        IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
+        List<ClaimCashflowPacket> claims = []
+        GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate), adjustedPattern)
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, true))
+        for (int period = 0; period < periods; period++) {
+            periodCounter.next()
+            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
+        }
+        List<Double> incrementalClaims = [500d, 500d, 250d, 3505.4092191909685d, 5587.958607714017d, 3725.305738476009d, 931.3264346190031d]
+        List<DateTime> payoutDates = [date20110630, date20111231, date20120630, date20130331, date20140731, date20150731, date20160731]
+        int index = 0
+        for (ClaimCashflowPacket claim : claims) {
+//            println "incremental$index @ ${claim.getUpdateDate()} ${claim.getPaidIncrementalIndexed()}"
+            assertEquals "incremental$index @ ${claim.getUpdateDate()}", incrementalClaims[index], claim.getPaidIncrementalIndexed(), EPSILON
+            assertEquals "payoutdates$index", payoutDates[index++], claim.getUpdateDate()
+        }
+        assertEquals "total", 15000d, claims*.getPaidIncrementalIndexed().sum(), EPSILON
+    }
+
+    void testAdjustedPatternNoUpdateInFirstContractPeriod() {
+        PatternPacket originalPattern = PatternPacketTests.getPattern([15, 27, 43, 55, 67], [0.2d, 0.45d, 0.75d, 0.95d, 1d])
+        DateTime periodStartDate = new DateTime(2010,1,1,0,0,0,0)
+        DateTime updateDate = new DateTime(2012,12,14,0,0,0,0)
+
+
+        TreeMap<DateTime, Double> claimUpdates = new TreeMap<DateTime, Double>()
+        claimUpdates.put(date20110630, 500d)
+        claimUpdates.put(date20111231, 1000d)
+        claimUpdates.put(date20120630, 1250d)
+        PatternPacket adjustedPattern = PatternUtils.adjustedPattern(originalPattern, claimUpdates, 15000d,
+                periodStartDate, updateDate)
+
+        int periods = 7
+        IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
+        List<ClaimCashflowPacket> claims = []
+        GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate), adjustedPattern)
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, true))
+        for (int period = 0; period < periods; period++) {
+            periodCounter.next()
+            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
+        }
+        List<Double> incrementalClaims = [0d, 500d, 500d, 250d, 6796.77623261694d, 5562.579013906447d, 1390.6447534766137d]
+        List<DateTime> payoutDates = [periodStartDate, date20110630, date20111231, date20120630, date20130731, date20140731, date20150731]
+        int index = 0
+        for (ClaimCashflowPacket claim : claims) {
+//            println "incremental$index @ ${claim.getUpdateDate()} ${claim.getPaidIncrementalIndexed()}"
+            assertEquals "incremental$index @ ${claim.getUpdateDate()}", incrementalClaims[index], claim.getPaidIncrementalIndexed(), EPSILON
+            assertEquals "payoutdates$index", payoutDates[index++], claim.getUpdateDate()
+        }
+        assertEquals "total", 15000d, claims*.getPaidIncrementalIndexed().sum(), EPSILON
+    }
+
+    void testAdjustedPatternHistoryVoid() {
+        PatternPacket originalPattern = PatternPacketTests.getPattern([15, 27, 43, 55, 67], [0.2d, 0.45d, 0.75d, 0.95d, 1d])
+        DateTime periodStartDate = new DateTime(2011,1,1,0,0,0,0)
+        DateTime updateDate = new DateTime(2011,3,1,0,0,0,0)
+
+        TreeMap<DateTime, Double> claimUpdates = new TreeMap<DateTime, Double>()
+        PatternPacket adjustedPattern = PatternUtils.adjustedPattern(originalPattern, claimUpdates, 15000d,
+                new DateTime(2011,1,1,0,0,0,0), updateDate)
+
+        int periods = 7
+        IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
+        List<ClaimCashflowPacket> claims = []
+        GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate), adjustedPattern)
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, true))
+        for (int period = 0; period < periods; period++) {
+            periodCounter.next()
+            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
+        }
+        List<Double> incrementalClaims = [0d, 3000d, 3750d, 4500d, 3000d, 750d]
+        List<DateTime> payoutDates = [periodStartDate, date20120401, date20130401, date20140801, date20150801, date20160801]
+        int index = 0
+        for (ClaimCashflowPacket claim : claims) {
+//            println "incremental$index @ ${claim.getUpdateDate()} ${claim.getPaidIncrementalIndexed()}"
+            assertEquals "incremental$index @ ${claim.getUpdateDate()}", incrementalClaims[index], claim.getPaidIncrementalIndexed(), EPSILON
+            assertEquals "payoutdates$index", payoutDates[index++], claim.getUpdateDate()
+        }
+        assertEquals "total", 15000d, claims*.getPaidIncrementalIndexed().sum(), EPSILON
+    }
+
+    void testAdjustedPatternFullyDeveloped() {
+        PatternPacket originalPattern = PatternPacketTests.getPattern([15, 27, 43, 55, 67], [0.2d, 0.45d, 0.75d, 0.95d, 1d])
+        DateTime periodStartDate = new DateTime(2011,1,1,0,0,0,0)
+        DateTime updateDate = new DateTime(2013,3,1,0,0,0,0)
+
+        TreeMap<DateTime, Double> claimUpdates = new TreeMap<DateTime, Double>()
+        claimUpdates.put(date20110630, 500d)
+        claimUpdates.put(date20111231, 1000d)
+        claimUpdates.put(date20120630, 1250d)
+        claimUpdates.put(date20121215, 15000d)
+        PatternPacket adjustedPattern = PatternUtils.adjustedPattern(originalPattern, claimUpdates, 15000d,
+                periodStartDate, updateDate)
+
+        int periods = 1
+        IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
+        List<ClaimCashflowPacket> claims = []
+        GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate), adjustedPattern)
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, true))
+        for (int period = 0; period < periods; period++) {
+            periodCounter.next()
+            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
+        }
+        List<Double> incrementalClaims = [500d, 500d, 250d, 13750d]
+        List<DateTime> payoutDates = [date20110630, date20111231, date20120630, date20121215]
+        int index = 0
+        for (ClaimCashflowPacket claim : claims) {
+//            println "incremental$index @ ${claim.getUpdateDate()} ${claim.getPaidIncrementalIndexed()}"
+            assertEquals "incremental$index @ ${claim.getUpdateDate()}", incrementalClaims[index], claim.getPaidIncrementalIndexed(), EPSILON
+            assertEquals "payoutdates$index", payoutDates[index++], claim.getUpdateDate()
+        }
+        assertEquals "total", 15000d, claims*.getPaidIncrementalIndexed().sum(), EPSILON
+    }
+
+    void testInterpolatedRate() {
+        PatternPacket originalPattern = PatternPacketTests.getPattern([15, 27, 43, 55, 67], [0.2d, 0.45d, 0.75d, 0.95d, 1d])
+        DateTime periodStartDate = new DateTime(2011,1,1,0,0,0,0)
+
+        TreeMap<DateTime, Double> claimUpdates = new TreeMap<DateTime, Double>()
+        claimUpdates.put(date20110630, 500d)
+        claimUpdates.put(date20111231, 1000d)
+        claimUpdates.put(date20120630, 1250d)
+
+        double elapsedMonthsTillLastReportedDate = PatternUtils.days360(periodStartDate, date20120630) / 30d;
+        assertEquals "elapsed months", 17.966666666666665, elapsedMonthsTillLastReportedDate
+        assertEquals "interpolated", 0.26180555555555557,  PatternUtils.interpolatedRate(originalPattern, 1, elapsedMonthsTillLastReportedDate)
+        assertEquals "next", 0.45, PatternUtils.interpolatedRate(originalPattern, 2, 27)
+
     }
 }
