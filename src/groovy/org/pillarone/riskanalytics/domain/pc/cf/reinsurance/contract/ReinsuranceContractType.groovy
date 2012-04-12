@@ -45,42 +45,42 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
     public static final ReinsuranceContractType SURPLUS = new ReinsuranceContractType("surplus", "SURPLUS",
             ["retention": 0d, "lines": 0d, "defaultCededLossShare": 0d, 'commission': CommissionStrategyType.getNoCommission()])
     public static final ReinsuranceContractType WXL = new ReinsuranceContractType("wxl", "WXL", [
-            "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d, "aggregateLimit": 0d,
+            "attachmentPoint": 0d, "limit": 0d, "aggregateDeductible":0d, "aggregateLimit": 0d,
             "stabilization": StabilizationStrategyType.getDefault(),
             "premiumBase": XLPremiumBase.ABSOLUTE, "premium": 0d,
             "reinstatementPremiums": new ConstrainedMultiDimensionalParameter([], ['Reinstatement Premium'],
                 ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
             "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),])
     public static final ReinsuranceContractType CXL = new ReinsuranceContractType("cxl", "CXL", [
-            "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d, "aggregateLimit": 0d,
+            "attachmentPoint": 0d, "limit": 0d, "aggregateDeductible":0d, "aggregateLimit": 0d,
             "stabilization": StabilizationStrategyType.getDefault(),
             "premiumBase": XLPremiumBase.ABSOLUTE, "premium": 0d,
             "reinstatementPremiums": new ConstrainedMultiDimensionalParameter([], ['Reinstatement Premium'],
                 ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
             "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),])
     public static final ReinsuranceContractType WCXL = new ReinsuranceContractType("wcxl", "WCXL", [
-            "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d, "aggregateLimit": 0d,
+            "attachmentPoint": 0d, "limit": 0d, "aggregateDeductible":0d, "aggregateLimit": 0d,
             "stabilization": StabilizationStrategyType.getDefault(),
             "premiumBase": XLPremiumBase.ABSOLUTE, "premium": 0d,
             "reinstatementPremiums": new ConstrainedMultiDimensionalParameter([], ['Reinstatement Premium'],
                 ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
             "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),])
     public static final ReinsuranceContractType WXLTERM = new ReinsuranceContractType("wxl", "WXL", [
-            "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d, "aggregateLimit": 0d,
+            "attachmentPoint": 0d, "limit": 0d, "aggregateDeductible":0d, "aggregateLimit": 0d,
             "termDeductible":0d, "termLimit":0d,"stabilization": StabilizationStrategyType.getDefault(),
             "premiumBase": XLPremiumBase.ABSOLUTE, "premium": 0d,
             "reinstatementPremiums": new ConstrainedMultiDimensionalParameter([], ['Reinstatement Premium'],
                     ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
             "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),])
     public static final ReinsuranceContractType CXLTERM = new ReinsuranceContractType("cxl", "CXL", [
-            "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d, "aggregateLimit": 0d,
+            "attachmentPoint": 0d, "limit": 0d, "aggregateDeductible":0d, "aggregateLimit": 0d,
             "termDeductible":0d, "termLimit":0d,"stabilization": StabilizationStrategyType.getDefault(),
             "premiumBase": XLPremiumBase.ABSOLUTE, "premium": 0d,
             "reinstatementPremiums": new ConstrainedMultiDimensionalParameter([], ['Reinstatement Premium'],
                     ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
             "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),])
     public static final ReinsuranceContractType WCXLTERM = new ReinsuranceContractType("wcxl", "WCXL", [
-            "aggregateDeductible":0d, "attachmentPoint": 0d, "limit": 0d, "aggregateLimit": 0d,
+            "attachmentPoint": 0d, "limit": 0d, "aggregateDeductible":0d, "aggregateLimit": 0d,
             "termDeductible":0d, "termLimit":0d,"stabilization": StabilizationStrategyType.getDefault(),
             "premiumBase": XLPremiumBase.ABSOLUTE, "premium": 0d,
             "reinstatementPremiums": new ConstrainedMultiDimensionalParameter([], ['Reinstatement Premium'],
