@@ -151,6 +151,9 @@ class GIRAModel extends StochasticModel {
     IPeriodCounter createPeriodCounter(DateTime beginOfFirstPeriod) {
         Period developmentPeriod = lastPatternPeriod()
         int numberOfYears = Math.max(1, Math.ceil(developmentPeriod.months / 12d) + 1)
+        if (globalParameters.parmProjection.periodNumberRestricted()) {
+            numberOfYears = Math.max(1, Math.ceil(developmentPeriod.months / 12d))
+        }
         return new LimitedContinuousPeriodCounter(globalParameters.parmProjectionStartDate, Period.years(1), numberOfYears)
     }
 
