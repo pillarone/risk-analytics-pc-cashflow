@@ -8,7 +8,6 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.ReserveVolatility;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 
 import java.util.HashMap;
@@ -20,16 +19,14 @@ import java.util.Map;
 public class AggregateActualClaimsStrategy extends AbstractParameterObject implements IAggregateActualClaimsStrategy {
 
     private ConstrainedMultiDimensionalParameter history = getDefaultHistory();
-    private ReserveVolatility reserveVolatility = ReserveVolatility.NONE;
 
     public IParameterObjectClassifier getType() {
         return AggregateActualClaimsStrategyType.AGGREGATE;
     }
 
     public Map getParameters() {
-        Map<String, Object> parameters = new HashMap<String, Object>(2);
+        Map<String, Object> parameters = new HashMap<String, Object>(1);
         parameters.put("history", history);
-//        parameters.put("reserveVolatility", reserveVolatility);
         return parameters;
     }
 
@@ -61,7 +58,8 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
                     historicClaimsPerContractPeriod.put(contractPeriod, claim);
                 }
                 double cumulativePaid = InputFormatConverter.getDouble(history.getValueAt(row, AggregateHistoricClaimsConstraints.PAID_AMOUNT_INDEX));
-                claim.add(reportedDate, cumulativePaid);
+                double cumulativeReported = InputFormatConverter.getDouble(history.getValueAt(row, AggregateHistoricClaimsConstraints.REPORTED_AMOUNT_INDEX));
+                claim.add(reportedDate, cumulativeReported, cumulativePaid);
             }
         }
     }
@@ -86,6 +84,11 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
             }
         }
         return new GrossClaimRoot(claimRoot, payoutPattern);
+    }
+
+    public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate) {
+        lazyInitHistoricClaimsPerContractPeriod(periodCounter, updateDate);
+        return historicClaimsPerContractPeriod.get(period);
     }
 
     /**

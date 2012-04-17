@@ -10,11 +10,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
-import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -52,7 +48,7 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
     protected PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
 
     protected boolean globalDeterministicMode = false;
-    private DateTime globalUpdateDate;
+    protected DateTime globalUpdateDate;
 
     public static final String REAL_PERIOD = "Period (real number)";
     public static final String CLAIM_VALUE = "Claim value";

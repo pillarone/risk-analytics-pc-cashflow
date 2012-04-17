@@ -16,4 +16,6 @@ public interface IAggregateActualClaimsStrategy extends IParameterObject {
 
     GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
                                             IPeriodCounter periodCounter, DateTime updateDate);
+
+    AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate);
 }

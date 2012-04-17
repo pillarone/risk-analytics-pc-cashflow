@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.*;
 
@@ -17,7 +18,8 @@ import java.util.*;
 public class AggregateHistoricClaim {
 
     private final int contractPeriod;
-    private TreeMap<DateTime, Double> claimUpdates = new TreeMap<DateTime, Double>();
+    private TreeMap<DateTime, Double> claimPaidUpdates = new TreeMap<DateTime, Double>();
+    private TreeMap<DateTime, Double> claimReportedUpdates = new TreeMap<DateTime, Double>();
 
     private DateTime contractPeriodStartDate;
     private PayoutPatternBase base;
@@ -33,19 +35,20 @@ public class AggregateHistoricClaim {
     }
 
     /**
-     * Helper method for updating claimUpdates
+     * Helper method for updating claimPaidUpdates
      * @param reportedDate
      * @param cumulativePaid
      */
-    public void add(DateTime reportedDate, double cumulativePaid) {
-        claimUpdates.put(reportedDate, cumulativePaid);
+    public void add(DateTime reportedDate, double cumulativeReported, double cumulativePaid) {
+        claimReportedUpdates.put(reportedDate, cumulativeReported);
+        claimPaidUpdates.put(reportedDate, cumulativePaid);
     }
 
     private PatternPacket adjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
         DateTime baseDate = payoutPatternBaseDate(claimRoot);
         List<Double> cumulativeValues = new ArrayList<Double>();
         List<Period> cumulativePeriods = new ArrayList<Period>();
-        for (Map.Entry<DateTime, Double> entry : claimUpdates.entrySet()) {
+        for (Map.Entry<DateTime, Double> entry : claimPaidUpdates.entrySet()) {
             cumulativeValues.add(entry.getValue() / Math.abs(claimRoot.getUltimate()));
             cumulativePeriods.add(new Period(baseDate, entry.getKey()));
         }
@@ -54,6 +57,20 @@ public class AggregateHistoricClaim {
 
     public GrossClaimRoot claimWithAdjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
         return new GrossClaimRoot(claimRoot, adjustedPattern(payoutPattern, claimRoot, updateDate));
+    }
+
+    /** last reported before or at updateDate */
+    public double reportedToDate(DateTime updateDate) {
+        return claimReportedUpdates.floorEntry(updateDate).getValue();
+    }
+
+    public DateTime lastReportedDate(DateTime updateDate) {
+        return claimReportedUpdates.floorEntry(updateDate).getKey();
+    }
+
+    public double outstandingShare(PatternPacket pattern, DateTime baseDate, DateTime updateDate) {
+        double elapsedMonths = DateTimeUtilities.days360(baseDate, updateDate) / 30d;
+        return pattern.outstandingShare(elapsedMonths);
     }
 
     private DateTime payoutPatternBaseDate(ClaimRoot claimRoot) {

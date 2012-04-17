@@ -15,7 +15,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.AggregateActualClaimsStrategyType;
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.AggregateUpdatingMethodologyStrategyType;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.IAggregateActualClaimsStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.IAggregateUpdatingMethodologyStrategy;
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints;
 
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
 //            ReinsuranceContractBaseType.PLEASESELECT, new HashMap());
     private ConstrainedString parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker.class, "");
     private IAggregateActualClaimsStrategy parmActualClaims = AggregateActualClaimsStrategyType.getDefault();
-//    private IAggregateUpdatingMethodologyStrategy parmUpdatingMethodology = AggregateUpdatingMethodologyStrategyType.getDefault();
+    private IAggregateUpdatingMethodologyStrategy parmUpdatingMethodology = AggregateUpdatingMethodologyStrategyType.getDefault();
     private ConstrainedMultiDimensionalParameter parmDeterministicClaims = new ConstrainedMultiDimensionalParameter(
             GroovyUtils.convertToListOfList(new Object[]{0d, 0d}), Arrays.asList(REAL_PERIOD, CLAIM_VALUE),
             ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER));
@@ -53,6 +55,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 inFactors, this, periodScope);
             severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices());
         }
+        baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter, globalUpdateDate, inPatterns);
         List<ClaimCashflowPacket> claims = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, parmActualClaims,
                 periodScope, severityFactors);
         developClaimsOfFormerPeriods(claims, periodCounter, severityFactors);

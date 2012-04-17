@@ -3,7 +3,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.pattern;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.AggregateHistoricClaim;
 
 import java.util.ArrayList;
 import java.util.List;

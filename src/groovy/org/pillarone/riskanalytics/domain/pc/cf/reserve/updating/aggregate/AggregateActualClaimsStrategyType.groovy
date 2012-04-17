@@ -4,6 +4,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
+import org.apache.commons.lang.NotImplementedException
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -50,8 +51,8 @@ class AggregateActualClaimsStrategyType extends AbstractParameterObjectClassifie
                 return new NoAggregateActualClaimsStrategy()
             case AggregateActualClaimsStrategyType.AGGREGATE:
                 return new AggregateActualClaimsStrategy(
-                        history: (ConstrainedMultiDimensionalParameter) parameters['history'],
-                        reserveVolatility: parameters['reserveVolatility'])
+                        history: (ConstrainedMultiDimensionalParameter) parameters['history'])
         }
+        throw new NotImplementedException(type.toString() + " is not implemented")
     }
 }

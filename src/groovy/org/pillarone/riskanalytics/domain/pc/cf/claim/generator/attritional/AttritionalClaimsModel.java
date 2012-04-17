@@ -7,8 +7,10 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.*;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AttritionalClaimsGenerator;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IClaimsGeneratorStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IPeriodDependingClaimsGeneratorStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
