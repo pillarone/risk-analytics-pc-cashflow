@@ -47,7 +47,7 @@ abstract public class AbstractSplitCollectingModeStrategy implements ICollecting
         mappingCache = packetCollector.getSimulationScope().getMappingCache();
     }
 
-    abstract public List<SingleValueResultPOJO> collect(PacketList packets);
+    abstract public List<SingleValueResultPOJO> collect(PacketList packets) throws IllegalAccessException;
 
     /**
      * Create a SingleValueResult object for each packetValue.

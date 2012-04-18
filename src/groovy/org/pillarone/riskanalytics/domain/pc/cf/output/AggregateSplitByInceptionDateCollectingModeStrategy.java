@@ -29,27 +29,21 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     private static final String PREMIUM_RISK = "premiumRisk";
     private static final String PERIOD = "period";
 
-    public List<SingleValueResultPOJO> collect(PacketList packets) {
+    public List<SingleValueResultPOJO> collect(PacketList packets) throws IllegalAccessException {
         initSimulation();
         iteration = packetCollector.getSimulationScope().getIterationScope().getCurrentIteration();
         period = packetCollector.getSimulationScope().getIterationScope().getPeriodScope().getCurrentPeriod();
 
         if (isCompatibleWith(packets.get(0).getClass())) {
-            try {
-                List<SingleValueResultPOJO> singleValueResults = createSingleValueResults(aggregate(packets));
-                if (packets.get(0) instanceof ClaimCashflowPacket) {
-                    singleValueResults.addAll(createPremiumReserveRisk(packets));
-                }
-                return singleValueResults;
+            List<SingleValueResultPOJO> singleValueResults = createSingleValueResults(aggregate(packets));
+            if (packets.get(0) instanceof ClaimCashflowPacket) {
+                singleValueResults.addAll(createPremiumReserveRisk(packets));
             }
-            catch (IllegalAccessException ex) {
-//                todo(sku): remove
-            }
+            return singleValueResults;
         } else {
             String notImplemented = ResourceBundle.getBundle(RESOURCE_BUNDLE).getString("AggregateSplitByInceptionDateCollectingModeStrategy.notImplemented");
             throw new NotImplementedException(notImplemented + "\n(" + packetCollector.getPath() + ")");
         }
-        return null;
     }
 
     protected SingleValueResultPOJO createSingleValueResult(String path, String fieldName, Double value) {
