@@ -40,7 +40,8 @@ public class ReinsuranceContract extends BaseReinsuranceContract implements IRei
     }
 
     /**
-     * add in every covered period a new contract to the periodStore
+     * Add for every covered period a new contract instance to the periodStore. Generally contracts of different periods
+     * are completely independent except there is a common term clause.
      */
     protected void updateContractParameters() {
         if (isCurrentPeriodCovered()) {
@@ -53,6 +54,7 @@ public class ReinsuranceContract extends BaseReinsuranceContract implements IRei
      * All incoming claims are removed if there is no counter party left.
      */
     protected void timeFilter() {
+        super.timeFilter();
         DateTime noCoverAfter = counterPartyFactors.allCounterPartiesDefaultAfter();
         List<ClaimCashflowPacket> uncoveredClaims = new ArrayList<ClaimCashflowPacket>();
         for (ClaimCashflowPacket grossClaim : getInClaims()) {

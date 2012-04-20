@@ -79,11 +79,11 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
-        IClaimRoot cededBaseClaim = storage.getCededClaimRoot();
-        if (cededBaseClaim == null) {
-            // first time this gross claim is treated by this contract
-            cededBaseClaim = storage.lazyInitCededClaimRoot(aggregateClaimStorage.getCededFactorUltimate());
-        }
+//        IClaimRoot cededBaseClaim = storage.getCededClaimRoot();
+//        if (cededBaseClaim == null) {
+//            // first time this gross claim is treated by this contract
+//            cededBaseClaim = storage.lazyInitCededClaimRoot(aggregateClaimStorage.getCededFactorUltimate());
+//        }
         ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage,
                 aggregateClaimStorage.getCededFactorUltimate(),
                 aggregateClaimStorage.getCededFactorReported(),

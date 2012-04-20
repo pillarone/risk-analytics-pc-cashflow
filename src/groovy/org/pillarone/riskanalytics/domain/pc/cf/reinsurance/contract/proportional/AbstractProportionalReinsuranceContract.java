@@ -19,9 +19,14 @@ abstract public class AbstractProportionalReinsuranceContract extends AbstractRe
     /** used to make sure that fixed premium is paid only in first period */
     private boolean isStartCoverPeriod = true;
 
+    /**
+     * Clearing grossUwInfos and cededUwInfos lists
+     * @param period
+     * @param inFactors
+     */
     @Override
     public void initPeriod(int period, List<FactorsPacket> inFactors) {
-        super.initPeriod(period, inFactors);    //To change body of overridden methods use File | Settings | File Templates.
+        super.initPeriod(period, inFactors);
         grossUwInfos.clear();
         cededUwInfos.clear();
     }

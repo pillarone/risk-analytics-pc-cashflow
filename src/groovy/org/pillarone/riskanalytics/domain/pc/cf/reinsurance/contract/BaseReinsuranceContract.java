@@ -96,16 +96,9 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         splitCededClaimsByCounterParty();
         processUnderwritingInfo();
         splitCededUnderwritingInfoByCounterParty();
-        processUnderwritingInfoGNPI();
+        fillUnderwritingInfoGNPIChannel();
         discountClaims(periodCounter);
-        fillContractFinancials(periodCounter);
-    }
-
-    private void fillContractFinancials(IPeriodCounter periodCounter) {
-        if (isSenderWired(outContractFinancials)) {
-            outContractFinancials.addAll(ContractFinancialsPacket.getContractFinancialsPacketsByInceptionPeriod(outClaimsCeded,
-                outClaimsNet, outUnderwritingInfoCeded, outUnderwritingInfoNet, periodCounter));
-        }
+        fillContractFinancialsChannel(periodCounter);
     }
 
     /** initialize counterPartyFactorsInit */
@@ -122,10 +115,6 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         }
     }
 
-    protected boolean firstIterationAndPeriod() {
-        return iterationScope.isFirstIteration() && iterationScope.getPeriodScope().isFirstPeriod();
-    }
-
     /** reset counterPartyFactors */
     protected void initIteration() {
         if (iterationScope.getPeriodScope().isFirstPeriod()) {
@@ -133,14 +122,18 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         }
     }
 
+    /**
+     * Resetting contract member variables like deductibles, limits, ...
+     * @param contracts to be prepared for the calculation of the current period
+     */
     private void initPeriod(Set<IReinsuranceContract> contracts) {
-        initProportionalContract(contracts);
+        initIsProportionalContract(contracts);
         int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
         if (isProportionalContract) {
             for (int period = 0; period < currentPeriod; period++) {
                 IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, -currentPeriod + period);
                 if (contract != null) {
-                    // for all proportional contracts underwriting info of preceding periods needs to be clear
+                    // for all proportional contracts underwriting info of preceding periods needs to be cleared
                     contract.initPeriod(currentPeriod, inFactors);
                 }
             }
@@ -161,12 +154,10 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
     }
 
     /**
-     * Filter according to covered period, occurrence date of claim and defaulting counter parties.
-     * All incoming claims are removed if there is no counter party left.
+     *  Filter according to covered period, occurrence date of claim and defaulting counter parties.
      */
     protected void timeFilter() {
     }
-
 
     private void updateCounterPartyFactors() {
         List<LegalEntity> counterParties = parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX);
@@ -190,15 +181,16 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
     }
 
     /**
-     * add in every covered period a new contract to the periodStore
+     * Add for every covered period a new contract instance to the periodStore. Generally contracts of different periods
+     * are completely independent except there is a common term clause.
      */
     abstract void updateContractParameters();
 
     /**
      * Make sure a ClaimStorage object is created for every new CashflowClaimPacket and put in the first time slot of
      * the periodStore with key CLAIM_HISTORY. This object contains the incremental history for paid and reported.
-     * Put a list of claims sorted by update date with an update in this period containing a reference to their history to the
-     * current periodStore time slot using key GROSS_CLAIMS.
+     * Put a list of claims sorted by update date with an update in this period containing a reference to their history
+     * to the current periodStore time slot using key GROSS_CLAIMS.
      *
      * @return all contracts with new claim updates in current period
      */
@@ -210,26 +202,24 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = new ArrayList<ClaimHistoryAndApplicableContract>();
         int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
         if (claimsHistories == null) {
+            // executed in first period
             claimsHistories = new HashMap<IClaimRoot, ClaimStorage>();
             periodStore.put(CLAIM_HISTORY, claimsHistories);
             for (ClaimCashflowPacket claim : inClaims) {
+                // claimsHistory needs to be queried for first period too as there might be several claim updates in it
                 ClaimStorage claimStorage = claimsHistories.get(claim.getKeyClaim());
                 // PMO-1963: calculation of an occurrence period before the projection start does not work
                 //           as current retrospective contracts don't cover specific periods all is mapped to period 0
                 int occurrencePeriod = 0;
                 if (claim.reserve() == null) {
+                    // claim source is not a reserve generator
                     occurrencePeriod = claim.occurrencePeriod(periodCounter);
                 }
                 if (claimStorage == null) {
-                    contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, currentPeriod, claimsHistories,
-                            currentPeriodGrossClaims));
+                    // first time this claim enters this contract
+                    claimStorage = newClaimOccurredInCurrentPeriod(claim, claimsHistories);
                 }
-                else {
-                    IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, occurrencePeriod - currentPeriod);
-                    contracts.add(contract);
-                    ClaimHistoryAndApplicableContract claimWithHistory = new ClaimHistoryAndApplicableContract(claim, claimStorage, contract);
-                    currentPeriodGrossClaims.add(claimWithHistory);
-                }
+                updateCurrentPeriodGrossClaims(contracts, currentPeriodGrossClaims, currentPeriod, claim, occurrencePeriod, claimStorage);
             }
         }
         else {
@@ -242,39 +232,59 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
                 }
                 ClaimStorage claimStorage = claimsHistories.get(claim.getKeyClaim());
                 if (currentPeriod == occurrencePeriod && claimStorage == null) {
-                    contracts.add(newClaimOccurredInCurrentPeriod(claim, occurrencePeriod, currentPeriod, claimsHistories,
-                            currentPeriodGrossClaims));
+                    claimStorage = newClaimOccurredInCurrentPeriod(claim, claimsHistories);
                 }
-                else if (claimStorage != null)  {
-                    IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, occurrencePeriod - currentPeriod);
-                    contracts.add(contract);
-                    ClaimHistoryAndApplicableContract claimWithHistory = new ClaimHistoryAndApplicableContract(claim, claimStorage, contract);
-                    currentPeriodGrossClaims.add(claimWithHistory);
+                if (claimStorage != null)  {
+                    updateCurrentPeriodGrossClaims(contracts, currentPeriodGrossClaims, currentPeriod, claim, occurrencePeriod, claimStorage);
                 }
                 else {
                     LOG.error("claimStorage is null");
                 }
             }
         }
+        // sort currentPeriodGrossClaims by updateDate
         Collections.sort(currentPeriodGrossClaims, SortClaimHistoryAndApplicableContract.getInstance());
         periodStore.put(GROSS_CLAIMS, currentPeriodGrossClaims);
         return contracts;
     }
 
-    private IReinsuranceContract newClaimOccurredInCurrentPeriod(ClaimCashflowPacket claim, int occurrencePeriod,
-                                                                 int currentPeriod, Map<IClaimRoot, ClaimStorage> claimsHistories,
-                                                                 List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims) {
+    /**
+     *
+     * @param contracts the contract covering the claim is added to the set
+     * @param currentPeriodGrossClaims is extended with the ClaimHistoryAndApplicableContract of the claim, claimStorage and contract
+     * @param currentPeriod used to get the applicable contract from the periodStore
+     * @param claim is used to fill currentPeriodGrossClaims
+     * @param occurrencePeriod used to get the applicable contract from the periodStore
+     * @param claimStorage is used to fill currentPeriodGrossClaims
+     */
+    private void updateCurrentPeriodGrossClaims(Set<IReinsuranceContract> contracts,
+                                                List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims,
+                                                int currentPeriod, ClaimCashflowPacket claim, int occurrencePeriod,
+                                                ClaimStorage claimStorage) {
         IReinsuranceContract contract = (IReinsuranceContract) periodStore.get(REINSURANCE_CONTRACT, occurrencePeriod - currentPeriod);
-        ClaimStorage claimStorage = new ClaimStorage(claim);
-        claimsHistories.put(claim.getKeyClaim(), claimStorage);
+        contracts.add(contract);
         ClaimHistoryAndApplicableContract claimWithHistory = new ClaimHistoryAndApplicableContract(claim, claimStorage, contract);
         currentPeriodGrossClaims.add(claimWithHistory);
-        return contract;
     }
 
+    /**
+     *
+     * @param claim is used to fill the claimsHistories
+     * @param claimsHistories gets a new element using the key claim and a ClaimStorage created of the claim
+     * @return contract covering the claim
+     */
+    private ClaimStorage newClaimOccurredInCurrentPeriod(ClaimCashflowPacket claim, Map<IClaimRoot, ClaimStorage> claimsHistories) {
+        ClaimStorage claimStorage = new ClaimStorage(claim);
+        claimsHistories.put(claim.getKeyClaim(), claimStorage);
+        return claimStorage;
+    }
+
+    /**
+     * Calls contract.initPeriodClaims for each contract
+     * @param contracts
+     */
     private void initContracts(Set<IReinsuranceContract> contracts) {
         for (IReinsuranceContract contract : contracts) {
-            // todo(sku): the following lines are required only if initPeriodClaims() has a non trivial implementation for this contract, avoid!
             List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
             List<ClaimCashflowPacket> contractGrossClaims = new ArrayList<ClaimCashflowPacket>();
             for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
@@ -331,6 +341,11 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         periodStore.put(NET_BASE_CLAIMS, netBaseClaimPerGrossClaim, 1);
     }
 
+    /**
+     * This method fills the outClaimsInward channel if it is wired.
+     * Whereas the outClaimsCeded channel contains the total ceded claim, the outClaimsInward channel needs the ceded 
+     * claim splitted up by counter party by applying the factors provided by counterPartyFactors. The sign is reverted.
+     */
     private void splitCededClaimsByCounterParty() {
         if (isSenderWired(outClaimsInward)) {
             for (ClaimCashflowPacket cededClaim : outClaimsCeded) {
@@ -374,7 +389,6 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             outUnderwritingInfoGross.addAll(inUnderwritingInfo);
         }
         for (IReinsuranceContract contract : contracts) {
-            // todo(sku): how time consuming are isSenderWired() calls? Might be necessary to cache this information.
             double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
             contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, coveredByReinsurers,
                     isSenderWired(outUnderwritingInfoNet));
@@ -387,6 +401,12 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         }
     }
 
+    /**
+     * This method fills the outUnderwritingInfoInward channel if it is wired.
+     * Whereas the outUnderwritingInfoInward channel contains the total ceded claim, the outUnderwritingInfoCeded channel 
+     * needs the ceded claim splitted up by counter party by applying the factors provided by counterPartyFactors. The 
+     * sign is reverted.
+     */
     private void splitCededUnderwritingInfoByCounterParty() {
         if (isSenderWired(outUnderwritingInfoInward)) {
             for (UnderwritingInfoPacket cededUnderwritingInfo : outUnderwritingInfoCeded) {
@@ -399,39 +419,39 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         }
     }
 
-    private void processUnderwritingInfoGNPI() {
+    private void fillUnderwritingInfoGNPIChannel() {
         if (isSenderWired(outUnderwritingInfoGNPI)) {
-            calculateUnderwritingInfoGNPI(inUnderwritingInfo);
-        }
-    }
-
-    private void calculateUnderwritingInfoGNPI(List<UnderwritingInfoPacket> baseUnderwritingInfos) {
-        if (isProportionalContract()) {
-            if (baseUnderwritingInfos.size() == outUnderwritingInfoCeded.size()) {
-                for (int i = 0; i < baseUnderwritingInfos.size(); i++) {
-                    // todo(sku): this implementation is dangerous: it assumes the same order of in and out uw info items
-                    if (baseUnderwritingInfos.get(i).getOriginal().equals(outUnderwritingInfoCeded.get(i).getOriginal())) {
-                        outUnderwritingInfoGNPI.add(baseUnderwritingInfos.get(i).getNet(outUnderwritingInfoCeded.get(i), true));
+            if (isProportionalContract()) {
+                if (inUnderwritingInfo.size() == outUnderwritingInfoCeded.size()) {
+                    for (int i = 0; i < inUnderwritingInfo.size(); i++) {
+                        // todo(sku): this implementation is dangerous: it assumes the same order of in and out uw info items
+                        if (inUnderwritingInfo.get(i).getOriginal().equals(outUnderwritingInfoCeded.get(i).getOriginal())) {
+                            outUnderwritingInfoGNPI.add(inUnderwritingInfo.get(i).getNet(outUnderwritingInfoCeded.get(i), true));
+                        }
+                        else {
+                            throw new RuntimeException("original uw info mismatch.");
+                        }
                     }
-                    else {
-                        throw new RuntimeException("original uw info mismatch.");
-                    }
+                }
+                else {
+                    throw new RuntimeException("different number of incoming GNPI and ceded uw info.");
                 }
             }
             else {
-                throw new RuntimeException("different number of incoming GNPI and ceded uw info.");
-            }
-        }
-        else {
-            for (UnderwritingInfoPacket underwritingInfo : baseUnderwritingInfos) {
-                UnderwritingInfoPacket clone = (UnderwritingInfoPacket) underwritingInfo.clone();
-                clone.setMarker(this);
-                outUnderwritingInfoGNPI.add(clone);
+                // non proportional contracts don't affect incoming underwriting info
+                for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
+                    UnderwritingInfoPacket clone = (UnderwritingInfoPacket) underwritingInfo.clone();
+                    clone.setMarker(this);
+                    outUnderwritingInfoGNPI.add(clone);
+                }
             }
         }
     }
 
-
+    /**
+     * Fills outDiscountedValues and outNetPresentValues if wired by using helper methods of DiscountUtils.
+     * @param periodCounter
+     */
     private void discountClaims(IPeriodCounter periodCounter) {
         if (isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues)) {
             DiscountUtils.getDiscountedGrossValues(outClaimsGross, periodStore, periodCounter);
@@ -444,6 +464,18 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
                 outClaimsNet.clear();
             }
         }
+    }
+
+    private void fillContractFinancialsChannel(IPeriodCounter periodCounter) {
+        if (isSenderWired(outContractFinancials)) {
+            outContractFinancials.addAll(ContractFinancialsPacket.getContractFinancialsPacketsByInceptionPeriod(outClaimsCeded,
+                    outClaimsNet, outUnderwritingInfoCeded, outUnderwritingInfoNet, periodCounter));
+        }
+    }
+
+
+    protected boolean firstIterationAndPeriod() {
+        return iterationScope.isFirstIteration() && iterationScope.getPeriodScope().isFirstPeriod();
     }
 
     protected boolean isCurrentPeriodCovered() {
@@ -568,7 +600,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         this.outUnderwritingInfoGross = outUnderwritingInfoGross;
     }
 
-    public void initProportionalContract(Set<IReinsuranceContract> contracts) {
+    private void initIsProportionalContract(Set<IReinsuranceContract> contracts) {
         if (isProportionalContract == null) {
             isProportionalContract = !contracts.isEmpty() && contracts.iterator().next() instanceof IPropReinsuranceContract;
         }

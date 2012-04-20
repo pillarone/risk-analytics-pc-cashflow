@@ -12,7 +12,7 @@ import java.util.List;
  * <ul>
  *     <li>Reinstatements are calculated on a paid base and cover is refilled permanently.</li>
  *     <li>order of application: (1) attachment point, limit, (2) aggregate deductible, (3) aggregate limit</li>
- *     <li>aggregate deductibles are re-init for every period</li>
+ *     <li>aggregate deductibles are re-init for every period as calculations are based on cumulated values</li>
  * </ul>
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -48,6 +48,7 @@ public class TermXLContract extends XLContract implements INonPropReinsuranceCon
 
     @Override
     public void initPeriod(int period, List<FactorsPacket> inFactors) {
+        super.initPeriod(period, inFactors);
         termLimit.initPeriod(period);
     }
 
