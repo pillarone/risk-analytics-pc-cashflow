@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class ReinsuranceContract extends BaseReinsuranceContract implements IReinsuranceContractMarker {
+public class ReinsuranceContract extends MultiCounterPartyBaseReinsuranceContract implements IReinsuranceContractMarker {
 
     private IPeriodStrategy parmCoveredPeriod = PeriodStrategyType.getDefault();
     private IReinsuranceContractStrategy parmContractStrategy = ReinsuranceContractType.getDefault();
@@ -54,7 +54,6 @@ public class ReinsuranceContract extends BaseReinsuranceContract implements IRei
      * All incoming claims are removed if there is no counter party left.
      */
     protected void timeFilter() {
-        super.timeFilter();
         DateTime noCoverAfter = counterPartyFactors.allCounterPartiesDefaultAfter();
         List<ClaimCashflowPacket> uncoveredClaims = new ArrayList<ClaimCashflowPacket>();
         for (ClaimCashflowPacket grossClaim : getInClaims()) {

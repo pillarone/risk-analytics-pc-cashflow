@@ -5,9 +5,13 @@ import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarke
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class RetrospectiveReinsuranceContract extends BaseReinsuranceContract implements IReinsuranceContractMarker {
+public class RetrospectiveReinsuranceContract extends MultiCounterPartyBaseReinsuranceContract implements IReinsuranceContractMarker {
 
     private IReinsuranceContractStrategy parmContractStrategy = RetrospectiveReinsuranceContractType.getDefault();
+
+    @Override
+    protected void timeFilter() {
+    }
 
     /**
      * add in every covered period a new contract to the periodStore

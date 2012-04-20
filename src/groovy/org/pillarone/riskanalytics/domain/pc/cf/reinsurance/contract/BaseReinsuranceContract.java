@@ -8,33 +8,27 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
-import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
-import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault;
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountedValuesPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.NetPresentValuesPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity;
-import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.IPropReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.CommissionPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ICoverAttributeStrategy;
-import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
 import java.util.*;
 
 /**
+ * This abstract base class should not contain any parameters to keep it easily extendable for the UI purposes.
+ *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public abstract class BaseReinsuranceContract extends Component implements IReinsuranceContractMarker {
@@ -44,43 +38,28 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
     protected IterationScope iterationScope;
     protected PeriodStore periodStore;
 
-    private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    protected PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     /** PMO-1635: gets GNPI underwriting info always */
-    private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
-    private PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
+    protected PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    protected PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
 
     /** Contains gross claims covered in the current periods according to their time and cover filter. This includes
      *  gross claims for which there is no cover left or no cover available as the counter party has gone default. */
-    private PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
-    private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
-    private PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
-    private PacketList<ClaimCashflowPacket> outClaimsInward = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
-    private PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<UnderwritingInfoPacket> outUnderwritingInfoInward = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<UnderwritingInfoPacket> outUnderwritingInfoGNPI = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
+    protected PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    protected PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    protected PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    protected PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    protected PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    protected PacketList<UnderwritingInfoPacket> outUnderwritingInfoGNPI = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    protected PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
-    private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
-    private PacketList<CommissionPacket> outCommission = new PacketList<CommissionPacket>(CommissionPacket.class);
-    private PacketList<DiscountedValuesPacket> outDiscountedValues = new PacketList<DiscountedValuesPacket>(DiscountedValuesPacket.class);
-    private PacketList<NetPresentValuesPacket> outNetPresentValues = new PacketList<NetPresentValuesPacket>(NetPresentValuesPacket.class);
+    protected PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
+    protected PacketList<CommissionPacket> outCommission = new PacketList<CommissionPacket>(CommissionPacket.class);
+    protected PacketList<DiscountedValuesPacket> outDiscountedValues = new PacketList<DiscountedValuesPacket>(DiscountedValuesPacket.class);
+    protected PacketList<NetPresentValuesPacket> outNetPresentValues = new PacketList<NetPresentValuesPacket>(NetPresentValuesPacket.class);
 
-    private ConstrainedMultiDimensionalParameter parmReinsurers = new ConstrainedMultiDimensionalParameter(
-            Collections.emptyList(), LegalEntityPortionConstraints.COLUMN_TITLES,
-            ConstraintsFactory.getConstraints(LegalEntityPortionConstraints.IDENTIFIER));
-    private ICoverAttributeStrategy parmCover = CoverAttributeStrategyType.getDefault();
-
-
-    /** This object is filled with the initial counter party factors according to parmReinsurers */
-    protected CounterPartyState counterPartyFactorsInit;
-    /** Contains the covered ratio per counter party and date for a whole iteration. Before every iteration it is re-filled
-     *  according to counterPartyFactorsInit. Whenever a default occurs, the factor of that specific counter party and
-     *  the overall factor have to be adjusted (updateCounterPartyFactors()). */
-    protected CounterPartyState counterPartyFactors;
-    private Boolean isProportionalContract;
-    private Boolean hasMultipleContractsPerPeriod = false;
+    protected Boolean isProportionalContract;
+    protected Boolean hasMultipleContractsPerPeriod = false;
 
 
     @Override
@@ -88,7 +67,6 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         // check cover
         initSimulation();
         initIteration();
-        updateCounterPartyFactors();
         filterInChannels();
         updateContractParameters();
         Set<IReinsuranceContract> contracts = fillGrossClaims();
@@ -96,40 +74,23 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         initContracts(contracts);
         IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
         calculateCededClaims(periodCounter);
-        splitCededClaimsByCounterParty();
         processUnderwritingInfo();
-        splitCededUnderwritingInfoByCounterParty();
         fillUnderwritingInfoGNPIChannel();
         discountClaims(periodCounter);
         fillContractFinancialsChannel(periodCounter);
     }
 
-    /** initialize counterPartyFactorsInit */
     protected void initSimulation() {
-        if (firstIterationAndPeriod()) {
-            counterPartyFactorsInit = new CounterPartyState();
-            DateTime validAsOf = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
-            List<LegalEntity> counterParties = parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX);
-            for (int row = parmReinsurers.getTitleRowCount(); row < parmReinsurers.getRowCount(); row++) {
-                ILegalEntityMarker legalEntity = counterParties.get(row - 1);
-                double coveredPortion = (Double) parmReinsurers.getValueAt(row, LegalEntityPortionConstraints.PORTION_COLUMN_INDEX);
-                counterPartyFactorsInit.addCounterPartyFactor(validAsOf, legalEntity, coveredPortion, true);
-            }
-        }
     }
 
-    /** reset counterPartyFactors */
     protected void initIteration() {
-        if (iterationScope.getPeriodScope().isFirstPeriod()) {
-            counterPartyFactors = new CounterPartyState(counterPartyFactorsInit);
-        }
     }
 
     /**
      * Resetting contract member variables like deductibles, limits, ...
      * @param contracts to be prepared for the calculation of the current period
      */
-    private void initPeriod(Set<IReinsuranceContract> contracts) {
+    protected void initPeriod(Set<IReinsuranceContract> contracts) {
         initIsProportionalContract(contracts);
         initHasMultipleContractsPerPeriod(contracts);
         int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
@@ -162,29 +123,12 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
     /**
      *  Filter according to covered period, occurrence date of claim and defaulting counter parties.
      */
-    protected void timeFilter() {
-    }
-
-    private void updateCounterPartyFactors() {
-        List<LegalEntity> counterParties = parmReinsurers.getValuesAsObjects(LegalEntityPortionConstraints.COMPANY_COLUMN_INDEX);
-        for (LegalEntityDefault legalEntityDefault : inLegalEntityDefault) {
-            if (counterParties.contains(legalEntityDefault.getLegalEntity())) {
-                DateTime dateOfDefault = legalEntityDefault.getDateOfDefault();
-                if (dateOfDefault != null) {
-                    counterPartyFactors.addCounterPartyFactor(dateOfDefault, legalEntityDefault.getLegalEntity(),
-                            legalEntityDefault.getFirstInstantRecovery(), false);
-                }
-            }
-        }
-    }
+    abstract protected void timeFilter();
 
     /**
      * filter according to covered claims generators, segments and companies (parmCover)
      */
-    private void coverFilter() {
-        parmCover.coveredClaims(inClaims);
-        parmCover.coveredUnderwritingInfo(inUnderwritingInfo, inClaims);
-    }
+    abstract protected void coverFilter();
 
     /**
      * Add for every covered period a new contract instance to the periodStore. Generally contracts of different periods
@@ -321,7 +265,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             ListMultimap<ClaimCashflowPacket, ClaimCashflowPacket> cededClaimsByGrossClaim = ArrayListMultimap.create();
             if (!grossClaim.isTrivialContract()) {
                 cededClaim = grossClaim.getCededClaim(periodCounter);
-                double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(grossClaim.getUpdateDate());
+                double coveredByReinsurers = coveredByReinsurers(grossClaim.getUpdateDate());
                 if (coveredByReinsurers != 1) {
                     cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers);
                 }
@@ -358,6 +302,10 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         periodStore.put(NET_BASE_CLAIMS, netBaseClaimPerGrossClaim, 1);
     }
 
+    protected double coveredByReinsurers(DateTime updateDate) {
+        return 1;
+    }
+
     /**
      * merge ceded claim of same gross claim and update date to avoid multiple additions of gross claims
      * and correct cover in following contracts based on ceded
@@ -370,25 +318,6 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             if (isSenderWired(outClaimsGross) || isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues)) {
                 // fill outClaimsGross temporarily if discounting or net present values are calculated as they are relaying on it
                 outClaimsGross.add(entry.getKey());
-            }
-        }
-    }
-
-    /**
-     * This method fills the outClaimsInward channel if it is wired.
-     * Whereas the outClaimsCeded channel contains the total ceded claim, the outClaimsInward channel needs the ceded 
-     * claim splitted up by counter party by applying the factors provided by counterPartyFactors. The sign is reverted.
-     */
-    private void splitCededClaimsByCounterParty() {
-        if (isSenderWired(outClaimsInward)) {
-            for (ClaimCashflowPacket cededClaim : outClaimsCeded) {
-                if (ClaimUtils.notTrivialValues(cededClaim)) {
-                    for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.getFactors(cededClaim.getUpdateDate()).entrySet()) {
-                        ClaimCashflowPacket counterPartyCededClaim = ClaimUtils.scale(cededClaim, -legalEntityAndFactor.getValue(), true, true);
-                        counterPartyCededClaim.setMarker(legalEntityAndFactor.getKey());
-                        outClaimsInward.add(counterPartyCededClaim);
-                    }
-                }
             }
         }
     }
@@ -426,7 +355,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             outUnderwritingInfoGross.addAll(inUnderwritingInfo);
         }
         for (IReinsuranceContract contract : contracts) {
-            double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
+            double coveredByReinsurers = coveredByReinsurers(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
             contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, coveredByReinsurers,
                     isSenderWired(outUnderwritingInfoNet));
         }
@@ -435,24 +364,6 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         }
         for (UnderwritingInfoPacket netUnderwritingPacket : outUnderwritingInfoNet) {
             netUnderwritingPacket.setMarker(this);
-        }
-    }
-
-    /**
-     * This method fills the outUnderwritingInfoInward channel if it is wired.
-     * Whereas the outUnderwritingInfoInward channel contains the total ceded claim, the outUnderwritingInfoCeded channel 
-     * needs the ceded claim splitted up by counter party by applying the factors provided by counterPartyFactors. The 
-     * sign is reverted.
-     */
-    private void splitCededUnderwritingInfoByCounterParty() {
-        if (isSenderWired(outUnderwritingInfoInward)) {
-            for (UnderwritingInfoPacket cededUnderwritingInfo : outUnderwritingInfoCeded) {
-                for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.getFactors(cededUnderwritingInfo.getDate()).entrySet()) {
-                    UnderwritingInfoPacket counterPartyCededUnderwritingInfo = cededUnderwritingInfo.withFactorsApplied(1, -legalEntityAndFactor.getValue());
-                    counterPartyCededUnderwritingInfo.setMarker(legalEntityAndFactor.getKey());
-                    outUnderwritingInfoInward.add(counterPartyCededUnderwritingInfo);
-                }
-            }
         }
     }
 
@@ -605,22 +516,6 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         this.outCommission = outCommission;
     }
 
-    public ConstrainedMultiDimensionalParameter getParmReinsurers() {
-        return parmReinsurers;
-    }
-
-    public void setParmReinsurers(ConstrainedMultiDimensionalParameter parmReinsurers) {
-        this.parmReinsurers = parmReinsurers;
-    }
-
-    public ICoverAttributeStrategy getParmCover() {
-        return parmCover;
-    }
-
-    public void setParmCover(ICoverAttributeStrategy parmCover) {
-        this.parmCover = parmCover;
-    }
-
     public PacketList<ClaimCashflowPacket> getOutClaimsGross() {
         return outClaimsGross;
     }
@@ -659,31 +554,6 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
 
     public void setInFactors(PacketList<FactorsPacket> inFactors) {
         this.inFactors = inFactors;
-    }
-
-    /** contains inward claims per counterparty */
-    public PacketList<ClaimCashflowPacket> getOutClaimsInward() {
-        return outClaimsInward;
-    }
-
-    public void setOutClaimsInward(PacketList<ClaimCashflowPacket> outClaimsInward) {
-        this.outClaimsInward = outClaimsInward;
-    }
-
-    public PacketList<UnderwritingInfoPacket> getOutUnderwritingInfoInward() {
-        return outUnderwritingInfoInward;
-    }
-
-    public void setOutUnderwritingInfoInward(PacketList<UnderwritingInfoPacket> outUnderwritingInfoInward) {
-        this.outUnderwritingInfoInward = outUnderwritingInfoInward;
-    }
-
-    public PacketList<LegalEntityDefault> getInLegalEntityDefault() {
-        return inLegalEntityDefault;
-    }
-
-    public void setInLegalEntityDefault(PacketList<LegalEntityDefault> inLegalEntityDefault) {
-        this.inLegalEntityDefault = inLegalEntityDefault;
     }
 
     public PacketList<UnderwritingInfoPacket> getOutUnderwritingInfoGNPI() {
