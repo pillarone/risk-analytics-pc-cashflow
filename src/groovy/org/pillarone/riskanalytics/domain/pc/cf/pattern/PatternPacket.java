@@ -41,7 +41,7 @@ public class PatternPacket extends Packet implements Cloneable {
         checkIncreasingPeriodLengths();
     }
 
-    public PatternPacket(Class<? extends IPatternMarker> patternMarker, List<Double> cumulativeValues, 
+    public PatternPacket(Class<? extends IPatternMarker> patternMarker, List<Double> cumulativeValues,
                          List<Period> cumulativePeriods, boolean stochasticHitPattern) {
         this(patternMarker, cumulativeValues, cumulativePeriods);
         this.stochasticHitPattern = stochasticHitPattern;
