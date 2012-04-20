@@ -64,7 +64,7 @@ public class PatternPacket extends Packet implements Cloneable {
         Period previousPeriod = Period.days(0);
         for (Period period : cumulativePeriods) {
             if (reference.plus(previousPeriod).isAfter(reference.plus(period))) {
-                throw new IllegalArgumentException("Periods need to be increasing!");
+                throw new PeriodsNotIncreasingException();
             }
             previousPeriod = period;
         }

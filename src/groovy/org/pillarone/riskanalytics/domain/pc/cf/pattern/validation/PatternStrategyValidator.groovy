@@ -17,6 +17,7 @@ import org.pillarone.riskanalytics.core.simulation.item.parameter.ConstrainedStr
 import org.joda.time.Period
 import org.pillarone.riskanalytics.domain.utils.validation.ParameterValidationImpl
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PayoutReportingCombinedPatternStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PeriodsNotIncreasingException
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -55,10 +56,10 @@ class PatternStrategyValidator implements IParameterizationValidator {
                         LOG.debug "validating ${parameter.path}"
                     }
                     if (parameter.path.contains("patterns:subPayoutPatterns:")) {
-                        payoutPatterns[parameter.path - 'patterns:subPayoutPatterns:' - ':parmPattern'] = parameter.getBusinessObject().getPattern()
+                        payoutPatterns[parameter.path - 'patterns:subPayoutPatterns:' - ':parmPattern'] = getPattern(parameter)
                     }
                     if (parameter.path.contains("patterns:subReportingPatterns:")) {
-                        reportingPatterns[parameter.path - 'patterns:subReportingPatterns:' - ':parmPattern'] = parameter.getBusinessObject().getPattern()
+                        reportingPatterns[parameter.path - 'patterns:subReportingPatterns:' - ':parmPattern'] = getReportingPattern(parameter)
                     }
 
                     def currentErrors = validationService.validate(classifier, parameter.getParameterMap())
@@ -66,10 +67,8 @@ class PatternStrategyValidator implements IParameterizationValidator {
                     errors.addAll(currentErrors)
                 }
                 else if (classifier instanceof PayoutReportingCombinedPatternStrategyType) {
-
-                    payoutPatterns[parameter.path - 'patterns:subPayoutAndReportingPatterns:' - ':parmPattern'] = parameter.getBusinessObject().getPayoutPattern()
-                    reportingPatterns[parameter.path - 'patterns:subPayoutAndReportingPatterns:' - ':parmPattern'] = parameter.getBusinessObject().getReportingPattern()
-
+                    payoutPatterns[parameter.path - 'patterns:subPayoutAndReportingPatterns:' - ':parmPattern'] = getPayoutPattern(parameter)
+                    reportingPatterns[parameter.path - 'patterns:subPayoutAndReportingPatterns:' - ':parmPattern'] = getReportingPattern(parameter)
                     def currentErrors = validationService.validate(classifier, parameter.getParameterMap())
                     currentErrors*.path = parameter.path
                     errors.addAll(currentErrors)
@@ -575,6 +574,33 @@ class PatternStrategyValidator implements IParameterizationValidator {
             valuePerMonth.put(0, 0)
         }
         return valuePerMonth
+    }
+
+    private PatternPacket getPattern(ParameterHolder parameter) {
+        try {
+            return parameter.getBusinessObject().getPattern()
+        }
+        catch (PeriodsNotIncreasingException ex) {
+            // this exception is treated by the validator in a different manner than during runtime of a simulation
+        }
+    }
+
+    private PatternPacket getPayoutPattern(ParameterHolder parameter) {
+        try {
+            return parameter.getBusinessObject().getPayoutPattern()
+        }
+        catch (PeriodsNotIncreasingException ex) {
+            // this exception is treated by the validator in a different manner than during runtime of a simulation
+        }
+    }
+
+    private PatternPacket getReportingPattern(ParameterHolder parameter) {
+        try {
+            return parameter.getBusinessObject().getReportingPattern()
+        }
+        catch (PeriodsNotIncreasingException ex) {
+            // this exception is treated by the validator in a different manner than during runtime of a simulation
+        }
     }
 
 }
