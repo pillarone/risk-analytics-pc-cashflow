@@ -45,7 +45,7 @@ public class ReinsuranceContract extends BaseReinsuranceContract implements IRei
      */
     protected void updateContractParameters() {
         if (isCurrentPeriodCovered()) {
-            periodStore.put(REINSURANCE_CONTRACT, parmContractStrategy.getContract(getInUnderwritingInfo(), termDeductible, termLimit));
+            periodStore.put(REINSURANCE_CONTRACT, parmContractStrategy.getContracts(getInUnderwritingInfo(), termDeductible, termLimit));
         }
     }
 

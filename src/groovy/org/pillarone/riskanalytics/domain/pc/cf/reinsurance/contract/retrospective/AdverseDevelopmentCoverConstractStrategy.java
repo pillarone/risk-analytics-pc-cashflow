@@ -9,9 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.Retrospecti
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.EqualUsagePerPeriodThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -34,9 +32,9 @@ public class AdverseDevelopmentCoverConstractStrategy extends AbstractParameterO
         return RetrospectiveReinsuranceContractType.ADVERSEDEVELOPMENTCOVER;
     }
 
-    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets,
-                                            ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
-        return new AdverseDevelopmentCoverContract(reinsurancePremium, attachmentPoint, limit);
+    public List<IReinsuranceContract> getContracts(List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                                   ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+        return new ArrayList<IReinsuranceContract>(Arrays.asList(new AdverseDevelopmentCoverContract(reinsurancePremium, attachmentPoint, limit)));
     }
 
     public double getTermDeductible() {

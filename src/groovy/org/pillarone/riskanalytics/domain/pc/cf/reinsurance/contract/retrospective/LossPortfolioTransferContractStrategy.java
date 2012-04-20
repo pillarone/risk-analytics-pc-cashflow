@@ -8,9 +8,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.Retrospecti
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.EqualUsagePerPeriodThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -33,9 +31,9 @@ public class LossPortfolioTransferContractStrategy extends AbstractParameterObje
         return params;
     }
 
-    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets,
-                                            ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
-        return new LossPortfolioTransferContract(cededShare, limit, reinsurancePremium);
+    public List<IReinsuranceContract> getContracts(List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                                   ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+        return new ArrayList<IReinsuranceContract>(Arrays.asList(new LossPortfolioTransferContract(cededShare, limit, reinsurancePremium)));
     }
 
     public double getTermDeductible() {

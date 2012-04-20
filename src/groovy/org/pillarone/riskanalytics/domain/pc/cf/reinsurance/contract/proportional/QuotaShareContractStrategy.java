@@ -11,9 +11,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproporti
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -37,23 +35,25 @@ public class QuotaShareContractStrategy extends AbstractParameterObject implemen
         return params;
     }
 
-    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets,
-                                            ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+    public List<IReinsuranceContract> getContracts(List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                                   ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+        IReinsuranceContract contract;
         if (limit instanceof NoneLimitStrategy) {
-            return new QuotaShareContract(quotaShare, commission.getCalculator());
+            contract = new QuotaShareContract(quotaShare, commission.getCalculator());
         }
         else if (limit instanceof AalLimitStrategy) {
-            return new AALQuotaShareContract(quotaShare, commission.getCalculator(), (AalLimitStrategy) limit);
+            contract = new AALQuotaShareContract(quotaShare, commission.getCalculator(), (AalLimitStrategy) limit);
         }
         else if (limit instanceof AadLimitStrategy) {
-            return new AADQuotaShareContract(quotaShare, commission.getCalculator(), (AadLimitStrategy) limit);
+            contract = new AADQuotaShareContract(quotaShare, commission.getCalculator(), (AadLimitStrategy) limit);
         }
         else if (limit instanceof AalAadLimitStrategy) {
-            return new AALAADQuotaShareContract(quotaShare, commission.getCalculator(), (AalAadLimitStrategy) limit);
+            contract = new AALAADQuotaShareContract(quotaShare, commission.getCalculator(), (AalAadLimitStrategy) limit);
         }
         else {
             throw new NotImplementedException(limit + " not implemented.");
         }
+        return new ArrayList<IReinsuranceContract>(Arrays.asList(contract));
     }
 
     public double getTermDeductible() {

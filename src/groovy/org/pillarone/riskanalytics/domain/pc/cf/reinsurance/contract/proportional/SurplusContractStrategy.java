@@ -9,9 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproporti
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -41,9 +39,10 @@ public class SurplusContractStrategy extends AbstractParameterObject implements 
         return params;
     }
 
-    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets,
-                                            ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
-        return new SurplusContract(retention, lines, defaultCededLossShare, commission.getCalculator());
+    public List<IReinsuranceContract> getContracts(List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                                   ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+        return new ArrayList<IReinsuranceContract>(Arrays.asList(
+                new SurplusContract(retention, lines, defaultCededLossShare, commission.getCalculator())));
     }
 
     public double getTermDeductible() {

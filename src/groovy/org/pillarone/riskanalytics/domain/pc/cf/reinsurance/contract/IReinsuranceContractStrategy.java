@@ -12,13 +12,14 @@ import java.util.List;
 public interface IReinsuranceContractStrategy {
     /**
      *
+     *
      * @param underwritingInfoPackets used for scaling relative contract parameters
      * @param termDeductible
      * @param termLimit
      * @return fully prepared contract
      */
-    IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets,
-                                     ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit);
+    List<IReinsuranceContract> getContracts(List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                            ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit);
 
     double getTermDeductible();
     double getTermLimit();

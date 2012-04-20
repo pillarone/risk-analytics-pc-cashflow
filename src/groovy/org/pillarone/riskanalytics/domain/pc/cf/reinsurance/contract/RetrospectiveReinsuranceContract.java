@@ -14,7 +14,7 @@ public class RetrospectiveReinsuranceContract extends BaseReinsuranceContract im
      */
     protected void updateContractParameters() {
         if (isCurrentPeriodCovered()) {
-            periodStore.put(REINSURANCE_CONTRACT, parmContractStrategy.getContract(getInUnderwritingInfo(), null, null));
+            periodStore.put(REINSURANCE_CONTRACT, parmContractStrategy.getContracts(getInUnderwritingInfo(), null, null));
         }
     }
 

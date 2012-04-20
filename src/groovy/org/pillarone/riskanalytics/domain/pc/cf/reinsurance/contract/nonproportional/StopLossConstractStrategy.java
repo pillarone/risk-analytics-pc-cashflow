@@ -9,9 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranc
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -43,8 +41,8 @@ public class StopLossConstractStrategy extends AbstractParameterObject implement
         return ReinsuranceContractType.STOPLOSS;
     }
 
-    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets,
-                                            ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+    public List<IReinsuranceContract> getContracts(List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                                   ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
         double cededPremiumFixed = premium;
         double scaledAttachmentPoint = attachmentPoint;
         double scaledLimit = limit;
@@ -58,7 +56,8 @@ public class StopLossConstractStrategy extends AbstractParameterObject implement
                 scaledLimit *= gnpi;
                 break;
         }
-        return new StopLossContract(cededPremiumFixed, scaledAttachmentPoint, scaledLimit, premiumAllocation);
+        return new ArrayList<IReinsuranceContract>(Arrays.asList(
+                new StopLossContract(cededPremiumFixed, scaledAttachmentPoint, scaledLimit, premiumAllocation)));
     }
 
     public double getTermDeductible() {

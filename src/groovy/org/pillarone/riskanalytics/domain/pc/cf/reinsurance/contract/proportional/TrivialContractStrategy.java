@@ -9,18 +9,16 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.Reinsurance
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.EqualUsagePerPeriodThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class TrivialContractStrategy extends AbstractParameterObject implements IReinsuranceContractStrategy {
 
-    public IReinsuranceContract getContract(List<UnderwritingInfoPacket> underwritingInfoPackets,
-                                            ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
-        return new TrivialContract();
+    public List<IReinsuranceContract> getContracts(List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                                   ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+        return new ArrayList<IReinsuranceContract>(Arrays.asList(new TrivialContract()));
     }
 
     public double getTermDeductible() {
