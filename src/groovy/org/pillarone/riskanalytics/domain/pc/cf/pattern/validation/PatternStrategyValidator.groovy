@@ -59,7 +59,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
                         payoutPatterns[parameter.path - 'patterns:subPayoutPatterns:' - ':parmPattern'] = getPattern(parameter)
                     }
                     if (parameter.path.contains("patterns:subReportingPatterns:")) {
-                        reportingPatterns[parameter.path - 'patterns:subReportingPatterns:' - ':parmPattern'] = getReportingPattern(parameter)
+                        reportingPatterns[parameter.path - 'patterns:subReportingPatterns:' - ':parmPattern'] = getPattern(parameter)
                     }
 
                     def currentErrors = validationService.validate(classifier, parameter.getParameterMap())
