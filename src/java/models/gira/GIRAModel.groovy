@@ -157,6 +157,14 @@ class GIRAModel extends StochasticModel {
         return new LimitedContinuousPeriodCounter(globalParameters.parmProjectionStartDate, Period.years(1), numberOfYears)
     }
 
+    public Set<String> periodLabelsBeforeProjectionStart() {
+        Set<String> periodLabels = []
+        for (ReservesGenerator generator : reservesGenerators.componentList) {
+            periodLabels << generator.parmUltimateEstimationMethod.averageInceptionDate.year.toString()
+        }
+        periodLabels
+    }
+
     private Period lastPatternPeriod() {
         Period maxPeriods = Period.months(0)
         if (globalParameters.isRuntimeTrivialPatterns()) return maxPeriods
