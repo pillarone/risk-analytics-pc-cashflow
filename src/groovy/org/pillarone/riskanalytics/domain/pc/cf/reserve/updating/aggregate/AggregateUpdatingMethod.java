@@ -53,14 +53,19 @@ public enum AggregateUpdatingMethod {
                     DateTime periodStartDate = periodCounter.startOfPeriod(baseClaim.getOccurrenceDate());
 
                     AggregateHistoricClaim historicClaim = actualClaims.historicClaims(occurrencePeriod, periodCounter, updateDate);
-                    double reportedToDate = historicClaim.reportedToDate(updateDate);
-                    DateTime lastReportedDate = historicClaim.lastReportedDate(updateDate);
-                    double elapsedMonths = DateTimeUtilities.days360(periodStartDate, lastReportedDate) / 30d;
-                    double outstandingShare = pattern.outstandingShare(elapsedMonths);
-                    double originalUltimate = baseClaim.getUltimate();
-                    double ultimate = reportedToDate + outstandingShare * originalUltimate;
-                    ClaimRoot adjustedBaseClaim = new ClaimRoot(ultimate, baseClaim);
-                    baseClaimsWithAdjustedUltimate.add(adjustedBaseClaim);
+                    if (historicClaim == null) {
+                        baseClaimsWithAdjustedUltimate.add(baseClaim);
+                    }
+                    else {
+                        double reportedToDate = historicClaim.reportedToDate(updateDate);
+                        DateTime lastReportedDate = historicClaim.lastReportedDate(updateDate);
+                        double elapsedMonths = DateTimeUtilities.days360(periodStartDate, lastReportedDate) / 30d;
+                        double outstandingShare = pattern.outstandingShare(elapsedMonths);
+                        double originalUltimate = baseClaim.getUltimate();
+                        double ultimate = reportedToDate + outstandingShare * originalUltimate;
+                        ClaimRoot adjustedBaseClaim = new ClaimRoot(ultimate, baseClaim);
+                        baseClaimsWithAdjustedUltimate.add(adjustedBaseClaim);
+                    }
                 }
                 catch (NotInProjectionHorizon ex) {
                     baseClaimsWithAdjustedUltimate.add(baseClaim);
