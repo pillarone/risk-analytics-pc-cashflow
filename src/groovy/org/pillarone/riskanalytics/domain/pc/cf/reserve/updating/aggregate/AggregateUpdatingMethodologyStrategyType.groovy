@@ -11,13 +11,15 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IUpdatingPatternMarker
  */
 class AggregateUpdatingMethodologyStrategyType extends AbstractParameterObjectClassifier {
 
-    public static final AggregateUpdatingMethodologyStrategyType NONE = new AggregateUpdatingMethodologyStrategyType('none', 'NONE', Collections.emptyMap())
-    public static final AggregateUpdatingMethodologyStrategyType AGGREGATE = new AggregateUpdatingMethodologyStrategyType(
-            'aggregate', 'AGGREGATE',
-            [updatingPattern: new ConstrainedString(IUpdatingPatternMarker.class, ""),
-                    methodology: AggregateUpdatingMethod.ORIGINAL_ULTIMATE])
+    public static final AggregateUpdatingMethodologyStrategyType PLEASESELECT = new AggregateUpdatingMethodologyStrategyType(
+            'Please Select', 'PLEASESELECT', [:])
+    public static final AggregateUpdatingMethodologyStrategyType BFREPORTING = new AggregateUpdatingMethodologyStrategyType(
+            'BF Reporting', 'BFREPORTING',
+            [updatingPattern: new ConstrainedString(IUpdatingPatternMarker.class, "")])
+    public static final AggregateUpdatingMethodologyStrategyType ORIGINALULTIMATE = new AggregateUpdatingMethodologyStrategyType(
+            'Original Ultimate', 'ORIGINALULTIMATE', [:])
 
-    public static final all = [NONE, AGGREGATE]
+    public static final all = [PLEASESELECT, BFREPORTING, ORIGINALULTIMATE]
 
     protected static Map types = [:]
     static {
@@ -49,11 +51,11 @@ class AggregateUpdatingMethodologyStrategyType extends AbstractParameterObjectCl
 
     static IAggregateUpdatingMethodologyStrategy getStrategy(AggregateUpdatingMethodologyStrategyType type, Map parameters) {
         switch (type) {
-            case AggregateUpdatingMethodologyStrategyType.AGGREGATE:
-                return new AggregateUpdatingMethodology(
-                        updatingPattern: parameters['updatingPattern'],
-                        methodology: parameters['methodology'])
-            case AggregateUpdatingMethodologyStrategyType.NONE:
+            case AggregateUpdatingMethodologyStrategyType.BFREPORTING:
+                return new AggregateUpdatingBFReportingMethodology(updatingPattern: parameters['updatingPattern'])
+            case AggregateUpdatingMethodologyStrategyType.ORIGINALULTIMATE:
+                return new AggregateUpdatingOriginalUltimateMethodology()
+            case AggregateUpdatingMethodologyStrategyType.PLEASESELECT:
                 return new NoUpdatingMethodology()
         }
     }

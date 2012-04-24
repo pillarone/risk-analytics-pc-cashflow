@@ -47,10 +47,9 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
                 [Period.months(0), Period.months(12), Period.months(24), Period.months(36), Period.months(48)])
         pattern.origin = new UpdatingPattern(name: '48m')
 
-        ConstrainedString updatingPattern = new ConstrainedString(IUpdatingPatternMarker, pattern.origin.name)
+        IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingOriginalUltimateMethodology()
+        List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate(baseClaims, actualClaims, periodCounter, updateDate, [pattern])
 
-        AggregateUpdatingMethod original = AggregateUpdatingMethod.ORIGINAL_ULTIMATE
-        List<ClaimRoot> updatedClaims = original.update(baseClaims, actualClaims, periodCounter, updateDate, [pattern], updatingPattern)
         updatedClaims.each {
             println it
         }
@@ -82,8 +81,8 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
         ConstrainedString updatingPattern = new ConstrainedString(IUpdatingPatternMarker, pattern.origin.name)
         updatingPattern.selectedComponent = pattern.origin
 
-        AggregateUpdatingMethod original = AggregateUpdatingMethod.REPORTED_BF
-        List<ClaimRoot> updatedClaims = original.update(baseClaims, actualClaims, periodCounter, updateDate, [pattern], updatingPattern)
+        IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingBFReportingMethodology(updatingPattern: updatingPattern)
+        List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate(baseClaims, actualClaims, periodCounter, updateDate, [pattern])
 
         assertEquals 'adjusted ultimates', [58468.75, 65041.666666666664, 70447.91666666666], updatedClaims*.getUltimate()
     }
@@ -113,8 +112,8 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
         ConstrainedString updatingPattern = new ConstrainedString(IUpdatingPatternMarker, pattern.origin.name)
         updatingPattern.selectedComponent = pattern.origin
 
-        AggregateUpdatingMethod original = AggregateUpdatingMethod.REPORTED_BF
-        List<ClaimRoot> updatedClaims = original.update(baseClaims, actualClaims, periodCounter, updateDate, [pattern], updatingPattern)
+        IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingBFReportingMethodology(updatingPattern: updatingPattern)
+        List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate(baseClaims, actualClaims, periodCounter, updateDate, [pattern])
 
         assertEquals 'adjusted ultimates', [75000d] * 3, updatedClaims*.getUltimate()
     }
@@ -144,8 +143,8 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
         ConstrainedString updatingPattern = new ConstrainedString(IUpdatingPatternMarker, pattern.origin.name)
         updatingPattern.selectedComponent = pattern.origin
 
-        AggregateUpdatingMethod original = AggregateUpdatingMethod.REPORTED_BF
-        List<ClaimRoot> updatedClaims = original.update(baseClaims, actualClaims, periodCounter, updateDate, [pattern], updatingPattern)
+        IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingBFReportingMethodology(updatingPattern: updatingPattern)
+        List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate(baseClaims, actualClaims, periodCounter, updateDate, [pattern])
 
         assertEquals 'adjusted ultimates', [58468.75, 65041.666666666664, 75000d], updatedClaims*.getUltimate()
     }

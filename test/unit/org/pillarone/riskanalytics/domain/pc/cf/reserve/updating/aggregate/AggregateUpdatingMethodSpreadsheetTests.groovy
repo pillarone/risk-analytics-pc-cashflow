@@ -42,8 +42,8 @@ class AggregateUpdatingMethodSpreadsheetTests extends SpreadsheetUnitTest {
             ConstrainedString updatingPattern = new ConstrainedString(IUpdatingPatternMarker, pattern.origin.name)
             updatingPattern.selectedComponent = pattern.origin
 
-            AggregateUpdatingMethod original = AggregateUpdatingMethod.REPORTED_BF
-            List<ClaimRoot> updatedClaims = original.update(baseClaims, actualClaims, periodCounter, updateDate, [pattern], updatingPattern)
+            IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingBFReportingMethodology(updatingPattern: updatingPattern)
+            List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate(baseClaims, actualClaims, periodCounter, updateDate, [pattern])
 
             List<Double> referenceAdjustedUltimates = referenceAdjustedUltimate(importer)
             for (int i = 0; i < referenceAdjustedUltimates.size(); i++) {

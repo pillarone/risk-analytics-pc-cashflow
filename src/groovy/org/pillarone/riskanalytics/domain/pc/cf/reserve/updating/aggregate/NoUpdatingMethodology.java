@@ -21,7 +21,7 @@ public class NoUpdatingMethodology extends AbstractParameterObject implements IA
     }
 
     public IParameterObjectClassifier getType() {
-        return AggregateUpdatingMethodologyStrategyType.NONE;
+        return AggregateUpdatingMethodologyStrategyType.PLEASESELECT;
     }
 
 

@@ -94,4 +94,12 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
     public void setParmActualClaims(IAggregateActualClaimsStrategy parmActualClaims) {
         this.parmActualClaims = parmActualClaims;
     }
+
+    public IAggregateUpdatingMethodologyStrategy getParmUpdatingMethodology() {
+        return parmUpdatingMethodology;
+    }
+
+    public void setParmUpdatingMethodology(IAggregateUpdatingMethodologyStrategy parmUpdatingMethodology) {
+        this.parmUpdatingMethodology = parmUpdatingMethodology;
+    }
 }
