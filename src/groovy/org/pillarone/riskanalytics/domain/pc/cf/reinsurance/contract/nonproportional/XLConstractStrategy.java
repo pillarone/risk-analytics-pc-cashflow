@@ -49,22 +49,7 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
     }
 
     protected Double getCededPremiumFixed(List<UnderwritingInfoPacket> underwritingInfoPackets) {
-        double cededPremiumFixed = 0;
-        switch (premiumBase) {
-            case ABSOLUTE:
-                cededPremiumFixed = premium;
-                break;
-            case GNPI:
-                cededPremiumFixed = premium * UnderwritingInfoUtils.sumPremiumWritten(underwritingInfoPackets);
-                break;
-            case RATE_ON_LINE:
-                cededPremiumFixed = premium * limit;
-                break;
-            case NUMBER_OF_POLICIES:
-                cededPremiumFixed = premium * UnderwritingInfoUtils.sumNumberOfPolicies(underwritingInfoPackets);
-                break;
-        }
-        return cededPremiumFixed;
+        return UnderwritingInfoUtils.scalePremium(underwritingInfoPackets, premiumBase, premium, limit);
     }
 
     public double getTermDeductible() {

@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional;
 
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
@@ -18,7 +19,16 @@ public class CXLConstractStrategy extends XLConstractStrategy implements IReinsu
         return ReinsuranceContractType.CXL;
     }
 
-    public List<IReinsuranceContract> getContracts(List<UnderwritingInfoPacket> underwritingInfoPackets,
+    /**
+     * @param period is ignored in this context
+     * @param underwritingInfoPackets used for scaling relative contract parameters
+     * @param base is ignored in this context
+     * @param termDeductible is ignored in this context
+     * @param termLimit is ignored in this context
+     * @return a single CXL contract
+     */
+    public List<IReinsuranceContract> getContracts(int period,
+                                                   List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
                                                    ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
         double cededPremiumFixed = getCededPremiumFixed(underwritingInfoPackets);
         List<Double> reinstatementPremiumFactors = (List<Double>) reinstatementPremiums.getValues().get(0);

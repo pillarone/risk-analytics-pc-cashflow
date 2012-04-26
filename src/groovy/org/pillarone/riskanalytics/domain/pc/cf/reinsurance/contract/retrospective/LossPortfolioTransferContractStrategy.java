@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.retrospective;
 
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
@@ -31,7 +32,17 @@ public class LossPortfolioTransferContractStrategy extends AbstractParameterObje
         return params;
     }
 
-    public List<IReinsuranceContract> getContracts(List<UnderwritingInfoPacket> underwritingInfoPackets,
+    /**
+     * This implementation ignores all provided parameters.
+     * @param period ignored
+     * @param underwritingInfoPackets ignored
+     * @param base ignored
+     * @param termDeductible ignored
+     * @param termLimit ignored
+     * @return one contract
+     */
+    public List<IReinsuranceContract> getContracts(int period,
+                                                   List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
                                                    ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
         return new ArrayList<IReinsuranceContract>(Arrays.asList(new LossPortfolioTransferContract(cededShare, limit, reinsurancePremium)));
     }

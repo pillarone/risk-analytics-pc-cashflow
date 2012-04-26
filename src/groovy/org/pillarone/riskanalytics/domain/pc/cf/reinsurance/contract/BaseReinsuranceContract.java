@@ -134,7 +134,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
      * Add for every covered period a new contract instance to the periodStore. Generally contracts of different periods
      * are completely independent except there is a common term clause.
      */
-    abstract void updateContractParameters();
+    abstract protected void updateContractParameters();
 
     /**
      * Make sure a ClaimStorage object is created for every new CashflowClaimPacket and put in the first time slot of

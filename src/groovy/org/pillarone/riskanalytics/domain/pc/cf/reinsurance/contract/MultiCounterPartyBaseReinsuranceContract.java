@@ -57,6 +57,7 @@ public abstract class MultiCounterPartyBaseReinsuranceContract extends BaseReins
     }
 
     /** initialize counterPartyFactorsInit */
+    @Override
     protected void initSimulation() {
         if (firstIterationAndPeriod()) {
             counterPartyFactorsInit = new CounterPartyState();
@@ -71,6 +72,7 @@ public abstract class MultiCounterPartyBaseReinsuranceContract extends BaseReins
     }
 
     /** reset counterPartyFactors */
+    @Override
     protected void initIteration() {
         if (iterationScope.getPeriodScope().isFirstPeriod()) {
             counterPartyFactors = new CounterPartyState(counterPartyFactorsInit);

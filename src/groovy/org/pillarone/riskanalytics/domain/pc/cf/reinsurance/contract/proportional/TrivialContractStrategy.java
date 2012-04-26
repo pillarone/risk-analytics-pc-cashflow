@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportion
 
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
@@ -16,7 +17,17 @@ import java.util.*;
  */
 public class TrivialContractStrategy extends AbstractParameterObject implements IReinsuranceContractStrategy {
 
-    public List<IReinsuranceContract> getContracts(List<UnderwritingInfoPacket> underwritingInfoPackets,
+    /**
+     * This implementation ignores all provided parameters.
+     * @param period ignored
+     * @param underwritingInfoPackets ignored
+     * @param base ignored
+     * @param termDeductible ignored
+     * @param termLimit ignored
+     * @return one contract
+     */
+    public List<IReinsuranceContract> getContracts(int period,
+                                                   List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
                                                    ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
         return new ArrayList<IReinsuranceContract>(Arrays.asList(new TrivialContract()));
     }

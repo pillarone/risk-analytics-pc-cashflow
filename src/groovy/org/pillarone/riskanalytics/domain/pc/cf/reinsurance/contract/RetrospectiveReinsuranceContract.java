@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
 /**
@@ -18,7 +19,9 @@ public class RetrospectiveReinsuranceContract extends MultiCounterPartyBaseReins
      */
     protected void updateContractParameters() {
         if (isCurrentPeriodCovered()) {
-            periodStore.put(REINSURANCE_CONTRACT, parmContractStrategy.getContracts(getInUnderwritingInfo(), null, null));
+            int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
+            periodStore.put(REINSURANCE_CONTRACT, parmContractStrategy.getContracts(
+                    currentPeriod, inUnderwritingInfo, ExposureBase.ABSOLUTE, null, null));
         }
     }
 

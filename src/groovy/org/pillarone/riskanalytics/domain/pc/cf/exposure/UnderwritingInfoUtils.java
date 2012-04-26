@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.exposure;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.XLPremiumBase;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
@@ -35,7 +36,60 @@ public class UnderwritingInfoUtils {
         return filterUnderwritingInfos;
     }
 
-    private static double scalingFactor(List<UnderwritingInfoPacket> underwritingInfos, ExposureBase base) {
+    /**
+     * @param underwritingInfoPackets is used for scaling base on premium written and number of policies
+     * @param premiumBase defines the scaling mode
+     * @param premium base premium
+     * @param limit used for scaling mode GNPI
+     * @return adjusted premium
+     */
+    public static double scalePremium(List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                              XLPremiumBase premiumBase, double premium, double limit) {
+        double scaledPremium = 0;
+        switch (premiumBase) {
+            case ABSOLUTE:
+                scaledPremium = premium;
+                break;
+            case GNPI:
+                scaledPremium = premium * UnderwritingInfoUtils.sumPremiumWritten(underwritingInfoPackets);
+                break;
+            case RATE_ON_LINE:
+                scaledPremium = premium * limit;
+                break;
+            case NUMBER_OF_POLICIES:
+                scaledPremium = premium * UnderwritingInfoUtils.sumNumberOfPolicies(underwritingInfoPackets);
+                break;
+        }
+        return scaledPremium;
+    }
+
+    /**
+     * @param underwritingInfoPackets is used for scaling base on premium written and number of policies
+     * @param exposureBase defines the scaling mode
+     * @param premium base premium
+     * @return adjusted premium
+     */
+    public static double scalePremium(List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                      ExposureBase exposureBase, double premium) {
+        double scaledPremium = 0;
+        switch (exposureBase) {
+            case ABSOLUTE:
+                scaledPremium = premium;
+                break;
+            case PREMIUM_WRITTEN:
+                scaledPremium = premium * UnderwritingInfoUtils.sumPremiumWritten(underwritingInfoPackets);
+                break;
+            case NUMBER_OF_POLICIES:
+                scaledPremium = premium * UnderwritingInfoUtils.sumNumberOfPolicies(underwritingInfoPackets);
+                break;
+            case SUM_INSURED:
+                scaledPremium = premium * UnderwritingInfoUtils.sumSumInsured(underwritingInfoPackets);
+                break;
+        }
+        return scaledPremium;
+    }
+
+    public static double scalingFactor(List<UnderwritingInfoPacket> underwritingInfos, ExposureBase base) {
         if (base.equals(ExposureBase.ABSOLUTE)) return 1;
         double factor = 0d;
         for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
@@ -90,14 +144,14 @@ public class UnderwritingInfoUtils {
     static public UnderwritingInfoPacket correctMetaProperties(UnderwritingInfoPacket result, List<UnderwritingInfoPacket> underwritingInfos) {
         UnderwritingInfoPacket verifiedResult = (UnderwritingInfoPacket) result.clone();
         ISegmentMarker lob = verifiedResult.segment();
-        IReinsuranceContractMarker reinsuranceContract = verifiedResult.getReinsuranceContract();
+        IReinsuranceContractMarker reinsuranceContract = verifiedResult.reinsuranceContract();
         boolean underwritingInfosOfDifferentLobs = lob == null;
         boolean underwritingInfosOfDifferentContracts = reinsuranceContract == null;
         for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
             if (!underwritingInfosOfDifferentLobs && !lob.equals(underwritingInfo.segment())) {
                 underwritingInfosOfDifferentLobs = true;
             }
-            if (!underwritingInfosOfDifferentContracts && !reinsuranceContract.equals(underwritingInfo.getReinsuranceContract())) {
+            if (!underwritingInfosOfDifferentContracts && !reinsuranceContract.equals(underwritingInfo.reinsuranceContract())) {
                 underwritingInfosOfDifferentContracts = true;
             }
         }
@@ -113,14 +167,14 @@ public class UnderwritingInfoUtils {
     static public CededUnderwritingInfoPacket correctMetaProperties(CededUnderwritingInfoPacket result, List<CededUnderwritingInfoPacket> underwritingInfos) {
         CededUnderwritingInfoPacket verifiedResult = (CededUnderwritingInfoPacket) result.clone();
         ISegmentMarker lob = verifiedResult.segment();
-        IReinsuranceContractMarker reinsuranceContract = verifiedResult.getReinsuranceContract();
+        IReinsuranceContractMarker reinsuranceContract = verifiedResult.reinsuranceContract();
         boolean underwritingInfosOfDifferentLobs = lob == null;
         boolean underwritingInfosOfDifferentContracts = reinsuranceContract == null;
         for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
             if (!underwritingInfosOfDifferentLobs && !lob.equals(underwritingInfo.segment())) {
                 underwritingInfosOfDifferentLobs = true;
             }
-            if (!underwritingInfosOfDifferentContracts && !reinsuranceContract.equals(underwritingInfo.getReinsuranceContract())) {
+            if (!underwritingInfosOfDifferentContracts && !reinsuranceContract.equals(underwritingInfo.reinsuranceContract())) {
                 underwritingInfosOfDifferentContracts = true;
             }
         }
@@ -148,7 +202,7 @@ public class UnderwritingInfoUtils {
         }
         else {
             for (CededUnderwritingInfoPacket underwritingInfo : underwritingInfos) {
-                if (contracts.contains(underwritingInfo.getReinsuranceContract())) {
+                if (contracts.contains(underwritingInfo.reinsuranceContract())) {
                     acceptedUnderwritingInfo.add(underwritingInfo);
                 }
                 else if (rejectedUnderwritingInfo != null) {
@@ -172,6 +226,14 @@ public class UnderwritingInfoUtils {
             policies += packet.getNumberOfPolicies();
         }
         return policies;
+    }
+
+    public static double sumSumInsured(List<UnderwritingInfoPacket> underwritingInfos) {
+        double sumInsured = 0;
+        for (UnderwritingInfoPacket packet : underwritingInfos) {
+            sumInsured += packet.getSumInsured();
+        }
+        return sumInsured;
     }
 
     public static void applyMarkers(UnderwritingInfoPacket source, UnderwritingInfoPacket target) {

@@ -3,8 +3,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
-import org.pillarone.riskanalytics.core.simulation.AfterSimulationEndException;
-import org.pillarone.riskanalytics.core.simulation.BeforeSimulationStartException;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
@@ -126,7 +124,7 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
                 return periodCounter.belongsToPeriod(exposureStartDate);
             }
             catch (NotInProjectionHorizon ex) {
-                // use fail over by returning occurrence period
+                return null;
             }
         }
         return getOccurrencePeriod(periodCounter);

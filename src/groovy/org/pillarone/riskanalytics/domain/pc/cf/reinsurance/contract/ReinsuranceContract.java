@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.EqualUsagePerPeriodThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
@@ -23,6 +24,7 @@ public class ReinsuranceContract extends MultiCounterPartyBaseReinsuranceContrac
     private ThresholdStore termDeductible;
     private EqualUsagePerPeriodThresholdStore termLimit;
 
+    @Override
     protected void initSimulation() {
         super.initSimulation();
         if (firstIterationAndPeriod()) {
@@ -30,7 +32,7 @@ public class ReinsuranceContract extends MultiCounterPartyBaseReinsuranceContrac
         }
     }
 
-
+    @Override
     protected void initIteration() {
         super.initIteration();
         if (iterationScope.getPeriodScope().isFirstPeriod()) {
@@ -45,7 +47,9 @@ public class ReinsuranceContract extends MultiCounterPartyBaseReinsuranceContrac
      */
     protected void updateContractParameters() {
         if (isCurrentPeriodCovered()) {
-            periodStore.put(REINSURANCE_CONTRACT, parmContractStrategy.getContracts(getInUnderwritingInfo(), termDeductible, termLimit));
+            int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
+            periodStore.put(REINSURANCE_CONTRACT, parmContractStrategy.getContracts(
+                    currentPeriod, inUnderwritingInfo, ExposureBase.ABSOLUTE, termDeductible, termLimit));
         }
     }
 
@@ -56,22 +60,22 @@ public class ReinsuranceContract extends MultiCounterPartyBaseReinsuranceContrac
     protected void timeFilter() {
         DateTime noCoverAfter = counterPartyFactors.allCounterPartiesDefaultAfter();
         List<ClaimCashflowPacket> uncoveredClaims = new ArrayList<ClaimCashflowPacket>();
-        for (ClaimCashflowPacket grossClaim : getInClaims()) {
+        for (ClaimCashflowPacket grossClaim : inClaims) {
             if (!parmCoveredPeriod.isCovered(grossClaim.getOccurrenceDate())
                     || (noCoverAfter != null && grossClaim.getOccurrenceDate().isAfter(noCoverAfter))) {
                 uncoveredClaims.add(grossClaim);
             }
         }
-        getInClaims().removeAll(uncoveredClaims);
+        inClaims.removeAll(uncoveredClaims);
 
         List<UnderwritingInfoPacket> uncoveredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
-        for (UnderwritingInfoPacket underwritingInfo : getInUnderwritingInfo()) {
+        for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
             if (!parmCoveredPeriod.isCovered(underwritingInfo.getExposure().getInceptionDate())
                     || (noCoverAfter != null && underwritingInfo.getExposure().getInceptionDate().isAfter(noCoverAfter))) {
                 uncoveredUnderwritingInfo.add(underwritingInfo);
             }
         }
-        getInUnderwritingInfo().removeAll(uncoveredUnderwritingInfo);
+        inUnderwritingInfo.removeAll(uncoveredUnderwritingInfo);
     }
 
     protected boolean isCurrentPeriodCovered() {

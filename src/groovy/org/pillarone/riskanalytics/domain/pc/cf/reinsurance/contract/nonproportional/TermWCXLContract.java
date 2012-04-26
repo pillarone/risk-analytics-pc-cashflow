@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional;
 
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 
@@ -30,4 +32,13 @@ public class TermWCXLContract extends TermCXLContract {
                 stabilization, reinstatementPremiumFactors, premiumAllocation, termDeductible, termLimit);
     }
 
+    /**
+     * @param grossClaim
+     * @return true if grossClaim claim type is single, event or aggregate event
+     */
+    protected boolean isClaimTypeCovered(ClaimCashflowPacket grossClaim) {
+        return grossClaim.getBaseClaim().getClaimType().equals(ClaimType.EVENT)
+                || grossClaim.getBaseClaim().getClaimType().equals(ClaimType.AGGREGATED_EVENT)
+                || grossClaim.getBaseClaim().getClaimType().equals(ClaimType.SINGLE);
+    }
 }

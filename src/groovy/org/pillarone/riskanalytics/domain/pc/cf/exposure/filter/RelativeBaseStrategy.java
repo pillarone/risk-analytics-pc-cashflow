@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,5 +31,23 @@ abstract public class RelativeBaseStrategy extends AbstractParameterObject imple
 
     public double factor(PacketList<UnderwritingInfoPacket> underwritingInfos) {
         return UnderwritingInfoUtils.scalingFactor(underwritingInfos, exposureBase(), filteredUnderwritingSegments());
+    }
+
+    /**
+     * @param underwritingInfos uncovered underwriting info is removed from this list
+     */
+    @Override
+    public void coveredUnderwritingInfo(PacketList<UnderwritingInfoPacket> underwritingInfos) {
+        List<UnderwritingInfoPacket> filteredList = new ArrayList<UnderwritingInfoPacket>();
+        List filterCriteria = filteredUnderwritingSegments();
+        for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
+            if (filterCriteria.contains(underwritingInfo.riskBand())) {
+                filteredList.add(underwritingInfo);
+            }
+        }
+        underwritingInfos.clear();
+        if (!filteredList.isEmpty()) {
+            underwritingInfos.addAll(filteredList);
+        }
     }
 }

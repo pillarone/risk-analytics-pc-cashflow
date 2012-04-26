@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.retrospect
 
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
@@ -32,8 +33,8 @@ public class AdverseDevelopmentCoverConstractStrategy extends AbstractParameterO
         return RetrospectiveReinsuranceContractType.ADVERSEDEVELOPMENTCOVER;
     }
 
-    public List<IReinsuranceContract> getContracts(List<UnderwritingInfoPacket> underwritingInfoPackets,
-                                                   ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+    public List<IReinsuranceContract> getContracts(int period, List<UnderwritingInfoPacket> underwritingInfoPackets,
+                                                   ExposureBase base, ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
         return new ArrayList<IReinsuranceContract>(Arrays.asList(new AdverseDevelopmentCoverContract(reinsurancePremium, attachmentPoint, limit)));
     }
 

@@ -10,7 +10,16 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
  */
 public interface IExposureBaseStrategy extends IParameterObject {
 
+    /**
+     * @param underwritingInfos
+     * @return sums up the property according to the strategy
+     */
     double factor(PacketList<UnderwritingInfoPacket> underwritingInfos);
+
+    /**
+     * @param underwritingInfos uncovered underwriting info is removed from this list
+     */
+    void coveredUnderwritingInfo(PacketList<UnderwritingInfoPacket> underwritingInfos);
 
     ExposureBase exposureBase();
 
