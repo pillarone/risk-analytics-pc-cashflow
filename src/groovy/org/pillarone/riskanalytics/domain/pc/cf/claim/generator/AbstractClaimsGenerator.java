@@ -161,8 +161,8 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
             // create the preset claims and place them in the correct period
             if (period >= 0) {
                 double fractionOfPeriod = periodWithDate - period;
-                DateTime occurrenceDate = DateTimeUtilities.getDate(periodScope, fractionOfPeriod);
-                ClaimRoot claim = new ClaimRoot(-claimValue, claimType, periodScope.getCurrentPeriodStartDate(), occurrenceDate);
+                DateTime occurrenceDate = DateTimeUtilities.getDate(periodScope, period, fractionOfPeriod);
+                ClaimRoot claim = new ClaimRoot(-claimValue, claimType, occurrenceDate, occurrenceDate);
                 presetClaimsByPeriod.put(period, claim);
             }
             else {

@@ -169,7 +169,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(
                 ReinsuranceContractBaseType.RISKATTACHING, ['underlyingContractLength': underlyingContractLength])
         generator.doCalculation()
-        int numberOfClaimsOccurrencePeriod0 = 2
+        int numberOfClaimsOccurrencePeriod0 = 5
         assertEquals "P0 ultimate claims", numberOfClaimsOccurrencePeriod0, generator.outClaims.size()
         assertEquals "P0 total ultimate", -1000d / 12d * numberOfClaimsOccurrencePeriod0, generator.outClaims*.ultimate().sum()
         for (int i = 0; i < numberOfClaimsOccurrencePeriod0; i++) {
@@ -179,7 +179,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.reset()
         generator.periodScope.prepareNextPeriod()
         generator.doCalculation()
-        int numberOfClaimsInceptionOccurrencePeriod1 = 9
+        int numberOfClaimsInceptionOccurrencePeriod1 = 6
         int numberOfClaimsOccurrencePeriod1 = numberOfClaimsInceptionOccurrencePeriod1 + (underlyingContractLength - numberOfClaimsOccurrencePeriod0)
         assertEquals "P1 ultimate claims", numberOfClaimsOccurrencePeriod1, generator.outClaims.size()
         assertEquals "P1 total ultimate", -1000d / 12d * numberOfClaimsOccurrencePeriod1, generator.outClaims*.ultimate().sum(), EPSILON
