@@ -19,13 +19,16 @@ import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimen
 import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.ReinsuranceContractBaseType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 class AttritionalClaimsGeneratorTests extends GroovyTestCase {
 
-    AttritionalClaimsGenerator generator;
+    private static final double EPSILON = 1E-10
+
+    AttritionalClaimsGenerator generator
 
     void setUp() {
         ConstraintsFactory.registerConstraint(new PeriodDistributionsConstraints())
@@ -159,6 +162,35 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.doCalculation()
         assertEquals "P2 claims", 2, generator.outClaims.size()
         assertEquals "P2 ultimate values", [-2100d, -1500d], generator.outClaims*.ultimate()
+    }
+
+    void testRiskAttachingMode() {
+        int underlyingContractLength = 12
+        generator.parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(
+                ReinsuranceContractBaseType.RISKATTACHING, ['underlyingContractLength': underlyingContractLength])
+        generator.doCalculation()
+        int numberOfClaimsOccurrencePeriod0 = 2
+        assertEquals "P0 ultimate claims", numberOfClaimsOccurrencePeriod0, generator.outClaims.size()
+        assertEquals "P0 total ultimate", -1000d / 12d * numberOfClaimsOccurrencePeriod0, generator.outClaims*.ultimate().sum()
+        for (int i = 0; i < numberOfClaimsOccurrencePeriod0; i++) {
+            assertEquals "P0 occurrence and inception in same year", generator.outClaims[i].occurrenceDate.year, generator.outClaims[i].getBaseClaim().getExposureStartDate().year
+        }
+
+        generator.reset()
+        generator.periodScope.prepareNextPeriod()
+        generator.doCalculation()
+        int numberOfClaimsInceptionOccurrencePeriod1 = 9
+        int numberOfClaimsOccurrencePeriod1 = numberOfClaimsInceptionOccurrencePeriod1 + (underlyingContractLength - numberOfClaimsOccurrencePeriod0)
+        assertEquals "P1 ultimate claims", numberOfClaimsOccurrencePeriod1, generator.outClaims.size()
+        assertEquals "P1 total ultimate", -1000d / 12d * numberOfClaimsOccurrencePeriod1, generator.outClaims*.ultimate().sum(), EPSILON
+        for (int i = 0; i < numberOfClaimsInceptionOccurrencePeriod1; i++) {
+            assertEquals "P1 occurrence and inception in same year", generator.outClaims[i].occurrenceDate.year, generator.outClaims[i].getBaseClaim().getExposureStartDate().year
+        }
+        // claims with inception dates of previous periods are added after claims of most recent period
+        for (int i = numberOfClaimsInceptionOccurrencePeriod1; i < numberOfClaimsOccurrencePeriod1; i++) {
+            assertEquals "P1 occurrence after inception", generator.outClaims[i].occurrenceDate.year, generator.outClaims[i].getBaseClaim().getExposureStartDate().year + 1
+        }
+
     }
 
     // todo: test for indices and events

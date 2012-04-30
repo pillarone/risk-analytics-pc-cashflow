@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
@@ -270,6 +271,15 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     }
 
     /**
+     * Delegates of method with same name of baseClaim
+     * @param periodScope
+     * @return true if occurrence is in current period
+     */
+    public boolean occurrenceInCurrentPeriod(PeriodScope periodScope) {
+        return baseClaim.occurrenceInCurrentPeriod(periodScope);
+    }
+
+    /**
      * Helper method to fill underwriting period channels
      *
      * @return a clone of the current instance with the date equal to the occurrence date
@@ -391,6 +401,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         result.append(paidIncrementalIndexed);
         result.append(separator);
         result.append(updateDate);
+        result.append(separator);
+        result.append(baseClaim.getExposureStartDate());
         result.append(separator);
         result.append(baseClaim.getClaimType());
         if (peril() != null) {

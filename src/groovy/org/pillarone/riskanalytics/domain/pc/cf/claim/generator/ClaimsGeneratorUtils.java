@@ -5,6 +5,9 @@ import org.joda.time.Days;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.DefaultContractBase;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.LossesOccurringContractBase;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
@@ -28,6 +31,17 @@ import java.util.List;
  */
 public class ClaimsGeneratorUtils {
 
+    /**
+     * @param severityScaleFactor
+     * @param claimSizeGenerator
+     * @param dateGenerator
+     * @param claimNumber
+     * @param claimType
+     * @param periodScope
+     * @return
+     * @deprecated currently kept to ensure reproducible results for the GIRA model
+     */
+    @Deprecated
     public static List<ClaimRoot> generateClaims(double severityScaleFactor, IRandomNumberGenerator claimSizeGenerator,
                                                  IRandomNumberGenerator dateGenerator, int claimNumber,
                                                  ClaimType claimType, PeriodScope periodScope) {
@@ -45,11 +59,43 @@ public class ClaimsGeneratorUtils {
         return baseClaims;
     }
 
-    public static List<ClaimRoot> generateClaims(double severityScaleFactor, RandomDistribution distribution, DistributionModified modifier,
-                                                 ClaimType claimType, PeriodScope periodScope) {
+    public static List<ClaimRoot> generateClaims(double severityScaleFactor, IRandomNumberGenerator claimSizeGenerator,
+                                                 IRandomNumberGenerator dateGenerator, int claimNumber,
+                                                 ClaimType claimType, PeriodScope periodScope,
+                                                 IReinsuranceContractBaseStrategy contractBase) {
+        if (contractBase instanceof DefaultContractBase) {
+            // temporarily added to keep reproducibility of results
+            return generateClaims(severityScaleFactor, claimSizeGenerator, dateGenerator, claimNumber, claimType, periodScope);
+        }
+        List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
+        List<EventPacket> events = generateEvents(claimType, claimNumber, periodScope, dateGenerator);
+        for (int i = 0; i < claimNumber; i++) {
+            EventPacket event = events == null ? null : events.get(i);
+            // todo(sku): replace with information from underwriting
+            DateTime inceptionDate = contractBase.inceptionDate(periodScope, dateGenerator);
+            int splittedClaimNumber = contractBase.splittedClaimsNumber();
+            double ultimate = (Double) claimSizeGenerator.nextValue() * -severityScaleFactor;
+            double splittedUltimate = ultimate / (double) splittedClaimNumber;
+            for (int j = 0; j < splittedClaimNumber; j++) {
+                DateTime occurrenceDate = contractBase.occurrenceDate(inceptionDate, dateGenerator, periodScope, event);
+                baseClaims.add(new ClaimRoot(splittedUltimate, claimType,
+                        inceptionDate, occurrenceDate, event));
+            }
+        }
+        return baseClaims;
+    }
+
+    public static List<ClaimRoot> generateClaims(double severityScaleFactor, RandomDistribution distribution,
+                                                 DistributionModified modifier, ClaimType claimType, PeriodScope periodScope) {
+        return generateClaims(severityScaleFactor, distribution, modifier, claimType, periodScope, new LossesOccurringContractBase());
+    }
+
+    public static List<ClaimRoot> generateClaims(double severityScaleFactor, RandomDistribution distribution,
+                                                 DistributionModified modifier, ClaimType claimType,
+                                                 PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase) {
         IRandomNumberGenerator claimSizeGenerator = RandomNumberGeneratorFactory.getGenerator(distribution, modifier);
         IRandomNumberGenerator dateGenerator = RandomNumberGeneratorFactory.getUniformGenerator();
-        return generateClaims(severityScaleFactor, claimSizeGenerator, dateGenerator, 1, claimType, periodScope);
+        return generateClaims(severityScaleFactor, claimSizeGenerator, dateGenerator, 1, claimType, periodScope, contractBase);
     }
 
     public static List<ClaimRoot> calculateClaims(double severityScaleFactor, Distribution claimsSizeDistribution, ClaimType claimType,
@@ -104,6 +150,14 @@ public class ClaimsGeneratorUtils {
         return events;
     }
 
+    /**
+     * @param claimType triggering behaviour, events are required for event claim types only
+     * @param number of events to generate
+     * @param periodScope used for date generation
+     * @param dateGenerator
+     * @return for ClaimType.EVENT or AGGREGATED_EVENT a list of length number in all other cases with event dates
+     *          generated according to dateGenerator and value = 0, null for all other claim types
+     */
     public static List<EventPacket> generateEvents(ClaimType claimType, int number, PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
         // dateGenerator uses fraction of period, i.e., must have states in unity interval
         if (!(claimType.equals(ClaimType.EVENT) || claimType.equals(ClaimType.AGGREGATED_EVENT))) {

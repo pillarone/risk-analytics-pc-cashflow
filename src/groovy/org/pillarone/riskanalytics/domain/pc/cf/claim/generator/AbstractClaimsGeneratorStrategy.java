@@ -5,6 +5,8 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.DefaultContractBase;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -37,13 +39,14 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
         lazyInitClaimsSizeGenerator();
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return generateClaims(severityScalingFactor, 1, periodScope);
+        return generateClaims(severityScalingFactor, 1, periodScope, new DefaultContractBase());
     }
 
-    public List<ClaimRoot> generateClaims(double scaleFactor, int claimNumber, PeriodScope periodScope) {
+    public List<ClaimRoot> generateClaims(double scaleFactor, int claimNumber, PeriodScope periodScope,
+                                          IReinsuranceContractBaseStrategy contractBase) {
         lazyInitClaimsSizeGenerator();
         return ClaimsGeneratorUtils.generateClaims(scaleFactor, claimSizeGenerator, dateGenerator, claimNumber,
-                claimType(), periodScope);
+                claimType(), periodScope, contractBase);
     }
 
     abstract void lazyInitClaimsSizeGenerator();

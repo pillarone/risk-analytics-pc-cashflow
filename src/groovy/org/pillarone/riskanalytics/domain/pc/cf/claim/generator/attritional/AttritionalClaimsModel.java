@@ -11,6 +11,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorT
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IClaimsGeneratorStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IPeriodDependingClaimsGeneratorStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
@@ -78,6 +79,7 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
                                       PacketList<SystematicFrequencyPacket> inEventFrequencies,
                                       PacketList<EventDependenceStream> inEventSeverities,
                                       PacketList<FactorsPacket> inFactors,
+                                      IReinsuranceContractBaseStrategy contractBase,
                                       IPerilMarker filterCriteria,
                                       PeriodScope periodScope) {
         int period = periodScope.getCurrentPeriod();
@@ -89,7 +91,7 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
             return claimsModel(period).calculateClaims(scaleFactor, periodScope, severities, events);
         }
         else {
-            return claimsModel(period).generateClaims(scaleFactor, 1, periodScope);
+            return claimsModel(period).generateClaims(scaleFactor, 1, periodScope, contractBase);
         }
     }
 

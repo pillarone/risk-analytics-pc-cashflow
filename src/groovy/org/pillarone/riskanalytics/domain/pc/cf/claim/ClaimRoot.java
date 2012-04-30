@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 
@@ -109,6 +110,14 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
             }
         }
         return occurrencePeriod;
+    }
+
+    /**
+     * @param periodScope
+     * @return ture if occurrence period is the same as the current period of the periodScope
+     */
+    public boolean occurrenceInCurrentPeriod(PeriodScope periodScope) {
+        return getOccurrencePeriod(periodScope.getPeriodCounter()) == periodScope.getCurrentPeriod();
     }
 
     /**

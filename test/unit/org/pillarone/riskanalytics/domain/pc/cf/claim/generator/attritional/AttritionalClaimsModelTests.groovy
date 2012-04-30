@@ -15,6 +15,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.joda.time.DateTime
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.DefaultContractBase
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -61,17 +62,17 @@ class AttritionalClaimsModelTests extends GroovyTestCase {
         PacketList<EventDependenceStream> events = new PacketList<EventDependenceStream>(EventDependenceStream)
         PacketList<FactorsPacket> factors = new PacketList<FactorsPacket>(FactorsPacket)
 
-        List<ClaimRoot> claimRoot = model.baseClaims(underwritingInfos, systematicFrequencies, events, factors, null, periodScope)
+        List<ClaimRoot> claimRoot = model.baseClaims(underwritingInfos, systematicFrequencies, events, factors, new DefaultContractBase(), null, periodScope)
         assertEquals "P0 one claim only", 1, claimRoot.size()
         assertEquals "P0 unmodified ultimate", -1000d, claimRoot[0].ultimate
 
         periodScope.prepareNextPeriod()
-        claimRoot = model.baseClaims(underwritingInfos, systematicFrequencies, events, factors, null, periodScope)
+        claimRoot = model.baseClaims(underwritingInfos, systematicFrequencies, events, factors, new DefaultContractBase(), null, periodScope)
         assertEquals "P1 one claim only", 1, claimRoot.size()
         assertEquals "P1 unmodified ultimate", -1000d, claimRoot[0].ultimate
 
         periodScope.prepareNextPeriod()
-        claimRoot = model.baseClaims(underwritingInfos, systematicFrequencies, events, factors, null, periodScope)
+        claimRoot = model.baseClaims(underwritingInfos, systematicFrequencies, events, factors, new DefaultContractBase(), null, periodScope)
         assertEquals "P2 one claim only", 1, claimRoot.size()
         assertEquals "P2 unmodified ultimate", -2000d, claimRoot[0].ultimate
     }

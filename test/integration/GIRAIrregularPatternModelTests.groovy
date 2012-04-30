@@ -31,4 +31,9 @@ class GIRAIrregularPatternModelTests extends ModelTest {
     protected boolean shouldCompareResults() {
         true
     }
+
+    @Override
+    protected boolean stopAtFirstDifference() {
+        false
+    }
 }

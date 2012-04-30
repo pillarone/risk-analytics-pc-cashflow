@@ -11,6 +11,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGenerator;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.ReinsuranceContractBaseType;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
@@ -22,6 +24,7 @@ import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,8 +35,8 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
     static Log LOG = LogFactory.getLog(AttritionalClaimsGenerator.class);
 
     private AttritionalClaimsModel subClaimsModel = new AttritionalClaimsModel();
-//    private IReinsuranceContractBaseStrategy parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(
-//            ReinsuranceContractBaseType.PLEASESELECT, new HashMap());
+    private IReinsuranceContractBaseStrategy parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(
+            ReinsuranceContractBaseType.PLEASESELECT, new HashMap());
     private ConstrainedString parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker.class, "");
     private IAggregateActualClaimsStrategy parmActualClaims = AggregateActualClaimsStrategyType.getDefault();
     private IAggregateUpdatingMethodologyStrategy parmUpdatingMethodology = AggregateUpdatingMethodologyStrategyType.getDefault();
@@ -52,7 +55,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
         }
         else {
             baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
-                inFactors, this, periodScope);
+                inFactors, parmParameterizationBasis, this, periodScope);
             severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices());
         }
         baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter, globalUpdateDate, inPatterns);
@@ -69,6 +72,14 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
 
     public void setSubClaimsModel(AttritionalClaimsModel subClaimsModel) {
         this.subClaimsModel = subClaimsModel;
+    }
+
+    public IReinsuranceContractBaseStrategy getParmParameterizationBasis() {
+        return parmParameterizationBasis;
+    }
+
+    public void setParmParameterizationBasis(IReinsuranceContractBaseStrategy parmParameterizationBasis) {
+        this.parmParameterizationBasis = parmParameterizationBasis;
     }
 
     public ConstrainedString getParmPayoutPattern() {

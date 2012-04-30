@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -20,6 +21,7 @@ public interface IPeriodDependingClaimsGeneratorStrategy {
      * @param inEventFrequencies ignored for attritional claims
      * @param inEventSeverities  ignored for attritional claims
      * @param inFactors
+     * @param contractBase
      * @param filterCriteria     for inEventSeverities
      * @param periodScope
      * @return ClaimRoot objects
@@ -28,5 +30,6 @@ public interface IPeriodDependingClaimsGeneratorStrategy {
                                PacketList<SystematicFrequencyPacket> inEventFrequencies,
                                PacketList<EventDependenceStream> inEventSeverities,
                                PacketList<FactorsPacket> inFactors,
+                               IReinsuranceContractBaseStrategy contractBase,
                                IPerilMarker filterCriteria, PeriodScope periodScope);
 }

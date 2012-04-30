@@ -4,6 +4,7 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObject;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
@@ -41,7 +42,7 @@ public interface IClaimsGeneratorStrategy extends IParameterObject {
 
     List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope, List<Double> severities, List<EventPacket> events);
 
-    List<ClaimRoot> generateClaims(double scaleFactor, int claimNumber, PeriodScope periodScope);
+    List<ClaimRoot> generateClaims(double scaleFactor, int claimNumber, PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase);
 
     ClaimType claimType();
 }

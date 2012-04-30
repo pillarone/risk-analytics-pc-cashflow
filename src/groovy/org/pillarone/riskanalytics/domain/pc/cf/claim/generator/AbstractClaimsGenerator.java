@@ -79,11 +79,18 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
             for (ClaimRoot baseClaim : baseClaims) {
                 GrossClaimRoot grossClaimRoot = parmActualClaims.claimWithAdjustedPattern(baseClaim, currentPeriod,
                         payoutPattern, periodScope.getPeriodCounter(), globalUpdateDate);
-                if (!grossClaimRoot.hasTrivialPayout()) {
-                    // add claim only to period store if development in future periods is required
+                boolean occurrenceInCurrentPeriod = baseClaim.occurrenceInCurrentPeriod(periodScope);
+                if (!grossClaimRoot.hasTrivialPayout() || !occurrenceInCurrentPeriod) {
+                    // add claim only to period store if development in future periods is required or occurrence is delayed
                     grossClaimRoots.add(grossClaimRoot);
                 }
-                claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodScope.getPeriodCounter(), factors, true));
+                if (occurrenceInCurrentPeriod) {
+                    claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodScope.getPeriodCounter(), factors, true));
+                }
+                else {
+                    // In the case of risk attaching the inception date is within this period but the occurrence date
+                    // might be delayed. If this happens don't return the claim within the list.
+                }
             }
         }
         if (!grossClaimRoots.isEmpty()) {

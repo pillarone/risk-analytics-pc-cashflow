@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
@@ -250,6 +251,15 @@ public final class GrossClaimRoot implements IClaimRoot {
         return claimRoot.getOccurrencePeriod(periodCounter);
     }
 
+    /**
+     * Delegates to equally named method of claimRoot object
+     * @param periodScope
+     * @return
+     */
+    public boolean occurrenceInCurrentPeriod(PeriodScope periodScope) {
+        return claimRoot.occurrenceInCurrentPeriod(periodScope);
+    }
+
     public Integer getInceptionPeriod(IPeriodCounter periodCounter) {
         return claimRoot.getInceptionPeriod(periodCounter);
     }
@@ -279,7 +289,6 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     public IClaimRoot withScale(double scaleFactor) {
         return new GrossClaimRoot((ClaimRoot) claimRoot.withScale(scaleFactor), payoutPattern, reportingPattern);
-//        return claimRoot.withScale(scaleFactor);
     }
 
     @Override
