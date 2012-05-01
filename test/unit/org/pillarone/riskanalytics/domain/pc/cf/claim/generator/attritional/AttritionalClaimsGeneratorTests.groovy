@@ -1,29 +1,28 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.attritional
 
 import org.joda.time.DateTime
+import org.joda.time.Period
 import org.pillarone.riskanalytics.core.components.PeriodStore
+import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedString
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
-import org.pillarone.riskanalytics.domain.utils.constraint.PeriodDistributionsConstraints
-import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionParams
-import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersDistributionType
-import org.pillarone.riskanalytics.core.parameterization.ConstrainedString
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.ReinsuranceContractBaseType
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ISeverityIndexMarker
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndex
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
-import org.joda.time.Period
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PayoutPattern
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
-import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
-import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.ReinsuranceContractBaseType
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.ISeverityIndexMarker
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.Index
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndex
+import org.pillarone.riskanalytics.domain.utils.constraint.PeriodDistributionsConstraints
+import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionParams
+import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersDistributionType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -32,22 +31,22 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
 
     private static final double EPSILON = 1E-10
 
-    AttritionalClaimsGenerator generator
-
-    void setUp() {
+    AttritionalClaimsGenerator createGenerator() {
         ConstraintsFactory.registerConstraint(new PeriodDistributionsConstraints())
         AttritionalClaimsModel model = new AttritionalClaimsModel(parmSeverityDistribution : VaryingParametersDistributionType.getStrategy(
                 VaryingParametersDistributionType.CONSTANT, ["constant": new ConstrainedMultiDimensionalParameter([[1, 3], [1000d, 2000d]],
                         [DistributionParams.PERIOD.toString(), DistributionParams.CONSTANT.toString()],
                         ConstraintsFactory.getConstraints(PeriodDistributionsConstraints.IDENTIFIER))]))
-        generator = new AttritionalClaimsGenerator(subClaimsModel: model)
+        AttritionalClaimsGenerator generator = new AttritionalClaimsGenerator(subClaimsModel: model)
         generator.parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(ReinsuranceContractBaseType.LOSSESOCCURRING, [:])
         generator.periodScope = TestPeriodScopeUtilities.getPeriodScope(new DateTime(2012,1,1,0,0,0,0), 4)
         generator.periodStore = new PeriodStore(generator.periodScope)
+        generator
     }
 
     /** different distribution parameters for different periods */
     void testUsage() {
+        AttritionalClaimsGenerator generator = createGenerator()
         generator.doCalculation()
         assertEquals "P0 one ultimate claim", 1, generator.outClaims.size()
         assertEquals "P0 ultimate value", -1000d, generator.outClaims[0].ultimate()
@@ -69,6 +68,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         PatternPacket pattern = new PatternPacket(IPayoutPatternMarker.class, [0.5d, 0.8d, 1.0d],
                 [Period.months(0), Period.months(12), Period.months(24)])
         pattern.origin = new PayoutPattern(name: '24m')
+        AttritionalClaimsGenerator generator = createGenerator()
         generator.parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker, pattern.origin.name)
         generator.parmPayoutPattern.selectedComponent = pattern.origin
 
@@ -108,6 +108,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         ComboBoxTableMultiDimensionalParameter uwInfoComboBox = new ComboBoxTableMultiDimensionalParameter(
                 ["motor hull"], ["Underwriting Information"], IUnderwritingInfoMarker)
         uwInfoComboBox.comboBoxValues.put('motor hull', riskBands)
+        AttritionalClaimsGenerator generator = createGenerator()
         generator.subClaimsModel.parmSeverityBase = ExposureBaseType.getStrategy(ExposureBaseType.PREMIUM, ['underwritingInfo': uwInfoComboBox])
         UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000, numberOfPolicies: 20, origin: riskBands)
 
@@ -130,6 +131,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         ComboBoxTableMultiDimensionalParameter uwInfoComboBox = new ComboBoxTableMultiDimensionalParameter(
                 ["motor hull"], ["Underwriting Information"], IUnderwritingInfoMarker)
         uwInfoComboBox.comboBoxValues.put('motor hull', riskBands)
+        AttritionalClaimsGenerator generator = createGenerator()
         generator.subClaimsModel.parmSeverityBase = ExposureBaseType.getStrategy(ExposureBaseType.EXPOSURE, ['underwritingInfo': uwInfoComboBox])
         UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000, numberOfPolicies: 20, origin: riskBands)
 
@@ -148,6 +150,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
     }
 
     void testDeterministicParameterization() {
+        AttritionalClaimsGenerator generator = createGenerator()
         generator.setGlobalDeterministicMode(true)
         generator.parmDeterministicClaims = new ConstrainedMultiDimensionalParameter([[1d, 3d, 3.2], [1300d, 2100d, 1500d]],
                 [AttritionalClaimsGenerator.REAL_PERIOD, AttritionalClaimsGenerator.CLAIM_VALUE],
@@ -171,6 +174,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
 
     void testRiskAttachingMode() {
         int underlyingContractLength = 12
+        AttritionalClaimsGenerator generator = createGenerator()
         generator.parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(
                 ReinsuranceContractBaseType.RISKATTACHING, ['underlyingContractLength': underlyingContractLength])
         generator.doCalculation()
@@ -200,6 +204,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
 
     void testIndices() {
         SeverityIndex marine = new SeverityIndex()
+        AttritionalClaimsGenerator generator = createGenerator()
         generator.subClaimsModel.parmSeverityIndices = new ComboBoxTableMultiDimensionalParameter(
                 ["Marine"], ["Severity Index"], ISeverityIndexMarker
         )
