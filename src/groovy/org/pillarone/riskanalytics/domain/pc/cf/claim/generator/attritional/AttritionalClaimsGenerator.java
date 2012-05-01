@@ -13,7 +13,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.ReinsuranceContractBaseType;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.BaseDateMode;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexMode;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.AggregateActualClaimsStrategyType;
@@ -49,19 +51,20 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
     protected void doCalculation() {
         IPeriodCounter periodCounter = periodScope.getPeriodCounter();
         List<ClaimRoot> baseClaims;
-        List<Factors> severityFactors = new ArrayList<Factors>();
         if (globalDeterministicMode) {
             baseClaims = getDeterministicClaims(parmDeterministicClaims, periodScope, ClaimType.ATTRITIONAL);
         }
         else {
+            List<Factors> severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices(),
+                    IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
             baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
-                inFactors, parmParameterizationBasis, this, periodScope);
-            severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices());
+                    severityFactors, parmParameterizationBasis, this, periodScope);
         }
         baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter, globalUpdateDate, inPatterns);
+        List<Factors> runoffFactors = new ArrayList<Factors>();
         List<ClaimCashflowPacket> claims = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, parmActualClaims,
-                periodScope, severityFactors);
-        developClaimsOfFormerPeriods(claims, periodCounter, severityFactors);
+                periodScope, runoffFactors);
+        developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
         setTechnicalProperties(claims);
         outClaims.addAll(claims);
     }

@@ -25,8 +25,8 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
     private Map<String, IRandomNumberGenerator> cachedClaimNumberGenerators = new HashMap<String, IRandomNumberGenerator>();
     private IRandomNumberGenerator claimNumberGenerator;
 
-    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                          ExposureBase severityBase, FrequencyBase frequencyBase,
+    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List<Factors> severityFacotrs,
+                                          List uwInfosFilterCriteria, ExposureBase severityBase, FrequencyBase frequencyBase,
                                           List<Factors> factors, PeriodScope periodScope) {
         double frequencyScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, frequencyBase, uwInfosFilterCriteria);
         int numberOfClaims = 0;
@@ -35,15 +35,15 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
         }
         numberOfClaims = calculateNumberOfClaimsWithAppliedIndices(numberOfClaims, periodScope, factors);
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return generateClaims(severityScalingFactor, numberOfClaims, periodScope, new DefaultContractBase());
+        return generateClaims(severityScalingFactor, severityFacotrs, numberOfClaims, periodScope, new DefaultContractBase());
     }
 
-    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+    public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List<Factors> severityFacotrs, List uwInfosFilterCriteria,
                                           ExposureBase severityBase, List<Factors> factors, PeriodScope periodScope) {
         int numberOfClaims = claimNumberGenerator.nextValue().intValue();
         numberOfClaims = calculateNumberOfClaimsWithAppliedIndices(numberOfClaims, periodScope, factors);
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return generateClaims(severityScalingFactor, numberOfClaims, periodScope, new DefaultContractBase());
+        return generateClaims(severityScalingFactor, severityFacotrs, numberOfClaims, periodScope, new DefaultContractBase());
     }
 
     private int calculateNumberOfClaimsWithAppliedIndices(int numberOfClaims, PeriodScope periodScope, List<Factors> factors) {

@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.indexing;
 
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
@@ -34,6 +35,19 @@ public class IndexUtils {
             if (row > -1) {
                 filteredFactors.add(new Factors(factorPacket, BaseDateMode.valueOf(baseDateModes.get(row)),
                         IndexMode.valueOf(indexModes.get(row)), fixedDates.get(row)));
+            }
+        }
+        return filteredFactors;
+    }
+
+    public static List<Factors> filterFactors(List<FactorsPacket> factorsPackets, ComboBoxTableMultiDimensionalParameter criteria,
+                                              IndexMode indexMode, BaseDateMode baseDateMode, DateTime fixedDate) {
+        List<Factors> filteredFactors = new ArrayList<Factors>();
+        if (criteria.isEmpty()) return null;
+        List<IIndexMarker> indices = criteria.getValuesAsObjects(0, true);;
+        for (FactorsPacket factorPacket : factorsPackets) {
+            if (indices.contains((IIndexMarker) factorPacket.getOrigin())) {
+                filteredFactors.add(new Factors(factorPacket, baseDateMode, indexMode, fixedDate));
             }
         }
         return filteredFactors;

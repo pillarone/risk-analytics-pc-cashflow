@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 
@@ -31,7 +32,8 @@ public interface IClaimsGeneratorStrategy extends IParameterObject {
      * @param filterCriteria
      * @return
      */
-    List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+    List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
+                                   List<Factors> severityFactors, List uwInfosFilterCriteria,
                                    List<FactorsPacket> factorsPackets, PeriodScope periodScope,
                                    List<SystematicFrequencyPacket> systematicFrequencies,
                                    IPerilMarker filterCriteria);
@@ -42,7 +44,8 @@ public interface IClaimsGeneratorStrategy extends IParameterObject {
 
     List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope, List<Double> severities, List<EventPacket> events);
 
-    List<ClaimRoot> generateClaims(double scaleFactor, int claimNumber, PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase);
+    List<ClaimRoot> generateClaims(double scaleFactor, List<Factors> severitiesFactors, int claimNumber,
+                                   PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase);
 
     ClaimType claimType();
 }

@@ -10,7 +10,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionUtils;
@@ -44,8 +46,9 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
         return parameters;
     }
 
+    @Override
     public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
-                                          List uwInfosFilterCriteria, List<FactorsPacket> factorsPackets,
+                                          List<Factors> severityFactors, List uwInfosFilterCriteria, List<FactorsPacket> factorsPackets,
                                           PeriodScope periodScope, List<SystematicFrequencyPacket> systematicFrequencies,
                                           IPerilMarker filterCriteria) {
 
@@ -65,9 +68,16 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
         }
         List<Double> claimValues = new ArrayList<Double>();
         claimValues.add(claimValue);
-        return getClaims(claimValues, periodScope);
+        List<ClaimRoot> indexedClaims = new ArrayList<ClaimRoot>();
+        for (ClaimRoot claim : getClaims(claimValues, periodScope)) {
+            double scaledUltimate = claim.getUltimate() * IndexUtils.aggregateFactor(severityFactors,
+                    claim.getOccurrenceDate(), periodScope.getPeriodCounter(), claim.getExposureStartDate());
+            indexedClaims.add(new ClaimRoot(scaledUltimate, claim));
+        }
+        return indexedClaims;
     }
 
+    @Override
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria,
                                            PeriodScope periodScope) {

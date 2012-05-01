@@ -12,6 +12,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
@@ -59,7 +61,8 @@ public class ClaimsGeneratorUtils {
         return baseClaims;
     }
 
-    public static List<ClaimRoot> generateClaims(double severityScaleFactor, IRandomNumberGenerator claimSizeGenerator,
+    public static List<ClaimRoot> generateClaims(double severityScaleFactor, List<Factors> severityFactors,
+                                                 IRandomNumberGenerator claimSizeGenerator,
                                                  IRandomNumberGenerator dateGenerator, int claimNumber,
                                                  ClaimType claimType, PeriodScope periodScope,
                                                  IReinsuranceContractBaseStrategy contractBase) {
@@ -78,24 +81,28 @@ public class ClaimsGeneratorUtils {
             double splittedUltimate = ultimate / (double) splittedClaimNumber;
             for (int j = 0; j < splittedClaimNumber; j++) {
                 DateTime occurrenceDate = contractBase.occurrenceDate(inceptionDate, dateGenerator, periodScope, event);
-                baseClaims.add(new ClaimRoot(splittedUltimate, claimType,
+                double scaleFactor = IndexUtils.aggregateFactor(severityFactors, occurrenceDate, periodScope.getPeriodCounter(), inceptionDate);
+                baseClaims.add(new ClaimRoot(splittedUltimate * scaleFactor, claimType,
                         inceptionDate, occurrenceDate, event));
             }
         }
         return baseClaims;
     }
 
-    public static List<ClaimRoot> generateClaims(double severityScaleFactor, RandomDistribution distribution,
-                                                 DistributionModified modifier, ClaimType claimType, PeriodScope periodScope) {
-        return generateClaims(severityScaleFactor, distribution, modifier, claimType, periodScope, new LossesOccurringContractBase());
+    public static List<ClaimRoot> generateClaims(double severityScaleFactor, List<Factors> severityFactors,
+                                                 RandomDistribution distribution, DistributionModified modifier,
+                                                 ClaimType claimType, PeriodScope periodScope) {
+        return generateClaims(severityScaleFactor, severityFactors, distribution, modifier, claimType, periodScope,
+                new LossesOccurringContractBase());
     }
 
-    public static List<ClaimRoot> generateClaims(double severityScaleFactor, RandomDistribution distribution,
-                                                 DistributionModified modifier, ClaimType claimType,
+    public static List<ClaimRoot> generateClaims(double severityScaleFactor, List<Factors> severityFactors,
+                                                 RandomDistribution distribution, DistributionModified modifier, ClaimType claimType,
                                                  PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase) {
         IRandomNumberGenerator claimSizeGenerator = RandomNumberGeneratorFactory.getGenerator(distribution, modifier);
         IRandomNumberGenerator dateGenerator = RandomNumberGeneratorFactory.getUniformGenerator();
-        return generateClaims(severityScaleFactor, claimSizeGenerator, dateGenerator, 1, claimType, periodScope, contractBase);
+        return generateClaims(severityScaleFactor, severityFactors, claimSizeGenerator, dateGenerator, 1, claimType,
+                periodScope, contractBase);
     }
 
     public static List<ClaimRoot> calculateClaims(double severityScaleFactor, Distribution claimsSizeDistribution, ClaimType claimType,

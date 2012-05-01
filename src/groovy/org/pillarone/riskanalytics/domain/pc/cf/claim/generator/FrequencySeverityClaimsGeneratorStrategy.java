@@ -59,6 +59,7 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
 
 
     public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
+                                          List<Factors> severityFactors,
                                           List uwInfosFilterCriteria, List<FactorsPacket> factorPackets,
                                           PeriodScope periodScope, List<SystematicFrequencyPacket> systematicFrequencies,
                                           IPerilMarker filterCriteria) {
@@ -66,7 +67,7 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
         setClaimNumberGenerator(FrequencyDistributionUtils.getIdiosyncraticDistribution(frequencyDistribution, systematicFrequencyDistribution),
                 frequencyModification);
         List<Factors> factors = IndexUtils.filterFactors(factorPackets, frequencyIndices);
-        baseClaims.addAll(generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, frequencyBase, factors, periodScope));
+        baseClaims.addAll(generateClaims(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, frequencyBase, factors, periodScope));
         return baseClaims;
     }
 

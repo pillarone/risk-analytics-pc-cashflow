@@ -20,6 +20,10 @@ import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.ReinsuranceContractBaseType
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ISeverityIndexMarker
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Index
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndex
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -37,6 +41,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
                         [DistributionParams.PERIOD.toString(), DistributionParams.CONSTANT.toString()],
                         ConstraintsFactory.getConstraints(PeriodDistributionsConstraints.IDENTIFIER))]))
         generator = new AttritionalClaimsGenerator(subClaimsModel: model)
+        generator.parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(ReinsuranceContractBaseType.LOSSESOCCURRING, [:])
         generator.periodScope = TestPeriodScopeUtilities.getPeriodScope(new DateTime(2012,1,1,0,0,0,0), 4)
         generator.periodStore = new PeriodStore(generator.periodScope)
     }
@@ -193,5 +198,39 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
 
     }
 
-    // todo: test for indices and events
+    void testIndices() {
+        SeverityIndex marine = new SeverityIndex()
+        generator.subClaimsModel.parmSeverityIndices = new ComboBoxTableMultiDimensionalParameter(
+                ["Marine"], ["Severity Index"], ISeverityIndexMarker
+        )
+        generator.subClaimsModel.parmSeverityIndices.comboBoxValues.put("Marine", marine)
+
+        FactorsPacket severityTimeSeries = new FactorsPacket()
+        severityTimeSeries.add(new DateTime(2011,1,1,0,0,0,0), 1.1d)
+        severityTimeSeries.add(new DateTime(2012,1,1,0,0,0,0), 1.05d)
+        severityTimeSeries.add(new DateTime(2013,1,1,0,0,0,0), 0.95d)
+        severityTimeSeries.add(new DateTime(2014,1,1,0,0,0,0), 1.1d)
+        severityTimeSeries.origin = marine
+
+        generator.inFactors.addAll(severityTimeSeries)
+        generator.doCalculation()
+        assertEquals "P0 claims", 1, generator.outClaims.size()
+        assertEquals "P0 ultimate values", -1000d, generator.outClaims[0].ultimate()
+
+        generator.reset()
+        generator.periodScope.prepareNextPeriod()
+        generator.inFactors.addAll(severityTimeSeries)
+        generator.doCalculation()
+        assertEquals "P1 claims", 1, generator.outClaims.size()
+        assertEquals "P1 ultimate values", -1000d * 0.95/1.05, generator.outClaims[0].ultimate()
+
+        generator.reset()
+        generator.periodScope.prepareNextPeriod()
+        generator.inFactors.addAll(severityTimeSeries)
+        generator.doCalculation()
+        assertEquals "P2 claims", 1, generator.outClaims.size()
+        assertEquals "P2 ultimate values", -2000d * 1.1/1.05, generator.outClaims[0].ultimate(), EPSILON
+    }
+
+    // todo: test for events
 }

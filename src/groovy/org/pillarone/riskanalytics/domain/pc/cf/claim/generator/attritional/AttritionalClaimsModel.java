@@ -3,7 +3,9 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.attritional;
 import org.apache.commons.lang.ArrayUtils;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
@@ -19,14 +21,17 @@ import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.IExposureBaseStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ISeverityIndexMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionTableConstraints;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.IVaryingParametersDistributionStrategy;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersDistributionType;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,9 +44,8 @@ import java.util.List;
 public class AttritionalClaimsModel extends Component implements IPeriodDependingClaimsGeneratorStrategy {
 
     private IExposureBaseStrategy parmSeverityBase = ExposureBaseType.getDefault();
-    private ConstrainedMultiDimensionalParameter parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
-            Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
-            ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER));
+    private ComboBoxTableMultiDimensionalParameter parmSeverityIndices = new ComboBoxTableMultiDimensionalParameter(
+            Arrays.asList(""), Arrays.asList("Severity Index"), ISeverityIndexMarker.class);
     private IVaryingParametersDistributionStrategy parmSeverityDistribution = VaryingParametersDistributionType.getDefault();
     private DistributionModified parmSeverityModification = DistributionModifier.getStrategy(DistributionModifier.NONE, Collections.emptyMap());
 
@@ -70,7 +74,7 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
      * @param inUnderwritingInfo is combined with parmSeverityBase in order to filter matching underwriting info and calculate the scale factor
      * @param inEventFrequencies ignored for attritional claims
      * @param inEventSeverities
-     * @param inFactors ignored for attritional claims
+     * @param severityFactors
      * @param filterCriteria for inEventSeverities
      * @param periodScope
      * @return ClaimRoot objects
@@ -78,7 +82,7 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
     public List<ClaimRoot> baseClaims(PacketList<UnderwritingInfoPacket> inUnderwritingInfo,
                                       PacketList<SystematicFrequencyPacket> inEventFrequencies,
                                       PacketList<EventDependenceStream> inEventSeverities,
-                                      PacketList<FactorsPacket> inFactors,
+                                      List<Factors> severityFactors,
                                       IReinsuranceContractBaseStrategy contractBase,
                                       IPerilMarker filterCriteria,
                                       PeriodScope periodScope) {
@@ -91,7 +95,7 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
             return claimsModel(period).calculateClaims(scaleFactor, periodScope, severities, events);
         }
         else {
-            return claimsModel(period).generateClaims(scaleFactor, 1, periodScope, contractBase);
+            return claimsModel(period).generateClaims(scaleFactor, severityFactors, 1, periodScope, contractBase);
         }
     }
 
@@ -103,11 +107,11 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
         this.parmSeverityBase = parmSeverityBase;
     }
 
-    public ConstrainedMultiDimensionalParameter getParmSeverityIndices() {
+    public ComboBoxTableMultiDimensionalParameter getParmSeverityIndices() {
         return parmSeverityIndices;
     }
 
-    public void setParmSeverityIndices(ConstrainedMultiDimensionalParameter parmSeverityIndices) {
+    public void setParmSeverityIndices(ComboBoxTableMultiDimensionalParameter parmSeverityIndices) {
         this.parmSeverityIndices = parmSeverityIndices;
     }
 

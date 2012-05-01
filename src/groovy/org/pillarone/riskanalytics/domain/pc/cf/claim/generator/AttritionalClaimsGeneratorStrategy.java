@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
@@ -47,14 +48,16 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
      * @param periodScope
      * @return
      */
-    public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+    public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims,  List<UnderwritingInfoPacket> uwInfos,
+                                          List<Factors> severityFactors, List uwInfosFilterCriteria,
                                           List<FactorsPacket> factorsPackets, PeriodScope periodScope,
                                           List<SystematicFrequencyPacket> systematicFrequencies, IPerilMarker filterCriteria) {
         if (baseClaims.size() == 1) {
             return baseClaims;
         }
-        return generateClaim(uwInfos, uwInfosFilterCriteria, claimsSizeBase, ClaimType.ATTRITIONAL, null, periodScope);
+        return generateClaim(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, ClaimType.ATTRITIONAL, null, periodScope);
     }
+
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria,

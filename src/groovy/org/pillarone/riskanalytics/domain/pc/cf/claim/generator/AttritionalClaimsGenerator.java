@@ -6,7 +6,10 @@ import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
@@ -32,8 +35,8 @@ public class AttritionalClaimsGenerator extends Component implements IPerilMarke
 
     protected void doCalculation() {
         PeriodScope periodScope = simulationScope.getIterationScope().getPeriodScope();
-        List<ClaimRoot> baseClaims = ClaimsGeneratorUtils.generateClaims(1, parmDistribution, parmModification,
-                ClaimType.ATTRITIONAL, periodScope);
+        List<ClaimRoot> baseClaims = ClaimsGeneratorUtils.generateClaims(1, null, parmDistribution, parmModification,
+                                                                         ClaimType.ATTRITIONAL, periodScope);
         IPeriodCounter periodCounter = periodScope.getPeriodCounter();
         List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
         for (ClaimRoot baseClaim : baseClaims) {

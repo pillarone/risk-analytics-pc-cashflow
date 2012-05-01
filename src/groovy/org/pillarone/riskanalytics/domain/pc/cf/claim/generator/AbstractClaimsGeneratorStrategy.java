@@ -11,6 +11,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.*;
@@ -34,18 +35,18 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     protected Distribution modifiedClaimsSizeDistribution;
     protected double shift;
 
-    public List<ClaimRoot> generateClaim(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
-                                         ExposureBase severityBase, ClaimType claimType,
+    public List<ClaimRoot> generateClaim(List<UnderwritingInfoPacket> uwInfos, List<Factors> severityFactors,
+                                         List uwInfosFilterCriteria, ExposureBase severityBase, ClaimType claimType,
                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
         lazyInitClaimsSizeGenerator();
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return generateClaims(severityScalingFactor, 1, periodScope, new DefaultContractBase());
+        return generateClaims(severityScalingFactor, severityFactors, 1, periodScope, new DefaultContractBase());
     }
 
-    public List<ClaimRoot> generateClaims(double scaleFactor, int claimNumber, PeriodScope periodScope,
+    public List<ClaimRoot> generateClaims(double scaleFactor, List<Factors> severityFactors, int claimNumber, PeriodScope periodScope,
                                           IReinsuranceContractBaseStrategy contractBase) {
         lazyInitClaimsSizeGenerator();
-        return ClaimsGeneratorUtils.generateClaims(scaleFactor, claimSizeGenerator, dateGenerator, claimNumber,
+        return ClaimsGeneratorUtils.generateClaims(scaleFactor, severityFactors, claimSizeGenerator, dateGenerator, claimNumber,
                 claimType(), periodScope, contractBase);
     }
 

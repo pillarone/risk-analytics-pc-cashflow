@@ -15,6 +15,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.*;
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints;
@@ -67,12 +68,13 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
      * @param periodScope
      * @return
      */
-    public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
+    public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
+                                          List<Factors> severityFactors, List uwInfosFilterCriteria,
                                           List<FactorsPacket> factorsPackets, PeriodScope periodScope,
                                           List<SystematicFrequencyPacket> systematicFrequencies, IPerilMarker filterCriteria) {
         setClaimsSizeGenerator(periodScope);
         setClaimNumberGenerator(periodScope);
-        return generateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, null, periodScope);
+        return generateClaims(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, null, periodScope);
     }
 
     @Override
