@@ -28,7 +28,7 @@ class AggregateUpdatingMethodSpreadsheetTests extends SpreadsheetUnitTest {
 
     @Override
     List<String> getSpreadsheetNames() {
-        ["AggregateBFUsage.xlsx", "AggregateBFUpdateAtStart.xlsx"]
+        ["AggregateBFUsage.xlsx", "AggregateBFUpdateAtStart.xlsx","AggregateBFRunOff.xlsx","AggregateBFUpdateEnd2ndPeriod.xlsx"]
     }
 
     void testUsage() {
