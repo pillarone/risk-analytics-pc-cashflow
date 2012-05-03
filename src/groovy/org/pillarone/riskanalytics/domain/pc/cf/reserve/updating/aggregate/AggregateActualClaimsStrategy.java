@@ -19,14 +19,16 @@ import java.util.Map;
 public class AggregateActualClaimsStrategy extends AbstractParameterObject implements IAggregateActualClaimsStrategy {
 
     private ConstrainedMultiDimensionalParameter history = getDefaultHistory();
+    private PayoutPatternBase payoutPatternBase = PayoutPatternBase.PERIOD_START_DATE;
 
     public IParameterObjectClassifier getType() {
         return AggregateActualClaimsStrategyType.AGGREGATE;
     }
 
     public Map getParameters() {
-        Map<String, Object> parameters = new HashMap<String, Object>(1);
+        Map<String, Object> parameters = new HashMap<String, Object>(2);
         parameters.put("history", history);
+        parameters.put("payoutPatternBase", payoutPatternBase);
         return parameters;
     }
 
@@ -54,7 +56,7 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
                 // iterationStore access without arguments is always reading and writing to period 0
                 AggregateHistoricClaim claim = historicClaimsPerContractPeriod.get(contractPeriod);
                 if (claim == null) {
-                    claim = new AggregateHistoricClaim(contractPeriod, periodCounter, PayoutPatternBase.PERIOD_START_DATE);
+                    claim = new AggregateHistoricClaim(contractPeriod, periodCounter, payoutPatternBase);
                     historicClaimsPerContractPeriod.put(contractPeriod, claim);
                 }
                 double cumulativePaid = InputFormatConverter.getDouble(history.getValueAt(row, AggregateHistoricClaimsConstraints.PAID_AMOUNT_INDEX));
@@ -66,7 +68,7 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
 
     /**
      * Creates a GrossClaimRoot. It's payout pattern is modified if the current period end is before the update date and
-     * there exists a AggregateHistoricClaim for contractPeriod.
+     * there exists a AggregateHistoricClaim for contractPeriod.   TODO correct description, what is the correct criteria/limiting date
      * @param claimRoot providing the ultimate and occurrence date
      * @param contractPeriod
      * @param payoutPattern original payout pattern
@@ -76,7 +78,8 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
      */
     public GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
                                                    IPeriodCounter periodCounter, DateTime updateDate) {
-        if (!periodCounter.getCurrentPeriodEnd().isAfter(updateDate)) {
+//        if (!periodCounter.getCurrentPeriodEnd().isAfter(updateDate)) {
+        if (claimRoot.getOccurrenceDate().isBefore(updateDate)) {
             lazyInitHistoricClaimsPerContractPeriod(periodCounter, updateDate);
             AggregateHistoricClaim historicClaim = historicClaimsPerContractPeriod.get(contractPeriod);
             if (historicClaim != null) {

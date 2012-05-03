@@ -13,7 +13,8 @@ class AggregateActualClaimsStrategyType extends AbstractParameterObjectClassifie
 
     public static final AggregateActualClaimsStrategyType NONE = new AggregateActualClaimsStrategyType('none', 'NONE', [:])
     public static final AggregateActualClaimsStrategyType AGGREGATE = new AggregateActualClaimsStrategyType('aggregate', 'AGGREGATE',
-            [history : AggregateActualClaimsStrategy.getDefaultHistory()])
+            [history : AggregateActualClaimsStrategy.getDefaultHistory(),
+             payoutPatternBase: PayoutPatternBase.PERIOD_START_DATE])
 
     public static final all = [NONE, AGGREGATE]
 
@@ -51,7 +52,8 @@ class AggregateActualClaimsStrategyType extends AbstractParameterObjectClassifie
                 return new NoAggregateActualClaimsStrategy()
             case AggregateActualClaimsStrategyType.AGGREGATE:
                 return new AggregateActualClaimsStrategy(
-                        history: (ConstrainedMultiDimensionalParameter) parameters['history'])
+                        history: (ConstrainedMultiDimensionalParameter) parameters['history'],
+                        payoutPatternBase: parameters['payoutPatternBase'])
         }
         throw new NotImplementedException(type.toString() + " is not implemented")
     }

@@ -33,11 +33,17 @@ public class AggregateUpdatingOriginalUltimateMethodology extends AbstractParame
             // todo(sku): think about a switch to use either the occurrence or inception period
             int occurrencePeriod = baseClaim.getOccurrencePeriod(periodCounter);
             AggregateHistoricClaim historicClaim = actualClaims.historicClaims(occurrencePeriod, periodCounter, updateDate);
-            double reportedToDate = historicClaim.reportedToDate(updateDate);
-            double originalUltimate = baseClaim.getUltimate();
-            double ultimate = Math.max(reportedToDate, originalUltimate);
-            ClaimRoot adjustedBaseClaim = new ClaimRoot(ultimate, baseClaim);
-            baseClaimsWithAdjustedUltimate.add(adjustedBaseClaim);
+            if (historicClaim == null) {
+                baseClaimsWithAdjustedUltimate.add((ClaimRoot) baseClaim);
+            }
+            else {
+                // * (-1) as reported claim is entered > 0 and the ultimate is negative
+                double reportedToDate = -historicClaim.reportedToDate(updateDate);
+                double originalUltimate = baseClaim.getUltimate();
+                double ultimate = Math.min(reportedToDate, originalUltimate);
+                ClaimRoot adjustedBaseClaim = new ClaimRoot(ultimate, baseClaim);
+                baseClaimsWithAdjustedUltimate.add(adjustedBaseClaim);
+            }
         }
         return baseClaimsWithAdjustedUltimate;
     }

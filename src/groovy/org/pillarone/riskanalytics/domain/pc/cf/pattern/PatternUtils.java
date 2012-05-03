@@ -97,11 +97,12 @@ public class PatternUtils {
         }
 
         double elapsedMonths = days360(baseDate, updateDate) / 30d;
-        int nextPatternIndex = originalPattern.thisOrNextPayoutIndex(elapsedMonths);
         DateTime lastReportedDate = baseDate.plus(cumulativePeriods.get(cumulativePeriods.size() - 1));
         double elapsedMonthsTillLastReportedDate = days360(baseDate, lastReportedDate) / 30d;
+        int nextPatternIndexLastReported = originalPattern.thisOrNextPayoutIndex(elapsedMonthsTillLastReportedDate);
+        Integer nextPatternIndex = originalPattern.thisOrNextPayoutIndex(elapsedMonths);
+        double paidByLatestReportedDate = interpolatedRate(originalPattern, nextPatternIndexLastReported, elapsedMonthsTillLastReportedDate);
         int nextCumulatedPeriod = originalPattern.getCumulativePeriod(nextPatternIndex).getMonths();
-        double paidByLatestReportedDate = interpolatedRate(originalPattern, nextPatternIndex, elapsedMonthsTillLastReportedDate);
         double cumulatedPaidByNextPaymentDate = interpolatedRate(originalPattern, nextPatternIndex + 1, nextCumulatedPeriod);
         double incrementalPaidByNextPaymentDate = cumulatedPaidByNextPaymentDate - paidByLatestReportedDate;
         Double lastCumulativeRate = cumulativePercentages.get(cumulativePercentages.size() - 1);
@@ -109,7 +110,7 @@ public class PatternUtils {
         double outstandingRate = incrementalPaidByNextPaymentDate + (1 - cumulatedPaidByNextPaymentDate);
         for (int index = nextPatternIndex; index < originalPattern.size(); index++) {
             double originalCumulativeValue = originalPattern.getCumulativeValues().get(index);
-            double originalIncrement = originalCumulativeValue - originalPattern.getCumulativeValues().get(index - 1);
+            double originalIncrement = index == 0 ? originalCumulativeValue : originalCumulativeValue - originalPattern.getCumulativeValues().get(index - 1);
             double adjustedIncrement = originalIncrement / outstandingRate;
             if (index == nextPatternIndex) {
                 adjustedIncrement = incrementalPaidByNextPaymentDate / outstandingRate;
@@ -154,9 +155,9 @@ public class PatternUtils {
     public static double interpolatedRate(PatternPacket pattern, int index, double cumulatedInterpolationPeriod) {
         if (index == pattern.size()) return 1d; // todo(sku): is this correct?
         int nextCumulatedPeriodInMonths = pattern.getCumulativePeriod(index).getMonths();
-        int previousCumulatedPeriodInMonths = pattern.getCumulativePeriod(index - 1).getMonths();
+        int previousCumulatedPeriodInMonths = index == 0 ?  0 : pattern.getCumulativePeriod(index - 1).getMonths();
         double nextCumulatedValue = pattern.getCumulativeValues().get(index);
-        double previousCumulatedValue = pattern.getCumulativeValues().get(index - 1);
+        double previousCumulatedValue = index == 0 ? 0 : pattern.getCumulativeValues().get(index - 1);
         return ((nextCumulatedPeriodInMonths - cumulatedInterpolationPeriod) * previousCumulatedValue
                 + (cumulatedInterpolationPeriod - previousCumulatedPeriodInMonths) * nextCumulatedValue)
                 / (nextCumulatedPeriodInMonths - previousCumulatedPeriodInMonths);

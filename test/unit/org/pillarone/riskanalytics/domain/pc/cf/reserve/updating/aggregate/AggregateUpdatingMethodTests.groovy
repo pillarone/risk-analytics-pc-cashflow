@@ -27,9 +27,9 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
 
     void testOriginal() {
         List<ClaimRoot> baseClaims = [
-                new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20100310),
-                new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20110210),
-                new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20120330),
+                new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20100310),
+                new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20110210),
+                new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20120330),
         ]
         IAggregateActualClaimsStrategy actualClaims = AggregateActualClaimsStrategyType.getStrategy(
                 AggregateActualClaimsStrategyType.AGGREGATE,
@@ -53,7 +53,7 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
         updatedClaims.each {
             println it
         }
-        assertEquals 'adjusted ultimates', [80000d, 75000d, 75000d], updatedClaims*.getUltimate()
+        assertEquals 'adjusted ultimates', [-80000d, -75000d, -75000d], updatedClaims*.getUltimate()
     }
 
     void testReportedBF() {
