@@ -304,7 +304,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
                 cededClaim = grossClaim.getCededClaim(periodCounter);
                 double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(grossClaim.getUpdateDate());
                 if (coveredByReinsurers != 1) {
-                    cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers);
+                    cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers, true, true);
                 }
                 ClaimUtils.applyMarkers(grossClaim.getGrossClaim(), cededClaim);
                 cededClaim.setMarker(this);

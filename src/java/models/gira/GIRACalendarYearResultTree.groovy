@@ -106,8 +106,14 @@ mappings = {
                     "IBNRIndexed" "GIRA:segments:[%segment%]:outClaimsNet:IBNRIndexed", {
                         "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsNet:IBNRIndexed"
                     }
+                    "changesInIBNRIndexed" "GIRA:segments:[%segment%]:outClaimsNet:changesInIBNRIndexed", {
+                        "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsNet:changesInIBNRIndexed"
+                    }
                     "reservesIndexed" "GIRA:segments:[%segment%]:outClaimsNet:reservesIndexed", {
                         "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsNet:reservesIndexed"
+                    }
+                    "changesInReservesIndexed" "GIRA:segments:[%segment%]:outClaimsNet:changesInReservesIndexed", {
+                        "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsNet:changesInReservesIndexed"
                     }
                     "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsNet:developedResultIndexed", {
                         "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsNet:developedResultIndexed"
@@ -130,8 +136,14 @@ mappings = {
                         "IBNRIndexed" "GIRA:segments:[%segment%]:outClaimsGross:IBNRIndexed", {
                             "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsGross:IBNRIndexed"
                         }
+                        "changesInIBNRIndexed" "GIRA:segments:[%segment%]:outClaimsGross:changesInIBNRIndexed", {
+                            "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsGross:changesInIBNRIndexed"
+                        }
                         "reservesIndexed" "GIRA:segments:[%segment%]:outClaimsGross:reservesIndexed", {
                             "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsGross:reservesIndexed"
+                        }
+                        "changesInReservesIndexed" "GIRA:segments:[%segment%]:outClaimsGross:changesInReservesIndexed", {
+                            "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsGross:changesInReservesIndexed"
                         }
                         "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsGross:developedResultIndexed", {
                             "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsGross:developedResultIndexed"
@@ -155,8 +167,14 @@ mappings = {
                         "IBNRIndexed" "GIRA:segments:[%segment%]:outClaimsCeded:IBNRIndexed", {
                             "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsCeded:IBNRIndexed"
                         }
+                        "changesInIBNRIndexed" "GIRA:segments:[%segment%]:outClaimsCeded:changesInIBNRIndexed", {
+                            "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsCeded:changesInIBNRIndexed"
+                        }
                         "reservesIndexed" "GIRA:segments:[%segment%]:outClaimsCeded:reservesIndexed", {
                             "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsCeded:reservesIndexed"
+                        }
+                        "changesInReservesIndexed" "GIRA:segments:[%segment%]:outClaimsCeded:changesInReservesIndexed", {
+                            "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsCeded:changesInReservesIndexed"
                         }
                         "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsCeded:developedResultIndexed", {
                             "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsCeded:developedResultIndexed"
