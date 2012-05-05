@@ -169,7 +169,7 @@ class GIRAModel extends StochasticModel {
         Period maxPeriods = Period.months(0)
         if (globalParameters.isRuntimeTrivialPatterns()) return maxPeriods
         if (globalParameters.parmProjection.periodNumberRestricted()) {
-            maxPeriods = Period.months(globalParameters.projectionPeriods() * 12)
+            return Period.months(globalParameters.projectionPeriods() * 12)
         }
 
         Map<String, Period> claimsGeneratorPatternLengths = new HashMap<String, Period>()

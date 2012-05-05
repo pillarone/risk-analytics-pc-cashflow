@@ -77,7 +77,6 @@ public class ClaimStorage {
         }
     }
 
-    // todo(sku): investigate on the 'call' order for this function
     public void setCumulatedUltimateDevelopedCeded(double cumulatedUltimateDevelopedCeded) {
         this.cumulatedUltimateDevelopedCeded = cumulatedUltimateDevelopedCeded;
     }
@@ -95,7 +94,7 @@ public class ClaimStorage {
     }
 
     public double cededIBNR() {
-        return nominalUltimate - cumulatedReportedCeded;
+        return cededReserves() - cumulatedReportedCeded + cumulatedPaidCeded;
     }
 
     public double changeInCededReserves() {

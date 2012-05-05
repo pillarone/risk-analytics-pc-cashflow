@@ -25,8 +25,8 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     protected static Log LOG = LogFactory.getLog(AggregateSplitByInceptionDateCollectingModeStrategy.class);
 
     static final String IDENTIFIER = "SPLIT_BY_INCEPTION_DATE";
-    private static final String RESERVE_RISK = "reserveRisk";
-    private static final String PREMIUM_RISK = "premiumRisk";
+    protected static final String RESERVE_RISK = "reserveRisk";
+    protected static final String PREMIUM_RISK = "premiumRisk";
     private static final String PERIOD = "period";
 
     public List<SingleValueResultPOJO> collect(PacketList packets) throws IllegalAccessException {
@@ -75,7 +75,7 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
      * @param packets
      * @return a map with paths as key
      */
-    private Map<PathMapping, Packet> aggregate(List<Packet> packets) {
+    protected Map<PathMapping, Packet> aggregate(List<Packet> packets) {
         // has to be a LinkedHashMap to make sure the shortest path is the first in the map and gets AGGREGATED as collecting mode
         Map<PathMapping, Packet> resultMap = new LinkedHashMap<PathMapping, Packet>(packets.size());
         if (packets == null || packets.size() == 0) {
@@ -111,7 +111,7 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
         }
     }
 
-    private void addToMap(Packet packet, PathMapping path, Map<PathMapping, Packet> resultMap) {
+    protected void addToMap(Packet packet, PathMapping path, Map<PathMapping, Packet> resultMap) {
         if (packet instanceof ClaimCashflowPacket) {
             addToMap((ClaimCashflowPacket) packet, path, resultMap);
         }
@@ -151,7 +151,7 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
         }
     }
     
-    private List<SingleValueResultPOJO> createPremiumReserveRisk(List<ClaimCashflowPacket> claims) {
+    protected List<SingleValueResultPOJO> createPremiumReserveRisk(List<ClaimCashflowPacket> claims) {
         List<SingleValueResultPOJO> results = new ArrayList<SingleValueResultPOJO>();
         double totalReserveRisk = 0;
         for (ClaimCashflowPacket claim : claims) {

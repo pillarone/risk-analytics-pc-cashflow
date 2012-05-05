@@ -4,6 +4,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateClaimCol
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateReportedPaidClaimCollectingModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimatePaidClaimCollectingModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitByInceptionDateCollectingModeStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateIncludingPremiumReserveRiskCollectingModeStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.output.AggregatePremiumReserveRiskCollectingModeStrategy
 
 class PCCashflowBootStrap {
 
@@ -23,6 +25,12 @@ class PCCashflowBootStrap {
             if (CollectorMapping.find(c) == null)
                 c.save()
             c = new CollectorMapping(collectorName: AggregateUltimatePaidClaimCollectingModeStrategy.IDENTIFIER);
+            if (CollectorMapping.find(c) == null)
+                c.save()
+            c = new CollectorMapping(collectorName: AggregateIncludingPremiumReserveRiskCollectingModeStrategy.IDENTIFIER);
+            if (CollectorMapping.find(c) == null)
+                c.save()
+            c = new CollectorMapping(collectorName: AggregatePremiumReserveRiskCollectingModeStrategy.IDENTIFIER);
             if (CollectorMapping.find(c) == null)
                 c.save()
         }
