@@ -31,13 +31,18 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
 
     @Override
     List<String> getSpreadsheetNames() {
-//        ["CODNoInPeriodStartPeriod.xlsx"]   todo runs if minusDays(1) is activated L71
-        ["CODYesInPeriodMiddleActualClaims.xlsx", "CODYesLongTimeIntoFuture.xlsx"]
-//        ["CODYesVeryLongTimeIntoFuture.xlsx"]
+        ['ART-687-1-CODNoInPeriodStartPeriod.xlsx',
+         'ART-687-2-CODYesInPeriodMiddleActualClaims.xlsx',
+         'ART-687-3-CODYesLongTimeIntoFuture.xlsx',
+         'ART-687-4-CODYesVeryLongTimeIntoFuture.xlsx',
+         'ART-687-5-PSDYesMiddleOfActualPeriod.xlsx',
+         'ART-687-6-PSDYesFirstQuarter.xlsx',
+         'ART-687-9-CODNoAfterUpdateDate2ndPeriod.xlsx']
     }
 
     void testUsage() {
         for (SpreadsheetImporter importer: importers) {
+            checkedForValidationErrors = true
 
             PatternPacket originalPattern = pattern(importer, 'Pattern')
             DateTime periodStartDate = generalParameters(importer).startCoverDate.toDateTimeAtStartOfDay()
@@ -50,7 +55,7 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
             TreeMap<DateTime, Double> claimUpdates = claimUpdates(importer, 'Claims', 0, periodCounter, updateDate, payoutPatternBase)
             DateTime baseDate = payoutPatternBase.equals(PayoutPatternBase.CLAIM_OCCURANCE_DATE) ? occurrenceDate : periodStartDate
             PatternPacket adjustedPattern = PatternUtils.adjustedPattern(originalPattern, claimUpdates, ultimate,
-                    baseDate, updateDate)
+                    baseDate, occurrenceDate,updateDate)
 
             List<ClaimCashflowPacket> claims = []
 
@@ -63,11 +68,15 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
             List<Map<String, Object>> payments = futurePayments(importer)
             int index = 0
             for (ClaimCashflowPacket claim : claims) {
-                println "incremental$index @ ${claim.getUpdateDate()} ${claim.getPaidIncrementalIndexed()}"
+                if (claim.ultimate() > 0) {
+                    println "${importer.fileName} ultimate @ ${claim.occurrenceDate} ${claim.ultimate()}"
+                }
+                else {
+                    println "incremental$index @ ${claim.getUpdateDate()} ${claim.getPaidIncrementalIndexed()}"
+                }
                 if (claim.getPaidIncrementalIndexed() > 0) {
                     assertEquals "incremental$index @ ${claim.getUpdateDate()}", payments[index]['futurePayment'], claim.getPaidIncrementalIndexed(), EPSILON
                     assertEquals "payoutdates$index", payments[index]['paymentDate'], claim.getUpdateDate().toLocalDate()
-//                    assertEquals "payoutdates$index", payments[index]['paymentDate'], claim.getUpdateDate().minusDays(1).toLocalDate()
                 }
                 index++
             }
@@ -84,7 +93,6 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
     }
 
     List<Map<String, Object>> futurePayments(SpreadsheetImporter importer) {
-        // todo(sku): reading formula cells does not work, value 0 is read in
         Map map = [sheet: 'Results', startRow: 1,
                 columnMap: ['A' : 'paymentDate', 'B' : 'futurePayment']]
         importer.columns(map, FUTURE_PAYMENTS_VALIDATION)
@@ -129,7 +137,6 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
                                            IPeriodCounter periodCounter, DateTime updateDate,
                                            PayoutPatternBase payoutPatternBase) {
         IAggregateActualClaimsStrategy actualClaims = actualClaims(importer, 'Claims', payoutPatternBase)
-        // todo(sku): loop until (including) period of updateDate
         TreeMap<DateTime, Double> updates = actualClaims.historicClaims(period, periodCounter, updateDate)?.claimPaidUpdates
         updates ? updates : new TreeMap<DateTime, Double>()
     }

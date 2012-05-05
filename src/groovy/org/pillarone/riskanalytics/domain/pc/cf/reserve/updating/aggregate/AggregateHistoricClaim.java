@@ -46,13 +46,8 @@ public class AggregateHistoricClaim {
 
     private PatternPacket adjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
         DateTime baseDate = payoutPatternBaseDate(claimRoot);
-        List<Double> cumulativeValues = new ArrayList<Double>();
-        List<Period> cumulativePeriods = new ArrayList<Period>();
-        for (Map.Entry<DateTime, Double> entry : claimPaidUpdates.entrySet()) {
-            cumulativeValues.add(entry.getValue() / Math.abs(claimRoot.getUltimate()));
-            cumulativePeriods.add(new Period(baseDate, entry.getKey()));
-        }
-        return PatternUtils.adjustedPattern(payoutPattern, cumulativePeriods, cumulativeValues, baseDate, updateDate);
+        return PatternUtils.adjustedPattern(payoutPattern, claimPaidUpdates, claimRoot.getUltimate(), baseDate,
+                claimRoot.getOccurrenceDate(), updateDate);
     }
 
     public GrossClaimRoot claimWithAdjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {

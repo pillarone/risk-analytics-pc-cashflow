@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.pattern;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 
@@ -83,10 +84,12 @@ public class PatternUtils {
      *
      * @param originalPattern
      * @param cumulativePeriods
+     * @param differenceBaseDateOccurrenceDate
      * @param cumulativePercentages
      * @return an adjusted pattern or the originalPattern if cumulativePeriods is empty
      */
     public static PatternPacket adjustedPattern(PatternPacket originalPattern, List<Period> cumulativePeriods,
+                                                Period differenceBaseDateOccurrenceDate,
                                                 List<Double> cumulativePercentages, DateTime baseDate, DateTime updateDate) {
         if (cumulativePeriods.size() != cumulativePercentages.size()) {
             throw new IllegalArgumentException("List arguments need to be of same size (periods: "
@@ -108,6 +111,11 @@ public class PatternUtils {
         Double lastCumulativeRate = cumulativePercentages.get(cumulativePercentages.size() - 1);
         double effectiveOutstandingRate = 1 - lastCumulativeRate;
         double outstandingRate = incrementalPaidByNextPaymentDate + (1 - cumulatedPaidByNextPaymentDate);
+        // start with index = 1 as the first period contains the occurrence date and therefore no correction is needed.
+        for (int index = 1; index < cumulativePeriods.size(); index++) {
+            Period adjustedPeriod = cumulativePeriods.get(index).minus(differenceBaseDateOccurrenceDate);
+            cumulativePeriods.set(index, adjustedPeriod);
+        }
         for (int index = nextPatternIndex; index < originalPattern.size(); index++) {
             double originalCumulativeValue = originalPattern.getCumulativeValues().get(index);
             double originalIncrement = index == 0 ? originalCumulativeValue : originalCumulativeValue - originalPattern.getCumulativeValues().get(index - 1);
@@ -119,8 +127,7 @@ public class PatternUtils {
             cumulativePercentages.add(lastCumulativeRate);
             // Note the "-1" in the date original pay date calculation, this means that when using the period start
             // date as the payout base a payout specified at month 12 will be seen in the first annual
-            // todo(sku): ask Chris/Simon if this rule should be applied also if there is no history
-            cumulativePeriods.add(originalPattern.getCumulativePeriods().get(index).minusDays(1));
+            cumulativePeriods.add(originalPattern.getCumulativePeriods().get(index).minusDays(1).minus(differenceBaseDateOccurrenceDate));
         }
         return new PatternPacket(originalPattern, cumulativePercentages, cumulativePeriods);
     }
@@ -135,15 +142,26 @@ public class PatternUtils {
      * @return adjusted pattern if claimUpdates is not empty, otherwise the originalPattern is returned
      */
     public static PatternPacket adjustedPattern(PatternPacket originalPattern, TreeMap<DateTime, Double> claimUpdates,
-                                                double ultimate, DateTime baseDate, DateTime updateDate) {
-        if (claimUpdates.isEmpty()) return originalPattern;
+                                                double ultimate, DateTime baseDate, DateTime occurrenceDate, DateTime updateDate) {
+        if (claimUpdates.isEmpty()) {
+            List<Period> cumulativePeriods = new ArrayList<Period>();
+            for (int index = 0; index < originalPattern.size(); index++) {
+                cumulativePeriods.add(originalPattern.getCumulativePeriod(index).minusDays(1));
+            }
+            return new PatternPacket(originalPattern, originalPattern.getCumulativeValues(), cumulativePeriods);
+        }
         List<Period> cumulativePeriods = new ArrayList<Period>();
         List<Double> cumulativeValues = new ArrayList<Double>();
+        if (!claimUpdates.containsKey(occurrenceDate)) {
+            cumulativePeriods.add(new Period());
+            cumulativeValues.add(0d);
+        }
         for (Map.Entry<DateTime, Double> claimUpdate : claimUpdates.entrySet()) {
             cumulativeValues.add(claimUpdate.getValue() / ultimate);
             cumulativePeriods.add(new Period(baseDate, claimUpdate.getKey()));
         }
-        return adjustedPattern(originalPattern, cumulativePeriods, cumulativeValues, baseDate, updateDate);
+        Period differenceOccurrenceDateBaseDate = new Period(baseDate, occurrenceDate);
+        return adjustedPattern(originalPattern, cumulativePeriods, differenceOccurrenceDateBaseDate, cumulativeValues, baseDate, updateDate);
     }
 
     /**
