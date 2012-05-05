@@ -42,7 +42,8 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
 
     void testUsage() {
         for (SpreadsheetImporter importer: importers) {
-            checkedForValidationErrors = true
+            // enable the following line while writing the test case but comment it out before committing!
+//            checkedForValidationErrors = true
 
             PatternPacket originalPattern = pattern(importer, 'Pattern')
             DateTime periodStartDate = generalParameters(importer).startCoverDate.toDateTimeAtStartOfDay()
