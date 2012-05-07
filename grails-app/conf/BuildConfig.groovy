@@ -25,12 +25,12 @@ grails.project.dependency.resolution = {
         test ":excel-import:0.9.6"
 
         if (appName == "risk-analytics-pc-cashflow") {
-            runtime "org.pillarone:risk-analytics-core:1.5"
-            runtime("org.pillarone:risk-analytics-commons:0.3") { transitive = false }
+            runtime "org.pillarone:risk-analytics-core:1.6-ALPHA-2.2"
+            runtime("org.pillarone:risk-analytics-commons:0.4") { transitive = false }
         }
     }
 }
-//grails.plugin.location.'risk-analytics-core' = "../RiskAnalyticsCore"
+//grails.plugin.location.'risk-analytics-core' = "../risk-analytics-core"
 //grails.plugin.location.'risk-analytics-commons' = "../risk-analytics-commons"
 
 grails.project.dependency.distribution = {

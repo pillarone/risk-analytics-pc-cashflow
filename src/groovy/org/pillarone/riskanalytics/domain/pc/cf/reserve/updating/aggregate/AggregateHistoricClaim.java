@@ -1,7 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate;
 
 import org.joda.time.DateTime;
-import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
@@ -10,7 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
-import java.util.*;
+import java.util.TreeMap;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

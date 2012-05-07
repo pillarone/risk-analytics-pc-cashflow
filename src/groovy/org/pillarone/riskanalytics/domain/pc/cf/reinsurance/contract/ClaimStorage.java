@@ -47,8 +47,9 @@ public class ClaimStorage {
                 return cumulatedReportedCeded;
             case PAID:
                 return cumulatedPaidCeded;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
-        throw new NotImplementedException(claimProperty.toString());
     }
 
 
@@ -74,6 +75,8 @@ public class ClaimStorage {
                 cumulatedReportedCeded += incrementalCeded;
                 cededIbnr.add(cededIBNR());
                 break;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
     }
 
@@ -156,13 +159,13 @@ public class ClaimStorage {
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(reference.toString());
-        buffer.append(", cumulatedReportedCeded: ");
-        buffer.append(cumulatedReportedCeded);
-        buffer.append(", cumulatedPaidCeded: ");
-        buffer.append(cumulatedPaidCeded);
-        return buffer.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append(reference.toString());
+        builder.append(", cumulatedReportedCeded: ");
+        builder.append(cumulatedReportedCeded);
+        builder.append(", cumulatedPaidCeded: ");
+        builder.append(cumulatedPaidCeded);
+        return builder.toString();
     }
 
     public IClaimRoot getReference() {

@@ -84,12 +84,10 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
                     // add claim only to period store if development in future periods is required or occurrence is delayed
                     grossClaimRoots.add(grossClaimRoot);
                 }
+                // In the case of risk attaching the inception date is within this period but the occurrence date
+                // might be delayed. If this happens don't return the claim within the list.
                 if (occurrenceInCurrentPeriod) {
                     claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodScope.getPeriodCounter(), factors, true));
-                }
-                else {
-                    // In the case of risk attaching the inception date is within this period but the occurrence date
-                    // might be delayed. If this happens don't return the claim within the list.
                 }
             }
         }

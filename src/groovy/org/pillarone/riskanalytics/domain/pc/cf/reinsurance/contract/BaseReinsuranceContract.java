@@ -225,6 +225,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
      * @param claimsHistories gets a new element using the key claim and a ClaimStorage created of the claim
      * @return contract covering the claim
      */
+    // todo(sku): avoid mixing function and method
     private ClaimStorage newClaimOccurredInCurrentPeriod(ClaimCashflowPacket claim, Map<IClaimRoot, ClaimStorage> claimsHistories) {
         ClaimStorage claimStorage = new ClaimStorage(claim);
         claimsHistories.put(claim.getKeyClaim(), claimStorage);

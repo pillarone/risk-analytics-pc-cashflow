@@ -37,8 +37,9 @@ public class ThresholdStore {
                 return thresholdReported;
             case PAID:
                 return thresholdPaid;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
-        throw new NotImplementedException(claimProperty.toString());
     }
 
     public double get(BasedOnClaimProperty claimProperty, double stabilizationFactor) {
@@ -57,8 +58,9 @@ public class ThresholdStore {
                 // updated for paid only as this property is used for reinstatement premium calculation
                 thresholdStabilizedCumulated += thresholdPaid - oldThresholdPaid;
                 return thresholdPaid;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
-        throw new NotImplementedException(claimProperty.toString());
     }
 
     public void set(double threshold, BasedOnClaimProperty claimProperty) {
@@ -72,6 +74,8 @@ public class ThresholdStore {
             case PAID:
                 thresholdPaid = threshold;
                 break;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
     }
 
@@ -86,6 +90,8 @@ public class ThresholdStore {
             case PAID:
                 thresholdPaid += summand;
                 break;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
     }
 
@@ -95,13 +101,13 @@ public class ThresholdStore {
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("ultimate: ");
-        buffer.append(thresholdUltimate);
-        buffer.append(", reported: ");
-        buffer.append(thresholdReported);
-        buffer.append(", paid: ");
-        buffer.append(thresholdPaid);
-        return buffer.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append("ultimate: ");
+        builder.append(thresholdUltimate);
+        builder.append(", reported: ");
+        builder.append(thresholdReported);
+        builder.append(", paid: ");
+        builder.append(thresholdPaid);
+        return builder.toString();
     }
 }

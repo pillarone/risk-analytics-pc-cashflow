@@ -25,6 +25,14 @@ public class NoUpdatingMethodology extends AbstractParameterObject implements IA
     }
 
 
+    /**
+     * @param baseClaims  ignored in this strategy
+     * @param actualClaims ignored in this strategy
+     * @param periodCounter ignored in this strategy
+     * @param updateDate ignored in this strategy
+     * @param patterns  ignored in this strategy
+     * @return provided baseClaims
+     */
     public List<ClaimRoot> updatingUltimate(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
                                             IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
         return baseClaims;

@@ -46,11 +46,11 @@ public class ClaimHistoryAndApplicableContract {
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(claim.toString());
-        buffer.append(", ");
-        buffer.append(contract.toString());
-        return buffer.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append(claim.toString());
+        builder.append(", ");
+        builder.append(contract.toString());
+        return builder.toString();
     }
 
     public boolean hasContract(IReinsuranceContract contract) {

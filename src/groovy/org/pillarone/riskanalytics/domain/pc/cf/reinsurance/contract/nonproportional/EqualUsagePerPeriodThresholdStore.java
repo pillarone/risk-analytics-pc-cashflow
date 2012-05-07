@@ -84,6 +84,9 @@ public class EqualUsagePerPeriodThresholdStore {
                     else {
                         throw new UnsupportedOperationException("Function has to be called first for ultimate!");
                     }
+                    break;
+                default:
+                    throw new NotImplementedException(claimProperty.toString());
             }
         }
     }
@@ -100,8 +103,9 @@ public class EqualUsagePerPeriodThresholdStore {
                 return usedThresholdPerPeriodReported;
             case PAID:
                 return usedThresholdPerPeriodPaid;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
-        throw new NotImplementedException(claimProperty.toString());
     }
 
     public double get(BasedOnClaimProperty claimProperty, double stabilizationFactor, int period) {
@@ -125,13 +129,13 @@ public class EqualUsagePerPeriodThresholdStore {
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("ultimate: ");
-        buffer.append(usedThresholdPerPeriodUltimate);
-        buffer.append(", reported: ");
-        buffer.append(usedThresholdPerPeriodReported);
-        buffer.append(", paid: ");
-        buffer.append(usedThresholdPerPeriodPaid);
-        return buffer.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append("ultimate: ");
+        builder.append(usedThresholdPerPeriodUltimate);
+        builder.append(", reported: ");
+        builder.append(usedThresholdPerPeriodReported);
+        builder.append(", paid: ");
+        builder.append(usedThresholdPerPeriodPaid);
+        return builder.toString();
     }
 }
