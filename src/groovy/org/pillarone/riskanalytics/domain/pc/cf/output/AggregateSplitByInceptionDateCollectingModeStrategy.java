@@ -27,6 +27,7 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     static final String IDENTIFIER = "SPLIT_BY_INCEPTION_DATE";
     protected static final String RESERVE_RISK = "reserveRisk";
     protected static final String PREMIUM_RISK = "premiumRisk";
+    protected static final String CALENDAR_YEAR_VOLATILITY = "calendarYearVolatility";
     private static final String PERIOD = "period";
 
     public List<SingleValueResultPOJO> collect(PacketList packets) throws IllegalAccessException {
@@ -154,6 +155,7 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     protected List<SingleValueResultPOJO> createPremiumReserveRisk(List<ClaimCashflowPacket> claims) {
         List<SingleValueResultPOJO> results = new ArrayList<SingleValueResultPOJO>();
         double totalReserveRisk = 0;
+        double premiumRisk = 0;
         for (ClaimCashflowPacket claim : claims) {
             if (claim.reserveRisk() != 0) {
                 // belongs to reserve risk
@@ -165,11 +167,15 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
             }
             else if (claim.premiumRisk() != 0) {
                 // belongs to premium risk
-                results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK, claim.premiumRisk()));
+                premiumRisk = claim.premiumRisk();
+                results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK, premiumRisk));
             }
         }
         if (totalReserveRisk != 0) {
             results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK, totalReserveRisk));
+        }
+        if (premiumRisk + totalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), CALENDAR_YEAR_VOLATILITY, premiumRisk + totalReserveRisk));
         }
         return results;
     }

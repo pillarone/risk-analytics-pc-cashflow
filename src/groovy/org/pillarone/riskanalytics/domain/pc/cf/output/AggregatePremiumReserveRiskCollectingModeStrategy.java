@@ -44,6 +44,7 @@ public class AggregatePremiumReserveRiskCollectingModeStrategy extends Aggregate
     protected List<SingleValueResultPOJO> createPremiumReserveRisk(List<ClaimCashflowPacket> claims) {
         List<SingleValueResultPOJO> results = new ArrayList<SingleValueResultPOJO>();
         double totalReserveRisk = 0;
+        double premiumRisk = 0;
         for (ClaimCashflowPacket claim : claims) {
             if (claim.reserveRisk() != 0) {
                 // belongs to reserve risk
@@ -51,11 +52,15 @@ public class AggregatePremiumReserveRiskCollectingModeStrategy extends Aggregate
             }
             else if (claim.premiumRisk() != 0) {
                 // belongs to premium risk
-                results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK, claim.premiumRisk()));
+                premiumRisk = claim.premiumRisk();
+                results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK, premiumRisk));
             }
         }
         if (totalReserveRisk != 0) {
             results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK, totalReserveRisk));
+        }
+        if (premiumRisk + totalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), CALENDAR_YEAR_VOLATILITY, premiumRisk + totalReserveRisk));
         }
         return results;
     }
