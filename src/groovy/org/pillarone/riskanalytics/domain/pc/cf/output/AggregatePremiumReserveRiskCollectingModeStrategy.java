@@ -53,8 +53,10 @@ public class AggregatePremiumReserveRiskCollectingModeStrategy extends Aggregate
             else if (claim.premiumRisk() != 0) {
                 // belongs to premium risk
                 premiumRisk = claim.premiumRisk();
-                results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK, premiumRisk));
             }
+        }
+        if (premiumRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK, premiumRisk));
         }
         if (totalReserveRisk != 0) {
             results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK, totalReserveRisk));

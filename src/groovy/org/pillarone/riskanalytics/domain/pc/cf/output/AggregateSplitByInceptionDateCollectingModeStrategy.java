@@ -156,6 +156,7 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
         List<SingleValueResultPOJO> results = new ArrayList<SingleValueResultPOJO>();
         double totalReserveRisk = 0;
         double premiumRisk = 0;
+        Map<String, Double> reserveRiskByPeriodPath = new HashMap<String, Double>();
         for (ClaimCashflowPacket claim : claims) {
             if (claim.reserveRisk() != 0) {
                 // belongs to reserve risk
@@ -163,13 +164,20 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
                 String periodLabel = inceptionPeriod(claim);
                 String pathExtension = PERIOD + PATH_SEPARATOR + periodLabel;
                 String pathExtended = getExtendedPath(claim, pathExtension);
-                results.add(createSingleValueResult(pathExtended, RESERVE_RISK, claim.reserveRisk()));
+                Double reserveRisk = reserveRiskByPeriodPath.get(pathExtended);
+                reserveRisk = reserveRisk == null ? claim.reserveRisk() : reserveRisk + claim.reserveRisk();
+                reserveRiskByPeriodPath.put(pathExtended, reserveRisk);
             }
             else if (claim.premiumRisk() != 0) {
                 // belongs to premium risk
-                premiumRisk = claim.premiumRisk();
-                results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK, premiumRisk));
+                premiumRisk += claim.premiumRisk();
             }
+        }
+        for (Map.Entry<String, Double> reserveRisk : reserveRiskByPeriodPath.entrySet()) {
+            results.add(createSingleValueResult(reserveRisk.getKey(), RESERVE_RISK, reserveRisk.getValue()));
+        }
+        if (premiumRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK, premiumRisk));
         }
         if (totalReserveRisk != 0) {
             results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK, totalReserveRisk));
