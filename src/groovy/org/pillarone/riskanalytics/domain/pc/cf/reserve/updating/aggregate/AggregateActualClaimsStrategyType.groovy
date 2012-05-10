@@ -5,11 +5,15 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.apache.commons.lang.NotImplementedException
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 class AggregateActualClaimsStrategyType extends AbstractParameterObjectClassifier {
+
+    static Log LOG = LogFactory.getLog(AggregateActualClaimsStrategy.class);
 
     public static final AggregateActualClaimsStrategyType NONE = new AggregateActualClaimsStrategyType('none', 'NONE', [:])
     public static final AggregateActualClaimsStrategyType AGGREGATE = new AggregateActualClaimsStrategyType('aggregate', 'AGGREGATE',
@@ -47,14 +51,20 @@ class AggregateActualClaimsStrategyType extends AbstractParameterObjectClassifie
     }
 
     static IAggregateActualClaimsStrategy getStrategy(AggregateActualClaimsStrategyType type, Map parameters) {
+        PayoutPatternBase base = (PayoutPatternBase) parameters['payoutPatternBase']
+        if(base == null) {
+            LOG.info("No payoutPatternBase set in the UI. This parameter is deliberately not exposed in the UI. Defaulting to " + PayoutPatternBase.PERIOD_START_DATE.toString());
+            base = PayoutPatternBase.PERIOD_START_DATE;
+        }
         switch (type) {
             case AggregateActualClaimsStrategyType.NONE:
                 return new NoAggregateActualClaimsStrategy()
             case AggregateActualClaimsStrategyType.AGGREGATE:
                 return new AggregateActualClaimsStrategy(
                         history: (ConstrainedMultiDimensionalParameter) parameters['history'],
-                        payoutPatternBase: parameters['payoutPatternBase'])
+                        payoutPatternBase: base
+                )
+            default: throw new NotImplementedException(type.toString() + " is not implemented")
         }
-        throw new NotImplementedException(type.toString() + " is not implemented")
     }
 }
