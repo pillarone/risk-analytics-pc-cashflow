@@ -36,7 +36,7 @@ public class AggregateIncludingPremiumReserveRiskCollectingModeStrategy extends 
             }
             else if (claim.premiumRisk() != 0) {
                 // belongs to premium risk
-                premiumRisk = claim.premiumRisk();
+                premiumRisk += claim.premiumRisk();
             }
         }
         if (premiumRisk != 0) {
