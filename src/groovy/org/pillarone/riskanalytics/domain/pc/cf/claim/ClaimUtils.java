@@ -220,13 +220,13 @@ public class ClaimUtils {
         storage.lazyInitCededClaimRoot(scaleFactorUltimate);
         double cededPaidIncremental = grossClaim.getPaidIncrementalIndexed() * scaleFactorPaid;
         storage.update(grossClaim.ultimate() * scaleFactorUltimate, BasedOnClaimProperty.ULTIMATE);
+        storage.setCumulatedUltimateDevelopedCeded(grossClaim.developmentResultCumulative() * scaleFactorUltimate);
         storage.update(cededPaidIncremental, BasedOnClaimProperty.PAID);
         storage.update(cededValueReported, BasedOnClaimProperty.REPORTED);
         ExposureInfo cededExposureInfo = adjustExposureInfo && grossClaim.getExposureInfo() != null
                 ? grossClaim.getExposureInfo().withScale(scaleFactorUltimate) : grossClaim.getExposureInfo();
         ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(grossClaim, storage, cededExposureInfo);
         applyMarkers(grossClaim, cededClaim);
-        storage.setCumulatedUltimateDevelopedCeded(grossClaim.developmentResultCumulative() * scaleFactorUltimate);
         return cededClaim;
     }
 
