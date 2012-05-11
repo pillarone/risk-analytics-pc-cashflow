@@ -81,6 +81,10 @@ public class ClaimStorage {
         this.cumulatedUltimateDevelopedCeded = cumulatedUltimateDevelopedCeded;
     }
 
+    public double getNominalUltimate() {
+        return nominalUltimate;
+    }
+
     public double getIncrementalPaidCeded() {
         return incrementalPaidCeded;
     }
