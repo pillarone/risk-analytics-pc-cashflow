@@ -51,7 +51,7 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
         correctPaths()
         correctFields(['developedResultIndexed', 'appliedIndexValue', 'IBNRIndexed', 'reservesIndexed', 'outstandingIndexed',
                 'paidIncrementalIndexed', 'reportedIncrementalIndexed', 'ultimate', 'premiumWritten', 'premiumPaid',
-                'reserveRisk', 'premiumRisk', 'calendarYearVolatility'])
+                'reserveRiskBase', 'premiumRiskBase', 'premiumAndReserveRiskBase'])
         correctReportingClaimsResults()
         correctPaidClaimsResults()
         correctPremiumResults()

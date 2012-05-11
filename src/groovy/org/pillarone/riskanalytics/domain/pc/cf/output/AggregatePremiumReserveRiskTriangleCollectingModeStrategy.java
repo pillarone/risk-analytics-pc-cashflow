@@ -1,54 +1,43 @@
 package org.pillarone.riskanalytics.domain.pc.cf.output;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pillarone.riskanalytics.core.output.ICollectingModeStrategy;
 import org.pillarone.riskanalytics.core.output.PathMapping;
 import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
 import org.pillarone.riskanalytics.core.packets.Packet;
+import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This collecting mode strategy calculates the premium and reserve risk
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AggregateIncludingPremiumReserveRiskCollectingModeStrategy extends AggregateSplitByInceptionDateCollectingModeStrategy implements ICollectingModeStrategy {
+public class AggregatePremiumReserveRiskTriangleCollectingModeStrategy extends AggregateSplitByInceptionDateCollectingModeStrategy implements ICollectingModeStrategy {
 
-    protected static Log LOG = LogFactory.getLog(AggregateIncludingPremiumReserveRiskCollectingModeStrategy.class);
+    protected static Log LOG = LogFactory.getLog(AggregatePremiumReserveRiskTriangleCollectingModeStrategy.class);
 
-    static final String IDENTIFIER = "INCLUDING_PREMIUM_RESERVE_RISK";
+    static final String IDENTIFIER = "PREMIUM_RESERVE_RISK_TRIANGLE";
 
-    @Override
-    protected List<SingleValueResultPOJO> createPremiumReserveRisk(List<ClaimCashflowPacket> claims) {
-        List<SingleValueResultPOJO> results = new ArrayList<SingleValueResultPOJO>();
-        double totalReserveRisk = 0;
-        double premiumRisk = 0;
-        for (ClaimCashflowPacket claim : claims) {
-            if (claim.reserveRisk() != 0) {
-                // belongs to reserve risk
-                totalReserveRisk += claim.reserveRisk();
+    public List<SingleValueResultPOJO> collect(PacketList packets) throws IllegalAccessException {
+        initSimulation();
+        iteration = packetCollector.getSimulationScope().getIterationScope().getCurrentIteration();
+        period = packetCollector.getSimulationScope().getIterationScope().getPeriodScope().getCurrentPeriod();
+
+        if (isCompatibleWith(packets.get(0).getClass())) {
+            List<SingleValueResultPOJO> singleValueResults = new ArrayList<SingleValueResultPOJO>();
+            if (packets.get(0) instanceof ClaimCashflowPacket) {
+                singleValueResults.addAll(createPremiumReserveRisk(packets));
             }
-            else if (claim.premiumRisk() != 0) {
-                // belongs to premium risk
-                premiumRisk += claim.premiumRisk();
-            }
+            return singleValueResults;
+        } else {
+            String notImplemented = ResourceBundle.getBundle(RESOURCE_BUNDLE).getString("AggregatePremiumReserveRiskTriangleCollectingModeStrategy.notImplemented");
+            throw new NotImplementedException(notImplemented + "\n(" + packetCollector.getPath() + ")");
         }
-        if (premiumRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK_BASE, premiumRisk));
-        }
-        if (totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK_BASE, totalReserveRisk));
-        }
-        if (premiumRisk + totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk + totalReserveRisk));
-        }
-        return results;
     }
 
     /**
@@ -76,6 +65,7 @@ public class AggregateIncludingPremiumReserveRiskCollectingModeStrategy extends 
         return IDENTIFIER;
     }
 
+    @Override
     public boolean isCompatibleWith(Class packetClass) {
         return ClaimCashflowPacket.class.isAssignableFrom(packetClass);
     }

@@ -56,13 +56,13 @@ public class AggregatePremiumReserveRiskCollectingModeStrategy extends Aggregate
             }
         }
         if (premiumRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK, premiumRisk));
+            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK_BASE, premiumRisk));
         }
         if (totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK, totalReserveRisk));
+            results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK_BASE, totalReserveRisk));
         }
         if (premiumRisk + totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), CALENDAR_YEAR_VOLATILITY, premiumRisk + totalReserveRisk));
+            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk + totalReserveRisk));
         }
         return results;
     }

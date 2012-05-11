@@ -25,9 +25,9 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     protected static Log LOG = LogFactory.getLog(AggregateSplitByInceptionDateCollectingModeStrategy.class);
 
     static final String IDENTIFIER = "SPLIT_BY_INCEPTION_DATE";
-    protected static final String RESERVE_RISK = "reserveRisk";
-    protected static final String PREMIUM_RISK = "premiumRisk";
-    protected static final String CALENDAR_YEAR_VOLATILITY = "calendarYearVolatility";
+    protected static final String RESERVE_RISK_BASE = "reserveRiskBase";
+    protected static final String PREMIUM_RISK_BASE = "premiumRiskBase";
+    protected static final String PREMIUM_AND_RESERVE_RISK_BASE = "premiumAndReserveRiskBase";
     private static final String PERIOD = "period";
 
     public List<SingleValueResultPOJO> collect(PacketList packets) throws IllegalAccessException {
@@ -174,16 +174,16 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
             }
         }
         for (Map.Entry<String, Double> reserveRisk : reserveRiskByPeriodPath.entrySet()) {
-            results.add(createSingleValueResult(reserveRisk.getKey(), RESERVE_RISK, reserveRisk.getValue()));
+            results.add(createSingleValueResult(reserveRisk.getKey(), RESERVE_RISK_BASE, reserveRisk.getValue()));
         }
         if (premiumRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK, premiumRisk));
+            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK_BASE, premiumRisk));
         }
         if (totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK, totalReserveRisk));
+            results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK_BASE, totalReserveRisk));
         }
         if (premiumRisk + totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), CALENDAR_YEAR_VOLATILITY, premiumRisk + totalReserveRisk));
+            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk + totalReserveRisk));
         }
         return results;
     }
