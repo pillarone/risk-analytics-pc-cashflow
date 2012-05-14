@@ -139,7 +139,7 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
             double cededAfterAAD = Math.max(0, ceded - periodDeductible.get(claimPropertyBase, stabilizationFactor));
             double reduceAAD = ceded - cededAfterAAD;
             periodDeductible.set(Math.max(0, periodDeductible.get(claimPropertyBase) - reduceAAD), claimPropertyBase);
-            double incrementalCeded = Math.max(0, cededAfterAAD - storage.getCumulatedCeded(claimPropertyBase));
+            double incrementalCeded = cededAfterAAD - storage.getCumulatedCeded(claimPropertyBase);
             double cededAfterAAL = aggregateLimitValue > incrementalCeded ? incrementalCeded : aggregateLimitValue;
             periodLimit.plus(-cededAfterAAL, claimPropertyBase);
             return cededAfterAAL;
