@@ -27,7 +27,16 @@ import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarke
 import java.util.*;
 
 /**
- * This abstract base class should not contain any parameters to keep it easily extendable for the UI purposes.
+ * General implementation guidelines:<ul>
+ *     <li>We use a claim/underwriting packet centric approach and avoid history tracking within this and derived classes.</li>
+ *     <li>There are specific claim storage objects (@link ClaimStorage) keeping track of a minimal information of each
+ *          key claim. So this base class and its derived class don't track individual claims.</li>
+ *     <li>For every single covered period a contract object is instantiated implementing IReinsuranceContract. These
+ *          objects are linked with claims in fillGrossClaims() by creating ClaimHistoryAndApplicableContract objects.</li>
+ *     <li>If information needs to be shared among several periods specific objects are added on this class. Available
+ *          implementations are so far ThresholdStore and EqualUsagePerPeriodThresholdStore.</li>
+ *     <li>This abstract base class should not contain any parameters to keep it easily extensible for the UI purposes.</li>
+ * </ul>
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */

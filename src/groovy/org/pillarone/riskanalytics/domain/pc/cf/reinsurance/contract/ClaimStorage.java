@@ -10,6 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * As ClaimCashflowPacket don't track any historic information/contains only incremental values and IReinsuranceContract
+ * are operating on a cumulated bases this helper class is keeping track of a ClaimCashflowPacket using the keyClaim
+ * as a link (reference, referenceCeded). Following our general concept a minimal set of information is kept in order to
+ * keep these objects as lean
+ * as possible.
+ *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class ClaimStorage {
@@ -31,6 +37,7 @@ public class ClaimStorage {
     private double cumulatedUltimateDevelopedCeded;
 
     public ClaimStorage(ClaimCashflowPacket claim) {
+        // todo: same check is done twice in ClaimHistoryAndApplicableContract
         if (claim.getNominalUltimate() > 0) {
             reference = ClaimUtils.scale(claim.getBaseClaim(), -1);
         }
@@ -39,6 +46,7 @@ public class ClaimStorage {
         }
     }
 
+    /** helper method for more generic call interfaces */
     public double getCumulatedCeded(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
             case ULTIMATE:
@@ -52,7 +60,7 @@ public class ClaimStorage {
         }
     }
 
-
+    /** helper method for more generic call interfaces */
     public void update(double incrementalCeded, BasedOnClaimProperty claimProperty) {
         incrementalCeded = avoidNegativeZero(incrementalCeded);
         switch (claimProperty) {

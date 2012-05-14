@@ -7,6 +7,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.TrivialContract;
 
 /**
+ * This objects links a ClaimCashflowPacket with its ClaimStorage and the IReinsuranceContract being applied to it.
+ *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class ClaimHistoryAndApplicableContract {
@@ -35,6 +37,7 @@ public class ClaimHistoryAndApplicableContract {
     }
 
     public ClaimCashflowPacket getCededClaim(IPeriodCounter periodCounter) {
+        // todo: why is this switch required here and in the c'tor?
         if (claim.getNominalUltimate() > 0) {
             // claim is positive if ceded claims are covered, inverting sign required
             return contract.calculateClaimCeded(ClaimUtils.scale(claim, -1, true, true), storage, periodCounter);
@@ -57,6 +60,9 @@ public class ClaimHistoryAndApplicableContract {
         return contract == this.contract;
     }
 
+    /**
+     * @return true if contract is implementing TrivialContract
+     */
     public boolean isTrivialContract() {
         return contract instanceof TrivialContract;
     }
