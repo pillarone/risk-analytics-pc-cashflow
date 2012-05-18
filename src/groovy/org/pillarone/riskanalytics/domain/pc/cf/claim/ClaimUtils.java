@@ -133,7 +133,7 @@ public class ClaimUtils {
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor, IClaimRoot scaledBaseClaim, boolean keepKeyClaim) {
         if (notTrivialValues(claim)) {
             double scaledReserves = (claim.developedUltimate() - claim.getPaidCumulatedIndexed()) * factor;
-            double scaledUltimate = claim.ultimate() == 0d ? 0d : claim.developedUltimate() * factor;
+            double scaledUltimate = claim.ultimate() == 0d ? 0d : claim.ultimate() * factor;
             double scaledPaidIncremental = claim.getPaidIncrementalIndexed() == 0d ? 0d : claim.getPaidIncrementalIndexed() * factor;
             double scaledPaidCumulated = claim.getPaidCumulatedIndexed() == 0d ? 0d : claim.getPaidCumulatedIndexed() * factor;
             double scaledReportedIncremental = claim.getReportedIncrementalIndexed() == 0d ? 0d : claim.getReportedIncrementalIndexed() * factor;
