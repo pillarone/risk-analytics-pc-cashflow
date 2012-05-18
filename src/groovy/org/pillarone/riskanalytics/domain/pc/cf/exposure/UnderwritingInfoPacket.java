@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.exposure;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
 import org.pillarone.riskanalytics.domain.utils.marker.*;
@@ -133,8 +134,9 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
                 return premiumWritten;
             case SUM_INSURED:
                 return sumInsured;
+            default:
+                throw new NotImplementedException("FrequencyBase " + base.toString() + " not implemented");
         }
-        return 1;
     }
 
     /**

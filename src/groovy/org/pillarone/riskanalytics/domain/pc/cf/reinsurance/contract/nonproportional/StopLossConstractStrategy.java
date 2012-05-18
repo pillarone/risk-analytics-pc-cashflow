@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
@@ -64,6 +65,8 @@ public class StopLossConstractStrategy extends AbstractParameterObject implement
                 scaledAttachmentPoint *= gnpi;
                 scaledLimit *= gnpi;
                 break;
+            default:
+                throw new NotImplementedException("StopLossBase " + stopLossContractBase.toString() + " not implemented.");
         }
         return new ArrayList<IReinsuranceContract>(Arrays.asList(
                 new StopLossContract(cededPremiumFixed, scaledAttachmentPoint, scaledLimit, premiumAllocation)));

@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.indexing;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 
@@ -29,8 +30,9 @@ public class Factors {
                 return packet.getFactorCeiling(date);
             case STEPWISE_PREVIOUS:
                 return packet.getFactorFloor(date);
+            default:
+                throw new NotImplementedException("BaseDateMode " + indexMode.toString() + " not implemented.");
         }
-        return null;
     }
 
     /**

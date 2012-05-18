@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.core.parameterization.AbstractMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -74,6 +75,8 @@ public abstract class TermXLConstractStrategy extends AbstractParameterObject im
             case NUMBER_OF_POLICIES:
                 cededPremiumFixed = premium * UnderwritingInfoUtils.sumNumberOfPolicies(underwritingInfoPackets);
                 break;
+            default:
+                throw new NotImplementedException("XLPremiumBase " + premiumBase + " not implemented.");
         }
         return cededPremiumFixed;
     }

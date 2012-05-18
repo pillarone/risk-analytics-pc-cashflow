@@ -2,7 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.exposure;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.XLPremiumBase;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
@@ -59,6 +59,8 @@ public class UnderwritingInfoUtils {
             case NUMBER_OF_POLICIES:
                 scaledPremium = premium * UnderwritingInfoUtils.sumNumberOfPolicies(underwritingInfoPackets);
                 break;
+            default:
+                throw new NotImplementedException("XLPremiumBase " + premiumBase + " not implemented.");
         }
         return scaledPremium;
     }

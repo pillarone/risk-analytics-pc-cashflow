@@ -23,6 +23,7 @@ import org.pillarone.riskanalytics.domain.utils.validation.ParameterValidationIm
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.FrequencySeverityClaimsGeneratorStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.FrequencyAverageAttritionalClaimsGeneratorStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGeneratorStrategy
+import org.apache.commons.lang.NotImplementedException
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -137,9 +138,12 @@ class ClaimsGeneratorScalingValidator implements IParameterizationValidator {
                 if (base.equals(ExposureBase.ABSOLUTE)) return true
                 return [ValidationType.WARNING, "claims.generator.model.frequency.severity.claim.type.single.exposure.base.not.absolute", claimsType.toString(), base.toString()]
             }
-            if (claimsType.equals(FrequencySeverityClaimType.AGGREGATED_EVENT)) {
+            else if (claimsType.equals(FrequencySeverityClaimType.AGGREGATED_EVENT)) {
                 if (frequencyBase.equals(FrequencyBase.ABSOLUTE)) return true
                 return [ValidationType.WARNING, "claims.generator.model.frequency.severity.claim.type.event.frequency.base.not.absolute", claimsType.toString(), frequencyBase.toString()]
+            }
+            else {
+                throw new NotImplementedException("FrequencySeverityClaimType " + claimsType.toString() + " not implemented.")
             }
         }
 
@@ -151,9 +155,12 @@ class ClaimsGeneratorScalingValidator implements IParameterizationValidator {
                 if (base.equals(ExposureBase.ABSOLUTE)) return true
                 return [ValidationType.WARNING, "claims.generator.model.frequency.severity.claim.type.single.exposure.base.not.absolute", claimsType.toString(), base.toString()]
             }
-            if (claimsType.equals(FrequencySeverityClaimType.AGGREGATED_EVENT)) {
+            else if (claimsType.equals(FrequencySeverityClaimType.AGGREGATED_EVENT)) {
                 if (frequencyBase.equals(FrequencyBase.ABSOLUTE)) return true
                 return [ValidationType.WARNING, "claims.generator.model.frequency.severity.claim.type.event.frequency.base.not.absolute", claimsType.toString(), frequencyBase.toString()]
+            }
+            else {
+                throw new NotImplementedException("FrequencySeverityClaimType " + claimsType.toString() + " not implemented.")
             }
         }
 

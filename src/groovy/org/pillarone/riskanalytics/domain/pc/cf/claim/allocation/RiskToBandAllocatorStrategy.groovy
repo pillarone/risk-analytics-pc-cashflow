@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
+import org.apache.commons.lang.NotImplementedException
 
 /**
  * @author martin.melchior (at) fhnw (dot) ch
@@ -84,6 +85,9 @@ class RiskToBandAllocatorStrategy extends AbstractParameterObject implements IRi
             }
             else if (allocationBase.is(RiskBandAllocationBaseLimited.PREMIUM)) {
                 targetDistribution.put(underwritingInfo.getMaxSumInsured(), underwritingInfo.getPremiumWritten())
+            }
+            else {
+                throw new NotImplementedException("RiskBandAllocationBaseLimited " + allocationBase + " not implemented.")
             }
         }
         Double sum = (Double) targetDistribution.values().sum()

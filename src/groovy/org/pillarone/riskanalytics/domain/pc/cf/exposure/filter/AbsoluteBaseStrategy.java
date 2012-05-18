@@ -18,7 +18,6 @@ public class AbsoluteBaseStrategy extends AbstractParameterObject implements IEx
         return 1;
     }
 
-    @Override
     public void coveredUnderwritingInfo(PacketList<UnderwritingInfoPacket> underwritingInfos) {
         // keep all packets, no modification required
     }

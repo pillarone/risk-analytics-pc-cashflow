@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
@@ -38,6 +39,9 @@ abstract public class AbstractCommission implements ICommission {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.getReportedIncrementalIndexed();
             }
+        }
+        else {
+            throw new NotImplementedException("BasedOnClaimProperty " + useClaims.toString() + " not implemented.");
         }
         return totalClaims;
     }

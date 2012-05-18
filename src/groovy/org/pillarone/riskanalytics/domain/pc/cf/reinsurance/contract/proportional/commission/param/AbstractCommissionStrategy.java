@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
@@ -49,6 +50,9 @@ abstract public class AbstractCommissionStrategy extends AbstractParameterObject
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.getReportedIncrementalIndexed();
             }
+        }
+        else {
+            throw new NotImplementedException("BasedOnClaimProperty " + useClaims.toString() + " not implemented.");
         }
         return totalClaims;
     }

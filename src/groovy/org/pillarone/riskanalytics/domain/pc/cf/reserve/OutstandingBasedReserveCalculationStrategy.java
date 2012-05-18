@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
@@ -39,6 +40,8 @@ public class OutstandingBasedReserveCalculationStrategy extends AbstractReserveC
                 reportedPortionAtBaseDate = reportingPattern.getCumulativeValues().get(reportingPattern.thisOrPreviousPayoutIndex(numberOfMonths));
                 payoutPortionAtBaseDate = payoutPattern.getCumulativeValues().get(payoutPattern.thisOrPreviousPayoutIndex(numberOfMonths));
                 break;
+            default:
+                throw new NotImplementedException("InterpolationMode " + interpolationMode.toString() + " not implemented");
         }
         if (reportedPortionAtBaseDate == payoutPortionAtBaseDate) {
             throw new IllegalArgumentException("outstandingIndexed share is zero: Reserve based strategy not possible here!");
