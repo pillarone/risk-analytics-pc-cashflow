@@ -33,7 +33,7 @@ public class NoAggregateActualClaimsStrategy extends AbstractParameterObject imp
     }
 
     public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate) {
-        return null;
+        return new AggregateHistoricClaim(period, periodCounter, PayoutPatternBase.PERIOD_START_DATE);
     }
 
 }

@@ -44,6 +44,13 @@ public class AggregateHistoricClaim {
         claimPaidUpdates.put(reportedDate, cumulativePaid);
     }
 
+    /**
+     * @return true if both there are no claim paid and reported updates
+     */
+    public boolean noUpdates() {
+        return claimPaidUpdates.isEmpty() && claimReportedUpdates.isEmpty();
+    }
+
     private PatternPacket adjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
         DateTime baseDate = payoutPatternBaseDate(claimRoot);
         return PatternUtils.adjustedPattern(payoutPattern, claimPaidUpdates, claimRoot.getUltimate(), baseDate,

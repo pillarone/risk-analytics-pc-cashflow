@@ -91,7 +91,11 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
 
     public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate) {
         lazyInitHistoricClaimsPerContractPeriod(periodCounter, updateDate);
-        return historicClaimsPerContractPeriod.get(period);
+        AggregateHistoricClaim historicClaim = historicClaimsPerContractPeriod.get(period);
+        if (historicClaim == null) {
+            historicClaim = new AggregateHistoricClaim(period, periodCounter, PayoutPatternBase.CLAIM_OCCURANCE_DATE);
+        }
+        return historicClaim;
     }
 
     /**

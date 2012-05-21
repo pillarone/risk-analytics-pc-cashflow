@@ -44,7 +44,7 @@ public class AggregateUpdatingBFReportingMethodology extends AbstractParameterOb
             DateTime periodStartDate = periodCounter.startOfPeriod(baseClaim.getOccurrenceDate());
 
             AggregateHistoricClaim historicClaim = actualClaims.historicClaims(occurrencePeriod, periodCounter, updateDate);
-            if (historicClaim == null) {
+            if (historicClaim.noUpdates()) {
                 baseClaimsWithAdjustedUltimate.add(baseClaim);
             }
             else {
