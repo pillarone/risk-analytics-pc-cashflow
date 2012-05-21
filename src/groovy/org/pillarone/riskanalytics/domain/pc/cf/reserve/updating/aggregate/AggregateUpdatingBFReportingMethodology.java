@@ -25,7 +25,7 @@ public class AggregateUpdatingBFReportingMethodology extends AbstractParameterOb
     private ConstrainedString updatingPattern = new ConstrainedString(IUpdatingPatternMarker.class, "");
 
     public Map getParameters() {
-        Map<String, Object> parameters = new HashMap<String, Object>(2);
+        Map<String, Object> parameters = new HashMap<String, Object>(1);
         parameters.put("updatingPattern", updatingPattern);
         return parameters;
     }
@@ -39,28 +39,23 @@ public class AggregateUpdatingBFReportingMethodology extends AbstractParameterOb
         PatternPacket pattern = PatternUtils.filterPattern(patterns, updatingPattern, IUpdatingPatternMarker.class);
         List<ClaimRoot> baseClaimsWithAdjustedUltimate = new ArrayList<ClaimRoot>();
         for (ClaimRoot baseClaim : baseClaims) {
-            try {
-                // todo(sku): think about a switch to use either the occurrence or inception period
-                int occurrencePeriod = baseClaim.getOccurrencePeriod(periodCounter);
-                DateTime periodStartDate = periodCounter.startOfPeriod(baseClaim.getOccurrenceDate());
+            // todo(sku): think about a switch to use either the occurrence or inception period
+            int occurrencePeriod = baseClaim.getOccurrencePeriod(periodCounter);
+            DateTime periodStartDate = periodCounter.startOfPeriod(baseClaim.getOccurrenceDate());
 
-                AggregateHistoricClaim historicClaim = actualClaims.historicClaims(occurrencePeriod, periodCounter, updateDate);
-                if (historicClaim == null) {
-                    baseClaimsWithAdjustedUltimate.add(baseClaim);
-                }
-                else {
-                    double reportedToDate = historicClaim.reportedToDate(updateDate);
-                    DateTime lastReportedDate = historicClaim.lastReportedDate(updateDate);
-                    double elapsedMonths = DateTimeUtilities.days360(periodStartDate, lastReportedDate) / 30d;
-                    double outstandingShare = pattern.outstandingShare(elapsedMonths);
-                    double originalUltimate = baseClaim.getUltimate();
-                    double ultimate = reportedToDate + outstandingShare * originalUltimate;
-                    ClaimRoot adjustedBaseClaim = new ClaimRoot(ultimate, baseClaim);
-                    baseClaimsWithAdjustedUltimate.add(adjustedBaseClaim);
-                }
-            }
-            catch (NotInProjectionHorizon ex) {
+            AggregateHistoricClaim historicClaim = actualClaims.historicClaims(occurrencePeriod, periodCounter, updateDate);
+            if (historicClaim == null) {
                 baseClaimsWithAdjustedUltimate.add(baseClaim);
+            }
+            else {
+                double reportedToDate = historicClaim.reportedToDate(updateDate);
+                DateTime lastReportedDate = historicClaim.lastReportedDate(updateDate);
+                double elapsedMonths = DateTimeUtilities.days360(periodStartDate, lastReportedDate) / 30d;
+                double outstandingShare = pattern.outstandingShare(elapsedMonths);
+                double originalUltimate = baseClaim.getUltimate();
+                double ultimate = reportedToDate + outstandingShare * originalUltimate;
+                ClaimRoot adjustedBaseClaim = new ClaimRoot(ultimate, baseClaim);
+                baseClaimsWithAdjustedUltimate.add(adjustedBaseClaim);
             }
         }
         return baseClaimsWithAdjustedUltimate;
