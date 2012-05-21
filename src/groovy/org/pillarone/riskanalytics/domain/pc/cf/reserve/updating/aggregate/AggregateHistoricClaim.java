@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate;
 
+import org.jfree.util.Log;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
@@ -29,7 +30,7 @@ public class AggregateHistoricClaim {
         try {
             contractPeriodStartDate = periodCounter.startOfPeriod(contractPeriod);
         } catch (NotInProjectionHorizon notInProjectionHorizon) {
-            notInProjectionHorizon.printStackTrace();
+            Log.debug(notInProjectionHorizon);
         }
     }
 
