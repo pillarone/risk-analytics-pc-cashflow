@@ -11,7 +11,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 
 /**
  * Doc: https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1540
- * It contains all shared information of several ClaimCashflowPacket objects and is used as key.
+ * It contains all shared information of several ClaimCashflowPacket objects and is used as key. As reserves are modelled
+ * using this object too it might occur in this case that the occurrence and inception date are outside the projection
+ * horizon and therefore the corresponding period properties will be null.
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
@@ -98,7 +100,8 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
 
     /**
      * @param periodCounter
-     * @return occurrence period in the context of the simulation engine
+     * @return occurrence period in the context of the simulation engine or null if the occurrenceDate is not within
+     *          the projection horizon.
      */
     public Integer getOccurrencePeriod(IPeriodCounter periodCounter) {
         if (occurrencePeriod == null) {
@@ -122,7 +125,9 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
 
     /**
      * @param periodCounter
-     * @return if exposure info is attached return its inception period, else the occurrence period
+     * @return if exposure info is attached return its inception period, else the period the exposureStartDate belongs to
+     *          or else the occurrence period. If the exposureStartDate is not within the projection horizon, null
+     *          is returned.
      */
     public Integer getInceptionPeriod(IPeriodCounter periodCounter) {
         if (hasExposureInfo()) {
@@ -133,6 +138,7 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
                 return periodCounter.belongsToPeriod(exposureStartDate);
             }
             catch (NotInProjectionHorizon ex) {
+                LOG.debug(exposureStartDate + " is not in projection horizon");
                 return null;
             }
         }
@@ -156,7 +162,7 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
         try {
             return (ClaimRoot) super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            LOG.debug(e);
         }
         return null;
     }
