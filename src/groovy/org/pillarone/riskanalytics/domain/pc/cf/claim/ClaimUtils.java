@@ -32,6 +32,7 @@ public class ClaimUtils {
             throw new NotImplementedException("method is currently implemented for same base claim only");
         }
         double ultimate = 0;
+        double nominalUltimate = 0;
         double paidIncremental = 0;
         double paidCumulated = 0;
         double reportedIncremental = 0;
@@ -42,6 +43,7 @@ public class ClaimUtils {
         double changeInIBNRIndexed = 0;
         for (ClaimCashflowPacket claim : claims) {
             ultimate += claim.ultimate();
+            nominalUltimate += claim.nominalUltimate();
             paidIncremental += claim.getPaidIncrementalIndexed();
             paidCumulated += claim.getPaidCumulatedIndexed();
             reportedIncremental += claim.getReportedIncrementalIndexed();
@@ -57,8 +59,9 @@ public class ClaimUtils {
         if (claims.get(0).getUpdatePeriod() != null) {
             updatePeriod = claims.get(0).getUpdatePeriod();
         }
-        ClaimCashflowPacket summedClaims = new ClaimCashflowPacket(baseClaim, ultimate, paidIncremental, paidCumulated,
-                reportedIncremental, reportedCumulated, reserves, changeInReservesIndexed, changeInIBNRIndexed, null, updateDate, updatePeriod);
+        ClaimCashflowPacket summedClaims = new ClaimCashflowPacket(baseClaim, ultimate, nominalUltimate, paidIncremental,
+                paidCumulated, reportedIncremental, reportedCumulated, reserves, changeInReservesIndexed,
+                changeInIBNRIndexed, null, updateDate, updatePeriod);
         applyMarkers(claims.get(0), summedClaims);
         summedClaims.setAppliedIndexValue(claims.size() == 0 ? 1d : Math.pow(appliedIndex, 1d / claims.size()));
         return summedClaims;
@@ -124,7 +127,7 @@ public class ClaimUtils {
     /**
      * @param claim
      * @param factor
-     * @return new ClaimCashflowPacket()
+     * @return new ClaimCashflowPacket using current base as scaled base claim and keeping key claim
      */
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor) {
         return scale(claim, factor, claim.getBaseClaim(), true);
@@ -133,6 +136,7 @@ public class ClaimUtils {
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor, IClaimRoot scaledBaseClaim, boolean keepKeyClaim) {
         if (notTrivialValues(claim)) {
             double scaledReserves = (claim.developedUltimate() - claim.getPaidCumulatedIndexed()) * factor;
+            // todo(sku): check impact on PMO-2072 and vice-versa
             double scaledUltimate = claim.ultimate() == 0d ? 0d : claim.ultimate() * factor;
             double scaledPaidIncremental = claim.getPaidIncrementalIndexed() == 0d ? 0d : claim.getPaidIncrementalIndexed() * factor;
             double scaledPaidCumulated = claim.getPaidCumulatedIndexed() == 0d ? 0d : claim.getPaidCumulatedIndexed() * factor;
@@ -153,13 +157,13 @@ public class ClaimUtils {
     }
 
     /**
-     * exposure info is not affected by scaling.
+     * Hint: linked exposure info is not affected by scaling.
      *
      * @param claim
      * @param factor
      * @param scaleBaseClaim
      * @param keepKeyClaim
-     * @return
+     * @return scales base claim before scaling the claim itself
      */
     public static ClaimCashflowPacket scale(ClaimCashflowPacket claim, double factor, boolean scaleBaseClaim, boolean keepKeyClaim) {
         if (!scaleBaseClaim) return scale(claim, factor);

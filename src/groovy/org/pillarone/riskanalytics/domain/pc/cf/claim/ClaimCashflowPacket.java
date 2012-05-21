@@ -134,6 +134,16 @@ public class ClaimCashflowPacket extends MultiValuePacket {
                 updateDate, updatePeriod);
     }
 
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double nominalUltimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
+                               double reportedIncrementalIndexed, double reportedCumulatedIndexed, double reservesIndexed,
+                               double changeInReservesIndexed, double changeInIBNRIndexed, ExposureInfo exposureInfo,
+                               DateTime updateDate, int updatePeriod) {
+        this(baseClaim, baseClaim, ultimate, nominalUltimate, paidIncrementalIndexed, paidCumulatedIndexed,
+                reportedIncrementalIndexed, reportedCumulatedIndexed,
+                reservesIndexed, changeInReservesIndexed, changeInIBNRIndexed, exposureInfo,
+                updateDate, updatePeriod);
+    }
+
     public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim, double ultimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
                                double reportedIncrementalIndexed, double reportedCumulatedIndexed, double reservesIndexed,
                                double changeInReservesIndexed, double changeInIBNRIndexed, ExposureInfo exposureInfo,
@@ -232,8 +242,12 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return nominalUltimate;
     }
 
+    /**
+     * @return difference between developed ultimate and nominal ultimate
+     */
     public double developmentResultCumulative() {
-        return baseClaim.hasTrivialPayout() ? 0 : developedUltimate() - nominalUltimate;
+        if (Math.abs(developedUltimate() - nominalUltimate) < 1E-10) return 0d;
+        return developedUltimate() - nominalUltimate;
     }
 
     public double premiumRisk() {
