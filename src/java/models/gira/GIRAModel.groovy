@@ -108,8 +108,7 @@ class GIRAModel extends StochasticModel {
         }
         else {
             segments.inClaims = claimsGenerators.outClaims
-            // todo: change inReserves to inClaims as soon as PMO-1733 is solved
-            segments.inReserves = reservesGenerators.outReserves
+            segments.inClaims = reservesGenerators.outReserves
             segments.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
             segments.inFactors = discounting.outFactors
             reinsuranceContracts.inClaims = segments.outClaimsGross
@@ -118,10 +117,8 @@ class GIRAModel extends StochasticModel {
             segments.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
             retrospectiveReinsurance.inClaims = segments.outClaimsGross
             retrospectiveReinsurance.inUnderwritingInfo = segments.outUnderwritingInfoGross
-            // todo: change inReserves to inClaims as soon as PMO-1733 is solved
-            segments.inReservesCeded = retrospectiveReinsurance.outClaimsCeded
-            // todo: change inReserves to inClaims as soon as PMO-1733 is solved
-            segments.inUnderwritingInfoCeded2 = retrospectiveReinsurance.outUnderwritingInfoCeded
+            segments.inClaimsCeded = retrospectiveReinsurance.outClaimsCeded
+            segments.inUnderwritingInfoCeded = retrospectiveReinsurance.outUnderwritingInfoCeded
             if (structures.subComponentCount() > 0) {
                 structures.inClaimsGross = segments.outClaimsGross
                 structures.inClaimsCeded = segments.outClaimsCeded

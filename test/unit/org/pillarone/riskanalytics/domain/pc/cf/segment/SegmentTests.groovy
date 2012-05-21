@@ -137,9 +137,8 @@ class SegmentTests extends GroovyTestCase {
         )
         paUwInfo1000.exposure = new ExposureInfo(new DateTime(2011, 1, 1, 0,0,0,0), 0, 1500, 5000, ExposureBase.ABSOLUTE)
 
-        segment.inClaims << marine1000 << motor500 << pa400
+        segment.inClaims << marine1000 << motor500 << pa400 << marineReserve2000 << motorReserve600 << paReserve800
         segment.inUnderwritingInfo << marineUwInfo600 << motorUwInfo450 << paUwInfo1000
-        segment.inReserves << marineReserve2000 << motorReserve600 << paReserve800
 
         segment.doCalculation(Segment.PHASE_GROSS)
 
