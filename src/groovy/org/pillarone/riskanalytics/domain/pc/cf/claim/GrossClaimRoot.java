@@ -278,8 +278,10 @@ public final class GrossClaimRoot implements IClaimRoot {
     }
 
     public IClaimRoot withScale(double scaleFactor) {
-        return new GrossClaimRoot((ClaimRoot) claimRoot.withScale(scaleFactor), payoutPattern, reportingPattern);
-//        return claimRoot.withScale(scaleFactor);
+        GrossClaimRoot grossClaimRoot = new GrossClaimRoot((ClaimRoot) claimRoot.withScale(scaleFactor), payoutPattern, reportingPattern);
+        grossClaimRoot.remainingReserves = remainingReserves * scaleFactor;
+        grossClaimRoot.previousIBNR = previousIBNR * scaleFactor;
+        return grossClaimRoot;
     }
 
     @Override
