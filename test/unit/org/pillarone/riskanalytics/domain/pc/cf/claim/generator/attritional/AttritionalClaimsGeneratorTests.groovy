@@ -23,6 +23,7 @@ import org.pillarone.riskanalytics.domain.utils.constraint.PeriodDistributionsCo
 import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionParams
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersDistributionType
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionTableConstraints
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -206,10 +207,11 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
     void testIndices() {
         SeverityIndex marine = new SeverityIndex()
         AttritionalClaimsGenerator generator = createGenerator()
-        generator.subClaimsModel.parmSeverityIndices = new ComboBoxTableMultiDimensionalParameter(
-                ["Marine"], ["Severity Index"], ISeverityIndexMarker
+        ConstraintsFactory.registerConstraint(new SeverityIndexSelectionTableConstraints())
+        generator.subClaimsModel.parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
+                ["Marine"], ["Severity Index"], ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER),
         )
-        generator.subClaimsModel.parmSeverityIndices.comboBoxValues.put("Marine", marine)
+        generator.subClaimsModel.parmSeverityIndices.comboBoxValues.put(0, ["Marine" : marine])
 
         FactorsPacket severityTimeSeries = new FactorsPacket()
         severityTimeSeries.add(new DateTime(2011,1,1,0,0,0,0), 1.1d)

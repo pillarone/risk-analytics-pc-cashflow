@@ -53,6 +53,19 @@ public class IndexUtils {
         return filteredFactors;
     }
 
+    public static List<Factors> filterFactors(List<FactorsPacket> factorsPackets, ConstrainedMultiDimensionalParameter criteria,
+                                              IndexMode indexMode, BaseDateMode baseDateMode, DateTime fixedDate) {
+        List<Factors> filteredFactors = new ArrayList<Factors>();
+        if (criteria.isEmpty()) return null;
+        List<IIndexMarker> indices = criteria.getValuesAsObjects(0);
+        for (FactorsPacket factorPacket : factorsPackets) {
+            if (indices.contains((IIndexMarker) factorPacket.getOrigin())) {
+                filteredFactors.add(new Factors(factorPacket, baseDateMode, indexMode, fixedDate));
+            }
+        }
+        return filteredFactors;
+    }
+
     /**
      * This method sets the BaseDateMode automatically to fixed date.
      * @param factorsPackets

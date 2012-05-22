@@ -44,8 +44,9 @@ import java.util.List;
 public class AttritionalClaimsModel extends Component implements IPeriodDependingClaimsGeneratorStrategy {
 
     private IExposureBaseStrategy parmSeverityBase = ExposureBaseType.getDefault();
-    private ComboBoxTableMultiDimensionalParameter parmSeverityIndices = new ComboBoxTableMultiDimensionalParameter(
-            Arrays.asList(""), Arrays.asList("Severity Index"), ISeverityIndexMarker.class);
+    private ConstrainedMultiDimensionalParameter parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
+            Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
+            ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER));
     private IVaryingParametersDistributionStrategy parmSeverityDistribution = VaryingParametersDistributionType.getDefault();
     private DistributionModified parmSeverityModification = DistributionModifier.getStrategy(DistributionModifier.NONE, Collections.emptyMap());
 
@@ -107,11 +108,11 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
         this.parmSeverityBase = parmSeverityBase;
     }
 
-    public ComboBoxTableMultiDimensionalParameter getParmSeverityIndices() {
+    public ConstrainedMultiDimensionalParameter getParmSeverityIndices() {
         return parmSeverityIndices;
     }
 
-    public void setParmSeverityIndices(ComboBoxTableMultiDimensionalParameter parmSeverityIndices) {
+    public void setParmSeverityIndices(ConstrainedMultiDimensionalParameter parmSeverityIndices) {
         this.parmSeverityIndices = parmSeverityIndices;
     }
 
