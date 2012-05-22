@@ -24,4 +24,6 @@ public class AadLimitStrategy extends AbstractParameterObject implements ILimitS
     }
 
     public double getAAD() { return aad; }
+
+    public double getAAL() { return Double.MAX_VALUE; }
 }
