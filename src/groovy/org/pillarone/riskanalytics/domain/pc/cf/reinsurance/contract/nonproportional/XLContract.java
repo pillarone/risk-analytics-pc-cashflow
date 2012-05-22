@@ -134,19 +134,14 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
     protected double cededValue(double claimPropertyCumulated, BasedOnClaimProperty claimPropertyBase, ClaimStorage storage,
                                double stabilizationFactor) {
         double aggregateLimitValue = periodLimit.get(claimPropertyBase, stabilizationFactor);
-        if (aggregateLimitValue > 0) {
-            double ceded = Math.min(Math.max(-claimPropertyCumulated - attachmentPoint * stabilizationFactor, 0), limit * stabilizationFactor);
-            double cededAfterAAD = Math.max(0, ceded - periodDeductible.get(claimPropertyBase, stabilizationFactor));
-            double reduceAAD = ceded - cededAfterAAD;
-            periodDeductible.set(Math.max(0, periodDeductible.get(claimPropertyBase) - reduceAAD), claimPropertyBase);
-            double incrementalCeded = cededAfterAAD - storage.getCumulatedCeded(claimPropertyBase);
-            double cededAfterAAL = aggregateLimitValue > incrementalCeded ? incrementalCeded : aggregateLimitValue;
-            periodLimit.plus(-cededAfterAAL, claimPropertyBase);
-            return cededAfterAAL;
-        }
-        else {
-            return 0;
-        }
+        double ceded = Math.min(Math.max(-claimPropertyCumulated - attachmentPoint * stabilizationFactor, 0), limit * stabilizationFactor);
+        double cededAfterAAD = Math.max(0, ceded - periodDeductible.get(claimPropertyBase, stabilizationFactor));
+        double reduceAAD = ceded - cededAfterAAD;
+        periodDeductible.set(Math.max(0, periodDeductible.get(claimPropertyBase) - reduceAAD), claimPropertyBase);
+        double incrementalCeded = cededAfterAAD - storage.getCumulatedCeded(claimPropertyBase);
+        double cededAfterAAL = aggregateLimitValue > incrementalCeded ? incrementalCeded : aggregateLimitValue;
+        periodLimit.plus(-cededAfterAAL, claimPropertyBase);
+        return cededAfterAAL;
     }
 
     public void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
