@@ -24,4 +24,12 @@ public class EventLimitStrategy extends AbstractParameterObject implements ILimi
     }
 
     public double getEventLimit() { return eventLimit; }
+
+    public double getAAD() {
+        return 0;
+    }
+
+    public double getAAL() {
+        return Double.MAX_VALUE;
+    }
 }

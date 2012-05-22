@@ -18,4 +18,12 @@ public class NoneLimitStrategy extends AbstractParameterObject implements ILimit
     public Map getParameters() {
         return Collections.emptyMap();
     }
+
+    public double getAAD() {
+        return 0;
+    }
+
+    public double getAAL() {
+        return Double.MAX_VALUE;
+    }
 }
