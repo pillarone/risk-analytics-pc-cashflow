@@ -24,6 +24,9 @@ import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionParams
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersDistributionType
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGenerator
+import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationState
+import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationBehaviour
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -34,13 +37,13 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
 
     AttritionalClaimsGenerator createGenerator() {
         ConstraintsFactory.registerConstraint(new PeriodDistributionsConstraints())
-        AttritionalClaimsModel model = new AttritionalClaimsModel(parmSeverityDistribution : VaryingParametersDistributionType.getStrategy(
+        AttritionalClaimsModel model = new AttritionalClaimsModel(parmSeverityDistribution: VaryingParametersDistributionType.getStrategy(
                 VaryingParametersDistributionType.CONSTANT, ["constant": new ConstrainedMultiDimensionalParameter([[1, 3], [1000d, 2000d]],
                         [DistributionParams.PERIOD.toString(), DistributionParams.CONSTANT.toString()],
                         ConstraintsFactory.getConstraints(PeriodDistributionsConstraints.IDENTIFIER))]))
         AttritionalClaimsGenerator generator = new AttritionalClaimsGenerator(subClaimsModel: model)
         generator.parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(ReinsuranceContractBaseType.LOSSESOCCURRING, [:])
-        generator.periodScope = TestPeriodScopeUtilities.getPeriodScope(new DateTime(2012,1,1,0,0,0,0), 4)
+        generator.periodScope = TestPeriodScopeUtilities.getPeriodScope(new DateTime(2012, 1, 1, 0, 0, 0, 0), 4)
         generator.periodStore = new PeriodStore(generator.periodScope)
         generator
     }
@@ -48,19 +51,19 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
     /** different distribution parameters for different periods */
     void testUsage() {
         AttritionalClaimsGenerator generator = createGenerator()
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
         assertEquals "P0 one ultimate claim", 1, generator.outClaims.size()
         assertEquals "P0 ultimate value", -1000d, generator.outClaims[0].ultimate()
 
         generator.periodScope.prepareNextPeriod()
         generator.reset()
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
         assertEquals "P1 one ultimate claim", 1, generator.outClaims.size()
         assertEquals "P1 ultimate value", -1000d, generator.outClaims[0].ultimate()
 
         generator.periodScope.prepareNextPeriod()
         generator.reset()
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
         assertEquals "P2 one ultimate claim", 1, generator.outClaims.size()
         assertEquals "P2 ultimate value", -2000d, generator.outClaims[0].ultimate()
     }
@@ -74,7 +77,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.parmPayoutPattern.selectedComponent = pattern.origin
 
         generator.inPatterns.add(pattern)
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
         assertEquals "P0 claims", 1, generator.outClaims.size()
         assertEquals "P0 ultimate values", -1000d, generator.outClaims[0].ultimate()
         assertEquals "P0 paid values", -500d, generator.outClaims[0].paidIncrementalIndexed
@@ -82,7 +85,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.periodScope.prepareNextPeriod()
         generator.reset()
         generator.inPatterns.add(pattern)
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
         assertEquals "P1 claim2", 2, generator.outClaims.size()
         assertEquals "P1 ultimate values", [-1000d, 0d], generator.outClaims*.ultimate()
         assertEquals "P1 paid values", [-500d, -300.00000000000006d], generator.outClaims*.paidIncrementalIndexed
@@ -90,7 +93,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.periodScope.prepareNextPeriod()
         generator.reset()
         generator.inPatterns.add(pattern)
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
         assertEquals "P2 claim", 3, generator.outClaims.size()
         assertEquals "P2 ultimate values", [-2000d, 0d, 0d], generator.outClaims*.ultimate()
         assertEquals "P2 paid values", [-1000d, -199.99999999999994, -300.00000000000006], generator.outClaims*.paidIncrementalIndexed
@@ -98,7 +101,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.periodScope.prepareNextPeriod()
         generator.reset()
         generator.inPatterns.add(pattern)
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
         assertEquals "P3 claim", 3, generator.outClaims.size()
         assertEquals "P3 ultimate values", [-2000d, 0d, 0d], generator.outClaims*.ultimate()
         assertEquals "P3 paid values", [-1000.0, -199.99999999999994, -600.0000000000001], generator.outClaims*.paidIncrementalIndexed
@@ -114,15 +117,18 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000, numberOfPolicies: 20, origin: riskBands)
 
         generator.inUnderwritingInfo.add(underwritingInfo)
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
         assertEquals "P0 claims", 1, generator.outClaims.size()
         assertEquals "P0 ultimate values", -1000000d, generator.outClaims[0].ultimate()
 
         generator.reset()
         generator.periodScope.prepareNextPeriod()
+        doClaimsCalcWithNoCommutation(generator)
+
+        generator.reset()
         generator.periodScope.prepareNextPeriod()
         generator.inUnderwritingInfo.add(underwritingInfo)
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
         assertEquals "P2 claims", 1, generator.outClaims.size()
         assertEquals "P2 ultimate values", -2000000d, generator.outClaims[0].ultimate()
     }
@@ -137,15 +143,18 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000, numberOfPolicies: 20, origin: riskBands)
 
         generator.inUnderwritingInfo.add(underwritingInfo)
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
         assertEquals "P0 claims", 1, generator.outClaims.size()
         assertEquals "P0 ultimate values", -20000d, generator.outClaims[0].ultimate()
 
         generator.reset()
         generator.periodScope.prepareNextPeriod()
+        doClaimsCalcWithNoCommutation(generator)
+
+        generator.reset()
         generator.periodScope.prepareNextPeriod()
         generator.inUnderwritingInfo.add(underwritingInfo)
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
         assertEquals "P2 claims", 1, generator.outClaims.size()
         assertEquals "P2 ultimate values", -40000d, generator.outClaims[0].ultimate()
     }
@@ -157,18 +166,20 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
                 [AttritionalClaimsGenerator.REAL_PERIOD, AttritionalClaimsGenerator.CLAIM_VALUE],
                 ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER))
 
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
         assertEquals "P0 claims", 1, generator.outClaims.size()
         assertEquals "P0 ultimate values", [-1300d], generator.outClaims*.ultimate()
 
         generator.reset()
         generator.periodScope.prepareNextPeriod()
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
+
         assertEquals "P1 claims", 0, generator.outClaims.size()
 
         generator.reset()
         generator.periodScope.prepareNextPeriod()
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
+
         assertEquals "P2 claims", 2, generator.outClaims.size()
         assertEquals "P2 ultimate values", [-2100d, -1500d], generator.outClaims*.ultimate()
     }
@@ -211,33 +222,86 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.subClaimsModel.parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
                 ["Marine"], ["Severity Index"], ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER),
         )
-        generator.subClaimsModel.parmSeverityIndices.comboBoxValues.put(0, ["Marine" : marine])
+        generator.subClaimsModel.parmSeverityIndices.comboBoxValues.put(0, ["Marine": marine])
 
         FactorsPacket severityTimeSeries = new FactorsPacket()
-        severityTimeSeries.add(new DateTime(2011,1,1,0,0,0,0), 1.1d)
-        severityTimeSeries.add(new DateTime(2012,1,1,0,0,0,0), 1.05d)
-        severityTimeSeries.add(new DateTime(2013,1,1,0,0,0,0), 0.95d)
-        severityTimeSeries.add(new DateTime(2014,1,1,0,0,0,0), 1.1d)
+        severityTimeSeries.add(new DateTime(2011, 1, 1, 0, 0, 0, 0), 1.1d)
+        severityTimeSeries.add(new DateTime(2012, 1, 1, 0, 0, 0, 0), 1.05d)
+        severityTimeSeries.add(new DateTime(2013, 1, 1, 0, 0, 0, 0), 0.95d)
+        severityTimeSeries.add(new DateTime(2014, 1, 1, 0, 0, 0, 0), 1.1d)
         severityTimeSeries.origin = marine
 
         generator.inFactors.addAll(severityTimeSeries)
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
         assertEquals "P0 claims", 1, generator.outClaims.size()
         assertEquals "P0 ultimate values", -1000d, generator.outClaims[0].ultimate()
 
         generator.reset()
         generator.periodScope.prepareNextPeriod()
         generator.inFactors.addAll(severityTimeSeries)
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
+
         assertEquals "P1 claims", 1, generator.outClaims.size()
-        assertEquals "P1 ultimate values", -1000d * 0.95/1.05, generator.outClaims[0].ultimate()
+        assertEquals "P1 ultimate values", -1000d * 0.95 / 1.05, generator.outClaims[0].ultimate()
 
         generator.reset()
         generator.periodScope.prepareNextPeriod()
         generator.inFactors.addAll(severityTimeSeries)
-        generator.doCalculation()
+        doClaimsCalcWithNoCommutation(generator)
+
         assertEquals "P2 claims", 1, generator.outClaims.size()
-        assertEquals "P2 ultimate values", -2000d * 1.1/1.05, generator.outClaims[0].ultimate(), EPSILON
+        assertEquals "P2 ultimate values", -2000d * 1.1 / 1.05, generator.outClaims[0].ultimate(), EPSILON
+    }
+
+    private void doClaimsCalcWithNoCommutation(AttritionalClaimsGenerator generator) {
+        generator.doCalculation(AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION)
+        generator.inCommutationState << new CommutationState()
+        generator.doCalculation(AbstractClaimsGenerator.PHASE_STORE_COMMUTATION_STATE)
+    }
+
+    void testClaimsStopOnCommutation() {
+        SeverityIndex marine = new SeverityIndex()
+        AttritionalClaimsGenerator generator = createGenerator()
+        ConstraintsFactory.registerConstraint(new SeverityIndexSelectionTableConstraints())
+        generator.subClaimsModel.parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
+                ["Marine"], ["Severity Index"], ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER),
+        )
+        generator.subClaimsModel.parmSeverityIndices.comboBoxValues.put(0, ["Marine": marine])
+
+        FactorsPacket severityTimeSeries = new FactorsPacket()
+        severityTimeSeries.add(new DateTime(2011, 1, 1, 0, 0, 0, 0), 1.1d)
+        severityTimeSeries.add(new DateTime(2012, 1, 1, 0, 0, 0, 0), 1.05d)
+        severityTimeSeries.add(new DateTime(2013, 1, 1, 0, 0, 0, 0), 0.95d)
+        severityTimeSeries.origin = marine
+
+        generator.inFactors.addAll(severityTimeSeries)
+        generator.doCalculation(AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION)
+        generator.inCommutationState << new CommutationState(true, 1, CommutationBehaviour.DEFAULT, 1d, 1, new DateTime(2012, 12, 31, 0, 0, 0, 0), true)
+        generator.doCalculation(AbstractClaimsGenerator.PHASE_STORE_COMMUTATION_STATE)
+        assertEquals "P0 claims", 1, generator.outClaims.size()
+        assertEquals "P0 ultimate values", -1000d, generator.outClaims[0].ultimate()
+
+        generator.reset()
+        generator.periodScope.prepareNextPeriod()
+        generator.inFactors.addAll(severityTimeSeries)
+
+        generator.doCalculation(AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION)
+        generator.inCommutationState << new CommutationState(true, 1, CommutationBehaviour.DEFAULT, 1d, 1, new DateTime(2011, 12, 31, 0, 0, 0, 0), false)
+        generator.doCalculation(AbstractClaimsGenerator.PHASE_STORE_COMMUTATION_STATE)
+
+//        There should be no claims as we are commuted.
+        assertEquals "P1 claims", 0, generator.outClaims.size()
+
+        generator.reset()
+        generator.periodScope.prepareNextPeriod()
+        generator.inFactors.addAll(severityTimeSeries)
+        generator.doCalculation(AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION)
+        generator.inCommutationState << new CommutationState(true, 1, CommutationBehaviour.DEFAULT, 1d, 1, new DateTime(2011, 12, 31, 0, 0, 0, 0), false)
+        generator.doCalculation(AbstractClaimsGenerator.PHASE_STORE_COMMUTATION_STATE)
+        //        There should be no claims as we are commuted.
+        assertEquals "P1 claims", 0, generator.outClaims.size()
+
+
     }
 
     // todo: test for events

@@ -273,4 +273,12 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     public void setGlobalUpdateDate(DateTime globalUpdateDate) {
         this.globalUpdateDate = globalUpdateDate;
     }
+
+    public PacketList<CommutationState> getInCommutationState() {
+        return inCommutationState;
+    }
+
+    public void setInCommutationState(PacketList<CommutationState> inCommutationState) {
+        this.inCommutationState = inCommutationState;
+    }
 }

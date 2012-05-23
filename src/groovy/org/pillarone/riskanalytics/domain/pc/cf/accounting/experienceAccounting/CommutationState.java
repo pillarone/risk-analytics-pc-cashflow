@@ -6,11 +6,12 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 /**
- * This object exists to propogate commutation information, it's state and expected behaviour.
+ * This object exists to propagate commutation information, it's state and expected behaviour.
  *
  * @author simon.parten (at) art-allianz (dot) com
  */
-public class CommutationState extends MultiValuePacket{
+
+public class CommutationState extends MultiValuePacket {
     private final boolean commuted;
     private final double profitShare;
     private final CommutationBehaviour commutationBehaviour;
@@ -20,26 +21,54 @@ public class CommutationState extends MultiValuePacket{
     private final boolean commuteThisPeriod;
 
     public CommutationState() {
-        this.commuted = false;
-        this.commutationBehaviour = CommutationBehaviour.DEFAULT;
-        this.profitShare = 1d;
-        this.discountRate = 1d;
-        this.commutationPeriod = -1;
-        this.commutationDate = new DateTime(1900, 1, 1, 1, 0, 0, 0);
-        this.commuteThisPeriod = false;
+        this(
+                false,
+                1d,
+                CommutationBehaviour.DEFAULT,
+                1d,
+                -1,
+                new DateTime(1900, 1, 1, 1, 0, 0, 0),
+                false
+        );
     }
 
     public CommutationState(double profitShare) {
-        this.commuted = false;
-        this.commutationBehaviour = CommutationBehaviour.DEFAULT;
-        this.profitShare = profitShare;
-        this.discountRate = 1d;
-        this.commutationPeriod = -1;
-        this.commutationDate = new DateTime(1900, 1, 1, 1, 0, 0, 0);
-        this.commuteThisPeriod = false;
+        this(
+                false,
+                profitShare,
+                CommutationBehaviour.DEFAULT,
+                1d,
+                -1,
+                new DateTime(1900, 1, 1, 1, 0, 0, 0),
+                false
+        );
     }
 
-    CommutationState(Boolean commuted, Double profitShare, CommutationBehaviour commutationBehaviour, Double discountRate, Integer commutationPeriod, DateTime commutationDate, Boolean commuteThisPeriod) {
+    public CommutationState(DateTime reportingDate) {
+        this(
+                false,
+                1d,
+                CommutationBehaviour.DEFAULT,
+                1d,
+                -1,
+                reportingDate,
+                false
+        );
+    }
+
+    public CommutationState(DateTime reportingDate, double profitShare) {
+        this(
+                false,
+                profitShare,
+                CommutationBehaviour.DEFAULT,
+                1d,
+                -1,
+                reportingDate,
+                false
+        );
+    }
+
+    public CommutationState(Boolean commuted, Double profitShare, CommutationBehaviour commutationBehaviour, Double discountRate, Integer commutationPeriod, DateTime commutationDate, Boolean commuteThisPeriod) {
         this.commuted = commuted;
         this.profitShare = profitShare;
         this.commutationBehaviour = commutationBehaviour;
@@ -47,19 +76,8 @@ public class CommutationState extends MultiValuePacket{
         this.commutationPeriod = commutationPeriod;
         this.commutationDate = commutationDate;
         this.commuteThisPeriod = commuteThisPeriod;
+        super.setDate(commutationDate);
     }
-
-    /**
-     * Answers the question ' Do we want the simulation to continue ?
-     * True if we are not commuted, false if commuted
-     *
-     * @param periodScope periodSCope
-     * @return True if we are commuted, false if not commuted
-     */
-    public boolean checkCommutation(PeriodScope periodScope) {
-        return !isCommuted() || isCommuted() && getCommutationPeriod() == periodScope.getCurrentPeriod();
-    }
-
 
     public boolean isCommuted() {
         return commuted;
@@ -87,6 +105,17 @@ public class CommutationState extends MultiValuePacket{
 
     public boolean isCommuteThisPeriod() {
         return commuteThisPeriod;
+    }
+
+    /**
+     * Answers the question ' Do we want the simulation to continue ?
+     * True if we are not commuted, false if commuted
+     *
+     * @param periodScope periodSCope
+     * @return True if we are commuted, false if not commuted
+     */
+    public boolean checkCommutation(PeriodScope periodScope) {
+        return !isCommuted() || isCommuted() && getCommutationPeriod() == periodScope.getCurrentPeriod();
     }
 
     @Override

@@ -2,10 +2,12 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.attritional;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationState;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
@@ -52,11 +54,12 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
     protected void doCalculation(String phase) {
 //        A deal may commute before the end of the contract period. We may hence want to terminate claims generation
 //        Depending on the outcome in the experience account.
+        initIteration(periodStore, periodScope);
 
         if (phase.equals(PHASE_CLAIMS_CALCULATION)) {
             CommutationState commutationState = (CommutationState) (periodStore.get(COMMUTATION_STATE));
 
-            if (commutationState.checkCommutation(periodScope)) {
+            if (! ( commutationState.isCommuted() || commutationState.isCommuteThisPeriod())) {
                 IPeriodCounter periodCounter = periodScope.getPeriodCounter();
                 List<ClaimRoot> baseClaims;
                 if (globalDeterministicMode) {
@@ -75,15 +78,27 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 setTechnicalProperties(claims);
                 outClaims.addAll(claims);
             }
+
+//            In this phase; check for incoming commutation information. If there is none, i.e the inCommutationChannel is null,
+//            Then assume that we want no commutation behaviour. Add an indefinite commutationState object to the environment.
         } else if (phase.equals(PHASE_STORE_COMMUTATION_STATE)) {
             if (inCommutationState != null && inCommutationState.size() == 1) {
                 CommutationState packet = inCommutationState.get(0);
                 periodStore.put(COMMUTATION_STATE, packet, 1);
             } else {
-                throw new IllegalArgumentException("Found different to one commutation in inCommutationState");
+                throw new RuntimeException("Found different to one commutationState in inCommutationState.");
             }
         } else {
             throw new RuntimeException("Unkown phase: " + phase);
+        }
+    }
+
+    /**
+     * @param periodStore the period store for this object
+     */
+    private void initIteration(PeriodStore periodStore, PeriodScope periodScope) {
+        if (periodScope.isFirstPeriod()) {
+            periodStore.put(COMMUTATION_STATE, new CommutationState());
         }
     }
 
