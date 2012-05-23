@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationState;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
@@ -48,26 +49,58 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
 
 
     @Override
-    protected void doCalculation() {
-        IPeriodCounter periodCounter = periodScope.getPeriodCounter();
-        List<ClaimRoot> baseClaims;
-        if (globalDeterministicMode) {
-            baseClaims = getDeterministicClaims(parmDeterministicClaims, periodScope, ClaimType.ATTRITIONAL);
+    protected void doCalculation(String phase) {
+//        A deal may commute before the end of the contract period. We may hence want to terminate claims generation
+//        Depending on the outcome in the experience account.
+
+        if (phase.equals(PHASE_CLAIMS_CALCULATION)) {
+            CommutationState commutationState = (CommutationState) (periodStore.get(COMMUTATION_STATE));
+
+            if (commutationState.checkCommutation(periodScope)) {
+                IPeriodCounter periodCounter = periodScope.getPeriodCounter();
+                List<ClaimRoot> baseClaims;
+                if (globalDeterministicMode) {
+                    baseClaims = getDeterministicClaims(parmDeterministicClaims, periodScope, ClaimType.ATTRITIONAL);
+                } else {
+                    List<Factors> severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices(),
+                            IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
+                    baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
+                            severityFactors, parmParameterizationBasis, this, periodScope);
+                }
+                baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter, globalUpdateDate, inPatterns);
+                List<Factors> runoffFactors = new ArrayList<Factors>();
+                List<ClaimCashflowPacket> claims = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, parmActualClaims,
+                        periodScope, runoffFactors);
+                developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
+                setTechnicalProperties(claims);
+                outClaims.addAll(claims);
+            }
+        } else if (phase.equals(PHASE_STORE_COMMUTATION_STATE)) {
+            if (inCommutationState != null && inCommutationState.size() == 1) {
+                CommutationState packet = inCommutationState.get(0);
+                periodStore.put(COMMUTATION_STATE, packet, 1);
+            } else {
+                throw new IllegalArgumentException("Found different to one commutation in inCommutationState");
+            }
+        } else {
+            throw new RuntimeException("Unkown phase: " + phase);
         }
-        else {
-            List<Factors> severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices(),
-                    IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
-            baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
-                    severityFactors, parmParameterizationBasis, this, periodScope);
-        }
-        baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter, globalUpdateDate, inPatterns);
-        List<Factors> runoffFactors = new ArrayList<Factors>();
-        List<ClaimCashflowPacket> claims = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, parmActualClaims,
-                periodScope, runoffFactors);
-        developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
-        setTechnicalProperties(claims);
-        outClaims.addAll(claims);
     }
+
+    public void allocateChannelsToPhases() {
+//          Calculation channels --------------------------------------------------------------------------
+        setTransmitterPhaseInput(inPatterns, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inEventSeverities, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inEventFrequencies, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inFactors, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inUnderwritingInfo, PHASE_CLAIMS_CALCULATION);
+
+        setTransmitterPhaseOutput(outClaims, PHASE_CLAIMS_CALCULATION);
+
+//          Commutation channels --------------------------------------------------------------------------
+        setTransmitterPhaseInput(inCommutationState, PHASE_STORE_COMMUTATION_STATE);
+    }
+
 
     public AttritionalClaimsModel getSubClaimsModel() {
         return subClaimsModel;

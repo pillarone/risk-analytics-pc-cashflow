@@ -4,12 +4,14 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.ComposedComponent;
+import org.pillarone.riskanalytics.core.components.MultiPhaseComposedComponent;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationState;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
@@ -34,7 +36,7 @@ import java.util.List;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-abstract public class AbstractClaimsGenerator extends ComposedComponent implements IPerilMarker, ICorrelationMarker {
+abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponent implements IPerilMarker, ICorrelationMarker {
 
     protected PeriodScope periodScope;
     protected PeriodStore periodStore;
@@ -44,6 +46,8 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
     protected PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket.class);
     protected PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
     protected PacketList<SystematicFrequencyPacket> inEventFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket.class);
+
+    protected PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState.class);
     /** don't assume any order in this channel */
     protected PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
 
@@ -52,6 +56,11 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
 
     public static final String REAL_PERIOD = "Period (real number)";
     public static final String CLAIM_VALUE = "Claim value";
+
+    protected static final String COMMUTATION_STATE = "commutation state at end of prior period";
+
+    public static final String PHASE_CLAIMS_CALCULATION = "Claims Calculation";
+    public static final String PHASE_STORE_COMMUTATION_STATE = "Store Commutation State";
 
     @Override
     public void wire() {

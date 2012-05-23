@@ -2,6 +2,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 /**
  * This object exists to propogate commutation information, it's state and expected behaviour.
@@ -47,6 +49,18 @@ public class CommutationState extends MultiValuePacket{
         this.commuteThisPeriod = commuteThisPeriod;
     }
 
+    /**
+     * Answers the question ' Do we want the simulation to continue ?
+     * True if we are not commuted, false if commuted
+     *
+     * @param periodScope periodSCope
+     * @return True if we are commuted, false if not commuted
+     */
+    public boolean checkCommutation(PeriodScope periodScope) {
+        return !isCommuted() || isCommuted() && getCommutationPeriod() == periodScope.getCurrentPeriod();
+    }
+
+
     public boolean isCommuted() {
         return commuted;
     }
@@ -73,5 +87,17 @@ public class CommutationState extends MultiValuePacket{
 
     public boolean isCommuteThisPeriod() {
         return commuteThisPeriod;
+    }
+
+    @Override
+    public String toString() {
+        return "CommutationState{" +
+                "commuted=" + commuted +
+                ", profitShare=" + profitShare +
+                ", discountRate=" + discountRate +
+                ", commutationPeriod=" + commutationPeriod +
+                ", commutationDate=" + DateTimeUtilities.formatDate.print( commutationDate ) +
+                ", commuteThisPeriod=" + commuteThisPeriod +
+                '}';
     }
 }
