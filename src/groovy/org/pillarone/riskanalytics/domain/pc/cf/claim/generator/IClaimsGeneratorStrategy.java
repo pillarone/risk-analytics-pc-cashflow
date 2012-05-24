@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IRe
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
@@ -42,7 +43,7 @@ public interface IClaimsGeneratorStrategy extends IParameterObject {
                                     List<EventDependenceStream> eventStreams,
                                     IPerilMarker filterCriteria, PeriodScope periodScope);
 
-    List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope, List<Double> severities, List<EventPacket> events);
+    List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope, List<EventSeverity> eventSeverities);
 
     List<ClaimRoot> generateClaims(double scaleFactor, List<Factors> severitiesFactors, int claimNumber,
                                    PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase);

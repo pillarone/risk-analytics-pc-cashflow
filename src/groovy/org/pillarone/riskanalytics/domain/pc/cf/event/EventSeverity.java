@@ -22,4 +22,13 @@ public class EventSeverity extends SingleValuePacket {
     public void setEvent(EventPacket event) {
         this.event = event;
     }
+
+    @Override
+    public String toString() {
+        return "EventSeverity{" +
+                "valueLabel='" + valueLabel + '\'' +
+                ", event=" + event +
+                ", evenSeverity " + this.getValue() +
+                '}';
+    }
 }

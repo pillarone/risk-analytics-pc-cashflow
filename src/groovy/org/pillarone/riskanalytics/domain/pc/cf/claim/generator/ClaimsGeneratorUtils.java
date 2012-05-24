@@ -106,15 +106,15 @@ public class ClaimsGeneratorUtils {
     }
 
     public static List<ClaimRoot> calculateClaims(double severityScaleFactor, Distribution claimsSizeDistribution, ClaimType claimType,
-                                                  PeriodScope periodScope, List<Double> severities,
-                                                  List<EventPacket> events, double shift) {
+                                                  PeriodScope periodScope, List<EventSeverity> eventSeverities,
+                                                  double shift) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
-        for (int i = 0; i < severities.size(); i++) {
-            DateTime occurrenceDate = events.get(i).getDate();
+        for (EventSeverity eventSeverity : eventSeverities) {
+            DateTime occurrenceDate = eventSeverity.getEvent().getDate();
             // todo(sku): replace with information from underwriting
             DateTime exposureStartDate = periodScope.getPeriodCounter().getCurrentPeriodStart();
-            EventPacket event = claimType.equals(ClaimType.EVENT) || claimType.equals(ClaimType.AGGREGATED_EVENT) ? events.get(i) : null;
-            baseClaims.add(new ClaimRoot((claimsSizeDistribution.inverseF(severities.get(i)) + shift) * -severityScaleFactor, claimType,
+            EventPacket event = claimType.equals(ClaimType.EVENT) || claimType.equals(ClaimType.AGGREGATED_EVENT) ? eventSeverity.getEvent() : null;
+            baseClaims.add(new ClaimRoot((claimsSizeDistribution.inverseF(eventSeverity.getValue()) + shift) * -severityScaleFactor, claimType,
                     exposureStartDate, occurrenceDate, event));
         }
         return baseClaims;

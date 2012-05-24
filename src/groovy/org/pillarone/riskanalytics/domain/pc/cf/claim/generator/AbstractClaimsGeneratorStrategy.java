@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.DefaultContractBase;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
@@ -54,15 +55,15 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            ExposureBase severityBase, PeriodScope periodScope,
-                                           List<Double> severities, List<EventPacket> events) {
+                                           List<EventSeverity> eventSeverities) {
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return calculateClaims(severityScalingFactor, periodScope, severities, events);
+        return calculateClaims(severityScalingFactor, periodScope, eventSeverities);
     }
 
     public List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope,
-                                              List<Double> severities, List<EventPacket> events) {
+                                           List<EventSeverity> eventSeverities) {
         return ClaimsGeneratorUtils.calculateClaims(scaleFactor, modifiedClaimsSizeDistribution, claimType(), periodScope,
-                severities, events, shift);
+                eventSeverities, shift);
     }
 
     protected List<ClaimRoot> getClaims(List<Double> claimValues, PeriodScope periodScope) {

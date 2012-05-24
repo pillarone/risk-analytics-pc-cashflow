@@ -81,9 +81,7 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
                                            PeriodScope periodScope) {
         setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
         List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(eventStreams, filterCriteria);
-        List<Double> severities = ClaimsGeneratorUtils.extractSeverities(eventSeverities);
-        List<EventPacket> events = ClaimsGeneratorUtils.extractEvents(eventSeverities);
-        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, periodScope, severities, events);
+        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, periodScope, eventSeverities);
     }
 
     public ClaimType claimType() {
