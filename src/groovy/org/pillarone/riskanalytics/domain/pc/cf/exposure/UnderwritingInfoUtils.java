@@ -131,7 +131,7 @@ public class UnderwritingInfoUtils {
         return correctMetaProperties(summedUnderwritingInfo, underwritingInfos);
     }
 
-    static public CededUnderwritingInfoPacket aggregate(List<CededUnderwritingInfoPacket> underwritingInfos) {
+    static public CededUnderwritingInfoPacket aggregateCeded(List<CededUnderwritingInfoPacket> underwritingInfos) {
         if (underwritingInfos == null || underwritingInfos.size() == 0) {
             return null;
         }
@@ -255,7 +255,7 @@ public class UnderwritingInfoUtils {
         }
         for (UnderwritingInfoPacket grossUwInfo : underwritingInfoGross) {
             List<CededUnderwritingInfoPacket> cededUnderwritingInfoPackets = aggregateCededUnderwritingInfos.get(grossUwInfo);
-            CededUnderwritingInfoPacket aggregateCededUwInfo = aggregate(cededUnderwritingInfoPackets);
+            CededUnderwritingInfoPacket aggregateCededUwInfo = aggregateCeded(cededUnderwritingInfoPackets);
             UnderwritingInfoPacket netUwInfo = grossUwInfo.getNet(aggregateCededUwInfo, true);
             underwritingInfoNet.add(netUwInfo);
         }

@@ -51,7 +51,7 @@ public class ContractFinancialsPacket extends MultiValuePacket {
             netClaim = ClaimUtils.sum(netClaims, true).ultimate();
         }
         if (!cededUwInformation.isEmpty()) {
-            CededUnderwritingInfoPacket aggregateCededUwInfoPacket = UnderwritingInfoUtils.aggregate(cededUwInformation);
+            CededUnderwritingInfoPacket aggregateCededUwInfoPacket = UnderwritingInfoUtils.aggregateCeded(cededUwInformation);
             cededCommission = aggregateCededUwInfoPacket.getCommission();
             cededPremium = aggregateCededUwInfoPacket.getPremiumWritten();
         }
