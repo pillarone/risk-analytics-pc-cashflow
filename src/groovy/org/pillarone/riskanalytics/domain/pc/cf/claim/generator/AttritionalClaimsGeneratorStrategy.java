@@ -6,7 +6,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -55,7 +54,7 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
         if (baseClaims.size() == 1) {
             return baseClaims;
         }
-        return generateClaim(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, ClaimType.ATTRITIONAL, null, periodScope);
+        return generateClaim(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, periodScope);
     }
 
 

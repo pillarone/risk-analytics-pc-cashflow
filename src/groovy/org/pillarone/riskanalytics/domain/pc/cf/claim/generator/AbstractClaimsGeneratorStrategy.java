@@ -37,8 +37,8 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     protected double shift;
 
     public List<ClaimRoot> generateClaim(List<UnderwritingInfoPacket> uwInfos, List<Factors> severityFactors,
-                                         List uwInfosFilterCriteria, ExposureBase severityBase, ClaimType claimType,
-                                         List<FactorsPacket> factorsPackets, PeriodScope periodScope) {
+                                         List uwInfosFilterCriteria, ExposureBase severityBase,
+                                         PeriodScope periodScope) {
         lazyInitClaimsSizeGenerator();
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
         return generateClaims(severityScalingFactor, severityFactors, 1, periodScope, new DefaultContractBase());
