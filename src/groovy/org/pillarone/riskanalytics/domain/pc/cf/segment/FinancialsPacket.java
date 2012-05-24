@@ -42,7 +42,7 @@ public class FinancialsPacket extends MultiValuePacket {
             netClaimPaid = ClaimUtils.sum(netClaims, true).getPaidIncrementalIndexed();
         }
         if (!cededUwInfos.isEmpty()) {
-            CededUnderwritingInfoPacket aggregateCededUwInfoPacket = UnderwritingInfoUtils.aggregate(cededUwInfos);
+            CededUnderwritingInfoPacket aggregateCededUwInfoPacket = UnderwritingInfoUtils.aggregateCeded(cededUwInfos);
             commission = aggregateCededUwInfoPacket.getCommission();
         }
         if (singlePeriod) {
