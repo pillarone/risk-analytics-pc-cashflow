@@ -25,10 +25,10 @@ public class DefaultContractBase extends AbstractContractBase implements IReinsu
 
     public DateTime occurrenceDate(DateTime inceptionDate, IRandomNumberGenerator dateGenerator,
                                    PeriodScope periodScope, EventPacket event) {
-        throw new NotImplementedException();
+        throw new RuntimeException("Default contractbase is not a valid option at runtime. Please select a different contract base.");
     }
 
     public DateTime inceptionDate(PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
-        throw new NotImplementedException();
+        throw new RuntimeException("Default contractbase is not a valid option at runtime. Please select a different contract base.");
     }
 }
