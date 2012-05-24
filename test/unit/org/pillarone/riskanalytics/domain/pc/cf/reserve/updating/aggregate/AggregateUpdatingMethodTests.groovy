@@ -12,11 +12,14 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.UpdatingPattern
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
+import com.google.common.collect.ArrayListMultimap
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 class AggregateUpdatingMethodTests extends GroovyTestCase {
+
+    private static final double EPSILON = 1E-10
 
     DateTime date20100101 = new DateTime(2010,1,1,0,0,0,0)
     DateTime date20100310 = new DateTime(2010,3,10,0,0,0,0)
@@ -26,11 +29,10 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
     DateTime date20120501 = new DateTime(2012,5,1,0,0,0,0)
 
     void testOriginal() {
-        List<ClaimRoot> baseClaims = [
-                new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20100310),
-                new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20110210),
-                new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20120330),
-        ]
+        List<ClaimRoot> baseClaims1 = [ new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20100310) ]
+        List<ClaimRoot> baseClaims2 = [ new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20110210) ]
+        List<ClaimRoot> baseClaims3 = [ new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20120330) ]
+
         IAggregateActualClaimsStrategy actualClaims = AggregateActualClaimsStrategyType.getStrategy(
                 AggregateActualClaimsStrategyType.AGGREGATE,
                 [history: new ConstrainedMultiDimensionalParameter([
@@ -48,20 +50,19 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
         pattern.origin = new UpdatingPattern(name: '48m')
 
         IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingOriginalUltimateMethodology()
-        List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate(baseClaims, actualClaims, periodCounter, updateDate, [pattern])
+        List<ClaimRoot> updatedClaims1 = updatingMethodology.updatingUltimate(baseClaims1, actualClaims, periodCounter, updateDate, [pattern])
+        List<ClaimRoot> updatedClaims2 = updatingMethodology.updatingUltimate(baseClaims2, actualClaims, periodCounter, updateDate, [pattern])
+        List<ClaimRoot> updatedClaims3 = updatingMethodology.updatingUltimate(baseClaims3, actualClaims, periodCounter, updateDate, [pattern])
 
-        updatedClaims.each {
-            println it
-        }
-        assertEquals 'adjusted ultimates', [-80000d, -75000d, -75000d], updatedClaims*.getUltimate()
+        assertEquals 'adjusted ultimates', -80000d, updatedClaims1[0].getUltimate()
+        assertEquals 'adjusted ultimates', -75000d , updatedClaims2[0].getUltimate()
+        assertEquals 'adjusted ultimates', -75000d , updatedClaims3[0].getUltimate()
     }
 
     void testReportedBF() {
-        List<ClaimRoot> baseClaims = [
-                new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20100310),
-                new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20110210),
-                new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20120330),
-        ]
+        List<ClaimRoot> baseClaims1 = [new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20100310)]
+        List<ClaimRoot> baseClaims2 = [new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20110210)]
+        List<ClaimRoot> baseClaims3 = [new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20120330)]
         IAggregateActualClaimsStrategy actualClaims = AggregateActualClaimsStrategyType.getStrategy(
                 AggregateActualClaimsStrategyType.AGGREGATE,
                 [history: new ConstrainedMultiDimensionalParameter([
@@ -82,17 +83,20 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
         updatingPattern.selectedComponent = pattern.origin
 
         IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingBFReportingMethodology(updatingPattern: updatingPattern)
-        List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate(baseClaims, actualClaims, periodCounter, updateDate, [pattern])
+        List<ClaimRoot> updatedClaims1 = updatingMethodology.updatingUltimate(baseClaims1, actualClaims, periodCounter, updateDate, [pattern])
+        List<ClaimRoot> updatedClaims2 = updatingMethodology.updatingUltimate(baseClaims2, actualClaims, periodCounter, updateDate, [pattern])
+        List<ClaimRoot> updatedClaims3 = updatingMethodology.updatingUltimate(baseClaims3, actualClaims, periodCounter, updateDate, [pattern])
 
-        assertEquals 'adjusted ultimates', [58468.75, 65041.666666666664, 70447.91666666666], updatedClaims*.getUltimate()
+
+        assertEquals 'adjusted ultimates', 58468.75, updatedClaims1[0].getUltimate(), EPSILON
+        assertEquals 'adjusted ultimates', 65041.666666666664,updatedClaims2[0].getUltimate(), EPSILON
+        assertEquals 'adjusted ultimates', 70447.91666666666, updatedClaims3[0].getUltimate(), EPSILON
     }
 
     void testReportedBFStartDateEqualsUpdateDate() {
-        List<ClaimRoot> baseClaims = [
-                new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20100310),
-                new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20110210),
-                new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20120330),
-        ]
+        List<ClaimRoot> baseClaims1 = [new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20100310)]
+        List<ClaimRoot> baseClaims2 = [new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20110210)]
+        List<ClaimRoot> baseClaims3 = [new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20120330)]
         IAggregateActualClaimsStrategy actualClaims = AggregateActualClaimsStrategyType.getStrategy(
                 AggregateActualClaimsStrategyType.AGGREGATE,
                 [history: new ConstrainedMultiDimensionalParameter([
@@ -113,17 +117,19 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
         updatingPattern.selectedComponent = pattern.origin
 
         IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingBFReportingMethodology(updatingPattern: updatingPattern)
-        List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate(baseClaims, actualClaims, periodCounter, updateDate, [pattern])
+        List<ClaimRoot> updatedClaims1 = updatingMethodology.updatingUltimate(baseClaims1, actualClaims, periodCounter, updateDate, [pattern])
+        List<ClaimRoot> updatedClaims2 = updatingMethodology.updatingUltimate(baseClaims2, actualClaims, periodCounter, updateDate, [pattern])
+        List<ClaimRoot> updatedClaims3 = updatingMethodology.updatingUltimate(baseClaims3, actualClaims, periodCounter, updateDate, [pattern])
 
-        assertEquals 'adjusted ultimates', [75000d] * 3, updatedClaims*.getUltimate()
+        assertEquals 'adjusted ultimates', 75000d , updatedClaims1[0].getUltimate()
+        assertEquals 'adjusted ultimates', 75000d, updatedClaims2[0].getUltimate()
+        assertEquals 'adjusted ultimates', 75000d , updatedClaims3[0].getUltimate()
     }
 
     void testReportedBFUpdateDateBeforeLastReportedDate() {
-        List<ClaimRoot> baseClaims = [
-                new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20100310),
-                new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20110210),
-                new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20120330),
-        ]
+        List<ClaimRoot> baseClaims1 = [new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20100310)]
+        List<ClaimRoot> baseClaims2 = [new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20110210)]
+        List<ClaimRoot> baseClaims3 = [new ClaimRoot(75000d, ClaimType.AGGREGATED, date20100101, date20120330)]
         IAggregateActualClaimsStrategy actualClaims = AggregateActualClaimsStrategyType.getStrategy(
                 AggregateActualClaimsStrategyType.AGGREGATE,
                 [history: new ConstrainedMultiDimensionalParameter([
@@ -144,8 +150,12 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
         updatingPattern.selectedComponent = pattern.origin
 
         IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingBFReportingMethodology(updatingPattern: updatingPattern)
-        List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate(baseClaims, actualClaims, periodCounter, updateDate, [pattern])
+        List<ClaimRoot> updatedClaims1 = updatingMethodology.updatingUltimate(baseClaims1, actualClaims, periodCounter, updateDate, [pattern])
+        List<ClaimRoot> updatedClaims2 = updatingMethodology.updatingUltimate(baseClaims2, actualClaims, periodCounter, updateDate, [pattern])
+        List<ClaimRoot> updatedClaims3 = updatingMethodology.updatingUltimate(baseClaims3, actualClaims, periodCounter, updateDate, [pattern])
 
-        assertEquals 'adjusted ultimates', [58468.75, 65041.666666666664, 75000d], updatedClaims*.getUltimate()
+        assertEquals 'adjusted ultimates', 58468.75, updatedClaims1[0].getUltimate()
+        assertEquals 'adjusted ultimates', 65041.666666666664,  updatedClaims2[0].getUltimate()
+        assertEquals 'adjusted ultimates', 75000d, updatedClaims3[0].getUltimate()
     }
 }

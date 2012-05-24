@@ -43,11 +43,15 @@ class AggregateUpdatingMethodSpreadsheetTests extends SpreadsheetUnitTest {
             updatingPattern.selectedComponent = pattern.origin
 
             IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingBFReportingMethodology(updatingPattern: updatingPattern)
-            List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate(baseClaims, actualClaims, periodCounter, updateDate, [pattern])
+            List<ClaimRoot> allUpdatedClaims = new ArrayList<ClaimRoot>();
+            for (ClaimRoot baseClaim : baseClaims) {
+                List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate([baseClaim], actualClaims, periodCounter, updateDate, [pattern])
+                allUpdatedClaims.addAll(updatedClaims)
+            }
 
             List<Double> referenceAdjustedUltimates = referenceAdjustedUltimate(importer)
             for (int i = 0; i < referenceAdjustedUltimates.size(); i++) {
-                assertEquals "[${importer.fileName}] correct adjusted ultimates $i", referenceAdjustedUltimates[i], updatedClaims[i].getUltimate(), EPSILON
+                assertEquals "[${importer.fileName}] correct adjusted ultimates $i", referenceAdjustedUltimates[i], allUpdatedClaims[i].getUltimate(), EPSILON
             }
 
             manageValidationErrors(importer)

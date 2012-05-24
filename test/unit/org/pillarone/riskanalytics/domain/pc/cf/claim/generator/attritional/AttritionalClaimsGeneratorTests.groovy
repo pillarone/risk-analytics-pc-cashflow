@@ -45,6 +45,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(ReinsuranceContractBaseType.LOSSESOCCURRING, [:])
         generator.periodScope = TestPeriodScopeUtilities.getPeriodScope(new DateTime(2012, 1, 1, 0, 0, 0, 0), 4)
         generator.periodStore = new PeriodStore(generator.periodScope)
+        generator.globalUpdateDate = new DateTime(2012, 1, 1, 0, 0, 0, 0)
         generator
     }
 
@@ -162,7 +163,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
     void testDeterministicParameterization() {
         AttritionalClaimsGenerator generator = createGenerator()
         generator.setGlobalDeterministicMode(true)
-        generator.parmDeterministicClaims = new ConstrainedMultiDimensionalParameter([[1d, 3d, 3.2], [1300d, 2100d, 1500d]],
+        generator.parmDeterministicClaims = new ConstrainedMultiDimensionalParameter([[1d, 2d, 3d], [1300d,0d, 2100d]],
                 [AttritionalClaimsGenerator.REAL_PERIOD, AttritionalClaimsGenerator.CLAIM_VALUE],
                 ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER))
 
@@ -174,14 +175,14 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.periodScope.prepareNextPeriod()
         doClaimsCalcWithNoCommutation(generator)
 
-        assertEquals "P1 claims", 0, generator.outClaims.size()
+        assertEquals "P1 claims", 1, generator.outClaims.size()
 
         generator.reset()
         generator.periodScope.prepareNextPeriod()
         doClaimsCalcWithNoCommutation(generator)
 
-        assertEquals "P2 claims", 2, generator.outClaims.size()
-        assertEquals "P2 ultimate values", [-2100d, -1500d], generator.outClaims*.ultimate()
+        assertEquals "P2 claims", 1, generator.outClaims.size()
+        assertEquals "P2 ultimate values", [-2100d], generator.outClaims*.ultimate()
     }
 
     // todo(sku): fix, runs locally but not on Jenkins

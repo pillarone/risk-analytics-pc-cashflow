@@ -1,7 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate;
 
 import org.joda.time.DateTime;
-import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
@@ -16,7 +15,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AggregateUpdatingOriginalUltimateMethodology extends AbstractParameterObject implements IAggregateUpdatingMethodologyStrategy {
+public class AggregateUpdatingOriginalUltimateMethodology extends IAggregateUpdatingMethodologyWithCheckStrategyImpl  {
 
     public Map getParameters() {
         return Collections.EMPTY_MAP;
@@ -26,25 +25,24 @@ public class AggregateUpdatingOriginalUltimateMethodology extends AbstractParame
         return AggregateUpdatingMethodologyStrategyType.ORIGINALULTIMATE;
     }
 
-    public List<ClaimRoot> updatingUltimate(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
-                                            IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
+    public List<ClaimRoot> updateUltimatePostChecs(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
+                                                   IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
         List<ClaimRoot> baseClaimsWithAdjustedUltimate = new ArrayList<ClaimRoot>();
-        for (IClaimRoot baseClaim : baseClaims) {
-            // todo(sku): think about a switch to use either the occurrence or inception period
-            int occurrencePeriod = baseClaim.getOccurrencePeriod(periodCounter);
-            AggregateHistoricClaim historicClaim = actualClaims.historicClaims(occurrencePeriod, periodCounter, updateDate);
-            if (historicClaim == null) {
-                baseClaimsWithAdjustedUltimate.add((ClaimRoot) baseClaim);
-            }
-            else {
-                // * (-1) as reported claim is entered > 0 and the ultimate is negative
-                double reportedToDate = -historicClaim.reportedToDate(updateDate);
-                double originalUltimate = baseClaim.getUltimate();
-                double ultimate = Math.min(reportedToDate, originalUltimate);
-                ClaimRoot adjustedBaseClaim = new ClaimRoot(ultimate, baseClaim);
-                baseClaimsWithAdjustedUltimate.add(adjustedBaseClaim);
-            }
+        IClaimRoot baseClaim = baseClaims.get(0);
+        // todo(sku): think about a switch to use either the occurrence or inception period
+        int occurrencePeriod = baseClaim.getOccurrencePeriod(periodCounter);
+        AggregateHistoricClaim historicClaim = actualClaims.historicClaims(occurrencePeriod, periodCounter, updateDate);
+        if(historicClaim.noUpdates()) {
+            baseClaimsWithAdjustedUltimate.add((ClaimRoot) baseClaim);
+            return baseClaimsWithAdjustedUltimate;
+        } else {
+            // * (-1) as reported claim is entered > 0 and the ultimate is negative
+            double reportedToDate = -historicClaim.reportedToDate(updateDate);
+            double originalUltimate = baseClaim.getUltimate();
+            double ultimate = Math.min(reportedToDate, originalUltimate);
+            ClaimRoot adjustedBaseClaim = new ClaimRoot(ultimate, baseClaim);
+            baseClaimsWithAdjustedUltimate.add(adjustedBaseClaim);
+            return baseClaimsWithAdjustedUltimate;
         }
-        return baseClaimsWithAdjustedUltimate;
     }
 }

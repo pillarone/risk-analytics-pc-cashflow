@@ -4,7 +4,6 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.DefaultContractBase;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
@@ -13,7 +12,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.*;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
@@ -52,7 +50,7 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     }
 
     /**
-     * This function is requried to be overridden by the overriding class. Often it will call the
+     * This function is requried to be overridden by the overriding class. Often the override will call the
      * {@link #setGenerator(org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution, org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified)}
      * function.
      */
@@ -91,7 +89,7 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
 
     protected List<ClaimRoot> getClaims(List<Double> claimValues, PeriodScope periodScope) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
-        List<EventPacket> events = ClaimsGeneratorUtils.generateEvents(claimType(), claimValues.size(), periodScope, dateGenerator);
+        List<EventPacket> events = ClaimsGeneratorUtils.generateEventsOrNull(claimType(), claimValues.size(), periodScope, dateGenerator);
         for (int i = 0; i < claimValues.size(); i++) {
             DateTime occurrenceDate = events == null ?
                     DateTimeUtilities.getDate(periodScope, dateGenerator.nextValue().doubleValue()) : events.get(i).getDate();

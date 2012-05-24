@@ -48,7 +48,7 @@ public class ClaimsGeneratorUtils {
                                                  IRandomNumberGenerator dateGenerator, int claimNumber,
                                                  ClaimType claimType, PeriodScope periodScope) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
-        List<EventPacket> events = generateEvents(claimType, claimNumber, periodScope, dateGenerator);
+        List<EventPacket> events = generateEventsOrNull(claimType, claimNumber, periodScope, dateGenerator);
         for (int i = 0; i < claimNumber; i++) {
             DateTime occurrenceDate = events == null ?
                     DateTimeUtilities.getDate(periodScope, dateGenerator.nextValue().doubleValue()) : events.get(i).getDate();
@@ -71,7 +71,7 @@ public class ClaimsGeneratorUtils {
             return generateClaims(severityScaleFactor, claimSizeGenerator, dateGenerator, claimNumber, claimType, periodScope);
         }
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
-        List<EventPacket> events = generateEvents(claimType, claimNumber, periodScope, dateGenerator);
+        List<EventPacket> events = generateEventsOrNull(claimType, claimNumber, periodScope, dateGenerator);
         for (int i = 0; i < claimNumber; i++) {
             EventPacket event = events == null ? null : events.get(i);
             // todo(sku): replace with information from underwriting
@@ -158,6 +158,7 @@ public class ClaimsGeneratorUtils {
     }
 
     /**
+     *
      * @param claimType triggering behaviour, events are required for event claim types only
      * @param number of events to generate
      * @param periodScope used for date generation
@@ -165,7 +166,7 @@ public class ClaimsGeneratorUtils {
      * @return for ClaimType.EVENT or AGGREGATED_EVENT a list of length number in all other cases with event dates
      *          generated according to dateGenerator and value = 0, null for all other claim types
      */
-    public static List<EventPacket> generateEvents(ClaimType claimType, int number, PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
+    public static List<EventPacket> generateEventsOrNull(ClaimType claimType, int number, PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
         // dateGenerator uses fraction of period, i.e., must have states in unity interval
         if (!(claimType.equals(ClaimType.EVENT) || claimType.equals(ClaimType.AGGREGATED_EVENT))) {
             return null;
