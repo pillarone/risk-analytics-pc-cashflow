@@ -27,11 +27,7 @@ public class AggregateHistoricClaim {
     public AggregateHistoricClaim(int contractPeriod, IPeriodCounter periodCounter, PayoutPatternBase base) {
         this.contractPeriod = contractPeriod;
         this.base = base;
-        try {
-            contractPeriodStartDate = periodCounter.startOfPeriod(contractPeriod);
-        } catch (NotInProjectionHorizon notInProjectionHorizon) {
-            Log.debug(notInProjectionHorizon);
-        }
+        contractPeriodStartDate = periodCounter.startOfPeriod(contractPeriod);
     }
 
     /**
