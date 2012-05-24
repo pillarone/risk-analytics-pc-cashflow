@@ -43,8 +43,25 @@ public interface IClaimsGeneratorStrategy extends IParameterObject {
                                     List<EventDependenceStream> eventStreams,
                                     IPerilMarker filterCriteria, PeriodScope periodScope);
 
+    /**
+     * Forces an implementation of claims generation reliant on a series of events. Usually called when a claims generator is not
+     * independent, for instance when a copula is used in generation the marginal distributions.
+     * @param scaleFactor
+     * @param periodScope
+     * @param eventSeverities usually from copulae
+     * @return list of dependant claim roots.
+     */
     List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope, List<EventSeverity> eventSeverities);
 
+    /**
+     * Forces an implementation of independant claim severities, often for standalone generators.
+     * @param scaleFactor
+     * @param severitiesFactors
+     * @param claimNumber
+     * @param periodScope
+     * @param contractBase
+     * @return list of independant claim roots.
+     */
     List<ClaimRoot> generateClaims(double scaleFactor, List<Factors> severitiesFactors, int claimNumber,
                                    PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase);
 

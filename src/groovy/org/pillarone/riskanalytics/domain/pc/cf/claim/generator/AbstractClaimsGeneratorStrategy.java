@@ -51,7 +51,30 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
                 claimType(), periodScope, contractBase);
     }
 
+    /**
+     * This function is requried to be overridden by the overriding class. Often it will call the
+     * {@link #setGenerator(org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution, org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified)}
+     * function.
+     */
     abstract void lazyInitClaimsSizeGenerator();
+
+    /**
+     * This function attemps to lookup a random distribution and modifier pair against their hashkey in the
+     * {@link AbstractClaimsGeneratorStrategy#cachedClaimSizeGenerators} hashmap. It then sets the {@link AbstractClaimsGeneratorStrategy#claimSizeGenerator}
+     * for this class.
+     * @param distribution random distribution
+     * @param modifier modification for that distribution
+     */
+    protected void setGenerator(RandomDistribution distribution, DistributionModified modifier) {
+        String key = key(distribution, modifier);
+        if (cachedClaimSizeGenerators.containsKey(key)) {
+            claimSizeGenerator = cachedClaimSizeGenerators.get(key);
+        }
+        else {
+            claimSizeGenerator = RandomNumberGeneratorFactory.getGenerator(distribution, modifier);
+            cachedClaimSizeGenerators.put(key, claimSizeGenerator);
+        }
+    }
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            ExposureBase severityBase, PeriodScope periodScope,
@@ -78,17 +101,6 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
             baseClaims.add(new ClaimRoot(claimValues.get(i) * -1, claimType(), exposureStartDate, occurrenceDate, event));
         }
         return baseClaims;
-    }
-
-    protected void setGenerator(RandomDistribution distribution, DistributionModified modifier) {
-        String key = key(distribution, modifier);
-        if (cachedClaimSizeGenerators.containsKey(key)) {
-            claimSizeGenerator = cachedClaimSizeGenerators.get(key);
-        }
-        else {
-            claimSizeGenerator = RandomNumberGeneratorFactory.getGenerator(distribution, modifier);
-            cachedClaimSizeGenerators.put(key, claimSizeGenerator);
-        }
     }
 
     protected void setGenerator(RandomDistribution distribution) {
