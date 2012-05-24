@@ -113,6 +113,8 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
 
         // add resource bundle for exceptions
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.RESOURCE, "org.pillarone.riskanalytics.domain.pc.cf.exceptionResources")
+        // doc urls
+        ResourceBundleRegistry.addBundle(ResourceBundleRegistry.HELP, "org/pillarone/riskanalytics/domain/pc/cf/ComponentHelp")
 
         PacketAggregatorRegistry.registerAggregator(ClaimCashflowPacket, new ClaimPacketAggregator())
         PacketAggregatorRegistry.registerAggregator(UnderwritingInfoPacket, new UnderwritingInfoPacketAggregator())
