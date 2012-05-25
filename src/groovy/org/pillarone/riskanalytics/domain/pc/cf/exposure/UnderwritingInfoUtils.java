@@ -75,7 +75,7 @@ public class UnderwritingInfoUtils {
         return correctMetaProperties(summedUnderwritingInfo, underwritingInfos);
     }
 
-    static public CededUnderwritingInfoPacket aggregate(List<CededUnderwritingInfoPacket> underwritingInfos) {
+    static public CededUnderwritingInfoPacket aggregateCeded(List<CededUnderwritingInfoPacket> underwritingInfos) {
         if (underwritingInfos == null || underwritingInfos.size() == 0) {
             return null;
         }
@@ -90,14 +90,14 @@ public class UnderwritingInfoUtils {
     static public UnderwritingInfoPacket correctMetaProperties(UnderwritingInfoPacket result, List<UnderwritingInfoPacket> underwritingInfos) {
         UnderwritingInfoPacket verifiedResult = (UnderwritingInfoPacket) result.clone();
         ISegmentMarker lob = verifiedResult.segment();
-        IReinsuranceContractMarker reinsuranceContract = verifiedResult.getReinsuranceContract();
+        IReinsuranceContractMarker reinsuranceContract = verifiedResult.reinsuranceContract();
         boolean underwritingInfosOfDifferentLobs = lob == null;
         boolean underwritingInfosOfDifferentContracts = reinsuranceContract == null;
         for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
             if (!underwritingInfosOfDifferentLobs && !lob.equals(underwritingInfo.segment())) {
                 underwritingInfosOfDifferentLobs = true;
             }
-            if (!underwritingInfosOfDifferentContracts && !reinsuranceContract.equals(underwritingInfo.getReinsuranceContract())) {
+            if (!underwritingInfosOfDifferentContracts && !reinsuranceContract.equals(underwritingInfo.reinsuranceContract())) {
                 underwritingInfosOfDifferentContracts = true;
             }
         }
@@ -113,14 +113,14 @@ public class UnderwritingInfoUtils {
     static public CededUnderwritingInfoPacket correctMetaProperties(CededUnderwritingInfoPacket result, List<CededUnderwritingInfoPacket> underwritingInfos) {
         CededUnderwritingInfoPacket verifiedResult = (CededUnderwritingInfoPacket) result.clone();
         ISegmentMarker lob = verifiedResult.segment();
-        IReinsuranceContractMarker reinsuranceContract = verifiedResult.getReinsuranceContract();
+        IReinsuranceContractMarker reinsuranceContract = verifiedResult.reinsuranceContract();
         boolean underwritingInfosOfDifferentLobs = lob == null;
         boolean underwritingInfosOfDifferentContracts = reinsuranceContract == null;
         for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
             if (!underwritingInfosOfDifferentLobs && !lob.equals(underwritingInfo.segment())) {
                 underwritingInfosOfDifferentLobs = true;
             }
-            if (!underwritingInfosOfDifferentContracts && !reinsuranceContract.equals(underwritingInfo.getReinsuranceContract())) {
+            if (!underwritingInfosOfDifferentContracts && !reinsuranceContract.equals(underwritingInfo.reinsuranceContract())) {
                 underwritingInfosOfDifferentContracts = true;
             }
         }
@@ -148,7 +148,7 @@ public class UnderwritingInfoUtils {
         }
         else {
             for (CededUnderwritingInfoPacket underwritingInfo : underwritingInfos) {
-                if (contracts.contains(underwritingInfo.getReinsuranceContract())) {
+                if (contracts.contains(underwritingInfo.reinsuranceContract())) {
                     acceptedUnderwritingInfo.add(underwritingInfo);
                 }
                 else if (rejectedUnderwritingInfo != null) {
@@ -191,7 +191,7 @@ public class UnderwritingInfoUtils {
         }
         for (UnderwritingInfoPacket grossUwInfo : underwritingInfoGross) {
             List<CededUnderwritingInfoPacket> cededUnderwritingInfoPackets = aggregateCededUnderwritingInfos.get(grossUwInfo);
-            CededUnderwritingInfoPacket aggregateCededUwInfo = aggregate(cededUnderwritingInfoPackets);
+            CededUnderwritingInfoPacket aggregateCededUwInfo = aggregateCeded(cededUnderwritingInfoPackets);
             UnderwritingInfoPacket netUwInfo = grossUwInfo.getNet(aggregateCededUwInfo, true);
             underwritingInfoNet.add(netUwInfo);
         }
