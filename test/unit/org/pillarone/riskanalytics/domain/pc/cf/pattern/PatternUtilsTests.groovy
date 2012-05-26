@@ -121,10 +121,10 @@ class PatternUtilsTests extends GroovyTestCase {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
         List<ClaimCashflowPacket> claims = []
         GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate), adjustedPattern)
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, true))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
         for (int period = 0; period < periods; period++) {
             periodCounter.next()
-            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
+            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
         }
         List<Double> incrementalClaims = [0d, 500d, 500d, 250d, 3505.4092191909685d, 5587.958607714017d, 3725.305738476009d, 931.3264346190031d]
         List<DateTime> payoutDates = [date20110101, date20110630, date20111231, date20120630, date20130331, date20140731, date20150731, date20160731]
@@ -154,10 +154,10 @@ class PatternUtilsTests extends GroovyTestCase {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
         List<ClaimCashflowPacket> claims = []
         GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate), adjustedPattern)
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, true))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
         for (int period = 0; period < periods; period++) {
             periodCounter.next()
-            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
+            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
         }
         List<Double> incrementalClaims = [0d, 500d, 500d, 250d, 6796.77623261694d, 5562.579013906447d, 1390.6447534766137d]
         List<DateTime> payoutDates = [periodStartDate, date20110630, date20111231, date20120630, date20130731, date20140731, date20150731]
@@ -183,10 +183,10 @@ class PatternUtilsTests extends GroovyTestCase {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
         List<ClaimCashflowPacket> claims = []
         GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate), adjustedPattern)
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, true))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
         for (int period = 0; period < periods; period++) {
             periodCounter.next()
-            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
+            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
         }
         List<Double> incrementalClaims = [0d, 3000d, 3750d, 4500d, 3000d, 750d]
         List<DateTime> payoutDates = [periodStartDate, date20120331, date20130331, date20140731, date20150731, date20160731]
@@ -216,10 +216,10 @@ class PatternUtilsTests extends GroovyTestCase {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
         List<ClaimCashflowPacket> claims = []
         GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate), adjustedPattern)
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, true))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
         for (int period = 0; period < periods; period++) {
             periodCounter.next()
-            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
+            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
         }
         List<Double> incrementalClaims = [0d, 500d, 500d, 250d, 13750d]
         List<DateTime> payoutDates = [date20110101, date20110630, date20111231, date20120630, date20121215]

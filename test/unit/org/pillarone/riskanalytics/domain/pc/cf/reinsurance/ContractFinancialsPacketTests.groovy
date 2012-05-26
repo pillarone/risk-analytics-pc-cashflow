@@ -77,7 +77,7 @@ class ContractFinancialsPacketTests extends GroovyTestCase {
     private ClaimCashflowPacket getClaim(double ultimate, DateTime inceptionDate, DateTime occurrenceDate, IPeriodCounter periodCounter) {
         GrossClaimRoot claimRoot = new GrossClaimRoot(ultimate, ClaimType.AGGREGATED,
                 inceptionDate, occurrenceDate, payoutPattern, reportingPattern)
-        claimRoot.getClaimCashflowPackets(periodCounter, true).get(0)
+        claimRoot.getClaimCashflowPackets(periodCounter).get(0)
     }
 
     private UnderwritingInfoPacket getUwInfo(double premiumWritten, double premiumPaid, DateTime inceptionDate, IPeriodCounter periodCounter) {

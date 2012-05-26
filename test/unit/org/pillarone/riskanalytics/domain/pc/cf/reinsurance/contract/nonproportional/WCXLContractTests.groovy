@@ -89,7 +89,7 @@ class WCXLContractTests extends GroovyTestCase {
 
         GrossClaimRoot claimRoot50 = new GrossClaimRoot(-50, ClaimType.EVENT,
                 date20110418, date20110418, annualPayoutPattern, annualReportingPatternInclFirst, new EventPacket(date20110101))
-        List<ClaimCashflowPacket> claims50 = claimRoot50.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims50 = claimRoot50.getClaimCashflowPackets(periodCounter)
         wcxl.inClaims.addAll(claims50)
         UnderwritingInfoPacket uw120 = new UnderwritingInfoPacket(premiumWritten: 120, premiumPaid: 100,
                                             exposure: new ExposureInfo(periodScope));
@@ -115,10 +115,10 @@ class WCXLContractTests extends GroovyTestCase {
 
         wcxl.reset()
         wcxl.iterationScope.periodScope.prepareNextPeriod()
-        wcxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter, false))
+        wcxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter))
         GrossClaimRoot claimRoot70 = new GrossClaimRoot(-70, ClaimType.EVENT,
                 date20120101, date20120101, annualPayoutPattern, annualReportingPatternInclFirst, new EventPacket(date20120101))
-        List<ClaimCashflowPacket> claims70 = claimRoot70.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims70 = claimRoot70.getClaimCashflowPackets(periodCounter)
         wcxl.inClaims.addAll(claims70)
         wcxl.doCalculation()
 
@@ -143,8 +143,8 @@ class WCXLContractTests extends GroovyTestCase {
 
         wcxl.reset()
         wcxl.iterationScope.periodScope.prepareNextPeriod()
-        wcxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter, false))
-        wcxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter, false))
+        wcxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter))
+        wcxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter))
         wcxl.doCalculation()
 
         assertEquals 'number of ceded claims', 2, wcxl.outClaimsCeded.size()
@@ -168,8 +168,8 @@ class WCXLContractTests extends GroovyTestCase {
 
         wcxl.reset()
         wcxl.iterationScope.periodScope.prepareNextPeriod()
-        wcxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter, false))
-        wcxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter, false))
+        wcxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter))
+        wcxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter))
         wcxl.doCalculation()
 
         assertEquals 'number of ceded claims', 2, wcxl.outClaimsCeded.size()
@@ -193,8 +193,8 @@ class WCXLContractTests extends GroovyTestCase {
 
         wcxl.reset()
         wcxl.iterationScope.periodScope.prepareNextPeriod()
-        wcxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter, false))
-        wcxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter, false))
+        wcxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter))
+        wcxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter))
         wcxl.doCalculation()
 
         assertEquals 'number of ceded claims', 2, wcxl.outClaimsCeded.size()
@@ -217,8 +217,8 @@ class WCXLContractTests extends GroovyTestCase {
 
         wcxl.reset()
         wcxl.iterationScope.periodScope.prepareNextPeriod()
-        wcxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter, false))
-        wcxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter, false))
+        wcxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter))
+        wcxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter))
         wcxl.doCalculation()
 
         assertEquals 'number of ceded claims', 1, wcxl.outClaimsCeded.size()
@@ -567,7 +567,7 @@ class WCXLContractTests extends GroovyTestCase {
     private void addClaimCashflowOfCurrentPeriod(ReinsuranceContract wcxl, List<GrossClaimRoot> baseClaims,
                                                  IPeriodCounter periodCounter, boolean firstPeriod) {
         for (GrossClaimRoot baseClaim : baseClaims) {
-            List<ClaimCashflowPacket> claims = baseClaim.getClaimCashflowPackets(periodCounter, firstPeriod)
+            List<ClaimCashflowPacket> claims = baseClaim.getClaimCashflowPackets(periodCounter)
             wcxl.inClaims.addAll(claims)
         }
     }

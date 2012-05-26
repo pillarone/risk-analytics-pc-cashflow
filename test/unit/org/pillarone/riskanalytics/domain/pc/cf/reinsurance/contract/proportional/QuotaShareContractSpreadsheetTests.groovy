@@ -79,7 +79,7 @@ class QuotaShareContractSpreadsheetTests extends SpreadsheetUnitTest {
             DateTime date = claim.occurrenceDate.toDateTimeAtStartOfDay()
             GrossClaimRoot baseClaim = new GrossClaimRoot(claim.ultimate, ClaimType.AGGREGATED, date,
                     date, trivialPayoutPattern, trivialReportingPattern)
-            claims.addAll baseClaim.getClaimCashflowPackets(iterationScope.periodScope.periodCounter, true)
+            claims.addAll baseClaim.getClaimCashflowPackets(iterationScope.periodScope.periodCounter)
         }
         claims
     }

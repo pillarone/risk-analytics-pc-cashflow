@@ -171,7 +171,7 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
                 List<UnderwritingInfoPacket> underwritingInfos = (List<UnderwritingInfoPacket>) periodStore.get(UNDERWRITING_INFOS, -periodOffset);
                 if (underwritingInfos == null || underwritingInfos.size() == 0) continue;
                 DateTime inceptionDate = underwritingInfos.get(0).getExposure().getInceptionDate();
-                List<DateFactors> dateFactorsList = premiumPattern.getDateFactorsForCurrentPeriod(inceptionDate, periodScope.getPeriodCounter(), false);
+                List<DateFactors> dateFactorsList = premiumPattern.getDateFactorsForCurrentPeriod(inceptionDate, inceptionDate, periodScope.getPeriodCounter(), false);
                 for (DateFactors dateFactors : dateFactorsList) {
                     for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
                         UnderwritingInfoPacket modifiedUnderwritingInfo = (UnderwritingInfoPacket) underwritingInfo.clone();

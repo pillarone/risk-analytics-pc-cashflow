@@ -83,7 +83,7 @@ class TrivialContractTests extends GroovyTestCase {
     private List<ClaimCashflowPacket> grossClaims(IPeriodCounter periodCounter, List<IComponentMarker> perils, double ultimate, ClaimType claimType = ClaimType.AGGREGATED) {
         GrossClaimRoot claimRoot = new GrossClaimRoot(-ultimate, claimType,
                 date20110418, date20110701, annualPayoutPattern, annualReportingPattern)
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
         perils.each { peril -> claims*.setMarker(peril) }
         return claims
     }

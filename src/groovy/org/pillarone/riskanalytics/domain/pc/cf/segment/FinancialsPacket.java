@@ -38,7 +38,7 @@ public class FinancialsPacket extends MultiValuePacket {
             netPremiumPaid = UnderwritingInfoUtils.aggregate(netUwInfos).getPremiumPaid();
         }
         if (!netClaims.isEmpty()) {
-            netClaimUltimate = ClaimUtils.sum(netClaims, true).getNominalUltimate();
+            netClaimUltimate = ClaimUtils.sum(netClaims, true).ultimate();
             netClaimPaid = ClaimUtils.sum(netClaims, true).getPaidIncrementalIndexed();
         }
         if (!cededUwInfos.isEmpty()) {

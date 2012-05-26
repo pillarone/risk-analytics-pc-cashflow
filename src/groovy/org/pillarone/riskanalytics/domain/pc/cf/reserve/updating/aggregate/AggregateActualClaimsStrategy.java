@@ -78,7 +78,6 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
      */
     public GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
                                                    IPeriodCounter periodCounter, DateTime updateDate) {
-//        if (!periodCounter.getCurrentPeriodEnd().isAfter(updateDate)) {
         if (claimRoot.getOccurrenceDate().isBefore(updateDate)) {
             lazyInitHistoricClaimsPerContractPeriod(periodCounter, updateDate);
             AggregateHistoricClaim historicClaim = historicClaimsPerContractPeriod.get(contractPeriod);

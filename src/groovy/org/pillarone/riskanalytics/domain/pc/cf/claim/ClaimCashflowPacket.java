@@ -98,50 +98,39 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         setDate(updateDate);
     }
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncrementalIndexed,
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double nominalUltimate, double paidIncrementalIndexed,
                                double paidCumulatedIndexed, double reservesIndexed, double changeInReservesIndexed,
                                double changeInIBNRIndexed, ExposureInfo exposureInfo, DateTime updateDate, IPeriodCounter periodCounter) {
-        this(baseClaim, ultimate, paidIncrementalIndexed, paidCumulatedIndexed, ultimate, baseClaim.getUltimate(),
+        this(baseClaim, ultimate, nominalUltimate, paidIncrementalIndexed, paidCumulatedIndexed, ultimate, baseClaim.getUltimate(),
                 reservesIndexed, changeInReservesIndexed, changeInIBNRIndexed, exposureInfo, updateDate, periodCounter);
     }
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double nominalUltimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
                                double reportedIncrementalIndexed, double reportedCumulatedIndexed, double reservesIndexed,
                                double changeInReservesIndexed, double changeInIBNRIndexed, ExposureInfo exposureInfo, DateTime updateDate,
                                IPeriodCounter periodCounter) {
-        this(baseClaim, ultimate, paidIncrementalIndexed, paidCumulatedIndexed, reportedIncrementalIndexed,
+        this(baseClaim, ultimate, nominalUltimate, paidIncrementalIndexed, paidCumulatedIndexed, reportedIncrementalIndexed,
                 reportedCumulatedIndexed, reservesIndexed, changeInReservesIndexed, changeInIBNRIndexed, exposureInfo,
                 updateDate, getUpdatePeriod(periodCounter, updateDate));
     }
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim, double ultimate,
-                               double nominalUltimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
-                               double reportedIncrementalIndexed, double reportedCumulatedIndexed,
-                               double reservesIndexed, double changeInReservesIndexed, double changeInIBNRIndexed,
-                               ExposureInfo exposureInfo, DateTime updateDate, int updatePeriod) {
-        this(baseClaim, keyClaim, ultimate, paidIncrementalIndexed, paidCumulatedIndexed, reportedIncrementalIndexed,
-                reportedCumulatedIndexed, reservesIndexed, changeInReservesIndexed, changeInIBNRIndexed, exposureInfo,
-                updateDate, updatePeriod);
-        this.nominalUltimate = nominalUltimate;
-    }
-
-
-    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double nominalUltimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
                                double reportedIncrementalIndexed, double reportedCumulatedIndexed, double reservesIndexed,
                                double changeInReservesIndexed, double changeInIBNRIndexed, ExposureInfo exposureInfo, 
                                DateTime updateDate, int updatePeriod) {
-        this(baseClaim, baseClaim, ultimate, paidIncrementalIndexed, paidCumulatedIndexed, reportedIncrementalIndexed,
+        this(baseClaim, baseClaim, ultimate, nominalUltimate, paidIncrementalIndexed, paidCumulatedIndexed, reportedIncrementalIndexed,
                 reportedCumulatedIndexed, reservesIndexed, changeInReservesIndexed, changeInIBNRIndexed, exposureInfo,
                 updateDate, updatePeriod);
     }
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim, double ultimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
+    public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim, double ultimate, double nominalUltimate,
+                               double paidIncrementalIndexed, double paidCumulatedIndexed,
                                double reportedIncrementalIndexed, double reportedCumulatedIndexed, double reservesIndexed,
                                double changeInReservesIndexed, double changeInIBNRIndexed, ExposureInfo exposureInfo,
                                DateTime updateDate, int updatePeriod) {
         this(baseClaim, keyClaim);
         this.ultimate = ultimate;
-        if (ultimate != 0) { nominalUltimate = ultimate; }
+        this.nominalUltimate = nominalUltimate;
         this.paidCumulatedIndexed = paidCumulatedIndexed;
         this.paidIncrementalIndexed = paidIncrementalIndexed;
         this.reportedCumulatedIndexed = reportedCumulatedIndexed;

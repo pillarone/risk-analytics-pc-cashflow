@@ -258,7 +258,7 @@ class TermWXLContractTests extends GroovyTestCase {
     private void addClaimCashflowOfCurrentPeriod(ReinsuranceContract wxl, List<GrossClaimRoot> baseClaims,
                                                  IPeriodCounter periodCounter, boolean firstPeriod) {
         for (GrossClaimRoot baseClaim : baseClaims) {
-            List<ClaimCashflowPacket> claims = baseClaim.getClaimCashflowPackets(periodCounter, firstPeriod)
+            List<ClaimCashflowPacket> claims = baseClaim.getClaimCashflowPackets(periodCounter)
             wxl.inClaims.addAll(claims)
         }
     }

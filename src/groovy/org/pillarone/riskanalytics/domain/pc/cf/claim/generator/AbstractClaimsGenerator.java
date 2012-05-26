@@ -96,7 +96,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
                 // In the case of risk attaching the inception date is within this period but the occurrence date
                 // might be delayed. If this happens don't return the claim within the list.
                 if (occurrenceInCurrentPeriod) {
-                    claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodScope.getPeriodCounter(), factors, true));
+                    claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodScope.getPeriodCounter(), factors));
                 }
             }
         }
@@ -122,7 +122,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
                 List<GrossClaimRoot> grossClaimRoots = (List<GrossClaimRoot>) periodStore.get(GROSS_CLAIMS, -periodOffset);
                 if (grossClaimRoots != null) {
                     for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
-                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, false));
+                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors));
                     }
                 }
             }

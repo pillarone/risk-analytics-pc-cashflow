@@ -115,6 +115,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
 
         PacketAggregatorRegistry.registerAggregator(ClaimCashflowPacket, new ClaimPacketAggregator())
         PacketAggregatorRegistry.registerAggregator(UnderwritingInfoPacket, new UnderwritingInfoPacketAggregator())
+
         CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregatePremiumReserveRiskCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateIncludingPremiumReserveRiskCollectingModeStrategy())

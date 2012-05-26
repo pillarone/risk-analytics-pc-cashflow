@@ -88,7 +88,7 @@ class CXLContractTests extends GroovyTestCase {
 
         GrossClaimRoot claimRoot50 = new GrossClaimRoot(-50, ClaimType.EVENT,
                 date20110418, date20110418, annualPayoutPattern, annualReportingPatternInclFirst, new EventPacket(date20110101))
-        List<ClaimCashflowPacket> claims50 = claimRoot50.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims50 = claimRoot50.getClaimCashflowPackets(periodCounter)
         cxl.inClaims.addAll(claims50)
         UnderwritingInfoPacket uw120 = new UnderwritingInfoPacket(premiumWritten: 120, premiumPaid: 100,
                                             exposure: new ExposureInfo(periodScope));
@@ -114,10 +114,10 @@ class CXLContractTests extends GroovyTestCase {
 
         cxl.reset()
         cxl.iterationScope.periodScope.prepareNextPeriod()
-        cxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter, false))
+        cxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter))
         GrossClaimRoot claimRoot70 = new GrossClaimRoot(-70, ClaimType.EVENT,
                 date20120101, date20120101, annualPayoutPattern, annualReportingPatternInclFirst, new EventPacket(date20120101))
-        List<ClaimCashflowPacket> claims70 = claimRoot70.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims70 = claimRoot70.getClaimCashflowPackets(periodCounter)
         cxl.inClaims.addAll(claims70)
         cxl.doCalculation()
 
@@ -142,8 +142,8 @@ class CXLContractTests extends GroovyTestCase {
 
         cxl.reset()
         cxl.iterationScope.periodScope.prepareNextPeriod()
-        cxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter, false))
-        cxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter, false))
+        cxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter))
+        cxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter))
         cxl.doCalculation()
 
         assertEquals 'number of ceded claims', 2, cxl.outClaimsCeded.size()
@@ -167,8 +167,8 @@ class CXLContractTests extends GroovyTestCase {
 
         cxl.reset()
         cxl.iterationScope.periodScope.prepareNextPeriod()
-        cxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter, false))
-        cxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter, false))
+        cxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter))
+        cxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter))
         cxl.doCalculation()
 
         assertEquals 'number of ceded claims', 2, cxl.outClaimsCeded.size()
@@ -192,8 +192,8 @@ class CXLContractTests extends GroovyTestCase {
 
         cxl.reset()
         cxl.iterationScope.periodScope.prepareNextPeriod()
-        cxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter, false))
-        cxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter, false))
+        cxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter))
+        cxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter))
         cxl.doCalculation()
 
         assertEquals 'number of ceded claims', 2, cxl.outClaimsCeded.size()
@@ -216,8 +216,8 @@ class CXLContractTests extends GroovyTestCase {
 
         cxl.reset()
         cxl.iterationScope.periodScope.prepareNextPeriod()
-        cxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter, false))
-        cxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter, false))
+        cxl.inClaims.addAll(claimRoot50.getClaimCashflowPackets(periodCounter))
+        cxl.inClaims.addAll(claimRoot70.getClaimCashflowPackets(periodCounter))
         cxl.doCalculation()
 
         assertEquals 'number of ceded claims', 1, cxl.outClaimsCeded.size()
@@ -553,7 +553,7 @@ class CXLContractTests extends GroovyTestCase {
     private void addClaimCashflowOfCurrentPeriod(ReinsuranceContract cxl, List<GrossClaimRoot> baseClaims,
                                                  IPeriodCounter periodCounter, boolean firstPeriod) {
         for (GrossClaimRoot baseClaim : baseClaims) {
-            List<ClaimCashflowPacket> claims = baseClaim.getClaimCashflowPackets(periodCounter, firstPeriod)
+            List<ClaimCashflowPacket> claims = baseClaim.getClaimCashflowPackets(periodCounter)
             cxl.inClaims.addAll(claims)
         }
     }

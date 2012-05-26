@@ -75,7 +75,7 @@ class QuotaShareContractTests extends GroovyTestCase {
 
         GrossClaimRoot claimRoot800 = new GrossClaimRoot(-800, ClaimType.AGGREGATED,
                 date20110418, date20110418, annualPayoutPattern, annualReportingPatternInclFirst)
-        List<ClaimCashflowPacket> claims800 = claimRoot800.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims800 = claimRoot800.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims800)
         UnderwritingInfoPacket uw1200 = new UnderwritingInfoPacket(premiumWritten: 1200, premiumPaid: 1000,
                                             exposure: new ExposureInfo(periodScope));
@@ -96,10 +96,10 @@ class QuotaShareContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter))
         GrossClaimRoot claimRoot1000 = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
                 date20120101, date20120101, annualPayoutPattern, annualReportingPatternInclFirst)
-        List<ClaimCashflowPacket> claims1000 = claimRoot1000.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims1000 = claimRoot1000.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims1000)
         quotaShare20.doCalculation()
 
@@ -114,8 +114,8 @@ class QuotaShareContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter, false))
-        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter))
+        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter))
         quotaShare20.doCalculation()
 
         assertEquals 'number of ceded claims', 2, quotaShare20.outClaimsCeded.size()
@@ -129,8 +129,8 @@ class QuotaShareContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter, false))
-        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter))
+        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter))
         quotaShare20.doCalculation()
 
         assertEquals 'number of ceded claims', 2, quotaShare20.outClaimsCeded.size()
@@ -144,8 +144,8 @@ class QuotaShareContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter, false))
-        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter))
+        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter))
         quotaShare20.doCalculation()
 
         assertEquals 'number of ceded claims', 2, quotaShare20.outClaimsCeded.size()
@@ -155,8 +155,8 @@ class QuotaShareContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter, false))
-        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter))
+        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter))
         quotaShare20.doCalculation()
 
         assertEquals 'number of ceded claims', 1, quotaShare20.outClaimsCeded.size()

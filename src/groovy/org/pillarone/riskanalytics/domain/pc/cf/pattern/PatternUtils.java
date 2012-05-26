@@ -84,12 +84,10 @@ public class PatternUtils {
      *
      * @param originalPattern
      * @param cumulativePeriods
-     * @param differenceBaseDateOccurrenceDate
      * @param cumulativePercentages
      * @return an adjusted pattern or the originalPattern if cumulativePeriods is empty
      */
     public static PatternPacket adjustedPattern(PatternPacket originalPattern, List<Period> cumulativePeriods,
-                                                Period differenceBaseDateOccurrenceDate,
                                                 List<Double> cumulativePercentages, DateTime baseDate, DateTime updateDate) {
         if (cumulativePeriods.size() != cumulativePercentages.size()) {
             throw new IllegalArgumentException("List arguments need to be of same size (periods: "
@@ -111,11 +109,6 @@ public class PatternUtils {
         Double lastCumulativeRate = cumulativePercentages.get(cumulativePercentages.size() - 1);
         double effectiveOutstandingRate = 1 - lastCumulativeRate;
         double outstandingRate = incrementalPaidByNextPaymentDate + (1 - cumulatedPaidByNextPaymentDate);
-        // start with index = 1 as the first period contains the occurrence date and therefore no correction is needed.
-        for (int index = 1; index < cumulativePeriods.size(); index++) {
-            Period adjustedPeriod = cumulativePeriods.get(index).minus(differenceBaseDateOccurrenceDate);
-            cumulativePeriods.set(index, adjustedPeriod);
-        }
         for (int index = nextPatternIndex; index < originalPattern.size(); index++) {
             double originalCumulativeValue = originalPattern.getCumulativeValues().get(index);
             double originalIncrement = index == 0 ? originalCumulativeValue : originalCumulativeValue - originalPattern.getCumulativeValues().get(index - 1);
@@ -127,7 +120,7 @@ public class PatternUtils {
             cumulativePercentages.add(lastCumulativeRate);
             // Note the "-1" in the date original pay date calculation, this means that when using the period start
             // date as the payout base a payout specified at month 12 will be seen in the first annual
-            cumulativePeriods.add(originalPattern.getCumulativePeriods().get(index).minusDays(1).minus(differenceBaseDateOccurrenceDate));
+            cumulativePeriods.add(originalPattern.getCumulativePeriods().get(index).minusDays(1)); //.minus(differenceBaseDateOccurrenceDate));
         }
         return new PatternPacket(originalPattern, cumulativePercentages, cumulativePeriods);
     }
@@ -145,10 +138,14 @@ public class PatternUtils {
                                                 double ultimate, DateTime baseDate, DateTime occurrenceDate, DateTime updateDate) {
         if (claimUpdates.isEmpty()) {
             List<Period> cumulativePeriods = new ArrayList<Period>();
+            List<Double> cumulativeValues = new ArrayList<Double>();
             for (int index = 0; index < originalPattern.size(); index++) {
-                cumulativePeriods.add(originalPattern.getCumulativePeriod(index).minusDays(1));
+                if (baseDate.plus(originalPattern.getCumulativePeriod(index)).isAfter(updateDate)) {
+                    cumulativePeriods.add(originalPattern.getCumulativePeriod(index).minusDays(1));
+                    cumulativeValues.add(originalPattern.getCumulativeValues().get(index));
+                }
             }
-            return new PatternPacket(originalPattern, originalPattern.getCumulativeValues(), cumulativePeriods);
+            return new PatternPacket(originalPattern, cumulativeValues, cumulativePeriods);
         }
         List<Period> cumulativePeriods = new ArrayList<Period>();
         List<Double> cumulativeValues = new ArrayList<Double>();
@@ -160,8 +157,7 @@ public class PatternUtils {
             cumulativeValues.add(claimUpdate.getValue() / ultimate);
             cumulativePeriods.add(new Period(baseDate, claimUpdate.getKey()));
         }
-        Period differenceOccurrenceDateBaseDate = new Period(baseDate, occurrenceDate);
-        return adjustedPattern(originalPattern, cumulativePeriods, differenceOccurrenceDateBaseDate, cumulativeValues, baseDate, updateDate);
+        return adjustedPattern(originalPattern, cumulativePeriods, cumulativeValues, baseDate, updateDate);
     }
 
     /**
@@ -201,5 +197,11 @@ public class PatternUtils {
         double daysInPeriod = days360(periodStart, periodEnd);
         double daysToUpdate = days360(periodStart, toDate);
         return  daysToUpdate / daysInPeriod;
+    }
+
+    public static PatternPacket getTrivialSynchronizePatterns(PatternPacket pattern, Class<? extends IPatternMarker> patternMarker) {
+        PatternPacket trivialSynchronizedPattern = new PatternPacket.TrivialPattern(patternMarker);
+        synchronizePatterns(pattern, trivialSynchronizedPattern);
+        return trivialSynchronizedPattern;
     }
 }

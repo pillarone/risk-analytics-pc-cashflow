@@ -110,7 +110,7 @@ class SurplusContractTests extends GroovyTestCase {
         ClaimRoot claimRoot = new ClaimRoot(ultimate, claimType, date20110101, date20110101)
         claimRoot = claimRoot.withExposure(uwInfo?.exposure)
         GrossClaimRoot grossClaimRoot = new GrossClaimRoot(claimRoot, payoutPattern, reportingPattern)
-        List<ClaimCashflowPacket> claims = grossClaimRoot.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims = grossClaimRoot.getClaimCashflowPackets(periodCounter)
         claims
     }
 

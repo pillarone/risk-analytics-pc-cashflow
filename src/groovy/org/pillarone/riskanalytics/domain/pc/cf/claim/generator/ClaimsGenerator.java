@@ -1,6 +1,5 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
-import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
@@ -105,7 +104,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
                         // add claim only to period store if development is required
                         grossClaimRoots.add(grossClaimRoot);
                     }
-                    claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, true));
+                    claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors));
                 }
                 periodStore.put(GROSS_CLAIMS, grossClaimRoots);
             }
@@ -129,7 +128,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
                 List<GrossClaimRoot> grossClaimRoots = (List<GrossClaimRoot>) periodStore.get(GROSS_CLAIMS, -periodOffset);
                 if (grossClaimRoots != null) {
                     for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
-                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, false));
+                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors));
                     }
                 }
             }

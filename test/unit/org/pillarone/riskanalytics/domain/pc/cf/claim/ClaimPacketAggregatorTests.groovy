@@ -33,13 +33,13 @@ class ClaimPacketAggregatorTests extends GroovyTestCase {
     void testUsage() {
         GrossClaimRoot claimRoot0101 = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
                 date20110101, date20110101, annualPayoutPattern, annualReportingPattern)
-        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter, true)
+        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter)
         GrossClaimRoot claimRoot0418 = new GrossClaimRoot(800, ClaimType.AGGREGATED,
                 date20110101, date20110101, annualPayoutPattern, annualReportingPattern)
-        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter, true)
+        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter)
         GrossClaimRoot claimRoot0701 = new GrossClaimRoot(350, ClaimType.AGGREGATED,
                 date20110101, date20110101, annualPayoutPattern, annualReportingPattern)
-        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter, true)
+        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter)
         ClaimCashflowPacket aggregateClaim = aggregator.aggregate(claims)
 
         int period = 0
@@ -55,9 +55,9 @@ class ClaimPacketAggregatorTests extends GroovyTestCase {
         period++    // 12
         periodCounter.next()
         claims.clear()
-        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter, false)
-        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter, false)
-        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter, false)
+        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter)
+        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter)
+        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter)
         aggregateClaim = aggregator.aggregate(claims)
 
         assertEquals "$period ultimate", 0, aggregateClaim.ultimate()
@@ -72,9 +72,9 @@ class ClaimPacketAggregatorTests extends GroovyTestCase {
         period++    // 24
         periodCounter.next()
         claims.clear()
-        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter, false)
-        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter, false)
-        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter, false)
+        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter)
+        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter)
+        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter)
         aggregateClaim = aggregator.aggregate(claims)
 
         assertEquals "$period ultimate", 0, aggregateClaim.ultimate()
@@ -89,9 +89,9 @@ class ClaimPacketAggregatorTests extends GroovyTestCase {
         period++    // 36
         periodCounter.next()
         claims.clear()
-        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter, false)
-        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter, false)
-        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter, false)
+        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter)
+        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter)
+        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter)
         aggregateClaim = aggregator.aggregate(claims)
 
         assertEquals "$period ultimate", 0, aggregateClaim.ultimate()
@@ -106,9 +106,9 @@ class ClaimPacketAggregatorTests extends GroovyTestCase {
         period++    // 48
         periodCounter.next()
         claims.clear()
-        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter, false)
-        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter, false)
-        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter, false)
+        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter)
+        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter)
+        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter)
         aggregateClaim = aggregator.aggregate(claims)
 
         assertEquals "$period ultimate", 0, aggregateClaim.ultimate()
@@ -125,13 +125,13 @@ class ClaimPacketAggregatorTests extends GroovyTestCase {
     void testMultipleUpdatePerPeriod() {
         GrossClaimRoot claimRoot0101 = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
                 date20110101, date20110101, payoutPattern, reportingPattern)
-        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter, true)
+        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter)
         GrossClaimRoot claimRoot0418 = new GrossClaimRoot(800, ClaimType.AGGREGATED,
                 date20110101, date20110101, payoutPattern, reportingPattern)
-        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter, true)
+        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter)
         GrossClaimRoot claimRoot0701 = new GrossClaimRoot(350, ClaimType.AGGREGATED,
                 date20110101, date20110101, payoutPattern, reportingPattern)
-        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter, true)
+        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter)
         ClaimCashflowPacket aggregateClaim = aggregator.aggregate(claims)
 
         int period = 0
@@ -148,9 +148,9 @@ class ClaimPacketAggregatorTests extends GroovyTestCase {
         period++    // 12
         periodCounter.next()
         claims.clear()
-        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter, false)
-        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter, false)
-        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter, false)
+        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter)
+        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter)
+        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter)
         aggregateClaim = aggregator.aggregate(claims)
 
         assertEquals "$period ultimate", 0, aggregateClaim.ultimate()
@@ -165,9 +165,9 @@ class ClaimPacketAggregatorTests extends GroovyTestCase {
         period++    // 24
         periodCounter.next()
         claims.clear()
-        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter, false)
-        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter, false)
-        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter, false)
+        claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter)
+        claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter)
+        claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter)
         aggregateClaim = aggregator.aggregate(claims)
 
         assertEquals "$period ultimate", 0, aggregateClaim.ultimate()

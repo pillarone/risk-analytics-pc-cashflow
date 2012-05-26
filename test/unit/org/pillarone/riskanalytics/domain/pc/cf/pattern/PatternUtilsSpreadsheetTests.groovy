@@ -31,19 +31,23 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
 
     @Override
     List<String> getSpreadsheetNames() {
-        ['ART-687-1-CODNoInPeriodStartPeriod.xlsx',
+        [
+         'ART-687-1-CODNoInPeriodStartPeriod.xlsx',
          'ART-687-2-CODYesInPeriodMiddleActualClaims.xlsx',
          'ART-687-3-CODYesLongTimeIntoFuture.xlsx',
          'ART-687-4-CODYesVeryLongTimeIntoFuture.xlsx',
          'ART-687-5-PSDYesMiddleOfActualPeriod.xlsx',
          'ART-687-6-PSDYesFirstQuarter.xlsx',
-         'ART-687-9-CODNoAfterUpdateDate2ndPeriod.xlsx']
+         'ART-687-7-PSDYesFirstQuarterUpdateEqualsReported.xlsx',
+         'ART-687-8-PSDNoAfterUpdateDate2ndPeriod.xlsx',
+         'ART-687-9-CODNoAfterUpdateDate2ndPeriod.xlsx'
+        ]
     }
 
     void testUsage() {
         for (SpreadsheetImporter importer: importers) {
-            // enable the following line while writing the test case but comment it out before committing!
-//            checkedForValidationErrors = true
+            // enable the following line while writing/debugging the test case but comment it out before committing!
+            setCheckedForValidationErrors(true)
 
             PatternPacket originalPattern = pattern(importer, 'Pattern')
             DateTime periodStartDate = generalParameters(importer).startCoverDate.toDateTimeAtStartOfDay()
@@ -56,24 +60,26 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
             TreeMap<DateTime, Double> claimUpdates = claimUpdates(importer, 'Claims', 0, periodCounter, updateDate, payoutPatternBase)
             DateTime baseDate = payoutPatternBase.equals(PayoutPatternBase.CLAIM_OCCURANCE_DATE) ? occurrenceDate : periodStartDate
             PatternPacket adjustedPattern = PatternUtils.adjustedPattern(originalPattern, claimUpdates, ultimate,
-                    baseDate, occurrenceDate,updateDate)
+                    baseDate, occurrenceDate, updateDate)
 
             List<ClaimCashflowPacket> claims = []
 
-            GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(ultimate, ClaimType.AGGREGATED, periodStartDate, occurrenceDate), adjustedPattern)
-            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, true))
+            GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(ultimate, ClaimType.AGGREGATED, periodStartDate, occurrenceDate), adjustedPattern, baseDate)
+            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
             for (int period = 0; period < periods; period++) {
                 periodCounter.next()
-                claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, false))
+                claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
             }
             List<Map<String, Object>> payments = futurePayments(importer)
             int index = 0
             for (ClaimCashflowPacket claim : claims) {
                 if (claim.ultimate() > 0) {
-                    println "${importer.fileName} ultimate @ ${claim.occurrenceDate} ${claim.ultimate()}"
+                    println "${importer.fileName}\n\tultimate @ ${claim.occurrenceDate} ${claim.ultimate()}"
+                    assertEquals "ultimate$index", ultimate, claim.ultimate()
+                    assertEquals "occurrence date", occurrenceDate, claim.occurrenceDate
                 }
                 else {
-                    println "incremental$index @ ${claim.getUpdateDate()} ${claim.getPaidIncrementalIndexed()}"
+                    println "\tincremental$index @ ${claim.getUpdateDate()} ${claim.getPaidIncrementalIndexed()}"
                 }
                 if (claim.getPaidIncrementalIndexed() > 0) {
                     assertEquals "incremental$index @ ${claim.getUpdateDate()}", payments[index]['futurePayment'], claim.getPaidIncrementalIndexed(), EPSILON

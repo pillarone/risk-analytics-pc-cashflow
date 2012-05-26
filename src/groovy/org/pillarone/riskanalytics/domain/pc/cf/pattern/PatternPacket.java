@@ -131,19 +131,26 @@ public class PatternPacket extends Packet implements Cloneable {
     }
 
     /**
+     * If patternStartDate and occurrenceDate differ an additional DateFactor with increment 0 is inserted.
+     * @param patternStartDate
      * @param occurrenceDate
      * @param periodCounter
      * @param returnPrevious if nothing is found in current period return value of last period containing information
      * @return
      */
-    public List<DateFactors> getDateFactorsForCurrentPeriod(DateTime occurrenceDate, IPeriodCounter periodCounter,
-                                                            boolean returnPrevious) {
+    public List<DateFactors> getDateFactorsForCurrentPeriod(DateTime patternStartDate, DateTime occurrenceDate,
+                                                            IPeriodCounter periodCounter, boolean returnPrevious) {
         List<DateFactors> dateFactors = new ArrayList<DateFactors>();       //      todo(sku): avoid looping through complete pattern
         double previousCumulativeValue = 0;
         boolean previousBeforeLastElement = false;
         DateTime previousDate = null;
+        boolean separateOccurrenceDate = !patternStartDate.equals(occurrenceDate) && periodCounter.belongsToCurrentPeriod(occurrenceDate);
         for (int devPeriod = 0; devPeriod < cumulativeValues.size(); devPeriod++) {
-            DateTime date = occurrenceDate.plus(cumulativePeriods.get(devPeriod));
+            DateTime date = patternStartDate.plus(cumulativePeriods.get(devPeriod));
+            if (separateOccurrenceDate && occurrenceDate.isBefore(date)) {
+                separateOccurrenceDate = false;
+                dateFactors.add(new DateFactors(occurrenceDate, 0, cumulativeValues.get(devPeriod - 1)));
+            }
             if (!date.isBefore(periodCounter.startOfFirstPeriod()) && periodCounter.belongsToCurrentPeriod(date)) {
                 dateFactors.add(new DateFactors(date, incrementFactor(devPeriod), cumulativeValues.get(devPeriod)));
             }
@@ -154,6 +161,10 @@ public class PatternPacket extends Packet implements Cloneable {
             else if (!date.isBefore(periodCounter.getCurrentPeriodEnd())) {
                 previousBeforeLastElement = true;
                 break;
+            }
+            if (separateOccurrenceDate && occurrenceDate.isAfter(date)) {
+                separateOccurrenceDate = false;
+                dateFactors.add(new DateFactors(occurrenceDate, 0, cumulativeValues.get(devPeriod)));
             }
         }
         if (returnPrevious && previousBeforeLastElement && dateFactors.isEmpty() && previousDate != null) {
@@ -174,7 +185,7 @@ public class PatternPacket extends Packet implements Cloneable {
     }
 
     public List<DateFactors> getDateFactorsForCurrentPeriod(IPeriodCounter periodCounter) {
-        return getDateFactorsForCurrentPeriod(periodCounter.getCurrentPeriodStart(), periodCounter, false);
+        return getDateFactorsForCurrentPeriod(periodCounter.getCurrentPeriodStart(), periodCounter.getCurrentPeriodStart(), periodCounter, false);
     }
 
     /**
@@ -288,7 +299,12 @@ public class PatternPacket extends Packet implements Cloneable {
     }
 
     public void insertTrivialPeriod(Period period, int index) {
-        cumulativeValues.add(index, cumulativeValues.get(index - 1));
+        if (index == 0) {
+            cumulativeValues.add(0, 0d);
+        }
+        else {
+            cumulativeValues.add(index, cumulativeValues.get(index - 1));
+        }
         cumulativePeriods.add(index, period);
     }
 

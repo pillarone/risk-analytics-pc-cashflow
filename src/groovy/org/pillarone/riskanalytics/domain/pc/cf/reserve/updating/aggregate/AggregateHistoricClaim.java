@@ -54,7 +54,8 @@ public class AggregateHistoricClaim {
     }
 
     public GrossClaimRoot claimWithAdjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
-        return new GrossClaimRoot(claimRoot, adjustedPattern(payoutPattern, claimRoot, updateDate));
+        DateTime startDateForPatterns = base.equals(PayoutPatternBase.PERIOD_START_DATE) ? contractPeriodStartDate : claimRoot.getOccurrenceDate();
+        return new GrossClaimRoot(claimRoot, adjustedPattern(payoutPattern, claimRoot, updateDate), startDateForPatterns);
     }
 
     /** last reported before or at updateDate */

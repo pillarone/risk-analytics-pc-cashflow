@@ -399,7 +399,7 @@ class StopLossContractTests extends GroovyTestCase {
     private void addClaimCashflowOfCurrentPeriod(ReinsuranceContract stopLoss, List<GrossClaimRoot> baseClaims,
                                                  IPeriodCounter periodCounter, boolean firstPeriod) {
         for (GrossClaimRoot baseClaim : baseClaims) {
-            List<ClaimCashflowPacket> claims = baseClaim.getClaimCashflowPackets(periodCounter, firstPeriod)
+            List<ClaimCashflowPacket> claims = baseClaim.getClaimCashflowPackets(periodCounter)
             stopLoss.inClaims.addAll(claims)
         }
     }

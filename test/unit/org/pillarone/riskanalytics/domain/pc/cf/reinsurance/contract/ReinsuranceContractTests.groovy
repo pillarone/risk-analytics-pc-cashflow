@@ -99,7 +99,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
 
         quotaShare20.inClaims.addAll(claims)
 
@@ -129,7 +129,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, annualPayoutPattern, annualReportingPatternInclFirst)
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
 
         quotaShare20.inClaims.addAll(claims)
 
@@ -149,7 +149,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        claims = claimRoot.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims)
         quotaShare20.doCalculation()
 
@@ -168,7 +168,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        claims = claimRoot.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims)
         quotaShare20.doCalculation()
 
@@ -187,7 +187,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        claims = claimRoot.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims)
         quotaShare20.doCalculation()
 
@@ -206,7 +206,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        claims = claimRoot.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims)
         quotaShare20.doCalculation()
 
@@ -225,7 +225,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        claims = claimRoot.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims)
         quotaShare20.doCalculation()
 
@@ -239,7 +239,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, payoutPattern, reportingPattern)
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
 
         quotaShare20.inClaims.addAll(claims)
 
@@ -268,7 +268,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        claims = claimRoot.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims)
         quotaShare20.doCalculation()
 
@@ -287,7 +287,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        claims = claimRoot.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims)
         quotaShare20.doCalculation()
 
@@ -306,7 +306,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        claims = claimRoot.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims)
         quotaShare20.doCalculation()
         assertEquals 'P3 number of ceded claims', 1, quotaShare20.outClaimsCeded.size()
@@ -326,7 +326,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        claims = claimRoot.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims)
         quotaShare20.doCalculation()
 
@@ -344,7 +344,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        claims = claimRoot.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims)
         quotaShare20.doCalculation()
 
@@ -359,7 +359,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
 
         quotaShare20.inClaims.addAll(claims)
 
@@ -383,8 +383,8 @@ class ReinsuranceContractTests extends GroovyTestCase {
         GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
 
-        List<ClaimCashflowPacket> claimsMotor = claimRoot.getClaimCashflowPackets(periodCounter, true)
-        List<ClaimCashflowPacket> claimsMotorHull = claimRoot.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claimsMotor = claimRoot.getClaimCashflowPackets(periodCounter)
+        List<ClaimCashflowPacket> claimsMotorHull = claimRoot.getClaimCashflowPackets(periodCounter)
         claimsMotor*.setMarker(perilMotor)
         claimsMotorHull*.setMarker(perilMotorHull)
 
@@ -425,8 +425,8 @@ class ReinsuranceContractTests extends GroovyTestCase {
         GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
 
-        List<ClaimCashflowPacket> claimsMotor = claimRoot.getClaimCashflowPackets(periodCounter, true)
-        List<ClaimCashflowPacket> claimsMotorHull = claimRoot.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claimsMotor = claimRoot.getClaimCashflowPackets(periodCounter)
+        List<ClaimCashflowPacket> claimsMotorHull = claimRoot.getClaimCashflowPackets(periodCounter)
         claimsMotor*.setMarker(segmentMotor)
         claimsMotorHull*.setMarker(segmentMotorHull)
 
@@ -504,7 +504,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, annualPayoutPattern, annualReportingPatternInclFirst)
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
 
         Segment segmentMotor = new Segment(name: 'motor')
         UnderwritingInfoPacket underwritingInfoMotor = new UnderwritingInfoPacket(segment: segmentMotor,
@@ -550,7 +550,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        claims = claimRoot.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims)
         quotaShare20.doCalculation()
 
@@ -591,7 +591,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, annualPayoutPattern, annualReportingPatternInclFirst)
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, true)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
 
         Segment segmentMotor = new Segment(name: 'motor')
         CededUnderwritingInfoPacket underwritingInfoMotor = new CededUnderwritingInfoPacket(segment: segmentMotor,
@@ -637,7 +637,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-        claims = claimRoot.getClaimCashflowPackets(periodCounter, false)
+        claims = claimRoot.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims)
         quotaShare20.doCalculation()
 
