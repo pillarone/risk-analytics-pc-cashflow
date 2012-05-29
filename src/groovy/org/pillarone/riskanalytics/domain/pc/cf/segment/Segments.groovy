@@ -23,12 +23,14 @@ import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault
 class Segments extends DynamicMultiPhaseComposedComponent {
 
     PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
-    // todo(jwa): remove as soon as PMO-1733 is solved
+    // todo: remove inReserves as soon as PMO-1733 is solved (and collect within inClaims)
     PacketList<ClaimCashflowPacket> inReserves = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
+    // todo: remove inReserves as soon as PMO-1733 is solved (and collect within inClaimsCeded)
     PacketList<ClaimCashflowPacket> inReservesCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
+    // todo: remove inReserves as soon as PMO-1733 is solved (and collect within inUnderwritingInfoCeded)
     PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded2 = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
     PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
     PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault)
