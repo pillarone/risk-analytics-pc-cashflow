@@ -39,7 +39,7 @@ components {
 	retrospectiveReinsurance {
 		subLPT {
 			parmContractStrategy[0]=org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.RetrospectiveReinsuranceContractType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.RetrospectiveReinsuranceContractType.LOSSPORTFOLIOTRANSFER, ["limit":1000.0,"cededShare":0.4,"reinsurancePremium":50.0,])
-			parmCover[0]=org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.RetrospectiveCoverAttributeStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.RetrospectiveCoverAttributeStrategyType.ORIGINALRESERVES, ["reserves":new org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([["marine", "motor"]]),["Reserve Generators"], org.pillarone.riskanalytics.domain.utils.marker.IReserveMarker),])
+			parmCover[0]=org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.RetrospectiveCoverAttributeStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.RetrospectiveCoverAttributeStrategyType.ORIGINALRESERVES, ["reserves":new org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([["subMarine", "subMotor"]]),["Reserve Generators"], org.pillarone.riskanalytics.domain.utils.marker.IReserveMarker),])
 			parmReinsurers[0]=new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([[]]),["Reinsurer","Covered Portion"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('LEGAL_ENTITY_PORTION'))
 		}
 	}

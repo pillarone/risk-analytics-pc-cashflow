@@ -26,7 +26,7 @@ components {
 	}
 	reservesGenerators {
 		subMarineRepBased {
-			parmIndices[0]=new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([["marine"], ["CONTINUOUS"]]),["Index","Index Mode"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('RESERVE_INDEX_SELECTION'))
+			parmIndices[0]=new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([["subMarine"], ["CONTINUOUS"]]),["Index","Index Mode"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('RESERVE_INDEX_SELECTION'))
 			parmPayoutPattern[0]=new org.pillarone.riskanalytics.core.parameterization.ConstrainedString(org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker, 'subMarine')
 			parmReportingPattern[0]=new org.pillarone.riskanalytics.core.parameterization.ConstrainedString(org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker, 'subMarine')
 			parmUltimateEstimationMethod[0]=org.pillarone.riskanalytics.domain.pc.cf.reserve.ReserveCalculationType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reserve.ReserveCalculationType.REPORTEDBASED, ["averageInceptionDate":new org.joda.time.DateTime(2008, 7, 1, 0, 0, 0, 0),"reportingDate":new org.joda.time.DateTime(2011, 3, 31, 0, 0, 0, 0),"reportedAtReportingDate":3500.0,"interpolationMode":org.pillarone.riskanalytics.domain.pc.cf.reserve.InterpolationMode.LINEAR,])

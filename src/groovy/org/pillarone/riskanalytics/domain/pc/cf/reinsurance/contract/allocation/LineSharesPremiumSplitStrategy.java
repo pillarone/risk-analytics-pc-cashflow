@@ -48,7 +48,7 @@ public class LineSharesPremiumSplitStrategy extends AbstractPremiumSplit {
         Map<String, ISegmentMarker> segmentNameMapping = new HashMap<String, ISegmentMarker>();
         for (UnderwritingInfoPacket underwritingInfo : grossUnderwritingInfos) {
             if (underwritingInfo.segment() == null) continue;
-            segmentNameMapping.put(underwritingInfo.segment().getNormalizedName(), underwritingInfo.segment());
+            segmentNameMapping.put(underwritingInfo.segment().getName(), underwritingInfo.segment());
         }
         Map<ISegmentMarker, Double> segmentShares = new HashMap<ISegmentMarker, Double>();
         double totalShare = 0;

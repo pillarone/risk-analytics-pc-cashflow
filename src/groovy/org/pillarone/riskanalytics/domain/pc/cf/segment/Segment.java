@@ -193,7 +193,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             List<UnderwritingInfoPacket> lobUnderwritingInfos = new ArrayList<UnderwritingInfoPacket>();
             int portionColumn = parmUnderwritingPortions.getColumnIndex(PORTION);
             for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
-                String originName = underwritingInfo.riskBand().getNormalizedName();
+                String originName = underwritingInfo.riskBand().getName();
                 int row = parmUnderwritingPortions.getColumnByName(UNDERWRITING).indexOf(originName);
                 if (row > -1) {
                     UnderwritingInfoPacket lobUnderwritingInfo = (UnderwritingInfoPacket) underwritingInfo.copy();
@@ -221,7 +221,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             for (ClaimCashflowPacket marketClaim : inClaims) {
                 // todo(jwa): if-statement needed as soon as reserves contained within inClaims
                 if (marketClaim.peril() != null) {
-                    String originName = marketClaim.peril().getNormalizedName();
+                    String originName = marketClaim.peril().getName();
                     int row = parmClaimsPortions.getColumnByName(PERIL).indexOf(originName);
                     if (row > -1) {
                         ClaimCashflowPacket segmentClaim = (ClaimCashflowPacket) marketClaim.copy();
@@ -255,7 +255,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             for (ClaimCashflowPacket marketClaim : inClaims) {
                 // todo(jwa): if-statement needed as soon as reserves contained within inClaims
                 if (marketClaim.reserve() != null) {
-                    String originName = marketClaim.reserve().getNormalizedName();
+                    String originName = marketClaim.reserve().getName();
                     int row = parmReservesPortions.getColumnByName(RESERVE).indexOf(originName);
                     if (row > -1) {
                         ClaimCashflowPacket segmentReserve = (ClaimCashflowPacket) marketClaim.copy();
