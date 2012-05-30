@@ -62,9 +62,6 @@ class ReinsuranceContracts extends DynamicComposedComponent {
 
     /** key: technical contract name, value: contract instance */
     private Map<String, ReinsuranceContract> reinsuranceContracts = new HashMap<String, ReinsuranceContract>()
-    /** key: normalized contract name, value: contract instance */
-    private Map<String, ReinsuranceContract> reinsuranceContractNames = new HashMap<String, ReinsuranceContract>()
-
 
     public ReinsuranceContract createDefaultSubComponent(){
         return new ReinsuranceContract(
@@ -162,7 +159,7 @@ class ReinsuranceContracts extends DynamicComposedComponent {
         }
         for (ReinsuranceContract contract : componentList) {
             if (isContractCover(contract)) {
-                List<ReinsuranceContractAndBase> coveredContracts = ((IContractCover) contract.parmCover).getCoveredReinsuranceContractsAndBase(reinsuranceContractNames)
+                List<ReinsuranceContractAndBase> coveredContracts = ((IContractCover) contract.parmCover).getCoveredReinsuranceContractsAndBase(reinsuranceContracts)
                 contractsBasedOnContracts.createNode(contract.name)
                 for (ReinsuranceContractAndBase coveredContract : coveredContracts) {
                     contractsBasedOnContracts.addRelation(contract.name, coveredContract.reinsuranceContract.name)
@@ -187,7 +184,6 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     private void initContractMap() {
         for (ReinsuranceContract contract: componentList) {
             reinsuranceContracts.put(contract.name, contract)
-            reinsuranceContractNames.put(contract.normalizedName, contract)
         }
     }
 

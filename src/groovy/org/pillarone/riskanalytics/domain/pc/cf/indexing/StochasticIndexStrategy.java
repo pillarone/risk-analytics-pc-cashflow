@@ -77,8 +77,8 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
     private static Double filterSeverity(Component filterCriteria, List<EventDependenceStream> eventStreams) {
         List<EventSeverity> filteredEventSeverities = new ArrayList<EventSeverity>();
         for (EventDependenceStream eventStream : eventStreams) {
-            if (eventStream.getEventDependenceStream().containsKey(filterCriteria.getNormalizedName())) {
-                filteredEventSeverities.add(eventStream.getEventDependenceStream().get(filterCriteria.getNormalizedName()));
+            if (eventStream.getEventDependenceStream().containsKey(filterCriteria.getName())) {
+                filteredEventSeverities.add(eventStream.getEventDependenceStream().get(filterCriteria.getName()));
             }
         }
         if (filteredEventSeverities.size() > 1) {

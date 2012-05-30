@@ -56,10 +56,10 @@ class SegmentTests extends GroovyTestCase {
     Segment segment = new Segment()
     Discounting discounting
 
-    ClaimsGenerator motorClaimsGenerator = new ClaimsGenerator(name: 'motor')
-    ClaimsGenerator marineClaimsGenerator = new ClaimsGenerator(name: 'marine')
+    ClaimsGenerator motorClaimsGenerator = new ClaimsGenerator(name: 'subMotor')
+    ClaimsGenerator marineClaimsGenerator = new ClaimsGenerator(name: 'subMarine')
     // is ignored as it is not part of included claims generators
-    ClaimsGenerator paClaimsGenerator = new ClaimsGenerator(name: 'personal accident')
+    ClaimsGenerator paClaimsGenerator = new ClaimsGenerator(name: 'subPersonalAccident')
 
     ClaimCashflowPacket marine1000 = getClaimCashflowPacket(null, -1000, -200, updateDate1, updateDate1,
             true, periodScope, marineClaimsGenerator)
@@ -68,9 +68,9 @@ class SegmentTests extends GroovyTestCase {
     ClaimCashflowPacket pa400 = getClaimCashflowPacket(null, -400, -200, projectionStart, projectionStart,
             true, periodScope, paClaimsGenerator)
 
-    ReservesGenerator motorReservesGenerator = new ReservesGenerator(name: 'motor reserve')
-    ReservesGenerator marineReservesGenerator = new ReservesGenerator(name: 'marineReserve')
-    ReservesGenerator paReservesGenerator = new ReservesGenerator(name: 'pa reserve')
+    ReservesGenerator motorReservesGenerator = new ReservesGenerator(name: 'subMotorReserve')
+    ReservesGenerator marineReservesGenerator = new ReservesGenerator(name: 'subMarineReserve')
+    ReservesGenerator paReservesGenerator = new ReservesGenerator(name: 'subPaReserve')
 
     ClaimCashflowPacket marineReserve2000 = getClaimCashflowPacket(null, -2000, -200, projectionStart, projectionStart,
             true, periodScope, marineReservesGenerator)
@@ -85,7 +85,7 @@ class SegmentTests extends GroovyTestCase {
         ConstraintsFactory.registerConstraint(new ReservePortion())
         ConstraintsFactory.registerConstraint(new UnderwritingPortion())
 
-        discounting = new Discounting(name: 'discount index', parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.DETERMINISTICINDEXSERIES,
+        discounting = new Discounting(name: 'subDiscountIndex', parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.DETERMINISTICINDEXSERIES,
                 [indices: new ConstrainedMultiDimensionalParameter(
                         [[new DateTime(2010, 1, 1, 0, 0, 0, 0), new DateTime(2011, 1, 1, 0, 0, 0, 0), new DateTime(2012, 3, 1, 0, 0, 0, 0)],
                                 [1.02, 1.04, 1.062]],
@@ -96,17 +96,17 @@ class SegmentTests extends GroovyTestCase {
         iterationScope.numberOfPeriods = 2
         segment.periodStore = new PeriodStore(segment.iterationScope.periodScope)
         segment.parmClaimsPortions = new ConstrainedMultiDimensionalParameter(
-                [['marine', 'motor'], [1d, 0.5d]], [Segment.PERIL, Segment.PORTION],
+                [['subMarine', 'subMotor'], [1d, 0.5d]], [Segment.PERIL, Segment.PORTION],
                 ConstraintsFactory.getConstraints(PerilPortion.IDENTIFIER))
         segment.parmUnderwritingPortions = new ConstrainedMultiDimensionalParameter(
-                [['marine', 'motor'], [1d, 0.6d]], [Segment.UNDERWRITING, Segment.PORTION],
+                [['subMarine', 'subMotor'], [1d, 0.6d]], [Segment.UNDERWRITING, Segment.PORTION],
                 ConstraintsFactory.getConstraints(UnderwritingPortion.IDENTIFIER))
         segment.parmReservesPortions = new ConstrainedMultiDimensionalParameter(
-                [['marine reserve', 'motor reserve'], [1d, 0.5d]], [Segment.RESERVE, Segment.PORTION],
+                [['subMarineReserve', 'subMotorReserve'], [1d, 0.5d]], [Segment.RESERVE, Segment.PORTION],
                 ConstraintsFactory.getConstraints(ReservePortion.IDENTIFIER))
         ComboBoxTableMultiDimensionalParameter discountComboBox = new ComboBoxTableMultiDimensionalParameter(
-                ["discount index"], ["Discount Index"], IDiscountMarker)
-        discountComboBox.comboBoxValues.put('discount index', discounting)
+                ["subDiscountIndex"], ["Discount Index"], IDiscountMarker)
+        discountComboBox.comboBoxValues.put('subDiscountIndex', discounting)
         segment.setParmDiscounting(discountComboBox)
 
         WiringUtils.use(WireCategory) {
@@ -120,18 +120,18 @@ class SegmentTests extends GroovyTestCase {
     /** apply weight for motor claim, ignore personal accident claim, net calculation        */
     void testUsage() {
 
-        RiskBands marineRisk = new RiskBands(name: 'marine')
+        RiskBands marineRisk = new RiskBands(name: 'subMarine')
         UnderwritingInfoPacket marineUwInfo600 = new UnderwritingInfoPacket(
                 premiumWritten: 600, premiumPaid: 500, numberOfPolicies: 10, riskBand: marineRisk
         )
         marineUwInfo600.exposure = new ExposureInfo(new DateTime(2011, 1, 1, 0,0,0,0), 0, 10000, 15000, ExposureBase.ABSOLUTE)
 
-        RiskBands motorRisk = new RiskBands(name: 'motor')
+        RiskBands motorRisk = new RiskBands(name: 'subMotor')
         UnderwritingInfoPacket motorUwInfo450 = new UnderwritingInfoPacket(
                 premiumWritten: 450, premiumPaid: 400, numberOfPolicies: 5, riskBand: motorRisk
         )
         motorUwInfo450.exposure = new ExposureInfo(new DateTime(2011, 1, 1, 0,0,0,0), 0, 1000, 2000, ExposureBase.ABSOLUTE)
-        RiskBands paRisk = new RiskBands(name: 'pa')
+        RiskBands paRisk = new RiskBands(name: 'subPa')
         UnderwritingInfoPacket paUwInfo1000 = new UnderwritingInfoPacket(
                 premiumWritten: 1000, premiumPaid: 800, numberOfPolicies: 20, riskBand: paRisk
         )
@@ -193,7 +193,7 @@ class SegmentTests extends GroovyTestCase {
         quotaShare = 0.1
         ClaimCashflowPacket marineReserve2000Ceded = getCededClaim(segmentMarineReserve2000, quotaShare)
         ClaimCashflowPacket motorReserve600Ceded = getCededClaim(segmentMotorReserve300, quotaShare)
-        paReserve800.setMarker(new Segment(name: 'pa'))
+        paReserve800.setMarker(new Segment(name: 'subPa'))
         ClaimCashflowPacket paReserve800Ceded = getCededClaim(paReserve800, quotaShare)
 
         segment.inClaimsCeded << marine1000Ceded << motor500Ceded << pa400Ceded << marineReserve2000Ceded << motorReserve600Ceded << paReserve800Ceded

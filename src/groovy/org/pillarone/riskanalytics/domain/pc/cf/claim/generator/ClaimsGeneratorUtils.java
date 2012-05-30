@@ -123,8 +123,8 @@ public class ClaimsGeneratorUtils {
     public static List<EventSeverity> filterEventSeverities(List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria) {
         List<EventSeverity> filteredEventSeverities = new ArrayList<EventSeverity>();
         for (EventDependenceStream eventStream : eventStreams) {
-            if (eventStream.getEventDependenceStream().containsKey(filterCriteria.getNormalizedName())) {
-                filteredEventSeverities.add(eventStream.getEventDependenceStream().get(filterCriteria.getNormalizedName()));
+            if (eventStream.getEventDependenceStream().containsKey(filterCriteria.getName())) {
+                filteredEventSeverities.add(eventStream.getEventDependenceStream().get(filterCriteria.getName()));
             }
         }
         return filteredEventSeverities;
@@ -182,7 +182,7 @@ public class ClaimsGeneratorUtils {
     public static RandomFrequencyDistribution extractFrequencyDistribution(List<SystematicFrequencyPacket> distributions, IPerilMarker filterCriteria) {
         List<RandomFrequencyDistribution> filteredDistributions = new ArrayList<RandomFrequencyDistribution>();
         for (SystematicFrequencyPacket distribution : distributions) {
-            if (distribution.getTargets().contains(filterCriteria.getNormalizedName())) {
+            if (distribution.getTargets().contains(filterCriteria.getName())) {
                 filteredDistributions.add(distribution.getFrequencyDistribution());
             }
         }
