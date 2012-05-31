@@ -24,7 +24,7 @@ class AttritionalClaimsGenerators extends DynamicMultiPhaseComposedComponent {
     PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket)
     PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class)
 
-    protected PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState.class)
+    PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState.class)
 
     @Override
     Component createDefaultSubComponent() {

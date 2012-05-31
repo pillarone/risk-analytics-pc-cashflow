@@ -54,7 +54,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
     protected void doCalculation(String phase) {
 //        A deal may commute before the end of the contract period. We may hence want to terminate claims generation
 //        Depending on the outcome in the experience account.
-        initIteration(periodStore, periodScope);
+        initIteration(periodStore, periodScope, phase);
 
         if (phase.equals(PHASE_CLAIMS_CALCULATION)) {
             CommutationState commutationState = (CommutationState) (periodStore.get(COMMUTATION_STATE));
@@ -62,18 +62,23 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
             if (! ( commutationState.isCommuted() || commutationState.isCommuteThisPeriod())) {
                 IPeriodCounter periodCounter = periodScope.getPeriodCounter();
                 List<ClaimRoot> baseClaims;
-                if (globalDeterministicMode) {
-                    baseClaims = getDeterministicClaims(parmDeterministicClaims, periodScope, ClaimType.ATTRITIONAL);
-                } else {
-                    List<Factors> severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices(),
-                            IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
-                    baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
-                            severityFactors, parmParameterizationBasis, this, periodScope);
+                List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
+
+                List<Factors> runoffFactors = null;
+                if (periodScope.getCurrentPeriod() < globalLastCoveredPeriod) {
+                    if (globalDeterministicMode) {
+                        baseClaims = getDeterministicClaims(parmDeterministicClaims, periodScope, ClaimType.ATTRITIONAL);
+                    } else  {
+                        List<Factors> severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices(),
+                                IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
+                        baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
+                                severityFactors, parmParameterizationBasis, this, periodScope);
+                    }
+                    baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter, globalUpdateDate, inPatterns);
+                    runoffFactors = new ArrayList<Factors>();
+                    claims = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, parmActualClaims,
+                            periodScope, runoffFactors);
                 }
-                baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter, globalUpdateDate, inPatterns);
-                List<Factors> runoffFactors = new ArrayList<Factors>();
-                List<ClaimCashflowPacket> claims = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, parmActualClaims,
-                        periodScope, runoffFactors);
                 developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
                 setTechnicalProperties(claims);
                 outClaims.addAll(claims);
@@ -86,7 +91,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 CommutationState packet = inCommutationState.get(0);
                 periodStore.put(COMMUTATION_STATE, packet, 1);
             } else {
-                throw new RuntimeException("Found different to one commutationState in inCommutationState.");
+                throw new RuntimeException("Found different to one commutationState in inCommutationState. Period: " + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
             }
         } else {
             throw new RuntimeException("Unkown phase: " + phase);
@@ -95,9 +100,10 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
 
     /**
      * @param periodStore the period store for this object
+     * @param phase
      */
-    private void initIteration(PeriodStore periodStore, PeriodScope periodScope) {
-        if (periodScope.isFirstPeriod()) {
+    private void initIteration(PeriodStore periodStore, PeriodScope periodScope, String phase) {
+        if (periodScope.isFirstPeriod() && phase.equals(PHASE_CLAIMS_CALCULATION) ) {
             periodStore.put(COMMUTATION_STATE, new CommutationState());
         }
     }
@@ -149,4 +155,6 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
     public void setParmUpdatingMethodology(IAggregateUpdatingMethodologyStrategy parmUpdatingMethodology) {
         this.parmUpdatingMethodology = parmUpdatingMethodology;
     }
+
+
 }

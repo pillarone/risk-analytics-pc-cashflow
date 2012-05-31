@@ -40,6 +40,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
 
     protected PeriodScope periodScope;
     protected PeriodStore periodStore;
+    protected Integer globalLastCoveredPeriod;
 
     protected PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     protected PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
@@ -294,5 +295,21 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
 
     public void setInCommutationState(PacketList<CommutationState> inCommutationState) {
         this.inCommutationState = inCommutationState;
+    }
+
+    public Integer getGlobalLastCoveredPeriod() {
+        return globalLastCoveredPeriod;
+    }
+
+    public void setGlobalLastCoveredPeriod(Integer globalLastCoveredPeriod) {
+        this.globalLastCoveredPeriod = globalLastCoveredPeriod;
+    }
+
+    public ListMultimap<Integer, ClaimRoot> getPresetClaimsByPeriod() {
+        return presetClaimsByPeriod;
+    }
+
+    public void setPresetClaimsByPeriod(ListMultimap<Integer, ClaimRoot> presetClaimsByPeriod) {
+        this.presetClaimsByPeriod = presetClaimsByPeriod;
     }
 }
