@@ -194,6 +194,20 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
         }
     }
 
+    public void allocateChannelsToPhases() {
+//          Calculation channels --------------------------------------------------------------------------
+        setTransmitterPhaseInput(inPatterns, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inEventSeverities, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inEventFrequencies, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inFactors, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inUnderwritingInfo, PHASE_CLAIMS_CALCULATION);
+
+        setTransmitterPhaseOutput(outClaims, PHASE_CLAIMS_CALCULATION);
+
+//          Commutation channels --------------------------------------------------------------------------
+        setTransmitterPhaseInput(inCommutationState, PHASE_STORE_COMMUTATION_STATE);
+    }
+
     public PeriodScope getPeriodScope() {
         return periodScope;
     }
