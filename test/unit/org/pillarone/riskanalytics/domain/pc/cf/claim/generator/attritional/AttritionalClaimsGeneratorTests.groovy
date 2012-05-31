@@ -45,6 +45,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(ReinsuranceContractBaseType.LOSSESOCCURRING, [:])
         generator.periodScope = TestPeriodScopeUtilities.getPeriodScope(new DateTime(2012, 1, 1, 0, 0, 0, 0), 4)
         generator.periodStore = new PeriodStore(generator.periodScope)
+        generator.globalLastCoveredPeriod= 4
         generator.globalUpdateDate = new DateTime(2012, 1, 1, 0, 0, 0, 0)
         generator
     }
