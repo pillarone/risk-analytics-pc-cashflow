@@ -56,7 +56,7 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
         double reduceAAD = -claimPropertyCumulated - grossAfterAAD;
         periodDeductible.set(Math.max(0, periodDeductible.get(claimPropertyBase) - reduceAAD), claimPropertyBase);
         Double previousPeriodAADReduction = aadReduction.previousAADReduction(storage.getCededClaimRoot(), claimPropertyBase);
-        double ceded = (grossAfterAAD - previousPeriodAADReduction) * quotaShare;
+        double ceded = grossAfterAAD != 0 ? (grossAfterAAD - previousPeriodAADReduction) * quotaShare : 0d;
         if (reduceAAD > 0) {
             aadReduction.increaseAADReduction(storage.getCededClaimRoot(), claimPropertyBase, reduceAAD);
         }

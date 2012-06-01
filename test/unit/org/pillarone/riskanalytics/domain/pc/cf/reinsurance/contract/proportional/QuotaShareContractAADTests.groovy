@@ -361,160 +361,160 @@ class QuotaShareContractAADTests extends GroovyTestCase {
         assertEquals 'M3 800 ceded ultimate', 0, quotaShare20.outClaimsCeded[3].ultimate()
         assertEquals 'M3 800 ceded incremental reported', 16, quotaShare20.outClaimsCeded[3].reportedIncrementalIndexed, EPSILON
         assertEquals 'M3 800 ceded cumulated reported', 68, quotaShare20.outClaimsCeded[3].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M3 800 ceded incremental paid', 0, quotaShare20.outClaimsCeded[3].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M3 800 ceded cumulated paid', 0, quotaShare20.outClaimsCeded[3].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M3 800 ceded reservedIndexed', 100, quotaShare20.outClaimsCeded[3].reservedIndexed()
-//        assertEquals 'M3 800 ceded outstandingIndexed', 68, quotaShare20.outClaimsCeded[3].outstandingIndexed(), EPSILON
-//        assertEquals 'M3 800 ceded ibnrIndexed', 32, quotaShare20.outClaimsCeded[3].ibnrIndexed(), EPSILON
-//        assertEquals 'M3 1000 ceded ultimate', 0, quotaShare20.outClaimsCeded[4].ultimate()
-//        assertEquals 'M3 1000 ceded incremental reported', 20, quotaShare20.outClaimsCeded[4].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M3 1000 ceded cumulated reported', 160, quotaShare20.outClaimsCeded[4].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M3 1000 ceded incremental paid', 0, quotaShare20.outClaimsCeded[4].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M3 1000 ceded cumulated paid', 0, quotaShare20.outClaimsCeded[4].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M3 1000 ceded reservedIndexed', 200, quotaShare20.outClaimsCeded[4].reservedIndexed()
-//        assertEquals 'M3 1000 ceded outstandingIndexed', 160, quotaShare20.outClaimsCeded[4].outstandingIndexed(), EPSILON
-//        assertEquals 'M3 1000 ceded ibnrIndexed', 40, quotaShare20.outClaimsCeded[4].ibnrIndexed(), EPSILON
-//        assertEquals 'M3 1200 ceded ultimate', 0, quotaShare20.outClaimsCeded[5].ultimate()
-//        assertEquals 'M3 1200 ceded incremental reported', 24, quotaShare20.outClaimsCeded[5].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M3 1200 ceded cumulated reported', 192, quotaShare20.outClaimsCeded[5].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M3 1200 ceded incremental paid', 0, quotaShare20.outClaimsCeded[5].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M3 1200 ceded cumulated paid', 0, quotaShare20.outClaimsCeded[5].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M3 1200 ceded reservedIndexed', 240, quotaShare20.outClaimsCeded[5].reservedIndexed()
-//        assertEquals 'M3 1200 ceded outstandingIndexed', 192, quotaShare20.outClaimsCeded[5].outstandingIndexed(), EPSILON
-//        assertEquals 'M3 1200 ceded ibnrIndexed', 48, quotaShare20.outClaimsCeded[5].ibnrIndexed(), EPSILON
-//
-//        quotaShare20.reset()
-//        quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-//        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter, false))
-//        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter, false))
-//        quotaShare20.inClaims.addAll(claimRoot1200.getClaimCashflowPackets(periodCounter, false))
-//        quotaShare20.doCalculation()
-//
-//        assertEquals 'M12 number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
-//        assertEquals 'M12 800 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
-//        assertEquals 'M12 800 ceded incremental reported', 16, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M12 800 ceded cumulated reported', 84, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M12 800 ceded incremental paid', 80, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M12 800 ceded cumulated paid', 80, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M12 800 ceded reservedIndexed', 20, quotaShare20.outClaimsCeded[0].reservedIndexed()
-//        assertEquals 'M12 800 ceded outstandingIndexed', 4, quotaShare20.outClaimsCeded[0].outstandingIndexed(), EPSILON
-//        assertEquals 'M12 800 ceded ibnrIndexed', 16, quotaShare20.outClaimsCeded[0].ibnrIndexed(), EPSILON
-//        assertEquals 'M12 1000 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
-//        assertEquals 'M12 1000 ceded incremental reported', 20, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M12 1000 ceded cumulated reported', 180, quotaShare20.outClaimsCeded[1].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M12 1000 ceded incremental paid', 100, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M12 1000 ceded cumulated paid', 100, quotaShare20.outClaimsCeded[1].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M12 1000 ceded reservedIndexed', 100, quotaShare20.outClaimsCeded[1].reservedIndexed()
-//        assertEquals 'M12 1000 ceded outstandingIndexed', 80, quotaShare20.outClaimsCeded[1].outstandingIndexed(), EPSILON
-//        assertEquals 'M12 1000 ceded ibnrIndexed', 20, quotaShare20.outClaimsCeded[1].ibnrIndexed(), EPSILON
-//        assertEquals 'M12 1200 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
-//        assertEquals 'M12 1200 ceded incremental reported', 24, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M12 1200 ceded cumulated reported', 216, quotaShare20.outClaimsCeded[2].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M12 1200 ceded incremental paid', 120, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M12 1200 ceded cumulated paid', 120, quotaShare20.outClaimsCeded[2].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M12 1200 ceded reservedIndexed', 120, quotaShare20.outClaimsCeded[2].reservedIndexed()
-//        assertEquals 'M12 1200 ceded outstandingIndexed', 96, quotaShare20.outClaimsCeded[2].outstandingIndexed(), EPSILON
-//        assertEquals 'M12 1200 ceded ibnrIndexed', 24, quotaShare20.outClaimsCeded[2].ibnrIndexed(), EPSILON
-//
-//
-//        quotaShare20.reset()
-//        quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-//        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter, false))
-//        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter, false))
-//        quotaShare20.inClaims.addAll(claimRoot1200.getClaimCashflowPackets(periodCounter, false))
-//        quotaShare20.doCalculation()
-//
-//        assertEquals 'M24 number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
-//        assertEquals 'M24 800 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
-//        assertEquals 'M24 800 ceded incremental reported', 16, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M24 800 ceded cumulated reported', 100, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M24 800 ceded incremental paid', 16, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M24 800 ceded cumulated paid', 96, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M24 800 ceded reservedIndexed', 4, quotaShare20.outClaimsCeded[0].reservedIndexed()
-//        assertEquals 'M24 800 ceded outstandingIndexed', 4, quotaShare20.outClaimsCeded[0].outstandingIndexed(), EPSILON
-//        assertEquals 'M24 800 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[0].ibnrIndexed(), EPSILON
-//        assertEquals 'M24 1000 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
-//        assertEquals 'M24 1000 ceded incremental reported', 20, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M24 1000 ceded cumulated reported', 200, quotaShare20.outClaimsCeded[1].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M24 1000 ceded incremental paid', 20, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M24 1000 ceded cumulated paid', 120, quotaShare20.outClaimsCeded[1].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M24 1000 ceded reservedIndexed', 80, quotaShare20.outClaimsCeded[1].reservedIndexed()
-//        assertEquals 'M24 1000 ceded outstandingIndexed', 80, quotaShare20.outClaimsCeded[1].outstandingIndexed(), EPSILON
-//        assertEquals 'M24 1000 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[1].ibnrIndexed(), EPSILON
-//        assertEquals 'M24 1200 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
-//        assertEquals 'M24 1200 ceded incremental reported', 24, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M24 1200 ceded cumulated reported', 240, quotaShare20.outClaimsCeded[2].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M24 1200 ceded incremental paid', 24, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M24 1200 ceded cumulated paid', 144, quotaShare20.outClaimsCeded[2].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M24 1200 ceded reservedIndexed', 96, quotaShare20.outClaimsCeded[2].reservedIndexed()
-//        assertEquals 'M24 1200 ceded outstandingIndexed', 96, quotaShare20.outClaimsCeded[2].outstandingIndexed(), EPSILON
-//        assertEquals 'M24 1200 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[2].ibnrIndexed(), EPSILON
-//
-//        quotaShare20.reset()
-//        quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-//        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter, false))
-//        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter, false))
-//        quotaShare20.inClaims.addAll(claimRoot1200.getClaimCashflowPackets(periodCounter, false))
-//        quotaShare20.doCalculation()
-//
-//        assertEquals 'M36 number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
-//        assertEquals 'M36 800 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
-//        assertEquals 'M36 800 ceded incremental reported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M36 800 ceded cumulated reported', 100, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M36 800 ceded incremental paid', 0, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M36 800 ceded cumulated paid', 96, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M36 800 ceded reservedIndexed', 4, quotaShare20.outClaimsCeded[0].reservedIndexed()
-//        assertEquals 'M36 800 ceded outstandingIndexed', 4, quotaShare20.outClaimsCeded[0].outstandingIndexed(), EPSILON
-//        assertEquals 'M36 800 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[0].ibnrIndexed(), EPSILON
-//        assertEquals 'M36 1000 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
-//        assertEquals 'M36 1000 ceded incremental reported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M36 1000 ceded cumulated reported', 200, quotaShare20.outClaimsCeded[1].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M36 1000 ceded incremental paid', 0, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M36 1000 ceded cumulated paid', 120, quotaShare20.outClaimsCeded[1].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M36 1000 ceded reservedIndexed', 80, quotaShare20.outClaimsCeded[1].reservedIndexed()
-//        assertEquals 'M36 1000 ceded outstandingIndexed', 80, quotaShare20.outClaimsCeded[1].outstandingIndexed(), EPSILON
-//        assertEquals 'M36 1000 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[1].ibnrIndexed(), EPSILON
-//        assertEquals 'M36 1200 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
-//        assertEquals 'M36 1200 ceded incremental reported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M36 1200 ceded cumulated reported', 240, quotaShare20.outClaimsCeded[2].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M36 1200 ceded incremental paid', 0, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M36 1200 ceded cumulated paid', 144, quotaShare20.outClaimsCeded[2].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M36 1200 ceded reservedIndexed', 96, quotaShare20.outClaimsCeded[2].reservedIndexed()
-//        assertEquals 'M36 1200 ceded outstandingIndexed', 96, quotaShare20.outClaimsCeded[2].outstandingIndexed(), EPSILON
-//        assertEquals 'M36 1200 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[2].ibnrIndexed(), EPSILON
-//
-//        quotaShare20.reset()
-//        quotaShare20.iterationScope.periodScope.prepareNextPeriod()
-//        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter, false))
-//        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter, false))
-//        quotaShare20.inClaims.addAll(claimRoot1200.getClaimCashflowPackets(periodCounter, false))
-//        quotaShare20.doCalculation()
-//
-//        assertEquals 'M48 number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
-//        assertEquals 'M48 800 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
-//        assertEquals 'M48 800 ceded incremental reported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M48 800 ceded cumulated reported', 100, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M48 800 ceded incremental paid', 48, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M48 800 ceded cumulated paid', 144, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M48 800 ceded reservedIndexed', -44, quotaShare20.outClaimsCeded[0].reservedIndexed()
-//        assertEquals 'M48 800 ceded outstandingIndexed', -44, quotaShare20.outClaimsCeded[0].outstandingIndexed(), EPSILON
-//        assertEquals 'M48 800 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[0].ibnrIndexed(), EPSILON
-//        assertEquals 'M48 1000 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
-//        assertEquals 'M48 1000 ceded incremental reported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M48 1000 ceded cumulated reported', 200, quotaShare20.outClaimsCeded[1].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M48 1000 ceded incremental paid', 60, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M48 1000 ceded cumulated paid', 180, quotaShare20.outClaimsCeded[1].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M48 1000 ceded reservedIndexed', 20, quotaShare20.outClaimsCeded[1].reservedIndexed()
-//        assertEquals 'M48 1000 ceded outstandingIndexed', 20, quotaShare20.outClaimsCeded[1].outstandingIndexed(), EPSILON
-//        assertEquals 'M48 1000 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[1].ibnrIndexed(), EPSILON
-//        assertEquals 'M48 1200 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
-//        assertEquals 'M48 1200 ceded incremental reported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed, EPSILON
-//        assertEquals 'M48 1200 ceded cumulated reported', 240, quotaShare20.outClaimsCeded[2].reportedCumulatedIndexed, EPSILON
-//        assertEquals 'M48 1200 ceded incremental paid', 72, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed, EPSILON
-//        assertEquals 'M48 1200 ceded cumulated paid', 216, quotaShare20.outClaimsCeded[2].paidCumulatedIndexed, EPSILON
-//        assertEquals 'M48 1200 ceded reservedIndexed', 24, quotaShare20.outClaimsCeded[2].reservedIndexed()
-//        assertEquals 'M48 1200 ceded outstandingIndexed', 24, quotaShare20.outClaimsCeded[2].outstandingIndexed(), EPSILON
-//        assertEquals 'M48 1200 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[2].ibnrIndexed(), EPSILON
+        assertEquals 'M3 800 ceded incremental paid', 0, quotaShare20.outClaimsCeded[3].paidIncrementalIndexed, EPSILON
+        assertEquals 'M3 800 ceded cumulated paid', 0, quotaShare20.outClaimsCeded[3].paidCumulatedIndexed, EPSILON
+        assertEquals 'M3 800 ceded reservedIndexed', 100, quotaShare20.outClaimsCeded[3].reservedIndexed()
+        assertEquals 'M3 800 ceded outstandingIndexed', 68, quotaShare20.outClaimsCeded[3].outstandingIndexed(), EPSILON
+        assertEquals 'M3 800 ceded ibnrIndexed', 32, quotaShare20.outClaimsCeded[3].ibnrIndexed(), EPSILON
+        assertEquals 'M3 1000 ceded ultimate', 0, quotaShare20.outClaimsCeded[4].ultimate()
+        assertEquals 'M3 1000 ceded incremental reported', 20, quotaShare20.outClaimsCeded[4].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M3 1000 ceded cumulated reported', 160, quotaShare20.outClaimsCeded[4].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M3 1000 ceded incremental paid', 0, quotaShare20.outClaimsCeded[4].paidIncrementalIndexed, EPSILON
+        assertEquals 'M3 1000 ceded cumulated paid', 0, quotaShare20.outClaimsCeded[4].paidCumulatedIndexed, EPSILON
+        assertEquals 'M3 1000 ceded reservedIndexed', 200, quotaShare20.outClaimsCeded[4].reservedIndexed()
+        assertEquals 'M3 1000 ceded outstandingIndexed', 160, quotaShare20.outClaimsCeded[4].outstandingIndexed(), EPSILON
+        assertEquals 'M3 1000 ceded ibnrIndexed', 40, quotaShare20.outClaimsCeded[4].ibnrIndexed(), EPSILON
+        assertEquals 'M3 1200 ceded ultimate', 0, quotaShare20.outClaimsCeded[5].ultimate()
+        assertEquals 'M3 1200 ceded incremental reported', 24, quotaShare20.outClaimsCeded[5].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M3 1200 ceded cumulated reported', 192, quotaShare20.outClaimsCeded[5].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M3 1200 ceded incremental paid', 3.6, quotaShare20.outClaimsCeded[5].paidIncrementalIndexed, EPSILON
+        assertEquals 'M3 1200 ceded cumulated paid', 3.6, quotaShare20.outClaimsCeded[5].paidCumulatedIndexed, EPSILON
+        assertEquals 'M3 1200 ceded reservedIndexed', 236.4, quotaShare20.outClaimsCeded[5].reservedIndexed()
+        assertEquals 'M3 1200 ceded outstandingIndexed', 188.4, quotaShare20.outClaimsCeded[5].outstandingIndexed(), EPSILON
+        assertEquals 'M3 1200 ceded ibnrIndexed', 48, quotaShare20.outClaimsCeded[5].ibnrIndexed(), EPSILON
+
+        quotaShare20.reset()
+        quotaShare20.iterationScope.periodScope.prepareNextPeriod()
+        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.inClaims.addAll(claimRoot1200.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.doCalculation()
+
+        assertEquals 'M12 number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
+        assertEquals 'M12 800 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
+        assertEquals 'M12 800 ceded incremental reported', 16, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M12 800 ceded cumulated reported', 84, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M12 800 ceded incremental paid', 78.4, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
+        assertEquals 'M12 800 ceded cumulated paid', 78.4, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed, EPSILON
+        assertEquals 'M12 800 ceded reservedIndexed', 21.6, quotaShare20.outClaimsCeded[0].reservedIndexed(), EPSILON
+        assertEquals 'M12 800 ceded outstandingIndexed', 5.6, quotaShare20.outClaimsCeded[0].outstandingIndexed(), EPSILON
+        assertEquals 'M12 800 ceded ibnrIndexed', 16, quotaShare20.outClaimsCeded[0].ibnrIndexed(), EPSILON
+        assertEquals 'M12 1000 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
+        assertEquals 'M12 1000 ceded incremental reported', 20, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M12 1000 ceded cumulated reported', 180, quotaShare20.outClaimsCeded[1].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M12 1000 ceded incremental paid', 98, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
+        assertEquals 'M12 1000 ceded cumulated paid', 98, quotaShare20.outClaimsCeded[1].paidCumulatedIndexed, EPSILON
+        assertEquals 'M12 1000 ceded reservedIndexed', 102, quotaShare20.outClaimsCeded[1].reservedIndexed()
+        assertEquals 'M12 1000 ceded outstandingIndexed', 82, quotaShare20.outClaimsCeded[1].outstandingIndexed(), EPSILON
+        assertEquals 'M12 1000 ceded ibnrIndexed', 20, quotaShare20.outClaimsCeded[1].ibnrIndexed(), EPSILON
+        assertEquals 'M12 1200 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
+        assertEquals 'M12 1200 ceded incremental reported', 24, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M12 1200 ceded cumulated reported', 216, quotaShare20.outClaimsCeded[2].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M12 1200 ceded incremental paid', 120, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed, EPSILON
+        assertEquals 'M12 1200 ceded cumulated paid', 123.6, quotaShare20.outClaimsCeded[2].paidCumulatedIndexed, EPSILON
+        assertEquals 'M12 1200 ceded reservedIndexed', 116.4, quotaShare20.outClaimsCeded[2].reservedIndexed(), EPSILON
+        assertEquals 'M12 1200 ceded outstandingIndexed', 92.4, quotaShare20.outClaimsCeded[2].outstandingIndexed(), EPSILON
+        assertEquals 'M12 1200 ceded ibnrIndexed', 24, quotaShare20.outClaimsCeded[2].ibnrIndexed(), EPSILON
+
+
+        quotaShare20.reset()
+        quotaShare20.iterationScope.periodScope.prepareNextPeriod()
+        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.inClaims.addAll(claimRoot1200.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.doCalculation()
+
+        assertEquals 'M24 number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
+        assertEquals 'M24 800 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
+        assertEquals 'M24 800 ceded incremental reported', 16, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M24 800 ceded cumulated reported', 100, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M24 800 ceded incremental paid', 16, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
+        assertEquals 'M24 800 ceded cumulated paid', 94.4, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed, EPSILON
+        assertEquals 'M24 800 ceded reservedIndexed', 5.6, quotaShare20.outClaimsCeded[0].reservedIndexed(), EPSILON
+        assertEquals 'M24 800 ceded outstandingIndexed', 5.6, quotaShare20.outClaimsCeded[0].outstandingIndexed(), EPSILON
+        assertEquals 'M24 800 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[0].ibnrIndexed(), EPSILON
+        assertEquals 'M24 1000 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
+        assertEquals 'M24 1000 ceded incremental reported', 20, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M24 1000 ceded cumulated reported', 200, quotaShare20.outClaimsCeded[1].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M24 1000 ceded incremental paid', 20, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
+        assertEquals 'M24 1000 ceded cumulated paid', 118, quotaShare20.outClaimsCeded[1].paidCumulatedIndexed, EPSILON
+        assertEquals 'M24 1000 ceded reservedIndexed', 82, quotaShare20.outClaimsCeded[1].reservedIndexed()
+        assertEquals 'M24 1000 ceded outstandingIndexed', 82, quotaShare20.outClaimsCeded[1].outstandingIndexed(), EPSILON
+        assertEquals 'M24 1000 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[1].ibnrIndexed(), EPSILON
+        assertEquals 'M24 1200 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
+        assertEquals 'M24 1200 ceded incremental reported', 24, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M24 1200 ceded cumulated reported', 240, quotaShare20.outClaimsCeded[2].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M24 1200 ceded incremental paid', 24, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed, EPSILON
+        assertEquals 'M24 1200 ceded cumulated paid', 147.6, quotaShare20.outClaimsCeded[2].paidCumulatedIndexed, EPSILON
+        assertEquals 'M24 1200 ceded reservedIndexed', 92.4, quotaShare20.outClaimsCeded[2].reservedIndexed()
+        assertEquals 'M24 1200 ceded outstandingIndexed', 92.4, quotaShare20.outClaimsCeded[2].outstandingIndexed(), EPSILON
+        assertEquals 'M24 1200 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[2].ibnrIndexed(), EPSILON
+
+        quotaShare20.reset()
+        quotaShare20.iterationScope.periodScope.prepareNextPeriod()
+        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.inClaims.addAll(claimRoot1200.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.doCalculation()
+
+        assertEquals 'M36 number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
+        assertEquals 'M36 800 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
+        assertEquals 'M36 800 ceded incremental reported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M36 800 ceded cumulated reported', 100, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M36 800 ceded incremental paid', 0, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
+        assertEquals 'M36 800 ceded cumulated paid', 94.4, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed, EPSILON
+        assertEquals 'M36 800 ceded reservedIndexed', 5.6, quotaShare20.outClaimsCeded[0].reservedIndexed(), EPSILON
+        assertEquals 'M36 800 ceded outstandingIndexed', 5.6, quotaShare20.outClaimsCeded[0].outstandingIndexed(), EPSILON
+        assertEquals 'M36 800 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[0].ibnrIndexed(), EPSILON
+        assertEquals 'M36 1000 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
+        assertEquals 'M36 1000 ceded incremental reported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M36 1000 ceded cumulated reported', 200, quotaShare20.outClaimsCeded[1].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M36 1000 ceded incremental paid', 0, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
+        assertEquals 'M36 1000 ceded cumulated paid', 118, quotaShare20.outClaimsCeded[1].paidCumulatedIndexed, EPSILON
+        assertEquals 'M36 1000 ceded reservedIndexed', 82, quotaShare20.outClaimsCeded[1].reservedIndexed()
+        assertEquals 'M36 1000 ceded outstandingIndexed', 82, quotaShare20.outClaimsCeded[1].outstandingIndexed(), EPSILON
+        assertEquals 'M36 1000 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[1].ibnrIndexed(), EPSILON
+        assertEquals 'M36 1200 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
+        assertEquals 'M36 1200 ceded incremental reported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M36 1200 ceded cumulated reported', 240, quotaShare20.outClaimsCeded[2].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M36 1200 ceded incremental paid', 0, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed, EPSILON
+        assertEquals 'M36 1200 ceded cumulated paid', 147.6, quotaShare20.outClaimsCeded[2].paidCumulatedIndexed, EPSILON
+        assertEquals 'M36 1200 ceded reservedIndexed', 92.4, quotaShare20.outClaimsCeded[2].reservedIndexed()
+        assertEquals 'M36 1200 ceded outstandingIndexed', 92.4, quotaShare20.outClaimsCeded[2].outstandingIndexed(), EPSILON
+        assertEquals 'M36 1200 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[2].ibnrIndexed(), EPSILON
+
+        quotaShare20.reset()
+        quotaShare20.iterationScope.periodScope.prepareNextPeriod()
+        quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.inClaims.addAll(claimRoot1000.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.inClaims.addAll(claimRoot1200.getClaimCashflowPackets(periodCounter, false))
+        quotaShare20.doCalculation()
+
+        assertEquals 'M48 number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
+        assertEquals 'M48 800 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
+        assertEquals 'M48 800 ceded incremental reported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M48 800 ceded cumulated reported', 100, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M48 800 ceded incremental paid', 48, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
+        assertEquals 'M48 800 ceded cumulated paid', 142.4, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed, EPSILON
+        assertEquals 'M48 800 ceded reservedIndexed', -42.4, quotaShare20.outClaimsCeded[0].reservedIndexed(), EPSILON
+        assertEquals 'M48 800 ceded outstandingIndexed', -42.4, quotaShare20.outClaimsCeded[0].outstandingIndexed(), EPSILON
+        assertEquals 'M48 800 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[0].ibnrIndexed(), EPSILON
+        assertEquals 'M48 1000 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
+        assertEquals 'M48 1000 ceded incremental reported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M48 1000 ceded cumulated reported', 200, quotaShare20.outClaimsCeded[1].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M48 1000 ceded incremental paid', 60, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
+        assertEquals 'M48 1000 ceded cumulated paid', 178, quotaShare20.outClaimsCeded[1].paidCumulatedIndexed, EPSILON
+        assertEquals 'M48 1000 ceded reservedIndexed', 22, quotaShare20.outClaimsCeded[1].reservedIndexed()
+        assertEquals 'M48 1000 ceded outstandingIndexed', 22, quotaShare20.outClaimsCeded[1].outstandingIndexed(), EPSILON
+        assertEquals 'M48 1000 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[1].ibnrIndexed(), EPSILON
+        assertEquals 'M48 1200 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
+        assertEquals 'M48 1200 ceded incremental reported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed, EPSILON
+        assertEquals 'M48 1200 ceded cumulated reported', 240, quotaShare20.outClaimsCeded[2].reportedCumulatedIndexed, EPSILON
+        assertEquals 'M48 1200 ceded incremental paid', 72, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed, EPSILON
+        assertEquals 'M48 1200 ceded cumulated paid', 219.6, quotaShare20.outClaimsCeded[2].paidCumulatedIndexed, EPSILON
+        assertEquals 'M48 1200 ceded reservedIndexed', 20.4, quotaShare20.outClaimsCeded[2].reservedIndexed(), EPSILON
+        assertEquals 'M48 1200 ceded outstandingIndexed', 20.4, quotaShare20.outClaimsCeded[2].outstandingIndexed(), EPSILON
+        assertEquals 'M48 1200 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[2].ibnrIndexed(), EPSILON
     }
 
     /** claims occur in different periods, make sure both get the whole AAL or more generally a new contract instance */
