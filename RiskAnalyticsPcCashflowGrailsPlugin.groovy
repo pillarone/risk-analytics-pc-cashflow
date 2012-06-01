@@ -40,10 +40,12 @@ import org.pillarone.riskanalytics.domain.pc.cf.output.AggregatePremiumReserveRi
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateIncludingPremiumReserveRiskCollectingModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregatePremiumReserveRiskTriangleCollectingModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.structure.validation.ClaimTypeStructuringValidator
+import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceReducedCollectingModeStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateReportedClaimCollectingModeStrategy
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.3.0.8"
+    def version = "0.3.0.9"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -122,12 +124,14 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         PacketAggregatorRegistry.registerAggregator(ClaimCashflowPacket, new ClaimPacketAggregator())
         PacketAggregatorRegistry.registerAggregator(UnderwritingInfoPacket, new UnderwritingInfoPacketAggregator())
         CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceCollectingModeStrategy())
+        CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceReducedCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregatePremiumReserveRiskCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateIncludingPremiumReserveRiskCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregatePremiumReserveRiskTriangleCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateSplitByInceptionDateCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateUltimateClaimCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateUltimateReportedPaidClaimCollectingModeStrategy())
+        CollectingModeFactory.registerStrategy(new AggregateUltimateReportedClaimCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateUltimatePaidClaimCollectingModeStrategy())
     }
 

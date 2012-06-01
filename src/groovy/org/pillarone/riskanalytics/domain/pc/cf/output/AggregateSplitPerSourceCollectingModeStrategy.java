@@ -3,6 +3,9 @@ package org.pillarone.riskanalytics.domain.pc.cf.output;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.pillarone.riskanalytics.core.components.Component;
+import org.pillarone.riskanalytics.core.components.DynamicComposedComponent;
+import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.output.ICollectingModeStrategy;
 import org.pillarone.riskanalytics.core.output.PathMapping;
 import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
@@ -13,6 +16,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.IStructureMarker;
 
 import java.util.*;
 
@@ -62,22 +66,30 @@ public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplit
 
             PathMapping perilPath = getPathMapping(claim, claim.peril(), PERILS);
             PathMapping lobPath = null;
-            if (!(claim.sender instanceof ISegmentMarker)) {
+            if (!(claim.sender instanceof ISegmentMarker)) { // && !(claim.sender instanceof DynamicComposedComponent && ((DynamicComposedComponent) claim.sender).createDefaultSubComponent() instanceof ISegmentMarker)) {
                 lobPath = getPathMapping(claim, claim.segment(), SEGMENTS);
             }
             PathMapping contractPath = null;
             if (!(claim.sender instanceof IReinsuranceContractMarker)) {
                 contractPath = getPathMapping(claim, claim.reinsuranceContract(), CONTRACTS);
             }
-            if (claim.sender instanceof ISegmentMarker) {
+            if (claim.sender instanceof ISegmentMarker||
+                    (claim.sender instanceof DynamicComposedComponent
+                            && ((DynamicComposedComponent) claim.sender).createDefaultSubComponent() instanceof ISegmentMarker)) {
                 addToMap(claim, perilPath, resultMap);
                 addToMap(claim, contractPath, resultMap);
             }
-            if (claim.sender instanceof IReinsuranceContractMarker) {
+            if (claim.sender instanceof IReinsuranceContractMarker) { /* ||
+                    (claim.sender instanceof DynamicComposedComponent
+                            && ((DynamicComposedComponent) claim.sender).createDefaultSubComponent() instanceof IReinsuranceContractMarker)) {*/
                 addToMap(claim, lobPath, resultMap);
                 addToMap(claim, perilPath, resultMap);
+                if (lobPath != null && perilPath != null) {
+                    PathMapping lobPerilPath = getPathMapping(claim, claim.segment(), SEGMENTS, claim.peril(), PERILS);
+                    addToMap(claim, lobPerilPath, resultMap);
+                }
             }
-            if (claim.sender instanceof ILegalEntityMarker) {
+            if (claim.sender instanceof ILegalEntityMarker || claim.sender instanceof IStructureMarker) {
                 addToMap(claim, perilPath, resultMap);
                 addToMap(claim, contractPath, resultMap);
                 addToMap(claim, lobPath, resultMap);
