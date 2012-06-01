@@ -246,7 +246,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      * @return difference between developed ultimate and nominal ultimate
      */
     public double developmentResultCumulative() {
-        if (Math.abs(developedUltimate() - nominalUltimate) < 1E-10) return 0d;
+        // check necessary due to rounding/rationale numbers
+        if (Math.abs(developedUltimate() / nominalUltimate - 1) < 1E-4) return 0d;
         return developedUltimate() - nominalUltimate;
     }
 
