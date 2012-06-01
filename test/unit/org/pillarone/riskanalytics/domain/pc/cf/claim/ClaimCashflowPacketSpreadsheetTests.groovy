@@ -33,7 +33,7 @@ class ClaimCashflowPacketSpreadsheetTests extends SpreadsheetUnitTest {
 
     void testUsage() {
         // enable the following line while writing/debugging the test case but comment it out before committing!
-        setCheckedForValidationErrors(true)
+//        setCheckedForValidationErrors(true)
         List<String> sheets = ['Example1527', 'OverReserving', 'NoTrendIndex']
 
         SpreadsheetImporter importer = importers[0]
