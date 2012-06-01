@@ -3,7 +3,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance
 import org.pillarone.riskanalytics.core.wiring.WireCategory as WC
 import org.pillarone.riskanalytics.core.wiring.PortReplicatorCategory as PRC
 
-import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.ListMultimap
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
@@ -14,7 +13,6 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
-import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityDefaultPacket
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
@@ -29,6 +27,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity
 import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.utils.graph.Node
+import com.google.common.collect.LinkedListMultimap
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -53,12 +52,12 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     private List contractsBasedOnGrossClaims = []
     private Graph contractsBasedOnContracts = new Graph()
     /** key: covering contract, value: covered contract and based to be covered */
-    private ListMultimap<ReinsuranceContract, ReinsuranceContractAndBase> coverForContracts = ArrayListMultimap.create()
+    private ListMultimap<ReinsuranceContract, ReinsuranceContractAndBase> coverForContracts = LinkedListMultimap.create()
     /** contains the relations between reinsurance contracts covering legal entities */
     private Graph contractsBasedOnCompanies = new Graph()
-    private ListMultimap<ILegalEntityMarker, IReinsuranceContractMarker> coverForLegalEntity = ArrayListMultimap.create()
+    private ListMultimap<ILegalEntityMarker, IReinsuranceContractMarker> coverForLegalEntity = LinkedListMultimap.create()
     /** contains for each legal entity the contract where it acts as a counter party */
-    private ListMultimap<ILegalEntityMarker, IReinsuranceContractMarker> inwardLegalEntity = ArrayListMultimap.create()
+    private ListMultimap<ILegalEntityMarker, IReinsuranceContractMarker> inwardLegalEntity = LinkedListMultimap.create()
 
     /** key: technical contract name, value: contract instance */
     private Map<String, ReinsuranceContract> reinsuranceContracts = new HashMap<String, ReinsuranceContract>()
