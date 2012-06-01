@@ -373,11 +373,12 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         if (isSenderWired(outUnderwritingInfoGross)) {
             outUnderwritingInfoGross.addAll(inUnderwritingInfo);
         }
+        boolean senderUwInfoNetWired = isSenderWired(outUnderwritingInfoNet);
+        DateTime currentPeriodStartDate = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
         for (IReinsuranceContract contract : contracts) {
-            // todo(sku): how time consuming are isSenderWired() calls? Might be necessary to cache this information.
-            double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
+            double coveredByReinsurers = counterPartyFactors.getCoveredByReinsurers(currentPeriodStartDate);
             contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, coveredByReinsurers,
-                    isSenderWired(outUnderwritingInfoNet));
+                    senderUwInfoNetWired);
         }
         for (UnderwritingInfoPacket cededUnderwritingPacket : outUnderwritingInfoCeded) {
             cededUnderwritingPacket.setMarker(this);
@@ -408,18 +409,16 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
     private void calculateUnderwritingInfoGNPI(List<UnderwritingInfoPacket> baseUnderwritingInfos) {
         if (isProportionalContract()) {
             if (baseUnderwritingInfos.size() == outUnderwritingInfoCeded.size()) {
-                for (int i = 0; i < baseUnderwritingInfos.size(); i++) {
-                    // todo(sku): this implementation is dangerous: it assumes the same order of in and out uw info items
-                    if (baseUnderwritingInfos.get(i).getOriginal().equals(outUnderwritingInfoCeded.get(i).getOriginal())) {
-                        outUnderwritingInfoGNPI.add(baseUnderwritingInfos.get(i).getNet(outUnderwritingInfoCeded.get(i), true));
-                    }
-                    else {
-                        throw new RuntimeException("original uw info mismatch.");
-                    }
+                Map<UnderwritingInfoPacket, CededUnderwritingInfoPacket> cededUwOriginal = new HashMap<UnderwritingInfoPacket, CededUnderwritingInfoPacket>(outUnderwritingInfoCeded.size());
+                for (CededUnderwritingInfoPacket cededUwInfo : outUnderwritingInfoCeded) {
+                    cededUwOriginal.put(cededUwInfo.getOriginal(), cededUwInfo);
+                }
+                for (UnderwritingInfoPacket baseUwInfo : baseUnderwritingInfos) {
+                    outUnderwritingInfoGNPI.add(baseUwInfo.getNet(cededUwOriginal.get(baseUwInfo.getOriginal()), true));
                 }
             }
             else {
-                throw new RuntimeException("different number of incoming GNPI and ceded uw info.");
+                throw new RuntimeException(getName() + ": different number of incoming GNPI and ceded uw info.");
             }
         }
         else {
