@@ -7,7 +7,6 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
@@ -39,7 +38,6 @@ public final class GrossClaimRoot implements IClaimRoot {
     // patterns are applied as of this date
     private DateTime startDateForPatterns;
 
-    private FactorsPacket factors = new FactorsPacket();
     private double paidCumulatedIncludingAppliedFactors = 0d;
     private double reportedCumulatedIncludingAppliedFactors = 0d;
 
@@ -133,7 +131,7 @@ public final class GrossClaimRoot implements IClaimRoot {
                     if (payouts.size() > 0) {
                         payoutCumulatedFactor = payouts.get(payouts.size() - 1).getFactorCumulated();
                     }
-                    double factor = manageFactor(factors, artificalPayoutDate, periodCounter, claimRoot.getOccurrenceDate());
+                    double factor = IndexUtils.aggregateFactor(factors, artificalPayoutDate, periodCounter, claimRoot.getOccurrenceDate());
                     double reserves = claimRoot.getUltimate() * (1 - payoutCumulatedFactor) * factor;
                     double changeInReserves = reserves - remainingReserves;
                     remainingReserves = reserves;
@@ -150,7 +148,7 @@ public final class GrossClaimRoot implements IClaimRoot {
             else {
                 for (int i = 0; i < payouts.size(); i++) {
                     DateTime payoutDate = payouts.get(i).getDate();
-                    double factor = manageFactor(factors, payoutDate, periodCounter, claimRoot.getOccurrenceDate());
+                    double factor = IndexUtils.aggregateFactor(factors, payoutDate, periodCounter, claimRoot.getOccurrenceDate());
                     double payoutIncrementalFactor = payouts.get(i).getFactorIncremental();
                     double payoutCumulatedFactor = payouts.get(i).getFactorCumulated();
                     double nominalUltimate = claimRoot.getUltimate();
@@ -205,7 +203,7 @@ public final class GrossClaimRoot implements IClaimRoot {
      * @return
      */
     private ClaimCashflowPacket singleClaimIndexed(IPeriodCounter periodCounter, List<Factors> factors) {
-        double factor = manageFactor(factors, getOccurrenceDate(), periodCounter, claimRoot.getOccurrenceDate());
+        double factor = IndexUtils.aggregateFactor(factors, getOccurrenceDate(), periodCounter, claimRoot.getOccurrenceDate());
         double scaledUltimate = claimRoot.getUltimate() * factor;
         return new ClaimCashflowPacket(this, claimRoot.getUltimate(), claimRoot.getUltimate(),
                 scaledUltimate, scaledUltimate, scaledUltimate, scaledUltimate, 0, 0, 0, claimRoot.getExposureInfo(),
@@ -226,12 +224,6 @@ public final class GrossClaimRoot implements IClaimRoot {
         return 0;
     }
 
-    private double manageFactor(List<Factors> factors, DateTime payoutDate, IPeriodCounter periodCounter, DateTime dateOfLoss) {
-        Double productFactor = IndexUtils.aggregateFactor(factors, payoutDate, periodCounter, dateOfLoss);
-        this.factors.add(payoutDate, productFactor);
-        return productFactor;
-    }
-
     public void updateCumulatedValuesAtProjectionStart(IPeriodCounter periodCounter, List<Factors> factors) {
         List<DateFactors> payouts = payoutPattern.getDateFactorsTillStartOfCurrentPeriod(claimRoot.getOccurrenceDate(), periodCounter);
         List<DateFactors> reports = reportingPattern != null ?
@@ -239,7 +231,7 @@ public final class GrossClaimRoot implements IClaimRoot {
                 : null;
         for (int i = 0; i < payouts.size(); i++) {
             DateTime payoutDate = payouts.get(i).getDate();
-            double factor = manageFactor(factors, payoutDate, periodCounter, claimRoot.getOccurrenceDate());
+            double factor = IndexUtils.aggregateFactor(factors, payoutDate, periodCounter, claimRoot.getOccurrenceDate());
             double payoutIncrementalFactor = payouts.get(i).getFactorIncremental();
             double payoutCumulatedFactor = payouts.get(i).getFactorCumulated();
             double ultimate = claimRoot.getUltimate();
