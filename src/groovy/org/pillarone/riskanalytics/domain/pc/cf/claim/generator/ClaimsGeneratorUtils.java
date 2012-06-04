@@ -163,8 +163,9 @@ public class ClaimsGeneratorUtils {
      * @param number of events to generate
      * @param periodScope used for date generation
      * @param dateGenerator
-     * @return for ClaimType.EVENT or AGGREGATED_EVENT a list of length number in all other cases with event dates
-     *          generated according to dateGenerator and value = 0, null for all other claim types
+     * @return <ul><li>for ClaimType.EVENT or AGGREGATED_EVENT a list of length number in all other cases with event dates
+     *          generated according to dateGenerator and value = 0,</li>
+     *         <li>null for all other claim types</li></ul>
      */
     public static List<EventPacket> generateEventsOrNull(ClaimType claimType, int number, PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
         // dateGenerator uses fraction of period, i.e., must have states in unity interval

@@ -66,7 +66,6 @@ class AggregateUpdatingMethodSpreadsheetTests extends SpreadsheetUnitTest {
     }
 
     List<Double> referenceAdjustedUltimate(SpreadsheetImporter importer) {
-        // todo(sku): reading formula cells does not work, value 0 is read in
         Map map = [sheet: 'Results', startRow: 1,
          columnMap: ['A' : 'adjustedUltimate']]
         importer.columns(map, ADJUSTED_ULTIMATE_VALIDATION)*.adjustedUltimate

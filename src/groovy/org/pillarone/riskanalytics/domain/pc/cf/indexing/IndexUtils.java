@@ -44,7 +44,7 @@ public class IndexUtils {
                                               IndexMode indexMode, BaseDateMode baseDateMode, DateTime fixedDate) {
         List<Factors> filteredFactors = new ArrayList<Factors>();
         if (criteria.isEmpty()) return null;
-        List<IIndexMarker> indices = criteria.getValuesAsObjects(0, true);;
+        List<IIndexMarker> indices = criteria.getValuesAsObjects(0, true);
         for (FactorsPacket factorPacket : factorsPackets) {
             if (indices.contains((IIndexMarker) factorPacket.getOrigin())) {
                 filteredFactors.add(new Factors(factorPacket, baseDateMode, indexMode, fixedDate));

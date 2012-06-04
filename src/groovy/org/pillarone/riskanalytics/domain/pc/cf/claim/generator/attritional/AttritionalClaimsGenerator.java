@@ -95,7 +95,8 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 CommutationState packet = inCommutationState.get(0);
                 periodStore.put(COMMUTATION_STATE, packet, 1);
             } else {
-                throw new RuntimeException("Found different to one commutationState in inCommutationState. Period: " + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
+                throw new RuntimeException("Found different to one commutationState in inCommutationState. Period: "
+                        + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
             }
         } else {
             throw new RuntimeException("Unknown phase: " + phase);

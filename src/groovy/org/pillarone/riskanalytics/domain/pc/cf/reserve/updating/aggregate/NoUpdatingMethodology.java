@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class NoUpdatingMethodology extends IAggregateUpdatingMethodologyWithCheckStrategyImpl implements IAggregateUpdatingMethodologyStrategy {
+public class NoUpdatingMethodology extends AggregateUpdatingMethodologyWithCheckStrategyImpl implements IAggregateUpdatingMethodologyStrategy {
 
     public Map getParameters() {
         return Collections.emptyMap();
@@ -33,8 +33,8 @@ public class NoUpdatingMethodology extends IAggregateUpdatingMethodologyWithChec
      * @param patterns  ignored in this strategy
      * @return provided baseClaims
      */
-    public List<ClaimRoot> updateUltimatePostChecs(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
-                                                   IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
+    public List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
+                                                    IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
         return baseClaims;
     }
 

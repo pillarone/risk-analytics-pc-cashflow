@@ -11,12 +11,13 @@ import java.util.List;
 /**
  * author simon.parten @ art-allianz . com
  */
-abstract class IAggregateUpdatingMethodologyWithCheckStrategyImpl extends AbstractParameterObject implements IAggregateUpdatingMethodologyStrategy {
+abstract class AggregateUpdatingMethodologyWithCheckStrategyImpl extends AbstractParameterObject
+        implements IAggregateUpdatingMethodologyStrategy {
 
 
     public List<ClaimRoot> updatingUltimate(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
         doSomeChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns);
-        return updateUltimatePostChecs(baseClaims, actualClaims, periodCounter, updateDate, patterns);
+        return updateUltimatePostChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns);
     }
 
     /**
@@ -34,6 +35,6 @@ abstract class IAggregateUpdatingMethodologyWithCheckStrategyImpl extends Abstra
         }
     }
 
-    protected abstract List<ClaimRoot> updateUltimatePostChecs(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns);
+    protected abstract List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns);
 
 }

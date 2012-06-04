@@ -15,11 +15,29 @@ import java.util.TreeMap;
  */
 public class PatternUtils {
 
+    /**
+     * Helper method calling the equally name method, setting returnClone = true.
+     * @param patterns from different origins. Function will fail if one origin would provide several patterns implementing
+     *                 the same IPatternMarker interface.
+     * @param criteria the selected component is used for the comparison with the pattern origin
+     * @param patternMarker is necessary as a component might produce several patterns of different types, but only one
+     *                      per type (see PayoutReportingCombinedPatterns)
+     * @return the cloned pattern with the origin component matching the selected component in criteria
+     */
     public static PatternPacket filterPattern(List<PatternPacket> patterns, ConstrainedString criteria,
                                               Class<? extends IPatternMarker> patternMarker) {
         return filterPattern(patterns, criteria, patternMarker, true);
     }
 
+    /**
+     * @param patterns from different origins. Function will fail if one origin would provide several patterns implementing
+     *                 the same IPatternMarker interface.
+     * @param criteria the selected component is used for the comparison with the pattern origin
+     * @param patternMarker is necessary as a component might produce several patterns of different types, but only one
+     *                      per type (see PayoutReportingCombinedPatterns)
+     * @param returnClone return a clone of the pattern matching the criteria
+     * @return the pattern with the origin component matching the selected component in criteria
+     */
     public static PatternPacket filterPattern(List<PatternPacket> patterns, ConstrainedString criteria,
                                               Class<? extends IPatternMarker> patternMarker, boolean returnClone) {
         for (PatternPacket pattern : patterns) {
@@ -154,7 +172,7 @@ public class PatternUtils {
             cumulativeValues.add(0d);
         }
         for (Map.Entry<DateTime, Double> claimUpdate : claimUpdates.entrySet()) {
-            cumulativeValues.add(claimUpdate.getValue() / ultimate);
+            cumulativeValues.add(Math.abs(claimUpdate.getValue() / ultimate));
             cumulativePeriods.add(new Period(baseDate, claimUpdate.getKey()));
         }
         return adjustedPattern(originalPattern, cumulativePeriods, cumulativeValues, baseDate, updateDate);
