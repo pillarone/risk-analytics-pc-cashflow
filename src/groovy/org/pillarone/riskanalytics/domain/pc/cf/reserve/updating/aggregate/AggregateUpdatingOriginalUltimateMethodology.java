@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AggregateUpdatingOriginalUltimateMethodology extends IAggregateUpdatingMethodologyWithCheckStrategyImpl  {
+public class AggregateUpdatingOriginalUltimateMethodology extends AggregateUpdatingMethodologyWithCheckStrategyImpl {
 
     public Map getParameters() {
         return Collections.EMPTY_MAP;

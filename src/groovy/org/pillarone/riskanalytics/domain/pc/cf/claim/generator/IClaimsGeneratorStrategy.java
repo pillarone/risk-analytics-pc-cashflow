@@ -23,8 +23,9 @@ public interface IClaimsGeneratorStrategy extends IParameterObject {
 
     /**
      *
-     * @param baseClaims this list is needed in order to calculate the number of required claims after calculateClaims has been executed
-     *                   i.e. if external severity information is provided and only the missing claim number needs to be generated.
+     * @param baseClaims this list is needed in order to calculate the number of required claims after calculateClaims
+     *                   has been executed i.e. if external severity information is provided and only the missing claim
+     *                   number needs to be generated.
      * @param uwInfos
      * @param uwInfosFilterCriteria
      * @param factorsPackets is used only for frequency based strategies in order to apply indices on frequency
@@ -54,7 +55,7 @@ public interface IClaimsGeneratorStrategy extends IParameterObject {
     List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope, List<EventSeverity> eventSeverities);
 
     /**
-     * Forces an implementation of independant claim severities, often for standalone generators.
+     * Forces an implementation of independent claim severities, often for standalone generators.
      * @param scaleFactor
      * @param severitiesFactors
      * @param claimNumber

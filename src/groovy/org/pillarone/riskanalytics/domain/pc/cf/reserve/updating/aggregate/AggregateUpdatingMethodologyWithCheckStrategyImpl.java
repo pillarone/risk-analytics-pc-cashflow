@@ -11,7 +11,8 @@ import java.util.List;
 /**
  * author simon.parten @ art-allianz . com
  */
-abstract class IAggregateUpdatingMethodologyWithCheckStrategyImpl extends AbstractParameterObject implements IAggregateUpdatingMethodologyStrategy {
+abstract class AggregateUpdatingMethodologyWithCheckStrategyImpl extends AbstractParameterObject
+        implements IAggregateUpdatingMethodologyStrategy {
 
 
     public List<ClaimRoot> updatingUltimate(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {

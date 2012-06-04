@@ -40,27 +40,27 @@ public class ClaimFilterUtils {
      * @param claims list of claims to filter
      * @param startDate date to start filtering
      * @param endDate end date of filtering 
-     * @return sub list of claims which are between the specifiued dates.
+     * @return sub list of claims which are between the specified dates.
      */
-    public static List<ClaimCashflowPacket> claimsInReportingPeriod(List<ClaimCashflowPacket> claims, DateTime startDate, DateTime endDate) {
+    public static List<ClaimCashflowPacket> claimsInReportingPeriod(List<ClaimCashflowPacket> claims,
+                                                                    DateTime startDate, DateTime endDate) {
         if(startDate.isAfter(endDate) || startDate.isEqual(endDate)){
-            throw new IllegalArgumentException("Start date : " + DateTimeUtilities.formatDate.print(startDate) + " is after end date : " + 
-                    DateTimeUtilities.formatDate.print(endDate) + " in claim filter method" );
+            throw new IllegalArgumentException("Start date : " + DateTimeUtilities.formatDate.print(startDate)
+                    + " is after end date : " + DateTimeUtilities.formatDate.print(endDate) + " in claim filter method" );
         }
         ArrayList<ClaimCashflowPacket> claimCashflowPackets = new ArrayList<ClaimCashflowPacket>();
         for (ClaimCashflowPacket claim : claims) {
-            if(DateTimeUtilities.isBetween(startDate.minusMillis(1), endDate, claim.getDate())){
+            if (DateTimeUtilities.isBetween(startDate.minusMillis(1), endDate, claim.getDate())) {
                 claimCashflowPackets.add(claim);
             }
         }
         return claimCashflowPackets;
-        
     }
 
     /**
      * Sums paid amount of incremental indexed claims in a list
-     * @param claims list fo claims
-     * @return sum of paid Incremental indexed amounts
+     * @param claims list of claims
+     * @return sum of paid incremental indexed amounts
      */
     public static double sumPaidIncrementalIndexedInClaimList(List<ClaimCashflowPacket> claims) {
         double paidAmount = 0;

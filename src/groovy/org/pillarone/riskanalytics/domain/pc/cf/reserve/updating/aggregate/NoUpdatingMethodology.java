@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class NoUpdatingMethodology extends IAggregateUpdatingMethodologyWithCheckStrategyImpl implements IAggregateUpdatingMethodologyStrategy {
+public class NoUpdatingMethodology extends AggregateUpdatingMethodologyWithCheckStrategyImpl implements IAggregateUpdatingMethodologyStrategy {
 
     public Map getParameters() {
         return Collections.emptyMap();

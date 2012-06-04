@@ -1,13 +1,10 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate;
 
 import org.joda.time.DateTime;
-import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
-import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IUpdatingPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
@@ -21,7 +18,8 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AggregateUpdatingBFReportingMethodology extends IAggregateUpdatingMethodologyWithCheckStrategyImpl implements IAggregateUpdatingMethodologyStrategy {
+public class AggregateUpdatingBFReportingMethodology extends AggregateUpdatingMethodologyWithCheckStrategyImpl
+        implements IAggregateUpdatingMethodologyStrategy {
 
     private ConstrainedString updatingPattern = new ConstrainedString(IUpdatingPatternMarker.class, "");
 

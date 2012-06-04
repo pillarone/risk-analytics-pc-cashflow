@@ -50,16 +50,16 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     }
 
     /**
-     * This function is requried to be overridden by the overriding class. Often the override will call the
+     * This function is required to be overridden by the overriding class. Often the override will call the
      * {@link #setGenerator(org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution, org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified)}
      * function.
      */
     abstract void lazyInitClaimsSizeGenerator();
 
     /**
-     * This function attemps to lookup a random distribution and modifier pair against their hashkey in the
-     * {@link AbstractClaimsGeneratorStrategy#cachedClaimSizeGenerators} hashmap. It then sets the {@link AbstractClaimsGeneratorStrategy#claimSizeGenerator}
-     * for this class.
+     * This function attempts to lookup a random distribution and modifier pair against their hash key in the
+     * {@link AbstractClaimsGeneratorStrategy#cachedClaimSizeGenerators} hash map. It then sets the
+     * {@link AbstractClaimsGeneratorStrategy#claimSizeGenerator} for this class.
      * @param distribution random distribution
      * @param modifier modification for that distribution
      */
