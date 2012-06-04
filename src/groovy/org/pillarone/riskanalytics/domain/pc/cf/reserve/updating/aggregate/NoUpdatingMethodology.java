@@ -33,8 +33,8 @@ public class NoUpdatingMethodology extends AggregateUpdatingMethodologyWithCheck
      * @param patterns  ignored in this strategy
      * @return provided baseClaims
      */
-    public List<ClaimRoot> updateUltimatePostChecs(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
-                                                   IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
+    public List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
+                                                    IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
         return baseClaims;
     }
 

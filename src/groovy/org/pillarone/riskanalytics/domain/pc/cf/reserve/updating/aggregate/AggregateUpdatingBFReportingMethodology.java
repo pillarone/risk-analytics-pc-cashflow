@@ -35,8 +35,8 @@ public class AggregateUpdatingBFReportingMethodology extends AggregateUpdatingMe
 
 
 
-    public List<ClaimRoot> updateUltimatePostChecs(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
-                                                   IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
+    public List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
+                                                    IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
         PatternPacket pattern = PatternUtils.filterPattern(patterns, updatingPattern, IUpdatingPatternMarker.class);
         List<ClaimRoot> baseClaimsWithAdjustedUltimate = new ArrayList<ClaimRoot>();
         ClaimRoot baseClaim = baseClaims.get(0);

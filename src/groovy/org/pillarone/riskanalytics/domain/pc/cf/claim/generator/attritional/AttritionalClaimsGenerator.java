@@ -74,7 +74,8 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                         baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
                                 severityFactors, parmParameterizationBasis, this, periodScope);
                     }
-                    baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter, globalUpdateDate, inPatterns);
+                    baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter,
+                                                                          globalUpdateDate, inPatterns);
                     runoffFactors = new ArrayList<Factors>();
                     claims = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, parmActualClaims,
                             periodScope, runoffFactors);
@@ -91,7 +92,8 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 CommutationState packet = inCommutationState.get(0);
                 periodStore.put(COMMUTATION_STATE, packet, 1);
             } else {
-                throw new RuntimeException("Found different to one commutationState in inCommutationState. Period: " + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
+                throw new RuntimeException("Found different to one commutationState in inCommutationState. Period: "
+                        + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
             }
         } else {
             throw new RuntimeException("Unkown phase: " + phase);

@@ -25,11 +25,10 @@ public class AggregateUpdatingOriginalUltimateMethodology extends AggregateUpdat
         return AggregateUpdatingMethodologyStrategyType.ORIGINALULTIMATE;
     }
 
-    public List<ClaimRoot> updateUltimatePostChecs(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
-                                                   IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
+    public List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
+                                                    IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
         List<ClaimRoot> baseClaimsWithAdjustedUltimate = new ArrayList<ClaimRoot>();
         IClaimRoot baseClaim = baseClaims.get(0);
-        // todo(sku): think about a switch to use either the occurrence or inception period
         int occurrencePeriod = baseClaim.getOccurrencePeriod(periodCounter);
         AggregateHistoricClaim historicClaim = actualClaims.historicClaims(occurrencePeriod, periodCounter, updateDate);
         if(historicClaim.noUpdates()) {

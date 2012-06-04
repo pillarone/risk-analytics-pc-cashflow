@@ -17,7 +17,7 @@ abstract class AggregateUpdatingMethodologyWithCheckStrategyImpl extends Abstrac
 
     public List<ClaimRoot> updatingUltimate(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
         doSomeChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns);
-        return updateUltimatePostChecs(baseClaims, actualClaims, periodCounter, updateDate, patterns);
+        return updateUltimatePostChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns);
     }
 
     /**
@@ -35,6 +35,6 @@ abstract class AggregateUpdatingMethodologyWithCheckStrategyImpl extends Abstrac
         }
     }
 
-    protected abstract List<ClaimRoot> updateUltimatePostChecs(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns);
+    protected abstract List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns);
 
 }
