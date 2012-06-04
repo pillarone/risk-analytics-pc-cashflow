@@ -56,6 +56,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
 //        Depending on the outcome in the experience account.
         initIteration(periodStore, periodScope, phase);
 
+//        In this phase check the commutation state from last period. If we are not commuted then calculate claims.
         if (phase.equals(PHASE_CLAIMS_CALCULATION)) {
             CommutationState commutationState = (CommutationState) (periodStore.get(COMMUTATION_STATE));
 
@@ -65,6 +66,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
 
                 List<Factors> runoffFactors = null;
+//                Check that the period we are in covers new claims.
                 if (periodScope.getCurrentPeriod() < globalLastCoveredPeriod) {
                     if (globalDeterministicMode) {
                         baseClaims = getDeterministicClaims(parmDeterministicClaims, periodScope, ClaimType.ATTRITIONAL);
@@ -75,11 +77,13 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                                 severityFactors, parmParameterizationBasis, this, periodScope);
                     }
                     baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter, globalUpdateDate, inPatterns);
+                    checkBaseClaims(baseClaims);
                     runoffFactors = new ArrayList<Factors>();
                     claims = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, parmActualClaims,
                             periodScope, runoffFactors);
                 }
                 developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
+                checkCashflowClaims(claims);
                 setTechnicalProperties(claims);
                 outClaims.addAll(claims);
             }
@@ -94,8 +98,35 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 throw new RuntimeException("Found different to one commutationState in inCommutationState. Period: " + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
             }
         } else {
-            throw new RuntimeException("Unkown phase: " + phase);
+            throw new RuntimeException("Unknown phase: " + phase);
         }
+    }
+
+    private void checkBaseClaims(List<ClaimRoot> baseClaims) {
+        if (globalSanityChecks) {
+            for (ClaimRoot baseClaim : baseClaims) {
+                if (baseClaim.getUltimate() < 0) {
+                    throw new RuntimeException("Negative claim detected: " + baseClaim.toString());
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Do some checks on the claims in this period.
+     * @param cashflowPackets
+     */
+
+    private void checkCashflowClaims(List<ClaimCashflowPacket> cashflowPackets) {
+        if (globalSanityChecks) {
+            for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
+                if (cashflowPacket.getPaidIncrementalIndexed() > 0) {
+                    throw new RuntimeException("Negative claim detected; " + cashflowPacket.toString());
+                }
+            }
+        }
+
     }
 
     /**

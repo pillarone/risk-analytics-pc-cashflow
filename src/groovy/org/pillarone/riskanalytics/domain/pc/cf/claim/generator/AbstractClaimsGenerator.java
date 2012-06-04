@@ -41,6 +41,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     protected PeriodScope periodScope;
     protected PeriodStore periodStore;
     protected Integer globalLastCoveredPeriod;
+    protected boolean globalSanityChecks;
 
     protected PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     protected PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
@@ -311,5 +312,13 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
 
     public void setPresetClaimsByPeriod(ListMultimap<Integer, ClaimRoot> presetClaimsByPeriod) {
         this.presetClaimsByPeriod = presetClaimsByPeriod;
+    }
+
+    public boolean isGlobalSanityChecks() {
+        return globalSanityChecks;
+    }
+
+    public void setGlobalSanityChecks(boolean globalSanityChecks) {
+        this.globalSanityChecks = globalSanityChecks;
     }
 }
