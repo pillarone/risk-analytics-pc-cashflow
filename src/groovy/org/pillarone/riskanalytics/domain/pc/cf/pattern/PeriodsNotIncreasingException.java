@@ -1,13 +1,30 @@
 package org.pillarone.riskanalytics.domain.pc.cf.pattern;
 
+import org.joda.time.Period;
+import org.joda.time.format.PeriodFormatter;
+
+import java.util.List;
+
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class PeriodsNotIncreasingException extends RuntimeException {
 
-    public static final String PERIODS_NOT_INCREASING = "Periods need to be increasing!";
+    public static final String PERIODS_NOT_INCREASING = "Periods need to be increasing! \n";
 
-    public PeriodsNotIncreasingException() {
-        super(PERIODS_NOT_INCREASING);
+    public PeriodsNotIncreasingException(List<Period> cumulativePeriods) {
+        super(PERIODS_NOT_INCREASING + getErrorPeriods(cumulativePeriods).toString());
+    }
+
+    private static StringBuilder getErrorPeriods(List<Period> cumulativePeriods) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Period : days " + " \n");
+
+        int i = 1;
+        for(Period period : cumulativePeriods ) {
+            String s = i + "  :  " + period.getDays() + "\n";
+            stringBuilder.append(s);
+        }
+        return stringBuilder;
     }
 }
