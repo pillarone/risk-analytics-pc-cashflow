@@ -172,7 +172,7 @@ public class PatternUtils {
             cumulativeValues.add(0d);
         }
         for (Map.Entry<DateTime, Double> claimUpdate : claimUpdates.entrySet()) {
-            cumulativeValues.add(claimUpdate.getValue() / ultimate);
+            cumulativeValues.add(Math.abs(claimUpdate.getValue() / ultimate));
             cumulativePeriods.add(new Period(baseDate, claimUpdate.getKey()));
         }
         return adjustedPattern(originalPattern, cumulativePeriods, cumulativeValues, baseDate, updateDate);
