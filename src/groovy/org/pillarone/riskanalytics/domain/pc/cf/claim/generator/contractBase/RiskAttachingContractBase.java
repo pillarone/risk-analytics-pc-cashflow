@@ -3,11 +3,16 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
+import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,5 +60,27 @@ public class RiskAttachingContractBase extends AbstractContractBase implements I
      */
     public int splittedClaimsNumber() {
         return underlyingContractLength;
+    }
+
+
+    /**
+     * This function splits claims which may occur outside of the occurance period when the original root claim incepted.
+     *
+     *
+     * @param claimsAfterUpdate
+     * @param periodScope
+     * @return
+     */
+    public List<GrossClaimRoot> splitClaims(List<GrossClaimRoot> claimsAfterUpdate, PeriodScope periodScope) {
+        List<GrossClaimRoot> claimRoots = new ArrayList<GrossClaimRoot>();
+        IRandomNumberGenerator dateGen = RandomNumberGeneratorFactory.getUniformGenerator();
+        for (GrossClaimRoot claimRoot : claimsAfterUpdate) {
+            double splittedUltimate = claimRoot.getUltimate() / (double) splittedClaimsNumber();
+            for (int j = 0; j < splittedClaimsNumber(); j++) {
+                DateTime occurrenceDate = occurrenceDate( claimRoot.getExposureStartDate() ,dateGen, periodScope, claimRoot.getEvent());
+                claimRoots.add(new GrossClaimRoot(claimRoot , splittedUltimate , occurrenceDate));
+            }
+        }
+        return claimRoots;
     }
 }

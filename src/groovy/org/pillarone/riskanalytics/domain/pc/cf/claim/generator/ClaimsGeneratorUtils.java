@@ -78,13 +78,18 @@ public class ClaimsGeneratorUtils {
             DateTime inceptionDate = contractBase.inceptionDate(periodScope, dateGenerator);
             int splittedClaimNumber = contractBase.splittedClaimsNumber();
             double ultimate = (Double) claimSizeGenerator.nextValue() * -severityScaleFactor;
-            double splittedUltimate = ultimate / (double) splittedClaimNumber;
-            for (int j = 0; j < splittedClaimNumber; j++) {
-                DateTime occurrenceDate = contractBase.occurrenceDate(inceptionDate, dateGenerator, periodScope, event);
-                double scaleFactor = IndexUtils.aggregateFactor(severityFactors, occurrenceDate, periodScope.getPeriodCounter(), inceptionDate);
-                baseClaims.add(new ClaimRoot(splittedUltimate * scaleFactor, claimType,
-                        inceptionDate, occurrenceDate, event));
-            }
+            DateTime occurrenceDate = contractBase.occurrenceDate(inceptionDate, dateGenerator, periodScope, event);
+            double scaleFactor = IndexUtils.aggregateFactor(severityFactors, inceptionDate, periodScope.getPeriodCounter(), inceptionDate);
+            baseClaims.add(new ClaimRoot(ultimate * scaleFactor, claimType,
+                    inceptionDate, occurrenceDate, event));
+
+//            double splittedUltimate = ultimate / (double) splittedClaimNumber;
+//            for (int j = 0; j < splittedClaimNumber; j++) {
+//                DateTime occurrenceDate = contractBase.occurrenceDate(inceptionDate, dateGenerator, periodScope, event);
+//                double scaleFactor = IndexUtils.aggregateFactor(severityFactors, occurrenceDate, periodScope.getPeriodCounter(), inceptionDate);
+//                baseClaims.add(new ClaimRoot(splittedUltimate * scaleFactor, claimType,
+//                        inceptionDate, occurrenceDate, event));
+//            }
         }
         return baseClaims;
     }

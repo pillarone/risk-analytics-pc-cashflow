@@ -79,33 +79,20 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
      * @param factors so far applied to the outstanding
      * @return claim packets of this period
      */
-    protected List<ClaimCashflowPacket> claimsOfCurrentPeriod(List<ClaimRoot> baseClaims, ConstrainedString parmPayoutPattern,
+    protected List<GrossClaimRoot> claimsOfCurrentPeriod(List<ClaimRoot> baseClaims, ConstrainedString parmPayoutPattern,
                                                               IAggregateActualClaimsStrategy parmActualClaims,
                                                               PeriodScope periodScope, List<Factors> factors) {
         PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
         List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
-        List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
         if (!baseClaims.isEmpty()) {
             int currentPeriod = periodScope.getCurrentPeriod();
             for (ClaimRoot baseClaim : baseClaims) {
                 GrossClaimRoot grossClaimRoot = parmActualClaims.claimWithAdjustedPattern(baseClaim, currentPeriod,
                         payoutPattern, periodScope.getPeriodCounter(), globalUpdateDate);
-                boolean occurrenceInCurrentPeriod = baseClaim.occurrenceInCurrentPeriod(periodScope);
-                if (!grossClaimRoot.hasTrivialPayout() || !occurrenceInCurrentPeriod) {
-                    // add claim only to period store if development in future periods is required or occurrence is delayed
-                    grossClaimRoots.add(grossClaimRoot);
-                }
-                // In the case of risk attaching the inception date is within this period but the occurrence date
-                // might be delayed. If this happens don't return the claim within the list.
-                if (occurrenceInCurrentPeriod) {
-                    claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodScope.getPeriodCounter(), factors));
-                }
+                grossClaimRoots.add(grossClaimRoot);
             }
         }
-        if (!grossClaimRoots.isEmpty()) {
-            periodStore.put(GROSS_CLAIMS, grossClaimRoots);
-        }
-        return claims;
+        return grossClaimRoots;
     }
 
     /**
@@ -183,7 +170,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     }
 
     // period store key
-    private static final String GROSS_CLAIMS = "gross claims root";
+    public static final String GROSS_CLAIMS = "gross claims root";
 
     /**
      * Sets the peril marker and origin of each list element

@@ -47,6 +47,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.periodStore = new PeriodStore(generator.periodScope)
         generator.globalLastCoveredPeriod= 4
         generator.globalUpdateDate = new DateTime(2012, 1, 1, 0, 0, 0, 0)
+        generator.globalSanityChecks = true
         generator
     }
 

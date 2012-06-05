@@ -3,11 +3,13 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,4 +54,16 @@ public class LossesOccurringContractBase extends AbstractContractBase implements
     }
 
 
+    /**
+     * returns the same list passed in
+     *
+     *
+     *
+     * @param claimsAfterUpdate
+     * @param periodScope
+     * @return identity funtion
+     */
+    public List<GrossClaimRoot> splitClaims(List<GrossClaimRoot> claimsAfterUpdate, PeriodScope periodScope) {
+        return claimsAfterUpdate;
+    }
 }

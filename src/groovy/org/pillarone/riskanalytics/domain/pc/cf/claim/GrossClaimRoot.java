@@ -87,6 +87,23 @@ public final class GrossClaimRoot implements IClaimRoot {
         // todo(sku): add check for synchronized patterns
     }
 
+    /**
+     * This constructor preseves claim metadata, but alters the ultimate amount according to what's passed in.
+     * @param claimRoot
+     * @param ultimate
+     */
+    public GrossClaimRoot(GrossClaimRoot claimRoot, double ultimate , DateTime occurenceDate){
+        this(
+                ultimate,
+                claimRoot.getClaimType(),
+                claimRoot.getExposureStartDate(),
+                occurenceDate,
+                claimRoot.payoutPattern,
+                claimRoot.reportingPattern,
+                claimRoot.getEvent()
+        );
+    }
+
     public GrossClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate,
                           PatternPacket payoutPattern, PatternPacket reportingPattern) {
         this(new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate), payoutPattern, reportingPattern);

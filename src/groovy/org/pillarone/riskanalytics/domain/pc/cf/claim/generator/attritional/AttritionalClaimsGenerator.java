@@ -13,6 +13,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.ReinsuranceContractBaseType;
@@ -60,9 +61,10 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
         if (phase.equals(PHASE_CLAIMS_CALCULATION)) {
             CommutationState commutationState = (CommutationState) (periodStore.get(COMMUTATION_STATE));
 
-            if (! ( commutationState.isCommuted() || commutationState.isCommuteThisPeriod())) {
+            if (!(commutationState.isCommuted() || commutationState.isCommuteThisPeriod())) {
                 IPeriodCounter periodCounter = periodScope.getPeriodCounter();
                 List<ClaimRoot> baseClaims;
+                List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
                 List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
 
                 List<Factors> runoffFactors = null;
@@ -70,7 +72,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 if (periodScope.getCurrentPeriod() < globalLastCoveredPeriod) {
                     if (globalDeterministicMode) {
                         baseClaims = getDeterministicClaims(parmDeterministicClaims, periodScope, ClaimType.ATTRITIONAL);
-                    } else  {
+                    } else {
                         List<Factors> severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices(),
                                 IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
                         baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
@@ -79,8 +81,11 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                     baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter, globalUpdateDate, inPatterns);
                     checkBaseClaims(baseClaims);
                     runoffFactors = new ArrayList<Factors>();
-                    claims = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, parmActualClaims,
+                    grossClaimRoots = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, parmActualClaims,
                             periodScope, runoffFactors);
+                    List<GrossClaimRoot> claimsAfterSplit = parmParameterizationBasis.splitClaims(grossClaimRoots, periodScope);
+                    storeClaimsWhichOccurInFuturePeriods(claimsAfterSplit, periodStore);
+                    claims = cashflowsInCurrentPeriod(grossClaimRoots, runoffFactors, periodScope);
                 }
                 developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
                 checkCashflowClaims(claims);
@@ -103,11 +108,38 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
         }
     }
 
+    private List<ClaimCashflowPacket> cashflowsInCurrentPeriod(List<GrossClaimRoot> grossClaimRoots, List<Factors> runOffFactors, PeriodScope periodScope) {
+        List<ClaimCashflowPacket> claimCashflowPackets = new ArrayList<ClaimCashflowPacket>();
+        for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
+            if (grossClaimRoot.occurrenceInCurrentPeriod(periodScope)) {
+                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(this.periodScope.getPeriodCounter(), runOffFactors));
+            }
+        }
+        return claimCashflowPackets;
+    }
+
+
+    private void storeClaimsWhichOccurInFuturePeriods(List<GrossClaimRoot> grossClaimRoots, PeriodStore periodStore) {
+        List<GrossClaimRoot> claimsNotOcurringThisPeriod = new ArrayList<GrossClaimRoot>();
+
+        for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
+            boolean occurrenceInCurrentPeriod = grossClaimRoot.occurrenceInCurrentPeriod(periodScope);
+            if (!grossClaimRoot.hasTrivialPayout() || !occurrenceInCurrentPeriod) {
+//        add claim only to period store if development in future periods is required or occurrence is delayed
+                claimsNotOcurringThisPeriod.add(grossClaimRoot);
+            }
+        }
+
+        if (!grossClaimRoots.isEmpty()) {
+            periodStore.put(AbstractClaimsGenerator.GROSS_CLAIMS, claimsNotOcurringThisPeriod);
+        }
+    }
+
     private void checkBaseClaims(List<ClaimRoot> baseClaims) {
         if (globalSanityChecks) {
             for (ClaimRoot baseClaim : baseClaims) {
-                if (baseClaim.getUltimate() < 0) {
-                    throw new RuntimeException("Negative claim detected: " + baseClaim.toString());
+                if (baseClaim.getUltimate() > 0) {
+                    throw new RuntimeException("Positive claim detected... i.e an inflow of cash!: " + baseClaim.toString());
                 }
             }
         }
@@ -116,6 +148,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
 
     /**
      * Do some checks on the claims in this period.
+     *
      * @param cashflowPackets
      */
 
@@ -123,7 +156,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
         if (globalSanityChecks) {
             for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
                 if (cashflowPacket.getPaidIncrementalIndexed() > 0) {
-                    throw new RuntimeException("Negative claim detected; " + cashflowPacket.toString());
+                    throw new RuntimeException("Negative claim detected... i.e an inflow of cash!; " + cashflowPacket.toString());
                 }
             }
         }
@@ -135,7 +168,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
      * @param phase
      */
     private void initIteration(PeriodStore periodStore, PeriodScope periodScope, String phase) {
-        if (periodScope.isFirstPeriod() && phase.equals(PHASE_CLAIMS_CALCULATION) ) {
+        if (periodScope.isFirstPeriod() && phase.equals(PHASE_CLAIMS_CALCULATION)) {
             periodStore.put(COMMUTATION_STATE, new CommutationState());
         }
     }
