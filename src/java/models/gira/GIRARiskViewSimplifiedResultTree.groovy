@@ -108,7 +108,7 @@ mappings = {
                     }
                 }
                 "claimsNet" {
-                    "ultimate" "GIRA:structures:[%structure%]:outClaimsGross:ultimate", {
+                    "ultimate" "GIRA:structures:[%structure%]:outClaimsNet:ultimate", {
                         "bySegment" {
                             "[%segment%]" "GIRA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:ultimate"
                         }
@@ -119,7 +119,7 @@ mappings = {
 //                            // todo
 //                        }
                     }
-                    "reportedIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsGross:reportedIncrementalIndexed", {
+                    "reportedIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsNet:reportedIncrementalIndexed", {
                         "bySegment" {
                             "[%segment%]" "GIRA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:reportedIncrementalIndexed"
                         }
@@ -142,7 +142,7 @@ mappings = {
                         "bySegment" {
                             "[%segment%]" "GIRA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:ultimate", {
                                 "byPerils" {
-                                    "[%peril%]" "GIRA:reinsuranceContracts:[%contract%]:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:ultimate"    // todo
+                                    "[%peril%]" "GIRA:reinsuranceContracts:[%contract%]:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:ultimate"
                                 }
                             }
                         }
@@ -154,7 +154,7 @@ mappings = {
                         "bySegment" {
                             "[%segment%]" "GIRA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:reportedIncrementalIndexed", {
                                 "byPerils" {
-                                    "[%peril%]" "GIRA:reinsuranceContracts:[%contract%]:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:reportedIncrementalIndexed"  // todo
+                                    "[%peril%]" "GIRA:reinsuranceContracts:[%contract%]:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:reportedIncrementalIndexed"
                                 }
                             }
                         }
