@@ -18,12 +18,13 @@ public class PeriodsNotIncreasingException extends RuntimeException {
 
     private static StringBuilder getErrorPeriods(List<Period> cumulativePeriods) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Period : days " + " \n");
+        stringBuilder.append("Pattern Entry : days " + " \n");
 
         int i = 1;
         for(Period period : cumulativePeriods ) {
             String s = i + "  :  " + period.getDays() + "\n";
             stringBuilder.append(s);
+            i++;
         }
         return stringBuilder;
     }
