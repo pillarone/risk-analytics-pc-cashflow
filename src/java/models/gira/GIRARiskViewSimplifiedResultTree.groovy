@@ -28,10 +28,10 @@ mappings = {
             "totalOfAllSegments" {
                 "claimsGross" {
                     "ultimate" "GIRA:segments:outClaimsGross:ultimate", {
-                        "[%peril%]" "GIRA:segments:claimsGenerators:[%peril%]:outClaimsGross:ultimate"      // todo
+                        "[%peril%]" "GIRA:segments:claimsGenerators:[%peril%]:outClaimsGross:ultimate"
                     }
                     "reportedIncrementalIndexed" "GIRA:segments:outClaimsGross:reportedIncrementalIndexed", {
-                        "[%peril%]" "GIRA:segments:claimsGenerators:[%peril%]:outClaimsGross:reportedIncrementalIndexed"    // todo
+                        "[%peril%]" "GIRA:segments:claimsGenerators:[%peril%]:outClaimsGross:reportedIncrementalIndexed"
                     }
                     "premiumAndReserveRiskBase" "GIRA:segments:outClaimsGross:premiumAndReserveRiskBase"
                     "premiumRiskBase" "GIRA:segments:outClaimsGross:premiumRiskBase"
@@ -41,10 +41,10 @@ mappings = {
                 }
                 "claimsNet" {
                     "ultimate" "GIRA:segments:outClaimsNet:ultimate", {
-                        "[%peril%]" "GIRA:segments:claimsGenerators:[%peril%]:outClaimsNet:ultimate"    // todo
+                        "[%peril%]" "GIRA:segments:claimsGenerators:[%peril%]:outClaimsNet:ultimate"
                     }
                     "reportedIncrementalIndexed" "GIRA:segments:outClaimsNet:reportedIncrementalIndexed", {
-                        "[%peril%]" "GIRA:segments:claimsGenerators:[%peril%]:outClaimsNet:reportedIncrementalIndexed"  // todo
+                        "[%peril%]" "GIRA:segments:claimsGenerators:[%peril%]:outClaimsNet:reportedIncrementalIndexed"
                     }
                     "premiumAndReserveRiskBase" "GIRA:segments:outClaimsNet:premiumAndReserveRiskBase"
                     "premiumRiskBase" "GIRA:segments:outClaimsNet:premiumRiskBase"
@@ -115,9 +115,6 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "GIRA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:ultimate"
                         }
-//                        "byContract" {
-//                            // todo
-//                        }
                     }
                     "reportedIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsNet:reportedIncrementalIndexed", {
                         "bySegment" {

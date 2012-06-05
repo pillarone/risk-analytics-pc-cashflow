@@ -34,6 +34,9 @@ public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplit
     private static final String CONTRACTS = "reinsuranceContracts";
     private static final String SEGMENTS = "segments";
 
+    private static final Map<Component, Class> componentsExtensibleBy = new HashMap<Component, Class>();
+    private static final Map<Component, PathMapping> componentsPathMapping = new HashMap<Component, PathMapping>();
+
     public List<SingleValueResultPOJO> collect(PacketList packets) throws IllegalAccessException {
         initSimulation();
         iteration = packetCollector.getSimulationScope().getIterationScope().getCurrentIteration();
@@ -66,22 +69,39 @@ public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplit
 
             PathMapping perilPath = getPathMapping(claim, claim.peril(), PERILS);
             PathMapping lobPath = null;
-            if (!(claim.sender instanceof ISegmentMarker)) { // && !(claim.sender instanceof DynamicComposedComponent && ((DynamicComposedComponent) claim.sender).createDefaultSubComponent() instanceof ISegmentMarker)) {
+
+            if (!componentsExtensibleBy.containsKey(claim.sender)) {
+                Component component = claim.sender;
+                if (component instanceof DynamicComposedComponent) {
+                    component = ((DynamicComposedComponent) component).createDefaultSubComponent();
+                }
+                if (component instanceof ISegmentMarker) {
+                    componentsExtensibleBy.put(claim.sender, ISegmentMarker.class);
+                }
+                else if (component instanceof IReinsuranceContractMarker) {
+                    componentsExtensibleBy.put(claim.sender, IReinsuranceContractMarker.class);
+                }
+                else if (component instanceof ILegalEntityMarker) {
+                    componentsExtensibleBy.put(claim.sender, ILegalEntityMarker.class);
+                }
+                else if (component instanceof IStructureMarker) {
+                    componentsExtensibleBy.put(claim.sender, IStructureMarker.class);
+                }
+            }
+            Class markerInterface = componentsExtensibleBy.get(claim.sender);
+
+            if (!(ISegmentMarker.class.equals(markerInterface))) {
                 lobPath = getPathMapping(claim, claim.segment(), SEGMENTS);
             }
             PathMapping contractPath = null;
-            if (!(claim.sender instanceof IReinsuranceContractMarker)) {
+            if (!(IReinsuranceContractMarker.class.equals(markerInterface))) {
                 contractPath = getPathMapping(claim, claim.reinsuranceContract(), CONTRACTS);
             }
-            if (claim.sender instanceof ISegmentMarker||
-                    (claim.sender instanceof DynamicComposedComponent
-                            && ((DynamicComposedComponent) claim.sender).createDefaultSubComponent() instanceof ISegmentMarker)) {
+            if (ISegmentMarker.class.equals(markerInterface)) {
                 addToMap(claim, perilPath, resultMap);
                 addToMap(claim, contractPath, resultMap);
             }
-            if (claim.sender instanceof IReinsuranceContractMarker) { /* ||
-                    (claim.sender instanceof DynamicComposedComponent
-                            && ((DynamicComposedComponent) claim.sender).createDefaultSubComponent() instanceof IReinsuranceContractMarker)) {*/
+            if (IReinsuranceContractMarker.class.equals(markerInterface)) {
                 addToMap(claim, lobPath, resultMap);
                 addToMap(claim, perilPath, resultMap);
                 if (lobPath != null && perilPath != null) {
@@ -89,7 +109,7 @@ public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplit
                     addToMap(claim, lobPerilPath, resultMap);
                 }
             }
-            if (claim.sender instanceof ILegalEntityMarker || claim.sender instanceof IStructureMarker) {
+            if (ILegalEntityMarker.class.equals(markerInterface) || IStructureMarker.class.equals(markerInterface)) {
                 addToMap(claim, perilPath, resultMap);
                 addToMap(claim, contractPath, resultMap);
                 addToMap(claim, lobPath, resultMap);
