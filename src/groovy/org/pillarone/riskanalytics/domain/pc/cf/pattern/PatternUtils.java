@@ -167,7 +167,7 @@ public class PatternUtils {
         }
         List<Period> cumulativePeriods = new ArrayList<Period>();
         List<Double> cumulativeValues = new ArrayList<Double>();
-        if (!claimUpdates.containsKey(occurrenceDate)) {
+        if (!claimUpdates.containsKey(baseDate)) {
             cumulativePeriods.add(new Period());
             cumulativeValues.add(0d);
         }

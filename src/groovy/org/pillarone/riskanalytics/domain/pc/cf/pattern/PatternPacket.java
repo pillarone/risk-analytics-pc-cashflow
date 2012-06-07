@@ -202,7 +202,10 @@ public class PatternPacket extends Packet implements Cloneable {
         final List<Period> newPeriods = new ArrayList<Period>();
         final List<Double> newValues = new ArrayList<Double>();
         for (Map.Entry<DateTime, Double> entry : rescaledPatternAsMap.entrySet()) {
-            final Period period1 = new Period(patternStartDate, entry.getKey(), PeriodType.months());
+            Period period1 = new Period( patternStartDate, patternStartDate.plusDays(1));
+            if(!patternStartDate.equals(entry.getKey())) {
+                period1 = new Period(patternStartDate, entry.getKey().minusDays(1));
+            }
             newPeriods.add(period1);
             newValues.add(Double.valueOf(entry.getValue()));
         }
@@ -271,6 +274,21 @@ public class PatternPacket extends Packet implements Cloneable {
 
     public int size() {
         return cumulativeValues.size();
+    }
+
+    public List<Double> getIncrementalValues() {
+        final ArrayList<Double> incrementalValues = new ArrayList<Double>();
+        double sumCumulativeValue = 0;
+        double priorValue = 0;
+        for (Double cumulativeValue : cumulativeValues) {
+            incrementalValues.add(cumulativeValue - priorValue);
+            sumCumulativeValue += (cumulativeValue - priorValue);
+            priorValue = cumulativeValue;
+        }
+        if(sumCumulativeValue != 1) {
+            throw new PatternSumNotOneException(incrementalValues);
+        }
+        return incrementalValues;
     }
 
     public boolean isTrivial() {

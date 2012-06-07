@@ -88,7 +88,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
             int currentPeriod = periodScope.getCurrentPeriod();
             for (ClaimRoot baseClaim : baseClaims) {
                 GrossClaimRoot grossClaimRoot = parmActualClaims.claimWithAdjustedPattern(baseClaim, currentPeriod,
-                        payoutPattern, periodScope.getPeriodCounter(), globalUpdateDate);
+                        payoutPattern, periodScope, globalUpdateDate);
                 grossClaimRoots.add(grossClaimRoot);
             }
         }

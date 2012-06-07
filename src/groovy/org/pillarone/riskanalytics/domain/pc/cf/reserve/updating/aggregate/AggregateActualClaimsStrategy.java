@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
@@ -90,23 +91,23 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
      * Creates a GrossClaimRoot. It's payout pattern is modified if the current period end is before the update date and
      * there exists a AggregateHistoricClaim for contractPeriod.
      *
+     *
      * @param claimRoot      providing the ultimate and occurrence date
      * @param contractPeriod
      * @param payoutPattern  original payout pattern
-     * @param periodCounter
-     * @param updateDate
-     * @return a GrossClaimRoot with a possibly modified payoutPattern
+     * @param periodScope
+     *@param updateDate  @return a GrossClaimRoot with a possibly modified payoutPattern
      */
     public GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
-                                                   IPeriodCounter periodCounter, DateTime updateDate) {
+                                                   PeriodScope periodScope, DateTime updateDate) {
 //        If the update date is the start of the first period this is an inception model, simply proceed without updating effects.
-        if (updateDate.equals(periodCounter.startOfFirstPeriod())) {
+        if (updateDate.equals(periodScope.getPeriodCounter().startOfFirstPeriod())) {
             return new GrossClaimRoot(claimRoot, payoutPattern);
         }
 
 //        If we have claim updates, rescale the payment pattern against them.
-        if (claimRoot.getOccurrenceDate().isBefore(updateDate)) {
-            lazyInitHistoricClaimsPerContractPeriod(periodCounter, updateDate);
+        if ( updateDate.isBefore(periodScope.getNextPeriodStartDate().minusMillis(1))  ) {
+            lazyInitHistoricClaimsPerContractPeriod(periodScope.getPeriodCounter(), updateDate);
             AggregateHistoricClaim historicClaim = historicClaimsPerContractPeriod.get(contractPeriod);
             if (historicClaim != null) {
                 return historicClaim.claimWithAdjustedPattern(payoutPattern, claimRoot, updateDate);

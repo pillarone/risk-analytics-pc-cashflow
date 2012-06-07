@@ -16,7 +16,7 @@ public class PeriodsNotIncreasingException extends RuntimeException {
         super(PERIODS_NOT_INCREASING + getErrorPeriods(cumulativePeriods).toString());
     }
 
-    private static StringBuilder getErrorPeriods(List<Period> cumulativePeriods) {
+    public static StringBuilder getErrorPeriods(List<Period> cumulativePeriods) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Pattern Entry : days " + " \n");
 

@@ -66,7 +66,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
 
             if (!(commutationState.isCommuted() || commutationState.isCommuteThisPeriod())) {
                 IPeriodCounter periodCounter = periodScope.getPeriodCounter();
-                List<ClaimRoot> baseClaims;
+                List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
                 List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
                 List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
 
@@ -92,6 +92,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 }
                 developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
                 checkCashflowClaims(claims);
+                doCashflowChecks(claims, grossClaimRoots, baseClaims);
                 setTechnicalProperties(claims);
                 outClaims.addAll(claims);
             }
@@ -109,6 +110,17 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
         } else {
             throw new RuntimeException("Unknown phase: " + phase);
         }
+    }
+
+    private void doCashflowChecks(List<ClaimCashflowPacket> claims, List<GrossClaimRoot> grossClaimRoots, List<ClaimRoot> baseClaims) {
+
+
+
+        for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
+
+        }
+
+
     }
 
     private List<ClaimCashflowPacket> cashflowsInCurrentPeriod(List<GrossClaimRoot> grossClaimRoots, List<Factors> runOffFactors, PeriodScope periodScope) {
@@ -162,7 +174,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
         if (globalSanityChecks) {
             for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
                 if (cashflowPacket.getPaidIncrementalIndexed() > 0) {
-                    throw new RuntimeException("Negative claim detected... i.e an inflow of cash!; " + cashflowPacket.toString());
+                    throw new RuntimeException("Positive claim detected... i.e an inflow of cash!; " + cashflowPacket.toString() + " \n" + "Period Info  " + periodScope.toString());
                 }
             }
         }
