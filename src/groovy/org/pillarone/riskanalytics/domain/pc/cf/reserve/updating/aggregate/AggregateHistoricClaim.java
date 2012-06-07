@@ -69,7 +69,7 @@ public class AggregateHistoricClaim {
             }
             final Double aDouble = Math.abs(( entry.getValue() - priorCumulativeValue) / claimRoot.getUltimate());
             newPatternPeriods.add(period);
-            newPatternDoubles.add(aDouble);
+            newPatternDoubles.add(aDouble + proportionOfSimulatedClaimAlreadyPaidOutAsActuals);
             proportionOfSimulatedClaimAlreadyPaidOutAsActuals += aDouble;
             priorCumulativeValue = entry.getValue();
         }
