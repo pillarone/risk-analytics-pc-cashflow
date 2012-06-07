@@ -15,8 +15,8 @@ abstract class AggregateUpdatingMethodologyWithCheckStrategyImpl extends Abstrac
         implements IAggregateUpdatingMethodologyStrategy {
 
 
-    public List<ClaimRoot> updatingUltimate(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
-        doSomeChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns);
+    public List<ClaimRoot> updatingUltimate(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, int contractPeriod) {
+        doSomeChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns, contractPeriod);
         return updateUltimatePostChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns);
     }
 
@@ -28,11 +28,13 @@ abstract class AggregateUpdatingMethodologyWithCheckStrategyImpl extends Abstrac
      * @param periodCounter
      * @param updateDate
      * @param patterns
+     * @param contractPeriod
      */
-    protected void doSomeChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
+    protected void doSomeChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, int contractPeriod) {
         if (baseClaims.size() != 1) {
             throw new IllegalArgumentException("Aggregate updating strategy recieved different to one claim. Claims recieved: " + baseClaims.size());
         }
+        actualClaims.checkClaimRootOccurenceAgainstFirstActualPaid(baseClaims, contractPeriod, periodCounter, updateDate);
     }
 
     protected abstract List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns);

@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationState;
@@ -50,6 +51,8 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
             GroovyUtils.convertToListOfList(new Object[]{0d, 0d}), Arrays.asList(REAL_PERIOD, CLAIM_VALUE),
             ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER));
 
+    private IterationScope iterationScope;
+
 
     @Override
     protected void doCalculation(String phase) {
@@ -78,14 +81,14 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                         baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
                                 severityFactors, parmParameterizationBasis, this, periodScope);
                     }
-                    baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter, globalUpdateDate, inPatterns);
+                    baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter, globalUpdateDate, inPatterns, periodScope.getCurrentPeriod());
                     checkBaseClaims(baseClaims);
                     runoffFactors = new ArrayList<Factors>();
                     grossClaimRoots = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, parmActualClaims,
                             periodScope, runoffFactors);
                     List<GrossClaimRoot> claimsAfterSplit = parmParameterizationBasis.splitClaims(grossClaimRoots, periodScope);
                     storeClaimsWhichOccurInFuturePeriods(claimsAfterSplit, periodStore);
-                    claims = cashflowsInCurrentPeriod(grossClaimRoots, runoffFactors, periodScope);
+                    claims = cashflowsInCurrentPeriod(claimsAfterSplit, runoffFactors, periodScope);
                 }
                 developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
                 checkCashflowClaims(claims);
@@ -140,6 +143,9 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
             for (ClaimRoot baseClaim : baseClaims) {
                 if (baseClaim.getUltimate() > 0) {
                     throw new RuntimeException("Positive claim detected... i.e an inflow of cash!: " + baseClaim.toString());
+                }
+                if(iterationScope.isFirstIteration()) {
+                    LOG.info("claim root : " + baseClaim.toString());
                 }
             }
         }
@@ -222,4 +228,11 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
     }
 
 
+    public IterationScope getIterationScope() {
+        return iterationScope;
+    }
+
+    public void setIterationScope(IterationScope iterationScope) {
+        this.iterationScope = iterationScope;
+    }
 }

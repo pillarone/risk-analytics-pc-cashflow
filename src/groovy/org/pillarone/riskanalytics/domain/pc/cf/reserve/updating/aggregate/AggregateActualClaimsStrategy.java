@@ -11,6 +11,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,8 +42,9 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
     /**
      * This function has to be called during period 0 in order to fill the periodStore correctly! The content of the
      * reported amount column is ignored. historicClaimsPerContractPeriod is filled.
+     *
      * @param periodCounter required for date calculations
-     * @param updateDate all reported claims after the updateDate are ignored
+     * @param updateDate    all reported claims after the updateDate are ignored
      */
     public void lazyInitHistoricClaimsPerContractPeriod(IPeriodCounter periodCounter, DateTime updateDate) {
         // key: contractPeriod
@@ -66,18 +68,43 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
         }
     }
 
+    public void checkClaimRootOccurenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims, int contractPeriod, IPeriodCounter periodCounter, DateTime updateDate) {
+        lazyInitHistoricClaimsPerContractPeriod(periodCounter, updateDate);
+        if (baseClaims.size() != 1) {
+            throw new RuntimeException("not one base stochastic claim in aggregate actual claims strategy, contact development");
+        }
+        AggregateHistoricClaim aggregateHistoricClaim = historicClaimsPerContractPeriod.get(contractPeriod);
+        if(aggregateHistoricClaim == null) return;
+        ClaimRoot claimRoot = baseClaims.get(0);
+//        Known payments before the exposure start date cannot be real. Invent a new root claim with a new exposure start date. THis is a rare case, in general
+//        this method should do nothing!
+        if(aggregateHistoricClaim.firstActualPaidDateOrNull() != null && claimRoot.getExposureStartDate().isAfter(aggregateHistoricClaim.firstActualPaidDateOrNull())) {
+            ClaimRoot claimRoot1 = new ClaimRoot(claimRoot.getUltimate(), claimRoot.getClaimType(),aggregateHistoricClaim.firstActualPaidDateOrNull(), claimRoot.getOccurrenceDate() );
+            baseClaims.clear();
+            baseClaims.add(claimRoot1);
+        }
+
+    }
+
     /**
      * Creates a GrossClaimRoot. It's payout pattern is modified if the current period end is before the update date and
-     * there exists a AggregateHistoricClaim for contractPeriod.   TODO correct description, what is the correct criteria/limiting date
-     * @param claimRoot providing the ultimate and occurrence date
+     * there exists a AggregateHistoricClaim for contractPeriod.
+     *
+     * @param claimRoot      providing the ultimate and occurrence date
      * @param contractPeriod
-     * @param payoutPattern original payout pattern
+     * @param payoutPattern  original payout pattern
      * @param periodCounter
      * @param updateDate
      * @return a GrossClaimRoot with a possibly modified payoutPattern
      */
     public GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
                                                    IPeriodCounter periodCounter, DateTime updateDate) {
+//        If the update date is the start of the first period this is an inception model, simply proceed without updating effects.
+        if (updateDate.equals(periodCounter.startOfFirstPeriod())) {
+            return new GrossClaimRoot(claimRoot, payoutPattern);
+        }
+
+//        If we have claim updates, rescale the payment pattern against them.
         if (claimRoot.getOccurrenceDate().isBefore(updateDate)) {
             lazyInitHistoricClaimsPerContractPeriod(periodCounter, updateDate);
             AggregateHistoricClaim historicClaim = historicClaimsPerContractPeriod.get(contractPeriod);
@@ -85,7 +112,9 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
                 return historicClaim.claimWithAdjustedPattern(payoutPattern, claimRoot, updateDate);
             }
         }
-        return new GrossClaimRoot(claimRoot, payoutPattern);
+//        If there are no claim updates, we rescale the pattern to avoid stochastic payments before update date.
+        PatternPacket patternPacket = payoutPattern.rescalePatternToUpdateDate(updateDate, claimRoot.getExposureStartDate(), false);
+        return new GrossClaimRoot(claimRoot,  patternPacket);
     }
 
     public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate) {
@@ -95,17 +124,5 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
             historicClaim = new AggregateHistoricClaim(period, periodCounter, PayoutPatternBase.CLAIM_OCCURANCE_DATE);
         }
         return historicClaim;
-    }
-
-    /**
-     * @return true if the update date is within or before the current period, false if globalUpdateDate is null
-     */
-    protected boolean beforeUpdateDate(DateTime nextPeriodStartDate, DateTime updateDate) {
-        if (updateDate == null) {
-            return false;
-        }
-        else {
-            return nextPeriodStartDate.isBefore(updateDate);
-        }
     }
 }

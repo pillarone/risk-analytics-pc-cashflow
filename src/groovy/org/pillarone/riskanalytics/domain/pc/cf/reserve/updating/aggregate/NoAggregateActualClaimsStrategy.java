@@ -7,8 +7,10 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,4 +38,7 @@ public class NoAggregateActualClaimsStrategy extends AbstractParameterObject imp
         return new AggregateHistoricClaim(period, periodCounter, PayoutPatternBase.PERIOD_START_DATE);
     }
 
+    public void checkClaimRootOccurenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims, int contractPeriod, IPeriodCounter periodCounter, DateTime updateDate) {
+//        There are no actual claims by definition of this class so this method is not useful...
+    }
 }

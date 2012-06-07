@@ -39,8 +39,8 @@ public class NoUpdatingMethodology extends AggregateUpdatingMethodologyWithCheck
     }
 
     @Override
-    protected void doSomeChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
-        super.doSomeChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns);
+    protected void doSomeChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, int contractPeriod) {
+        super.doSomeChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns, contractPeriod);
         if(updateDate.isAfter(periodCounter.startOfFirstPeriod())) {
             throw new IllegalArgumentException("The update date is " + DateTimeUtilities.formatDate.print(updateDate) + " and the start of the simulation is " +
                     "" + DateTimeUtilities.formatDate.print(periodCounter.startOfFirstPeriod()) + ". Have you forgotten to select an updating strategy?"

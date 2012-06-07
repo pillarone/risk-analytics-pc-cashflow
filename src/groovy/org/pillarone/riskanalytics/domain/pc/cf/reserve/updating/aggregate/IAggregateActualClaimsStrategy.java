@@ -7,6 +7,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 
+import java.util.List;
+
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
@@ -18,4 +20,6 @@ public interface IAggregateActualClaimsStrategy extends IParameterObject {
                                             IPeriodCounter periodCounter, DateTime updateDate);
 
     AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate);
+
+    void checkClaimRootOccurenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims, int contractPeriod, IPeriodCounter periodCounter, DateTime updateDate);
 }

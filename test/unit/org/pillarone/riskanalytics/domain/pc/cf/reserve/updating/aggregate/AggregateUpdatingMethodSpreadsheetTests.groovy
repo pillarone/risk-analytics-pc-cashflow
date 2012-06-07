@@ -34,6 +34,7 @@ class AggregateUpdatingMethodSpreadsheetTests extends SpreadsheetUnitTest {
     void testUsage() {
         for (SpreadsheetImporter importer: importers) {
             List<ClaimRoot> baseClaims = baseClaims(importer)
+            List<Integer> periods = numberYears(importer)
             IAggregateActualClaimsStrategy actualClaims = actualClaims(importer, 'Claims')
             IPeriodCounter periodCounter = periodCounter(importer)
             DateTime updateDate = generalParameters(importer).updateDate.toDateTimeAtStartOfDay()
@@ -44,8 +45,9 @@ class AggregateUpdatingMethodSpreadsheetTests extends SpreadsheetUnitTest {
 
             IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingBFReportingMethodology(updatingPattern: updatingPattern)
             List<ClaimRoot> allUpdatedClaims = new ArrayList<ClaimRoot>();
+            int j = 0
             for (ClaimRoot baseClaim : baseClaims) {
-                List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate([baseClaim], actualClaims, periodCounter, updateDate, [pattern])
+                List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate([baseClaim], actualClaims, periodCounter, updateDate, [pattern], periods.get(j))
                 allUpdatedClaims.addAll(updatedClaims)
             }
 
@@ -103,6 +105,12 @@ class AggregateUpdatingMethodSpreadsheetTests extends SpreadsheetUnitTest {
             claims << new ClaimRoot(params.ultimate, ClaimType.AGGREGATED, params.startCoverDate.toDateTimeAtStartOfDay(), occurrenceDate)
         }
         claims
+    }
+
+    List<Integer> numberYears(SpreadsheetImporter importer) {
+        Map params = generalParameters(importer)
+        int periods = params.numberOfYears
+        1..periods
     }
 
     IAggregateActualClaimsStrategy actualClaims(SpreadsheetImporter importer, String sheet) {

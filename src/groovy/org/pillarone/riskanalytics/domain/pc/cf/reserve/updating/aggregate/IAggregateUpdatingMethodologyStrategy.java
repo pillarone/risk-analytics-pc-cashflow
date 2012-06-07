@@ -14,6 +14,6 @@ import java.util.List;
 public interface IAggregateUpdatingMethodologyStrategy extends IParameterObject {
 
     List<ClaimRoot> updatingUltimate(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
-                                     IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns);
+                                     IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, int contractPeriod);
 
 }

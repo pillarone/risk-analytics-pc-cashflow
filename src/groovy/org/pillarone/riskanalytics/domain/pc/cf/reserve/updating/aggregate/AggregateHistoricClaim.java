@@ -1,9 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate;
 
-import org.jfree.util.Log;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
-import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
@@ -48,14 +46,18 @@ public class AggregateHistoricClaim {
     }
 
     private PatternPacket adjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
-        DateTime baseDate = payoutPatternBaseDate(claimRoot);
-        return PatternUtils.adjustedPattern(payoutPattern, claimPaidUpdates, claimRoot.getUltimate(), baseDate,
+        DateTime startDateForPattern = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
+        return PatternUtils.adjustedPattern(payoutPattern, claimPaidUpdates, claimRoot.getUltimate(), startDateForPattern,
                 claimRoot.getOccurrenceDate(), updateDate);
     }
 
     public GrossClaimRoot claimWithAdjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
-        DateTime startDateForPatterns = base.equals(PayoutPatternBase.PERIOD_START_DATE) ? contractPeriodStartDate : claimRoot.getOccurrenceDate();
+        DateTime startDateForPatterns = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
         return new GrossClaimRoot(claimRoot, adjustedPattern(payoutPattern, claimRoot, updateDate), startDateForPatterns);
+    }
+
+    public DateTime firstActualPaidDateOrNull() {
+        return claimPaidUpdates.firstKey();
     }
 
     /** last reported before or at updateDate */
@@ -70,16 +72,6 @@ public class AggregateHistoricClaim {
     public double outstandingShare(PatternPacket pattern, DateTime baseDate, DateTime updateDate) {
         double elapsedMonths = DateTimeUtilities.days360(baseDate, updateDate) / 30d;
         return pattern.outstandingShare(elapsedMonths);
-    }
-
-    private DateTime payoutPatternBaseDate(ClaimRoot claimRoot) {
-        switch (base) {
-            case PERIOD_START_DATE:
-                return contractPeriodStartDate;
-            case CLAIM_OCCURANCE_DATE:
-                return claimRoot.getOccurrenceDate();
-        }
-        throw new IllegalArgumentException("Unknown base: " + base.toString());
     }
 
     @Override

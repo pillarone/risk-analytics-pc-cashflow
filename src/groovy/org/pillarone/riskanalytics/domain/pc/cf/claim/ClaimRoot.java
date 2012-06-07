@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 /**
  * Doc: https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1540
@@ -175,7 +176,7 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
         result.append(separator);
         result.append(claimType);
         result.append(separator);
-        result.append(occurrenceDate);
+        result.append(DateTimeUtilities.formatDate.print(occurrenceDate));
         return result.toString();
     }
 }

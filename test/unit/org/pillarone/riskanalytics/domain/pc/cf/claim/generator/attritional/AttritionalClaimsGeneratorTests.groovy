@@ -27,6 +27,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionT
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationState
 import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationBehaviour
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -45,6 +46,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(ReinsuranceContractBaseType.LOSSESOCCURRING, [:])
         generator.periodScope = TestPeriodScopeUtilities.getPeriodScope(new DateTime(2012, 1, 1, 0, 0, 0, 0), 4)
         generator.periodStore = new PeriodStore(generator.periodScope)
+        generator.iterationScope = new IterationScope()
         generator.globalLastCoveredPeriod= 4
         generator.globalUpdateDate = new DateTime(2012, 1, 1, 0, 0, 0, 0)
         generator.globalSanityChecks = true
