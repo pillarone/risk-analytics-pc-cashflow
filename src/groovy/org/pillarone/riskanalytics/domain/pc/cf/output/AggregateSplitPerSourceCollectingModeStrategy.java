@@ -34,8 +34,7 @@ public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplit
     private static final String CONTRACTS = "reinsuranceContracts";
     private static final String SEGMENTS = "segments";
 
-    private static final Map<Component, Class> componentsExtensibleBy = new HashMap<Component, Class>();
-    private static final Map<Component, PathMapping> componentsPathMapping = new HashMap<Component, PathMapping>();
+    private final Map<Component, Class> componentsExtensibleBy = new HashMap<Component, Class>();
 
     public List<SingleValueResultPOJO> collect(PacketList packets) throws IllegalAccessException {
         initSimulation();
