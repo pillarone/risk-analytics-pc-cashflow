@@ -88,16 +88,17 @@ public final class GrossClaimRoot implements IClaimRoot {
     }
 
     /**
-     * This constructor preseves claim metadata, but alters the ultimate amount according to what's passed in.
+     * This constructor preserves claim metadata, but alters the ultimate amount and occurrence date according to what's passed in.
      * @param claimRoot
      * @param ultimate
+     * @param occurrenceDate
      */
-    public GrossClaimRoot(GrossClaimRoot claimRoot, double ultimate , DateTime occurenceDate){
+    public GrossClaimRoot(GrossClaimRoot claimRoot, double ultimate , DateTime occurrenceDate){
         this(
                 ultimate,
                 claimRoot.getClaimType(),
                 claimRoot.getExposureStartDate(),
-                occurenceDate,
+                occurrenceDate,
                 claimRoot.payoutPattern,
                 claimRoot.reportingPattern,
                 claimRoot.getEvent()

@@ -70,18 +70,16 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     }
 
     /**
-     * Derives claim packets for the current period (periodCounter) by applying payout pattern and factors. If future
-     * payout will occur base claims are written to the periodStore with key GROSS_CLAIMS. For actual claims the
-     * payout pattern is adjusted according the already existing payout history.
+     * Derives gross claim root for the current period (periodCounter) by applying payout pattern and factors.
+     * For actual claims the payout pattern is adjusted according the already existing payout history.
      * @param baseClaims
      * @param parmPayoutPattern
      * @param periodScope needed to derive the payouts in the current period
-     * @param factors so far applied to the outstanding
-     * @return claim packets of this period
+     * @return GrossClaimRoot objects of this period
      */
-    protected List<GrossClaimRoot> claimsOfCurrentPeriod(List<ClaimRoot> baseClaims, ConstrainedString parmPayoutPattern,
-                                                              IAggregateActualClaimsStrategy parmActualClaims,
-                                                              PeriodScope periodScope, List<Factors> factors) {
+    protected List<GrossClaimRoot> baseClaimsOfCurrentPeriodAdjustedPattern(
+            List<ClaimRoot> baseClaims, ConstrainedString parmPayoutPattern,
+            IAggregateActualClaimsStrategy parmActualClaims, PeriodScope periodScope) {
         PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
         List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
         if (!baseClaims.isEmpty()) {
