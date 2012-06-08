@@ -21,6 +21,7 @@ import org.joda.time.Period
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.AggregateHistoricClaim
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -44,6 +45,7 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
         ]
     }
 
+
     void testUsage() {
         for (SpreadsheetImporter importer: importers) {
             // enable the following line while writing/debugging the test case but comment it out before committing!
@@ -65,7 +67,7 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
 
             List<ClaimCashflowPacket> claims = []
 
-            GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(ultimate, ClaimType.AGGREGATED, periodStartDate, occurrenceDate), adjustedPattern, baseDate)
+            GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(ultimate, ClaimType.AGGREGATED, periodStartDate, occurrenceDate), anotherPattern, baseDate)
             claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
             for (int period = 0; period < periods; period++) {
                 periodCounter.next()

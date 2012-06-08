@@ -52,7 +52,7 @@ public class AggregateHistoricClaim {
         return claimPaidUpdates.isEmpty() && claimReportedUpdates.isEmpty();
     }
 
-    private PatternPacket adjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
+/*    private PatternPacket adjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
         DateTime startDateForPattern = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
 
 
@@ -80,7 +80,7 @@ public class AggregateHistoricClaim {
 //        Now that we have the actual part of the pattern contructed, add the remainder of the pattern rescaled against it's incremental amounts.
 
         //        This pattern has the rescaled original pattern ignoring updates.
-        PatternPacket patternPacket = payoutPattern.rescalePatternToUpdateDate(updateDate, startDateForPattern, false);
+        PatternPacket patternPacket = payoutPattern.rescalePatternToUpdateDate(updateDate, startDateForPattern, true);
 
         final List<Period> oldPeriod = patternPacket.getCumulativePeriods();
         for (Period period : oldPeriod) {
@@ -95,13 +95,23 @@ public class AggregateHistoricClaim {
             newPatternDoubles.add(cumulatedNewPatternValue + proportionOfSimulatedClaimAlreadyPaidOutAsActuals);
         }
 
-        if(cumulatedNewPatternValue + proportionOfSimulatedClaimAlreadyPaidOutAsActuals != 1 ) {
+        if( !(
+                (0.999999 < cumulatedNewPatternValue + proportionOfSimulatedClaimAlreadyPaidOutAsActuals)
+                        &&
+                (cumulatedNewPatternValue + proportionOfSimulatedClaimAlreadyPaidOutAsActuals < 1.00001))
+            ) {
             throw new PatternSumNotOneException(newPatternDoubles);
         }
 
         return new PatternPacket(payoutPattern, newPatternDoubles, newPatternPeriods);
+    }*/
 
+    private PatternPacket adjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
+        DateTime startDateForPattern = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
+        return PatternUtils.adjustedPattern(payoutPattern, claimPaidUpdates, claimRoot.getUltimate(), startDateForPattern,
+                claimRoot.getOccurrenceDate(), updateDate);
     }
+
 
     public GrossClaimRoot claimWithAdjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
         DateTime startDateForPatterns = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
