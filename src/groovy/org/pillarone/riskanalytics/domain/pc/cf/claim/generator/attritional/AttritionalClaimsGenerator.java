@@ -81,11 +81,12 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                         baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
                                 severityFactors, parmParameterizationBasis, this, periodScope);
                     }
-                    baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter, globalUpdateDate, inPatterns, periodScope.getCurrentPeriod());
+                    baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter,
+                                                            globalUpdateDate, inPatterns, periodScope.getCurrentPeriod());
                     checkBaseClaims(baseClaims);
                     runoffFactors = new ArrayList<Factors>();
-                    grossClaimRoots = claimsOfCurrentPeriod(baseClaims, parmPayoutPattern, parmActualClaims,
-                            periodScope, runoffFactors);
+                    grossClaimRoots = baseClaimsOfCurrentPeriodAdjustedPattern(baseClaims, parmPayoutPattern, parmActualClaims,
+                            periodScope);
                     List<GrossClaimRoot> claimsAfterSplit = parmParameterizationBasis.splitClaims(grossClaimRoots, periodScope);
                     storeClaimsWhichOccurInFuturePeriods(claimsAfterSplit, periodStore);
                     claims = cashflowsInCurrentPeriod(claimsAfterSplit, runoffFactors, periodScope);

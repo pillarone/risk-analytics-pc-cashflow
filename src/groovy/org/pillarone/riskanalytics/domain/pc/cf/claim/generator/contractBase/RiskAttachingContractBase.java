@@ -64,12 +64,13 @@ public class RiskAttachingContractBase extends AbstractContractBase implements I
 
 
     /**
-     * This function splits claims which may occur outside of the occurance period when the original root claim incepted.
-     *
+     * This function splits claims which may occur outside of the occurrence period when the original root claim incepted.
+     * The original occurrence date is completely ignored. Instead new uniformly distributed occurrence dates starting
+     * at the exposure start date and ending after splittedClaimsNumber * months are generated.
      *
      * @param claimsAfterUpdate
      * @param periodScope
-     * @return
+     * @return splits the original ultimate by splittedClaimsNumber()
      */
     public List<GrossClaimRoot> splitClaims(List<GrossClaimRoot> claimsAfterUpdate, PeriodScope periodScope) {
         List<GrossClaimRoot> claimRoots = new ArrayList<GrossClaimRoot>();
@@ -77,8 +78,8 @@ public class RiskAttachingContractBase extends AbstractContractBase implements I
         for (GrossClaimRoot claimRoot : claimsAfterUpdate) {
             double splittedUltimate = claimRoot.getUltimate() / (double) splittedClaimsNumber();
             for (int j = 0; j < splittedClaimsNumber(); j++) {
-                DateTime occurrenceDate = occurrenceDate( claimRoot.getExposureStartDate() ,dateGen, periodScope, claimRoot.getEvent());
-                claimRoots.add(new GrossClaimRoot(claimRoot , splittedUltimate , occurrenceDate));
+                DateTime occurrenceDate = occurrenceDate(claimRoot.getExposureStartDate(), dateGen, periodScope, claimRoot.getEvent());
+                claimRoots.add(new GrossClaimRoot(claimRoot, splittedUltimate, occurrenceDate));
             }
         }
         return claimRoots;
