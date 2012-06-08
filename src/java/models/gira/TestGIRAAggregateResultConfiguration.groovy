@@ -7,7 +7,6 @@ components {
 		subsubcomponents {
 			outClaimNumber = "AGGREGATED"
 			outClaims = "SINGLE"
-			outSeverityIndicesApplied = "SINGLE"
 		}
 	}
 	reservesGenerators {
