@@ -67,7 +67,7 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
 
             List<ClaimCashflowPacket> claims = []
 
-            GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(ultimate, ClaimType.AGGREGATED, periodStartDate, occurrenceDate), anotherPattern, baseDate)
+            GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(ultimate, ClaimType.AGGREGATED, periodStartDate, occurrenceDate), adjustedPattern, baseDate)
             claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
             for (int period = 0; period < periods; period++) {
                 periodCounter.next()
