@@ -47,7 +47,7 @@ public final class GrossClaimRoot implements IClaimRoot {
     private int childCounter;
 
     public GrossClaimRoot(GrossClaimRoot original) {
-        this(original.claimRoot.clone());
+        this(new ClaimRoot(original.claimRoot));
         if (original.payoutPattern != null) {
             payoutPattern = original.payoutPattern.clone().get();
         }

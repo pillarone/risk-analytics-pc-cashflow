@@ -13,6 +13,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ReserveRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
@@ -55,8 +56,9 @@ public class ReservesGenerator extends Component implements IReserveMarker {
 
         GrossClaimRoot baseClaim;
         if (periodScope.isFirstPeriod()) {
-            baseClaim = new GrossClaimRoot(ultimateAtReportingDate, ClaimType.AGGREGATED_RESERVES, averageInceptionDate,
-                    averageInceptionDate, payoutPattern, reportingPattern);
+            ReserveRoot reserveRoot = new ReserveRoot(ultimateAtReportingDate, ClaimType.AGGREGATED_RESERVES,
+                                                      averageInceptionDate, averageInceptionDate);
+            baseClaim = new GrossClaimRoot(reserveRoot, payoutPattern, reportingPattern);
             baseClaim.updateCumulatedValuesAtProjectionStart(periodCounter, factors);
             outNominalUltimates.add(new SingleValuePacket(ultimateAtReportingDate));
         }

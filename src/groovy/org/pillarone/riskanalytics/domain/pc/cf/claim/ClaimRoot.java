@@ -12,14 +12,12 @@ import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 /**
  * Doc: https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1540
- * It contains all shared information of several ClaimCashflowPacket objects and is used as key. As reserves are modelled
- * using this object too it might occur in this case that the occurrence and inception date are outside the projection
- * horizon and therefore the corresponding period properties will be null.
+ * It contains all shared information of several ClaimCashflowPacket objects and is used as key.
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 // todo(sku): clarify index application order and effect on reported
-public final class ClaimRoot implements IClaimRoot, Cloneable {
+public class ClaimRoot implements IClaimRoot, Cloneable {
 
     private static Log LOG = LogFactory.getLog(ClaimRoot.class);
 
@@ -55,117 +53,104 @@ public final class ClaimRoot implements IClaimRoot, Cloneable {
         this(ultimate, claimRoot.getClaimType(), claimRoot.getExposureStartDate(), claimRoot.getOccurrenceDate(), claimRoot.getEvent());
     }
 
-    public IClaimRoot withScale(double scaleFactor) {
-        ClaimRoot packet = (ClaimRoot) clone();
+    /**
+     * copy c'tor
+     * @param claimRoot
+     */
+    public ClaimRoot(ClaimRoot claimRoot) {
+        this(claimRoot.getUltimate(), claimRoot);
+    }
+
+    public final IClaimRoot withScale(double scaleFactor) {
+        ClaimRoot packet = new ClaimRoot(this);
         packet.ultimate = ultimate * scaleFactor;
         return packet;
     }
 
-    public ClaimRoot withExposure(ExposureInfo exposure){
-        ClaimRoot packet = (ClaimRoot) clone();
+    public final ClaimRoot withExposure(ExposureInfo exposure){
+        ClaimRoot packet = new ClaimRoot(this);
         packet.exposure = exposure;
         return packet;
     }
 
-    public double getUltimate() {
+    public final double getUltimate() {
         return ultimate;
     }
 
-    public boolean hasEvent() {
+    public final boolean hasEvent() {
         return event != null;
     }
 
-    public EventPacket getEvent() {
+    public final EventPacket getEvent() {
         return event;
     }
 
-    public ClaimType getClaimType() {
+    public final ClaimType getClaimType() {
         return claimType;
     }
 
-    public ExposureInfo getExposureInfo() {
+    public final ExposureInfo getExposureInfo() {
         return exposure;
     }
 
-    public boolean hasExposureInfo() {
+    public final boolean hasExposureInfo() {
         return exposure != null;
     }
 
-    public DateTime getExposureStartDate() {
+    public final DateTime getExposureStartDate() {
         return exposureStartDate;
     }
 
-    public DateTime getOccurrenceDate() {
+    public final DateTime getOccurrenceDate() {
         return occurrenceDate;
     }
 
     /**
      * @param periodCounter
-     * @return occurrence period in the context of the simulation engine or null if the occurrenceDate is not within
-     *          the projection horizon.
+     * @return occurrence period in the context of the simulation engine. If the occurrenceDate is outside the projection
+     *          horizon the framework will throw a NotInProjectionHorizon.
      */
     public Integer getOccurrencePeriod(IPeriodCounter periodCounter) {
         if (occurrencePeriod == null) {
-            try {
-                occurrencePeriod = periodCounter.belongsToPeriod(occurrenceDate);
-            }
-            catch (NotInProjectionHorizon ex) {
-                LOG.debug(occurrenceDate + " is not in projection horizon");
-            }
+            occurrencePeriod = periodCounter.belongsToPeriod(occurrenceDate);
         }
         return occurrencePeriod;
     }
 
     /**
      * @param periodScope
-     * @return ture if occurrence period is the same as the current period of the periodScope
+     * @return true if occurrence period is the same as the current period of the periodScope
      */
-    public boolean occurrenceInCurrentPeriod(PeriodScope periodScope) {
+    public final boolean occurrenceInCurrentPeriod(PeriodScope periodScope) {
         return getOccurrencePeriod(periodScope.getPeriodCounter()) == periodScope.getCurrentPeriod();
     }
 
     /**
      * @param periodCounter
      * @return if exposure info is attached return its inception period, else the period the exposureStartDate belongs to
-     *          or else the occurrence period. If the exposureStartDate is not within the projection horizon, null
-     *          is returned.
+     *          or else the occurrence period. If the exposureStartDate is not within the projection horizon, the projection
+     *          horizon the framework will throw a NotInProjectionHorizon.
      */
     public Integer getInceptionPeriod(IPeriodCounter periodCounter) {
         if (hasExposureInfo()) {
             return exposure.getInceptionPeriod();
         }
         else if (exposureStartDate != null) {
-            try {
-                return periodCounter.belongsToPeriod(exposureStartDate);
-            }
-            catch (NotInProjectionHorizon ex) {
-                LOG.debug(exposureStartDate + " is not in projection horizon");
-                return null;
-            }
+            return periodCounter.belongsToPeriod(exposureStartDate);
         }
         return getOccurrencePeriod(periodCounter);
     }
 
-    public boolean hasSynchronizedPatterns() {
+    public final boolean hasSynchronizedPatterns() {
         return false;
     }
 
-    public boolean hasTrivialPayout() {
+    public final boolean hasTrivialPayout() {
         return true;
     }
 
-    public boolean hasIBNR() {
+    public final boolean hasIBNR() {
         return false;
-    }
-
-    @Override
-    public ClaimRoot clone() {
-        try {
-            return (ClaimRoot) super.clone();
-        } catch (CloneNotSupportedException e) {
-            LOG.debug(e);
-        }
-        return null;
     }
 
     @Override
