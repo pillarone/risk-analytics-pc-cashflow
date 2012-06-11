@@ -13,6 +13,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReserveMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
@@ -389,7 +390,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         result.append(separator);
         result.append(paidIncrementalIndexed);
         result.append(separator);
-        result.append(updateDate);
+        result.append(DateTimeUtilities.formatDate.print(updateDate));
         result.append(separator);
         result.append(baseClaim.getExposureStartDate());
         result.append(separator);
