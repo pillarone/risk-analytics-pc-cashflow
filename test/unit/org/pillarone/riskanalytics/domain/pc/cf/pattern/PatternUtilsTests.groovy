@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -115,7 +116,7 @@ class PatternUtilsTests extends GroovyTestCase {
         claimUpdates.put(date20111231, 1000d)
         claimUpdates.put(date20120630, 1250d)
         PatternPacket adjustedPattern = PatternUtils.adjustedPattern(originalPattern, claimUpdates, 15000d,
-                periodStartDate, periodStartDate, updateDate)
+                periodStartDate, periodStartDate, updateDate, date20120630, DateTimeUtilities.Days360.US)
 
         int periods = 7
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
@@ -148,7 +149,7 @@ class PatternUtilsTests extends GroovyTestCase {
         claimUpdates.put(date20111231, 1000d)
         claimUpdates.put(date20120630, 1250d)
         PatternPacket adjustedPattern = PatternUtils.adjustedPattern(originalPattern, claimUpdates, 15000d,
-                periodStartDate, periodStartDate, updateDate)
+                periodStartDate, periodStartDate, updateDate, date20120630, DateTimeUtilities.Days360.US)
 
         int periods = 7
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
@@ -170,6 +171,8 @@ class PatternUtilsTests extends GroovyTestCase {
         assertEquals "total", 15000d, claims*.getPaidIncrementalIndexed().sum(), EPSILON
     }
 
+
+//    To discuss with stefan, I'm not sure this is a valid test!
     void testAdjustedPatternHistoryVoid() {
         PatternPacket originalPattern = PatternPacketTests.getPattern([15, 27, 43, 55, 67], [0.2d, 0.45d, 0.75d, 0.95d, 1d])
         DateTime periodStartDate = new DateTime(2011,1,1,0,0,0,0)
@@ -177,7 +180,7 @@ class PatternUtilsTests extends GroovyTestCase {
 
         TreeMap<DateTime, Double> claimUpdates = new TreeMap<DateTime, Double>()
         PatternPacket adjustedPattern = PatternUtils.adjustedPattern(originalPattern, claimUpdates, 15000d,
-                new DateTime(2011,1,1,0,0,0,0), new DateTime(2011,1,1,0,0,0,0), updateDate)
+                new DateTime(2011, 1, 1, 0, 0, 0, 0), new DateTime(2011, 1, 1, 0, 0, 0, 0), updateDate, periodStartDate, DateTimeUtilities.Days360.US)
 
         int periods = 7
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
@@ -210,7 +213,7 @@ class PatternUtilsTests extends GroovyTestCase {
         claimUpdates.put(date20120630, 1250d)
         claimUpdates.put(date20121215, 15000d)
         PatternPacket adjustedPattern = PatternUtils.adjustedPattern(originalPattern, claimUpdates, 15000d,
-                periodStartDate, periodStartDate, updateDate)
+                periodStartDate, periodStartDate, updateDate, date20121215, DateTimeUtilities.Days360.US)
 
         int periods = 1
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
@@ -241,7 +244,7 @@ class PatternUtilsTests extends GroovyTestCase {
         claimUpdates.put(date20111231, 1000d)
         claimUpdates.put(date20120630, 1250d)
 
-        double elapsedMonthsTillLastReportedDate = PatternUtils.days360(periodStartDate, date20120630) / 30d;
+        double elapsedMonthsTillLastReportedDate = DateTimeUtilities.days360(periodStartDate, date20120630) / 30d;
         assertEquals "elapsed months", 17.966666666666665, elapsedMonthsTillLastReportedDate
         assertEquals "interpolated", 0.26180555555555557,  PatternUtils.interpolatedRate(originalPattern, 1, elapsedMonthsTillLastReportedDate)
         assertEquals "next", 0.45, PatternUtils.interpolatedRate(originalPattern, 2, 27)
