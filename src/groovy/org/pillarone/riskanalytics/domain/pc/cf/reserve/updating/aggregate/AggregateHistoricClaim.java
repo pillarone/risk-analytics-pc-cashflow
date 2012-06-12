@@ -1,19 +1,13 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate;
 
 import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternSumNotOneException;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -52,70 +46,13 @@ public class AggregateHistoricClaim {
         return claimPaidUpdates.isEmpty() && claimReportedUpdates.isEmpty();
     }
 
-/*    private PatternPacket adjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
-        DateTime startDateForPattern = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
 
-
-        final ArrayList<Period> newPatternPeriods = new ArrayList<Period>();
-        final ArrayList<Double> newPatternDoubles = new ArrayList<Double>();
-        double proportionOfSimulatedClaimAlreadyPaidOutAsActuals = 0;
-
-        double priorCumulativeValue = 0d;
-//        Now go around the paid updates and figure out where they fall against what percentage of ultimate claim.
-        for (Map.Entry<DateTime, Double> entry : claimPaidUpdates.entrySet()) {
-            Period period = new Period(startDateForPattern, startDateForPattern.plusDays(1));
-            if(!startDateForPattern.equals(entry.getKey())) {
-                period = new Period(startDateForPattern, entry.getKey().minusDays(1));
-            }
-            final Double aDouble = Math.abs(( entry.getValue() - priorCumulativeValue) / claimRoot.getUltimate());
-            newPatternPeriods.add(period);
-            newPatternDoubles.add(aDouble + proportionOfSimulatedClaimAlreadyPaidOutAsActuals);
-            proportionOfSimulatedClaimAlreadyPaidOutAsActuals += aDouble;
-            priorCumulativeValue = entry.getValue();
-        }
-        if (proportionOfSimulatedClaimAlreadyPaidOutAsActuals > 1) {
-            throw new RuntimeException("Actual entries are greater than ultimate claim! This is not allowed . Claim: " + claimRoot.toString() + " Proportion of Claim already paid: " + proportionOfSimulatedClaimAlreadyPaidOutAsActuals);
-        }
-
-//        Now that we have the actual part of the pattern contructed, add the remainder of the pattern rescaled against it's incremental amounts.
-
-        //        This pattern has the rescaled original pattern ignoring updates.
-        PatternPacket patternPacket = payoutPattern.rescalePatternToUpdateDate(updateDate, startDateForPattern, true);
-
-        final List<Period> oldPeriod = patternPacket.getCumulativePeriods();
-        for (Period period : oldPeriod) {
-            newPatternPeriods.add(period);
-        }
-
-        final List<Double> incrementalValues = patternPacket.getIncrementalValues();
-        double cumulatedNewPatternValue = 0d;
-        for (Double oldPatternValue : incrementalValues) {
-            double incrementalNewPatternValue = ( oldPatternValue * (1 - proportionOfSimulatedClaimAlreadyPaidOutAsActuals));
-            cumulatedNewPatternValue += incrementalNewPatternValue;
-            newPatternDoubles.add(cumulatedNewPatternValue + proportionOfSimulatedClaimAlreadyPaidOutAsActuals);
-        }
-
-        if( !(
-                (0.999999 < cumulatedNewPatternValue + proportionOfSimulatedClaimAlreadyPaidOutAsActuals)
-                        &&
-                (cumulatedNewPatternValue + proportionOfSimulatedClaimAlreadyPaidOutAsActuals < 1.00001))
-            ) {
-            throw new PatternSumNotOneException(newPatternDoubles);
-        }
-
-        return new PatternPacket(payoutPattern, newPatternDoubles, newPatternPeriods);
-    }*/
-
-    private PatternPacket adjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
-        DateTime startDateForPattern = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
-        return PatternUtils.adjustedPattern(payoutPattern, claimPaidUpdates, claimRoot.getUltimate(), startDateForPattern,
-                claimRoot.getOccurrenceDate(), updateDate);
-    }
-
-
-    public GrossClaimRoot claimWithAdjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate) {
+    public GrossClaimRoot claimWithAdjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate, DateTimeUtilities.Days360 days360, boolean sanityChecks) {
         DateTime startDateForPatterns = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
-        return new GrossClaimRoot(claimRoot, adjustedPattern(payoutPattern, claimRoot, updateDate), startDateForPatterns);
+        PatternPacket patternPacket = PatternUtils.adjustedPattern(payoutPattern, claimPaidUpdates, claimRoot.getUltimate(), startDateForPatterns,
+                claimRoot.getOccurrenceDate(), updateDate, lastReportedDate(updateDate), days360);
+        patternPacket.consistencyCheck(sanityChecks, sanityChecks, sanityChecks, sanityChecks);
+        return new GrossClaimRoot(claimRoot, patternPacket , startDateForPatterns);
     }
 
     public DateTime firstActualPaidDateOrNull() {

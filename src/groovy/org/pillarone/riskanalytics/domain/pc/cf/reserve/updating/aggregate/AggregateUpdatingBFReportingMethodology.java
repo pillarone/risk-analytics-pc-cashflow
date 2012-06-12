@@ -36,7 +36,7 @@ public class AggregateUpdatingBFReportingMethodology extends AggregateUpdatingMe
 
 
     public List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
-                                                    IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
+                                                    IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, DateTimeUtilities.Days360 days360) {
         PatternPacket pattern = PatternUtils.filterPattern(patterns, updatingPattern, IUpdatingPatternMarker.class);
         List<ClaimRoot> baseClaimsWithAdjustedUltimate = new ArrayList<ClaimRoot>();
         ClaimRoot baseClaim = baseClaims.get(0);
@@ -50,7 +50,7 @@ public class AggregateUpdatingBFReportingMethodology extends AggregateUpdatingMe
         } else {
             double reportedToDate = historicClaim.reportedToDate(updateDate);
             DateTime lastReportedDate = historicClaim.lastReportedDate(updateDate);
-            double elapsedMonths = DateTimeUtilities.days360(periodStartDate, lastReportedDate) / 30d;
+            double elapsedMonths = days360.days360 (periodStartDate, lastReportedDate) / 30d;
             double outstandingShare = pattern.outstandingShare(elapsedMonths);
             double originalUltimate = baseClaim.getUltimate();
             double ultimate = reportedToDate + outstandingShare * originalUltimate;

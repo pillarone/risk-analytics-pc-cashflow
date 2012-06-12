@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.HashMap;
 import java.util.List;
@@ -96,9 +97,11 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
      * @param payoutPattern  original payout pattern
      * @param periodScope
      * @param updateDate     @return a GrossClaimRoot with a possibly modified payoutPattern
+     * @param days360
+     * @param sanityChecks
      */
     public GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
-                                                   PeriodScope periodScope, DateTime updateDate) {
+                                                   PeriodScope periodScope, DateTime updateDate, DateTimeUtilities.Days360 days360, boolean sanityChecks) {
 //        If the update date is the start of the first period this is an inception model, simply proceed without updating effects.
         if (updateDate.equals(periodScope.getPeriodCounter().startOfFirstPeriod())) {
             return new GrossClaimRoot(claimRoot, payoutPattern);
@@ -109,11 +112,12 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
 //        If we have claim updates, rescale the payment pattern against them.
         if (historicClaim != null) {
             if(!historicClaim.noUpdates()) {
-                return historicClaim.claimWithAdjustedPattern(payoutPattern, claimRoot, updateDate);
+                return historicClaim.claimWithAdjustedPattern(payoutPattern, claimRoot, updateDate, days360, sanityChecks);
             }
         }
 //        If there are no claim updates, we rescale the pattern to avoid stochastic payments before update date.
         PatternPacket patternPacket = payoutPattern.rescalePatternToUpdateDate(updateDate, claimRoot.getExposureStartDate(), false);
+        patternPacket.consistencyCheck(sanityChecks, sanityChecks, sanityChecks, sanityChecks);
         return new GrossClaimRoot(claimRoot, patternPacket);
     }
 

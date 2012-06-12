@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.List;
 
@@ -15,9 +16,9 @@ abstract class AggregateUpdatingMethodologyWithCheckStrategyImpl extends Abstrac
         implements IAggregateUpdatingMethodologyStrategy {
 
 
-    public List<ClaimRoot> updatingUltimate(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, int contractPeriod) {
+    public List<ClaimRoot> updatingUltimate(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, int contractPeriod, DateTimeUtilities.Days360 days360) {
         doSomeChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns, contractPeriod);
-        return updateUltimatePostChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns);
+        return updateUltimatePostChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns, days360);
     }
 
     /**
@@ -37,6 +38,6 @@ abstract class AggregateUpdatingMethodologyWithCheckStrategyImpl extends Abstrac
         actualClaims.checkClaimRootOccurenceAgainstFirstActualPaid(baseClaims, contractPeriod, periodCounter, updateDate);
     }
 
-    protected abstract List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns);
+    protected abstract List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, DateTimeUtilities.Days360 days360);
 
 }
