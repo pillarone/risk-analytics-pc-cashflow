@@ -53,7 +53,7 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
         for (SpreadsheetImporter importer: importers) {
             // enable the following line while writing/debugging the test case but comment it out before committing!
 //            SP - Why?
-            setCheckedForValidationErrors( true );
+//            setCheckedForValidationErrors( true );
             LOG.info(importer.fileName);
             Integer grossClaimPeriod  = generalParameters(importer).claimPeriod - 1
             PatternPacket originalPattern = pattern(importer, 'Pattern')

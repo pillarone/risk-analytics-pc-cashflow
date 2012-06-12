@@ -114,14 +114,9 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
     }
 
     private void doCashflowChecks(List<ClaimCashflowPacket> claims, List<GrossClaimRoot> grossClaimRoots, List<ClaimRoot> baseClaims) {
-
-
-
         for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
 
         }
-
-
     }
 
     private List<ClaimCashflowPacket> cashflowsInCurrentPeriod(List<GrossClaimRoot> grossClaimRoots, List<Factors> runOffFactors, PeriodScope periodScope) {
