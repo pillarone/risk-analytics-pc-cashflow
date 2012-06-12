@@ -31,7 +31,7 @@ public class NoAggregateActualClaimsStrategy extends AbstractParameterObject imp
     }
 
     public GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
-                                                   PeriodScope periodScope, DateTime updateDate) {
+                                                   PeriodScope periodScope, DateTime updateDate, DateTimeUtilities.Days360 days360, boolean sanityChecks) {
         return new GrossClaimRoot(claimRoot, payoutPattern);
     }
 
@@ -39,7 +39,8 @@ public class NoAggregateActualClaimsStrategy extends AbstractParameterObject imp
         return new AggregateHistoricClaim(period, periodCounter, PayoutPatternBase.PERIOD_START_DATE);
     }
 
-    public void checkClaimRootOccurenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims, int contractPeriod, IPeriodCounter periodCounter, DateTime updateDate) {
+    public void checkClaimRootOccurenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims,
+                                                              int contractPeriod, IPeriodCounter periodCounter, DateTime updateDate) {
 //        There are no actual claims by definition of this class so this method is not useful...
     }
 }

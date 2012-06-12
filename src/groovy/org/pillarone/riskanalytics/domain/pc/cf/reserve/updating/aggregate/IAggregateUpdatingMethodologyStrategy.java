@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObject;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.List;
 
@@ -14,6 +15,6 @@ import java.util.List;
 public interface IAggregateUpdatingMethodologyStrategy extends IParameterObject {
 
     List<ClaimRoot> updatingUltimate(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
-                                     IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, int contractPeriod);
+                                     IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, int contractPeriod, DateTimeUtilities.Days360 days360);
 
 }

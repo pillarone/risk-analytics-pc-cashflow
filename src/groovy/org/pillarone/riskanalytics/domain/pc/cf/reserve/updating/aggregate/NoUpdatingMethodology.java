@@ -26,15 +26,17 @@ public class NoUpdatingMethodology extends AggregateUpdatingMethodologyWithCheck
 
 
     /**
+     *
      * @param baseClaims  ignored in this strategy
      * @param actualClaims ignored in this strategy
      * @param periodCounter ignored in this strategy
      * @param updateDate ignored in this strategy
      * @param patterns  ignored in this strategy
+     * @param days360
      * @return provided baseClaims
      */
     public List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims,
-                                                    IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns) {
+                                                    IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, DateTimeUtilities.Days360 days360) {
         return baseClaims;
     }
 

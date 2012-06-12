@@ -151,24 +151,48 @@ public class RunOffPatternUtils {
         return runOffPatternByDate;
     }
 
-    /**
-     * This takes a pattern and interpolates from the start date to the update date, returning what the interpolated value of
-     * the pattern supplied on that date. Should deal tail cases gracefully.
-     *
-     * @param simulationStartDate     - the base date of the pattern.
-     * @param interpolationStartDate  - ignored, originall intended for a different function so left in at the moment.
-     * @param interpolationReportDate - the date to interpolate to, commonly the so called, ' update date '.
-     * @param dateRatioMap            - the pattern of interest
-     * @return a double which is the interpolated value of the pattern on the interpolationReportDate.
-     */
+    @Deprecated
     public static double dateRatioInterpolation(DateTime simulationStartDate,
                                                 DateTime interpolationStartDate,
                                                 DateTime interpolationReportDate,
-                                                TreeMap<DateTime, Double> dateRatioMap) {
+                                                TreeMap<DateTime, Double> dateRatioMap
+                                                ) {
+
+        return dateRatioInterpolation(
+                simulationStartDate,
+                interpolationStartDate,
+                interpolationReportDate,
+                dateRatioMap,
+                DateTimeUtilities.Days360.EU);
+    }
+
+
+        /**
+        * This takes a pattern and interpolates from the start date to the update date, returning what the interpolated value of
+        * the pattern supplied on that date. Should deal tail cases gracefully.
+        *
+        * @param simulationStartDate     - the base date of the pattern.
+        * @param interpolationStartDate  - ignored, originall intended for a different function so left in at the moment.
+        * @param interpolationReportDate - the date to interpolate to, commonly the so called, ' update date '.
+        * @param dateRatioMap            - the pattern of interest
+        * @return a double which is the interpolated value of the pattern on the interpolationReportDate.
+        */
+    public static double dateRatioInterpolation(DateTime simulationStartDate,
+                                                DateTime interpolationStartDate,
+                                                DateTime interpolationReportDate,
+                                                TreeMap<DateTime, Double> dateRatioMap,
+                                                DateTimeUtilities.Days360 days360) {
+        if(interpolationStartDate == null ) {
+            interpolationStartDate = simulationStartDate;
+        }
+
         Map.Entry<DateTime, Double> floorPatternEntry = dateRatioMap.floorEntry(interpolationReportDate);
         Map.Entry<DateTime, Double> ceilingPatternEntry = dateRatioMap.ceilingEntry(interpolationReportDate);
         if (dateRatioMap.containsKey(interpolationReportDate.plusMillis(1))) {
             return dateRatioMap.get(interpolationReportDate.plusMillis(1));
+        }
+        if (dateRatioMap.containsKey(interpolationReportDate)) {
+            return dateRatioMap.get(interpolationReportDate);
         }
         if (ceilingPatternEntry == null) {
             return 1d;
@@ -180,8 +204,9 @@ public class RunOffPatternUtils {
             if (patternDate == null) {
                 throw new IllegalArgumentException("No data in pattern map!!!");
             }
-            double daysInReportingPeriod = DateTimeUtilities.days360(simulationStartDate, interpolationReportDate.plusMillis(1));
-            double daysInPatternPeriod = DateTimeUtilities.days360(simulationStartDate, patternDate);
+
+            double daysInReportingPeriod = days360.days360(interpolationStartDate, interpolationReportDate.plusMillis(1));
+            double daysInPatternPeriod = days360.days360(interpolationStartDate, patternDate);
 
             double ratio = daysInReportingPeriod / daysInPatternPeriod;
             return ceilingPatternEntry.getValue() * ratio;
@@ -189,8 +214,8 @@ public class RunOffPatternUtils {
 
         DateTime ceilingPatternDate = dateRatioMap.ceilingEntry(interpolationReportDate).getKey();
         DateTime floorPatternDate = dateRatioMap.floorEntry(interpolationReportDate).getKey();
-        int daysBetweenReportAndPattern = DateTimeUtilities.days360(floorPatternDate, interpolationReportDate.plusMillis(1));
-        int daysBetweenPatternDates = DateTimeUtilities.days360(floorPatternDate, ceilingPatternDate);
+        int daysBetweenReportAndPattern = days360.days360(floorPatternDate, interpolationReportDate.plusMillis(1));
+        int daysBetweenPatternDates = days360.days360(floorPatternDate, ceilingPatternDate);
 //        Cast to double so that the divison below returns a double.
         double doubleDaysToReport = daysBetweenReportAndPattern;
         double doubleDaysBetweenEntries = daysBetweenPatternDates;
