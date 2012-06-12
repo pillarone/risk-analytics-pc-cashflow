@@ -16,6 +16,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.UpdatingPattern
 import org.pillarone.riskanalytics.domain.test.SpreadsheetImporter
 import org.pillarone.riskanalytics.domain.test.SpreadsheetUnitTest
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -26,13 +29,23 @@ class AggregateUpdatingMethodSpreadsheetTests extends SpreadsheetUnitTest {
 
     static final private double EPSILON = 1E-7
 
+    static Log LOG = LogFactory.getLog(AggregateUpdatingMethodSpreadsheetTests.class);
+
     @Override
     List<String> getSpreadsheetNames() {
-        ["AggregateBFUsage.xlsx", "AggregateBFUpdateAtStart.xlsx","AggregateBFRunOff.xlsx","AggregateBFUpdateEnd2ndPeriod.xlsx"]
+        [
+                "AggregateBFUsage.xlsx",
+                "AggregateBFUpdateAtStart.xlsx",
+                "AggregateBFRunOff.xlsx",
+                "AggregateBFUpdateEnd2ndPeriod.xlsx",
+        ]
     }
 
     void testUsage() {
         for (SpreadsheetImporter importer: importers) {
+
+            LOG.info(importer.fileName);
+
             List<ClaimRoot> baseClaims = baseClaims(importer)
             List<Integer> periods = numberYears(importer)
             IAggregateActualClaimsStrategy actualClaims = actualClaims(importer, 'Claims')
@@ -47,8 +60,9 @@ class AggregateUpdatingMethodSpreadsheetTests extends SpreadsheetUnitTest {
             List<ClaimRoot> allUpdatedClaims = new ArrayList<ClaimRoot>();
             int j = 0
             for (ClaimRoot baseClaim : baseClaims) {
-                List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate([baseClaim], actualClaims, periodCounter, updateDate, [pattern], periods.get(j))
                 allUpdatedClaims.addAll(updatedClaims)
+                List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate([baseClaim], actualClaims,
+                        periodCounter, updateDate, [pattern], periods.get(j), DateTimeUtilities.Days360.US  )
             }
 
             List<Double> referenceAdjustedUltimates = referenceAdjustedUltimate(importer)
