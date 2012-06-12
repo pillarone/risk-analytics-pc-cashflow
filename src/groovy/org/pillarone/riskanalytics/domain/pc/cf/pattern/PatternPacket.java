@@ -5,7 +5,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
-import org.joda.time.PeriodType;
 import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.DateFactors;
@@ -48,7 +47,7 @@ public class PatternPacket extends Packet implements Cloneable {
     }
 
     /**
-     * @param originalPattern used for the patternMarker and stochasticHitPattern property
+     * @param originalPattern   used for the patternMarker and stochasticHitPattern property
      * @param cumulativeValues
      * @param cumulativePeriods
      */
@@ -60,7 +59,7 @@ public class PatternPacket extends Packet implements Cloneable {
      * throws an IllegalArgumentException if cumulativePeriods are not of increasing duration.
      */
     private void checkIncreasingPeriodLengths() {
-        DateTime reference = new DateTime(2010,1,1,0,0,0,0);
+        DateTime reference = new DateTime(2010, 1, 1, 0, 0, 0, 0);
         Period previousPeriod = Period.days(0);
         for (Period period : cumulativePeriods) {
             if (reference.plus(previousPeriod).isAfter(reference.plus(period))) {
@@ -76,7 +75,7 @@ public class PatternPacket extends Packet implements Cloneable {
      */
     public double outstandingShare(double elapsedMonths) {
         int indexAboveElapsedMonths = 0;
-        if (elapsedMonths < 0){
+        if (elapsedMonths < 0) {
             throw new IllegalArgumentException("elapsed months are negative!");
         }
         for (int i = 0; i < cumulativePeriods.size(); i++) {
@@ -90,8 +89,7 @@ public class PatternPacket extends Packet implements Cloneable {
                         / (double) (numberOfMonthsAboveElapsedMonths - numberOfMonthsBelowElapsedMonths);
                 double paidPortion = (valueAboveElapsedMonths - valueBelowElapsedMonths) * periodRatio;
                 return 1 - valueBelowElapsedMonths - paidPortion;
-            }
-            else if (elapsedMonths == cumulativePeriods.get(i).getMonths()) {
+            } else if (elapsedMonths == cumulativePeriods.get(i).getMonths()) {
                 return 1 - cumulativeValues.get(i);
             }
         }
@@ -124,18 +122,18 @@ public class PatternPacket extends Packet implements Cloneable {
                 }
             }
             return new PatternPacket(patternMarker, adjustedCumulativeValues, cumulativePeriods, false);
-        }
-        else {
+        } else {
             return this;
         }
     }
 
     /**
      * If patternStartDate and occurrenceDate differ an additional DateFactor with increment 0 is inserted.
+     *
      * @param patternStartDate
      * @param occurrenceDate
      * @param periodCounter
-     * @param returnPrevious if nothing is found in current period return value of last period containing information
+     * @param returnPrevious   if nothing is found in current period return value of last period containing information
      * @return
      */
     public List<DateFactors> getDateFactorsForCurrentPeriod(DateTime patternStartDate, DateTime occurrenceDate,
@@ -153,12 +151,10 @@ public class PatternPacket extends Packet implements Cloneable {
             }
             if (!date.isBefore(periodCounter.startOfFirstPeriod()) && periodCounter.belongsToCurrentPeriod(date)) {
                 dateFactors.add(new DateFactors(date, incrementFactor(devPeriod), cumulativeValues.get(devPeriod)));
-            }
-            else if (date.isBefore(periodCounter.getCurrentPeriodStart())) {
+            } else if (date.isBefore(periodCounter.getCurrentPeriodStart())) {
                 previousDate = date;
                 previousCumulativeValue = cumulativeValues.get(devPeriod);
-            }
-            else if (!date.isBefore(periodCounter.getCurrentPeriodEnd())) {
+            } else if (!date.isBefore(periodCounter.getCurrentPeriodEnd())) {
                 previousBeforeLastElement = true;
                 break;
             }
@@ -176,22 +172,22 @@ public class PatternPacket extends Packet implements Cloneable {
     /**
      * Rescales this pattern against an update date. Returns a new, independant pattern
      *
-     * @param updateDate update date
-     * @param patternStartDate date the pattern starts from
+     * @param updateDate              update date
+     * @param patternStartDate        date the pattern starts from
      * @param interpolateToUpdateDate whether or not to normalise the pattern against an interpolated value on the update date, or simply payout
      *                                the cumulative amounts before the update date, on the update date.
      * @return a new rescaled pattern at the update date
      */
-    public PatternPacket rescalePatternToUpdateDate(DateTime updateDate, DateTime patternStartDate, boolean interpolateToUpdateDate){
+    public PatternPacket rescalePatternToUpdateDate(DateTime updateDate, DateTime patternStartDate, boolean interpolateToUpdateDate) {
         final List<Number> cumulativePeriodsAsMonth = new ArrayList<Number>();
         final List<Number> cumulativeValuesAsNumber = new ArrayList<Number>();
-        for (int i = 0 ; i < cumulativePeriods.size() ; i++) {
-            cumulativePeriodsAsMonth.add( cumulativePeriods.get(i).getMonths());
-            cumulativeValuesAsNumber.add( cumulativeValues.get(i));
+        for (int i = 0; i < cumulativePeriods.size(); i++) {
+            cumulativePeriodsAsMonth.add(cumulativePeriods.get(i).getMonths());
+            cumulativeValuesAsNumber.add(cumulativeValues.get(i));
         }
 
-         final TreeMap<DateTime, Double> rescaledPatternAsMap = RunOffPatternUtils.rescaleRunOffPattern(
-          patternStartDate,
+        final TreeMap<DateTime, Double> rescaledPatternAsMap = RunOffPatternUtils.rescaleRunOffPattern(
+                patternStartDate,
                 updateDate,
                 cumulativeValues.size(),
                 cumulativePeriodsAsMonth,
@@ -202,8 +198,8 @@ public class PatternPacket extends Packet implements Cloneable {
         final List<Period> newPeriods = new ArrayList<Period>();
         final List<Double> newValues = new ArrayList<Double>();
         for (Map.Entry<DateTime, Double> entry : rescaledPatternAsMap.entrySet()) {
-            Period period1 = new Period( patternStartDate, patternStartDate.plusDays(1));
-            if(!patternStartDate.equals(entry.getKey())) {
+            Period period1 = new Period(patternStartDate, patternStartDate.plusDays(1));
+            if (!patternStartDate.equals(entry.getKey())) {
                 period1 = new Period(patternStartDate, entry.getKey().minusDays(1));
             }
             newPeriods.add(period1);
@@ -263,9 +259,8 @@ public class PatternPacket extends Packet implements Cloneable {
         int index = -1;  // elapseMonths is before first period
         for (int i = 0; i < cumulativePeriods.size(); i++) {
             if (elapsedMonths >= cumulativePeriods.get(i).getMonths()) {
-                index +=1;
-            }
-            else {
+                index += 1;
+            } else {
                 break;
             }
         }
@@ -276,19 +271,43 @@ public class PatternPacket extends Packet implements Cloneable {
         return cumulativeValues.size();
     }
 
-    public List<Double> getIncrementalValues() {
+    public List<Double> getIncrementalValues(boolean checkSumOne) {
         final ArrayList<Double> incrementalValues = new ArrayList<Double>();
-        double sumCumulativeValue = 0;
         double priorValue = 0;
         for (Double cumulativeValue : cumulativeValues) {
             incrementalValues.add(cumulativeValue - priorValue);
+        }
+        if(checkSumOne) checkIncrementalPatternSumTo1();
+        return incrementalValues;
+    }
+
+    void checkIncrementalPatternSumTo1(){
+        double sumCumulativeValue = 0;
+        double priorValue = 0;
+//        Important the check here is set to false otherwise we have an infinite loop!
+        for (Double cumulativeValue : getIncrementalValues(false)) {
             sumCumulativeValue += (cumulativeValue - priorValue);
             priorValue = cumulativeValue;
         }
-        if(! ( (0.99999 < sumCumulativeValue) && (sumCumulativeValue < 1.00001))) {
-            throw new PatternSumNotOneException(incrementalValues);
+        if (!((0.99999 < sumCumulativeValue) && (sumCumulativeValue < 1.00001))) {
+            throw new PatternSumNotOneException(getIncrementalValues(true));
         }
-        return incrementalValues;
+    }
+
+    public TreeMap<DateTime, Double> absolutePattern(DateTime baseDate, boolean incremental) {
+        TreeMap<DateTime, Double> tempMap = new TreeMap<DateTime, Double>();
+        for (int j = 0; j < cumulativePeriods.size() ; j++) {
+            Period month = cumulativePeriods.get(j);
+            Number ratio;
+            if(incremental) {
+              ratio  = getIncrementalValues(true).get(j);
+            } else {
+                ratio = cumulativeValues.get(j);
+            }
+            DateTime ratioDate = baseDate.plus(month);
+            tempMap.put(ratioDate, ratio.doubleValue());
+        }
+        return tempMap;
     }
 
     public boolean isTrivial() {
@@ -310,8 +329,7 @@ public class PatternPacket extends Packet implements Cloneable {
         if (developmentPeriod >= size()) return null;
         if (developmentPeriod == 0) {
             return cumulativePeriods.get(0).getMonths();
-        }
-        else {
+        } else {
             return cumulativePeriods.get(developmentPeriod).getMonths() - cumulativePeriods.get(developmentPeriod - 1).getMonths();
         }
     }
@@ -355,11 +373,34 @@ public class PatternPacket extends Packet implements Cloneable {
     public void insertTrivialPeriod(Period period, int index) {
         if (index == 0) {
             cumulativeValues.add(0, 0d);
-        }
-        else {
+        } else {
             cumulativeValues.add(index, cumulativeValues.get(index - 1));
         }
         cumulativePeriods.add(index, period);
+    }
+
+    public void consistencyCheck(boolean checkIncrementalSum1, boolean checkFinalCumulative1, boolean checkIncreasingPeriods, boolean checkIncreasingIncrements) {
+        if(checkIncrementalSum1) checkIncrementalPatternSumTo1();
+        if(checkFinalCumulative1) {
+            if(cumulativeValues.get(cumulativeValues.size() -1 ) != 1) {
+                throw new PatternSumNotOneException(cumulativeValues);
+            }
+        }
+        if (checkIncreasingPeriods) {
+            checkIncreasingPeriodLengths();
+        }
+        if(checkIncreasingIncrements) {
+            checkIncreasingIncrements();
+        }
+    }
+
+    private void checkIncreasingIncrements() {
+        List<Double> increments = getIncrementalValues(false);
+        for (Double increment : increments) {
+            if(increment < 0) {
+                throw new PatternSumNotOneException(getIncrementalValues(false));
+            }
+        }
     }
 
     public static final class TrivialPattern extends PatternPacket {
@@ -400,7 +441,7 @@ public class PatternPacket extends Packet implements Cloneable {
 
     @Override
     public PatternPacket clone() {
-        List<Double>  clonedCumulativeValues = new ArrayList<Double>(cumulativeValues.size());
+        List<Double> clonedCumulativeValues = new ArrayList<Double>(cumulativeValues.size());
         for (Double value : cumulativeValues) {
             clonedCumulativeValues.add(new Double(value));
         }
