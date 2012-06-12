@@ -60,9 +60,9 @@ class AggregateUpdatingMethodSpreadsheetTests extends SpreadsheetUnitTest {
             List<ClaimRoot> allUpdatedClaims = new ArrayList<ClaimRoot>();
             int j = 0
             for (ClaimRoot baseClaim : baseClaims) {
-                allUpdatedClaims.addAll(updatedClaims)
                 List<ClaimRoot> updatedClaims = updatingMethodology.updatingUltimate([baseClaim], actualClaims,
                         periodCounter, updateDate, [pattern], periods.get(j), DateTimeUtilities.Days360.US  )
+                allUpdatedClaims.addAll(updatedClaims)
             }
 
             List<Double> referenceAdjustedUltimates = referenceAdjustedUltimate(importer)
