@@ -3,7 +3,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.joda.time.DateTime;
-import org.pillarone.riskanalytics.core.components.ComposedComponent;
 import org.pillarone.riskanalytics.core.components.MultiPhaseComposedComponent;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
@@ -64,6 +63,8 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     public static final String PHASE_CLAIMS_CALCULATION = "Claims Calculation";
     public static final String PHASE_STORE_COMMUTATION_STATE = "Store Commutation State";
 
+    public static final DateTimeUtilities.Days360 DAYS_360 = DateTimeUtilities.Days360.US;
+
     @Override
     public void wire() {
         // do nothing as the sub component is used only to add a hierarchy level without using a strategy/type line
@@ -86,7 +87,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
             int currentPeriod = periodScope.getCurrentPeriod();
             for (ClaimRoot baseClaim : baseClaims) {
                 GrossClaimRoot grossClaimRoot = parmActualClaims.claimWithAdjustedPattern(baseClaim, currentPeriod,
-                        payoutPattern, periodScope, globalUpdateDate);
+                        payoutPattern, periodScope, globalUpdateDate, DAYS_360, globalSanityChecks);
                 grossClaimRoots.add(grossClaimRoot);
             }
         }
