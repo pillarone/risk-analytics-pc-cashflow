@@ -6,9 +6,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.IAggregateActualClaimsStrategy
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.joda.time.DateTime
-import org.pillarone.riskanalytics.core.parameterization.ConstrainedString
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.IAggregateUpdatingMethodologyStrategy
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.AggregateUpdatingBFReportingMethodology
+
 import org.grails.plugins.excelimport.ExpectedPropertyType
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.joda.time.LocalDate
@@ -21,13 +19,16 @@ import org.joda.time.Period
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.AggregateHistoricClaim
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
 
+    static Log LOG = LogFactory.getLog(PatternUtilsSpreadsheetTests.class);
     static final private double EPSILON = 1E-7
 
     @Override
@@ -41,7 +42,9 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
          'ART-687-6-PSDYesFirstQuarter.xlsx',
          'ART-687-7-PSDYesFirstQuarterUpdateEqualsReported.xlsx',
          'ART-687-8-PSDNoAfterUpdateDate2ndPeriod.xlsx',
-         'ART-687-9-CODNoAfterUpdateDate2ndPeriod.xlsx'
+         'ART-687-9-CODNoAfterUpdateDate2ndPeriod.xlsx',
+         'ART-687-10-CODYesPeriod1_TwoUpdates.xlsx',
+         'ART-687-11-CODNoPeriod1_Period3.xlsx',
         ]
     }
 
@@ -50,28 +53,33 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
         for (SpreadsheetImporter importer: importers) {
             // enable the following line while writing/debugging the test case but comment it out before committing!
 //            SP - Why?
-//            setCheckedForValidationErrors(true)
-
+            setCheckedForValidationErrors( true );
+            LOG.info(importer.fileName);
+            Integer grossClaimPeriod  = generalParameters(importer).claimPeriod - 1
             PatternPacket originalPattern = pattern(importer, 'Pattern')
-            DateTime periodStartDate = generalParameters(importer).startCoverDate.toDateTimeAtStartOfDay()
+            DateTime coverStartDate = generalParameters(importer).startCoverDate.toDateTimeAtStartOfDay()
+            DateTime periodStartDate = coverStartDate.plusYears(grossClaimPeriod)
             DateTime occurrenceDate = generalParameters(importer).occurrenceDate.toDateTimeAtStartOfDay()
-            PayoutPatternBase payoutPatternBase = generalParameters(importer).payoutPatternBase == 'Claim Occurance Date' ? PayoutPatternBase.CLAIM_OCCURANCE_DATE : PayoutPatternBase.PERIOD_START_DATE
+            PayoutPatternBase payoutPatternBase = generalParameters(importer). payoutPatternBase == 'Claim Occurance Date' ? PayoutPatternBase.CLAIM_OCCURANCE_DATE : PayoutPatternBase.PERIOD_START_DATE
             int periods = (originalPattern.cumulativePeriods[-1].months + 12) / 12
             IPeriodCounter periodCounter = periodCounter(importer, periods)
             DateTime updateDate = generalParameters(importer).updateDate.toDateTimeAtStartOfDay()
             Double ultimate = generalParameters(importer).ultimate
-            TreeMap<DateTime, Double> claimUpdates = claimUpdates(importer, 'Claims', 0, periodCounter, updateDate, payoutPatternBase)
+            TreeMap<DateTime, Double> claimUpdates = claimUpdates(importer, 'Claims', 0, periodCounter, updateDate, payoutPatternBase, grossClaimPeriod)
             DateTime baseDate = payoutPatternBase.equals(PayoutPatternBase.CLAIM_OCCURANCE_DATE) ? occurrenceDate : periodStartDate
+            DateTime lastReportedDate = claimUpdates.lastEntry() == null ? updateDate : claimUpdates.lastEntry().getKey()
             PatternPacket adjustedPattern = PatternUtils.adjustedPattern(originalPattern, claimUpdates, ultimate,
-                    baseDate, occurrenceDate, updateDate)
+                    baseDate, occurrenceDate, updateDate, lastReportedDate, DateTimeUtilities.Days360.US)
 
             List<ClaimCashflowPacket> claims = []
 
             GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(ultimate, ClaimType.AGGREGATED, periodStartDate, occurrenceDate), adjustedPattern, baseDate)
-            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
-            for (int period = 0; period < periods; period++) {
+//            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
+            for (int period = 0; period <= periods; period++) {
+                if(period >= grossClaimPeriod) {
+                    claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
+                }
                 periodCounter.next()
-                claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
             }
             List<Map<String, Object>> payments = futurePayments(importer)
             int index = 0
@@ -99,6 +107,7 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
     Map generalParameters(SpreadsheetImporter importer) {
         importer.cells([sheet: 'Usage',
                 cellMap: ['F3': 'startCoverDate', 'F4': 'updateDate', 'F5': 'payoutPatternBase', 'F8': 'ultimate',
+                        'F9' : 'claimPeriod',
                           'F10': 'occurrenceDate', 'F5': 'payoutPatternBase']])
     }
 
@@ -145,23 +154,25 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
 
     TreeMap<DateTime, Double> claimUpdates(SpreadsheetImporter importer, String sheet, int period,
                                            IPeriodCounter periodCounter, DateTime updateDate,
-                                           PayoutPatternBase payoutPatternBase) {
-        IAggregateActualClaimsStrategy actualClaims = actualClaims(importer, 'Claims', payoutPatternBase)
-        TreeMap<DateTime, Double> updates = actualClaims.historicClaims(period, periodCounter, updateDate)?.claimPaidUpdates
+                                           PayoutPatternBase payoutPatternBase, Integer testContractPeriod) {
+        IAggregateActualClaimsStrategy actualClaims = actualClaims(importer, 'Claims', payoutPatternBase, testContractPeriod)
+        TreeMap<DateTime, Double> updates = actualClaims.historicClaims(testContractPeriod - 1, periodCounter, updateDate)?.claimPaidUpdates
         updates ? updates : new TreeMap<DateTime, Double>()
     }
 
-    IAggregateActualClaimsStrategy actualClaims(SpreadsheetImporter importer, String sheet, PayoutPatternBase payoutPatternBase) {
+    IAggregateActualClaimsStrategy actualClaims(SpreadsheetImporter importer, String sheet, PayoutPatternBase payoutPatternBase, Integer contractPeriod1) {
         List claimsMap = importer.columns(claimsSheetStructure(sheet), CLAIMS_VALIDATION)
         List<Integer> contractPeriod = []
         List<Double> reportedValues = []
         List<Double> paidValues = []
         List<LocalDate> reportedDates = []
         for (Map claim : claimsMap) {
-            contractPeriod << claim.contractPeriod
-            reportedValues << claim.reported
-            paidValues << claim.paid
-            reportedDates << claim.reportedDate.toDateTimeAtStartOfDay()
+            if(claim.reported > 0 || claim.reported > 0 ) {
+                contractPeriod << contractPeriod1
+                reportedValues << claim.reported
+                paidValues << claim.paid
+                reportedDates << claim.reportedDate.toDateTimeAtStartOfDay()
+            }
         }
         return AggregateActualClaimsStrategyType.getStrategy(
                 AggregateActualClaimsStrategyType.AGGREGATE,
