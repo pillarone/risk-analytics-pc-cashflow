@@ -24,6 +24,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.FrequencySeverit
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.FrequencyAverageAttritionalClaimsGeneratorStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGeneratorStrategy
 import org.apache.commons.lang.NotImplementedException
+import org.pillarone.riskanalytics.core.simulation.InvalidParameterException
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -63,7 +64,7 @@ class ClaimsGeneratorScalingValidator implements IParameterizationValidator {
                         currentErrors*.path = parameter.path
                         errors.addAll(currentErrors)
                     }
-                    catch (IllegalArgumentException ex) {
+                    catch (InvalidParameterException ex) {
                         // https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1619
                         LOG.debug("call parameter.getBusinessObject() failed " + ex.toString())
                     }

@@ -25,6 +25,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.FrequencySeverit
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.OccurrenceFrequencySeverityClaimsGeneratorStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.FrequencyAverageAttritionalClaimsGeneratorStrategy
 import umontreal.iro.lecuyer.probdist.Distribution
+import org.pillarone.riskanalytics.core.simulation.InvalidParameterException
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -71,7 +72,7 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
                         claimsGeneratorStrategyPerClaimsGeneratorName[parameter.path - 'claimsGenerators:' - ':parmClaimsModel'] =
                             (IClaimsGeneratorStrategy) parameter.getBusinessObject()
                     }
-                    catch (IllegalArgumentException ex) {
+                    catch (InvalidParameterException ex) {
                         // https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1619
                         LOG.debug("call parameter.getBusinessObject() failed " + ex.toString())
                     }
@@ -81,7 +82,7 @@ class MultipleProbabilitiesCopulaValidator implements IParameterizationValidator
                         frequencyDistributionPerCopula[parameter.path - 'parmFrequencyDistribution' + 'parmCopulaStrategy'] =
                             (RandomFrequencyDistribution) parameter.getBusinessObject()
                     }
-                    catch (IllegalArgumentException ex) {
+                    catch (InvalidParameterException ex) {
                         // https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1619
                         LOG.debug("call parameter.getBusinessObject() failed " + ex.toString())
                     }
