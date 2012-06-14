@@ -2,13 +2,14 @@ package org.pillarone.riskanalytics.domain.pc.cf.pattern;
 
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 
 import java.util.List;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class PeriodsNotIncreasingException extends RuntimeException {
+public class PeriodsNotIncreasingException extends SimulationException {
 
     public static final String PERIODS_NOT_INCREASING = "Periods need to be increasing! \n";
 

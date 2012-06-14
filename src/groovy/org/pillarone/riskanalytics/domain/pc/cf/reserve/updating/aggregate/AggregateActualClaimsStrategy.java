@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
@@ -73,7 +74,7 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
     public void checkClaimRootOccurenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims, int contractPeriod, IPeriodCounter periodCounter, DateTime updateDate) {
         lazyInitHistoricClaimsPerContractPeriod(periodCounter, updateDate);
         if (baseClaims.size() != 1) {
-            throw new RuntimeException("not one base stochastic claim in aggregate actual claims strategy, contact development");
+            throw new SimulationException("Not one base stochastic claim in aggregate actual claims strategy, contact development");
         }
         AggregateHistoricClaim aggregateHistoricClaim = historicClaimsPerContractPeriod.get(contractPeriod);
         if (aggregateHistoricClaim == null) return;

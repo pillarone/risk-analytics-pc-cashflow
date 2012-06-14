@@ -1,11 +1,13 @@
 package org.pillarone.riskanalytics.domain.pc.cf.pattern;
 
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
+
 import java.util.List;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class PatternValuesNotIncreasingException extends RuntimeException {
+public class PatternValuesNotIncreasingException extends SimulationException {
 
     public static final String PATTERN_VALUES_NOT_INCREASING = "Incremental Pattern Values go -ve! \n";
 

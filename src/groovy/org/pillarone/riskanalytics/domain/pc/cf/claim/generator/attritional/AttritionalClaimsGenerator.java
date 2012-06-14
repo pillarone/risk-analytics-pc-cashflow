@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
@@ -105,11 +106,11 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 CommutationState packet = inCommutationState.get(0);
                 periodStore.put(COMMUTATION_STATE, packet, 1);
             } else {
-                throw new RuntimeException("Found different to one commutationState in inCommutationState. Period: "
+                throw new SimulationException("Found different to one commutationState in inCommutationState. Period: "
                         + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
             }
         } else {
-            throw new RuntimeException("Unknown phase: " + phase);
+            throw new SimulationException("Unknown phase: " + phase);
         }
     }
 
@@ -150,7 +151,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
         if (globalSanityChecks) {
             for (ClaimRoot baseClaim : baseClaims) {
                 if (baseClaim.getUltimate() > 0) {
-                    throw new RuntimeException("Positive claim detected... i.e an inflow of cash!: " + baseClaim.toString());
+                    throw new SimulationException("Positive claim detected... i.e an inflow of cash!: " + baseClaim.toString());
                 }
                 if(iterationScope.isFirstIteration()) {
                     LOG.info("claim root : " + baseClaim.toString());
@@ -170,7 +171,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
         if (globalSanityChecks) {
             for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
                 if (cashflowPacket.getPaidIncrementalIndexed() > 0) {
-                    throw new RuntimeException("Positive claim detected... i.e an inflow of cash!; " + cashflowPacket.toString() + " \n" + "Period Info  " + periodScope.toString());
+                    throw new SimulationException("Positive claim detected... i.e an inflow of cash!; " + cashflowPacket.toString() + " \n" + "Period Info  " + periodScope.toString());
                 }
             }
         }
