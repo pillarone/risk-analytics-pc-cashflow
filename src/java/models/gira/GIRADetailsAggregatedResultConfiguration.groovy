@@ -73,7 +73,7 @@ components {
 		}
 	}
 	structures {
-		subsubcomponents {
+		substructure {
 			outClaimsCeded = "AGGREGATED"
 			outClaimsGross = "AGGREGATED"
 			outClaimsNet = "AGGREGATED"
