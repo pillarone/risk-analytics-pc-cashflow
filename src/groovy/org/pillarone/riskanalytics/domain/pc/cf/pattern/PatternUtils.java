@@ -172,15 +172,7 @@ public class PatternUtils {
                                                 double ultimate, DateTime baseDate, DateTime occurrenceDate,
                                                 DateTime updateDate, DateTime lastReportedDate, DateTimeUtilities.Days360 days360) {
         if (claimUpdates.isEmpty()) {
-            List<Period> cumulativePeriods = new ArrayList<Period>();
-            List<Double> cumulativeValues = new ArrayList<Double>();
-            for (int index = 0; index < originalPattern.size(); index++) {
-                if (baseDate.plus(originalPattern.getCumulativePeriod(index)).isAfter(updateDate)) {
-                    cumulativePeriods.add(originalPattern.getCumulativePeriod(index).minusDays(1));
-                    cumulativeValues.add(originalPattern.getCumulativeValues().get(index));
-                }
-            }
-            return new PatternPacket(originalPattern, cumulativeValues, cumulativePeriods);
+            return adjustForNoClaimUpdates(originalPattern, baseDate, updateDate);
         }
         List<Period> cumulativePeriods = new ArrayList<Period>();
         List<Double> cumulativeValues = new ArrayList<Double>();
@@ -193,6 +185,22 @@ public class PatternUtils {
             cumulativePeriods.add(new Period(baseDate, claimUpdate.getKey()));
         }
         return adjustedPattern(originalPattern, cumulativePeriods, cumulativeValues, baseDate, updateDate, lastReportedDate, days360);
+    }
+
+    public static PatternPacket adjustForNoClaimUpdates(PatternPacket originalPattern, DateTime baseDate, DateTime updateDate) {
+        List<Period> cumulativePeriods = new ArrayList<Period>();
+        List<Double> cumulativeValues = new ArrayList<Double>();
+        for (int index = 0; index < originalPattern.size(); index++) {
+            if (baseDate.plus(originalPattern.getCumulativePeriod(index)).isAfter(updateDate)) {
+                if(originalPattern.getCumulativePeriod(index).equals(new Period(0)) ) {
+                    cumulativePeriods.add(originalPattern.getCumulativePeriod(index));
+                } else {
+                    cumulativePeriods.add(originalPattern.getCumulativePeriod(index).minusDays(1));
+                }
+                cumulativeValues.add(originalPattern.getCumulativeValues().get(index));
+            }
+        }
+        return new PatternPacket(originalPattern, cumulativeValues, cumulativePeriods);
     }
 
     /**

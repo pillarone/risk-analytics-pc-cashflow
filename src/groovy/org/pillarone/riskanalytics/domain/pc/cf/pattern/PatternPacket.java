@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.DateFactors;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.runOff.RunOffPatternUtils;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 
@@ -172,40 +173,19 @@ public class PatternPacket extends Packet implements Cloneable {
     /**
      * Rescales this pattern against an update date. Returns a new, independant pattern
      *
+     *
+     *
+     *
      * @param updateDate              update date
      * @param patternStartDate        date the pattern starts from
-     * @param interpolateToUpdateDate whether or not to normalise the pattern against an interpolated value on the update date, or simply payout
-     *                                the cumulative amounts before the update date, on the update date.
      * @return a new rescaled pattern at the update date
      */
-    public PatternPacket rescalePatternToUpdateDate(DateTime updateDate, DateTime patternStartDate, boolean interpolateToUpdateDate) {
-        final List<Number> cumulativePeriodsAsMonth = new ArrayList<Number>();
-        final List<Number> cumulativeValuesAsNumber = new ArrayList<Number>();
-        for (int i = 0; i < cumulativePeriods.size(); i++) {
-            cumulativePeriodsAsMonth.add(cumulativePeriods.get(i).getMonths());
-            cumulativeValuesAsNumber.add(cumulativeValues.get(i));
-        }
+    public PatternPacket rescalePatternToUpdateDate(DateTime updateDate, DateTime patternStartDate) {
 
-        final TreeMap<DateTime, Double> rescaledPatternAsMap = RunOffPatternUtils.rescaleRunOffPattern(
-                patternStartDate,
-                updateDate,
-                cumulativeValues.size(),
-                cumulativePeriodsAsMonth,
-                cumulativeValuesAsNumber,
-                interpolateToUpdateDate
-        );
+        PatternPacket patternPacket = PatternUtils.adjustForNoClaimUpdates(this, patternStartDate, updateDate);
+        return patternPacket;
 
-        final List<Period> newPeriods = new ArrayList<Period>();
-        final List<Double> newValues = new ArrayList<Double>();
-        for (Map.Entry<DateTime, Double> entry : rescaledPatternAsMap.entrySet()) {
-            Period period1 = new Period(patternStartDate, patternStartDate.plusDays(1));
-            if (!patternStartDate.equals(entry.getKey())) {
-                period1 = new Period(patternStartDate, entry.getKey().minusDays(1));
-            }
-            newPeriods.add(period1);
-            newValues.add(Double.valueOf(entry.getValue()));
-        }
-        return new PatternPacket(this.patternMarker, newValues, newPeriods);
+
     }
 
     public List<DateFactors> getDateFactorsTillStartOfCurrentPeriod(DateTime occurrenceDate, IPeriodCounter periodCounter) {

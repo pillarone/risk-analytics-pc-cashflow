@@ -45,6 +45,7 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
          'ART-687-9-CODNoAfterUpdateDate2ndPeriod.xlsx',
          'ART-687-10-CODYesPeriod1_TwoUpdates.xlsx',
          'ART-687-11-CODNoPeriod1_Period3.xlsx',
+         'ART-687-12-PSDNoPeriod1.xlsx',
         ]
     }
 

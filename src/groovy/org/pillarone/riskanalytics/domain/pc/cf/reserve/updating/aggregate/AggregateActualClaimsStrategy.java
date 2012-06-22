@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
@@ -117,9 +118,11 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
             }
         }
 //        If there are no claim updates, we rescale the pattern to avoid stochastic payments before update date.
-        PatternPacket patternPacket = payoutPattern.rescalePatternToUpdateDate(updateDate, claimRoot.getExposureStartDate(), false);
+
+        final DateTime dateTime = payoutPatternBase.startDateForPayouts(claimRoot, periodScope.getCurrentPeriodStartDate(), null);
+        PatternPacket patternPacket = PatternUtils.adjustForNoClaimUpdates(payoutPattern, dateTime ,updateDate );
         patternPacket.consistencyCheck(sanityChecks, sanityChecks, sanityChecks, sanityChecks);
-        return new GrossClaimRoot(claimRoot, patternPacket);
+        return new GrossClaimRoot(claimRoot, patternPacket, dateTime);
     }
 
     public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate) {
