@@ -73,7 +73,7 @@ components {
 		}
 	}
 	structures {
-		subsubcomponents {
+        substructure {
 			outClaimsCeded = "AGGREGATED_ULTIMATE_CLAIM"
 			outClaimsGross = "AGGREGATED_ULTIMATE_CLAIM"
 			outClaimsNet = "AGGREGATED_ULTIMATE_CLAIM"
