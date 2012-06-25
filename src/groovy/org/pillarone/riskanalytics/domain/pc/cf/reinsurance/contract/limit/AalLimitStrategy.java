@@ -23,5 +23,9 @@ public class AalLimitStrategy extends AbstractParameterObject implements ILimitS
         return parameters;
     }
 
+    public double getAAD() {
+        return 0;
+    }
+
     public double getAAL() { return aal; }
 }

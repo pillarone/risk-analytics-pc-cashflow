@@ -364,10 +364,12 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         if (isSenderWired(outUnderwritingInfoGross)) {
             outUnderwritingInfoGross.addAll(inUnderwritingInfo);
         }
+        boolean senderUwInfoNetWired = isSenderWired(outUnderwritingInfoNet);
+        DateTime currentPeriodStartDate = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
         for (IReinsuranceContract contract : contracts) {
             double coveredByReinsurers = coveredByReinsurers(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
             contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, coveredByReinsurers,
-                    isSenderWired(outUnderwritingInfoNet));
+                    senderUwInfoNetWired);
         }
         for (UnderwritingInfoPacket cededUnderwritingPacket : outUnderwritingInfoCeded) {
             cededUnderwritingPacket.setMarker(this);
@@ -379,29 +381,30 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
 
     private void fillUnderwritingInfoGNPIChannel() {
         if (isSenderWired(outUnderwritingInfoGNPI)) {
-            if (isProportionalContract()) {
-                if (inUnderwritingInfo.size() == outUnderwritingInfoCeded.size()) {
-                    for (int i = 0; i < inUnderwritingInfo.size(); i++) {
-                        // todo(sku): this implementation is dangerous: it assumes the same order of in and out uw info items
-                        if (inUnderwritingInfo.get(i).getOriginal().equals(outUnderwritingInfoCeded.get(i).getOriginal())) {
-                            outUnderwritingInfoGNPI.add(inUnderwritingInfo.get(i).getNet(outUnderwritingInfoCeded.get(i), true));
-                        }
-                        else {
-                            throw new RuntimeException("original uw info mismatch.");
-                        }
-                    }
+            calculateUnderwritingInfoGNPI(inUnderwritingInfo);
+        }
+    }
+
+    private void calculateUnderwritingInfoGNPI(List<UnderwritingInfoPacket> baseUnderwritingInfos) {
+        if (isProportionalContract()) {
+            if (baseUnderwritingInfos.size() == outUnderwritingInfoCeded.size()) {
+                Map<UnderwritingInfoPacket, CededUnderwritingInfoPacket> cededUwOriginal = new HashMap<UnderwritingInfoPacket, CededUnderwritingInfoPacket>(outUnderwritingInfoCeded.size());
+                for (CededUnderwritingInfoPacket cededUwInfo : outUnderwritingInfoCeded) {
+                    cededUwOriginal.put(cededUwInfo.getOriginal(), cededUwInfo);
                 }
-                else {
-                    throw new RuntimeException("different number of incoming GNPI and ceded uw info.");
+                for (UnderwritingInfoPacket baseUwInfo : baseUnderwritingInfos) {
+                    outUnderwritingInfoGNPI.add(baseUwInfo.getNet(cededUwOriginal.get(baseUwInfo.getOriginal()), true));
                 }
             }
             else {
-                // non proportional contracts don't affect incoming underwriting info
-                for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
-                    UnderwritingInfoPacket clone = (UnderwritingInfoPacket) underwritingInfo.clone();
-                    clone.setMarker(this);
-                    outUnderwritingInfoGNPI.add(clone);
-                }
+                throw new RuntimeException(getName() + ": different number of incoming GNPI and ceded uw info.");
+            }
+        }
+        else {
+            for (UnderwritingInfoPacket underwritingInfo : baseUnderwritingInfos) {
+                UnderwritingInfoPacket clone = (UnderwritingInfoPacket) underwritingInfo.clone();
+                clone.setMarker(this);
+                outUnderwritingInfoGNPI.add(clone);
             }
         }
     }

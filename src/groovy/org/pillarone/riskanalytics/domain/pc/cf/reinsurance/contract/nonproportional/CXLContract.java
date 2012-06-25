@@ -68,7 +68,7 @@ public class CXLContract extends XLContract {
             cededAfterAAD = Math.max(0, cededAfterAAD - storage.getAadReductionInPeriod(claimPropertyBase));
             storage.addAadReductionInPeriod(claimPropertyBase, reduceAAD);
             periodDeductible.set(Math.max(0, periodDeductible.get(claimPropertyBase) - reduceAAD), claimPropertyBase);
-            double incrementalCeded = Math.max(0, cededAfterAAD - storage.getCumulatedCeded(claimPropertyBase));
+            double incrementalCeded = cededAfterAAD - storage.getCumulatedCeded(claimPropertyBase);
             double cededAfterAAL = aggregateLimitValue > incrementalCeded ? incrementalCeded : aggregateLimitValue;
             periodLimit.plus(-cededAfterAAL, claimPropertyBase);
             double factor = claimPropertyIncrementalLast == 0 ? 0 : cededAfterAAL / claimPropertyIncrementalLast;

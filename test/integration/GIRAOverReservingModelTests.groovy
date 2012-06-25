@@ -4,37 +4,31 @@ import org.pillarone.riskanalytics.core.simulation.engine.ModelTest
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class GIRACompanyWithDefaultModelTests extends ModelTest {
+// https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-2072
+class GIRAOverReservingModelTests extends ModelTest {
 
     Class getModelClass() {
         GIRAModel
     }
 
-    @Override
     String getResultConfigurationFileName() {
-        'GIRALegalEntityDrillDownResultConfiguration'
+        'TestGIRASplitByInceptionResultConfiguration'
     }
 
     String getResultConfigurationDisplayName() {
-        'Legal Entity, Drill Down'
+        'Premium Reserve Risk Triangle'
     }
 
-    @Override
     String getParameterFileName() {
-        'TestGIRAMultiCompanyWithDefaultParameters'
+        'TestGIRAOverReservingParameters'
     }
 
     String getParameterDisplayName() {
-        'Multi Company with Default'
+        'PMO 2072 over reserving'
     }
 
     @Override
-    int getIterationCount() {
-        1
+    protected boolean shouldCompareResults() {
+        true
     }
-
-    //todo(sku): re-enable net financials currently wrong
-//    protected boolean shouldCompareResults() {
-//        true
-//    }
 }

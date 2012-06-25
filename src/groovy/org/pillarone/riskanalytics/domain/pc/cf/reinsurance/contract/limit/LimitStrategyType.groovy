@@ -64,12 +64,12 @@ class LimitStrategyType extends AbstractParameterObjectClassifier {
             case LimitStrategyType.AALAAD:
                 limitStrategy = new AalAadLimitStrategy(aal: (Double) parameters['aal'], aad: (Double) parameters['aad'])
                 break
-            case LimitStrategyType.EVENTLIMIT:
-                limitStrategy = new EventLimitStrategy(eventLimit: (Double) parameters['eventLimit'])
-                break
-            case LimitStrategyType.EVENTLIMITAAL:
-                limitStrategy = new EventAalLimitStrategy(eventLimit: (Double) parameters['eventLimit'], aal: (Double) parameters['aal'])
-                break
+//            case LimitStrategyType.EVENTLIMIT:
+//                limitStrategy = new EventLimitStrategy(eventLimit: (Double) parameters['eventLimit'])
+//                break
+//            case LimitStrategyType.EVENTLIMITAAL:
+//                limitStrategy = new EventAalLimitStrategy(eventLimit: (Double) parameters['eventLimit'], aal: (Double) parameters['aal'])
+//                break
         }
         limitStrategy;
     }

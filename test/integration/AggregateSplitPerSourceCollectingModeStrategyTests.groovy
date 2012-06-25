@@ -174,6 +174,31 @@ class AggregateSplitPerSourceCollectingModeStrategyTests extends ModelTest {
                 'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:outUnderwritingInfoGross',
                 'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:outUnderwritingInfoCeded',
                 'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:outUnderwritingInfoNet',
+
+                'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:claimsGenerators:subPropertyEarthquake:outClaimsCeded',
+                'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:claimsGenerators:subPropertySingle:outClaimsCeded',
+                'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:claimsGenerators:subPropertyAttritional:outClaimsCeded',
+                'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:claimsGenerators:subPropertyEarthquake:outClaimsGross',
+                'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:claimsGenerators:subPropertySingle:outClaimsGross',
+                'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:claimsGenerators:subPropertyAttritional:outClaimsGross',
+                'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:claimsGenerators:subPropertyEarthquake:outClaimsNet',
+                'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:claimsGenerators:subPropertySingle:outClaimsNet',
+                'GIRA:reinsuranceContracts:subPropertyQuotaShare:segments:subProperty:claimsGenerators:subPropertyAttritional:outClaimsNet',
+                'GIRA:reinsuranceContracts:subPropertyCxl:segments:subProperty:claimsGenerators:subPropertyEarthquake:outClaimsCeded',
+                'GIRA:reinsuranceContracts:subPropertyCxl:segments:subProperty:claimsGenerators:subPropertySingle:outClaimsCeded',
+                'GIRA:reinsuranceContracts:subPropertyCxl:segments:subProperty:claimsGenerators:subPropertyAttritional:outClaimsCeded',
+                'GIRA:reinsuranceContracts:subPropertyCxl:segments:subProperty:claimsGenerators:subPropertyEarthquake:outClaimsGross',
+                'GIRA:reinsuranceContracts:subPropertyCxl:segments:subProperty:claimsGenerators:subPropertySingle:outClaimsGross',
+                'GIRA:reinsuranceContracts:subPropertyCxl:segments:subProperty:claimsGenerators:subPropertyAttritional:outClaimsGross',
+                'GIRA:reinsuranceContracts:subPropertyCxl:segments:subProperty:claimsGenerators:subPropertyEarthquake:outClaimsNet',
+                'GIRA:reinsuranceContracts:subPropertyCxl:segments:subProperty:claimsGenerators:subPropertySingle:outClaimsNet',
+                'GIRA:reinsuranceContracts:subPropertyCxl:segments:subProperty:claimsGenerators:subPropertyAttritional:outClaimsNet',
+                'GIRA:reinsuranceContracts:subMotorHullWxl:segments:subMotorHull:claimsGenerators:subMotorHullSingle:outClaimsCeded',
+                'GIRA:reinsuranceContracts:subMotorHullWxl:segments:subMotorHull:claimsGenerators:subMotorHullAttritional:outClaimsCeded',
+                'GIRA:reinsuranceContracts:subMotorHullWxl:segments:subMotorHull:claimsGenerators:subMotorHullSingle:outClaimsGross',
+                'GIRA:reinsuranceContracts:subMotorHullWxl:segments:subMotorHull:claimsGenerators:subMotorHullAttritional:outClaimsGross',
+                'GIRA:reinsuranceContracts:subMotorHullWxl:segments:subMotorHull:claimsGenerators:subMotorHullSingle:outClaimsNet',
+                'GIRA:reinsuranceContracts:subMotorHullWxl:segments:subMotorHull:claimsGenerators:subMotorHullAttritional:outClaimsNet'
         ]
         // don't count paths containing subcomponents
         assertEquals '# of paths correct', paths.size(), collectedPaths.size() - 15

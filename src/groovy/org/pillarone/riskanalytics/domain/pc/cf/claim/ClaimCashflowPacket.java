@@ -115,23 +115,44 @@ public class ClaimCashflowPacket extends MultiValuePacket {
                 updateDate, getUpdatePeriod(periodCounter, updateDate));
     }
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double nominalUltimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
+    public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim, double ultimate,
+                               double nominalUltimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
+                               double reportedIncrementalIndexed, double reportedCumulatedIndexed,
+                               double reservesIndexed, double changeInReservesIndexed, double changeInIBNRIndexed,
+                               ExposureInfo exposureInfo, DateTime updateDate, int updatePeriod) {
+        this(baseClaim, keyClaim, ultimate, paidIncrementalIndexed, paidCumulatedIndexed, reportedIncrementalIndexed,
+                reportedCumulatedIndexed, reservesIndexed, changeInReservesIndexed, changeInIBNRIndexed, exposureInfo,
+                updateDate, updatePeriod);
+        this.nominalUltimate = nominalUltimate;
+    }
+
+
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
                                double reportedIncrementalIndexed, double reportedCumulatedIndexed, double reservesIndexed,
                                double changeInReservesIndexed, double changeInIBNRIndexed, ExposureInfo exposureInfo, 
                                DateTime updateDate, int updatePeriod) {
-        this(baseClaim, baseClaim, ultimate, nominalUltimate, paidIncrementalIndexed, paidCumulatedIndexed, reportedIncrementalIndexed,
+        this(baseClaim, baseClaim, ultimate, paidIncrementalIndexed, paidCumulatedIndexed, reportedIncrementalIndexed,
                 reportedCumulatedIndexed, reservesIndexed, changeInReservesIndexed, changeInIBNRIndexed, exposureInfo,
                 updateDate, updatePeriod);
     }
 
-    public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim, double ultimate, double nominalUltimate,
-                               double paidIncrementalIndexed, double paidCumulatedIndexed,
+    public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double nominalUltimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
+                               double reportedIncrementalIndexed, double reportedCumulatedIndexed, double reservesIndexed,
+                               double changeInReservesIndexed, double changeInIBNRIndexed, ExposureInfo exposureInfo,
+                               DateTime updateDate, int updatePeriod) {
+        this(baseClaim, baseClaim, ultimate, nominalUltimate, paidIncrementalIndexed, paidCumulatedIndexed,
+                reportedIncrementalIndexed, reportedCumulatedIndexed,
+                reservesIndexed, changeInReservesIndexed, changeInIBNRIndexed, exposureInfo,
+                updateDate, updatePeriod);
+    }
+
+    public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim, double ultimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
                                double reportedIncrementalIndexed, double reportedCumulatedIndexed, double reservesIndexed,
                                double changeInReservesIndexed, double changeInIBNRIndexed, ExposureInfo exposureInfo,
                                DateTime updateDate, int updatePeriod) {
         this(baseClaim, keyClaim);
         this.ultimate = ultimate;
-        this.nominalUltimate = nominalUltimate;
+        if (ultimate != 0) { nominalUltimate = ultimate; }
         this.paidCumulatedIndexed = paidCumulatedIndexed;
         this.paidIncrementalIndexed = paidIncrementalIndexed;
         this.reportedCumulatedIndexed = reportedCumulatedIndexed;
@@ -223,8 +244,13 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return nominalUltimate;
     }
 
+    /**
+     * @return difference between developed ultimate and nominal ultimate
+     */
     public double developmentResultCumulative() {
-        return baseClaim.hasTrivialPayout() ? 0 : developedUltimate() - nominalUltimate;
+        // check necessary due to rounding/rationale numbers
+        if (Math.abs(developedUltimate() / nominalUltimate - 1) < 1E-4) return 0d;
+        return developedUltimate() - nominalUltimate;
     }
 
     public double premiumRisk() {

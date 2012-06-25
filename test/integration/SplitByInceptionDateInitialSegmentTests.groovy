@@ -4,37 +4,36 @@ import org.pillarone.riskanalytics.core.simulation.engine.ModelTest
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class GIRACompanyWithDefaultInwardModelTests extends ModelTest {
+// https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-2075
+class SplitByInceptionDateInitialSegmentTests extends ModelTest {
 
     Class getModelClass() {
         GIRAModel
     }
 
-    @Override
     String getResultConfigurationFileName() {
-        'GIRALegalEntityDrillDownResultConfiguration'
+        'TestGIRASplitByInceptionResultConfiguration'
     }
 
     String getResultConfigurationDisplayName() {
-        'Legal Entity, Drill Down'
+        'Premium Reserve Risk Triangle'
     }
 
-    @Override
     String getParameterFileName() {
-        'TestGIRAMultiCompanyWithDefaultInwardParameters'
+        'TestGIRAInitialSegmentParameters'
     }
 
     String getParameterDisplayName() {
-        'Multi Company with Default, Inward'
+        'Initial Segments'
     }
 
     @Override
-    int getIterationCount() {
-        1
+    protected boolean shouldCompareResults() {
+        true
     }
 
-    //todo(sku): re-enable net financials currently wrong
-//    protected boolean shouldCompareResults() {
-//        true
-//    }
+    @Override
+    protected boolean stopAtFirstDifference() {
+        false
+    }
 }

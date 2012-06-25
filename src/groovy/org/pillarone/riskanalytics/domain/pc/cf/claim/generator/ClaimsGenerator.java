@@ -47,7 +47,6 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
 
     private PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<SingleValuePacket> outClaimNumber = new PacketList<SingleValuePacket>(SingleValuePacket.class);
-    private PacketList<SingleValuePacket> outSeverityIndicesApplied = new PacketList<SingleValuePacket>(SingleValuePacket.class);
 
     // attritional, frequency average attritional, ...
     private ConstrainedString parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker.class, "");
@@ -69,12 +68,6 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
         setTechnicalProperties(claims);
         outClaims.addAll(claims);
         outClaimNumber.add(new SingleValuePacket(number));
-        if (this.isSenderWired(outSeverityIndicesApplied)) {
-            for (ClaimCashflowPacket claim : outClaims) {
-                outSeverityIndicesApplied.add(new SingleValuePacket(
-                        IndexUtils.aggregateFactor(factors, claim.getUpdateDate(), periodCounter, claim.getOccurrenceDate())));
-            }
-        }
     }
 
     /**
@@ -278,13 +271,5 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
 
     public void setParmAssociateExposureInfo(IRiskAllocatorStrategy parmAssociateExposureInfo) {
         this.parmAssociateExposureInfo = parmAssociateExposureInfo;
-    }
-
-    public PacketList<SingleValuePacket> getOutSeverityIndicesApplied() {
-        return outSeverityIndicesApplied;
-    }
-
-    public void setOutSeverityIndicesApplied(PacketList<SingleValuePacket> outSeverityIndicesApplied) {
-        this.outSeverityIndicesApplied = outSeverityIndicesApplied;
     }
 }

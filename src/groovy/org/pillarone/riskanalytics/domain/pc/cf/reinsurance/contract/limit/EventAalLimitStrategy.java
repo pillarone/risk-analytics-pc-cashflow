@@ -26,5 +26,10 @@ public class EventAalLimitStrategy extends AbstractParameterObject implements IL
     }
 
     public double getEventLimit() { return eventLimit; }
+
+    public double getAAD() {
+        return 0;
+    }
+
     public double getAAL() { return aal; }
 }
