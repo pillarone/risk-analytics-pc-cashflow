@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.attritional;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
@@ -46,6 +47,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
     private IReinsuranceContractBaseStrategy parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(
             ReinsuranceContractBaseType.PLEASESELECT, new HashMap());
     private ConstrainedString parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker.class, "");
+    private PayoutPatternBase parmPayoutPatternBase = PayoutPatternBase.PERIOD_START_DATE;
     private IAggregateActualClaimsStrategy parmActualClaims = AggregateActualClaimsStrategyType.getDefault();
     private IAggregateUpdatingMethodologyStrategy parmUpdatingMethodology = AggregateUpdatingMethodologyStrategyType.getDefault();
     private ConstrainedMultiDimensionalParameter parmDeterministicClaims = new ConstrainedMultiDimensionalParameter(
@@ -83,11 +85,11 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                                 severityFactors, parmParameterizationBasis, this, periodScope);
                     }
                     baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter,
-                            globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), DAYS_360);
+                            globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), DAYS_360, parmPayoutPatternBase);
                     checkBaseClaims(baseClaims);
                     runoffFactors = new ArrayList<Factors>();
                     grossClaimRoots = baseClaimsOfCurrentPeriodAdjustedPattern(baseClaims, parmPayoutPattern, parmActualClaims,
-                            periodScope);
+                            periodScope, parmPayoutPatternBase);
                     List<GrossClaimRoot> claimsAfterSplit = parmParameterizationBasis.splitClaims(grossClaimRoots, periodScope);
                     storeClaimsWhichOccurInFuturePeriods(claimsAfterSplit, periodStore);
                     claims = cashflowsInCurrentPeriod(claimsAfterSplit, runoffFactors, periodScope);
@@ -243,5 +245,13 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
 
     public void setIterationScope(IterationScope iterationScope) {
         this.iterationScope = iterationScope;
+    }
+
+    public PayoutPatternBase getParmPayoutPatternBase() {
+        return parmPayoutPatternBase;
+    }
+
+    public void setParmPayoutPatternBase(PayoutPatternBase parmPayoutPatternBase) {
+        this.parmPayoutPatternBase = parmPayoutPatternBase;
     }
 }

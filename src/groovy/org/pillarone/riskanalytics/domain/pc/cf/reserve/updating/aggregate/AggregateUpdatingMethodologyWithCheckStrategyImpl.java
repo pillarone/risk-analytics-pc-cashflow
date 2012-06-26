@@ -16,9 +16,13 @@ abstract class AggregateUpdatingMethodologyWithCheckStrategyImpl extends Abstrac
         implements IAggregateUpdatingMethodologyStrategy {
 
 
-    public List<ClaimRoot> updatingUltimate(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, int contractPeriod, DateTimeUtilities.Days360 days360) {
-        doSomeChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns, contractPeriod);
-        return updateUltimatePostChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns, days360);
+    public List<ClaimRoot> updatingUltimate(List<ClaimRoot> baseClaims,
+                                            IAggregateActualClaimsStrategy actualClaims,
+                                            IPeriodCounter periodCounter, DateTime updateDate,
+                                            List<PatternPacket> patterns, int contractPeriod,
+                                            DateTimeUtilities.Days360 days360, PayoutPatternBase base) {
+        doSomeChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns, contractPeriod, base);
+        return updateUltimatePostChecks(baseClaims, actualClaims, periodCounter, updateDate, patterns, days360, base);
     }
 
     /**
@@ -30,14 +34,15 @@ abstract class AggregateUpdatingMethodologyWithCheckStrategyImpl extends Abstrac
      * @param updateDate
      * @param patterns
      * @param contractPeriod
+     * @param base
      */
-    protected void doSomeChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, int contractPeriod) {
+    protected void doSomeChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, int contractPeriod, PayoutPatternBase base) {
         if (baseClaims.size() != 1) {
             throw new IllegalArgumentException("Aggregate updating strategy recieved different to one claim. Claims recieved: " + baseClaims.size());
         }
-        actualClaims.checkClaimRootOccurenceAgainstFirstActualPaid(baseClaims, contractPeriod, periodCounter, updateDate);
+        actualClaims.checkClaimRootOccurenceAgainstFirstActualPaid(baseClaims, contractPeriod, periodCounter, updateDate, base );
     }
 
-    protected abstract List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, DateTimeUtilities.Days360 days360);
+    protected abstract List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, DateTimeUtilities.Days360 days360, PayoutPatternBase base);
 
 }

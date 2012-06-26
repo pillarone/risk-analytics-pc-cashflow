@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase;
 import org.pillarone.riskanalytics.core.components.MultiPhaseComposedComponent;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
@@ -73,21 +74,23 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     /**
      * Derives gross claim root for the current period (periodCounter) by applying payout pattern and factors.
      * For actual claims the payout pattern is adjusted according the already existing payout history.
+     *
      * @param baseClaims
      * @param parmPayoutPattern
      * @param periodScope needed to derive the payouts in the current period
+     * @param base
      * @return GrossClaimRoot objects of this period
      */
     protected List<GrossClaimRoot> baseClaimsOfCurrentPeriodAdjustedPattern(
             List<ClaimRoot> baseClaims, ConstrainedString parmPayoutPattern,
-            IAggregateActualClaimsStrategy parmActualClaims, PeriodScope periodScope) {
+            IAggregateActualClaimsStrategy parmActualClaims, PeriodScope periodScope, PayoutPatternBase base) {
         PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
         List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
         if (!baseClaims.isEmpty()) {
             int currentPeriod = periodScope.getCurrentPeriod();
             for (ClaimRoot baseClaim : baseClaims) {
                 GrossClaimRoot grossClaimRoot = parmActualClaims.claimWithAdjustedPattern(baseClaim, currentPeriod,
-                        payoutPattern, periodScope, globalUpdateDate, DAYS_360, globalSanityChecks);
+                        payoutPattern, periodScope, globalUpdateDate, DAYS_360, globalSanityChecks, base);
                 grossClaimRoots.add(grossClaimRoot);
             }
         }

@@ -24,7 +24,6 @@ import java.util.Map;
 public class AggregateActualClaimsStrategy extends AbstractParameterObject implements IAggregateActualClaimsStrategy {
 
     private ConstrainedMultiDimensionalParameter history = getDefaultHistory();
-    private PayoutPatternBase payoutPatternBase = PayoutPatternBase.PERIOD_START_DATE;
 
     public IParameterObjectClassifier getType() {
         return AggregateActualClaimsStrategyType.AGGREGATE;
@@ -33,7 +32,6 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
     public Map getParameters() {
         Map<String, Object> parameters = new HashMap<String, Object>(2);
         parameters.put("history", history);
-        parameters.put("payoutPatternBase", payoutPatternBase);
         return parameters;
     }
 
@@ -50,7 +48,7 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
      * @param periodCounter required for date calculations
      * @param updateDate    all reported claims after the updateDate are ignored
      */
-    public void lazyInitHistoricClaimsPerContractPeriod(IPeriodCounter periodCounter, DateTime updateDate) {
+    public void lazyInitHistoricClaimsPerContractPeriod(IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase) {
         // key: contractPeriod
         if (historicClaimsPerContractPeriod == null) {
             historicClaimsPerContractPeriod = new HashMap<Integer, AggregateHistoricClaim>();
@@ -72,11 +70,8 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
         }
     }
 
-    public void checkClaimRootOccurenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims, int contractPeriod, IPeriodCounter periodCounter, DateTime updateDate) {
-        lazyInitHistoricClaimsPerContractPeriod(periodCounter, updateDate);
-        if (baseClaims.size() != 1) {
-            throw new SimulationException("Not one base stochastic claim in aggregate actual claims strategy, contact development");
-        }
+    public void checkClaimRootOccurenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims, int contractPeriod, IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase base) {
+        lazyInitHistoricClaimsPerContractPeriod(periodCounter, updateDate, base);
         AggregateHistoricClaim aggregateHistoricClaim = historicClaimsPerContractPeriod.get(contractPeriod);
         if (aggregateHistoricClaim == null) return;
         ClaimRoot claimRoot = baseClaims.get(0);
@@ -103,12 +98,13 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
      * @param sanityChecks
      */
     public GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
-                                                   PeriodScope periodScope, DateTime updateDate, DateTimeUtilities.Days360 days360, boolean sanityChecks) {
+                                                   PeriodScope periodScope, DateTime updateDate, DateTimeUtilities.Days360 days360,
+                                                   boolean sanityChecks, PayoutPatternBase base) {
 //        If the update date is the start of the first period this is an inception model, simply proceed without updating effects.
         if (updateDate.equals(periodScope.getPeriodCounter().startOfFirstPeriod())) {
             return new GrossClaimRoot(claimRoot, payoutPattern);
         }
-        lazyInitHistoricClaimsPerContractPeriod(periodScope.getPeriodCounter(), updateDate);
+        lazyInitHistoricClaimsPerContractPeriod(periodScope.getPeriodCounter(), updateDate, base);
         AggregateHistoricClaim historicClaim = historicClaimsPerContractPeriod.get(contractPeriod);
 
 //        If we have claim updates, rescale the payment pattern against them.
@@ -119,14 +115,14 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
         }
 //        If there are no claim updates, we rescale the pattern to avoid stochastic payments before update date.
 
-        final DateTime dateTime = payoutPatternBase.startDateForPayouts(claimRoot, periodScope.getCurrentPeriodStartDate(), null);
+        final DateTime dateTime = base.startDateForPayouts(claimRoot, periodScope.getCurrentPeriodStartDate(), null);
         PatternPacket patternPacket = PatternUtils.adjustForNoClaimUpdates(payoutPattern, dateTime ,updateDate );
         patternPacket.consistencyCheck(sanityChecks, sanityChecks, sanityChecks, sanityChecks);
         return new GrossClaimRoot(claimRoot, patternPacket, dateTime);
     }
 
-    public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate) {
-        lazyInitHistoricClaimsPerContractPeriod(periodCounter, updateDate);
+    public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase base) {
+        lazyInitHistoricClaimsPerContractPeriod(periodCounter, updateDate, base);
         AggregateHistoricClaim historicClaim = historicClaimsPerContractPeriod.get(period);
         if (historicClaim == null) {
             historicClaim = new AggregateHistoricClaim(period, periodCounter, PayoutPatternBase.CLAIM_OCCURANCE_DATE);

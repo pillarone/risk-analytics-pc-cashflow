@@ -27,20 +27,20 @@ public class NoAggregateActualClaimsStrategy extends AbstractParameterObject imp
         return Collections.emptyMap();
     }
 
-    public void lazyInitHistoricClaimsPerContractPeriod(IPeriodCounter periodCounter, DateTime updateDate) {
+    public void lazyInitHistoricClaimsPerContractPeriod(IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase) {
     }
 
     public GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
-                                                   PeriodScope periodScope, DateTime updateDate, DateTimeUtilities.Days360 days360, boolean sanityChecks) {
+                                                   PeriodScope periodScope, DateTime updateDate, DateTimeUtilities.Days360 days360, boolean sanityChecks, PayoutPatternBase payoutPatternBase) {
         return new GrossClaimRoot(claimRoot, payoutPattern);
     }
 
-    public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate) {
+    public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase) {
         return new AggregateHistoricClaim(period, periodCounter, PayoutPatternBase.PERIOD_START_DATE);
     }
 
     public void checkClaimRootOccurenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims,
-                                                              int contractPeriod, IPeriodCounter periodCounter, DateTime updateDate) {
+                                                              int contractPeriod, IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase) {
 //        There are no actual claims by definition of this class so this method is not useful...
     }
 }
