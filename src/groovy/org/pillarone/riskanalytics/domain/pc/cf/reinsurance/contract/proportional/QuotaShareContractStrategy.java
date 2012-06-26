@@ -52,14 +52,8 @@ public class QuotaShareContractStrategy extends AbstractParameterObject implemen
         if (limit instanceof NoneLimitStrategy) {
             contract = new QuotaShareContract(quotaShare, commission.getCalculator());
         }
-        else if (limit instanceof AalLimitStrategy) {
-            contract = new AALQuotaShareContract(quotaShare, commission.getCalculator(), (AalLimitStrategy) limit);
-        }
-        else if (limit instanceof AadLimitStrategy) {
-            contract = new AADQuotaShareContract(quotaShare, commission.getCalculator(), (AadLimitStrategy) limit);
-        }
-        else if (limit instanceof AalAadLimitStrategy) {
-            contract = new AALAADQuotaShareContract(quotaShare, commission.getCalculator(), (AalAadLimitStrategy) limit);
+        else if (limit instanceof AalLimitStrategy || limit instanceof AalAadLimitStrategy || limit instanceof  AadLimitStrategy) {
+            contract = new AALAADQuotaShareContract(quotaShare, commission.getCalculator(), limit);
         }
         else {
             throw new NotImplementedException(limit + " not implemented.");

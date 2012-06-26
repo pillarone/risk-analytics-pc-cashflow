@@ -89,7 +89,12 @@ public class ClaimStorage {
     }
 
     public void setCumulatedUltimateDevelopedCeded(double cumulatedUltimateDevelopedCeded) {
+        if (Math.abs(cumulatedUltimateDevelopedCeded) < 1E-10) return;
         this.cumulatedUltimateDevelopedCeded = cumulatedUltimateDevelopedCeded;
+    }
+
+    public double getNominalUltimate() {
+        return nominalUltimate;
     }
 
     public double getIncrementalPaidCeded() {

@@ -3,6 +3,9 @@ package org.pillarone.riskanalytics.domain.pc.cf.output;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.pillarone.riskanalytics.core.components.Component;
+import org.pillarone.riskanalytics.core.components.DynamicComposedComponent;
+import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.output.ICollectingModeStrategy;
 import org.pillarone.riskanalytics.core.output.PathMapping;
 import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
@@ -13,6 +16,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.IStructureMarker;
 
 import java.util.*;
 
@@ -29,6 +33,8 @@ public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplit
     private static final String PERILS = "claimsGenerators";
     private static final String CONTRACTS = "reinsuranceContracts";
     private static final String SEGMENTS = "segments";
+
+    private final Map<Component, Class> componentsExtensibleBy = new HashMap<Component, Class>();
 
     public List<SingleValueResultPOJO> collect(PacketList packets) throws IllegalAccessException {
         initSimulation();
@@ -62,22 +68,47 @@ public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplit
 
             PathMapping perilPath = getPathMapping(claim, claim.peril(), PERILS);
             PathMapping lobPath = null;
-            if (!(claim.sender instanceof ISegmentMarker)) {
+
+            if (!componentsExtensibleBy.containsKey(claim.sender)) {
+                Component component = claim.sender;
+                if (component instanceof DynamicComposedComponent) {
+                    component = ((DynamicComposedComponent) component).createDefaultSubComponent();
+                }
+                if (component instanceof ISegmentMarker) {
+                    componentsExtensibleBy.put(claim.sender, ISegmentMarker.class);
+                }
+                else if (component instanceof IReinsuranceContractMarker) {
+                    componentsExtensibleBy.put(claim.sender, IReinsuranceContractMarker.class);
+                }
+                else if (component instanceof ILegalEntityMarker) {
+                    componentsExtensibleBy.put(claim.sender, ILegalEntityMarker.class);
+                }
+                else if (component instanceof IStructureMarker) {
+                    componentsExtensibleBy.put(claim.sender, IStructureMarker.class);
+                }
+            }
+            Class markerInterface = componentsExtensibleBy.get(claim.sender);
+
+            if (!(ISegmentMarker.class.equals(markerInterface))) {
                 lobPath = getPathMapping(claim, claim.segment(), SEGMENTS);
             }
             PathMapping contractPath = null;
-            if (!(claim.sender instanceof IReinsuranceContractMarker)) {
+            if (!(IReinsuranceContractMarker.class.equals(markerInterface))) {
                 contractPath = getPathMapping(claim, claim.reinsuranceContract(), CONTRACTS);
             }
-            if (claim.sender instanceof ISegmentMarker) {
+            if (ISegmentMarker.class.equals(markerInterface)) {
                 addToMap(claim, perilPath, resultMap);
                 addToMap(claim, contractPath, resultMap);
             }
-            if (claim.sender instanceof IReinsuranceContractMarker) {
+            if (IReinsuranceContractMarker.class.equals(markerInterface)) {
                 addToMap(claim, lobPath, resultMap);
                 addToMap(claim, perilPath, resultMap);
+                if (lobPath != null && perilPath != null) {
+                    PathMapping lobPerilPath = getPathMapping(claim, claim.segment(), SEGMENTS, claim.peril(), PERILS);
+                    addToMap(claim, lobPerilPath, resultMap);
+                }
             }
-            if (claim.sender instanceof ILegalEntityMarker) {
+            if (ILegalEntityMarker.class.equals(markerInterface) || IStructureMarker.class.equals(markerInterface)) {
                 addToMap(claim, perilPath, resultMap);
                 addToMap(claim, contractPath, resultMap);
                 addToMap(claim, lobPath, resultMap);

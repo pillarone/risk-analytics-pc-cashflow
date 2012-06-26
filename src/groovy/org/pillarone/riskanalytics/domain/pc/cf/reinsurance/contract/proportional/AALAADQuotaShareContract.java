@@ -1,90 +1,148 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.AalAadLimitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.ILimitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class AALAADQuotaShareContract extends QuotaShareContract {
 
-    private DoubleValue annualAggregateLimitUltimate = new DoubleValue();
-    private DoubleValue annualAggregateLimitPaid = new DoubleValue();
-    private DoubleValue annualAggregateLimitReported = new DoubleValue();
-    private DoubleValue annualAggregateDeductibleUltimate = new DoubleValue();
-    private DoubleValue annualAggregateDeductiblePaid = new DoubleValue();
-    private DoubleValue annualAggregateDeductibleReported = new DoubleValue();
+    private ThresholdStore periodLimit;
+    private ThresholdStore periodDeductible;
+    private AADReduction aadReduction;
 
 
-    public AALAADQuotaShareContract(double quotaShare, ICommission commission, AalAadLimitStrategy limit) {
+
+    public AALAADQuotaShareContract(double quotaShare, ICommission commission, ILimitStrategy limit) {
         super(quotaShare, commission);
-        double annualAggregateLimit = limit.getAAL();
-        annualAggregateLimitUltimate.value = annualAggregateLimit;
-        annualAggregateLimitPaid.value = annualAggregateLimit;
-        annualAggregateLimitReported.value = annualAggregateLimit;
-        double annualAggregateDeductible = limit.getAAD();
-        annualAggregateDeductibleUltimate.value = annualAggregateDeductible;
-        annualAggregateDeductiblePaid.value = annualAggregateDeductible;
-        annualAggregateDeductibleReported.value = annualAggregateDeductible;
+        periodLimit = new ThresholdStore(limit.getAAL());
+        periodDeductible = new ThresholdStore(limit.getAAD());
+        aadReduction = new AADReduction();
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
         double quotaShareUltimate = 0;
-        IClaimRoot cededBaseClaim;
-        if (storage.hasReferenceCeded()) {
-            cededBaseClaim = storage.getCededClaimRoot();
-        }
-        else {
-            quotaShareUltimate = adjustedQuote(grossClaim.ultimate(), annualAggregateLimitUltimate, annualAggregateDeductibleUltimate);
-            cededBaseClaim = storage.lazyInitCededClaimRoot(quotaShareUltimate);
+        if (!storage.hasReferenceCeded()) {
+            quotaShareUltimate = adjustedQuote(grossClaim.developedUltimate(), grossClaim.nominalUltimate(),
+                    BasedOnClaimProperty.ULTIMATE, storage);
+            storage.lazyInitCededClaimRoot(quotaShareUltimate);
         }
 
-        double quotaShareReported = adjustedQuote(grossClaim.getReportedIncrementalIndexed(), annualAggregateLimitReported, annualAggregateDeductibleReported);
-        double quotaSharePaid = adjustedQuote(grossClaim.getPaidIncrementalIndexed(), annualAggregateLimitPaid, annualAggregateDeductiblePaid);
+        double quotaShareReported = adjustedQuote(grossClaim.getReportedCumulatedIndexed(),
+                grossClaim.getReportedIncrementalIndexed(), BasedOnClaimProperty.REPORTED, storage);
+        double quotaSharePaid = adjustedQuote(grossClaim.getPaidCumulatedIndexed(),
+                grossClaim.getPaidIncrementalIndexed(), BasedOnClaimProperty.PAID, storage);
         ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate,
                 quotaShareReported, quotaSharePaid, true);
         add(grossClaim, cededClaim);
         return cededClaim;
     }
 
-    /**
-     * @param claimProperty
-     * @param annualAggregateLimit
-     * @param annualAggregateDeductible
-     * @return has a negative sign as claimProperty is negative
-     */
-    private double adjustedQuote(double claimProperty, DoubleValue annualAggregateLimit, DoubleValue annualAggregateDeductible) {
-        if (claimProperty == 0) return -1;
-        double claimPropertyAfterAAD = Math.max(claimProperty - annualAggregateDeductible.value, 0);
-        double aadReduction = claimProperty - claimPropertyAfterAAD;
-        annualAggregateDeductible.minus(aadReduction);
-        Double cededClaimProperty = Math.min(claimPropertyAfterAAD * -quotaShare, annualAggregateLimit.value);
-        annualAggregateLimit.minus(cededClaimProperty);
-        return (cededClaimProperty / claimProperty);
+    private double adjustedQuote(double claimPropertyCumulated, double claimPropertyIncremental,
+                                 BasedOnClaimProperty claimPropertyBase, ClaimStorage storage) {
+        double grossAfterAAD = Math.max(0, -claimPropertyCumulated - periodDeductible.get(claimPropertyBase));
+        double reduceAAD = -claimPropertyCumulated - grossAfterAAD;
+        periodDeductible.set(Math.max(0, periodDeductible.get(claimPropertyBase) - reduceAAD), claimPropertyBase);
+        Double previousPeriodAADReduction = aadReduction.previousAADReduction(storage.getCededClaimRoot(), claimPropertyBase);
+        double ceded = grossAfterAAD != 0 ? (grossAfterAAD - previousPeriodAADReduction) * quotaShare : 0d;
+        if (reduceAAD > 0) {
+            aadReduction.increaseAADReduction(storage.getCededClaimRoot(), claimPropertyBase, reduceAAD);
+        }
+        double incrementalCeded = ceded - storage.getCumulatedCeded(claimPropertyBase);
+        double cededAfterAAL = periodLimit.get(claimPropertyBase) > incrementalCeded ? incrementalCeded : periodLimit.get(claimPropertyBase);
+        periodLimit.plus(-cededAfterAAL, claimPropertyBase);
+        return claimPropertyIncremental == 0 ? 0 : cededAfterAAL / claimPropertyIncremental;
     }
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(super.toString());
-        buffer.append(", AAL ultimate: ");
-        buffer.append(annualAggregateLimitUltimate);
-        buffer.append(", AAL reported: ");
-        buffer.append(annualAggregateLimitReported);
-        buffer.append(", AAL paid: ");
-        buffer.append(annualAggregateLimitPaid);
-        buffer.append(", AAD ultimate: ");
-        buffer.append(annualAggregateDeductibleUltimate);
-        buffer.append(", AAD reported: ");
-        buffer.append(annualAggregateDeductibleReported);
-        buffer.append(", AAD paid: ");
-        buffer.append(annualAggregateDeductiblePaid);
-        return buffer.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append(super.toString());
+        builder.append(", AAL ultimate: ");
+        builder.append(periodLimit.get(BasedOnClaimProperty.ULTIMATE));
+        builder.append(", AAL reported: ");
+        builder.append(periodLimit.get(BasedOnClaimProperty.REPORTED));
+        builder.append(", AAL paid: ");
+        builder.append(periodLimit.get(BasedOnClaimProperty.PAID));
+        builder.append(", AAD ultimate: ");
+        builder.append(periodDeductible.get(BasedOnClaimProperty.ULTIMATE));
+        builder.append(", AAD reported: ");
+        builder.append(periodDeductible.get(BasedOnClaimProperty.REPORTED));
+        builder.append(", AAD paid: ");
+        builder.append(periodDeductible.get(BasedOnClaimProperty.PAID));
+        return builder.toString();
+    }
+
+    private class AADReduction {
+//        private Map<IClaimRoot, Double> ultimate;
+        private Map<IClaimRoot, Double> reported;
+        private Map<IClaimRoot, Double> paid;
+
+        public AADReduction() {
+            init();
+        }
+
+        public void init() {
+//            ultimate = new HashMap<IClaimRoot, Double>();
+            reported = new HashMap<IClaimRoot, Double>();
+            paid = new HashMap<IClaimRoot, Double>();
+        }
+
+        public void increaseAADReduction(IClaimRoot keyClaim, BasedOnClaimProperty base, double incrementalReduction) {
+            switch (base) {
+                case ULTIMATE: {
+//                    Double previousReduction = ultimate.get(keyClaim);
+//                    ultimate.put(keyClaim, incrementalReduction + ((previousReduction != null) ? previousReduction : 0));
+                    break;
+                }
+                case REPORTED: {
+                    Double previousReduction = reported.get(keyClaim);
+                    reported.put(keyClaim, incrementalReduction + ((previousReduction != null) ? previousReduction : 0));
+                    break;
+                }
+                case PAID: {
+                    Double previousReduction = paid.get(keyClaim);
+                    paid.put(keyClaim, incrementalReduction + ((previousReduction != null) ? previousReduction : 0));
+                    break;
+                }
+                default: {
+                    throw new NotImplementedException(base.toString());
+                }
+            }
+        }
+
+        public double previousAADReduction(IClaimRoot keyClaim, BasedOnClaimProperty base) {
+            Double previousReduction = null;
+            switch (base) {
+                case ULTIMATE: {
+//                    previousReduction = ultimate.get(keyClaim);
+                    break;
+                }
+                case REPORTED: {
+                    previousReduction = reported.get(keyClaim);
+                    break;
+                }
+                case PAID: {
+                    previousReduction = paid.get(keyClaim);
+                    break;
+                }
+                default: {
+                    throw new NotImplementedException(base.toString());
+                }
+            }
+            return ((previousReduction == null) ? 0d : previousReduction);
+        }
     }
 }

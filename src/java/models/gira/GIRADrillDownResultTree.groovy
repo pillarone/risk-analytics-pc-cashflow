@@ -47,13 +47,62 @@ mappings = {
         "segments" {
             "[%segment%]" {
                 "claimsNet" {
-                    "ultimate" "GIRA:segments:[%segment%]:outClaimsNet:ultimate"
-                    "reportedIncrementalIndexed" "GIRA:segments:[%segment%]:outClaimsNet:reportedIncrementalIndexed"
-                    "paidIncrementalIndexed" "GIRA:segments:[%segment%]:outClaimsNet:paidIncrementalIndexed"
-                    "outstandingIndexed" "GIRA:segments:[%segment%]:outClaimsNet:outstandingIndexed"
-                    "IBNRIndexed" "GIRA:segments:[%segment%]:outClaimsNet:IBNRIndexed"
-                    "reservesIndexed" "GIRA:segments:[%segment%]:outClaimsNet:reservesIndexed"
-                    "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsNet:developedResultIndexed"
+                    "ultimate" "GIRA:segments:[%segment%]:outClaimsNet:ultimate", {
+                        "byPeril" {
+                            "[%peril%]" "GIRA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:ultimate"
+                        }
+                        "byContract" {
+                            "[%contract%]" "GIRA:segments:[%segment%]:reinsuranceContracts:[%contract%]:outClaimsNet:ultimate"
+                        }
+                    }
+                    "reportedIncrementalIndexed" "GIRA:segments:[%segment%]:outClaimsNet:reportedIncrementalIndexed", {
+                        "byPeril" {
+                            "[%peril%]" "GIRA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:reportedIncrementalIndexed"
+                        }
+                        "byContract" {
+                            "[%contract%]" "GIRA:segments:[%segment%]:reinsuranceContracts:[%contract%]:outClaimsNet:reportedIncrementalIndexed"
+                        }
+                    }
+                    "paidIncrementalIndexed" "GIRA:segments:[%segment%]:outClaimsNet:paidIncrementalIndexed", {
+                        "byPeril" {
+                            "[%peril%]" "GIRA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:paidIncrementalIndexed"
+                        }
+                        "byContract" {
+                            "[%contract%]" "GIRA:segments:[%segment%]:reinsuranceContracts:[%contract%]:outClaimsNet:paidIncrementalIndexed"
+                        }
+                    }
+                    "outstandingIndexed" "GIRA:segments:[%segment%]:outClaimsNet:outstandingIndexed", {
+                        "byPeril" {
+                            "[%peril%]" "GIRA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:outstandingIndexed"
+                        }
+                        "byContract" {
+                            "[%contract%]" "GIRA:segments:[%segment%]:reinsuranceContracts:[%contract%]:outClaimsNet:outstandingIndexed"
+                        }
+                    }
+                    "IBNRIndexed" "GIRA:segments:[%segment%]:outClaimsNet:IBNRIndexed", {
+                        "byPeril" {
+                            "[%peril%]" "GIRA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:IBNRIndexed"
+                        }
+                        "byContract" {
+                            "[%contract%]" "GIRA:segments:[%segment%]:reinsuranceContracts:[%contract%]:outClaimsNet:IBNRIndexed"
+                        }
+                    }
+                    "reservesIndexed" "GIRA:segments:[%segment%]:outClaimsNet:reservesIndexed", {
+                        "byPeril" {
+                            "[%peril%]" "GIRA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:reservesIndexed"
+                        }
+                        "byContract" {
+                            "[%contract%]" "GIRA:segments:[%segment%]:reinsuranceContracts:[%contract%]:outClaimsNet:reservesIndexed"
+                        }
+                    }
+                    "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsNet:developedResultIndexed", {
+                        "byPeril" {
+                            "[%peril%]" "GIRA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:developedResultIndexed"
+                        }
+                        "byContract" {
+                            "[%contract%]" "GIRA:segments:[%segment%]:reinsuranceContracts:[%contract%]:outClaimsNet:developedResultIndexed"
+                        }
+                    }
                     "claimsGross" {
                         "ultimate" "GIRA:segments:[%segment%]:outClaimsGross:ultimate", {
                             "[%peril%]" "GIRA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:ultimate"

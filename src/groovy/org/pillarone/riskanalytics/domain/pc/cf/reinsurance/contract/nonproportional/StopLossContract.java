@@ -61,12 +61,10 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
         if (aggregateClaimStorage != null) {
             aggregateClaimStorage.resetIncrementsAndFactors();
         }
-        for (ClaimCashflowPacket grossClaim : grossClaims) {
-            if (aggregateClaimStorage == null) {
-                aggregateClaimStorage = new AggregateEventClaimsStorage();
-            }
-            aggregateClaimStorage.add(grossClaim);
+        if (aggregateClaimStorage == null) {
+            aggregateClaimStorage = new AggregateEventClaimsStorage();
         }
+        aggregateClaimStorage.add(ClaimUtils.sum(grossClaims, true));
 
         cededFactor(BasedOnClaimProperty.ULTIMATE, aggregateClaimStorage);
         cededFactor(BasedOnClaimProperty.REPORTED, aggregateClaimStorage);
@@ -93,29 +91,15 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
     }
 
     private void cededFactor(BasedOnClaimProperty claimPropertyBase, AggregateEventClaimsStorage storage) {
-        double aggregateLimitValue = periodLimit.get(claimPropertyBase);
-        if (aggregateLimitValue > 0) {
-            double claimPropertyIncremental;
-            if (claimPropertyBase.equals(BasedOnClaimProperty.ULTIMATE)) {
-                claimPropertyIncremental = storage.getCumulated(claimPropertyBase);
-            }
-            else {
-                claimPropertyIncremental = storage.getIncremental(claimPropertyBase);
-            }
-            double attachmentPoint = periodAttachmentPoint.get(claimPropertyBase);
-            double limit = periodLimit.get(claimPropertyBase);
-            double ceded = Math.min(Math.max(-claimPropertyIncremental - attachmentPoint, 0), limit);
-            if (ceded > 0) {
-                periodAttachmentPoint.set(0, claimPropertyBase);
-            }
-            else {
-                periodAttachmentPoint.plus(claimPropertyIncremental, claimPropertyBase);
-            }
-            periodLimit.plus(-ceded, claimPropertyBase);
-            double factor = claimPropertyIncremental == 0 ? 0 : ceded / claimPropertyIncremental;
-            storage.setCededFactor(claimPropertyBase, factor);
-            storage.update(claimPropertyBase, ceded);
-        }
+        double claimPropertyCumulated = storage.getCumulated(claimPropertyBase);
+        double claimPropertyIncremental = storage.getIncremental(claimPropertyBase);
+        double attachmentPoint = periodAttachmentPoint.get(claimPropertyBase);
+        double limit = periodLimit.get(claimPropertyBase);
+        double cededCumulated = Math.min(Math.max(-claimPropertyCumulated - attachmentPoint, 0), limit);
+        double cededIncremental = cededCumulated - storage.getCumulatedCeded(claimPropertyBase);
+        double factor = claimPropertyIncremental == 0 ? 0 : cededIncremental / claimPropertyIncremental;
+        storage.setCededFactor(claimPropertyBase, factor);
+        storage.update(claimPropertyBase, cededIncremental);
     }
 
     public void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
