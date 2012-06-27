@@ -30,6 +30,9 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
     DateTime date20120404 = new DateTime(2012,4,4,0,0,0,0)
     DateTime date20120501 = new DateTime(2012,5,1,0,0,0,0)
 
+    PayoutPatternBase periodBase = PayoutPatternBase.PERIOD_START_DATE
+    PayoutPatternBase occurenceBase = PayoutPatternBase.CLAIM_OCCURANCE_DATE
+
     void testOriginal() {
         List<ClaimRoot> baseClaims1 = [ new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20100310) ]
         List<ClaimRoot> baseClaims2 = [ new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20110210) ]
@@ -52,9 +55,9 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
         pattern.origin = new UpdatingPattern(name: '48m')
 
         IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingOriginalUltimateMethodology()
-        List<ClaimRoot> updatedClaims1 = updatingMethodology.updatingUltimate(baseClaims1, actualClaims, periodCounter, updateDate, [pattern], 1, days360 )
-        List<ClaimRoot> updatedClaims2 = updatingMethodology.updatingUltimate(baseClaims2, actualClaims, periodCounter, updateDate, [pattern], 2, days360 )
-        List<ClaimRoot> updatedClaims3 = updatingMethodology.updatingUltimate(baseClaims3, actualClaims, periodCounter, updateDate, [pattern], 3, days360 )
+        List<ClaimRoot> updatedClaims1 = updatingMethodology.updatingUltimate(baseClaims1, actualClaims, periodCounter, updateDate, [pattern], 1, days360, periodBase )
+        List<ClaimRoot> updatedClaims2 = updatingMethodology.updatingUltimate(baseClaims2, actualClaims, periodCounter, updateDate, [pattern], 2, days360, periodBase )
+        List<ClaimRoot> updatedClaims3 = updatingMethodology.updatingUltimate(baseClaims3, actualClaims, periodCounter, updateDate, [pattern], 3, days360, periodBase )
 
         assertEquals 'adjusted ultimates', -80000d, updatedClaims1[0].getUltimate()
         assertEquals 'adjusted ultimates', -75000d , updatedClaims2[0].getUltimate()
@@ -85,9 +88,9 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
         updatingPattern.selectedComponent = pattern.origin
 
         IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingBFReportingMethodology(updatingPattern: updatingPattern)
-        List<ClaimRoot> updatedClaims1 = updatingMethodology.updatingUltimate(baseClaims1, actualClaims, periodCounter, updateDate, [pattern], 1, days360)
-        List<ClaimRoot> updatedClaims2 = updatingMethodology.updatingUltimate(baseClaims2, actualClaims, periodCounter, updateDate, [pattern], 2, days360)
-        List<ClaimRoot> updatedClaims3 = updatingMethodology.updatingUltimate(baseClaims3, actualClaims, periodCounter, updateDate, [pattern], 3, days360)
+        List<ClaimRoot> updatedClaims1 = updatingMethodology.updatingUltimate(baseClaims1, actualClaims, periodCounter, updateDate, [pattern], 1, days360, periodBase)
+        List<ClaimRoot> updatedClaims2 = updatingMethodology.updatingUltimate(baseClaims2, actualClaims, periodCounter, updateDate, [pattern], 2, days360, periodBase)
+        List<ClaimRoot> updatedClaims3 = updatingMethodology.updatingUltimate(baseClaims3, actualClaims, periodCounter, updateDate, [pattern], 3, days360, periodBase)
 
 
         assertEquals 'adjusted ultimates', 58468.75, updatedClaims1[0].getUltimate(), EPSILON
@@ -119,9 +122,9 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
         updatingPattern.selectedComponent = pattern.origin
 
         IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingBFReportingMethodology(updatingPattern: updatingPattern)
-        List<ClaimRoot> updatedClaims1 = updatingMethodology.updatingUltimate(baseClaims1, actualClaims, periodCounter, updateDate, [pattern], 1, days360)
-        List<ClaimRoot> updatedClaims2 = updatingMethodology.updatingUltimate(baseClaims2, actualClaims, periodCounter, updateDate, [pattern], 2, days360)
-        List<ClaimRoot> updatedClaims3 = updatingMethodology.updatingUltimate(baseClaims3, actualClaims, periodCounter, updateDate, [pattern], 3, days360)
+        List<ClaimRoot> updatedClaims1 = updatingMethodology.updatingUltimate(baseClaims1, actualClaims, periodCounter, updateDate, [pattern], 1, days360, periodBase)
+        List<ClaimRoot> updatedClaims2 = updatingMethodology.updatingUltimate(baseClaims2, actualClaims, periodCounter, updateDate, [pattern], 2, days360, periodBase)
+        List<ClaimRoot> updatedClaims3 = updatingMethodology.updatingUltimate(baseClaims3, actualClaims, periodCounter, updateDate, [pattern], 3, days360, periodBase)
 
         assertEquals 'adjusted ultimates', 75000d , updatedClaims1[0].getUltimate()
         assertEquals 'adjusted ultimates', 75000d, updatedClaims2[0].getUltimate()
@@ -152,9 +155,9 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
         updatingPattern.selectedComponent = pattern.origin
 
         IAggregateUpdatingMethodologyStrategy updatingMethodology = new AggregateUpdatingBFReportingMethodology(updatingPattern: updatingPattern)
-        List<ClaimRoot> updatedClaims1 = updatingMethodology.updatingUltimate(baseClaims1, actualClaims, periodCounter, updateDate, [pattern], 1, days360)
-        List<ClaimRoot> updatedClaims2 = updatingMethodology.updatingUltimate(baseClaims2, actualClaims, periodCounter, updateDate, [pattern], 2, days360)
-        List<ClaimRoot> updatedClaims3 = updatingMethodology.updatingUltimate(baseClaims3, actualClaims, periodCounter, updateDate, [pattern], 3, days360)
+        List<ClaimRoot> updatedClaims1 = updatingMethodology.updatingUltimate(baseClaims1, actualClaims, periodCounter, updateDate, [pattern], 1, days360, periodBase)
+        List<ClaimRoot> updatedClaims2 = updatingMethodology.updatingUltimate(baseClaims2, actualClaims, periodCounter, updateDate, [pattern], 2, days360, periodBase)
+        List<ClaimRoot> updatedClaims3 = updatingMethodology.updatingUltimate(baseClaims3, actualClaims, periodCounter, updateDate, [pattern], 3, days360, periodBase)
 
         assertEquals 'adjusted ultimates', 58468.75, updatedClaims1[0].getUltimate()
         assertEquals 'adjusted ultimates', 65041.666666666664,  updatedClaims2[0].getUltimate()

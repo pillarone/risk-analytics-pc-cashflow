@@ -81,6 +81,7 @@ abstract public class AbstractSplitCollectingModeStrategy implements ICollecting
                 result.setSimulationRun(simulationRun);
                 result.setIteration(iteration);
                 result.setPeriod(period);
+                result.setDate(packet.getDate());
                 result.setPath(path);
                 if (firstPath) {    // todo(sku): might be completely removed
                     result.setCollector(mappingCache.lookupCollector("AGGREGATED"));
