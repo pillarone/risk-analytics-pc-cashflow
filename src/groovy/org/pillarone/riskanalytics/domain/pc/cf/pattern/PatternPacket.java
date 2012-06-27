@@ -362,7 +362,8 @@ public class PatternPacket extends Packet implements Cloneable {
     public void consistencyCheck(boolean checkIncrementalSum1, boolean checkFinalCumulative1, boolean checkIncreasingPeriods, boolean checkIncreasingIncrements) {
         if(checkIncrementalSum1) checkIncrementalPatternSumTo1();
         if(checkFinalCumulative1) {
-            if(cumulativeValues.get(cumulativeValues.size() -1 ) != 1) {
+            double finalCumulative = cumulativeValues.get(cumulativeValues.size() - 1);
+            if (( ! (finalCumulative > 0.9999999) && (finalCumulative < 1.0000001))){
                 throw new PatternSumNotOneException(cumulativeValues);
             }
         }
