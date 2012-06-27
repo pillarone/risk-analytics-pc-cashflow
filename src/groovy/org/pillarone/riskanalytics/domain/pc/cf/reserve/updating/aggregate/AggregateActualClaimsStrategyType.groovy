@@ -18,7 +18,6 @@ class AggregateActualClaimsStrategyType extends AbstractParameterObjectClassifie
     public static final AggregateActualClaimsStrategyType NONE = new AggregateActualClaimsStrategyType('none', 'NONE', [:])
     public static final AggregateActualClaimsStrategyType AGGREGATE = new AggregateActualClaimsStrategyType('aggregate', 'AGGREGATE',
             [history : AggregateActualClaimsStrategy.getDefaultHistory(),
-             payoutPatternBase: PayoutPatternBase.PERIOD_START_DATE
             ]
     )
 
@@ -53,18 +52,12 @@ class AggregateActualClaimsStrategyType extends AbstractParameterObjectClassifie
     }
 
     static IAggregateActualClaimsStrategy getStrategy(AggregateActualClaimsStrategyType type, Map parameters) {
-//        PayoutPatternBase base = (PayoutPatternBase) parameters['payoutPatternBase']
-//        if(base == null) {
-//            LOG.info("No payoutPatternBase set in the UI. This parameter is deliberately not exposed in the UI. Defaulting to " + PayoutPatternBase.PERIOD_START_DATE.toString());
-//            base = PayoutPatternBase.PERIOD_START_DATE;
-//        }
         switch (type) {
             case AggregateActualClaimsStrategyType.NONE:
                 return new NoAggregateActualClaimsStrategy()
             case AggregateActualClaimsStrategyType.AGGREGATE:
                 return new AggregateActualClaimsStrategy(
                         history: (ConstrainedMultiDimensionalParameter) parameters['history'],
-//                        payoutPatternBase: base
                 )
             default: throw new NotImplementedException(type.toString() + " is not implemented")
         }
