@@ -173,11 +173,8 @@ public class PatternPacket extends Packet implements Cloneable {
     /**
      * Rescales this pattern against an update date. Returns a new, independant pattern
      *
-     *
-     *
-     *
-     * @param updateDate              update date
-     * @param patternStartDate        date the pattern starts from
+     * @param updateDate       update date
+     * @param patternStartDate date the pattern starts from
      * @return a new rescaled pattern at the update date
      */
     public PatternPacket rescalePatternToUpdateDate(DateTime updateDate, DateTime patternStartDate) {
@@ -257,11 +254,11 @@ public class PatternPacket extends Packet implements Cloneable {
         for (Double cumulativeValue : cumulativeValues) {
             incrementalValues.add(cumulativeValue - priorValue);
         }
-        if(checkSumOne) checkIncrementalPatternSumTo1();
+        if (checkSumOne) checkIncrementalPatternSumTo1();
         return incrementalValues;
     }
 
-    void checkIncrementalPatternSumTo1(){
+    void checkIncrementalPatternSumTo1() {
         double sumCumulativeValue = 0;
         double priorValue = 0;
 //        Important the check here is set to false otherwise we have an infinite loop!
@@ -276,11 +273,11 @@ public class PatternPacket extends Packet implements Cloneable {
 
     public TreeMap<DateTime, Double> absolutePattern(DateTime baseDate, boolean incremental) {
         TreeMap<DateTime, Double> tempMap = new TreeMap<DateTime, Double>();
-        for (int j = 0; j < cumulativePeriods.size() ; j++) {
+        for (int j = 0; j < cumulativePeriods.size(); j++) {
             Period month = cumulativePeriods.get(j);
             Number ratio;
-            if(incremental) {
-              ratio  = getIncrementalValues(true).get(j);
+            if (incremental) {
+                ratio = getIncrementalValues(true).get(j);
             } else {
                 ratio = cumulativeValues.get(j);
             }
@@ -360,17 +357,17 @@ public class PatternPacket extends Packet implements Cloneable {
     }
 
     public void consistencyCheck(boolean checkIncrementalSum1, boolean checkFinalCumulative1, boolean checkIncreasingPeriods, boolean checkIncreasingIncrements) {
-        if(checkIncrementalSum1) checkIncrementalPatternSumTo1();
-        if(checkFinalCumulative1) {
+        if (checkIncrementalSum1) checkIncrementalPatternSumTo1();
+        if (checkFinalCumulative1) {
             double finalCumulative = cumulativeValues.get(cumulativeValues.size() - 1);
-            if (( ! (finalCumulative > 0.9999999) && (finalCumulative < 1.0000001))){
+            if ((!(finalCumulative > 0.9999999) && (finalCumulative < 1.0000001))) {
                 throw new PatternSumNotOneException(cumulativeValues);
             }
         }
         if (checkIncreasingPeriods) {
             checkIncreasingPeriodLengths();
         }
-        if(checkIncreasingIncrements) {
+        if (checkIncreasingIncrements) {
             checkIncreasingIncrements();
         }
     }
@@ -378,7 +375,7 @@ public class PatternPacket extends Packet implements Cloneable {
     private void checkIncreasingIncrements() {
         List<Double> increments = getIncrementalValues(false);
         for (Double increment : increments) {
-            if(increment < 0) {
+            if (increment < 0) {
                 throw new PatternSumNotOneException(getIncrementalValues(false));
             }
         }
