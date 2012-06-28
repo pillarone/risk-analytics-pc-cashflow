@@ -42,7 +42,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.output.AggregatePremiumReserveRi
 import org.pillarone.riskanalytics.domain.pc.cf.structure.validation.ClaimTypeStructuringValidator
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceReducedCollectingModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateReportedClaimCollectingModeStrategy
-import org.pillarone.riskanalytics.domain.pc.cf.output.SingleSplitByInceptionDateCollectingModeStrategy
+//import org.pillarone.riskanalytics.domain.pc.cf.output.SingleSplitByInceptionDateCollectingModeStrategy
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
