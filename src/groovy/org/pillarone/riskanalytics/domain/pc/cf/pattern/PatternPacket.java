@@ -267,7 +267,7 @@ public class PatternPacket extends Packet implements Cloneable {
             priorValue = cumulativeValue;
         }
         if (!((0.99999 < sumCumulativeValue) && (sumCumulativeValue < 1.00001))) {
-            throw new PatternSumNotOneException(getIncrementalValues(true));
+            throw new PatternSumNotOneException(getIncrementalValues(false));
         }
     }
 
