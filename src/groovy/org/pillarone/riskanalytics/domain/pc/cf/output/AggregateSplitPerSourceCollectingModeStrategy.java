@@ -50,6 +50,11 @@ public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplit
         }
     }
 
+    @Override
+    public List<String> filter() {
+        return Collections.emptyList();
+    }
+
     /**
      * @param claims
      * @return a map with paths as key

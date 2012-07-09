@@ -3,15 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.output;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pillarone.riskanalytics.core.output.ICollectingModeStrategy;
-import org.pillarone.riskanalytics.core.output.PathMapping;
-import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
-import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This collecting mode strategy calculates the premium and reserve risk
@@ -24,54 +16,10 @@ public class AggregateIncludingPremiumReserveRiskCollectingModeStrategy extends 
 
     static final String IDENTIFIER = "INCLUDING_PREMIUM_RESERVE_RISK";
 
-    @Override
-    protected List<SingleValueResultPOJO> createPremiumReserveRisk(List<ClaimCashflowPacket> claims) {
-        List<SingleValueResultPOJO> results = new ArrayList<SingleValueResultPOJO>();
-        double totalReserveRisk = 0;
-        double premiumRisk = 0;
-        for (ClaimCashflowPacket claim : claims) {
-            if (claim.reserveRisk() != 0) {
-                // belongs to reserve risk
-                totalReserveRisk += claim.reserveRisk();
-            }
-            else if (claim.premiumRisk() != 0) {
-                // belongs to premium risk
-                premiumRisk += claim.premiumRisk();
-            }
-        }
-        if (premiumRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK_BASE, premiumRisk));
-        }
-        if (totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK_BASE, totalReserveRisk));
-        }
-        if (premiumRisk + totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk + totalReserveRisk));
-        }
-        return results;
+    protected boolean splitByInceptionPeriod() {
+        return false;
     }
 
-    /**
-     * @param packets
-     * @return a map with paths as key
-     */
-    protected Map<PathMapping, Packet> aggregate(List<Packet> packets) {
-        // has to be a LinkedHashMap to make sure the shortest path is the first in the map and gets AGGREGATED as collecting mode
-        Map<PathMapping, Packet> resultMap = new LinkedHashMap<PathMapping, Packet>(packets.size());
-        if (packets == null || packets.size() == 0) {
-            return resultMap;
-        }
-
-        for (Packet packet : packets) {
-            String originPath = packetCollector.getSimulationScope().getStructureInformation().getPath(packet);
-            PathMapping path = mappingCache.lookupPath(originPath);
-            addToMap(packet, path, resultMap);
-
-        }
-        return resultMap;
-    }
-
-    
     public String getIdentifier() {
         return IDENTIFIER;
     }
