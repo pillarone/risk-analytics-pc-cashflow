@@ -87,32 +87,55 @@ public final class GrossClaimRoot implements IClaimRoot {
         // todo(sku): add check for synchronized patterns
     }
 
+    public GrossClaimRoot(ClaimRoot claimRoot, PatternPacket payoutPattern, PatternPacket reportingPattern, DateTime startDateForPatterns) {
+        this(claimRoot);
+        this.payoutPattern = payoutPattern != null ? payoutPattern.get() : null;
+        this.reportingPattern = reportingPattern != null ? reportingPattern.get() : null;
+        this.startDateForPatterns = startDateForPatterns;
+    }
+
     /**
      * This constructor preserves claim metadata, but alters the ultimate amount and occurrence date according to what's passed in.
      * @param claimRoot
      * @param ultimate
      * @param occurrenceDate
+     * @param startDateForPatterns
      */
-    public GrossClaimRoot(GrossClaimRoot claimRoot, double ultimate , DateTime occurrenceDate){
+    public GrossClaimRoot(GrossClaimRoot claimRoot, double ultimate, DateTime occurrenceDate, DateTime startDateForPatterns){
         this(
-                ultimate,
-                claimRoot.getClaimType(),
-                claimRoot.getExposureStartDate(),
-                occurrenceDate,
+                new ClaimRoot(ultimate, claimRoot.getClaimType(), claimRoot.getExposureStartDate(), occurrenceDate, claimRoot.getEvent()) ,
                 claimRoot.payoutPattern,
                 claimRoot.reportingPattern,
-                claimRoot.getEvent()
+                startDateForPatterns
         );
     }
 
     public GrossClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate,
                           PatternPacket payoutPattern, PatternPacket reportingPattern) {
-        this(new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate), payoutPattern, reportingPattern);
+        this(
+                new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate),
+                payoutPattern,
+                reportingPattern
+        );
+    }
+
+    public GrossClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate,
+                          PatternPacket payoutPattern, PatternPacket reportingPattern, DateTime startDateForPatterns) {
+        this(
+                new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate),
+                payoutPattern,
+                reportingPattern,
+                startDateForPatterns
+        );
     }
 
     public GrossClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate,
                           PatternPacket payoutPattern, PatternPacket reportingPattern, EventPacket event) {
-        this(new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate, event), payoutPattern, reportingPattern);
+        this(
+                new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate, event),
+                payoutPattern,
+                reportingPattern
+        );
     }
 
     /**
@@ -334,6 +357,10 @@ public final class GrossClaimRoot implements IClaimRoot {
         grossClaimRoot.remainingReserves = remainingReserves * scaleFactor;
         grossClaimRoot.previousIBNR = previousIBNR * scaleFactor;
         return grossClaimRoot;
+    }
+
+    public DateTime getStartDateForPatterns() {
+        return startDateForPatterns;
     }
 
     @Override

@@ -3,7 +3,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
@@ -79,9 +78,10 @@ public class RiskAttachingContractBase extends AbstractContractBase implements I
             double splittedUltimate = claimRoot.getUltimate() / (double) splittedClaimsNumber();
             for (int j = 0; j < splittedClaimsNumber(); j++) {
                 DateTime occurrenceDate = occurrenceDate(claimRoot.getExposureStartDate(), dateGen, periodScope, claimRoot.getEvent());
-                claimRoots.add(new GrossClaimRoot(claimRoot, splittedUltimate, occurrenceDate));
+                claimRoots.add(new GrossClaimRoot(claimRoot, splittedUltimate, occurrenceDate, claimRoot.getStartDateForPatterns()));
             }
         }
         return claimRoots;
     }
+
 }

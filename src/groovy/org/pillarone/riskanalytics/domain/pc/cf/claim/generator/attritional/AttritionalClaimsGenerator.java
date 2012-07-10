@@ -70,7 +70,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
             if (!(commutationState.isCommuted() || commutationState.isCommuteThisPeriod())) {
                 IPeriodCounter periodCounter = periodScope.getPeriodCounter();
                 List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
-                List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
+                List<GrossClaimRoot> claimsAfterSplit = new ArrayList<GrossClaimRoot>();
                 List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
 
                 List<Factors> runoffFactors = null;
@@ -88,15 +88,15 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                             globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), DAYS_360, parmPayoutPatternBase);
                     checkBaseClaims(baseClaims);
                     runoffFactors = new ArrayList<Factors>();
-                    grossClaimRoots = baseClaimsOfCurrentPeriodAdjustedPattern(baseClaims, parmPayoutPattern, parmActualClaims,
+                    List<GrossClaimRoot> grossClaimRoots = baseClaimsOfCurrentPeriodAdjustedPattern(baseClaims, parmPayoutPattern, parmActualClaims,
                             periodScope, parmPayoutPatternBase);
-                    List<GrossClaimRoot> claimsAfterSplit = parmParameterizationBasis.splitClaims(grossClaimRoots, periodScope);
+                    claimsAfterSplit = parmParameterizationBasis.splitClaims(grossClaimRoots, periodScope);
                     storeClaimsWhichOccurInFuturePeriods(claimsAfterSplit, periodStore);
                     claims = cashflowsInCurrentPeriod(claimsAfterSplit, runoffFactors, periodScope);
                 }
                 developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
                 checkCashflowClaims(claims);
-                doCashflowChecks(claims, grossClaimRoots, baseClaims);
+                doCashflowChecks(claims, claimsAfterSplit, baseClaims);
                 setTechnicalProperties(claims);
                 outClaims.addAll(claims);
             }
