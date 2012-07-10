@@ -64,19 +64,10 @@ abstract public class AbstractSplitCollectingModeStrategy implements ICollecting
         for (Map.Entry<PathMapping, Packet> packetEntry : packets.entrySet()) {
             PathMapping path = packetEntry.getKey();
             Packet packet = packetEntry.getValue();
-            for (Map.Entry<String, Number> field : packet.getValuesToSave().entrySet()) {
+            for (Map.Entry<String, Number> field : filter(packet.getValuesToSave()).entrySet()) {
                 String fieldName = field.getKey();
                 Double value = (Double) field.getValue();
-                if (value == Double.NaN || value == Double.NEGATIVE_INFINITY || value == Double.POSITIVE_INFINITY) {
-                    if (LOG.isErrorEnabled()) {
-                        StringBuilder message = new StringBuilder();
-                        message.append(value).append(" collected at ").append(packetCollector.getPath());
-                        message.append(" (period ").append(period).append(") in iteration ");
-                        message.append(iteration).append(" - ignoring.");
-                        LOG.error(message);
-                    }
-                    continue;
-                }
+                if (handleInvalidNumber(value)) continue;
                 SingleValueResultPOJO result = new SingleValueResultPOJO();
                 result.setSimulationRun(simulationRun);
                 result.setIteration(iteration);
@@ -98,6 +89,35 @@ abstract public class AbstractSplitCollectingModeStrategy implements ICollecting
         }
         return singleValueResults;
     }
+
+    protected boolean handleInvalidNumber(Double value) {
+        if (value == Double.NaN || value == Double.NEGATIVE_INFINITY || value == Double.POSITIVE_INFINITY) {
+            if (LOG.isErrorEnabled()) {
+                StringBuilder message = new StringBuilder();
+                message.append(value).append(" collected at ").append(packetCollector.getPath());
+                message.append(" (period ").append(period).append(") in iteration ");
+                message.append(iteration).append(" - ignoring.");
+                LOG.error(message);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param valuesToSave
+     * @return valuesToSave itself if filter() returns an empty list or all fields and number with matching field names
+     */
+    public Map<String, Number> filter(Map<String, Number> valuesToSave) {
+        if (filter().isEmpty()) return valuesToSave;
+        Map<String, Number> filteredValuesToSave = new HashMap<String, Number>(filter().size());
+        for (String filterItem : filter()) {
+            filteredValuesToSave.put(filterItem, valuesToSave.get(filterItem));
+        }
+        return filteredValuesToSave;
+    }
+
+    abstract public List<String> filter();
 
     protected PathMapping getPathMapping(Packet packet, IComponentMarker marker, String pathExtensionPrefix) {
         PathMapping path = markerPaths.get(marker);
