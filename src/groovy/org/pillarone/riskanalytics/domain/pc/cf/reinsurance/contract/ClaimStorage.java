@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilizati
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * As ClaimCashflowPacket don't track any historic information/contains only incremental values and IReinsuranceContract
@@ -187,5 +188,17 @@ public class ClaimStorage {
 
     public IClaimRoot getReferenceCeded() {
         return referenceCeded;
+    }
+
+    /**
+     * Factory method wrapping the @claim in a ClaimStorage object, adding it to the @storage and returning it
+     * @param claim wrapped in a ClaimStorage and added to the storage
+     * @param storage the @claim is added to this storage using is keyClaim property
+     * @return claim wrapped in a ClaimStorage object
+     */
+    public static ClaimStorage makeStoredClaim(ClaimCashflowPacket claim, Map<IClaimRoot, ClaimStorage> storage) {
+        ClaimStorage claimStorage = new ClaimStorage(claim);
+        storage.put(claim.getKeyClaim(), claimStorage);
+        return claimStorage;
     }
 }

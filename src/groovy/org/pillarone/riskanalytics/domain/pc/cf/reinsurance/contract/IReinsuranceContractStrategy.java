@@ -19,7 +19,7 @@ public interface IReinsuranceContractStrategy {
      *             contracts are parametrized, this parameter is ignored and instead a local strategy parameter is used
      * @param termDeductible deductible shared among several contracts
      * @param termLimit limit shared among several contracts
-     * @return fully prepared contracts
+     * @return fully prepared contracts including absolute values
      */
     List<IReinsuranceContract> getContracts(int period,
                                             List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,

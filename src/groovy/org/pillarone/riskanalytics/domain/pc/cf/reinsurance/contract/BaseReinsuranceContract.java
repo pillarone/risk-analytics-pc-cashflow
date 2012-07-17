@@ -30,12 +30,51 @@ import java.util.*;
  * General implementation guidelines:<ul>
  *     <li>We use a claim/underwriting packet centric approach and avoid history tracking within this and derived classes.</li>
  *     <li>There are specific claim storage objects (@link ClaimStorage) keeping track of a minimal information of each
- *          key claim. So this base class and its derived class don't track individual claims.</li>
+ *          key claim. So this base class and its derived class don't track individual claim packets.</li>
  *     <li>For every single covered period a contract object is instantiated implementing IReinsuranceContract. These
  *          objects are linked with claims in fillGrossClaims() by creating ClaimHistoryAndApplicableContract objects.</li>
  *     <li>If information needs to be shared among several periods specific objects are added on this class. Available
  *          implementations are so far ThresholdStore and EqualUsagePerPeriodThresholdStore.</li>
- *     <li>This abstract base class should not contain any parameters to keep it easily extensible for the UI purposes.</li>
+ *     <li>This abstract base class should not contain any parameters to keep it easily extensible for different UI purposes.</li>
+ *     <li>Contract strategies are splitted for calculation and UI purposes allowing to map several UI implementations to the
+ *         same calculation logic. All UI classes need to implement IReinsuranceContractStrategy providing i.e.
+ *         a list of IReinsuranceContract used for all implementation classes. This means that every UI class knows how
+ *         to convert the parameters and feed them into a corresponding calculation class. The conversion is done in
+ *         updateContractParameters() by querying the parameter object, retrieving the implementation objects and
+ *         putting them to the periodStore using the key REINSURANCE_CONTRACT.</li>
+ *     <li>How to add a new contract: In order to add a new contract one needs to extend at least ReinsuranceContractType
+ *         and implement the new strategy implementing IReinsuranceContractStrategy. This is a normal strategy class.
+ *         Additionally the IReinsuranceContractStrategy needs to be implemented in order to return calculation objects.
+ *         The only calculation done in these strategy classes are conversions of relative to absolute parameters. This
+ *         conversion needs to be done for every iteration and period (see updateContractParameters()). If it is not possible
+ *         to map a new UI contract to an existing implementation contract, a new class implementing IReinsuranceContract
+ *         is needed.</li>
+ *     <li>Usage of the periodStore:<ul>
+ *         <li>REINSURANCE_CONTRACT:
+ *          <ul><li>is filled in updateContractParameters() by transforming UI contracts in absolute parametrized
+ *                  calculation contracts</li>
+ *          <li>and querried afterwards in
+ *              <ul><li>initPeriod() in order to call initPeriod() on every contract in order to update deductibles and limits</li>
+ *              <li>updateCurrentPeriodGrossClaims to create new ClaimHistoryAndApplicableContract objects</li>
+ *              <li>processUnderwritingInfo() in order to attach underwriting info to the contract itself and calculate
+ *                  ceded and net uw info</li></ul>
+ *          </li></ul>
+ *         <li>CLAIM_HISTORY: contains a HashMap with keyClaim and ClaimStorage. It is filled, updated and querried in
+ *             fillGrossClaims()</li>
+ *         <li>GROSS_CLAIMS:
+ *             <ul><li>is filled/updated with ClaimHistoryAndApplicableContract objects in fillGrossClaims() using CLAIM_HISTORY and
+ *                     inClaims. This is basically a mapping of claims and covering contracts</li>
+ *                 <li>consumers are
+ *                      <ul>
+ *                          <li>initContracts() in order to call contract.initPeriodClaims() (i.e. used for none trivial
+ *                              allocation/event processing)</li>
+ *                          <li>calculateCededClaims() in order to call getCededClaim() on every covered gross claim</li>
+ *                      </ul>
+ *                 </li>
+ *             </ul></li>
+ *         <li>NET_BASE_CLAIMS: is used in calculateCededClaims() only to make sure all net claims belonging together get
+ *             the same base claim.</li>
+ *     </ul></li>
  * </ul>
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -176,7 +215,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
                 }
                 if (claimStorage == null) {
                     // first time this claim enters this contract
-                    claimStorage = newClaimOccurredInCurrentPeriod(claim, claimsHistories);
+                    claimStorage = ClaimStorage.makeStoredClaim(claim, claimsHistories);
                 }
                 updateCurrentPeriodGrossClaims(contracts, currentPeriodGrossClaims, currentPeriod, claim, occurrencePeriod, claimStorage);
             }
@@ -191,7 +230,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
                 }
                 ClaimStorage claimStorage = claimsHistories.get(claim.getKeyClaim());
                 if (currentPeriod == occurrencePeriod && claimStorage == null) {
-                    claimStorage = newClaimOccurredInCurrentPeriod(claim, claimsHistories);
+                    claimStorage = ClaimStorage.makeStoredClaim(claim, claimsHistories);
                 }
                 if (claimStorage != null)  {
                     updateCurrentPeriodGrossClaims(contracts, currentPeriodGrossClaims, currentPeriod, claim, occurrencePeriod, claimStorage);
@@ -226,19 +265,6 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             ClaimHistoryAndApplicableContract claimWithHistory = new ClaimHistoryAndApplicableContract(claim, claimStorage, contract);
             currentPeriodGrossClaims.add(claimWithHistory);
         }
-    }
-
-    /**
-     *
-     * @param claim is used to fill the claimsHistories
-     * @param claimsHistories gets a new element using the key claim and a ClaimStorage created of the claim
-     * @return contract covering the claim
-     */
-    // todo(sku): avoid mixing function and method
-    private ClaimStorage newClaimOccurredInCurrentPeriod(ClaimCashflowPacket claim, Map<IClaimRoot, ClaimStorage> claimsHistories) {
-        ClaimStorage claimStorage = new ClaimStorage(claim);
-        claimsHistories.put(claim.getKeyClaim(), claimStorage);
-        return claimStorage;
     }
 
     /**

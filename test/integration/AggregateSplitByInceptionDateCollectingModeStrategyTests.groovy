@@ -44,7 +44,9 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
 
     void setUp() {
         super.setUp()
-        assertNotNull new CollectorMapping(collectorName: AggregateSplitPerSourceCollectingModeStrategy.IDENTIFIER).save()
+//        CollectorMapping mapping = new CollectorMapping(collectorName: AggregateSplitPerSourceCollectingModeStrategy.IDENTIFIER)
+//        mapping.save()
+//        assertNotNull mapping.save()
     }
 
     void postSimulationEvaluation() {
