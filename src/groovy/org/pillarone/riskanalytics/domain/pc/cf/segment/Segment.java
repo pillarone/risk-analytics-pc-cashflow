@@ -123,6 +123,12 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
             outNetFinancials.addAll(FinancialsPacket.getFinancialsPacketsByInceptionPeriod(outUnderwritingInfoNet,
                     outUnderwritingInfoCeded, outClaimsNet, periodCounter));
         }
+        if (!isSenderWired(outClaimsNet)) {
+            outClaimsNet.clear();
+        }
+        if (!isSenderWired(outUnderwritingInfoNet)) {
+            outUnderwritingInfoNet.clear();
+        }
     }
 
     private boolean defaultNotBeforeCurrentPeriodStart() {
@@ -161,13 +167,13 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     }
 
     private void calculateNetUnderwritingInfo() {
-        if (isSenderWired(outUnderwritingInfoNet)) {
+        if (isSenderWired(outNetFinancials) || isSenderWired(outUnderwritingInfoNet)) {
             outUnderwritingInfoNet.addAll(UnderwritingInfoUtils.calculateNetUnderwritingInfo(outUnderwritingInfoGross, inUnderwritingInfoCeded));
         }
     }
 
     private void calculateNetClaims() {
-        if (isSenderWired(outClaimsNet) && !outClaimsGross.isEmpty()) {
+        if ((isSenderWired(outNetFinancials) || isSenderWired(outClaimsNet)) && !outClaimsGross.isEmpty()) {
             outClaimsNet.addAll(ClaimUtils.calculateNetClaims(outClaimsGross, outClaimsCeded));
         }
     }
