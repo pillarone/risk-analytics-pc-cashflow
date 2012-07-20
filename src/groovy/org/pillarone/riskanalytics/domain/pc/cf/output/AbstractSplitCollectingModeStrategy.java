@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.output.*;
 import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.MappingCache;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
@@ -47,7 +48,7 @@ abstract public class AbstractSplitCollectingModeStrategy implements ICollecting
         mappingCache = packetCollector.getSimulationScope().getMappingCache();
     }
 
-    abstract public List<SingleValueResultPOJO> collect(PacketList packets) throws IllegalAccessException;
+    abstract public List<SingleValueResultPOJO> collect(PacketList packets, boolean crashSimulationOnError) throws IllegalAccessException;
 
     /**
      * Create a SingleValueResult object for each packetValue.
@@ -58,7 +59,7 @@ abstract public class AbstractSplitCollectingModeStrategy implements ICollecting
      * @return
      * @throws IllegalAccessException
      */
-    protected List<SingleValueResultPOJO> createSingleValueResults(Map<PathMapping, Packet> packets) throws IllegalAccessException {
+    protected List<SingleValueResultPOJO> createSingleValueResults(Map<PathMapping, Packet> packets, boolean crashSimulationOnError) throws IllegalAccessException {
         List<SingleValueResultPOJO> singleValueResults = new ArrayList<SingleValueResultPOJO>(packets.size());
         boolean firstPath = true;
         for (Map.Entry<PathMapping, Packet> packetEntry : packets.entrySet()) {
@@ -67,7 +68,7 @@ abstract public class AbstractSplitCollectingModeStrategy implements ICollecting
             for (Map.Entry<String, Number> field : filter(packet.getValuesToSave()).entrySet()) {
                 String fieldName = field.getKey();
                 Double value = (Double) field.getValue();
-                if (handleInvalidNumber(value)) continue;
+                if (checkInvalidValues(fieldName, value, period, iteration, crashSimulationOnError)) continue;
                 SingleValueResultPOJO result = new SingleValueResultPOJO();
                 result.setSimulationRun(simulationRun);
                 result.setIteration(iteration);
@@ -90,14 +91,17 @@ abstract public class AbstractSplitCollectingModeStrategy implements ICollecting
         return singleValueResults;
     }
 
-    protected boolean handleInvalidNumber(Double value) {
-        if (value == Double.NaN || value == Double.NEGATIVE_INFINITY || value == Double.POSITIVE_INFINITY) {
+    public boolean checkInvalidValues(String name, Double value, int period, int iteration, boolean crashSimulationOnError) {
+        if (value.isInfinite() || value.isNaN()) {
+            StringBuilder message = new StringBuilder();
+            message.append(value).append(" collected at ").append(packetCollector.getPath()).append(":").append(name);
+            message.append(" (period ").append(period).append(") in iteration ");
+            message.append(iteration).append(" - ignoring.");
             if (LOG.isErrorEnabled()) {
-                StringBuilder message = new StringBuilder();
-                message.append(value).append(" collected at ").append(packetCollector.getPath());
-                message.append(" (period ").append(period).append(") in iteration ");
-                message.append(iteration).append(" - ignoring.");
-                LOG.error(message);
+                LOG.info(message);
+            }
+            if(crashSimulationOnError) {
+                throw new SimulationException(message.toString());
             }
             return true;
         }

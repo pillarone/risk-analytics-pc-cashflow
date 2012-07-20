@@ -3,6 +3,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.output;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pillarone.riskanalytics.core.output.ICollectingModeStrategy;
+import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
+import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 
 import java.util.Arrays;

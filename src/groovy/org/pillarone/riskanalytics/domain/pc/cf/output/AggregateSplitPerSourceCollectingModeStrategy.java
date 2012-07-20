@@ -36,14 +36,14 @@ public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplit
 
     private final Map<Component, Class> componentsExtensibleBy = new HashMap<Component, Class>();
 
-    public List<SingleValueResultPOJO> collect(PacketList packets) throws IllegalAccessException {
+    public List<SingleValueResultPOJO> collect(PacketList packets, boolean crashSimulationOnError) throws IllegalAccessException {
         initSimulation();
         iteration = packetCollector.getSimulationScope().getIterationScope().getCurrentIteration();
         period = packetCollector.getSimulationScope().getIterationScope().getPeriodScope().getCurrentPeriod();
         if (packets.get(0) instanceof ClaimCashflowPacket) {
-            return createSingleValueResults(aggregateClaims(packets));
+            return createSingleValueResults(aggregateClaims(packets), crashSimulationOnError);
         } else if (packets.get(0) instanceof UnderwritingInfoPacket) {
-            return createSingleValueResults(aggregateUnderwritingInfo(packets));
+            return createSingleValueResults(aggregateUnderwritingInfo(packets), crashSimulationOnError);
         } else {
             String notImplemented = ResourceBundle.getBundle(RESOURCE_BUNDLE).getString("AggregateSplitPerSourceCollectingModeStrategy.notImplemented");
             throw new NotImplementedException(notImplemented + "\n(" + packetCollector.getPath() + ")");
