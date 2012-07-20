@@ -47,8 +47,8 @@ abstract public class AbstractProportionalReinsuranceContract extends AbstractRe
 
     public void calculateCommission() {
         // todo(sku): commission paid over several periods? This would require a different approach than isStartCoverPeriod
-        if (!isStartCoverPeriod) return;
-        isStartCoverPeriod = false;
+//        if (!isStartCoverPeriod) return;
+//        isStartCoverPeriod = false;
         // todo(sku): check whether all is fine regarding coveredByReinsurers and commissions
         commission.calculateCommission(cededClaims, cededUwInfos, false, false);
     }

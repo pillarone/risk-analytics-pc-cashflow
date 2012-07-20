@@ -11,7 +11,7 @@ import java.util.List;
 public class FixedCommission implements ICommission {
 
     private double commission = 0;
-    private boolean isStartCoverPeriod = true;
+//    private boolean isStartCoverPeriod = true;
 
     public FixedCommission(double commission) {
         this.commission = commission;
@@ -19,8 +19,8 @@ public class FixedCommission implements ICommission {
 
     public void calculateCommission(List<ClaimCashflowPacket> claims, List<CededUnderwritingInfoPacket> underwritingInfos,
                                     boolean isFirstPeriod, boolean isAdditive) {
-        if (!isStartCoverPeriod) return;
-        isStartCoverPeriod = false;
+//        if (!isStartCoverPeriod) return;
+//        isStartCoverPeriod = false;
         if (isAdditive) {
             for (CededUnderwritingInfoPacket underwritingInfo : underwritingInfos) {
                 double premiumWritten = underwritingInfo.getPremiumWritten();

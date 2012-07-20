@@ -43,8 +43,8 @@ public class SlidingCommission extends AbstractCommission {
 
     public void calculateCommission(List<ClaimCashflowPacket> claims, List<CededUnderwritingInfoPacket> underwritingInfos,
                                     boolean isFirstPeriod, boolean isAdditive) {
-        if (!isStartCoverPeriod) return;
-        isStartCoverPeriod = false;
+//        if (!isStartCoverPeriod) return;
+//        isStartCoverPeriod = false;
         double totalClaims = sumClaims(claims);
         double totalPremium = sumPremiumPaid(underwritingInfos);
         double totalLossRatio = totalPremium == 0 ? 0 : totalClaims / -totalPremium;
