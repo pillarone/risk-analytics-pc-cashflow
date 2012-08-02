@@ -42,11 +42,10 @@ import org.pillarone.riskanalytics.domain.pc.cf.output.AggregatePremiumReserveRi
 import org.pillarone.riskanalytics.domain.pc.cf.structure.validation.ClaimTypeStructuringValidator
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceReducedCollectingModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateReportedClaimCollectingModeStrategy
-//import org.pillarone.riskanalytics.domain.pc.cf.output.SingleSplitByInceptionDateCollectingModeStrategy
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.4.8.20"
+    def version = "0.4.9"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -135,8 +134,6 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         CollectingModeFactory.registerStrategy(new AggregateUltimateReportedPaidClaimCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateUltimateReportedClaimCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateUltimatePaidClaimCollectingModeStrategy())
-
-//        CollectingModeFactory.registerStrategy(new SingleSplitByInceptionDateCollectingModeStrategy())
     }
 
     def onChange = { event ->
