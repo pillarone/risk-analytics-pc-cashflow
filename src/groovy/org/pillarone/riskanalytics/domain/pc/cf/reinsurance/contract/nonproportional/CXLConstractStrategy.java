@@ -29,7 +29,7 @@ public class CXLConstractStrategy extends XLConstractStrategy implements IReinsu
      */
     public List<IReinsuranceContract> getContracts(int period,
                                                    List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
-                                                   ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+                                                   IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit) {
         double cededPremiumFixed = getCededPremiumFixed(underwritingInfoPackets);
         List<Double> reinstatementPremiumFactors = (List<Double>) reinstatementPremiums.getValues().get(0);
         return new ArrayList<IReinsuranceContract>(Arrays.asList(new CXLContract(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit,

@@ -20,7 +20,8 @@ public class TermWCXLConstractStrategy extends XLConstractStrategy implements IR
     }
 
     public List<IReinsuranceContract> getContracts(int period, List<UnderwritingInfoPacket> underwritingInfoPackets,
-                                                   ExposureBase base, ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+                                                   ExposureBase base, IPeriodDependingThresholdStore termDeductible,
+                                                   IPeriodDependingThresholdStore termLimit) {
         double cededPremiumFixed = getCededPremiumFixed(underwritingInfoPackets);
         List<Double> reinstatementPremiumFactors = (List<Double>) reinstatementPremiums.getValues().get(0);
         return new ArrayList<IReinsuranceContract>(Arrays.asList(new TermWCXLContract(cededPremiumFixed, attachmentPoint,

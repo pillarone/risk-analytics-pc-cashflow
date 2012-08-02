@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class EqualUsagePerPeriodThresholdStore {
+public class EqualUsagePerPeriodThresholdStore implements IPeriodDependingThresholdStore {
 
     /** original threshold */
     private double threshold;
@@ -108,23 +108,35 @@ public class EqualUsagePerPeriodThresholdStore {
         }
     }
 
-    public double get(BasedOnClaimProperty claimProperty, double stabilizationFactor, int period) {
-        if (stabilizationFactor == 1) return get(claimProperty, period);
+    public double get(BasedOnClaimProperty claimProperty, double stabilizationFactor, int occurrencePeriod) {
+        if (stabilizationFactor == 1) return get(claimProperty, occurrencePeriod);
         double thresholdStabilized = threshold * stabilizationFactor;
-        double adjustedThreshold = thresholdStabilized - (threshold - getUsedThreshold(claimProperty).get(period));
-        getUsedThreshold(claimProperty).set(period, adjustedThreshold);
+        double adjustedThreshold = thresholdStabilized - (threshold - getUsedThreshold(claimProperty).get(occurrencePeriod));
+        getUsedThreshold(claimProperty).set(occurrencePeriod, adjustedThreshold);
         return adjustedThreshold;
     }
 
-    public void plus(double summand, BasedOnClaimProperty claimProperty, int period) {
+    @Override
+    public void set(double threshold, BasedOnClaimProperty claimProperty, int occurrencePeriod) {
         if (claimProperty.equals(BasedOnClaimProperty.ULTIMATE)) {
             // sanity check
             int last = usedThresholdPerPeriodReported.size() - 1;
-            if (period != last) {
+            if (occurrencePeriod != last) {
                 throw new IllegalArgumentException("Updating ultimate threshold of previous periods is not allowed!");
             }
         }
-        getUsedThreshold(claimProperty).set(period, getUsedThreshold(claimProperty).get(period) + summand);
+        getUsedThreshold(claimProperty).set(occurrencePeriod, threshold);
+    }
+
+    public void plus(double summand, BasedOnClaimProperty claimProperty, int occurrencePeriod) {
+        if (claimProperty.equals(BasedOnClaimProperty.ULTIMATE)) {
+            // sanity check
+            int last = usedThresholdPerPeriodReported.size() - 1;
+            if (occurrencePeriod != last) {
+                throw new IllegalArgumentException("Updating ultimate threshold of previous periods is not allowed!");
+            }
+        }
+        getUsedThreshold(claimProperty).set(occurrencePeriod, getUsedThreshold(claimProperty).get(occurrencePeriod) + summand);
     }
 
     @Override

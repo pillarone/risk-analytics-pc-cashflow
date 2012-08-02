@@ -50,6 +50,9 @@ public class AggregateEventClaimsStorage {
         incrementalPaidLast = claim.getPaidIncrementalIndexed();
     }
 
+    /**
+     * resets all properties to 0
+     */
     public void resetIncrementsAndFactors() {
         incrementalUltimate = 0;
         incrementalReported = 0;

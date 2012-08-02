@@ -44,6 +44,7 @@ public class StopLossConstractStrategy extends AbstractParameterObject implement
     }
 
     /**
+     *
      * @param period ignored
      * @param underwritingInfoPackets used for scaling relative contract parameters if the contract base is GNPI
      * @param base ignored
@@ -52,7 +53,8 @@ public class StopLossConstractStrategy extends AbstractParameterObject implement
      * @return one contract
      */
     public List<IReinsuranceContract> getContracts(int period, List<UnderwritingInfoPacket> underwritingInfoPackets,
-                                                   ExposureBase base, ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+                                                   ExposureBase base, IPeriodDependingThresholdStore termDeductible,
+                                                   IPeriodDependingThresholdStore termLimit) {
         double cededPremiumFixed = premium;
         double scaledAttachmentPoint = attachmentPoint;
         double scaledLimit = limit;

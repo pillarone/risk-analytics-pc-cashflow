@@ -19,8 +19,8 @@ import java.util.List;
  */
 public class TermXLContract extends XLContract implements INonPropReinsuranceContract {
 
-    protected ThresholdStore termDeductible;
-    protected EqualUsagePerPeriodThresholdStore termLimit;
+    protected IPeriodDependingThresholdStore termDeductible;
+    protected IPeriodDependingThresholdStore termLimit;
 
 
     /**
@@ -39,7 +39,7 @@ public class TermXLContract extends XLContract implements INonPropReinsuranceCon
     public TermXLContract(double cededPremiumFixed, double attachmentPoint, double limit, double aggregateDeductible,
                           double aggregateLimit, IStabilizationStrategy stabilization,
                           List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy riPremiumSplit,
-                          ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+                          IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit) {
         super(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit, stabilization,
                 reinstatementPremiumFactors, riPremiumSplit);
         this.termDeductible = termDeductible;
@@ -49,6 +49,7 @@ public class TermXLContract extends XLContract implements INonPropReinsuranceCon
     @Override
     public void initPeriod(int period, List<FactorsPacket> inFactors) {
         super.initPeriod(period, inFactors);
+        termDeductible.initPeriod(period);
         termLimit.initPeriod(period);
     }
 
@@ -61,15 +62,15 @@ public class TermXLContract extends XLContract implements INonPropReinsuranceCon
             if (termLimitValue > 0) {
                 double ceded = Math.min(Math.max(-claimPropertyCumulated - attachmentPoint * stabilizationFactor, 0), limit * stabilizationFactor);
 
-                double cededAfterTermDeductible = Math.max(0, ceded - termDeductible.get(claimPropertyBase, stabilizationFactor));
-                double reduceTermDeductible = ceded - cededAfterTermDeductible;
-                termDeductible.set(Math.max(0, termDeductible.get(claimPropertyBase) - reduceTermDeductible), claimPropertyBase);
-
                 double cededAfterAAD = Math.max(0, ceded - periodDeductible.get(claimPropertyBase, stabilizationFactor));
-                double reduceAAD = cededAfterTermDeductible - cededAfterAAD;
+                double reduceAAD = ceded - cededAfterAAD;
                 periodDeductible.set(Math.max(0, periodDeductible.get(claimPropertyBase) - reduceAAD), claimPropertyBase);
 
-                double incrementalCeded = Math.max(0, cededAfterAAD - storage.getCumulatedCeded(claimPropertyBase));
+                double cededAfterTermDeductible = Math.max(0, cededAfterAAD - termDeductible.get(claimPropertyBase, stabilizationFactor, occurrencePeriod));
+                double reduceTermDeductible = cededAfterAAD - cededAfterTermDeductible;
+                termDeductible.plus(Math.max(0, termDeductible.get(claimPropertyBase, occurrencePeriod) - reduceTermDeductible), claimPropertyBase, occurrencePeriod);
+
+                double incrementalCeded = Math.max(0, cededAfterTermDeductible - storage.getCumulatedCeded(claimPropertyBase));
                 double cededAfterAAL = aggregateLimitValue > incrementalCeded ? incrementalCeded : aggregateLimitValue;
                 periodLimit.plus(-cededAfterAAL, claimPropertyBase);
                 double cededAfterTermLimit = termLimitValue > cededAfterAAL ? cededAfterAAL : termLimitValue;

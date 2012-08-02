@@ -21,6 +21,7 @@ public class WCXLConstractStrategy extends XLConstractStrategy implements IReins
 
 
     /**
+     *
      * @param period ignored
      * @param underwritingInfoPackets used for scaling relative contract parameters
      * @param base defines which property of the underwritingInfoPackets should be used for scaling. Depending on the
@@ -31,7 +32,8 @@ public class WCXLConstractStrategy extends XLConstractStrategy implements IReins
      */
     public List<IReinsuranceContract> getContracts(int period,
                                                    List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
-                                                   ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+                                                   IPeriodDependingThresholdStore termDeductible,
+                                                   IPeriodDependingThresholdStore termLimit) {
         double cededPremiumFixed = getCededPremiumFixed(underwritingInfoPackets);
         List<Double> reinstatementPremiumFactors = (List<Double>) reinstatementPremiums.getValues().get(0);
         return new ArrayList<IReinsuranceContract>(Arrays.asList(new WCXLContract(cededPremiumFixed, attachmentPoint, limit,

@@ -5,7 +5,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.EqualUsagePerPeriodThresholdStore;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.IPeriodDependingThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.IPeriodStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
@@ -21,8 +21,8 @@ public class ReinsuranceContract extends MultiCounterPartyBaseReinsuranceContrac
     private IPeriodStrategy parmCoveredPeriod = PeriodStrategyType.getDefault();
     private IReinsuranceContractStrategy parmContractStrategy = ReinsuranceContractType.getDefault();
     private Boolean parmVirtual = Boolean.FALSE;
-    private ThresholdStore termDeductible;
-    private EqualUsagePerPeriodThresholdStore termLimit;
+    private IPeriodDependingThresholdStore termDeductible;
+    private IPeriodDependingThresholdStore termLimit;
 
     @Override
     protected void initSimulation() {
@@ -36,7 +36,7 @@ public class ReinsuranceContract extends MultiCounterPartyBaseReinsuranceContrac
     protected void initIteration() {
         super.initIteration();
         if (iterationScope.getPeriodScope().isFirstPeriod()) {
-            termDeductible = new ThresholdStore(parmContractStrategy.getTermDeductible());
+            termDeductible = new EqualUsagePerPeriodThresholdStore(parmContractStrategy.getTermDeductible());
             termLimit = new EqualUsagePerPeriodThresholdStore(parmContractStrategy.getTermLimit());
         }
     }

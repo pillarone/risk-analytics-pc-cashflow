@@ -8,8 +8,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranc
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.*;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.EqualUsagePerPeriodThresholdStore;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.IPeriodDependingThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy;
 
 import java.util.*;
@@ -47,7 +46,7 @@ public class QuotaShareContractStrategy extends AbstractParameterObject implemen
      */
     public List<IReinsuranceContract> getContracts(int period,
                                                    List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
-                                                   ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+                                                   IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit) {
         IReinsuranceContract contract;
         if (limit instanceof NoneLimitStrategy) {
             contract = new QuotaShareContract(quotaShare, commission.getCalculator());

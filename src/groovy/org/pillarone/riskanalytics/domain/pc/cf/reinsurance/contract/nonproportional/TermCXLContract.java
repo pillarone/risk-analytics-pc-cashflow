@@ -2,14 +2,13 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproport
 
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimStorageContainer;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimsStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -17,7 +16,7 @@ import java.util.Map;
 // todo(sku): get rid off code duplication
 public class TermCXLContract extends TermXLContract {
 
-    protected Map<Object, AggregateEventClaimsStorage> cededShareByEvent = new LinkedHashMap<Object, AggregateEventClaimsStorage>();
+    protected AggregateEventClaimStorageContainer cededShareByEvent = new AggregateEventClaimStorageContainer();
 
     /**
      * All provided values have to be absolute! Scaling is done within the parameter strategy.
@@ -36,7 +35,7 @@ public class TermCXLContract extends TermXLContract {
     public TermCXLContract(double cededPremiumFixed, double attachmentPoint, double limit, double aggregateDeductible,
                            double aggregateLimit, IStabilizationStrategy stabilization,
                            List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy riPremiumSplit,
-                           ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+                           IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit) {
         super(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit, stabilization,
                 reinstatementPremiumFactors, riPremiumSplit, termDeductible, termLimit);
     }
@@ -46,18 +45,11 @@ public class TermCXLContract extends TermXLContract {
      * @param grossClaims
      */
     public void initPeriodClaims(List<ClaimCashflowPacket> grossClaims) {
-        for (AggregateEventClaimsStorage storage : cededShareByEvent.values()) {
-            storage.resetIncrementsAndFactors();
-        }
+        cededShareByEvent.reset();
     }
 
     protected AggregateEventClaimsStorage getClaimsStorage(ClaimCashflowPacket grossClaim) {
-        if (grossClaim.hasEvent()) {
-            return cededShareByEvent.get(grossClaim.getEvent());
-        }
-        else {
-            return cededShareByEvent.get(grossClaim.getKeyClaim());
-        }
+        return cededShareByEvent.get(grossClaim, this);
     }
 
     protected void cededFactor(BasedOnClaimProperty claimPropertyBase, AggregateEventClaimsStorage storage, double stabilizationFactor) {
@@ -112,12 +104,7 @@ public class TermCXLContract extends TermXLContract {
             AggregateEventClaimsStorage storage = getClaimsStorage(grossClaim);
             if (storage == null) {
                 storage = new AggregateEventClaimsStorage();
-                if (grossClaim.hasEvent()) {
-                    cededShareByEvent.put(grossClaim.getEvent(), storage);
-                }
-                else {
-                    cededShareByEvent.put(grossClaim.getKeyClaim(), storage);
-                }
+                cededShareByEvent.add(grossClaim, this, storage);
             }
             storage.add(grossClaim);
             cededFactor(BasedOnClaimProperty.ULTIMATE, storage, stabilizationFactor);

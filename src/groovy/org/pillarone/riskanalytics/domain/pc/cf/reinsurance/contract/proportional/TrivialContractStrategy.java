@@ -7,8 +7,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.EqualUsagePerPeriodThresholdStore;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.IPeriodDependingThresholdStore;
 
 import java.util.*;
 
@@ -19,6 +18,7 @@ public class TrivialContractStrategy extends AbstractParameterObject implements 
 
     /**
      * This implementation ignores all provided parameters.
+     *
      * @param period ignored
      * @param underwritingInfoPackets ignored
      * @param base ignored
@@ -28,7 +28,7 @@ public class TrivialContractStrategy extends AbstractParameterObject implements 
      */
     public List<IReinsuranceContract> getContracts(int period,
                                                    List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
-                                                   ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+                                                   IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit) {
         return new ArrayList<IReinsuranceContract>(Arrays.asList(new TrivialContract()));
     }
 

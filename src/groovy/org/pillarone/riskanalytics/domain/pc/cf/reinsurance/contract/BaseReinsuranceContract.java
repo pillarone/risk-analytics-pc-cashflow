@@ -194,51 +194,17 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
      */
     private Set<IReinsuranceContract> fillGrossClaims() {
         Set<IReinsuranceContract> contracts = new HashSet<IReinsuranceContract>();
-        IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
-        Map<IClaimRoot, ClaimStorage> claimsHistories =
-                (HashMap<IClaimRoot, ClaimStorage>) periodStore.getFirstPeriod(CLAIM_HISTORY);
+
         List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = new ArrayList<ClaimHistoryAndApplicableContract>();
         int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
+        ClaimStorageContainer claimsHistories = (ClaimStorageContainer) periodStore.getFirstPeriod(CLAIM_HISTORY);
         if (claimsHistories == null) {
-            // executed in first period
-            claimsHistories = new HashMap<IClaimRoot, ClaimStorage>();
+//            executed in first period
+            claimsHistories = new ClaimStorageContainer();
             periodStore.put(CLAIM_HISTORY, claimsHistories);
-            for (ClaimCashflowPacket claim : inClaims) {
-                // claimsHistory needs to be queried for first period too as there might be several claim updates in it
-                ClaimStorage claimStorage = claimsHistories.get(claim.getKeyClaim());
-                // PMO-1963: calculation of an occurrence period before the projection start does not work
-                //           as current retrospective contracts don't cover specific periods all is mapped to period 0
-                int occurrencePeriod = 0;
-                if (claim.reserve() == null) {
-                    // claim source is not a reserve generator
-                    occurrencePeriod = claim.occurrencePeriod(periodCounter);
-                }
-                if (claimStorage == null) {
-                    // first time this claim enters this contract
-                    claimStorage = ClaimStorage.makeStoredClaim(claim, claimsHistories);
-                }
-                updateCurrentPeriodGrossClaims(contracts, currentPeriodGrossClaims, currentPeriod, claim, occurrencePeriod, claimStorage);
-            }
         }
-        else {
-            for (ClaimCashflowPacket claim : inClaims) {
-                // PMO-1963: calculation of an occurrence period before the projection start does not work
-                //           as current retrospective contracts don't cover specific periods all is mapped to period 0
-                int occurrencePeriod = 0;
-                if (claim.reserve() == null) {
-                    occurrencePeriod = claim.occurrencePeriod(periodCounter);
-                }
-                ClaimStorage claimStorage = claimsHistories.get(claim.getKeyClaim());
-                if (currentPeriod == occurrencePeriod && claimStorage == null) {
-                    claimStorage = ClaimStorage.makeStoredClaim(claim, claimsHistories);
-                }
-                if (claimStorage != null)  {
-                    updateCurrentPeriodGrossClaims(contracts, currentPeriodGrossClaims, currentPeriod, claim, occurrencePeriod, claimStorage);
-                }
-                else {
-                    LOG.error("claimStorage is null");
-                }
-            }
+        for (ClaimCashflowPacket claim : inClaims) {
+            updateCurrentPeriodGrossClaims(contracts, currentPeriodGrossClaims, currentPeriod, claim, claimsHistories);
         }
         // sort currentPeriodGrossClaims by updateDate
         Collections.sort(currentPeriodGrossClaims, SortClaimHistoryAndApplicableContract.getInstance());
@@ -247,21 +213,30 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
     }
 
     /**
-     *
-     * @param contracts the contract covering the claim is added to the set
-     * @param currentPeriodGrossClaims is extended with the ClaimHistoryAndApplicableContract of the claim, claimStorage and contract
+     * Creates a ClaimHistoryAndApplicableContract for every claim-contract combination and adds it to the provided
+     * currentPeriodGrossClaims list.
+     * @param contracts the contract covering the claim is added to this set
+     * @param currentPeriodGrossClaims is extended with the ClaimHistoryAndApplicableContract of this claim, claimStorage and contract
      * @param currentPeriod used to get the applicable contract from the periodStore
      * @param claim is used to fill currentPeriodGrossClaims
-     * @param occurrencePeriod used to get the applicable contract from the periodStore
-     * @param claimStorage is used to fill currentPeriodGrossClaims
      */
     private void updateCurrentPeriodGrossClaims(Set<IReinsuranceContract> contracts,
                                                 List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims,
-                                                int currentPeriod, ClaimCashflowPacket claim, int occurrencePeriod,
-                                                ClaimStorage claimStorage) {
+                                                int currentPeriod, ClaimCashflowPacket claim, ClaimStorageContainer claimsHistories) {
+        IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
+        // PMO-1963: calculation of an occurrence period before the projection start does not work
+        //           as current retrospective contracts don't cover specific periods all is mapped to period 0
+        //           for claims generated in reserve generators
+        int occurrencePeriod = claim.reserve() == null ? claim.occurrencePeriod(periodCounter) : 0;
         List<IReinsuranceContract> periodContracts = (List<IReinsuranceContract>) periodStore.get(REINSURANCE_CONTRACT, occurrencePeriod - currentPeriod);
         contracts.addAll(periodContracts);
+
         for (IReinsuranceContract contract : periodContracts) {
+            ClaimStorage claimStorage = claimsHistories.get(claim, contract);
+            if (claimStorage == null) {
+                // first time this claim enters this contract
+                claimStorage = ClaimStorage.makeStoredClaim(claim, contract, claimsHistories);
+            }
             ClaimHistoryAndApplicableContract claimWithHistory = new ClaimHistoryAndApplicableContract(claim, claimStorage, contract);
             currentPeriodGrossClaims.add(claimWithHistory);
         }

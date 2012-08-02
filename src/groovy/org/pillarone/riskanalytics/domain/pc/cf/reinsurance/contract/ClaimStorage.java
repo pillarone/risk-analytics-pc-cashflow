@@ -196,9 +196,9 @@ public class ClaimStorage {
      * @param storage the @claim is added to this storage using is keyClaim property
      * @return claim wrapped in a ClaimStorage object
      */
-    public static ClaimStorage makeStoredClaim(ClaimCashflowPacket claim, Map<IClaimRoot, ClaimStorage> storage) {
+    public static ClaimStorage makeStoredClaim(ClaimCashflowPacket claim, IReinsuranceContract contract, ClaimStorageContainer storage) {
         ClaimStorage claimStorage = new ClaimStorage(claim);
-        storage.put(claim.getKeyClaim(), claimStorage);
+        storage.add(claim, contract, claimStorage);
         return claimStorage;
     }
 }

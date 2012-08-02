@@ -7,8 +7,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.RetrospectiveReinsuranceContractType;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.EqualUsagePerPeriodThresholdStore;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.IPeriodDependingThresholdStore;
 
 import java.util.*;
 
@@ -34,7 +33,8 @@ public class AdverseDevelopmentCoverConstractStrategy extends AbstractParameterO
     }
 
     public List<IReinsuranceContract> getContracts(int period, List<UnderwritingInfoPacket> underwritingInfoPackets,
-                                                   ExposureBase base, ThresholdStore termDeductible, EqualUsagePerPeriodThresholdStore termLimit) {
+                                                   ExposureBase base, IPeriodDependingThresholdStore termDeductible,
+                                                   IPeriodDependingThresholdStore termLimit) {
         return new ArrayList<IReinsuranceContract>(Arrays.asList(new AdverseDevelopmentCoverContract(reinsurancePremium, attachmentPoint, limit)));
     }
 
