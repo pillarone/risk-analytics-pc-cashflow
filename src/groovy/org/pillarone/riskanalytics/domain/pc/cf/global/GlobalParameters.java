@@ -14,6 +14,7 @@ public class GlobalParameters extends GlobalParameterComponent {
     private boolean parmRunOffAfterFirstPeriod = true;
     private boolean runtimeTrivialPatterns = false;
     private boolean runtimeTrivialIndices = false;
+    private boolean runtimeSanityChecks = true;
 
     @Global(identifier = "projectionStartDate")
     public DateTime projectionStartDate() {
@@ -38,6 +39,14 @@ public class GlobalParameters extends GlobalParameterComponent {
     @Global(identifier = "projectionPeriods")
     public Integer projectionPeriods() {
         return parmProjection.projectionPeriods();
+    }
+
+    public boolean isRuntimeSanityChecks() {
+        return runtimeSanityChecks;
+    }
+
+    public void setRuntimeSanityChecks(boolean runtimeSanityChecks) {
+        this.runtimeSanityChecks = runtimeSanityChecks;
     }
 
     public boolean isParmRunOffAfterFirstPeriod() {
