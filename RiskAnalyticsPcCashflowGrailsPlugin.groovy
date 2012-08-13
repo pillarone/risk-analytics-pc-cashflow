@@ -42,6 +42,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.output.AggregatePremiumReserveRi
 import org.pillarone.riskanalytics.domain.pc.cf.structure.validation.ClaimTypeStructuringValidator
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceReducedCollectingModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateReportedClaimCollectingModeStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.RunOffIndexSelectionTableConstraints
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -87,6 +88,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new PremiumIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new FrequencyIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new SeverityIndexSelectionTableConstraints())
+        ConstraintsFactory.registerConstraint(new RunOffIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new ReservesIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
         ConstraintsFactory.registerConstraint(new PatternTableConstraints())

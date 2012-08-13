@@ -60,8 +60,8 @@ class CopulaValidator implements IParameterizationValidator {
                     if (parameter.path.contains('indices:subFrequencyIndices:')) {
                         strategyPerIndexName[parameter.path - 'indices:subFrequencyIndices:' - ':parmIndex'] = classifier
                     }
-                    else if (parameter.path.contains('indices:subSeverityIndices:')) {
-                        strategyPerIndexName[parameter.path - 'indices:subSeverityIndices:' - ':parmIndex'] = classifier
+                    else if (parameter.path.contains('indices:subRunOffIndices:')) {
+                        strategyPerIndexName[parameter.path - 'indices:subRunOffIndices:' - ':parmIndex'] = classifier
                     }
 
                     else if (parameter.path.contains('indices:subPolicyIndices:')) {

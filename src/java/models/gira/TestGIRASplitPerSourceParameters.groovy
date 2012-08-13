@@ -45,7 +45,7 @@ components {
 			parmClaimsModel[0]=ClaimsGeneratorType.getStrategy(ClaimsGeneratorType.ATTRITIONAL, ["claimsSizeDistribution":DistributionType.getStrategy(DistributionType.CONSTANT, [constant:100.0]),"claimsSizeModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"claimsSizeBase":ExposureBase.ABSOLUTE,])
 			parmPayoutPattern[0]=new ConstrainedString(IPayoutPatternMarker, '')
 			parmReportingPattern[0]=new ConstrainedString(IReportingPatternMarker, '')
-			parmSeverityIndices[0]=new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[]]),["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('SEVERITY_INDEX_SELECTION'))
+			parmRunOffIndices[0]=new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[]]),["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('RUN_OFF_INDEX_SELECTION'))
 			parmUnderwritingSegments[0]=new ComboBoxTableMultiDimensionalParameter(GroovyUtils.toList([["subMotorHull"]]),["Underwriting Information"], IUnderwritingInfoMarker)
 		}
 		subMotorHullSingle {
@@ -53,7 +53,7 @@ components {
 			parmClaimsModel[0]=ClaimsGeneratorType.getStrategy(ClaimsGeneratorType.FREQUENCY_SEVERITY, ["frequencyBase":FrequencyBase.ABSOLUTE,"frequencyModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"produceClaim":FrequencySeverityClaimType.SINGLE,"frequencyDistribution":FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant:1.0]),"claimsSizeModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"claimsSizeBase":ExposureBase.ABSOLUTE,"claimsSizeDistribution":DistributionType.getStrategy(DistributionType.CONSTANT, [constant:1000.0]),"frequencyIndices":new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[]]),["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('FREQUENCY_INDEX_SELECTION')),])
 			parmPayoutPattern[0]=new ConstrainedString(IPayoutPatternMarker, '')
 			parmReportingPattern[0]=new ConstrainedString(IReportingPatternMarker, '')
-			parmSeverityIndices[0]=new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[]]),["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('SEVERITY_INDEX_SELECTION'))
+			parmRunOffIndices[0]=new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[]]),["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('RUN_OFF_INDEX_SELECTION'))
 			parmUnderwritingSegments[0]=new ComboBoxTableMultiDimensionalParameter(GroovyUtils.toList([["subMotorHull"]]),["Underwriting Information"], IUnderwritingInfoMarker)
 		}
 		subPropertyAttritional {
@@ -61,7 +61,7 @@ components {
 			parmClaimsModel[0]=ClaimsGeneratorType.getStrategy(ClaimsGeneratorType.ATTRITIONAL, ["claimsSizeDistribution":DistributionType.getStrategy(DistributionType.CONSTANT, [constant:200.0]),"claimsSizeModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"claimsSizeBase":ExposureBase.ABSOLUTE,])
 			parmPayoutPattern[0]=new ConstrainedString(IPayoutPatternMarker, '')
 			parmReportingPattern[0]=new ConstrainedString(IReportingPatternMarker, '')
-			parmSeverityIndices[0]=new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[]]),["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('SEVERITY_INDEX_SELECTION'))
+			parmRunOffIndices[0]=new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[]]),["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('RUN_OFF_INDEX_SELECTION'))
 			parmUnderwritingSegments[0]=new ComboBoxTableMultiDimensionalParameter(GroovyUtils.toList([["subProperty"]]),["Underwriting Information"], IUnderwritingInfoMarker)
 		}
 		subPropertyEarthquake {
@@ -69,7 +69,7 @@ components {
 			parmClaimsModel[0]=ClaimsGeneratorType.getStrategy(ClaimsGeneratorType.FREQUENCY_SEVERITY, ["frequencyBase":FrequencyBase.ABSOLUTE,"frequencyModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"produceClaim":FrequencySeverityClaimType.AGGREGATED_EVENT,"frequencyDistribution":FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant:1.0]),"claimsSizeModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"claimsSizeBase":ExposureBase.ABSOLUTE,"claimsSizeDistribution":DistributionType.getStrategy(DistributionType.CONSTANT, [constant:500.0]),"frequencyIndices":new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[]]),["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('FREQUENCY_INDEX_SELECTION')),])
 			parmPayoutPattern[0]=new ConstrainedString(IPayoutPatternMarker, '')
 			parmReportingPattern[0]=new ConstrainedString(IReportingPatternMarker, '')
-			parmSeverityIndices[0]=new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[]]),["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('SEVERITY_INDEX_SELECTION'))
+			parmRunOffIndices[0]=new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[]]),["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('RUN_OFF_INDEX_SELECTION'))
 			parmUnderwritingSegments[0]=new ComboBoxTableMultiDimensionalParameter(GroovyUtils.toList([["subProperty"]]),["Underwriting Information"], IUnderwritingInfoMarker)
 		}
 		subPropertySingle {
@@ -77,7 +77,7 @@ components {
 			parmClaimsModel[0]=ClaimsGeneratorType.getStrategy(ClaimsGeneratorType.FREQUENCY_SEVERITY, ["frequencyBase":FrequencyBase.ABSOLUTE,"frequencyModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"produceClaim":FrequencySeverityClaimType.SINGLE,"frequencyDistribution":FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant:1.0]),"claimsSizeModification":DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),"claimsSizeBase":ExposureBase.ABSOLUTE,"claimsSizeDistribution":DistributionType.getStrategy(DistributionType.CONSTANT, [constant:900.0]),"frequencyIndices":new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[]]),["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('FREQUENCY_INDEX_SELECTION')),])
 			parmPayoutPattern[0]=new ConstrainedString(IPayoutPatternMarker, '')
 			parmReportingPattern[0]=new ConstrainedString(IReportingPatternMarker, '')
-			parmSeverityIndices[0]=new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[]]),["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('SEVERITY_INDEX_SELECTION'))
+			parmRunOffIndices[0]=new ConstrainedMultiDimensionalParameter(GroovyUtils.toList([[]]),["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('RUN_OFF_INDEX_SELECTION'))
 			parmUnderwritingSegments[0]=new ComboBoxTableMultiDimensionalParameter(GroovyUtils.toList([["subProperty"]]),["Underwriting Information"], IUnderwritingInfoMarker)
 		}
 	}

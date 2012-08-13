@@ -47,10 +47,10 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         generator.inPatterns.addAll(patterns)
         generator.parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker, pattern.name)
         generator.parmPayoutPattern.selectedComponent = pattern
-        generator.parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
+        generator.parmRunOffIndices = new ConstrainedMultiDimensionalParameter(
                 [[index.name], [indexMode.toString()], [baseDateMode.toString()], [fixedIndexDate]],
                 ["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints('SEVERITY_INDEX_SELECTION'))
-        generator.parmSeverityIndices.comboBoxValues.put(0, ['inflation': index])
+        generator.parmRunOffIndices.comboBoxValues.put(0, ['inflation': index])
         generator.setParmClaimsModel(ClaimsGeneratorType.getStrategy(
                 ClaimsGeneratorType.ATTRITIONAL_WITH_DATE, [
                         "claimsSizeBase": ExposureBase.ABSOLUTE,
