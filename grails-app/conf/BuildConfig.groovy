@@ -8,26 +8,30 @@ grails.project.dependency.resolution = {
     repositories {
         grailsHome()
         grailsCentral()
-    }
 
-    mavenRepo "https://repository.intuitive-collaboration.com/nexus/content/repositories/pillarone-public/"
+        mavenRepo "https://repository.intuitive-collaboration.com/nexus/content/repositories/pillarone-public/"
+    }
 
     plugins {
         runtime ":background-thread:1.3"
-        runtime ":hibernate:1.3.7"
+        runtime ":hibernate:2.1.0"
         runtime ":joda-time:0.5"
-        runtime ":maven-publisher:0.7.5"
+        runtime(":release:2.0.3") { excludes "groovy" }
         runtime ":quartz:0.4.2"
-        runtime ":spring-security-core:1.1.2"
-        runtime ":tomcat:1.3.7"
+        runtime ":spring-security-core:1.2.7.3"
+        runtime ":tomcat:2.0.1"
 
         test ":code-coverage:1.2.4"
-        test ":excel-import:0.9.6"
+        compile(":excel-import:0.9.6") { excludes "xmlbeans" }
 
         if (appName == "risk-analytics-pc-cashflow") {
-            runtime "org.pillarone:risk-analytics-core:1.6-ALPHA-4.9"
-            runtime("org.pillarone:risk-analytics-commons:0.4.7") { transitive = false }
+            runtime "org.pillarone:risk-analytics-core:1.6-ALPHA-4.12-2.1.0"
+            runtime("org.pillarone:risk-analytics-commons:0.4.6-2.1.0") { transitive = false }
         }
+    }
+
+    dependencies {
+        test "hsqldb:hsqldb:1.8.0.10"
     }
 }
 //grails.plugin.location.'risk-analytics-core' = "../risk-analytics-core"

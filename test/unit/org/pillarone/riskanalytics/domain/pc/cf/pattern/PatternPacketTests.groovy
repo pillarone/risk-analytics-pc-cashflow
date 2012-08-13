@@ -12,7 +12,7 @@ class PatternPacketTests extends GroovyTestCase {
     PatternPacket pattern
 
     static PatternPacket getPattern(List<Integer> periods, List<Double> cumulativeValues, boolean stochasticPattern = false) {
-        protected List<Period> cumulativePeriods = [];
+        List<Period> cumulativePeriods = [];
         periods.each { period -> cumulativePeriods.add(Period.months(period)) }
         return new PatternPacket(null, cumulativeValues, cumulativePeriods, stochasticPattern)
     }

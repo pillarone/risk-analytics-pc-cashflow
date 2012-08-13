@@ -213,7 +213,7 @@ class SurplusContractTests extends GroovyTestCase {
         contract.doCalculation()
 
         assertEquals "coverUnderwritingInfo.size", contract.inUnderwritingInfo.size(), contract.outUnderwritingInfoCeded.size()
-        assertEquals "premium written 0", -0d * contract.inUnderwritingInfo[0].premiumWritten, contract.outUnderwritingInfoCeded[0].premiumWritten
+        assertEquals "premium written 0", -0d * contract.inUnderwritingInfo[0].premiumWritten, contract.outUnderwritingInfoCeded[0].premiumWritten, 1E-14
         assertEquals "premium written 1", -0.5 * contract.inUnderwritingInfo[1].premiumWritten, contract.outUnderwritingInfoCeded[1].premiumWritten
         assertEquals "premium written 2", -0.8 * contract.inUnderwritingInfo[2].premiumWritten, contract.outUnderwritingInfoCeded[2].premiumWritten
     }

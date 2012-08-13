@@ -40,7 +40,11 @@
         <delete dir="${dist.dir}"/>
 
         <mkdir dir="${dist.dir}"/>
-        <grails command="clean"/>
+        <exec executable="${grails}" failonerror="true" resolveexecutable="true">
+            <arg value="clean"/>
+            <arg value="--non-interactive"/>
+            <env key="GRAILS_HOME" value="${GRAILS_HOME}"/>
+        </exec>
         <delete verbose="true">
             <fileset dir="." includes="*Db.script"/>
             <fileset dir="." includes="**Db.properties"/>
@@ -62,7 +66,7 @@
             <arg value="compile"/>
             <arg value="--non-interactive"/>
             <env key="GRAILS_HOME" value="${GRAILS_HOME}"/>
-            <env key="JAVA_OPTS" value="-Xmx512m -XX:MaxPermSize=128m -Duser.language='en'"/>
+            <env key="JAVA_OPTS" value="-Xmx512m -Xms512m -XX:MaxPermSize=128m -Duser.language='en'"/>
         </exec>
     </target>
 
@@ -83,7 +87,7 @@
             <!--<arg value="-echoOut"/>-->
             <env key="GRAILS_HOME" value="${GRAILS_HOME}"/>
             <env key="JAVA_OPTS"
-                 value="-Xmx512m -XX:MaxPermSize=128m -Duser.language='en'"/>
+                 value="-Xmx1024m -Xms512m -XX:MaxPermSize=128m -XX:-UseSplitVerifier -Duser.language='en'"/>
         </exec>
         <copy todir="${dist.dir}">
             <fileset dir="target" includes="test-reports/"/>
