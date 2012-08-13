@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimValidator
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -32,7 +33,7 @@ class ReservesFilterStrategy extends AbstractParameterObject implements ICoverAt
         List coveredReserves = getCoveredReserves();
         for (ClaimCashflowPacket claim : source) {
             if (coveredReserves.contains(claim.reserve())) {
-                filteredClaims.add(claim);
+                filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
             }
         }
         source.clear();

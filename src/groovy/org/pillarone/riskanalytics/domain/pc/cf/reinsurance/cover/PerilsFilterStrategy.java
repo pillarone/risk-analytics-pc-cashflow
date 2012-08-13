@@ -4,6 +4,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimValidator;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
@@ -36,7 +37,7 @@ public class PerilsFilterStrategy extends AbstractParameterObject implements ICo
         List coveredPerils = getCoveredPerils();
         for (ClaimCashflowPacket claim : source) {
             if (coveredPerils.contains(claim.peril())) {
-                filteredClaims.add(claim);
+                filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
             }
         }
         source.clear();

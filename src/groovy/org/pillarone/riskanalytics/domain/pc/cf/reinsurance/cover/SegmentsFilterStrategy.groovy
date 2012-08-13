@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimValidator
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -32,7 +33,7 @@ class SegmentsFilterStrategy extends AbstractParameterObject implements ICoverAt
         List coveredSegments = getCoveredSegments();
         for (ClaimCashflowPacket claim : source) {
             if (coveredSegments.contains(claim.segment()) && claim.reserve() == null) {
-                filteredClaims.add(claim);
+                filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
             }
         }
         source.clear();

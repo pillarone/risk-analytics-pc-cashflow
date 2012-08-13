@@ -38,13 +38,7 @@ public class ClaimStorage {
     private double cumulatedUltimateDevelopedCeded;
 
     public ClaimStorage(ClaimCashflowPacket claim) {
-        // todo: same check is done twice in ClaimHistoryAndApplicableContract
-        if (claim.getNominalUltimate() > 0) {
-            reference = ClaimUtils.scale(claim.getBaseClaim(), -1);
-        }
-        else {
-            reference = claim.getBaseClaim();
-        }
+        reference = claim.getBaseClaim();
     }
 
     /** helper method for more generic call interfaces */

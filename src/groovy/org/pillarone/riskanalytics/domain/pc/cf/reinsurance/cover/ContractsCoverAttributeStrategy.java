@@ -4,6 +4,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimValidator;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract;
 import org.pillarone.riskanalytics.domain.utils.constant.ReinsuranceContractBase;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class ContractsCoverAttributeStrategy extends AbstractParameterObject implements ICoverAttributeStrategy, IContractCover {
 
     private ICoverAttributeStrategy filter;
+    private ClaimValidator claimValidator;
 
     public IParameterObjectClassifier getType() {
         return CoverAttributeStrategyType.CONTRACTS;
@@ -34,11 +36,17 @@ public class ContractsCoverAttributeStrategy extends AbstractParameterObject imp
     }
 
     public List<ClaimCashflowPacket> coveredClaims(List<ClaimCashflowPacket> source) {
+        if (claimValidator == null) { claimValidator = new ClaimValidator(); }
         List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
         List coveredContracts = getCoveredReinsuranceContracts();
         for (ClaimCashflowPacket claim : source) {
             if (coveredContracts.contains(claim.reinsuranceContract()) && claim.reserve() == null) {
-                filteredClaims.add(claim);
+                if (coveredContractsCoveringCeded.contains(claim.reinsuranceContract())) {
+                    filteredClaims.add(claimValidator.invertClaimSign(claim));
+                }
+                else {
+                    filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
+                }
             }
         }
         filteredClaims = filter.coveredClaims(filteredClaims);
@@ -69,12 +77,17 @@ public class ContractsCoverAttributeStrategy extends AbstractParameterObject imp
 
     private List<ReinsuranceContractAndBase> coveredContractsAndBase;
     private List<IReinsuranceContractMarker> coveredContracts;
+    private List<IReinsuranceContractMarker> coveredContractsCoveringCeded;
 
     public List<IReinsuranceContractMarker> getCoveredReinsuranceContracts() {
         if (coveredContracts == null) {
             coveredContracts = new ArrayList<IReinsuranceContractMarker>();
+            coveredContractsCoveringCeded = new ArrayList<IReinsuranceContractMarker>();
             for (ReinsuranceContractAndBase contract : coveredContractsAndBase) {
                 coveredContracts.add(contract.reinsuranceContract);
+                if (contract.contractBase.equals(ReinsuranceContractBase.CEDED)) {
+                    coveredContractsCoveringCeded.add(contract.reinsuranceContract);
+                }
             }
         }
         return coveredContracts;
