@@ -1,5 +1,5 @@
 //Use a custom plugins dir, because different branches use different plugin versions
-grails.project.plugins.dir = "../local-plugins/risk-analytics-pc-cashflow-master"
+grails.project.plugins.dir = "../local-plugins/risk-analytics-pc-cashflow-2.1.0"
 
 grails.project.dependency.resolution = {
     inherits "global" // inherit Grails' default dependencies
