@@ -4,6 +4,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimValidator;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 
@@ -41,7 +42,7 @@ public class InwardLegalEntitiesCoverAttributeStrategy extends AbstractParameter
         List coveredLegalEntities = getCoveredLegalEntities();
         for (ClaimCashflowPacket claim : source) {
             if (coveredLegalEntities.contains(claim.legalEntity()) && claim.reserve() == null) {
-                filteredClaims.add(claim);
+                filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
             }
         }
         source.clear();

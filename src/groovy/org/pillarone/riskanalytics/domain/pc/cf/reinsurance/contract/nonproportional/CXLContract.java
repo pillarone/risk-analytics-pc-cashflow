@@ -15,6 +15,7 @@ import java.util.*;
  */
 public class CXLContract extends XLContract {
 
+    // todo(sku): misleading name as the key might be any object, not just an event
     protected Map<Object, AggregateEventClaimsStorage> cededShareByEvent = new LinkedHashMap<Object, AggregateEventClaimsStorage>();
 
     /**

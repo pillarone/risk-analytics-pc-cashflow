@@ -32,11 +32,13 @@ class QuotaShareContractSpreadsheetTests extends SpreadsheetUnitTest {
     }
 
     void testUsage() {
+        // enable the following line while writing/debugging the test case but comment it out before committing!
+//        setCheckedForValidationErrors(true)
         SpreadsheetImporter importer = importers[0]
         ReinsuranceContract contract = getQuotaShareContract(importer)
-        contract.inClaims.addAll getClaims(importer, 'GrossClaims')
+        contract.inClaims.addAll getClaims(importer, 'GrossClaims', -1)
         contract.doCalculation()
-        List<ClaimCashflowPacket> cededClaims = getClaims(importer, 'CededClaims')
+        List<ClaimCashflowPacket> cededClaims = getClaims(importer, 'CededClaims', 1)
 
         assertEquals "[${importer.fileName}] correct ceded ultimates", cededClaims*.ultimate, contract.outClaimsCeded*.ultimate
         assertEquals "[${importer.fileName}] correct ceded reportedIncrementalIndexed", cededClaims*.reportedIncrementalIndexed, contract.outClaimsCeded*.reportedCumulatedIndexed
@@ -47,7 +49,7 @@ class QuotaShareContractSpreadsheetTests extends SpreadsheetUnitTest {
 
     void testValidationErrors() {
         SpreadsheetImporter importer = importers[1]
-        getClaims(importer, 'GrossClaims')
+        getClaims(importer, 'GrossClaims', 1)
 
         shouldFail {
             manageValidationErrors(importer)
@@ -72,12 +74,12 @@ class QuotaShareContractSpreadsheetTests extends SpreadsheetUnitTest {
             peril : ([expectedType: ExpectedPropertyType.StringType, defaultValue: null])
     ]
 
-    List<ClaimCashflowPacket> getClaims(SpreadsheetImporter importer, String sheet) {
+    List<ClaimCashflowPacket> getClaims(SpreadsheetImporter importer, String sheet, Double sign) {
         List claimsMap = importer.columns(claimsSheetStructure(sheet), CLAIMS_VALIDATION)
         List<ClaimCashflowPacket> claims = []
         for (Map claim : claimsMap) {
             DateTime date = claim.occurrenceDate.toDateTimeAtStartOfDay()
-            GrossClaimRoot baseClaim = new GrossClaimRoot(claim.ultimate, ClaimType.AGGREGATED, date,
+            GrossClaimRoot baseClaim = new GrossClaimRoot(sign * claim.ultimate, ClaimType.AGGREGATED, date,
                     date, trivialPayoutPattern, trivialReportingPattern)
             claims.addAll baseClaim.getClaimCashflowPackets(iterationScope.periodScope.periodCounter)
         }

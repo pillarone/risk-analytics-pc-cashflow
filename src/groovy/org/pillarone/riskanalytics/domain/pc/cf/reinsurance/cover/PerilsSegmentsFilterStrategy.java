@@ -4,6 +4,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimValidator;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.constant.LogicArguments;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
@@ -49,7 +50,7 @@ public class PerilsSegmentsFilterStrategy extends AbstractParameterObject implem
                     && coveredPerils.contains(claim.peril()) && coveredSegments.contains(claim.segment()))
                 || (connection == LogicArguments.OR
                     && (coveredPerils.contains(claim.peril()) || coveredSegments.contains(claim.segment()))))) {
-                filteredClaims.add(claim);
+                filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
             }
         }
         source.clear();

@@ -15,7 +15,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.IRiskAllocatorS
 import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.RiskAllocatorType;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
@@ -51,9 +50,9 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     // attritional, frequency average attritional, ...
     private ConstrainedString parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker.class, "");
     private ConstrainedString parmReportingPattern = new ConstrainedString(IReportingPatternMarker.class, "");
-    private ConstrainedMultiDimensionalParameter parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
-            Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
-            ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER));
+    private ConstrainedMultiDimensionalParameter parmRunOffIndices = new ConstrainedMultiDimensionalParameter(
+            Collections.emptyList(), RunOffIndexSelectionTableConstraints.COLUMN_TITLES,
+            ConstraintsFactory.getConstraints(RunOffIndexSelectionTableConstraints.IDENTIFIER));
     private ComboBoxTableMultiDimensionalParameter parmUnderwritingSegments = new ComboBoxTableMultiDimensionalParameter(
             Arrays.asList(""), Arrays.asList("Underwriting Information"), IUnderwritingInfoMarker.class);
     private IClaimsGeneratorStrategy parmClaimsModel = ClaimsGeneratorType.getDefault();
@@ -62,7 +61,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     protected void doCalculation() {
         List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
         IPeriodCounter periodCounter = periodScope.getPeriodCounter();
-        List<Factors> factors = IndexUtils.filterFactors(inFactors, parmSeverityIndices);
+        List<Factors> factors = IndexUtils.filterFactors(inFactors, parmRunOffIndices);
         int number = generateClaimsOfCurrentPeriod(claims, periodCounter, factors);
         developClaimsOfFormerPeriods(claims, periodCounter, factors);
         setTechnicalProperties(claims);
@@ -241,12 +240,12 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
         this.outClaimNumber = outClaimNumber;
     }
 
-    public ConstrainedMultiDimensionalParameter getParmSeverityIndices() {
-        return parmSeverityIndices;
+    public ConstrainedMultiDimensionalParameter getParmRunOffIndices() {
+        return parmRunOffIndices;
     }
 
-    public void setParmSeverityIndices(ConstrainedMultiDimensionalParameter parmSeverityIndices) {
-        this.parmSeverityIndices = parmSeverityIndices;
+    public void setParmRunOffIndices(ConstrainedMultiDimensionalParameter parmRunOffIndices) {
+        this.parmRunOffIndices = parmRunOffIndices;
     }
 
     public PacketList<EventDependenceStream> getInEventSeverities() {
