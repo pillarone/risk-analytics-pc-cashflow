@@ -224,11 +224,8 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
                                                 List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims,
                                                 int currentPeriod, ClaimCashflowPacket claim, ClaimStorageContainer claimsHistories) {
         IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
-        // PMO-1963: calculation of an occurrence period before the projection start does not work
-        //           as current retrospective contracts don't cover specific periods all is mapped to period 0
-        //           for claims generated in reserve generators
-        int occurrencePeriod = claim.reserve() == null ? claim.occurrencePeriod(periodCounter) : 0;
-        List<IReinsuranceContract> periodContracts = (List<IReinsuranceContract>) periodStore.get(REINSURANCE_CONTRACT, occurrencePeriod - currentPeriod);
+        int period = claimCoveredInContractPeriod(claim, periodCounter);
+        List<IReinsuranceContract> periodContracts = (List<IReinsuranceContract>) periodStore.get(REINSURANCE_CONTRACT, period - currentPeriod);
         contracts.addAll(periodContracts);
 
         for (IReinsuranceContract contract : periodContracts) {
@@ -240,6 +237,18 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             ClaimHistoryAndApplicableContract claimWithHistory = new ClaimHistoryAndApplicableContract(claim, claimStorage, contract);
             currentPeriodGrossClaims.add(claimWithHistory);
         }
+    }
+
+    /**
+     * @param claim
+     * @param periodCounter
+     * @return occurrence period of the claim or 0 for reserve claims
+     */
+    protected int claimCoveredInContractPeriod(ClaimCashflowPacket claim, IPeriodCounter periodCounter) {
+        // PMO-1963: calculation of an occurrence period before the projection start does not work
+        //           as current retrospective contracts don't cover specific periods all is mapped to period 0
+        //           for claims generated in reserve generators
+        return claim.reserve() == null ? claim.occurrencePeriod(periodCounter) : 0;
     }
 
     /**
