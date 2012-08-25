@@ -105,8 +105,7 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
             "slAttachmentPoint": 0d, "slLimit": 0d, "goldorakSlThreshold": 0d,
             "reinstatementPremiums": new TableMultiDimensionalParameter([0.0], ['Reinstatement Premium'])])
 
-    public static final all = [QUOTASHARE, SURPLUS, WXL, CXL,
-            WCXL, STOPLOSS, TRIVIAL/*, LOSSPORTFOLIOTRANSFER, ADVERSEDEVELOPMENTCOVER, GOLDORAK*/]
+    public static final all = [QUOTASHARE, SURPLUS, WXL, CXL, WCXL, STOPLOSS, TRIVIAL]
 
     protected static Map types = [:]
     static {

@@ -7,6 +7,13 @@ public class DoubleValue {
 
     public double value;
 
+    public DoubleValue() {
+    }
+
+    public DoubleValue(double value) {
+        this.value = value;
+    }
+
     public void plus(Double summand) {
         value += summand;
     }

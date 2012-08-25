@@ -86,7 +86,6 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
     }
 
     private class AADReduction {
-//        private Map<IClaimRoot, Double> ultimate;
         private Map<IClaimRoot, Double> reported;
         private Map<IClaimRoot, Double> paid;
 
@@ -95,7 +94,6 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
         }
 
         public void init() {
-//            ultimate = new HashMap<IClaimRoot, Double>();
             reported = new HashMap<IClaimRoot, Double>();
             paid = new HashMap<IClaimRoot, Double>();
         }
@@ -103,8 +101,6 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
         public void increaseAADReduction(IClaimRoot keyClaim, BasedOnClaimProperty base, double incrementalReduction) {
             switch (base) {
                 case ULTIMATE: {
-//                    Double previousReduction = ultimate.get(keyClaim);
-//                    ultimate.put(keyClaim, incrementalReduction + ((previousReduction != null) ? previousReduction : 0));
                     break;
                 }
                 case REPORTED: {
@@ -127,7 +123,6 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
             Double previousReduction = null;
             switch (base) {
                 case ULTIMATE: {
-//                    previousReduction = ultimate.get(keyClaim);
                     break;
                 }
                 case REPORTED: {

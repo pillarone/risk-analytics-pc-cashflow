@@ -50,27 +50,21 @@ class LimitStrategyType extends AbstractParameterObjectClassifier {
     }
 
     public static ILimitStrategy getStrategy(LimitStrategyType type, Map parameters) {
-        ILimitStrategy limitStrategy ;
         switch (type) {
             case LimitStrategyType.NONE:
-                limitStrategy = new NoneLimitStrategy()
-                break
+                return new NoneLimitStrategy()
             case LimitStrategyType.AAL:
-                limitStrategy = new AalLimitStrategy(aal: (Double) parameters['aal'])
-                break
+                return new AalLimitStrategy(aal: (Double) parameters['aal'])
             case LimitStrategyType.AAD:
-                limitStrategy = new AadLimitStrategy(aad: (Double) parameters['aad'])
-                break
+                return new AadLimitStrategy(aad: (Double) parameters['aad'])
             case LimitStrategyType.AALAAD:
-                limitStrategy = new AalAadLimitStrategy(aal: (Double) parameters['aal'], aad: (Double) parameters['aad'])
-                break
-//            case LimitStrategyType.EVENTLIMIT:
-//                limitStrategy = new EventLimitStrategy(eventLimit: (Double) parameters['eventLimit'])
-//                break
-//            case LimitStrategyType.EVENTLIMITAAL:
-//                limitStrategy = new EventAalLimitStrategy(eventLimit: (Double) parameters['eventLimit'], aal: (Double) parameters['aal'])
-//                break
+                return new AalAadLimitStrategy(aal: (Double) parameters['aal'], aad: (Double) parameters['aad'])
+            case LimitStrategyType.EVENTLIMIT:
+                return new EventLimitStrategy(eventLimit: (Double) parameters['eventLimit'])
+            case LimitStrategyType.EVENTLIMITAAL:
+                return new EventAalLimitStrategy(eventLimit: (Double) parameters['eventLimit'], aal: (Double) parameters['aal'])
+            default:
+                throw new IllegalArgumentException("Unknown LimitStrategyType provided " + type.toString())
         }
-        limitStrategy;
     }
 }

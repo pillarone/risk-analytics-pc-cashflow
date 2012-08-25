@@ -61,6 +61,23 @@ class QuotaShareContractTests extends GroovyTestCase {
                 periodStore: iterationScope.periodStores[0])
     }
 
+    static ReinsuranceContract getQuotaShareContractEventLimit(double quotaShare, double eventLimit, DateTime beginOfCover, int years) {
+        IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
+        return new ReinsuranceContract(
+                parmContractStrategy : ReinsuranceContractType.getStrategy(ReinsuranceContractType.QUOTASHARE, [
+                        'quotaShare': quotaShare,
+                        'limit': LimitStrategyType.getStrategy(LimitStrategyType.EVENTLIMIT, ['eventLimit' : eventLimit]),
+                        'commission': CommissionStrategyType.getStrategy(CommissionStrategyType.PROFITCOMMISSION, [
+                                'profitCommissionRatio' : 0.2d, 'commissionRatio' : 0.1d, 'costRatio' : 0.1d,
+                                'lossCarriedForwardEnabled' : false, 'initialLossCarriedForward' : 0d,
+                                'useClaims': BasedOnClaimProperty.REPORTED])]),
+                parmCover : CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS, [filter: FilterStrategyType.getDefault()]),
+                iterationScope: iterationScope,
+                periodStore: iterationScope.periodStores[0],
+                parmCoveredPeriod: PeriodStrategyType.getStrategy(PeriodStrategyType.MONTHS, [startCover: beginOfCover, numberOfMonths: years * 12])
+        )
+    }
+
     void setUp() {
         ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
     }

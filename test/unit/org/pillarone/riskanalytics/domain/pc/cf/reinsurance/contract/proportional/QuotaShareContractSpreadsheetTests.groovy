@@ -33,7 +33,7 @@ class QuotaShareContractSpreadsheetTests extends SpreadsheetUnitTest {
 
     void testUsage() {
         // enable the following line while writing/debugging the test case but comment it out before committing!
-//        setCheckedForValidationErrors(true)
+        setCheckedForValidationErrors(true)
         SpreadsheetImporter importer = importers[0]
         ReinsuranceContract contract = getQuotaShareContract(importer)
         contract.inClaims.addAll getClaims(importer, 'GrossClaims', -1)
