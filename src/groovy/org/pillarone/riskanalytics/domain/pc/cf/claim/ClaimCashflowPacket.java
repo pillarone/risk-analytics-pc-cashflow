@@ -84,7 +84,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this(baseClaim, baseClaim);
     }
 
-    private ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim) {
+    public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim) {
         this.baseClaim = baseClaim;
         this.keyClaim = keyClaim;
         hasUltimate = true;
@@ -188,6 +188,27 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         updateDate = grossClaim.getUpdateDate();
         updatePeriod = grossClaim.updatePeriod;
         discountFactors = grossClaim.discountFactors;
+        setDate(grossClaim.getUpdateDate());
+    }
+
+    /**
+     * Convienience method for setting a new payment amount based on an old Claim Cashflow
+     */
+    public ClaimCashflowPacket(ClaimCashflowPacket grossClaim, double paidIncremental, double cumulatedPaid) {
+        this(grossClaim.getBaseClaim(), grossClaim.getKeyClaim());
+        ultimate = 0;
+        // todo(sku): investigate!
+        nominalUltimate = 0;
+        paidIncrementalIndexed = paidIncremental;
+        paidCumulatedIndexed = 0;
+        reportedIncrementalIndexed = 0;
+        reportedCumulatedIndexed = 0;
+        reservesIndexed = 0;
+        changeInReservesIndexed = 0;
+        changeInIBNRIndexed = 0;
+        updateDate = grossClaim.getUpdateDate();
+        updatePeriod = grossClaim.getUpdatePeriod();
+        discountFactors = grossClaim.getDiscountFactors();
         setDate(grossClaim.getUpdateDate());
     }
     
