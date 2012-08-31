@@ -40,6 +40,10 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
         return 0d;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    public Map<Integer, Double> cededIncrementalPaidRespectTerm() {
+        return new HashMap<Integer, Double>();
+    }
+
     public Map<Integer, Double> cededCumulativePaidRespectTerm(List<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters, PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess) {
 
         TermIncurredCalculation incCalc = new TermIncurredCalculation();
@@ -69,8 +73,6 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
         boolean termExcessExceeded = false;
         double cumulativePaidInSimulation = 0d;
         for (int period = 0; period <= periodTo; period++) {
-            double incrementalPaidSimPeriod = cededPaidUpToSimulationPeriod(new ArrayList<ClaimCashflowPacket>(allPaidClaims), layerParameters, periodScope, termExcess, termLimit, base, period);
-            cumulativePaidInSimulation += incrementalPaidSimPeriod;
 
             if(termExcessExceeded) {
                 List<ClaimCashflowPacket> cashflowsPaidAgainsThisModelPeriod = GRIUtilities.cashflowsCoveredInModelPeriod(allPaidClaims, periodScope, base, periodTo);
@@ -79,11 +81,11 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
                 period_paid.put(period, paidLossToModelPeriod);
             }
 
+            double incrementalPaidSimPeriod = cededPaidUpToSimulationPeriod(new ArrayList<ClaimCashflowPacket>(allPaidClaims), layerParameters, periodScope, termExcess, termLimit, base, period);
+            cumulativePaidInSimulation += incrementalPaidSimPeriod;
+
             if(cumulativePaidInSimulation >= termExcess ) {
                 termExcessExceeded = true;
-                List<ClaimCashflowPacket> cashflowsPaidAgainsThisModelPeriod = GRIUtilities.cashflowsCoveredInModelPeriod(allPaidClaims, periodScope, base, periodTo);
-                List<LayerParameters> layers = layerParameters.getLayers(periodTo + 1);
-                double paidLossToModelPeriod = paidLossAllLayers(cashflowsPaidAgainsThisModelPeriod, layers);
                 period_paid.put(period, incrementalPaidSimPeriod);
 
             } else {
