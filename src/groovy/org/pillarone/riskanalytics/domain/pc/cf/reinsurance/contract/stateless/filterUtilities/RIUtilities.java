@@ -37,7 +37,7 @@ public class RIUtilities {
     }
 
 
-    public static Set<IClaimRoot> incurredClaimsByDate( DateTime startDate, DateTime endDate, Set<IClaimRoot> allIncurredClaims , ContractCoverBase coverBase  ) {
+    public static Set<IClaimRoot> incurredClaimsByDate( DateTime startDate, DateTime endDate, Collection<IClaimRoot> allIncurredClaims , ContractCoverBase coverBase  ) {
         Set<IClaimRoot> claimsOfInterest = new HashSet<IClaimRoot>();
         for (IClaimRoot anIncurredClaim : allIncurredClaims) {
             DateTime coverDateTime = coverBase.claimCoverDate(anIncurredClaim);
@@ -62,11 +62,7 @@ public class RIUtilities {
     public static List<ClaimCashflowPacket> latestCashflowByIncurredClaim( List<ClaimCashflowPacket> cashflows ) {
         Set<IClaimRoot> claimRoots = RIUtilities.incurredClaims(cashflows, IncurredClaimBase.KEY);
 
-        ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByKey = ArrayListMultimap.create();
-
-        for(ClaimCashflowPacket aCashflow : cashflows) {
-            cashflowsByKey.put(aCashflow.getKeyClaim(), aCashflow);
-        }
+        ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByKey = cashflowsByRoot(cashflows);
 
         List<ClaimCashflowPacket> latestUpdates = new ArrayList<ClaimCashflowPacket>();
 
@@ -89,7 +85,13 @@ public class RIUtilities {
 
     }
 
-
+    public static ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByRoot(List<ClaimCashflowPacket> cashflows) {
+        ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByKey = ArrayListMultimap.create();
+        for(ClaimCashflowPacket aCashflow : cashflows) {
+            cashflowsByKey.put(aCashflow.getKeyClaim(), aCashflow);
+        }
+        return cashflowsByKey;
+    }
 
 
     public static List<ClaimCashflowPacket> cashflowsByIncurredDate( DateTime startDate, DateTime endDate, List<ClaimCashflowPacket> cashflows , ContractCoverBase coverBase  ) {
@@ -109,6 +111,16 @@ public class RIUtilities {
         Set<IClaimRoot> claimsOfInterest = new HashSet<IClaimRoot>();
         for (IClaimRoot anIncurredClaim : allIncurredClaims) {
             DateTime coverDateTime = coverBase.claimCoverDate(anIncurredClaim);
+            periodCounter.belongsToPeriod(coverDateTime);
+        }
+        return claimsOfInterest;
+    }
+
+    public static List<ClaimCashflowPacket> cashflowsClaimsByPeriod( Integer period, IPeriodCounter periodCounter, List<ClaimCashflowPacket> cashflowsClaims , ContractCoverBase coverBase  ) {
+
+        List<ClaimCashflowPacket> claimsOfInterest = new ArrayList<ClaimCashflowPacket>();
+        for (ClaimCashflowPacket aClaim : cashflowsClaims) {
+            DateTime coverDateTime = coverBase.claimCoverDate(aClaim);
             periodCounter.belongsToPeriod(coverDateTime);
         }
         return claimsOfInterest;

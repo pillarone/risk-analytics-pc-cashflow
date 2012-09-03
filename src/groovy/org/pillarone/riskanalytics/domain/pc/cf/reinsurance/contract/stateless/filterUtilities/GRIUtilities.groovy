@@ -5,6 +5,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot
+import org.pillarone.riskanalytics.core.simulation.SimulationException
 
 /**
  *   author simon.parten @ art-allianz . com
@@ -12,9 +15,30 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 class GRIUtilities {
 
     public static List<ClaimCashflowPacket> cashflowsRelatedToRoots(Set<IClaimRoot> rootClaims, List<ClaimCashflowPacket> cashflows) {
-
         new ArrayList<ClaimCashflowPacket>(cashflows.findAll {it -> rootClaims.contains(it.baseClaim) })
+    }
 
+
+    public static Double ultimateSumFromCashflows(List<ClaimCashflowPacket> cashflows) {
+       List<IClaimRoot> ultimates = RIUtilities.incurredClaims(cashflows, IncurredClaimBase.BASE)
+        return ultimateSum(ultimates)
+
+    }
+
+    public static ICededRoot findCededClaimRelatedToGrossClaim(IClaimRoot grossClaim, List<ICededRoot> allCededClaims ) {
+        ICededRoot claim = allCededClaims.find {grossClaim.equals(it.getGrossClaim())}
+        if(claim == null) {
+            throw new SimulationException("Failed to match a gross claim to the list of ceded claims")
+        }
+        return claim
+    }
+
+    public static ClaimCashflowPacket findCashflowToGrossClaim(IClaimRoot cededKeyClaim, List<ClaimCashflowPacket> allCashflows ) {
+        ClaimCashflowPacket claim = allCashflows.find {cededKeyClaim.equals(it.getKeyClaim())}
+        if(claim == null) {
+            throw new SimulationException("Failed to match a gross claim to the list of ceded claims")
+        }
+        return claim
     }
 
     public static Double ultimateSum(List<IClaimRoot> incurredClaims) {

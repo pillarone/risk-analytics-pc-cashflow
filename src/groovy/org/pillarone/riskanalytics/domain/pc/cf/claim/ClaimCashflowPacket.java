@@ -194,22 +194,26 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     /**
      * Convienience method for setting a new payment amount based on an old Claim Cashflow
      */
-    public ClaimCashflowPacket(ClaimCashflowPacket grossClaim, double paidIncremental, double cumulatedPaid) {
-        this(grossClaim.getBaseClaim(), grossClaim.getKeyClaim());
-        ultimate = 0;
-        // todo(sku): investigate!
-        nominalUltimate = 0;
-        paidIncrementalIndexed = paidIncremental;
-        paidCumulatedIndexed = 0;
-        reportedIncrementalIndexed = 0;
-        reportedCumulatedIndexed = 0;
-        reservesIndexed = 0;
-        changeInReservesIndexed = 0;
+    public ClaimCashflowPacket(IClaimRoot baseClaim, ClaimCashflowPacket claimCashflowPacket, double paidIncremental, double cumulatedPaid) {
+        this.baseClaim = baseClaim;
+        this.keyClaim = claimCashflowPacket.getKeyClaim();
+        this.ultimate = baseClaim.getUltimate();
+        this.nominalUltimate = ultimate;
+        this.updateDate = claimCashflowPacket.getUpdateDate();
+        setDate(claimCashflowPacket.getDate());
+        this.paidIncrementalIndexed = paidIncremental;
+        this.paidCumulatedIndexed = cumulatedPaid;
+
+//      Danger here!!!!!
+        this.reportedIncrementalIndexed = 0;
+        this.reportedCumulatedIndexed = ultimate;
+        this.reservesIndexed = ultimate - cumulatedPaid ;
+        changeInReservesIndexed = claimCashflowPacket.reservedIndexed() - reservesIndexed ;
         changeInIBNRIndexed = 0;
-        updateDate = grossClaim.getUpdateDate();
-        updatePeriod = grossClaim.getUpdatePeriod();
-        discountFactors = grossClaim.getDiscountFactors();
-        setDate(grossClaim.getUpdateDate());
+
+        updateDate = claimCashflowPacket.getUpdateDate();
+        updatePeriod = claimCashflowPacket.getUpdatePeriod();
+        discountFactors = claimCashflowPacket.getDiscountFactors();
     }
     
 

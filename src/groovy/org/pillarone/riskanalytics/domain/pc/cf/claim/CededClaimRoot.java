@@ -10,7 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
-public class CededClaimRoot implements IClaimRoot {
+public class CededClaimRoot implements ICededRoot {
 
     private static Log LOG = LogFactory.getLog(CededClaimRoot.class);
 

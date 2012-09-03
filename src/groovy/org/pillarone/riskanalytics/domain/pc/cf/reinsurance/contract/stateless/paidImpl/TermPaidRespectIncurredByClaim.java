@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.paidImpl;
 
+import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
@@ -30,18 +31,38 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
         return lossAfterShareAndProRata;
     }
 
-    @Override
-    public double cededIncrementalPaidRespectTerm(Collection<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters, PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess) {
-        return 0d;
-    }
-
-    @Override
     public double cumulativePaidForPeriodIgnoreTermStructure(Collection<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters, PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess, int period) {
         return 0d;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public Map<Integer, Double> cededIncrementalPaidRespectTerm() {
-        return new HashMap<Integer, Double>();
+    public Map<Integer, Double> cededIncrementalPaidRespectTerm(List<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters,
+                                                                PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess, DateTime fromDate, DateTime toDate) {
+
+        List<ClaimCashflowPacket> fromDateFilteredClaims = RIUtilities.cashflowClaimsByOccurenceDate(periodScope.getPeriodCounter().startOfFirstPeriod(), toDate, allPaidClaims);
+        List<ClaimCashflowPacket> toDateFilteredClaims = RIUtilities.cashflowClaimsByOccurenceDate(periodScope.getPeriodCounter().startOfFirstPeriod(), fromDate, allPaidClaims);
+        Map<Integer, Double> paidByPeriodUpToFilterDate = cededCumulativePaidRespectTerm(fromDateFilteredClaims, layerParameters, periodScope, coverageBase, termLimit, termExcess);
+        Map<Integer, Double> cumulativeIncurredToDate = cededCumulativePaidRespectTerm(toDateFilteredClaims, layerParameters, periodScope, coverageBase, termLimit, termExcess);
+
+        Map<Integer, Double> paidByPeriod = new TreeMap<Integer, Double>();
+
+        for (int modelPeriod = 0; modelPeriod < cumulativeIncurredToDate.size(); modelPeriod++) {
+//          It is possible nothing is entered for the map, which may only run to the end of a prior period.
+            if (paidByPeriodUpToFilterDate.get(modelPeriod) == null) {
+                paidByPeriod.put(modelPeriod, cumulativeIncurredToDate.get(modelPeriod));
+            } else {
+
+                double paidPriorSimPeriod = paidByPeriodUpToFilterDate.get(modelPeriod);
+                double paidToCurrentSimPoint = cumulativeIncurredToDate.get(modelPeriod);
+                double cumPaid = paidToCurrentSimPoint - paidPriorSimPeriod;
+                if (cumPaid < 0) {
+                    throw new SimulationException("Insanity detected: incremental paid amount in model period : " + modelPeriod + 1 + " is calculated as negative. " +
+                            "Contact support");
+                }
+                paidByPeriod.put(modelPeriod, cumPaid);
+            }
+        }
+
+        return paidByPeriod;
     }
 
     public Map<Integer, Double> cededCumulativePaidRespectTerm(List<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters, PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess) {
@@ -59,6 +80,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
     /**
      * This method calculates the cumulative ceded amounts (by model period). It inspects the total amount ceded across the entire
      * simulation to determine if the term excess is breached, and then begins allocating paid amounts to periods.
+     *
      * @param periodScope
      * @param allPaidClaims
      * @param layerParameters
@@ -74,17 +96,17 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
         double cumulativePaidInSimulation = 0d;
         for (int period = 0; period <= periodTo; period++) {
 
-            if(termExcessExceeded) {
+            if (termExcessExceeded) {
                 List<ClaimCashflowPacket> cashflowsPaidAgainsThisModelPeriod = GRIUtilities.cashflowsCoveredInModelPeriod(allPaidClaims, periodScope, base, periodTo);
                 List<LayerParameters> layers = layerParameters.getLayers(periodTo + 1);
-                double paidLossToModelPeriod = paidLossAllLayers (cashflowsPaidAgainsThisModelPeriod, layers);
+                double paidLossToModelPeriod = paidLossAllLayers(cashflowsPaidAgainsThisModelPeriod, layers);
                 period_paid.put(period, paidLossToModelPeriod);
             }
 
             double incrementalPaidSimPeriod = cededPaidUpToSimulationPeriod(new ArrayList<ClaimCashflowPacket>(allPaidClaims), layerParameters, periodScope, termExcess, termLimit, base, period);
             cumulativePaidInSimulation += incrementalPaidSimPeriod;
 
-            if(cumulativePaidInSimulation >= termExcess ) {
+            if (cumulativePaidInSimulation >= termExcess) {
                 termExcessExceeded = true;
                 period_paid.put(period, incrementalPaidSimPeriod);
 
@@ -97,6 +119,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
 
     /**
      * This method calculated the incremental paid amount (respecting the term limit) across the entire simulation.
+     *
      * @param allCashflows
      * @param layerParameters
      * @param periodScope
@@ -119,7 +142,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
         List<ClaimCashflowPacket> cashflowsPaidAgainsThisModelPeriod = GRIUtilities.cashflowsCoveredInModelPeriod(allCashflows, periodScope, coverageBase, periodTo);
         List<ClaimCashflowPacket> latestCashflowsInPeriod = RIUtilities.latestCashflowByIncurredClaim(cashflowsPaidAgainsThisModelPeriod);
         List<LayerParameters> layers = layerParameters.getLayers(periodTo + 1);
-        double paidLossThisPeriod = paidLossAllLayers (latestCashflowsInPeriod, layers);
+        double paidLossThisPeriod = paidLossAllLayers(latestCashflowsInPeriod, layers);
 
         double lossAfterTermStructure = Math.min(Math.max(termPaidPriorPeriod + paidLossThisPeriod - termExcess, 0), termLimit);
         double lossAfterTermStructurePriorPeriods = Math.min(Math.max(termPaidPriorPeriod - termExcess, 0), termLimit);
@@ -129,6 +152,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
 
     /**
      * This method accepts all cashflows in all layers and calculates the amount ceded by contract.
+     *
      * @param allLayerCashflows
      * @param layerParameters
      * @return
@@ -143,6 +167,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
 
     /**
      * This calculates the amount ceded respecting the annual structure.
+     *
      * @param layerCashflows
      * @param layerParameters
      * @return
@@ -155,7 +180,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
         return Math.min(Math.max(lossAfterClaimStructure - layerParameters.getLayerPeriodExcess(), 0), layerParameters.getLayerPeriodLimit());
     }
 
-    public Map<Integer, Double> imposeIncurredLimits( Map<Integer, Double> incurredLimits, Map<Integer, Double> paidAmounts  ) {
+    public Map<Integer, Double> imposeIncurredLimits(Map<Integer, Double> incurredLimits, Map<Integer, Double> paidAmounts) {
         Map<Integer, Double> paidAmountRespectingIncurred = new TreeMap<Integer, Double>();
 
         for (Map.Entry<Integer, Double> entry : paidAmounts.entrySet()) {
