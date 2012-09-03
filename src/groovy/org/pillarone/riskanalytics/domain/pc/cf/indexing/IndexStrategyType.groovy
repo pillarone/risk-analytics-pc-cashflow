@@ -34,8 +34,10 @@ class IndexStrategyType extends AbstractParameterObjectClassifier {
     public static final IndexStrategyType STOCHASTIC = new IndexStrategyType("stochastic", "STOCHASTIC", [
             startDate: new DateTime(2011,1,1,0,0,0,0),
             distribution: DistributionType.getStrategy(DistributionType.NORMAL, [mean: 0d, stDev: 1d])])
+    public static final IndexStrategyType ORNSTEINUHLENBECK = new IndexStrategyType("Ornstein-Uhlenbeck", "ORNSTEINUHLENBECK", [
+            startValue: 0d, a: 0d, b: 0d, sigma: 1d])
 
-    public static final all = [NONE, DETERMINISTICANNUALCHANGE, DETERMINISTICINDEXSERIES, AGE_TO_AGE, STOCHASTIC]
+    public static final all = [NONE, DETERMINISTICANNUALCHANGE, DETERMINISTICINDEXSERIES, AGE_TO_AGE, STOCHASTIC, ORNSTEINUHLENBECK]
 
     protected static Map types = [:]
     static {
@@ -69,26 +71,28 @@ class IndexStrategyType extends AbstractParameterObjectClassifier {
         IIndexStrategy indexStrategy;
         switch (type) {
             case IndexStrategyType.NONE:
-                indexStrategy = new TrivialIndexStrategy()
-                break
+                return new TrivialIndexStrategy()
             case IndexStrategyType.DETERMINISTICANNUALCHANGE:
-                indexStrategy = new DeterministicAnnualChangeIndexStrategy(
+                return new DeterministicAnnualChangeIndexStrategy(
                         changes: (ConstrainedMultiDimensionalParameter) parameters['changes'])
-                break;
             case IndexStrategyType.DETERMINISTICINDEXSERIES:
-                indexStrategy = new DeterministicIndexStrategy(
+                return new DeterministicIndexStrategy(
                         indices : (ConstrainedMultiDimensionalParameter) parameters['indices'])
-                break;
             case IndexStrategyType.AGE_TO_AGE:
-                indexStrategy = new AgeToAgeIndexStrategy(
+                return new AgeToAgeIndexStrategy(
                         ratios : (ConstrainedMultiDimensionalParameter) parameters['ratios'])
-                break;
             case IndexStrategyType.STOCHASTIC:
-                indexStrategy = new StochasticIndexStrategy(
+                return new StochasticIndexStrategy(
                         startDate : (DateTime) parameters[StochasticIndexStrategy.START_DATE],
-                        distribution : (RandomDistribution) parameters[StochasticIndexStrategy.DISTRIBUTION],
-                )
+                        distribution : (RandomDistribution) parameters[StochasticIndexStrategy.DISTRIBUTION])
+            case IndexStrategyType.ORNSTEINUHLENBECK:
+                return new OrnsteinUhlenbeckIndexStrategy(
+                        startValue: parameters[OrnsteinUhlenbeckIndexStrategy.START_VALUE],
+                        a:  parameters[OrnsteinUhlenbeckIndexStrategy.A],
+                        b:  parameters[OrnsteinUhlenbeckIndexStrategy.B],
+                        sigma: parameters[OrnsteinUhlenbeckIndexStrategy.SIGMA])
+            default:
+                throw new IllegalArgumentException("Unknown trategy " + type)
         }
-        return indexStrategy
     }
 }
