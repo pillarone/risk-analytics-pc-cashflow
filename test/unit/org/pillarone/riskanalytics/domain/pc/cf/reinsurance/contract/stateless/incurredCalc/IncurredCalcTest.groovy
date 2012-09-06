@@ -114,7 +114,7 @@ class IncurredCalcTest extends GroovyTestCase {
         PeriodScope periodScope = TestPeriodScopeUtilities.getPeriodScope(start2010, 3)
 
         PeriodLayerParameters layerParameters = new PeriodLayerParameters()
-        layerParameters.add(1, 1, 1, 0, 0, 0, 0, 0, APBasis.NCB)
+        layerParameters.add(0, 1, 1, 0, 0, 0, 0, 0, APBasis.NCB)
         double incurredFirstCalc = calculation.cededIncurredRespectTerm( grossClaims, layerParameters, periodScope, 100, 400, periodScope.getPeriodCounter(), ContractCoverBase.LOSSES_OCCURING )
         assertEquals("First period inc term deductible", 350, incurredFirstCalc)
         Map<Integer, Double> incurredFirstCalcMap = calculation.cededIncurredsByPeriods( grossClaims, periodScope, 100, 400, layerParameters, ContractCoverBase.LOSSES_OCCURING )

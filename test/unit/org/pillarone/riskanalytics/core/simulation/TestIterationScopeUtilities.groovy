@@ -8,9 +8,9 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class TestIterationScopeUtilities {
+public class TestIterationScopeUtilities {
 
-    static IterationScope getIterationScope(DateTime date, int numberOfPeriods) {
+    public static IterationScope getIterationScope(DateTime date, int numberOfPeriods) {
         PeriodScope periodScope = TestPeriodScopeUtilities.getPeriodScope(date, numberOfPeriods)
         IterationScope iterationScope = new IterationScope(periodScope: periodScope)
         iterationScope.periodStores.add(new PeriodStore(periodScope))

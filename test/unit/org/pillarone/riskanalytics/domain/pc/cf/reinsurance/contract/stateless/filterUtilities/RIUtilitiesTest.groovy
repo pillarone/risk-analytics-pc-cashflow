@@ -13,6 +13,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.I
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
 import org.pillarone.riskanalytics.core.simulation.TestPeriodCounterUtilities
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
+import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 
 /**
  *   author simon.parten @ art-allianz . com
@@ -88,9 +90,23 @@ class RIUtilitiesTest extends GroovyTestCase {
 
         assertEquals "check date", 1,  claimCashflowPackets1.findAll {it -> it.getDate().equals(start2010.plusMonths(13)) }.size()
         assertEquals "check date", 1,  claimCashflowPackets1.findAll {it -> it.getDate().equals(start2011.plusMonths(23)) }.size()
-
-
-
     }
+
+    void testClaimsByPeriod() {
+        PeriodScope periodScope = TestPeriodScopeUtilities.getPeriodScope(start2010, 3)
+        List<ClaimCashflowPacket> claims = RIUtilities.cashflowsClaimsByPeriod(0, periodScope.getPeriodCounter(), claimCashflowPackets, ContractCoverBase.RISKS_ATTACHING )
+        PatternPacket packet2 = PatternPacketTests.getPattern([1i], [1d], false)
+        IClaimRoot noCoverClaim = new ClaimRoot(200, ClaimType.SINGLE, start2011, start2011)
+        IClaimRoot noCoverHere = new GrossClaimRoot(noCoverClaim, packet2)
+
+        IPeriodCounter counter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(start2011, 4)
+        claimCashflowPackets.addAll(noCoverHere.getClaimCashflowPackets(counter))
+        assert claimCashflowPackets.size() == 8
+        assertEquals "", 6,  claims.size()
+    }
+
+
+
+
 
 }

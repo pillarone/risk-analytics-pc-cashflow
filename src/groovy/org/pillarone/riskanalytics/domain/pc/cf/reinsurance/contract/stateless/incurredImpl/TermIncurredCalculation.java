@@ -58,7 +58,7 @@ public class TermIncurredCalculation implements IIncurredCalculation {
     public double incurredAmountInPeriod(List<IClaimRoot> incurredClaims, PeriodLayerParameters layerParameters, int period, AnnualIncurredCalc annualIncurredCalc, ContractCoverBase base, PeriodScope periodScope) {
         double termIncurredInPeriod = 0;
         ArrayList<IClaimRoot> claimsInPeriod = GRIUtilities.claimsCoveredInPeriod(incurredClaims, periodScope, base, period);
-        List<LayerParameters> layers = layerParameters.getLayers(period + 1);
+        List<LayerParameters> layers = layerParameters.getLayers(period);
         for (LayerParameters layerParameter : layers) {
             termIncurredInPeriod += annualIncurredCalc.layerCededIncurred(claimsInPeriod, layerParameter);
         }

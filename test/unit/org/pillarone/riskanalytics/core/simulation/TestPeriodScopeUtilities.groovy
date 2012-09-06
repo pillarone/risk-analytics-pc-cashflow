@@ -6,9 +6,9 @@ import org.joda.time.DateTime
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class TestPeriodScopeUtilities {
+public class TestPeriodScopeUtilities {
 
-    static PeriodScope getPeriodScope(DateTime date, int numberOfPeriods) {
+    public static PeriodScope getPeriodScope(DateTime date, int numberOfPeriods) {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date, numberOfPeriods);
         return new PeriodScope(periodCounter: periodCounter)
     }

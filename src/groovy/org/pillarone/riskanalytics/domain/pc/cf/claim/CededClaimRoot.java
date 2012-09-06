@@ -77,4 +77,12 @@ public class CededClaimRoot implements ICededRoot {
     public IClaimRoot withScale(double scaleFactor) {
         throw new SimulationException("A ceded claim should never be scaled");
     }
+
+    @Override
+    public String toString() {
+        return "CededClaimRoot{" +
+                "ultimate=" + ultimate +
+                ", grossClaim=" + grossClaim.toString() +
+                '}';
+    }
 }

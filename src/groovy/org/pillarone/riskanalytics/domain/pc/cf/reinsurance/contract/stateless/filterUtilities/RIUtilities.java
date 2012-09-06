@@ -4,10 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase;
 
@@ -28,6 +25,24 @@ public class RIUtilities {
                     break;
                 case BASE:
                     iClaimRoots.add(aClaim.getBaseClaim());
+                    break;
+                default:
+                    throw new SimulationException("Unknown base claims type :" + incurredClaimBase.toString());
+            }
+        }
+        return iClaimRoots;
+    }
+
+    public static Set<ICededRoot> incurredCededClaims(List<ClaimCashflowPacket> allCashflows, IncurredClaimBase incurredClaimBase) {
+        Set<ICededRoot> iClaimRoots = new HashSet<ICededRoot>();
+
+        for (ClaimCashflowPacket aClaim : allCashflows) {
+            switch (incurredClaimBase) {
+                case KEY:
+                    iClaimRoots.add((ICededRoot) aClaim.getKeyClaim());
+                    break;
+                case BASE:
+                    iClaimRoots.add((ICededRoot) aClaim.getBaseClaim());
                     break;
                 default:
                     throw new SimulationException("Unknown base claims type :" + incurredClaimBase.toString());
@@ -94,7 +109,7 @@ public class RIUtilities {
     }
 
 
-    public static List<ClaimCashflowPacket> cashflowsByIncurredDate( DateTime startDate, DateTime endDate, List<ClaimCashflowPacket> cashflows , ContractCoverBase coverBase  ) {
+    public static List<ClaimCashflowPacket> cashflowsByIncurredDate( DateTime startDate, DateTime endDate, Collection<ClaimCashflowPacket> cashflows , ContractCoverBase coverBase  ) {
         List<ClaimCashflowPacket> claimsOfInterest = new ArrayList<ClaimCashflowPacket>();
         for (ClaimCashflowPacket anIncurredClaim : cashflows) {
             DateTime coverDateTime = coverBase.claimCoverDate(anIncurredClaim);
@@ -106,22 +121,24 @@ public class RIUtilities {
     }
 
 
-    public static Set<IClaimRoot> incurredClaimsByPeriod( Integer period, IPeriodCounter periodCounter, Set<IClaimRoot> allIncurredClaims , ContractCoverBase coverBase  ) {
-
+    public static Set<IClaimRoot> incurredClaimsByPeriod( Integer period, IPeriodCounter periodCounter, Collection<IClaimRoot> allIncurredClaims , ContractCoverBase coverBase  ) {
         Set<IClaimRoot> claimsOfInterest = new HashSet<IClaimRoot>();
         for (IClaimRoot anIncurredClaim : allIncurredClaims) {
             DateTime coverDateTime = coverBase.claimCoverDate(anIncurredClaim);
-            periodCounter.belongsToPeriod(coverDateTime);
+            if( periodCounter.belongsToPeriod(coverDateTime) == period ) {
+                claimsOfInterest.add(anIncurredClaim);
+            }
         }
         return claimsOfInterest;
     }
 
-    public static List<ClaimCashflowPacket> cashflowsClaimsByPeriod( Integer period, IPeriodCounter periodCounter, List<ClaimCashflowPacket> cashflowsClaims , ContractCoverBase coverBase  ) {
-
+    public static List<ClaimCashflowPacket> cashflowsClaimsByPeriod( Integer period, IPeriodCounter periodCounter, Collection<ClaimCashflowPacket> cashflowsClaims , ContractCoverBase coverBase  ) {
         List<ClaimCashflowPacket> claimsOfInterest = new ArrayList<ClaimCashflowPacket>();
         for (ClaimCashflowPacket aClaim : cashflowsClaims) {
             DateTime coverDateTime = coverBase.claimCoverDate(aClaim);
-            periodCounter.belongsToPeriod(coverDateTime);
+            if(period == periodCounter.belongsToPeriod(coverDateTime)) {
+                claimsOfInterest.add(aClaim);
+            }
         }
         return claimsOfInterest;
     }
