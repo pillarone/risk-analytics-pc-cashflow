@@ -148,7 +148,7 @@ class PatternUtilsTests extends GroovyTestCase {
         assertEquals "total", 15000d, claims*.getPaidIncrementalIndexed().sum(), EPSILON
 
         /* Test a second development strategy */
-        List<ClaimCashflowPacket> someMoreClaims = claimRoot.paidPackets(periodCounter, true)
+        List<ClaimCashflowPacket> someMoreClaims = claimRoot.paidPackets(periodCounter)
         List<Double> incrementalMoreClaims = [0d, 0d, 500d, 500d, 0d, 250d, 0d, 3505.4092191909685d, 0d, 5587.958607714017d, 0d, 3725.305738476009d, 0d, 931.3264346190031d, 0d, 0d]
         List<DateTime> payoutMoreDates = [date20110101, date20110101, date20110630,  date20111231, date20120101, date20120630, date20130101,
                 date20130331, date20140101, date20140731, date20150101, date20150731, date20160101, date20160731, date20170101, date20180101,]
@@ -197,7 +197,7 @@ class PatternUtilsTests extends GroovyTestCase {
         assertEquals "total", 15000d, claims*.getPaidIncrementalIndexed().sum(), EPSILON
 
         /* Test a second development strategy */
-        List<ClaimCashflowPacket> someMoreClaims = claimRoot.paidPackets(periodCounter, true)
+        List<ClaimCashflowPacket> someMoreClaims = claimRoot.paidPackets(periodCounter)
         List<Double> incrementalMoreClaims = [0d, 0d, 0d, 500d, 500d, 0d, 250d, 0d, 6796.77623261694d, 0d, 5562.579013906447d, 0d, 1390.6447534766137d, 0d, 0d, ]
         List<DateTime> payoutMoreDates = [periodStartDate, periodStartDate, date20110101, date20110630, date20111231, date20120101, date20120630, date20130101,
                 date20130731, date20140101, date20140731, date20150101, date20150731, date20160101, date20170101]
@@ -242,7 +242,7 @@ class PatternUtilsTests extends GroovyTestCase {
         assertEquals "total", 15000d, claims*.getPaidIncrementalIndexed().sum(), EPSILON
 
         /* Test a second development strategy */
-        List<ClaimCashflowPacket> someMoreClaims = claimRoot.paidPackets(periodCounter, true)
+        List<ClaimCashflowPacket> someMoreClaims = claimRoot.paidPackets(periodCounter)
         List<Double> incrementalMoreClaims = [0d,0d,0d, 3000d, 0d, 3750d, 0d, 4500d, 0d, 3000d, 0d, 750d, 0d,0d,]
         List<DateTime> payoutMoreDates = [periodStartDate,periodStartDate, date20120101, date20120331, date20130101, date20130331, date20140101, date20140731, date20150101, date20150731, date20160101, date20160731, date20170101, date20180101]
 
@@ -288,7 +288,7 @@ class PatternUtilsTests extends GroovyTestCase {
         assertEquals "total", 15000d, claims*.getPaidIncrementalIndexed().sum(), EPSILON
 
         /* Test a second development strategy */
-        List<ClaimCashflowPacket> someMoreClaims = claimRoot.paidPackets(periodCounter, true)
+        List<ClaimCashflowPacket> someMoreClaims = claimRoot.paidPackets(periodCounter)
         List<Double> incrementalMoreClaims = [0d,0d,500d, 500d, 0d, 250d, 13750d, 0d,0d,0d,0d,]
         List<DateTime> payoutMoreDates = [date20110101, date20110101,  date20110630,  date20111231, date20120101, date20120630, date20121215, date20130331, date20140731, date20150731, date20160731 ]
 

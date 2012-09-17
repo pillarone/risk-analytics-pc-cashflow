@@ -158,7 +158,7 @@ public final class GrossClaimRoot implements IClaimRoot {
      *
      * @param periodCounter
      * @param factors - to develop
-     * @param useIndexes swtitches between using the fully indexed development strategy
+     * @param useIndexes switches between using the fully indexed development strategy
      * @return
      */
     public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter, List<Factors> factors, boolean useIndexes) {
@@ -197,7 +197,7 @@ public final class GrossClaimRoot implements IClaimRoot {
         final ClaimCashflowPacket ultimateOnly = new ClaimCashflowPacket(this, claimRoot, getUltimate(), 0, 0, 0, 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), getExposureStartDate(), ultimatePeriod);
         paidPackets.add(ultimateOnly);
 
-//        Now create zero packets for every subsequent period. This should ensure that any and every higher component knows that this gross claim exists.
+//        Zero packets for every subsequent period. This should ensure that any and every higher component knows that this gross claim exists.
         List<DateTime> periodStartDates = aLimitedCounter.periodDates();
         Collection<DateTime> zeroPacketDates = GRIUtilities.filterDates(getExposureStartDate(), periodCounter.endOfLastPeriod(), periodStartDates);
         for (DateTime zeroPacketDate : zeroPacketDates) {
@@ -206,7 +206,7 @@ public final class GrossClaimRoot implements IClaimRoot {
             paidPackets.add(zeroClaim);
         }
         checkPayoutPattern();
-//        Finally add the claims which represent the real development of the claim.
+
         TreeMap<DateTime, DateFactors> factors = payoutPattern.dateTimeFactors(startDateForPatterns);
         for (Map.Entry<DateTime, DateFactors> developmentEntry : factors.entrySet()) {
             DateFactors factor = developmentEntry.getValue();
