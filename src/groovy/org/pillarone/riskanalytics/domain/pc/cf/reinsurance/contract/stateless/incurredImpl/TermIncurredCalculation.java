@@ -39,7 +39,7 @@ public class TermIncurredCalculation implements IIncurredCalculation {
         return cededIncurredToPeriod(incurredClaims, layerParameters, periodScope, termExcess, termLimit, coverageBase, periodScope.getCurrentPeriod());
     }
 
-    public double cededIncurredToPeriod(List<IClaimRoot> incurredClaims, PeriodLayerParameters layerParameters, PeriodScope periodScope, double termExcess, double termLimit, ContractCoverBase coverageBase, int periodTo) {
+    public double cededIncurredToPeriod(Collection<IClaimRoot> incurredClaims, PeriodLayerParameters layerParameters, PeriodScope periodScope, double termExcess, double termLimit, ContractCoverBase coverageBase, int periodTo) {
 
         AnnualIncurredCalc annualIncurredCalc = new AnnualIncurredCalc();
 
@@ -55,7 +55,7 @@ public class TermIncurredCalculation implements IIncurredCalculation {
         return lossAfterTermStructure - lossAfterTermStructurePriorPeriods;
     }
 
-    public double incurredAmountInPeriod(List<IClaimRoot> incurredClaims, PeriodLayerParameters layerParameters, int period, AnnualIncurredCalc annualIncurredCalc, ContractCoverBase base, PeriodScope periodScope) {
+    public double incurredAmountInPeriod(Collection<IClaimRoot> incurredClaims, PeriodLayerParameters layerParameters, int period, AnnualIncurredCalc annualIncurredCalc, ContractCoverBase base, PeriodScope periodScope) {
         double termIncurredInPeriod = 0;
         ArrayList<IClaimRoot> claimsInPeriod = GRIUtilities.claimsCoveredInPeriod(incurredClaims, periodScope, base, period);
         List<LayerParameters> layers = layerParameters.getLayers(period);
@@ -65,7 +65,7 @@ public class TermIncurredCalculation implements IIncurredCalculation {
         return termIncurredInPeriod;
     }
 
-    public Map<Integer, Double> cededIncurredsByPeriods(List<IClaimRoot> allIncurredClaims, PeriodScope periodScope, double termExcess, double termLimit, PeriodLayerParameters layerParameters, ContractCoverBase coverageBase) {
+    public Map<Integer, Double> cededIncurredsByPeriods(Collection<IClaimRoot> allIncurredClaims, PeriodScope periodScope, double termExcess, double termLimit, PeriodLayerParameters layerParameters, ContractCoverBase coverageBase) {
         Map<Integer, Double> incurredCededAmountByPeriod = new TreeMap<Integer, Double>();
         for (int contractPeriod = 0; contractPeriod <= periodScope.getCurrentPeriod(); contractPeriod++) {
             double incurredInPeriod = cededIncurredToPeriod(allIncurredClaims, layerParameters, periodScope, termExcess, termLimit, coverageBase, contractPeriod);

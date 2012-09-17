@@ -75,14 +75,14 @@ public class ClaimsGeneratorUtils {
         for (int i = 0; i < claimNumber; i++) {
             EventPacket event = events == null ? null : events.get(i);
             // todo(sku): replace with information from underwriting
-            DateTime inceptionDate = contractBase.inceptionDate(periodScope, dateGenerator);
+            DateTime exposureStartDate = contractBase.exposureStartDate(periodScope, dateGenerator);
             int splittedClaimNumber = contractBase.splittedClaimsNumber();
 
             double ultimate = (Double) claimSizeGenerator.nextValue() * -severityScaleFactor;
-            DateTime occurrenceDate = contractBase.occurrenceDate(inceptionDate, dateGenerator, periodScope, event);
-            double scaleFactor = IndexUtils.aggregateFactor(severityFactors, inceptionDate, periodScope.getPeriodCounter(), inceptionDate);
+            DateTime occurrenceDate = contractBase.occurrenceDate(exposureStartDate, dateGenerator, periodScope, event);
+            double scaleFactor = IndexUtils.aggregateFactor(severityFactors, exposureStartDate, periodScope.getPeriodCounter(), exposureStartDate);
             baseClaims.add(new ClaimRoot(ultimate * scaleFactor, claimType,
-                    inceptionDate, occurrenceDate, event));
+                    exposureStartDate, occurrenceDate, event));
 
 //            double splittedUltimate = ultimate / (double) splittedClaimNumber;
 //            for (int j = 0; j < splittedClaimNumber; j++) {

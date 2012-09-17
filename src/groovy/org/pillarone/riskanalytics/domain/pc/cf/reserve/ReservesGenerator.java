@@ -66,7 +66,7 @@ public class ReservesGenerator extends Component implements IReserveMarker {
             baseClaim = (GrossClaimRoot) periodStore.get(BASE_CLAIM, -1);
         }
         periodStore.put(BASE_CLAIM, baseClaim);
-        List<ClaimCashflowPacket> claims = baseClaim.getClaimCashflowPackets(periodCounter, factors);
+        List<ClaimCashflowPacket> claims = baseClaim.getClaimCashflowPackets(periodCounter, factors, true);
         setTechnicalProperties(claims);
         outReserves.addAll(claims);
 

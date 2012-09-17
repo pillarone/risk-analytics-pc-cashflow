@@ -1,8 +1,10 @@
 package org.pillarone.riskanalytics.domain.pc.cf.pattern;
 
+import org.jfree.data.time.Day;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.runOff.RunOffPatternUtils;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
@@ -155,7 +157,36 @@ public class PatternUtils {
             // date as the payout base a payout specified at month 12 will be seen in the first annual
             cumulativePeriods.add(originalPattern.getCumulativePeriods().get(index).minusDays(1)); //.minus(differenceBaseDateOccurrenceDate));
         }
+
+        checkNonDuplicatedDays(cumulativePeriods, cumulativePercentages, baseDate);
+
         return new PatternPacket(originalPattern, cumulativePercentages, cumulativePeriods);
+    }
+
+    /**
+     * Check the period lengths. if they have the same day, and contain the same value for the cumulated pattern value, the
+     * entry may be safely removed. If they have the same day, and different pattern values, this is an insanity. Attempt to halt the simulation.
+     *
+     * @param cumulativePeriods
+     * @param cumulativePercentages
+     */
+    private static void checkNonDuplicatedDays(List<Period> cumulativePeriods, List<Double> cumulativePercentages, DateTime baseDate) {
+        final List<Period> copyPeriods = new ArrayList<Period>();
+        copyPeriods.addAll(cumulativePeriods);
+
+        Period priorPeriod = Period.days(-1);
+        int index = 0;
+        for( Period period : copyPeriods ) {
+            if(priorPeriod.toDurationFrom(baseDate).equals(period.toDurationFrom(baseDate)  )) {
+                if(cumulativePercentages.get(index) .equals(cumulativePercentages.get(index - 1))) {
+                    cumulativePercentages.remove(index);
+                    cumulativePeriods.remove(period);
+                } else throw new PatternValuesNotIncreasingException(cumulativePercentages, cumulativePeriods,
+                        "An inferred pattern carries different values for payouts on the same millisecond(!). Please contact development. " , baseDate );
+            }
+            priorPeriod = period;
+            index++;
+        }
     }
 
     /**

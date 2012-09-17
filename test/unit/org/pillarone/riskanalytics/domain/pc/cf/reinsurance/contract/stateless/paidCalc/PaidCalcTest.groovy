@@ -105,10 +105,6 @@ class PaidCalcTest extends GroovyTestCase {
         assertEquals("p1", 120 , p4Calc.get(0) )
         assertEquals("p2", 120 , p4Calc.get(1) )
         assertEquals("p3", 0 , p4Calc.get(2) )
-
-
-
-
     }
 
     void testPaidLossAllLayers() {

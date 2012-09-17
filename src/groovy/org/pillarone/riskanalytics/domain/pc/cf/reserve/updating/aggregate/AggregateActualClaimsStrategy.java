@@ -102,7 +102,7 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
                                                    boolean sanityChecks, PayoutPatternBase base) {
 //        If the update date is the start of the first period this is an inception model, simply proceed without updating effects.
         if (updateDate.equals(periodScope.getPeriodCounter().startOfFirstPeriod())) {
-            return new GrossClaimRoot(claimRoot, payoutPattern);
+            return new GrossClaimRoot(claimRoot, payoutPattern, base.startDateForPayouts(claimRoot, periodScope.getCurrentPeriodStartDate(), null ) );
         }
         lazyInitHistoricClaimsPerContractPeriod(periodScope.getPeriodCounter(), updateDate, base);
         AggregateHistoricClaim historicClaim = historicClaimsPerContractPeriod.get(contractPeriod);

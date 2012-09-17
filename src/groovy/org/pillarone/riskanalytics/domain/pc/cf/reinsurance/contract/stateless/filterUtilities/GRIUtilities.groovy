@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot
 import org.pillarone.riskanalytics.core.simulation.SimulationException
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
 
 /**
  *   author simon.parten @ art-allianz . com
@@ -18,7 +19,7 @@ class GRIUtilities {
         new ArrayList<ClaimCashflowPacket>(cashflows.findAll {it -> rootClaims.contains(it.baseClaim) })
     }
 
-    public static boolean hasGrossCashflow(List<ClaimCashflowPacket> cashflowPacketList, ICededRoot root ) {
+    public static boolean hasGrossCashflow(List<ClaimCashflowPacket> cashflowPacketList, ICededRoot root) {
         return cashflowPacketList*.getBaseClaim().contains(root)
     }
 
@@ -31,32 +32,32 @@ class GRIUtilities {
 
     }
 
-    public static ICededRoot findCededClaimRelatedToGrossClaim(IClaimRoot grossClaim, List<ICededRoot> allCededClaims ) {
+    public static ICededRoot findCededClaimRelatedToGrossClaim(IClaimRoot grossClaim, List<ICededRoot> allCededClaims) {
         ICededRoot claim = allCededClaims.find {grossClaim.equals(it.getGrossClaim())}
-        if(claim == null) {
+        if (claim == null) {
             throw new SimulationException("Failed to match a gross claim to the list of ceded claims; " + claim.toString())
         }
         return claim
     }
 
-    public static ClaimCashflowPacket findCashflowToGrossClaim(IClaimRoot cededKeyClaim, List<ClaimCashflowPacket> allCashflows ) {
+    public static ClaimCashflowPacket findCashflowToGrossClaim(IClaimRoot cededKeyClaim, List<ClaimCashflowPacket> allCashflows) {
         ClaimCashflowPacket claim = allCashflows.find {cededKeyClaim.equals(it.getKeyClaim())}
 //        There ought to be no prior ceded claims. Pump out a dummy claim.
-        if(claim == null) {
+        if (claim == null) {
             claim = new ClaimCashflowPacket()
         }
         return claim
     }
 
-    public static Double ultimateSum(List<IClaimRoot> incurredClaims) {
-        if(incurredClaims.size() > 0) {
+    public static Double ultimateSum(Collection<IClaimRoot> incurredClaims) {
+        if (incurredClaims.size() > 0) {
             return (Double) incurredClaims*.getUltimate().sum()
         }
         return 0d
     }
 
-    public static Double incrementalCashflowSum(List<ClaimCashflowPacket> incurredClaims) {
-        if(incurredClaims.size() > 0) {
+    public static Double incrementalCashflowSum(Collection<ClaimCashflowPacket> incurredClaims) {
+        if (incurredClaims.size() > 0) {
             return (Double) incurredClaims*.getPaidIncrementalIndexed().sum()
         }
         return 0d
@@ -72,9 +73,9 @@ class GRIUtilities {
         return uncoveredClaims;
     }
 
-    public static ArrayList<IClaimRoot> claimsCoveredInPeriod(List<IClaimRoot> incurredClaims, PeriodScope periodScope, ContractCoverBase base, int period ) {
+    public static ArrayList<IClaimRoot> claimsCoveredInPeriod(Collection<IClaimRoot> incurredClaims, PeriodScope periodScope, ContractCoverBase base, int period) {
 
-        ArrayList<IClaimRoot> claims  = incurredClaims.findAll {
+        ArrayList<IClaimRoot> claims = incurredClaims.findAll {
             it ->
             DateTime coverDate = base.claimCoverDate(it)
             return periodScope.getPeriodCounter().belongsToPeriod(coverDate) == period
@@ -83,7 +84,7 @@ class GRIUtilities {
         return claims
     }
 
-    public static ArrayList<ClaimCashflowPacket> cashflowsCoveredInModelPeriod(List<ClaimCashflowPacket> cashflows, PeriodScope periodScope, ContractCoverBase base, int period ) {
+    public static ArrayList<ClaimCashflowPacket> cashflowsCoveredInModelPeriod(List<ClaimCashflowPacket> cashflows, PeriodScope periodScope, ContractCoverBase base, int period) {
 
         return cashflows.findAll {
             it ->
@@ -92,5 +93,7 @@ class GRIUtilities {
         }
     }
 
-
+    public static Collection<DateTime> filterDates(DateTime allDatesAfterOrEqual, DateTime endDate, Collection<DateTime> dates) {
+        dates.findAll {it -> DateTimeUtilities.isBetween(allDatesAfterOrEqual, endDate, it )  }
+    }
 }

@@ -3,7 +3,9 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.simulation.ILimitedPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
@@ -11,9 +13,11 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Doc: https://issuetracking.intuitive-collaboration.com/jira/browse/PMO-1540
@@ -145,11 +149,92 @@ public final class GrossClaimRoot implements IClaimRoot {
      * @return
      */
     public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter) {
-        return getClaimCashflowPackets(periodCounter, null);
+        return getClaimCashflowPackets(periodCounter, null, true);
+    }
+
+    /**
+     * There is a fundamental difference in modelling strategy between indexing paid and reported amounts, and simply developing cashflows
+     * to a pre-determined ultimate. This method acts as a switch to choose between the two differing strategies.
+     *
+     * @param periodCounter
+     * @param factors - to develop
+     * @param useIndexes swtitches between using the fully indexed development strategy
+     * @return
+     */
+    public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter, List<Factors> factors, boolean useIndexes) {
+        if(!useIndexes) {
+            List<ClaimCashflowPacket> paidPackets = paidPackets(periodCounter);
+            List<ClaimCashflowPacket> filteredClaims = RIUtilities.cashflowClaimsByOccurenceDate(periodCounter.getCurrentPeriodStart(), periodCounter.getCurrentPeriodEnd(), paidPackets);
+            return filteredClaims;
+        }
+        return getClaimCashflowPackets(periodCounter, factors);
+    }
+
+    /**
+     * This method takes no account of any indexing strategy. It accepts an ultimate cashflow, and produces cashflow packets according to the following algorithm.
+     *
+     * 1) A single cashflow packet on the exposure start date with the ultimate value (and nothing else) set.
+     *
+     * 2) Zero valued (in every field) cashflow packets in every subsequent simulation period; including *after* the pattern itself has finished. This
+     * ensures that any and every higher component knows that this gross claim has been a part of the simulation.
+     *
+     * 3) Cashflows which represent the cashflows associated with the development of this ultimate claim.
+     *
+     * It will therefore always produce a list with a well defined size; 1 + number of periods + length of pattern.
+     * It is left to the calling function to filter out claims as they are wanted for the simulation period itself.
+     *
+     *
+     * @param periodCounter used to provide blank packets in every period.
+     * @return the list of packets associated with this ultimate claim.
+     */
+    private List<ClaimCashflowPacket> paidPackets(IPeriodCounter periodCounter) {
+
+        ILimitedPeriodCounter aLimitedCounter = ((ILimitedPeriodCounter) periodCounter);
+        final ArrayList<ClaimCashflowPacket> paidPackets = new ArrayList<ClaimCashflowPacket>();
+
+        // The ultimate packet
+        int ultimatePeriod = periodCounter.belongsToPeriod(getExposureStartDate());
+        final ClaimCashflowPacket ultimateOnly = new ClaimCashflowPacket(this, claimRoot, getUltimate(), 0, 0, 0, 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), getExposureStartDate(), ultimatePeriod);
+        paidPackets.add(ultimateOnly);
+
+//        Now create zero packets for every subsequent period. This should ensure that any and every higher component knows that this gross claim exists.
+        List<DateTime> periodStartDates = aLimitedCounter.periodDates();
+        Collection<DateTime> zeroPacketDates = GRIUtilities.filterDates(getExposureStartDate(), periodCounter.endOfLastPeriod(), periodStartDates);
+        for (DateTime zeroPacketDate : zeroPacketDates) {
+            int period = periodCounter.belongsToPeriod(zeroPacketDate);
+            final ClaimCashflowPacket zeroClaim = new ClaimCashflowPacket(this, claimRoot, 0, 0, 0, 0, 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), zeroPacketDate, period);
+            paidPackets.add(zeroClaim);
+        }
+        checkPayoutPattern();
+//        Finally add the claims which represent the real development of the claim.
+        TreeMap<DateTime, DateFactors> factors = payoutPattern.dateTimeFactors(startDateForPatterns);
+        for (Map.Entry<DateTime, DateFactors> developmentEntry : factors.entrySet()) {
+            DateFactors factor = developmentEntry.getValue();
+            DateTime cashflowDate = factor.getDate();
+            int period = periodCounter.belongsToPeriod(cashflowDate);
+            double incrementalPaid = this.getUltimate() * factor.getFactorIncremental();
+            double cumulativePaid = this.getUltimate() * factor.getFactorCumulated();
+            final ClaimCashflowPacket zeroClaim = new ClaimCashflowPacket(this, claimRoot, 0, 0, incrementalPaid, cumulativePaid, 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), cashflowDate, period);
+            paidPackets.add(zeroClaim);
+        }
+        Collections.sort ( paidPackets, new ClaimCashflowDateComparator()  );
+        return paidPackets;
+    }
+
+    private void checkPayoutPattern() {
+        if(payoutPattern == null) {
+            throw new SimulationException("Attempted to develop a claim with a null payout pattern. This should never happen. Contact development ");
+        }
+    }
+
+    public ClaimCashflowPacket occurenceCashflow(IPeriodCounter periodCounter) {
+        int ultimatePeriod = periodCounter.belongsToPeriod(getOccurrenceDate());
+        return new ClaimCashflowPacket(this, claimRoot, getUltimate(), 0, 0, 0, 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), getOccurrenceDate(), ultimatePeriod);
     }
 
     /**
      * Hint for direct use in test cases: patterns need to be synchronized before calling this function!
+     *
      * @param periodCounter
      * @param factors
      * @return
@@ -327,6 +412,15 @@ public final class GrossClaimRoot implements IClaimRoot {
      */
     public boolean occurrenceInCurrentPeriod(PeriodScope periodScope) {
         return claimRoot.occurrenceInCurrentPeriod(periodScope);
+    }
+
+    /**
+     * Delegates to equally named method of claimRoot object
+     * @param periodScope
+     * @return
+     */
+    public boolean exposureStartInCurrentPeriod(PeriodScope periodScope) {
+        return claimRoot.exposureStartInCurrentPeriod(periodScope);
     }
 
     public Integer getInceptionPeriod(IPeriodCounter periodCounter) {

@@ -124,9 +124,12 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
 
     private List<ClaimCashflowPacket> cashflowsInCurrentPeriod(List<GrossClaimRoot> grossClaimRoots, List<Factors> runOffFactors, PeriodScope periodScope) {
         List<ClaimCashflowPacket> claimCashflowPackets = new ArrayList<ClaimCashflowPacket>();
+        IPeriodCounter counter = this.periodScope.getPeriodCounter();
+//                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(periodScope.getPeriodCounter(), null, false));
         for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
-            if (grossClaimRoot.occurrenceInCurrentPeriod(periodScope)) {
-                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(this.periodScope.getPeriodCounter(), runOffFactors));
+            if (grossClaimRoot.exposureStartInCurrentPeriod(periodScope)) {
+                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(counter, runOffFactors, false));
+//                outOccurenceUltimateClaims.add(grossClaimRoot.occurenceCashflow(counter));
             }
         }
         return claimCashflowPackets;

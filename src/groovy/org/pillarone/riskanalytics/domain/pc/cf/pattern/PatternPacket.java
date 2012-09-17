@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.pattern;
 
+import com.google.common.collect.TreeMultimap;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -8,8 +9,6 @@ import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.DateFactors;
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.runOff.RunOffPatternUtils;
-import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 
@@ -148,7 +147,7 @@ public class PatternPacket extends Packet implements Cloneable {
             DateTime date = patternStartDate.plus(cumulativePeriods.get(devPeriod));
             if (separateOccurrenceDate && occurrenceDate.isBefore(date)) {
                 separateOccurrenceDate = false;
-                dateFactors.add(new DateFactors(occurrenceDate, 0, cumulativeValues.get(devPeriod - 1)));
+                dateFactors.add(new DateFactors(occurrenceDate, 0, 0));
             }
             if (!date.isBefore(periodCounter.startOfFirstPeriod()) && periodCounter.belongsToCurrentPeriod(date)) {
                 dateFactors.add(new DateFactors(date, incrementFactor(devPeriod), cumulativeValues.get(devPeriod)));
@@ -167,6 +166,27 @@ public class PatternPacket extends Packet implements Cloneable {
         if (returnPrevious && previousBeforeLastElement && dateFactors.isEmpty() && previousDate != null) {
             dateFactors.add(new DateFactors(previousDate, 0, previousCumulativeValue));
         }
+
+/*        TreeMap<DateTime, DateFactors> absolutePattern = this.dateTimeFactors(patternStartDate);
+
+        List<DateFactors> patternEntries = new ArrayList<DateFactors>();
+        for (Map.Entry<DateTime, DateFactors> factorEntry : absolutePattern.entrySet()) {
+            if (periodCounter.belongsToCurrentPeriod(factorEntry.getKey())) {
+                patternEntries.add(factorEntry.getValue());
+            }
+        }
+        if (returnPrevious && patternEntries.isEmpty()) {
+            if (absolutePattern.ceilingEntry(periodCounter.getCurrentPeriodEnd()) != null) {
+                Map.Entry<DateTime, DateFactors> factor = absolutePattern.floorEntry(periodCounter.getCurrentPeriodStart());
+                if (factor != null) {
+                    patternEntries.add(new DateFactors(periodCounter.getCurrentPeriodStart(), 0d, factor.getValue().getFactorCumulated()));
+                }
+//                else {
+//                    patternEntries.add(new DateFactors(periodCounter.getCurrentPeriodStart(), 0d, 0d));
+//                }
+            }
+        }*/
+
         return dateFactors;
     }
 
@@ -253,6 +273,7 @@ public class PatternPacket extends Packet implements Cloneable {
         double priorValue = 0;
         for (Double cumulativeValue : cumulativeValues) {
             incrementalValues.add(cumulativeValue - priorValue);
+            priorValue = cumulativeValue;
         }
         if (checkSumOne) checkIncrementalPatternSumTo1();
         return incrementalValues;
@@ -262,9 +283,8 @@ public class PatternPacket extends Packet implements Cloneable {
         double sumCumulativeValue = 0;
         double priorValue = 0;
 //        Important the check here is set to false otherwise we have an infinite loop!
-        for (Double cumulativeValue : getIncrementalValues(false)) {
-            sumCumulativeValue += (cumulativeValue - priorValue);
-            priorValue = cumulativeValue;
+        for (Double incrementalValue : getIncrementalValues(false)) {
+            sumCumulativeValue += incrementalValue ;
         }
         if (!((0.99999 < sumCumulativeValue) && (sumCumulativeValue < 1.00001))) {
             throw new PatternSumNotOneException(getIncrementalValues(false));
@@ -286,6 +306,21 @@ public class PatternPacket extends Packet implements Cloneable {
         }
         return tempMap;
     }
+
+    public TreeMap<DateTime, DateFactors> dateTimeFactors(DateTime baseDate) {
+        TreeMap<DateTime, DateFactors> tempMap = new TreeMap<DateTime, DateFactors>();
+        for (int j = 0; j < cumulativePeriods.size(); j++) {
+            Period month = cumulativePeriods.get(j);
+            Number incrementalRatio;
+            Number cumulativeRatio;
+            incrementalRatio = getIncrementalValues(false).get(j);
+            cumulativeRatio = cumulativeValues.get(j);
+            DateTime ratioDate = baseDate.plus(month);
+            tempMap.put(ratioDate, new DateFactors(ratioDate, incrementalRatio.doubleValue(), cumulativeRatio.doubleValue()));
+        }
+        return tempMap;
+    }
+
 
     public boolean isTrivial() {
         return size() == 0 || (size() == 1 && cumulativeValues.get(0) == 1d);

@@ -47,7 +47,7 @@ class ClaimCashflowPacketSpreadsheetTests extends SpreadsheetUnitTest {
             IPeriodCounter periodCounter = TestPeriodScopeUtilities.getPeriodScope(beginOfCover, numberOfPeriods).periodCounter
             for (int period = 0; period < numberOfPeriods; period++) {
                 for (GrossClaimRoot claimRoot : claimRoots) {
-                    claims.addAll claimRoot.getClaimCashflowPackets(periodCounter, factors)
+                    claims.addAll claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
                 }
                 periodCounter.next()
             }

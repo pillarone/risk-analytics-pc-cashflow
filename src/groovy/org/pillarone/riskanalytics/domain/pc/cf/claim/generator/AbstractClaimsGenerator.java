@@ -52,6 +52,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     protected PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState.class);
     /** don't assume any order in this channel */
     protected PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+//    protected PacketList<ClaimCashflowPacket> outOccurenceUltimateClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
 
     protected boolean globalDeterministicMode = false;
     protected DateTime globalUpdateDate;
@@ -113,7 +114,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
                 List<GrossClaimRoot> grossClaimRoots = (List<GrossClaimRoot>) periodStore.get(GROSS_CLAIMS, -periodOffset);
                 if (grossClaimRoots != null) {
                     for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
-                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors));
+                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, globalSanityChecks));
                     }
                 }
             }
@@ -194,6 +195,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
         setTransmitterPhaseInput(inUnderwritingInfo, PHASE_CLAIMS_CALCULATION);
 
         setTransmitterPhaseOutput(outClaims, PHASE_CLAIMS_CALCULATION);
+//        setTransmitterPhaseOutput(outOccurenceUltimateClaims, PHASE_CLAIMS_CALCULATION);
 
 //          Commutation channels --------------------------------------------------------------------------
         setTransmitterPhaseInput(inCommutationState, PHASE_STORE_COMMUTATION_STATE);
@@ -310,4 +312,12 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     public void setGlobalSanityChecks(boolean globalSanityChecks) {
         this.globalSanityChecks = globalSanityChecks;
     }
+
+/*    public PacketList<ClaimCashflowPacket> getOutOccurenceUltimateClaims() {
+        return outOccurenceUltimateClaims;
+    }
+
+    public void setOutOccurenceUltimateClaims(PacketList<ClaimCashflowPacket> outOccurenceUltimateClaims) {
+        this.outOccurenceUltimateClaims = outOccurenceUltimateClaims;
+    }*/
 }

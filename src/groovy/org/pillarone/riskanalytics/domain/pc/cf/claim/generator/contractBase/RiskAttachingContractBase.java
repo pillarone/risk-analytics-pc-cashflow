@@ -45,12 +45,14 @@ public class RiskAttachingContractBase extends AbstractContractBase implements I
     }
 
     /**
+     *
      * @param periodScope
      * @param dateGenerator
-     * @return generate a new date according using dateGenerator and periodScope
+     * @return This is start of the contract exposure... NOT the inception date of the claim.
      */
-    public DateTime inceptionDate(PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
+    public DateTime exposureStartDate(PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
         return DateTimeUtilities.getDate(periodScope, dateGenerator.nextValue().doubleValue());
+//        return periodScope.getCurrentPeriodStartDate();
     }
 
     /**

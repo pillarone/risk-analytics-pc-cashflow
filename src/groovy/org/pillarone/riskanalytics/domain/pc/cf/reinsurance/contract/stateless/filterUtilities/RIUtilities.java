@@ -33,6 +33,15 @@ public class RIUtilities {
         return iClaimRoots;
     }
 
+    public static ArrayListMultimap<IClaimRoot, IClaimRoot> incurredClaims(List<ClaimCashflowPacket> allCashflows) {
+        ArrayListMultimap<IClaimRoot, IClaimRoot> grossClaimsByKeyClaim = ArrayListMultimap.create();
+
+        for (ClaimCashflowPacket aClaim : allCashflows) {
+            grossClaimsByKeyClaim.put( aClaim.getKeyClaim(), aClaim.getBaseClaim());
+        }
+        return grossClaimsByKeyClaim;
+    }
+
     public static Set<ICededRoot> incurredCededClaims(List<ClaimCashflowPacket> allCashflows, IncurredClaimBase incurredClaimBase) {
         Set<ICededRoot> iClaimRoots = new HashSet<ICededRoot>();
 
@@ -55,6 +64,17 @@ public class RIUtilities {
     public static Set<IClaimRoot> incurredClaimsByDate( DateTime startDate, DateTime endDate, Collection<IClaimRoot> allIncurredClaims , ContractCoverBase coverBase  ) {
         Set<IClaimRoot> claimsOfInterest = new HashSet<IClaimRoot>();
         for (IClaimRoot anIncurredClaim : allIncurredClaims) {
+            DateTime coverDateTime = coverBase.claimCoverDate(anIncurredClaim);
+            if ((coverDateTime.equals(startDate) || coverDateTime.isAfter(startDate)) && coverDateTime.isBefore(endDate)) {
+                claimsOfInterest.add(anIncurredClaim);
+            }
+        }
+        return claimsOfInterest;
+    }
+
+    public static Set<IClaimRoot> incurredClaimsByDate( DateTime startDate, DateTime endDate, ArrayListMultimap<IClaimRoot, IClaimRoot> allIncurredClaims , ContractCoverBase coverBase  ) {
+        Set<IClaimRoot> claimsOfInterest = new HashSet<IClaimRoot>();
+        for (IClaimRoot anIncurredClaim : allIncurredClaims.keys()) {
             DateTime coverDateTime = coverBase.claimCoverDate(anIncurredClaim);
             if ((coverDateTime.equals(startDate) || coverDateTime.isAfter(startDate)) && coverDateTime.isBefore(endDate)) {
                 claimsOfInterest.add(anIncurredClaim);

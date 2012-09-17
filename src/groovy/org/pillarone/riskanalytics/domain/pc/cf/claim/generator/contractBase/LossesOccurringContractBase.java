@@ -45,11 +45,12 @@ public class LossesOccurringContractBase extends AbstractContractBase implements
     }
 
     /**
+     *
      * @param periodScope current period start date is returned
      * @param dateGenerator ignored in the context of this strategy
      * @return current period start date
      */
-    public DateTime inceptionDate(PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
+    public DateTime exposureStartDate(PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
         return periodScope.getCurrentPeriodStartDate();
     }
 

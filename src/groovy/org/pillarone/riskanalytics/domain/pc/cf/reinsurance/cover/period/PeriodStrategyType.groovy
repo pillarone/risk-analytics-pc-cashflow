@@ -7,6 +7,8 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.domain.utils.constraint.DateTimeConstraints
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObjectClassifier
+import org.pillarone.riskanalytics.core.simulation.SimulationException
+import org.pillarone.riskanalytics.domain.pc.cf.global.AnnualPeriodStrategy
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -22,8 +24,10 @@ class PeriodStrategyType extends AbstractParameterObjectClassifier {
             'Custom', 'CUSTOM', ['periods': new ConstrainedMultiDimensionalParameter(
                 [[new DateTime(2012,1,1,0,0,0,0)], [new DateTime(2012,12,31,0,0,0,0)]],
                 ['Start Date','End Date'], ConstraintsFactory.getConstraints(DateTimeConstraints.IDENTIFIER))])
+    public static final PeriodStrategyType ANNUAL = new PeriodStrategyType("Annual", "ANNUAL",
+            ['startCover': new DateTime(2010,1,1,0,0,0,0), 'numberOfYears': 3])
 
-    public static final all = [ONEYEAR, MONTHS, CUSTOM]
+    public static final all = [ONEYEAR, MONTHS, CUSTOM, ANNUAL]
 
     protected static Map types = [:]
     static {
@@ -66,6 +70,12 @@ class PeriodStrategyType extends AbstractParameterObjectClassifier {
             case PeriodStrategyType.CUSTOM:
                 strategy = new CustomPeriodStrategy(periods : (ConstrainedMultiDimensionalParameter) parameters['periods'])
                 break
+            case PeriodStrategyType.ANNUAL:
+                strategy = new AnnualPeriodStrategy(startCover: (DateTime) parameters['startCover'],
+                        numberOfYears: (Integer) parameters['numberOfYears'])
+                break
+            default :
+                throw new IllegalArgumentException("Unknown strategy type : " + type.toString()  )
         }
         return strategy;
     }

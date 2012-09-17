@@ -1,5 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.pattern;
 
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+
 import java.util.List;
 
 /**
@@ -20,6 +23,19 @@ public class PatternSumNotOneException extends RuntimeException {
         int i = 1;
         for(Double aDouble : doubles) {
             String s = i + "  :  " + aDouble + "\n";
+            stringBuilder.append(s);
+            i++;
+        }
+        return stringBuilder;
+    }
+
+    public static StringBuilder getErrorPeriods(List<Double> doubles, List<Period> periods, DateTime baseDate) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Pattern Entry : double value : milliseconds" + " \n");
+
+        int i = 1;
+        for(Double aDouble : doubles) {
+            String s = i + "  :  " + aDouble + "  :  " + periods.get(i-1).toDurationFrom(baseDate).getMillis() + "\n";
             stringBuilder.append(s);
             i++;
         }

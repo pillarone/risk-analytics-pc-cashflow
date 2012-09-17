@@ -23,6 +23,7 @@ class AttritionalClaimsGenerators extends DynamicMultiPhaseComposedComponent {
     PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
     PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket)
     PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
+//    PacketList<ClaimCashflowPacket> outOccurenceUltimateClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
 
     PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState)
 
@@ -43,6 +44,7 @@ class AttritionalClaimsGenerators extends DynamicMultiPhaseComposedComponent {
         setTransmitterPhaseInput(inPatterns, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
 
         setTransmitterPhaseOutput(outClaims, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
+//        setTransmitterPhaseOutput(outOccurenceUltimateClaims, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
 
         setTransmitterPhaseInput(inCommutationState, AbstractClaimsGenerator.PHASE_STORE_COMMUTATION_STATE )
 
@@ -54,6 +56,8 @@ class AttritionalClaimsGenerators extends DynamicMultiPhaseComposedComponent {
         replicateInChannels this, 'inFactors'
         replicateInChannels this, 'inPatterns'
         replicateInChannels this, 'inCommutationState'
+
         replicateOutChannels this, 'outClaims'
+//        replicateOutChannels this, 'outOccurenceUltimateClaims'
     }
 }

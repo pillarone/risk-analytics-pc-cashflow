@@ -52,7 +52,7 @@ class ClaimUtilsTests extends GroovyTestCase {
 
 
         periodCounter.next()
-        claims = claims[0].baseClaim.getClaimCashflowPackets(periodCounter)
+        claims = claims[0].baseClaim.getClaimCashflowPackets(periodCounter, null, true)
         factor = 0.7
         scaledClaim = ClaimUtils.scale(claims[0], factor, true, true)
 
@@ -121,7 +121,7 @@ class ClaimUtilsTests extends GroovyTestCase {
 
 
         periodCounter.next()
-        claims = claims[0].baseClaim.getClaimCashflowPackets(periodCounter, factors)
+        claims = claims[0].baseClaim.getClaimCashflowPackets(periodCounter, factors, true)
         factor = 0.7
         scaledClaim = ClaimUtils.scale(claims[0], factor, true, true)
 
@@ -182,7 +182,7 @@ class ClaimUtilsTests extends GroovyTestCase {
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(-ultimate, claimType,
                 date20110418, date20110701, payoutPattern, reportingPattern)
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, factors)
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
         return claims
     }
 

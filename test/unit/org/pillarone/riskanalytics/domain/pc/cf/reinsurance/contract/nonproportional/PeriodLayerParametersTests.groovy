@@ -97,7 +97,6 @@ class PeriodLayerParametersTests extends GroovyTestCase {
         shouldFail {
             params.addAdditionalPremium( 50 , 50, 0.5, APBasis.LOSS )
         }
-
     }
 
 }

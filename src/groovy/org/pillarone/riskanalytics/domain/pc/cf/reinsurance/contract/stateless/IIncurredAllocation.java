@@ -13,6 +13,6 @@ import java.util.Set;
  */
 public interface IIncurredAllocation {
 
-    List<IClaimRoot> allocateClaims(double incurredInPeriod, Set<IClaimRoot> allIncurredClaims, PeriodScope periodScope, ContractCoverBase base);
+    List<ICededRoot> allocateClaims(double incurredInPeriod, Set<IClaimRoot> allIncurredClaims, PeriodScope periodScope, ContractCoverBase base);
 
 }

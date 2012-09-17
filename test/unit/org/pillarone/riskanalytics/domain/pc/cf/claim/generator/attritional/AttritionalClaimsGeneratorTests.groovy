@@ -28,6 +28,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGe
 import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationState
 import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationBehaviour
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -56,19 +57,19 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
     /** different distribution parameters for different periods */
     void testUsage() {
         AttritionalClaimsGenerator generator = createGenerator()
-        doClaimsCalcWithNoCommutation(generator)
+        doClaimsCalcWithNoCommutation(generator, true)
         assertEquals "P0 one ultimate claim", 1, generator.outClaims.size()
         assertEquals "P0 ultimate value", -1000d, generator.outClaims[0].ultimate()
 
         generator.periodScope.prepareNextPeriod()
         generator.reset()
-        doClaimsCalcWithNoCommutation(generator)
+        doClaimsCalcWithNoCommutation(generator, true)
         assertEquals "P1 one ultimate claim", 1, generator.outClaims.size()
         assertEquals "P1 ultimate value", -1000d, generator.outClaims[0].ultimate()
 
         generator.periodScope.prepareNextPeriod()
         generator.reset()
-        doClaimsCalcWithNoCommutation(generator)
+        doClaimsCalcWithNoCommutation(generator, true)
         assertEquals "P2 one ultimate claim", 1, generator.outClaims.size()
         assertEquals "P2 ultimate value", -2000d, generator.outClaims[0].ultimate()
     }
@@ -258,11 +259,26 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         assertEquals "P2 ultimate values", -2000d * 1.1 / 1.05, generator.outClaims[0].ultimate(), EPSILON
     }
 
-    private void doClaimsCalcWithNoCommutation(AttritionalClaimsGenerator generator) {
+    private void doClaimsCalcWithNoCommutation(AttritionalClaimsGenerator generator, boolean addPattern = false) {
         generator.doCalculation(AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION)
         generator.inCommutationState << new CommutationState()
+        if(addPattern) {
+            addPayoutPattern(generator)
+        }
         generator.doCalculation(AbstractClaimsGenerator.PHASE_STORE_COMMUTATION_STATE)
     }
+
+    private void addPayoutPattern (AttritionalClaimsGenerator generator ) {
+        List<Integer> nothing = new ArrayList<Integer>()
+        nothing << 0
+        List<Double> notMuch = new ArrayList<Integer>()
+        nothing << 0d
+
+        PatternPacket packet = PatternPacketTests.getPattern(nothing, notMuch, false)
+        generator.inPatterns << packet
+    }
+
+
 
     void testClaimsStopOnCommutation() {
         SeverityIndex marine = new SeverityIndex()
