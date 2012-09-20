@@ -21,7 +21,7 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
 
     private ComboBoxTableMultiDimensionalParameter grossClaims = new ComboBoxTableMultiDimensionalParameter(
             Collections.emptyList(), Arrays.asList("Covered Perils"), IPerilMarker.class);
-//    private ComboBoxTableMultiDimensionalParameter claimFilters = new ComboBoxTableMultiDimensionalParameter(
+    //    private ComboBoxTableMultiDimensionalParameter claimFilters = new ComboBoxTableMultiDimensionalParameter(
 //            Collections.emptyList(), Arrays.asList("Covered Filters"), IClaimFilterMarker.class);
     private ConstrainedMultiDimensionalParameter structures = new ConstrainedMultiDimensionalParameter(
             GroovyUtils.toList("[[],[]]"),
@@ -85,25 +85,25 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
                 if (coveredContracts.contains(claim.reinsuranceContract()) && claim.reserve() == null
                         && coveredPerils.contains(claim.peril())) {
                     if (coveredContractsCoveringCeded.contains(claim.reinsuranceContract())) {
-                        filteredClaims.add(claim);
+                        filteredClaims.add(claimValidator.invertClaimSign(claim));
                     }
                     else {
-                        filteredClaims.add(claim);
+                        filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
                     }
                 }
             }
             else if (perilBasedCover()) {
                 if (coveredPerils.contains(claim.peril())) {
-                    filteredClaims.add(claim);
+                    filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
                 }
             }
             else if (contractBasedCover()) {
                 if (coveredContracts.contains(claim.reinsuranceContract()) && claim.reserve() == null) {
                     if (coveredContractsCoveringCeded.contains(claim.reinsuranceContract())) {
-                        filteredClaims.add(claim);
+                        filteredClaims.add(claimValidator.invertClaimSign(claim));
                     }
                     else {
-                        filteredClaims.add(claim);
+                        filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
                     }
                 }
             }

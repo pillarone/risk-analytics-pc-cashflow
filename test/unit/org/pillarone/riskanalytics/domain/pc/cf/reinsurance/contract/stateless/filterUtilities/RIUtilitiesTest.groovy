@@ -84,7 +84,7 @@ class RIUtilitiesTest extends GroovyTestCase {
     }
 
     void testLatestCashflowByIncurredClaim() {
-        ArrayList<ClaimCashflowPacket> claimCashflowPackets1 = RIUtilities.latestCashflowByIncurredClaim(claimCashflowPackets, base)
+        ArrayList<ClaimCashflowPacket> claimCashflowPackets1 = RIUtilities.latestCashflowByIncurredClaim(claimCashflowPackets, IncurredClaimBase.BASE)
 
         assertEquals("size should be 2", 2, claimCashflowPackets1.size())
 

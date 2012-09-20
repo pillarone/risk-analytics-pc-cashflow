@@ -131,7 +131,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
         for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
             if (grossClaimRoot.exposureStartInCurrentPeriod(periodScope)) {
                 claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(counter, runOffFactors, !globalTrivialIndices));
-//                outOccurenceUltimateClaims.add(grossClaimRoot.occurenceCashflow(counter));
+                outOccurenceUltimateClaims.add(grossClaimRoot.occurenceCashflow(counter));
             }
         }
         return claimCashflowPackets;
