@@ -84,7 +84,7 @@ class GRIUtilities {
         return claims
     }
 
-    public static ArrayList<ClaimCashflowPacket> cashflowsCoveredInModelPeriod(List<ClaimCashflowPacket> cashflows, PeriodScope periodScope, ContractCoverBase base, int period) {
+    public static ArrayList<ClaimCashflowPacket> cashflowsCoveredInModelPeriod(Collection<ClaimCashflowPacket> cashflows, PeriodScope periodScope, ContractCoverBase base, int period) {
 
         return cashflows.findAll {
             it ->

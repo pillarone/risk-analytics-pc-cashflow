@@ -1,6 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities;
 
-import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.*;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class RIUtilities {
 
-    public static Set<IClaimRoot> incurredClaims(List<ClaimCashflowPacket> allCashflows, IncurredClaimBase incurredClaimBase) {
+    public static Set<IClaimRoot> incurredClaims(Collection<ClaimCashflowPacket> allCashflows, IncurredClaimBase incurredClaimBase) {
         Set<IClaimRoot> iClaimRoots = new HashSet<IClaimRoot>();
 
         for (ClaimCashflowPacket aClaim : allCashflows) {
@@ -33,8 +33,8 @@ public class RIUtilities {
         return iClaimRoots;
     }
 
-    public static ArrayListMultimap<IClaimRoot, IClaimRoot> incurredClaims(List<ClaimCashflowPacket> allCashflows) {
-        ArrayListMultimap<IClaimRoot, IClaimRoot> grossClaimsByKeyClaim = ArrayListMultimap.create();
+    public static SetMultimap<IClaimRoot, IClaimRoot> incurredClaims(Collection<ClaimCashflowPacket> allCashflows) {
+        SetMultimap<IClaimRoot, IClaimRoot> grossClaimsByKeyClaim = HashMultimap.create();
 
         for (ClaimCashflowPacket aClaim : allCashflows) {
             grossClaimsByKeyClaim.put( aClaim.getKeyClaim(), aClaim.getBaseClaim());
@@ -42,7 +42,7 @@ public class RIUtilities {
         return grossClaimsByKeyClaim;
     }
 
-    public static Set<ICededRoot> incurredCededClaims(List<ClaimCashflowPacket> allCashflows, IncurredClaimBase incurredClaimBase) {
+    public static Set<ICededRoot> incurredCededClaims(Collection<ClaimCashflowPacket> allCashflows, IncurredClaimBase incurredClaimBase) {
         Set<ICededRoot> iClaimRoots = new HashSet<ICededRoot>();
 
         for (ClaimCashflowPacket aClaim : allCashflows) {
@@ -72,7 +72,7 @@ public class RIUtilities {
         return claimsOfInterest;
     }
 
-    public static Set<IClaimRoot> incurredClaimsByDate( DateTime startDate, DateTime endDate, ArrayListMultimap<IClaimRoot, IClaimRoot> allIncurredClaims , ContractCoverBase coverBase  ) {
+    public static Set<IClaimRoot> incurredClaimsByDate( DateTime startDate, DateTime endDate, Multimap<IClaimRoot, IClaimRoot> allIncurredClaims , ContractCoverBase coverBase  ) {
         Set<IClaimRoot> claimsOfInterest = new HashSet<IClaimRoot>();
         for (IClaimRoot anIncurredClaim : allIncurredClaims.keys()) {
             DateTime coverDateTime = coverBase.claimCoverDate(anIncurredClaim);

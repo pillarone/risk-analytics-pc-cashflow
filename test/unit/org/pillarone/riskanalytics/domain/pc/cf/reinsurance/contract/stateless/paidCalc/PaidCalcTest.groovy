@@ -80,7 +80,8 @@ class PaidCalcTest extends GroovyTestCase {
 
         PeriodLayerParameters allLayers = new PeriodLayerParameters()
         allLayers.add(0, 1, 1, 60, 90, 0, 0, 0, APBasis.LOSS)
-        Map<Integer, Double> period1Calc = calculation.cededCumulativePaidRespectTerm(period1Claims2010, allLayers, periodScope, ContractCoverBase.LOSSES_OCCURING, 240, 10)
+        Map<Integer, Double> period1Calc = calculation.cededCumulativePaidRespectTerm(period1Claims2010,
+                allLayers, periodScope, ContractCoverBase.LOSSES_OCCURING, 240, 10)
 
 //        40 ceded out of claim limit, minus 10 term ded
         assertEquals("p1", 40, period1Calc.get(0))

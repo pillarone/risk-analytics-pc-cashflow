@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.paidImpl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
@@ -23,6 +25,8 @@ import java.util.*;
  */
 public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
 
+    private static Log LOG = LogFactory.getLog(TermPaidRespectIncurredByClaim.class);
+
     public double layerCededPaid(Collection<ClaimCashflowPacket> layerCashflows, LayerParameters layerParameters) {
         double lossAfterAnnualStructure = lossAfterAnnualStructure(layerCashflows, layerParameters);
 
@@ -36,7 +40,8 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
     }
 
     public Map<Integer, Double> cededIncrementalPaidRespectTerm(List<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters,
-                                                                PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess, DateTime fromDate, DateTime toDate) {
+                                                                PeriodScope periodScope, ContractCoverBase coverageBase,
+                                                                double termLimit, double termExcess, DateTime fromDate, DateTime toDate, boolean sanityChecks) {
 
         List<ClaimCashflowPacket> fromDateFilteredClaims = RIUtilities.cashflowClaimsByOccurenceDate(periodScope.getPeriodCounter().startOfFirstPeriod(), fromDate, allPaidClaims);
         List<ClaimCashflowPacket> toDateFilteredClaims = RIUtilities.cashflowClaimsByOccurenceDate(periodScope.getPeriodCounter().startOfFirstPeriod(), toDate, allPaidClaims);
@@ -55,8 +60,13 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
                 double paidToCurrentSimPoint = cumulativePaidToDate.get(modelPeriod);
                 double cumPaid = paidToCurrentSimPoint - paidPriorSimPeriod;
                 if (cumPaid < -0.000000005) {
-                    throw new SimulationException("Insanity detected: incremental paid amount in model period : " + modelPeriod + " is calculated as negative. " + cumPaid +
-                            "Contact support");
+
+                    String message = "Insanity detected: incremental paid amount in model period : " + modelPeriod + " is calculated as negative. " + cumPaid +
+                            ". Contact support";
+                    LOG.error(message);
+                    if(sanityChecks) {
+                        throw new SimulationException(message);
+                    }
                 }
                 paidByPeriod.put(modelPeriod, cumPaid);
             }
@@ -65,7 +75,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
         return paidByPeriod;
     }
 
-    public Map<Integer, Double> cededCumulativePaidRespectTerm(List<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters, PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess) {
+    public Map<Integer, Double> cededCumulativePaidRespectTerm(Collection<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters, PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess) {
 
         TermIncurredCalculation incCalc = new TermIncurredCalculation();
         List<IClaimRoot> allIncurredClaims = new ArrayList<IClaimRoot>(RIUtilities.incurredClaims(allPaidClaims, IncurredClaimBase.BASE));
@@ -90,10 +100,11 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
      * @param termLimit
      * @return
      */
-    public Map<Integer, Double> cededPaidByModelPeriod(PeriodScope periodScope, List<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters, ContractCoverBase base, int periodTo, double termExcess, double termLimit) {
+    public Map<Integer, Double> cededPaidByModelPeriod(PeriodScope periodScope, Collection<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters, ContractCoverBase base, int periodTo, double termExcess, double termLimit) {
         Map<Integer, Double> period_paid = new HashMap<Integer, Double>();
 
-        /* As it stands, the spec takes no notice of the term excess when calculating payments. For the moment, ignore it here too. Set to falase to enable functionality.  */
+        /* As it stands, the spec takes no notice of the term excess when calculating payments.
+        For the moment, ignore it here too. Set to falase to enable functionality. Not guaranteed to work.  */
         boolean termExcessExceeded = true;
         double cumulativePaidInSimulation = 0d;
         for (int period = 0; period <= periodTo; period++) {

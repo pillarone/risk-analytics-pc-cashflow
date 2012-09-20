@@ -1,17 +1,14 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.paidImpl
 
-import org.apache.tools.ant.taskdefs.optional.depend.constantpool.ClassCPInfo
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.PeriodLayerParameters
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis
+
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
+
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
-import org.pillarone.riskanalytics.core.simulation.TestPeriodCounterUtilities
+
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.TestClaimUtils
 import org.pillarone.riskanalytics.domain.pc.cf.claim.CededClaimRoot
@@ -57,7 +54,7 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         contractPaidThisPeriod.put(0, 50d)
 
         ProportionalToGrossPaidAllocation allocation = new ProportionalToGrossPaidAllocation()
-        List<ClaimCashflowPacket> cededPackets = allocation.allocatePaid(contractPaidThisPeriod, cashflowPacketList, cededClaimsToDate, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims )
+        List<ClaimCashflowPacket> cededPackets = allocation.allocatePaid(contractPaidThisPeriod, cashflowPacketList, cededClaimsToDate, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims, globalSanityChecks)
 
         assert cededPackets.size() == cashflowPacketList.size()
         assertEquals "Check 50 ceded", -50d, cededPackets*.getPaidIncrementalIndexed().sum()
@@ -100,7 +97,7 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         contractPaidPeriod1.put(0, 25d)
 
         ProportionalToGrossPaidAllocation allocation = new ProportionalToGrossPaidAllocation()
-        List<ClaimCashflowPacket> cededPackets = allocation.allocatePaid(contractPaidPeriod1, cashflowPacketList1, cededClaimsToDate, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims )
+        List<ClaimCashflowPacket> cededPackets = allocation.allocatePaid(contractPaidPeriod1, cashflowPacketList1, cededClaimsToDate, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims, globalSanityChecks)
 
         assert cededPackets.size() == cashflowPacketList1.size()
         ArrayList<ClaimCashflowPacket> cededCashflows = new ArrayList<ClaimCashflowPacket>()
@@ -115,7 +112,7 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         contractPaidPeriod2.put(0, 12.5d)
         contractPaidPeriod2.put(1, 0d)
 
-        List<ClaimCashflowPacket> cededPacketsPeriod2 = allocation.allocatePaid(contractPaidPeriod2, cashflowPacketList2, cededCashflows, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims )
+        List<ClaimCashflowPacket> cededPacketsPeriod2 = allocation.allocatePaid(contractPaidPeriod2, cashflowPacketList2, cededCashflows, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims, globalSanityChecks)
         assert cededPacketsPeriod2.size() == cashflowPacketList2.size()
         assertEquals("Check cumulated amount : ", -37.5d, cededPacketsPeriod2.get(0).getPaidCumulatedIndexed() )
         cededCashflows.addAll(cededPacketsPeriod2)
@@ -132,11 +129,11 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         contractPaidPeriod3.put(2, 0d)
         shouldFail {
             /* Expect an exception here because the claim will pay more than the Root ultimate amount.  */
-            List<ClaimCashflowPacket> cededPacketsPeriod3 = allocation.allocatePaid(contractPaidPeriod3, cashflowPacketList3, cededCashflows, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims )
+            List<ClaimCashflowPacket> cededPacketsPeriod3 = allocation.allocatePaid(contractPaidPeriod3, cashflowPacketList3, cededCashflows, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims, globalSanityChecks)
         }
 
         contractPaidPeriod3.put(0, 12.5d)
-        List<ClaimCashflowPacket> cededPacketsPeriod3 = allocation.allocatePaid(contractPaidPeriod3, cashflowPacketList3, cededCashflows, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims )
+        List<ClaimCashflowPacket> cededPacketsPeriod3 = allocation.allocatePaid(contractPaidPeriod3, cashflowPacketList3, cededCashflows, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims, globalSanityChecks)
         assertEquals("Check cumulated amount : ", -50, cededPacketsPeriod3.get(0).getPaidCumulatedIndexed())
     }
 
@@ -173,7 +170,7 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         contractPaidThisPeriod.put(0, 40d)
 
         ProportionalToGrossPaidAllocation allocation = new ProportionalToGrossPaidAllocation()
-        List<ClaimCashflowPacket> cededPackets1 = allocation.allocatePaid(contractPaidThisPeriod, cashflowPacketList, cededClaimsToDate, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims )
+        List<ClaimCashflowPacket> cededPackets1 = allocation.allocatePaid(contractPaidThisPeriod, cashflowPacketList, cededClaimsToDate, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims, globalSanityChecks)
 
 
         assert cededPackets1.size() == cashflowPacketList.size()
@@ -192,7 +189,7 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         List<ClaimCashflowPacket> cashflowPacketList2 = new ArrayList<ClaimCashflowPacket>()
         cashflowPacketList2.addAll(createCashflows(rootClaims, periodScope.getPeriodCounter()))
         List<ClaimCashflowPacket> cededPackets2 = allocation.allocatePaid(contractPaidPeriod1, cashflowPacketList2,
-                cededClaimsToDate, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims )
+                cededClaimsToDate, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims, globalSanityChecks)
 
         List<ClaimCashflowPacket> cededClaimsP0 = RIUtilities.cashflowsClaimsByPeriod(0, periodScope.getPeriodCounter(), cededPackets2, ContractCoverBase.LOSSES_OCCURING)
         List<ClaimCashflowPacket> cededClaimsP1 = RIUtilities.cashflowsClaimsByPeriod(1, periodScope.getPeriodCounter(), cededPackets2, ContractCoverBase.LOSSES_OCCURING)

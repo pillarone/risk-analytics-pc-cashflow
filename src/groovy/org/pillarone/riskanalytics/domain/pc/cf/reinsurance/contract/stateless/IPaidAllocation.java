@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public interface IPaidAllocation {
 
-    List<ClaimCashflowPacket> allocatePaid(Map<Integer, Double> incrementalPaidByPeriod, List<ClaimCashflowPacket> grossCashflowsThisPeriod, List<ClaimCashflowPacket> cededCashflowsToDate, PeriodScope periodScope, ContractCoverBase coverageBase, List<ICededRoot> incurredCededClaims);
+    List<ClaimCashflowPacket> allocatePaid(Map<Integer, Double> incrementalPaidByPeriod, List<ClaimCashflowPacket> grossCashflowsThisPeriod, List<ClaimCashflowPacket> cededCashflowsToDate, PeriodScope periodScope, ContractCoverBase coverageBase, List<ICededRoot> incurredCededClaims, boolean sanityChecks);
 
 }
 

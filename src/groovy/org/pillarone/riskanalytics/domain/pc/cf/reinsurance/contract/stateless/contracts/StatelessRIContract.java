@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.SetMultimap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
@@ -48,6 +49,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
     private PeriodStore periodStore;
     private PeriodScope periodScope;
     private IPeriodStrategy globalCover;
+    private boolean globalSanityChecks;
 
     /**
      * Incoming information
@@ -91,7 +93,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         List<ICededRoot> allIncurredCededClaims = new ArrayList<ICededRoot>();
         List<ClaimCashflowPacket> allCashflowsToDate = allClaimsToDate(periodScope, periodStore, GROSS_CLAIMS);
         List<ClaimCashflowPacket> cededCashflowsToDate = allClaimsToDate(periodScope, periodStore, CEDED_CLAIMS);
-        ArrayListMultimap<IClaimRoot, IClaimRoot> incurredClaims = RIUtilities.incurredClaims(allCashflowsToDate);
+        SetMultimap<IClaimRoot, IClaimRoot> incurredClaims = RIUtilities.incurredClaims(allCashflowsToDate);
         Set<ICededRoot> allIncurredCeded = RIUtilities.incurredCededClaims(cededCashflowsToDate, IncurredClaimBase.BASE);
         allIncurredCededClaims.addAll(new ArrayList<ICededRoot>(allIncurredCeded));
 
@@ -118,7 +120,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
             IPaidAllocation iRiPaidAllocation = new ProportionalToGrossPaidAllocation();
             paidClaims = iRiPaidAllocation.allocatePaid(incrementalPaidInThisSimulationPeriod, inClaims,
-                    cededCashflowsToDate, periodScope, parmCoverageBase, allIncurredCededClaims);
+                    cededCashflowsToDate, periodScope, parmCoverageBase, allIncurredCededClaims, globalSanityChecks);
             contractFinancialsPacket = ContractFinancialsPacket.getContractFinancialsPacketsByInceptionPeriod(
                     paidClaims, new ArrayList<ClaimCashflowPacket>(), new ArrayList<CededUnderwritingInfoPacket>(),
                     new ArrayList<UnderwritingInfoPacket>(), periodScope.getPeriodCounter());
@@ -159,7 +161,8 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
         TermPaidRespectIncurredByClaim iPaidCalculation = new TermPaidRespectIncurredByClaim();
         DateTime endPriorPeriod = periodScope.getCurrentPeriodStartDate().minusMillis(1);
-        Map<Integer, Double> paidByModelPeriod = iPaidCalculation.cededIncrementalPaidRespectTerm(claims, layerParameters, periodScope, parmCoverageBase, termLimit, termExcess, endPriorPeriod, periodScope.getNextPeriodStartDate());
+        Map<Integer, Double> paidByModelPeriod = iPaidCalculation.cededIncrementalPaidRespectTerm(claims, layerParameters,
+                periodScope, parmCoverageBase, termLimit, termExcess, endPriorPeriod, periodScope.getNextPeriodStartDate(), globalSanityChecks);
         return paidByModelPeriod;
     }
 
@@ -303,5 +306,21 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     public void setGlobalCover(IPeriodStrategy globalCover) {
         this.globalCover = globalCover;
+    }
+
+    public boolean isGlobalSanityChecks() {
+        return globalSanityChecks;
+    }
+
+    public void setGlobalSanityChecks(boolean globalSanityChecks) {
+        this.globalSanityChecks = globalSanityChecks;
+    }
+
+    public IReinsuranceContractStrategy getParmContractStructure() {
+        return parmContractStructure;
+    }
+
+    public void setParmContractStructure(IReinsuranceContractStrategy parmContractStructure) {
+        this.parmContractStructure = parmContractStructure;
     }
 }

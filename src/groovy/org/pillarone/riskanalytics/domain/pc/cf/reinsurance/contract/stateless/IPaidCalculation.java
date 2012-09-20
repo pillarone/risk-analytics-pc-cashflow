@@ -18,7 +18,7 @@ public interface IPaidCalculation {
     double layerCededPaid(Collection<ClaimCashflowPacket> layerCashflows, LayerParameters layerParameters);
 
     Map<Integer, Double> cededIncrementalPaidRespectTerm(List<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters,
-                         PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess, DateTime fromDate, DateTime toDate);
+                                                         PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess, DateTime fromDate, DateTime toDate, boolean sanityChecks);
 
     double paidLossAllLayers(Collection<ClaimCashflowPacket> allLayerCashflows, Collection<LayerParameters> layerParameters);
 

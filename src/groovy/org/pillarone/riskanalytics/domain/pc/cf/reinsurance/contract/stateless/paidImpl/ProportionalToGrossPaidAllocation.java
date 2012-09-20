@@ -1,6 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.paidImpl;
 
 import com.google.common.collect.ArrayListMultimap;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
@@ -18,10 +20,12 @@ import java.util.*;
  */
 public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
 
+    private static Log LOG = LogFactory.getLog(ProportionalToGrossPaidAllocation.class);
+
     public List<ClaimCashflowPacket> allocatePaid(Map<Integer, Double> incrementalPaidByPeriod, List<ClaimCashflowPacket> grossCashflowsThisPeriod,
                                                   List<ClaimCashflowPacket> cededCashflowsToDate,
                                                   PeriodScope periodScope,
-                                                  ContractCoverBase coverageBase, List<ICededRoot> incurredCededClaims) {
+                                                  ContractCoverBase coverageBase, List<ICededRoot> incurredCededClaims, boolean sanityChecks) {
 
 
 
@@ -66,10 +70,16 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                     cumulatedCededForThisClaim += paidAgainstThisPacket;
                     ClaimCashflowPacket claimCashflowPacket = new ClaimCashflowPacket(cededRoot, cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, setUltimate);
                     if (cumulatedCededForThisClaim < cededRoot.getUltimate()) {
-                        throw new SimulationException("Insanity detected : " + cededRoot.toString() + " has an ultimate smaller " +
+
+                        String message = "Insanity detected : " + cededRoot.toString() + " has an ultimate smaller " +
                                 "than the paid amount " + claimCashflowPacket.toString() + "" +
-                                "This will create inconsistencies in higher structures. Contact development"
-                        );
+                                "This will create inconsistencies in higher structures. Contact development";
+                        LOG.error(message);
+                        if (sanityChecks) {
+                            throw new SimulationException(message);
+                        }
+
+
                     }
                     setUltimate = false;
                     claimsOfInterest.add(claimCashflowPacket);
