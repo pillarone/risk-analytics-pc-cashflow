@@ -110,7 +110,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
         for (int period = 0; period <= periodTo; period++) {
             if (termExcessExceeded) {
                 List<ClaimCashflowPacket> cashflowsPaidAgainsThisModelPeriod = GRIUtilities.cashflowsCoveredInModelPeriod(allPaidClaims, periodScope, base, period);
-                List<ClaimCashflowPacket> latestCashflowsInPeriod = RIUtilities.latestCashflowByIncurredClaim(cashflowsPaidAgainsThisModelPeriod);
+                List<ClaimCashflowPacket> latestCashflowsInPeriod = RIUtilities.latestCashflowByIncurredClaim(cashflowsPaidAgainsThisModelPeriod, IncurredClaimBase.BASE);
                 List<LayerParameters> layers = layerParameters.getLayers(period);
                 double paidLossToModelPeriod = paidLossAllLayers(latestCashflowsInPeriod, layers);
                 period_paid.put(period, paidLossToModelPeriod);
@@ -145,16 +145,18 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
      */
     public double cededPaidUpToSimulationPeriod(List<ClaimCashflowPacket> allCashflows, PeriodLayerParameters layerParameters, PeriodScope periodScope, double termExcess, double termLimit, ContractCoverBase coverageBase, int periodTo) {
 
+        IncurredClaimBase claimBase = IncurredClaimBase.BASE;
+
         double termPaidPriorPeriod = 0;
         for (int period = 0; period < periodTo; period++) {
             List<ClaimCashflowPacket> cashflowsPaidAgainsThisModelPeriod = GRIUtilities.cashflowsCoveredInModelPeriod(allCashflows, periodScope, coverageBase, period);
-            List<ClaimCashflowPacket> latestCashflowsInPeriod = RIUtilities.latestCashflowByIncurredClaim(cashflowsPaidAgainsThisModelPeriod);
+            List<ClaimCashflowPacket> latestCashflowsInPeriod = RIUtilities.latestCashflowByIncurredClaim(cashflowsPaidAgainsThisModelPeriod, claimBase);
             List<LayerParameters> layers = layerParameters.getLayers(period);
             termPaidPriorPeriod += paidLossAllLayers(latestCashflowsInPeriod, layers);
         }
 
         List<ClaimCashflowPacket> cashflowsPaidAgainsThisModelPeriod = GRIUtilities.cashflowsCoveredInModelPeriod(allCashflows, periodScope, coverageBase, periodTo);
-        List<ClaimCashflowPacket> latestCashflowsInPeriod = RIUtilities.latestCashflowByIncurredClaim(cashflowsPaidAgainsThisModelPeriod);
+        List<ClaimCashflowPacket> latestCashflowsInPeriod = RIUtilities.latestCashflowByIncurredClaim(cashflowsPaidAgainsThisModelPeriod, claimBase);
         List<LayerParameters> layers = layerParameters.getLayers(periodTo);
         double paidLossThisPeriod = paidLossAllLayers(latestCashflowsInPeriod, layers);
 

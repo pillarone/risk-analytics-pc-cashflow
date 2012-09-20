@@ -5,10 +5,7 @@ import org.joda.time.DateTimeZone
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
+
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.pillarone.riskanalytics.core.simulation.TestPeriodCounterUtilities
@@ -18,7 +15,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.f
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.PeriodLayerParameters
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
+
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.TestClaimUtils
 
@@ -64,7 +61,7 @@ class PaidCalcTest extends GroovyTestCase {
         IPaidCalculation calculation = new TermPaidRespectIncurredByClaim()
         List<ClaimCashflowPacket> period1Claims = RIUtilities.cashflowsByIncurredDate(start2010, start2011.minusMillis(1), grossClaims, ContractCoverBase.LOSSES_OCCURING)
 
-        List<ClaimCashflowPacket> latestCashflows = RIUtilities.latestCashflowByIncurredClaim(period1Claims)
+        List<ClaimCashflowPacket> latestCashflows = RIUtilities.latestCashflowByIncurredClaim(period1Claims, base)
         LayerParameters periodLimitAndDeductible = new LayerParameters(1, 60, 90)
         periodLimitAndDeductible.addAdditionalPremium(10, 0, 0, APBasis.LOSS)
         double cededPaid = calculation.layerCededPaid(latestCashflows, periodLimitAndDeductible)
@@ -111,7 +108,7 @@ class PaidCalcTest extends GroovyTestCase {
     void testPaidLossAllLayers() {
         IPaidCalculation calculation = new TermPaidRespectIncurredByClaim()
         List<ClaimCashflowPacket> period1Claims = RIUtilities.cashflowsByIncurredDate(start2010, start2011.minusMillis(1), grossClaims, ContractCoverBase.LOSSES_OCCURING)
-        List<ClaimCashflowPacket> latestCashflows = RIUtilities.latestCashflowByIncurredClaim(period1Claims)
+        List<ClaimCashflowPacket> latestCashflows = RIUtilities.latestCashflowByIncurredClaim(period1Claims, base)
 
 
         LayerParameters claimLimits = new LayerParameters(1, 60, 90)

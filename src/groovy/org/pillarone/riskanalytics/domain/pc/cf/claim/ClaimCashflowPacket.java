@@ -213,7 +213,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      */
     public ClaimCashflowPacket(IClaimRoot baseClaim, ClaimCashflowPacket claimCashflowPacket, double paidIncremental, double cumulatedPaid, boolean setUltimate) {
         this.baseClaim = baseClaim;
-        this.keyClaim = claimCashflowPacket.getKeyClaim();
+        this.keyClaim = claimCashflowPacket.getBaseClaim();
         if(setUltimate) {
             this.ultimate = baseClaim.getUltimate();
             this.nominalUltimate = ultimate;
@@ -233,6 +233,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.reservesIndexed = baseClaim.getUltimate() - cumulatedPaid;
         changeInReservesIndexed = 0;
         changeInIBNRIndexed = 0;
+
 
         updateDate = claimCashflowPacket.getUpdateDate();
         updatePeriod = claimCashflowPacket.getUpdatePeriod();

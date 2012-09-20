@@ -1,6 +1,5 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.SetMultimap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -104,19 +103,20 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
 //        Incurred calc
         Set<IClaimRoot> incurredClaimsInContractPeriod = RIUtilities.incurredClaimsByDate(periodScope.getCurrentPeriodStartDate(), periodScope.getNextPeriodStartDate().minusMillis(1),
-                incurredClaims, parmCoverageBase);
+                incurredClaims, parmCoverageBase, IncurredClaimBase.BASE);
         IncurredClaimAndAP incurredPeriodResult = incurredResultsThisSimPeriod(incurredClaimsInContractPeriod);
         IncurredAllocation incurredAllocation = new IncurredAllocation();
         TermIncurredCalculation incurredCalc = new TermIncurredCalculation();
         List<ClaimCashflowPacket> paidClaims;
         List<ContractFinancialsPacket> contractFinancialsPacket;
         try {
-            Map<Integer, Double> cededIncurredByPeriod = incurredCalc.cededIncurredsByPeriods(incurredClaims.keys(), periodScope, termExcess, termLimit, layerParameters, parmCoverageBase);
-            List<ICededRoot> cededClaims = incurredAllocation.allocateClaims(incurredPeriodResult.getIncurredClaim(), new HashSet<IClaimRoot>(incurredClaims.keys()), periodScope, parmCoverageBase);
+            final Map<Integer, Double> cededIncurredByPeriod = incurredCalc.cededIncurredsByPeriods(incurredClaims.keys(), periodScope, termExcess, termLimit, layerParameters, parmCoverageBase);
+            final Set<IClaimRoot> allIncurredClaims = RIUtilities.incurredClaims(allCashflowsToDate, IncurredClaimBase.BASE);
+            final List<ICededRoot> cededClaims = incurredAllocation.allocateClaims(incurredPeriodResult.getIncurredClaim(), allIncurredClaims, periodScope, parmCoverageBase);
             allIncurredCededClaims.addAll(cededClaims);
 
 
-            Map<Integer, Double> incrementalPaidInThisSimulationPeriod = incrementalPaidAmountByModelPeriod(allCashflowsToDate);
+            final Map<Integer, Double> incrementalPaidInThisSimulationPeriod = incrementalPaidAmountByModelPeriod(allCashflowsToDate);
 
             IPaidAllocation iRiPaidAllocation = new ProportionalToGrossPaidAllocation();
             paidClaims = iRiPaidAllocation.allocatePaid(incrementalPaidInThisSimulationPeriod, inClaims,
@@ -128,6 +128,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
             throw new SimulationException(" Insanity detected in structure module : " + this.getName() + "\n In iteration :"
                     + iterationScope.getCurrentIteration() + "\n Period : " + periodScope.getCurrentPeriod() + "    .... Please see logs.   \n", ex);
         }
+        RIUtilities.addMarkers(paidClaims, this);
         outClaimsCeded.addAll(paidClaims);
         outContractFinancials.addAll(contractFinancialsPacket);
         periodStore.put(CEDED_CLAIMS, paidClaims);
@@ -175,11 +176,6 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         }
         return allClaims;
     }
-
-    Set<IClaimRoot> incurredClaimsToDate(DateTime endDate, Set<IClaimRoot> allIncurredClaims, ContractCoverBase coverBase) {
-        return RIUtilities.incurredClaimsByDate(periodScope.getPeriodCounter().startOfFirstPeriod(), endDate, allIncurredClaims, coverBase);
-    }
-
 
     private void doFilter() {
         DateTime coverStart = periodScope.getPeriodCounter().startOfFirstPeriod();
