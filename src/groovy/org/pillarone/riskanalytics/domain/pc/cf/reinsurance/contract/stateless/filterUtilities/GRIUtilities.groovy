@@ -40,8 +40,8 @@ class GRIUtilities {
         return claim
     }
 
-    public static ClaimCashflowPacket findCashflowToGrossClaim(IClaimRoot cededKeyClaim, List<ClaimCashflowPacket> allCashflows) {
-        ClaimCashflowPacket claim = allCashflows.find {cededKeyClaim.equals(it.getKeyClaim())}
+    public static ClaimCashflowPacket findCashflowToGrossClaim(IClaimRoot cededKeyClaim, List<ClaimCashflowPacket> allCashflows, IncurredClaimBase base) {
+        ClaimCashflowPacket claim = allCashflows.find { cededKeyClaim.equals( base.parentClaim(it) )}
 //        There ought to be no prior ceded claims. Pump out a dummy claim.
         if (claim == null) {
             claim = new ClaimCashflowPacket()

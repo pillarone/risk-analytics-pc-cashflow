@@ -100,6 +100,7 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     /**
      * This constructor preserves claim metadata, but alters the ultimate amount and occurrence date according to what's passed in.
+     *
      * @param claimRoot
      * @param ultimate
      * @param occurrenceDate

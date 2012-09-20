@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IPaidAllocation;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 
@@ -28,9 +29,10 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                                                   ContractCoverBase coverageBase, List<ICededRoot> incurredCededClaims, boolean sanityChecks) {
 
 
+        IncurredClaimBase base = IncurredClaimBase.BASE;
 
         List<ClaimCashflowPacket> claimsOfInterest = new ArrayList<ClaimCashflowPacket>();
-        List<ClaimCashflowPacket> latestCededCashflowsByIncurredClaim = RIUtilities.latestCashflowByIncurredClaim(cededCashflowsToDate);
+        List<ClaimCashflowPacket> latestCededCashflowsByIncurredClaim = RIUtilities.latestCashflowByIncurredClaim(cededCashflowsToDate, base);
 
 //        For each model period
         for (Map.Entry<Integer, Double> entry : incrementalPaidByPeriod.entrySet()) {
@@ -38,21 +40,22 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
             double grossIncurredInPeriod = GRIUtilities.ultimateSumFromCashflows(cashflowsRelatedToModelPeriod);
             double cededPaidAmountInModelPeriodThisSimPeriod = (Double) entry.getValue();
 
-            ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByKey = RIUtilities.cashflowsByRoot(cashflowsRelatedToModelPeriod);
+            ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByKey = RIUtilities.cashflowsByRoot(cashflowsRelatedToModelPeriod, base);
             Map<IClaimRoot, Collection<ClaimCashflowPacket>> cashflows = cashflowsByKey.asMap();
 
             for (Map.Entry<IClaimRoot, Collection<ClaimCashflowPacket>> packetEntrys : cashflows.entrySet()) {
-                List<ClaimCashflowPacket> cashflowPackets = new ArrayList<ClaimCashflowPacket>(packetEntrys.getValue()) ;
+                List<ClaimCashflowPacket> cashflowPackets = new ArrayList<ClaimCashflowPacket>(packetEntrys.getValue());
                 double grossIncurredByClaimRatio = packetEntrys.getKey().getUltimate() / grossIncurredInPeriod;
                 double claimPaidInContractYear = grossIncurredByClaimRatio * cededPaidAmountInModelPeriodThisSimPeriod;
 
                 double sumIncrementsOfThisClaim = GRIUtilities.incrementalCashflowSum(cashflowPackets);
 
-                IClaimRoot keyClaim = cashflowPackets.get(0).getKeyClaim();
+                IClaimRoot keyClaim = base.parentClaim(cashflowPackets.get(0));
                 ICededRoot cededRoot = GRIUtilities.findCededClaimRelatedToGrossClaim(packetEntrys.getKey(), incurredCededClaims);
-                ClaimCashflowPacket latestCededCashflow = GRIUtilities.findCashflowToGrossClaim(keyClaim, latestCededCashflowsByIncurredClaim);
+                ClaimCashflowPacket latestCededCashflow = GRIUtilities.findCashflowToGrossClaim(keyClaim, latestCededCashflowsByIncurredClaim, IncurredClaimBase.KEY);
+
                 boolean setUltimate = false;
-                if(latestCededCashflow.getBaseClaim().getExposureStartDate() == null && latestCededCashflow.ultimate() == 0 ) {
+                if (base.parentClaim(latestCededCashflow).getExposureStartDate() == null && latestCededCashflow.ultimate() == 0) {
 //                    We know we have a dummy claim - this is the first time this incurred claim has ceded something.
                     setUltimate = true;
                 }
@@ -61,8 +64,8 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                 for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
                     double paidAgainstThisPacket = 0;
 
-                    if (sumIncrementsOfThisClaim == 0 ||  (cashflowPackets.size() == 1) ) {
-                        paidAgainstThisPacket = - claimPaidInContractYear;
+                    if (sumIncrementsOfThisClaim == 0 || (cashflowPackets.size() == 1)) {
+                        paidAgainstThisPacket = -claimPaidInContractYear;
                     } else {
                         paidAgainstThisPacket = claimPaidInContractYear * cashflowPacket.getPaidIncrementalIndexed() / -sumIncrementsOfThisClaim;
                     }
@@ -78,8 +81,6 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                         if (sanityChecks) {
                             throw new SimulationException(message);
                         }
-
-
                     }
                     setUltimate = false;
                     claimsOfInterest.add(claimCashflowPacket);

@@ -22,4 +22,11 @@ public class IncurredClaimAndAP {
         return new IncurredClaimAndAP(incurredClaim - incurredClaimAndAP.getIncurredClaim(), additionalpremium - incurredClaimAndAP.getAdditionalpremium());
     }
 
+    @Override
+    public String toString() {
+        return "IncurredClaimAndAP{" +
+                "incurredClaim= "  + incurredClaim +
+                ", additionalpremium= " + additionalpremium +
+                '}';
+    }
 }

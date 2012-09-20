@@ -2,11 +2,14 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.
 
 import com.google.common.collect.*;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.components.Component;
+import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase;
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
 import java.util.*;
 
@@ -17,18 +20,8 @@ public class RIUtilities {
 
     public static Set<IClaimRoot> incurredClaims(Collection<ClaimCashflowPacket> allCashflows, IncurredClaimBase incurredClaimBase) {
         Set<IClaimRoot> iClaimRoots = new HashSet<IClaimRoot>();
-
         for (ClaimCashflowPacket aClaim : allCashflows) {
-            switch (incurredClaimBase) {
-                case KEY:
-                    iClaimRoots.add(aClaim.getKeyClaim());
-                    break;
-                case BASE:
-                    iClaimRoots.add(aClaim.getBaseClaim());
-                    break;
-                default:
-                    throw new SimulationException("Unknown base claims type :" + incurredClaimBase.toString());
-            }
+            iClaimRoots.add(incurredClaimBase.parentClaim(aClaim));
         }
         return iClaimRoots;
     }
@@ -37,31 +30,28 @@ public class RIUtilities {
         SetMultimap<IClaimRoot, IClaimRoot> grossClaimsByKeyClaim = HashMultimap.create();
 
         for (ClaimCashflowPacket aClaim : allCashflows) {
-            grossClaimsByKeyClaim.put( aClaim.getKeyClaim(), aClaim.getBaseClaim());
+            grossClaimsByKeyClaim.put(aClaim.getKeyClaim(), aClaim.getBaseClaim());
         }
         return grossClaimsByKeyClaim;
     }
 
+    public static void  addMarkers(Collection<ClaimCashflowPacket> packets, IComponentMarker sender ) {
+        for (ClaimCashflowPacket packet : packets) {
+            packet.setMarker(sender);
+        }
+
+    }
+
     public static Set<ICededRoot> incurredCededClaims(Collection<ClaimCashflowPacket> allCashflows, IncurredClaimBase incurredClaimBase) {
         Set<ICededRoot> iClaimRoots = new HashSet<ICededRoot>();
-
         for (ClaimCashflowPacket aClaim : allCashflows) {
-            switch (incurredClaimBase) {
-                case KEY:
-                    iClaimRoots.add((ICededRoot) aClaim.getKeyClaim());
-                    break;
-                case BASE:
-                    iClaimRoots.add((ICededRoot) aClaim.getBaseClaim());
-                    break;
-                default:
-                    throw new SimulationException("Unknown base claims type :" + incurredClaimBase.toString());
-            }
+            iClaimRoots.add(incurredClaimBase.parentCededClaim(aClaim));
         }
         return iClaimRoots;
     }
 
 
-    public static Set<IClaimRoot> incurredClaimsByDate( DateTime startDate, DateTime endDate, Collection<IClaimRoot> allIncurredClaims , ContractCoverBase coverBase  ) {
+    public static Set<IClaimRoot> incurredClaimsByDate(DateTime startDate, DateTime endDate, Collection<IClaimRoot> allIncurredClaims, ContractCoverBase coverBase) {
         Set<IClaimRoot> claimsOfInterest = new HashSet<IClaimRoot>();
         for (IClaimRoot anIncurredClaim : allIncurredClaims) {
             DateTime coverDateTime = coverBase.claimCoverDate(anIncurredClaim);
@@ -72,9 +62,22 @@ public class RIUtilities {
         return claimsOfInterest;
     }
 
-    public static Set<IClaimRoot> incurredClaimsByDate( DateTime startDate, DateTime endDate, Multimap<IClaimRoot, IClaimRoot> allIncurredClaims , ContractCoverBase coverBase  ) {
+    public static Set<IClaimRoot> incurredClaimsByDate(DateTime startDate, DateTime endDate, Multimap<IClaimRoot, IClaimRoot> allIncurredClaims, ContractCoverBase coverBase, IncurredClaimBase claimBase) {
         Set<IClaimRoot> claimsOfInterest = new HashSet<IClaimRoot>();
-        for (IClaimRoot anIncurredClaim : allIncurredClaims.keys()) {
+        Collection<IClaimRoot> incurredClaimsOfInterest;
+
+        switch (claimBase) {
+            case BASE:
+                incurredClaimsOfInterest = allIncurredClaims.values();
+                break;
+            case KEY:
+                incurredClaimsOfInterest = allIncurredClaims.keys();
+                break;
+            default:
+                throw new SimulationException("Unknown claim base " + claimBase.toString() );
+        }
+
+        for (IClaimRoot anIncurredClaim : incurredClaimsOfInterest) {
             DateTime coverDateTime = coverBase.claimCoverDate(anIncurredClaim);
             if ((coverDateTime.equals(startDate) || coverDateTime.isAfter(startDate)) && coverDateTime.isBefore(endDate)) {
                 claimsOfInterest.add(anIncurredClaim);
@@ -82,6 +85,7 @@ public class RIUtilities {
         }
         return claimsOfInterest;
     }
+
 
     public static List<ClaimCashflowPacket> cashflowClaimsByOccurenceDate(DateTime startDate, DateTime endDate, List<ClaimCashflowPacket> cashflows) {
         List<ClaimCashflowPacket> claimsOfInterest = new ArrayList<ClaimCashflowPacket>();
@@ -94,10 +98,10 @@ public class RIUtilities {
         return claimsOfInterest;
     }
 
-    public static List<ClaimCashflowPacket> latestCashflowByIncurredClaim( List<ClaimCashflowPacket> cashflows ) {
-        Set<IClaimRoot> claimRoots = RIUtilities.incurredClaims(cashflows, IncurredClaimBase.KEY);
+    public static List<ClaimCashflowPacket> latestCashflowByIncurredClaim(List<ClaimCashflowPacket> cashflows, IncurredClaimBase base) {
+        Set<IClaimRoot> claimRoots = RIUtilities.incurredClaims(cashflows, base);
 
-        ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByKey = cashflowsByRoot(cashflows);
+        ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByKey = cashflowsByRoot(cashflows, base);
 
         List<ClaimCashflowPacket> latestUpdates = new ArrayList<ClaimCashflowPacket>();
 
@@ -108,7 +112,7 @@ public class RIUtilities {
 
             List<ClaimCashflowPacket> cashflowPackets = cashflowsByKey.get(claimRoot);
             for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
-                if(cashflowPacket.getDate().isAfter(latestPacket.getDate())) {
+                if (cashflowPacket.getDate().isAfter(latestPacket.getDate())) {
                     latestPacket = cashflowPacket;
                 }
             }
@@ -120,16 +124,15 @@ public class RIUtilities {
 
     }
 
-    public static ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByRoot(List<ClaimCashflowPacket> cashflows) {
+    public static ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByRoot(List<ClaimCashflowPacket> cashflows, IncurredClaimBase base) {
         ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByKey = ArrayListMultimap.create();
-        for(ClaimCashflowPacket aCashflow : cashflows) {
-            cashflowsByKey.put(aCashflow.getKeyClaim(), aCashflow);
+        for (ClaimCashflowPacket aCashflow : cashflows) {
+            cashflowsByKey.put(base.parentClaim(aCashflow), aCashflow);
         }
         return cashflowsByKey;
     }
 
-
-    public static List<ClaimCashflowPacket> cashflowsByIncurredDate( DateTime startDate, DateTime endDate, Collection<ClaimCashflowPacket> cashflows , ContractCoverBase coverBase  ) {
+    public static List<ClaimCashflowPacket> cashflowsByIncurredDate(DateTime startDate, DateTime endDate, Collection<ClaimCashflowPacket> cashflows, ContractCoverBase coverBase) {
         List<ClaimCashflowPacket> claimsOfInterest = new ArrayList<ClaimCashflowPacket>();
         for (ClaimCashflowPacket anIncurredClaim : cashflows) {
             DateTime coverDateTime = coverBase.claimCoverDate(anIncurredClaim);
@@ -141,22 +144,22 @@ public class RIUtilities {
     }
 
 
-    public static Set<IClaimRoot> incurredClaimsByPeriod( Integer period, IPeriodCounter periodCounter, Collection<IClaimRoot> allIncurredClaims , ContractCoverBase coverBase  ) {
+    public static Set<IClaimRoot> incurredClaimsByPeriod(Integer period, IPeriodCounter periodCounter, Collection<IClaimRoot> allIncurredClaims, ContractCoverBase coverBase) {
         Set<IClaimRoot> claimsOfInterest = new HashSet<IClaimRoot>();
         for (IClaimRoot anIncurredClaim : allIncurredClaims) {
             DateTime coverDateTime = coverBase.claimCoverDate(anIncurredClaim);
-            if( periodCounter.belongsToPeriod(coverDateTime) == period ) {
+            if (periodCounter.belongsToPeriod(coverDateTime) == period) {
                 claimsOfInterest.add(anIncurredClaim);
             }
         }
         return claimsOfInterest;
     }
 
-    public static List<ClaimCashflowPacket> cashflowsClaimsByPeriod( Integer period, IPeriodCounter periodCounter, Collection<ClaimCashflowPacket> cashflowsClaims , ContractCoverBase coverBase  ) {
+    public static List<ClaimCashflowPacket> cashflowsClaimsByPeriod(Integer period, IPeriodCounter periodCounter, Collection<ClaimCashflowPacket> cashflowsClaims, ContractCoverBase coverBase) {
         List<ClaimCashflowPacket> claimsOfInterest = new ArrayList<ClaimCashflowPacket>();
         for (ClaimCashflowPacket aClaim : cashflowsClaims) {
             DateTime coverDateTime = coverBase.claimCoverDate(aClaim);
-            if(period == periodCounter.belongsToPeriod(coverDateTime)) {
+            if (period == periodCounter.belongsToPeriod(coverDateTime)) {
                 claimsOfInterest.add(aClaim);
             }
         }
