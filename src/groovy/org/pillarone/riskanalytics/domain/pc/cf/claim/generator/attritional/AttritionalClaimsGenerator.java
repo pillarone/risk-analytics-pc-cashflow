@@ -54,7 +54,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
             GroovyUtils.convertToListOfList(new Object[]{0d, 0d}), Arrays.asList(REAL_PERIOD, CLAIM_VALUE),
             ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER));
 
-    private boolean globalTrivialIndicies;
+    private boolean globalTrivialIndices;
 
     private IterationScope iterationScope;
 
@@ -130,7 +130,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
 //                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(periodScope.getPeriodCounter(), null, false));
         for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
             if (grossClaimRoot.exposureStartInCurrentPeriod(periodScope)) {
-                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(counter, runOffFactors, !globalTrivialIndicies));
+                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(counter, runOffFactors, !globalTrivialIndices));
 //                outOccurenceUltimateClaims.add(grossClaimRoot.occurenceCashflow(counter));
             }
         }
@@ -260,11 +260,11 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
         this.parmPayoutPatternBase = parmPayoutPatternBase;
     }
 
-    public boolean isGlobalTrivialIndicies() {
-        return globalTrivialIndicies;
+    public boolean isGlobalTrivialIndices() {
+        return globalTrivialIndices;
     }
 
-    public void setGlobalTrivialIndicies(boolean globalTrivialIndicies) {
-        this.globalTrivialIndicies = globalTrivialIndicies;
+    public void setGlobalTrivialIndices(boolean globalTrivialIndices) {
+        this.globalTrivialIndices = globalTrivialIndices;
     }
 }
