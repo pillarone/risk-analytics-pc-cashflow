@@ -202,10 +202,15 @@ public class PatternUtils {
     public static PatternPacket adjustedPattern(PatternPacket originalPattern, TreeMap<DateTime, Double> claimUpdates,
                                                 double ultimate, DateTime baseDate, DateTime occurrenceDate,
                                                 DateTime updateDate, DateTime lastReportedDate, DateTimeUtilities.Days360 days360) {
+        if(Math.abs(ultimate) == 0d ) {
+            throw new SimulationException("Insanity detected; Attempted to develop historic claim with 0 ultimate value. Pattern : " + originalPattern.toString() + " ... \n \n Claim Updates : " + claimUpdates.toString()) ;
+        }
+
         if (claimUpdates.isEmpty()) {
             return adjustForNoClaimUpdates(originalPattern, baseDate, updateDate);
         }
         List<Period> cumulativePeriods = new ArrayList<Period>();
+
         List<Double> cumulativeValues = new ArrayList<Double>();
         if (!claimUpdates.containsKey(baseDate)) {
             cumulativePeriods.add(new Period());

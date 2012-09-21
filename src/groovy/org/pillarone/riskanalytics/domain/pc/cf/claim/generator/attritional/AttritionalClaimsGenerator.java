@@ -54,68 +54,71 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
             GroovyUtils.convertToListOfList(new Object[]{0d, 0d}), Arrays.asList(REAL_PERIOD, CLAIM_VALUE),
             ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER));
 
-    private boolean globalTrivialIndices;
-
     private IterationScope iterationScope;
 
 
     @Override
     protected void doCalculation(String phase) {
+        try {
 //        A deal may commute before the end of the contract period. We may hence want to terminate claims generation
 //        Depending on the outcome in the experience account.
-        initIteration(periodStore, periodScope, phase);
+            initIteration(periodStore, periodScope, phase);
 
 //        In this phase check the commutation state from last period. If we are not commuted then calculate claims.
-        if (phase.equals(PHASE_CLAIMS_CALCULATION)) {
-            CommutationState commutationState = (CommutationState) (periodStore.get(COMMUTATION_STATE));
+            if (phase.equals(PHASE_CLAIMS_CALCULATION)) {
+                CommutationState commutationState = (CommutationState) (periodStore.get(COMMUTATION_STATE));
 
-            if (!(commutationState.isCommuted() || commutationState.isCommuteThisPeriod())) {
-                IPeriodCounter periodCounter = periodScope.getPeriodCounter();
-                List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
-                List<GrossClaimRoot> claimsAfterSplit = new ArrayList<GrossClaimRoot>();
-                List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
+                if (!(commutationState.isCommuted() || commutationState.isCommuteThisPeriod())) {
+                    IPeriodCounter periodCounter = periodScope.getPeriodCounter();
+                    List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
+                    List<GrossClaimRoot> claimsAfterSplit = new ArrayList<GrossClaimRoot>();
+                    List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
 
-                List<Factors> runoffFactors = null;
-//                Check that the period we are in covers new claims.
-                if (periodScope.getCurrentPeriod() < globalLastCoveredPeriod) {
-                    if (globalDeterministicMode) {
-                        baseClaims = getDeterministicClaims(parmDeterministicClaims, periodScope, ClaimType.ATTRITIONAL);
-                    } else {
-                        List<Factors> severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices(),
-                                IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
-                        baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
-                                severityFactors, parmParameterizationBasis, this, periodScope);
+                    List<Factors> runoffFactors = null;
+    //                Check that the period we are in covers new claims.
+                    if (periodScope.getCurrentPeriod() < globalLastCoveredPeriod) {
+                        if (globalDeterministicMode) {
+                            baseClaims = getDeterministicClaims(parmDeterministicClaims, periodScope, ClaimType.ATTRITIONAL);
+                        } else {
+                            List<Factors> severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices(),
+                                    IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
+                            baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
+                                    severityFactors, parmParameterizationBasis, this, periodScope);
+                        }
+                        baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter,
+                                globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), DAYS_360, parmPayoutPatternBase);
+                        checkBaseClaims(baseClaims);
+                        runoffFactors = new ArrayList<Factors>();
+                        List<GrossClaimRoot> grossClaimRoots = baseClaimsOfCurrentPeriodAdjustedPattern(baseClaims, parmPayoutPattern, parmActualClaims,
+                                periodScope, parmPayoutPatternBase);
+                        claimsAfterSplit = parmParameterizationBasis.splitClaims(grossClaimRoots, periodScope);
+                        storeClaimsWhichOccurInFuturePeriods(claimsAfterSplit, periodStore);
+                        claims = cashflowsInCurrentPeriod(claimsAfterSplit, runoffFactors, periodScope);
                     }
-                    baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter,
-                            globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), DAYS_360, parmPayoutPatternBase);
-                    checkBaseClaims(baseClaims);
-                    runoffFactors = new ArrayList<Factors>();
-                    List<GrossClaimRoot> grossClaimRoots = baseClaimsOfCurrentPeriodAdjustedPattern(baseClaims, parmPayoutPattern, parmActualClaims,
-                            periodScope, parmPayoutPatternBase);
-                    claimsAfterSplit = parmParameterizationBasis.splitClaims(grossClaimRoots, periodScope);
-                    storeClaimsWhichOccurInFuturePeriods(claimsAfterSplit, periodStore);
-                    claims = cashflowsInCurrentPeriod(claimsAfterSplit, runoffFactors, periodScope);
+                    developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
+                    checkCashflowClaims(claims);
+                    doCashflowChecks(claims, claimsAfterSplit, baseClaims);
+                    setTechnicalProperties(claims);
+                    outClaims.addAll(claims);
                 }
-                developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
-                checkCashflowClaims(claims);
-                doCashflowChecks(claims, claimsAfterSplit, baseClaims);
-                setTechnicalProperties(claims);
-                outClaims.addAll(claims);
-            }
 
-//            In this phase; check for incoming commutation information. If there is none, i.e the inCommutationChannel is null,
-//            Then assume that we want no commutation behaviour. Add an indefinite commutationState object to the environment.
-        } else if (phase.equals(PHASE_STORE_COMMUTATION_STATE)) {
-            if (inCommutationState != null && inCommutationState.size() == 1) {
-                CommutationState packet = inCommutationState.get(0);
-                periodStore.put(COMMUTATION_STATE, packet, 1);
+    //            In this phase; check for incoming commutation information. If there is none, i.e the inCommutationChannel is null,
+    //            Then assume that we want no commutation behaviour. Add an indefinite commutationState object to the environment.
+            } else if (phase.equals(PHASE_STORE_COMMUTATION_STATE)) {
+                if (inCommutationState != null && inCommutationState.size() == 1) {
+                    CommutationState packet = inCommutationState.get(0);
+                    periodStore.put(COMMUTATION_STATE, packet, 1);
+                } else {
+                    throw new SimulationException("Found different to one commutationState in inCommutationState. Period: "
+                            + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
+                }
             } else {
-                throw new SimulationException("Found different to one commutationState in inCommutationState. Period: "
-                        + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
+                throw new SimulationException("Unknown phase: " + phase);
             }
-        } else {
-            throw new SimulationException("Unknown phase: " + phase);
-        }
+        } catch (SimulationException e) {
+            throw new SimulationException("Problem in claims generator in Iteration : "
+                    + iterationScope.getCurrentIteration() + ". Period :" + periodScope.getCurrentPeriod() + "with seed : " + simulationScope.getSimulation().getRandomSeed().toString()
+                     +  "\n \n " + e.getMessage(), e);        }
     }
 
     private void doCashflowChecks(List<ClaimCashflowPacket> claims, List<GrossClaimRoot> grossClaimRoots, List<ClaimRoot> baseClaims) {
@@ -130,8 +133,8 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
 //                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(periodScope.getPeriodCounter(), null, false));
         for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
             if (grossClaimRoot.exposureStartInCurrentPeriod(periodScope)) {
-                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(counter, runOffFactors, !globalTrivialIndices));
-                outOccurenceUltimateClaims.add(grossClaimRoot.occurenceCashflow(counter));
+                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(counter, runOffFactors, !this.globalTrivialIndices));
+                outOccurenceUltimateClaims.addAll(grossClaimRoot.occurenceCashflow(periodScope));
             }
         }
         return claimCashflowPackets;
@@ -258,13 +261,5 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
 
     public void setParmPayoutPatternBase(PayoutPatternBase parmPayoutPatternBase) {
         this.parmPayoutPatternBase = parmPayoutPatternBase;
-    }
-
-    public boolean isGlobalTrivialIndices() {
-        return globalTrivialIndices;
-    }
-
-    public void setGlobalTrivialIndices(boolean globalTrivialIndices) {
-        this.globalTrivialIndices = globalTrivialIndices;
     }
 }

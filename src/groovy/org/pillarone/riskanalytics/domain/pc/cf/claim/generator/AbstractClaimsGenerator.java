@@ -3,6 +3,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
+import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase;
 import org.pillarone.riskanalytics.core.components.MultiPhaseComposedComponent;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
@@ -39,6 +41,8 @@ import java.util.List;
 abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponent implements IPerilMarker, ICorrelationMarker {
 
     protected PeriodScope periodScope;
+    protected SimulationScope simulationScope;
+    protected IterationScope iterationScope;
     protected PeriodStore periodStore;
     protected Integer globalLastCoveredPeriod;
     protected boolean globalSanityChecks;
@@ -55,6 +59,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     protected PacketList<ClaimCashflowPacket> outOccurenceUltimateClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
 
     protected boolean globalDeterministicMode = false;
+    protected boolean globalTrivialIndices = false;
     protected DateTime globalUpdateDate;
 
     public static final String REAL_PERIOD = "Period (real number)";
@@ -114,7 +119,8 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
                 List<GrossClaimRoot> grossClaimRoots = (List<GrossClaimRoot>) periodStore.get(GROSS_CLAIMS, -periodOffset);
                 if (grossClaimRoots != null) {
                     for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
-                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, globalSanityChecks));
+                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, !globalTrivialIndices));
+                        outOccurenceUltimateClaims.addAll(grossClaimRoot.occurenceCashflow(periodScope));
                     }
                 }
             }
@@ -319,5 +325,29 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
 
     public void setOutOccurenceUltimateClaims(PacketList<ClaimCashflowPacket> outOccurenceUltimateClaims) {
         this.outOccurenceUltimateClaims = outOccurenceUltimateClaims;
+    }
+
+    public boolean isGlobalTrivialIndices() {
+        return globalTrivialIndices;
+    }
+
+    public void setGlobalTrivialIndices(boolean globalTrivialIndices) {
+        this.globalTrivialIndices = globalTrivialIndices;
+    }
+
+    public SimulationScope getSimulationScope() {
+        return simulationScope;
+    }
+
+    public void setSimulationScope(SimulationScope simulationScope) {
+        this.simulationScope = simulationScope;
+    }
+
+    public IterationScope getIterationScope() {
+        return iterationScope;
+    }
+
+    public void setIterationScope(IterationScope iterationScope) {
+        this.iterationScope = iterationScope;
     }
 }

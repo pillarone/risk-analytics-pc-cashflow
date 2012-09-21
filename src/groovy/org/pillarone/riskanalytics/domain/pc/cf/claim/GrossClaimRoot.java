@@ -15,7 +15,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase;
 
 import java.util.*;
 
@@ -228,9 +227,13 @@ public final class GrossClaimRoot implements IClaimRoot {
         }
     }
 
-    public ClaimCashflowPacket occurenceCashflow(IPeriodCounter periodCounter) {
-        int ultimatePeriod = periodCounter.belongsToPeriod(getOccurrenceDate());
-        return new ClaimCashflowPacket(this, claimRoot, getUltimate(), 0, 0, 0, 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), getOccurrenceDate(), ultimatePeriod);
+    public List<ClaimCashflowPacket> occurenceCashflow(PeriodScope periodScope) {
+        final ArrayList<ClaimCashflowPacket> claimCashflowPackets = new ArrayList<ClaimCashflowPacket>();
+        int ultimatePeriod = periodScope.getPeriodCounter().belongsToPeriod(getOccurrenceDate());
+        if (ultimatePeriod == periodScope.getCurrentPeriod()) {
+            claimCashflowPackets.add(new ClaimCashflowPacket(this, claimRoot, getUltimate(), 0, 0, 0, 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), getOccurrenceDate(), ultimatePeriod));
+        }
+        return claimCashflowPackets;
     }
 
     /**
