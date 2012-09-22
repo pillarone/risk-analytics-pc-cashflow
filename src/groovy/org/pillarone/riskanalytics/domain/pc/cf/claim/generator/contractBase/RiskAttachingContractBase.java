@@ -1,6 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase;
 
+import org.jfree.util.Log;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
@@ -40,8 +42,19 @@ public class RiskAttachingContractBase extends AbstractContractBase implements I
      */
     public DateTime occurrenceDate(DateTime inceptionDate, IRandomNumberGenerator dateGenerator,
                                    PeriodScope periodScope, EventPacket event) {
-        int days = (int) (dateGenerator.nextValue().doubleValue() * (365/12d) * underlyingContractLength);
-        return inceptionDate.plusDays(days);
+        double aNumber = dateGenerator.nextValue().doubleValue();
+        DateTime inceptionStartDate = periodScope.getCurrentPeriodStartDate();
+        int days = Days.daysBetween(inceptionStartDate, periodScope.getNextPeriodStartDate()).getDays();
+        int inceptionRandomDays = (int) ((double) days * aNumber);
+
+        double aNotherNumber = dateGenerator.nextValue().doubleValue();
+        DateTime startDate = periodScope.getNextPeriodStartDate();
+        DateTime endDate = startDate.plusMonths(underlyingContractLength);
+        int contractDays = Days.daysBetween(startDate, endDate).getDays();
+        int contractRandomDays = (int) ((double) contractDays * aNotherNumber);
+
+        DateTime occurenceAsPerExposurePattern = inceptionStartDate.plusDays(inceptionRandomDays + contractRandomDays );
+        return occurenceAsPerExposurePattern;
     }
 
     /**
@@ -51,8 +64,8 @@ public class RiskAttachingContractBase extends AbstractContractBase implements I
      * @return This is start of the contract exposure... NOT the inception date of the claim.
      */
     public DateTime exposureStartDate(PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
-        return DateTimeUtilities.getDate(periodScope, dateGenerator.nextValue().doubleValue());
-//        return periodScope.getCurrentPeriodStartDate();
+        return periodScope.getCurrentPeriodStartDate();
+
     }
 
     /**
@@ -80,7 +93,11 @@ public class RiskAttachingContractBase extends AbstractContractBase implements I
             double splittedUltimate = claimRoot.getUltimate() / (double) splittedClaimsNumber();
             for (int j = 0; j < splittedClaimsNumber(); j++) {
                 DateTime occurrenceDate = occurrenceDate(claimRoot.getExposureStartDate(), dateGen, periodScope, claimRoot.getEvent());
-                claimRoots.add(new GrossClaimRoot(claimRoot, splittedUltimate, occurrenceDate, claimRoot.getStartDateForPatterns()));
+                if(claimRoot.getExposureStartDate().isAfter(occurrenceDate)) {
+                    claimRoots.add(new GrossClaimRoot(claimRoot, splittedUltimate, claimRoot.getExposureStartDate(), claimRoot.getStartDateForPatterns()));
+                } else {
+                    claimRoots.add(new GrossClaimRoot(claimRoot, splittedUltimate, occurrenceDate, claimRoot.getStartDateForPatterns()));
+                }
             }
         }
         return claimRoots;

@@ -37,7 +37,8 @@ public class LossesOccurringContractBase extends AbstractContractBase implements
     public DateTime occurrenceDate(DateTime inceptionDate, IRandomNumberGenerator dateGenerator,
                                    PeriodScope periodScope, EventPacket event) {
         if (event == null) {
-            return DateTimeUtilities.getDate(periodScope, dateGenerator.nextValue().doubleValue());
+            return DateTimeUtilities.randomDate(inceptionDate, periodScope.getNextPeriodStartDate(), dateGenerator)
+            ;
         }
         else {
             return event.getDate();

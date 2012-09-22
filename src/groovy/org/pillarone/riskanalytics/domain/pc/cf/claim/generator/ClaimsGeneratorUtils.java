@@ -76,8 +76,6 @@ public class ClaimsGeneratorUtils {
             EventPacket event = events == null ? null : events.get(i);
             // todo(sku): replace with information from underwriting
             DateTime exposureStartDate = contractBase.exposureStartDate(periodScope, dateGenerator);
-            int splittedClaimNumber = contractBase.splittedClaimsNumber();
-
             double ultimate = (Double) claimSizeGenerator.nextValue() * -severityScaleFactor;
             DateTime occurrenceDate = contractBase.occurrenceDate(exposureStartDate, dateGenerator, periodScope, event);
             double scaleFactor = IndexUtils.aggregateFactor(severityFactors, exposureStartDate, periodScope.getPeriodCounter(), exposureStartDate);
