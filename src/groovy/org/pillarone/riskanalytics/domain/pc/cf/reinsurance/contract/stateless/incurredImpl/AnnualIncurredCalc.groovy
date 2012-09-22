@@ -13,6 +13,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.A
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IIncurredCalculation
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ScaledPeriodLayerParameters
 
 /**
  * author simon.parten @ art-allianz . com
@@ -74,7 +75,7 @@ public class AnnualIncurredCalc implements IIncurredCalculation {
         return additionalPremiumAllLayers;
     }
 
-    public double cededIncurredRespectTerm(List<IClaimRoot> incurredClaims, PeriodLayerParameters layerParameters, PeriodScope periodScope, double termExcess, double termLimit, IPeriodCounter counter, ContractCoverBase coverageBase) {
+    public double cededIncurredRespectTerm(List<IClaimRoot> incurredClaims, ScaledPeriodLayerParameters scaledLayerParameters, PeriodScope periodScope, double termExcess, double termLimit, IPeriodCounter counter, ContractCoverBase coverageBase) {
         throw new SimulationException("Annual calculation was asked for a term calculation. It has no knowledge of this");
     }
 }

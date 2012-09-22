@@ -112,7 +112,7 @@ public class RIUtilities {
 
             List<ClaimCashflowPacket> cashflowPackets = cashflowsByKey.get(claimRoot);
             for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
-                if (cashflowPacket.getDate().isAfter(latestPacket.getDate())) {
+                if (cashflowPacket.getDate().isAfter(latestPacket.getDate()) && cashflowPacket.getPaidCumulatedIndexed() < 0) {
                     latestPacket = cashflowPacket;
                 }
             }

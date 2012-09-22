@@ -19,6 +19,10 @@ public class PeriodLayerParameters {
     public PeriodLayerParameters() {
     }
 
+    public PeriodLayerParameters(PeriodLayerParameters layerParams) {
+        this.layerByPeriod = layerParams.layerByPeriod;
+    }
+
     private LayerParameters add(int period, int layer, double share, double attachmentPoint, double limit, double annualAttachment, double annualLimit) {
         Map<Integer, LayerParameters> layerMap = layerByPeriod.get(period);
         if (layerMap == null) {

@@ -5,15 +5,19 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.Component;
+import org.pillarone.riskanalytics.core.components.IterationStore;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.AllPeriodUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.IExposureBaseStrategy;
@@ -45,9 +49,11 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
      * Injected by framework
      */
     private IterationScope iterationScope;
+    private IterationStore iterationStore;
     private PeriodStore periodStore;
     private PeriodScope periodScope;
     private IPeriodStrategy globalCover;
+    private SimulationScope simulationScope;
     private boolean globalSanityChecks;
 
     /**
@@ -55,6 +61,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
      */
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    private PacketList<AllPeriodUnderwritingInfoPacket> inAllPeriodUnderwritingInfo = new PacketList<AllPeriodUnderwritingInfoPacket>(AllPeriodUnderwritingInfoPacket.class);
 //    Need to wire up some premiums. Hell on earth.
 
     /**
@@ -81,9 +88,11 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
     public static final String GROSS_CLAIMS = "All covered cashflows";
     public static final String CEDED_CLAIMS = "All ceded cashflows";
     public static final String CEDED_INCURRED_CLAIMS = "All ceded cashflows";
+    public static final String UWINFO = "All period UW info";
 
     @Override
     protected void doCalculation() {
+        initIteration();
         doFilter();
         List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
         claims.addAll(inClaims);
@@ -96,10 +105,15 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         Set<ICededRoot> allIncurredCeded = RIUtilities.incurredCededClaims(cededCashflowsToDate, IncurredClaimBase.BASE);
         allIncurredCededClaims.addAll(new ArrayList<ICededRoot>(allIncurredCeded));
 
-        PeriodLayerParameters layerParameters = ((NonPropTemplateContractStrategy) parmContractStructure).getContractsByPeriod();
+        ScaledPeriodLayerParameters layerParameters = ((ScaledPeriodLayerParameters) ((NonPropTemplateContractStrategy) parmContractStructure).scalablePeriodLayerParameters());
+        layerParameters.setExposureBase(parmContractBase.exposureBase());
+        layerParameters.setCounter(periodScope.getPeriodCounter());
+        AllPeriodUnderwritingInfoPacket packet = (AllPeriodUnderwritingInfoPacket) iterationStore.get(UWINFO, -periodScope.getCurrentPeriod());
+        layerParameters.setUwInfo(packet);
+        List<LayerParameters> layers = layerParameters.getLayers(periodScope.getCurrentPeriod());
         Double termLimit = ((NonPropTemplateContractStrategy) parmContractStructure).getTermLimit();
         Double termExcess = ((NonPropTemplateContractStrategy) parmContractStructure).getTermDeductible();
-        List<LayerParameters> layers = layerParameters.getLayers(periodScope.getCurrentPeriod());
+
 
 //        Incurred calc
         Set<IClaimRoot> incurredClaimsInContractPeriod = RIUtilities.incurredClaimsByDate(periodScope.getCurrentPeriodStartDate(), periodScope.getNextPeriodStartDate().minusMillis(1),
@@ -126,7 +140,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
                     new ArrayList<UnderwritingInfoPacket>(), periodScope.getPeriodCounter());
         } catch (SimulationException ex) {
             throw new SimulationException(" Insanity detected in structure module : " + this.getName() + "\n In iteration :"
-                    + iterationScope.getCurrentIteration() + "\n Period : " + periodScope.getCurrentPeriod() + "    .... Please see logs.   \n", ex);
+                    + iterationScope.getCurrentIteration() + "\n Period : " + periodScope.getCurrentPeriod() + ". Seed : " + simulationScope.getSimulation().getRandomSeed() + "   .... Please see logs.   \n" + ex.getMessage(), ex);
         }
         RIUtilities.addMarkers(paidClaims, this);
         outClaimsCeded.addAll(paidClaims);
@@ -135,14 +149,30 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     }
 
+    private void initIteration() {
+        if (iterationScope.isFirstIteration() && periodScope.isFirstPeriod()) {
+            if (parmContractBase.exposureBase() != ExposureBase.ABSOLUTE) {
+                AllPeriodUnderwritingInfoPacket uwInfo = inAllPeriodUnderwritingInfo.get(0);
+                iterationStore.put(UWINFO, uwInfo);
+            } else {
+                AllPeriodUnderwritingInfoPacket uwInfo = new AllPeriodUnderwritingInfoPacket();
+                iterationStore.put(UWINFO, uwInfo);
+            }
+        }
+    }
+
     private IncurredClaimAndAP incurredResultsThisSimPeriod(Set<IClaimRoot> incurredClaimsInContractPeriod) {
 
         IIncurredCalculation incurredCalc = new TermIncurredCalculation();
 
-        PeriodLayerParameters layerParameters = ((NonPropTemplateContractStrategy) parmContractStructure).getContractsByPeriod();
+        ScaledPeriodLayerParameters layerParameters = ((ScaledPeriodLayerParameters) ((NonPropTemplateContractStrategy) parmContractStructure).scalablePeriodLayerParameters());
+        layerParameters.setExposureBase(parmContractBase.exposureBase());
+        layerParameters.setCounter(periodScope.getPeriodCounter());
+        AllPeriodUnderwritingInfoPacket packet = (AllPeriodUnderwritingInfoPacket) iterationStore.get(UWINFO, -periodScope.getCurrentPeriod());
+        layerParameters.setUwInfo(packet);
+        List<LayerParameters> layers = layerParameters.getLayers(periodScope.getCurrentPeriod());
         Double termLimit = ((NonPropTemplateContractStrategy) parmContractStructure).getTermLimit();
         Double termExcess = ((NonPropTemplateContractStrategy) parmContractStructure).getTermDeductible();
-        List<LayerParameters> layers = layerParameters.getLayers(periodScope.getCurrentPeriod());
 
         List<ClaimCashflowPacket> claims = allClaimsToDate(periodScope, periodStore, GROSS_CLAIMS);
         List<IClaimRoot> incurredClaims = new ArrayList<IClaimRoot>(RIUtilities.incurredClaims(claims, IncurredClaimBase.BASE));
@@ -153,10 +183,15 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
     }
 
     private Map<Integer, Double> incrementalPaidAmountByModelPeriod(List<ClaimCashflowPacket> allPaidClaims) {
-        PeriodLayerParameters layerParameters = ((NonPropTemplateContractStrategy) parmContractStructure).getContractsByPeriod();
+        ScaledPeriodLayerParameters layerParameters = ((NonPropTemplateContractStrategy) parmContractStructure).scalablePeriodLayerParameters();
+        layerParameters.setExposureBase(parmContractBase.exposureBase());
+        layerParameters.setCounter(periodScope.getPeriodCounter());
+        AllPeriodUnderwritingInfoPacket packet = (AllPeriodUnderwritingInfoPacket) iterationStore.get(UWINFO, -periodScope.getCurrentPeriod());
+        layerParameters.setUwInfo(packet);
+        List<LayerParameters> layers = layerParameters.getLayers(periodScope.getCurrentPeriod());
         Double termLimit = ((NonPropTemplateContractStrategy) parmContractStructure).getTermLimit();
         Double termExcess = ((NonPropTemplateContractStrategy) parmContractStructure).getTermDeductible();
-        List<LayerParameters> layers = layerParameters.getLayers(periodScope.getCurrentPeriod());
+
 
         List<ClaimCashflowPacket> claims = allClaimsToDate(periodScope, periodStore, GROSS_CLAIMS);
 
@@ -318,5 +353,29 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     public void setParmContractStructure(IReinsuranceContractStrategy parmContractStructure) {
         this.parmContractStructure = parmContractStructure;
+    }
+
+    public PacketList<AllPeriodUnderwritingInfoPacket> getInAllPeriodUnderwritingInfo() {
+        return inAllPeriodUnderwritingInfo;
+    }
+
+    public void setInAllPeriodUnderwritingInfo(PacketList<AllPeriodUnderwritingInfoPacket> inAllPeriodUnderwritingInfo) {
+        this.inAllPeriodUnderwritingInfo = inAllPeriodUnderwritingInfo;
+    }
+
+    public IterationStore getIterationStore() {
+        return iterationStore;
+    }
+
+    public void setIterationStore(IterationStore iterationStore) {
+        this.iterationStore = iterationStore;
+    }
+
+    public SimulationScope getSimulationScope() {
+        return simulationScope;
+    }
+
+    public void setSimulationScope(SimulationScope simulationScope) {
+        this.simulationScope = simulationScope;
     }
 }

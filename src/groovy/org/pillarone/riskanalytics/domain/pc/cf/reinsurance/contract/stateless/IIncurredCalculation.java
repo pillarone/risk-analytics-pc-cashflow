@@ -15,5 +15,5 @@ public interface IIncurredCalculation {
 
     double additionalPremiumAllLayers(Collection<IClaimRoot> incurredClaims, Collection<LayerParameters> layerParameters, double layerPremium);
 
-    double cededIncurredRespectTerm(List<IClaimRoot> incurredClaims, PeriodLayerParameters layerParameters, PeriodScope periodScope, double termExcess, double termLimit, IPeriodCounter counter, ContractCoverBase coverageBase);
+    double cededIncurredRespectTerm(List<IClaimRoot> incurredClaims, ScaledPeriodLayerParameters scaledLayerParameters, PeriodScope periodScope, double termExcess, double termLimit, IPeriodCounter counter, ContractCoverBase coverageBase);
 }

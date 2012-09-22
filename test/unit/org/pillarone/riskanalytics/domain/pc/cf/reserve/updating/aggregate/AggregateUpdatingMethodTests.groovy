@@ -24,6 +24,8 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
     private static final DateTimeUtilities.Days360 days360 = DateTimeUtilities.Days360.US;
 
     DateTime date20100101 = new DateTime(2010,1,1,0,0,0,0)
+    DateTime date20110101 = new DateTime(2011,1,1,0,0,0,0)
+    DateTime date20120101 = new DateTime(2012,1,1,0,0,0,0)
     DateTime date20100310 = new DateTime(2010,3,10,0,0,0,0)
     DateTime date20110210 = new DateTime(2011,2,10,0,0,0,0)
     DateTime date20120330 = new DateTime(2012,3,30,0,0,0,0)
@@ -35,8 +37,8 @@ class AggregateUpdatingMethodTests extends GroovyTestCase {
 
     void testOriginal() {
         List<ClaimRoot> baseClaims1 = [ new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20100310) ]
-        List<ClaimRoot> baseClaims2 = [ new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20110210) ]
-        List<ClaimRoot> baseClaims3 = [ new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20100101, date20120330) ]
+        List<ClaimRoot> baseClaims2 = [ new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20110101, date20110210) ]
+        List<ClaimRoot> baseClaims3 = [ new ClaimRoot(-75000d, ClaimType.AGGREGATED, date20120101, date20120330) ]
 
         IAggregateActualClaimsStrategy actualClaims = AggregateActualClaimsStrategyType.getStrategy(
                 AggregateActualClaimsStrategyType.AGGREGATE,

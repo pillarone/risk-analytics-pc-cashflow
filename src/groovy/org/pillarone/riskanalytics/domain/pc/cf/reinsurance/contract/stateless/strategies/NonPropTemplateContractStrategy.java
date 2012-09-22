@@ -20,6 +20,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilizati
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.PeriodLayerParameters;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ScaledPeriodLayerParameters;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.AdditionalPremiumConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.LayerConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts.TemplateContractType;
@@ -136,6 +137,11 @@ public class NonPropTemplateContractStrategy extends AbstractParameterObject imp
     public PeriodLayerParameters getContractsByPeriod() {
         initContractsByPeriodAndPeriodCovered();
         return contractsByPeriod;
+    }
+
+    public ScaledPeriodLayerParameters scalablePeriodLayerParameters() {
+        initContractsByPeriodAndPeriodCovered();
+        return new ScaledPeriodLayerParameters(contractsByPeriod);
     }
 
     public static final String TERM_LIMIT = "termLimit";

@@ -79,11 +79,11 @@
         <mkdir dir="test/data/spreadsheets/validationfailed"/>
         <exec executable="${grails}" failonerror="true" resolveexecutable="true">
             <arg value="test-app"/>
-            <arg value="-coverage"/>
+            <!--<arg value="-coverage"/>-->
             <!--<arg value="-echoOut"/>-->
             <env key="GRAILS_HOME" value="${GRAILS_HOME}"/>
             <env key="JAVA_OPTS"
-                 value="-Xmx512m -XX:MaxPermSize=128m -Duser.language='en'"/>
+                 value="-Xmx512m -XX:MaxPermSize=128m -XX:-UseSplitVerifier -Duser.language='en'"/>
         </exec>
         <copy todir="${dist.dir}">
             <fileset dir="target" includes="test-reports/"/>

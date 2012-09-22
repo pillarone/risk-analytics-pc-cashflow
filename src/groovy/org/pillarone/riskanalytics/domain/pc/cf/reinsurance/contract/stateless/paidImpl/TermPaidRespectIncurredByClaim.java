@@ -6,16 +6,11 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AdditionalPremiumPerLayer;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.PeriodLayerParameters;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IPaidCalculation;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl.TermIncurredCalculation;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
 
 import java.util.*;
@@ -35,11 +30,11 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
         return lossAfterShareAndProRata;
     }
 
-    public double cumulativePaidForPeriodIgnoreTermStructure(Collection<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters, PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess, int period) {
+    public double cumulativePaidForPeriodIgnoreTermStructure(Collection<ClaimCashflowPacket> allPaidClaims, ScaledPeriodLayerParameters layerParameters, PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess, int period) {
         return 0d;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public Map<Integer, Double> cededIncrementalPaidRespectTerm(List<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters,
+    public Map<Integer, Double> cededIncrementalPaidRespectTerm(List<ClaimCashflowPacket> allPaidClaims, ScaledPeriodLayerParameters layerParameters,
                                                                 PeriodScope periodScope, ContractCoverBase coverageBase,
                                                                 double termLimit, double termExcess, DateTime fromDate, DateTime toDate, boolean sanityChecks) {
 
@@ -59,10 +54,10 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
                 double paidPriorSimPeriod = paidByPeriodUpToFilterFromDate.get(modelPeriod);
                 double paidToCurrentSimPoint = cumulativePaidToDate.get(modelPeriod);
                 double cumPaid = paidToCurrentSimPoint - paidPriorSimPeriod;
-                if (cumPaid < -0.000000005) {
+                if (cumPaid < - 0.000000005) {
 
                     String message = "Insanity detected: incremental paid amount in model period : " + modelPeriod + " is calculated as negative. " + cumPaid +
-                            ". Contact support";
+                            ". Contact support. " ;
                     LOG.error(message);
                     if(sanityChecks) {
                         throw new SimulationException(message);
@@ -75,7 +70,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
         return paidByPeriod;
     }
 
-    public Map<Integer, Double> cededCumulativePaidRespectTerm(Collection<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters, PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess) {
+    public Map<Integer, Double> cededCumulativePaidRespectTerm(Collection<ClaimCashflowPacket> allPaidClaims, ScaledPeriodLayerParameters layerParameters, PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess) {
 
         TermIncurredCalculation incCalc = new TermIncurredCalculation();
         List<IClaimRoot> allIncurredClaims = new ArrayList<IClaimRoot>(RIUtilities.incurredClaims(allPaidClaims, IncurredClaimBase.BASE));

@@ -17,14 +17,14 @@ public interface IPaidCalculation {
 
     double layerCededPaid(Collection<ClaimCashflowPacket> layerCashflows, LayerParameters layerParameters);
 
-    Map<Integer, Double> cededIncrementalPaidRespectTerm(List<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters,
+    Map<Integer, Double> cededIncrementalPaidRespectTerm(List<ClaimCashflowPacket> allPaidClaims, ScaledPeriodLayerParameters layerParameters,
                                                          PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess, DateTime fromDate, DateTime toDate, boolean sanityChecks);
 
     double paidLossAllLayers(Collection<ClaimCashflowPacket> allLayerCashflows, Collection<LayerParameters> layerParameters);
 
     double additionalPremiumByLayer(Collection<ClaimCashflowPacket> cashflowsByLayer, LayerParameters layerParameters, double layerPremium);
 
-    double cumulativePaidForPeriodIgnoreTermStructure(Collection<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters,
+    double cumulativePaidForPeriodIgnoreTermStructure(Collection<ClaimCashflowPacket> allPaidClaims, ScaledPeriodLayerParameters layerParameters,
                                                       PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess, int period);
 
 
