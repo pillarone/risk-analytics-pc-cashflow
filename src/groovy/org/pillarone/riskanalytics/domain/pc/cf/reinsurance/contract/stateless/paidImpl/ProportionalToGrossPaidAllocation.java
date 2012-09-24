@@ -44,6 +44,7 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
             Map<IClaimRoot, Collection<ClaimCashflowPacket>> cashflows = cashflowsByKey.asMap();
 
             for (Map.Entry<IClaimRoot, Collection<ClaimCashflowPacket>> packetEntrys : cashflows.entrySet()) {
+                ICededRoot cededRoot = GRIUtilities.findCededClaimRelatedToGrossClaim(packetEntrys.getKey(), incurredCededClaims);
                 List<ClaimCashflowPacket> cashflowPackets = new ArrayList<ClaimCashflowPacket>(packetEntrys.getValue());
                 double grossIncurredByClaimRatio = packetEntrys.getKey().getUltimate() / grossIncurredInPeriod;
                 double claimPaidInContractYear = grossIncurredByClaimRatio * cededPaidAmountInModelPeriodThisSimPeriod;
@@ -51,7 +52,7 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                 double sumIncrementsOfThisClaim = GRIUtilities.incrementalCashflowSum(cashflowPackets);
 
                 IClaimRoot keyClaim = base.parentClaim(cashflowPackets.get(0));
-                ICededRoot cededRoot = GRIUtilities.findCededClaimRelatedToGrossClaim(packetEntrys.getKey(), incurredCededClaims);
+
                 ClaimCashflowPacket latestCededCashflow = GRIUtilities.findCashflowToGrossClaim(keyClaim, latestCededCashflowsByIncurredClaim, IncurredClaimBase.KEY);
 
                 boolean setUltimate = false;
@@ -74,8 +75,8 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                     ClaimCashflowPacket claimCashflowPacket = new ClaimCashflowPacket(cededRoot, cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, setUltimate);
                     if (cumulatedCededForThisClaim < cededRoot.getUltimate()) {
 
-                        String message = "Insanity detected : " + cededRoot.toString() + " has an ultimate smaller " +
-                                "than the paid amount " + claimCashflowPacket.toString() + "" +
+                        String message = "Insanity detected : " + cededRoot.getUltimate() + " has an ultimate of smaller magnitude " +
+                                "than the paid amount " + claimCashflowPacket.getPaidCumulatedIndexed() + "" +
                                 "This will create inconsistencies in higher structures. Contact development";
                         LOG.error(message);
                         if (sanityChecks) {

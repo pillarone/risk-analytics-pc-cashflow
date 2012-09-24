@@ -19,6 +19,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.P
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.TestClaimUtils
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ScaledPeriodLayerParameters
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.AllPeriodUnderwritingInfoPacket
 
 /**
  *   author simon.parten @ art-allianz . com
@@ -76,7 +79,10 @@ class PaidCalcTest extends GroovyTestCase {
         List<ClaimCashflowPacket> period1Claims = RIUtilities.cashflowsByIncurredDate(start2010, start2011.minusMillis(1), grossClaims, ContractCoverBase.LOSSES_OCCURING)
         List<ClaimCashflowPacket> period1Claims2010 = period1Claims.findAll {it -> it.getDate().isBefore(start2011) }
 
-        PeriodLayerParameters allLayers = new PeriodLayerParameters()
+        ScaledPeriodLayerParameters allLayers = new ScaledPeriodLayerParameters()
+        allLayers.setExposureBase(ExposureBase.ABSOLUTE)
+        allLayers.setCounter(periodScope.getPeriodCounter())
+        allLayers.setUwInfo(new AllPeriodUnderwritingInfoPacket())
         allLayers.add(0, 1, 1, 60, 90, 0, 0, 0, APBasis.LOSS)
         Map<Integer, Double> period1Calc = calculation.cededCumulativePaidRespectTerm(period1Claims2010,
                 allLayers, periodScope, ContractCoverBase.LOSSES_OCCURING, 240, 10)

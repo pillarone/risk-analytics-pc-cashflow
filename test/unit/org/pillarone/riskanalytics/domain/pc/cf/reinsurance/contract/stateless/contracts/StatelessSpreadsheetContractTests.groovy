@@ -17,6 +17,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.c
 import org.pillarone.riskanalytics.domain.test.SpreadsheetImporter
 import org.pillarone.riskanalytics.domain.test.SpreadsheetUnitTest
 import org.pillarone.riskanalytics.domain.pc.cf.global.AnnualPeriodStrategy
+import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope
+import org.pillarone.riskanalytics.core.components.IterationStore
 
 /**
  * This spreadsheet test does not check any reinstatements and AP calculations as they are not implemented so far
@@ -48,6 +50,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                                                 [0d] * numberOfLayers, ['PREMIUM'] * numberOfLayers],
                                         LayerConstraints.columnHeaders, ConstraintsFactory.getConstraints(LayerConstraints.IDENTIFIER))]),
                 iterationScope: iterationScope,
+                iterationStore: new IterationStore(iterationScope),
                 periodScope: iterationScope.getPeriodScope(),
                 globalCover: new AnnualPeriodStrategy(startCover: beginOfCover),
                 periodStore: iterationScope.periodStores[0])
@@ -58,6 +61,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                                                 List<Integer> layers, List<Double> shares,
                                                 List<Double> periodExcess, List<Double> periodLimit,
                                                 List<Double> claimExcess, List<Double> claimLimit, DateTime beginOfCover) {
+
         IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
         int numberOfLayers = layers.size()
         return new StatelessRIContract(
@@ -73,6 +77,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                                                 [0d] * numberOfLayers, ['PREMIUM'] * numberOfLayers],
                                         LayerConstraints.columnHeaders, ConstraintsFactory.getConstraints(LayerConstraints.IDENTIFIER))]),
                 iterationScope: iterationScope,
+                iterationStore: new IterationStore(iterationScope),
                 periodScope: iterationScope.getPeriodScope(),
                 globalCover: new AnnualPeriodStrategy(startCover: beginOfCover),
                 periodStore: iterationScope.periodStores[0])

@@ -13,6 +13,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.i
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
 import org.hibernate.dialect.IngresDialect
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ScaledPeriodLayerParameters
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.AllPeriodUnderwritingInfoPacket
 
 /**
  * Created with IntelliJ IDEA.
@@ -113,7 +116,10 @@ class IncurredCalcTest extends GroovyTestCase {
         TermIncurredCalculation calculation = new TermIncurredCalculation()
         PeriodScope periodScope = TestPeriodScopeUtilities.getPeriodScope(start2010, 3)
 
-        PeriodLayerParameters layerParameters = new PeriodLayerParameters()
+        ScaledPeriodLayerParameters layerParameters = new ScaledPeriodLayerParameters()
+        layerParameters.setExposureBase(ExposureBase.ABSOLUTE)
+        layerParameters.setCounter(periodScope.getPeriodCounter())
+        layerParameters.setUwInfo(new AllPeriodUnderwritingInfoPacket())
         layerParameters.add(0, 1, 1, 0, 0, 0, 0, 0, APBasis.NCB)
         double incurredFirstCalc = calculation.cededIncurredRespectTerm( grossClaims, layerParameters, periodScope, 100, 400, periodScope.getPeriodCounter(), ContractCoverBase.LOSSES_OCCURING )
         assertEquals("First period inc term deductible", 350, incurredFirstCalc)

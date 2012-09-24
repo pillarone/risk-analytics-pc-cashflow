@@ -7,8 +7,12 @@ import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.AllPeriodUnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ScaledPeriodLayerParameters;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
 import java.util.*;
@@ -98,6 +102,15 @@ public class RIUtilities {
         return claimsOfInterest;
     }
 
+    /**
+     * This method attempts to find the lastest cashflow by incurred claim. It first attempts to find the first non-zero cashflow.
+     *
+     * If none is found it searches for a zero cashflow.
+     *
+     * @param cashflows
+     * @param base
+     * @return
+     */
     public static List<ClaimCashflowPacket> latestCashflowByIncurredClaim(List<ClaimCashflowPacket> cashflows, IncurredClaimBase base) {
         Set<IClaimRoot> claimRoots = RIUtilities.incurredClaims(cashflows, base);
 
@@ -111,12 +124,23 @@ public class RIUtilities {
             ClaimCashflowPacket latestPacket = new ClaimCashflowPacket(claimRoot1, claimRoot1);
 
             List<ClaimCashflowPacket> cashflowPackets = cashflowsByKey.get(claimRoot);
+            boolean foundNonZeroCashflow = false;
             for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
                 if (cashflowPacket.getDate().isAfter(latestPacket.getDate()) && cashflowPacket.getPaidCumulatedIndexed() < 0) {
                     latestPacket = cashflowPacket;
+                    foundNonZeroCashflow = true;
                 }
             }
-            latestUpdates.add(latestPacket);
+            if(foundNonZeroCashflow) {
+                latestUpdates.add(latestPacket);
+            } else {
+                for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
+                    if (cashflowPacket.getDate().isAfter(latestPacket.getDate())) {
+                        latestPacket = cashflowPacket;
+                    }
+                }
+                latestUpdates.add(latestPacket);
+            }
         }
 
         return latestUpdates;

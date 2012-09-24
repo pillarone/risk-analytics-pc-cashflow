@@ -95,7 +95,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
      * @param termLimit
      * @return
      */
-    public Map<Integer, Double> cededPaidByModelPeriod(PeriodScope periodScope, Collection<ClaimCashflowPacket> allPaidClaims, PeriodLayerParameters layerParameters, ContractCoverBase base, int periodTo, double termExcess, double termLimit) {
+    public Map<Integer, Double> cededPaidByModelPeriod(PeriodScope periodScope, Collection<ClaimCashflowPacket> allPaidClaims, ScaledPeriodLayerParameters layerParameters, ContractCoverBase base, int periodTo, double termExcess, double termLimit) {
         Map<Integer, Double> period_paid = new HashMap<Integer, Double>();
 
         /* As it stands, the spec takes no notice of the term excess when calculating payments.
@@ -138,7 +138,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
      * @param periodTo
      * @return
      */
-    public double cededPaidUpToSimulationPeriod(List<ClaimCashflowPacket> allCashflows, PeriodLayerParameters layerParameters, PeriodScope periodScope, double termExcess, double termLimit, ContractCoverBase coverageBase, int periodTo) {
+    public double cededPaidUpToSimulationPeriod(List<ClaimCashflowPacket> allCashflows, ScaledPeriodLayerParameters layerParameters, PeriodScope periodScope, double termExcess, double termLimit, ContractCoverBase coverageBase, int periodTo) {
 
         IncurredClaimBase claimBase = IncurredClaimBase.BASE;
 
