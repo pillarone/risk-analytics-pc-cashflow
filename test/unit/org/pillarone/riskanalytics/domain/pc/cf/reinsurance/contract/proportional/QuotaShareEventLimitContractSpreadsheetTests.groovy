@@ -61,6 +61,15 @@ class QuotaShareEventLimitContractSpreadsheetTests extends SpreadsheetUnitTest {
             contract.doCalculation()
             for (ClaimCashflowPacket cededClaim : contract.outClaimsCeded) {
                 ReferenceClaim referenceClaim = cededReferenceClaims.get(cededClaim)
+//                if (Math.abs(referenceClaim.ultimate - cededClaim.ultimate()) > EPSILON) {
+//                    println "[${importer.fileName}] correct ceded ultimate ${referenceClaim.dateSummary()} ${referenceClaim.ultimate}, ${cededClaim.ultimate()}"
+//                }
+//                if (Math.abs(referenceClaim.reported - cededClaim.reportedIncrementalIndexed) > EPSILON) {
+//                    println "[${importer.fileName}] correct ceded reported ${referenceClaim.dateSummary()} ${referenceClaim.reported}, ${cededClaim.reportedIncrementalIndexed}"
+//                }
+//                if (Math.abs(referenceClaim.paid - cededClaim.paidIncrementalIndexed) > EPSILON) {
+//                    println "[${importer.fileName}] correct ceded paid ${referenceClaim.dateSummary()} ${referenceClaim.paid}, ${cededClaim.paidIncrementalIndexed}"
+//                }
                 assertEquals "[${importer.fileName}] correct ceded ultimate ${referenceClaim.dateSummary()}", referenceClaim.ultimate, cededClaim.ultimate(), EPSILON
                 assertEquals "[${importer.fileName}] correct ceded reported ${referenceClaim.dateSummary()}", referenceClaim.reported, cededClaim.reportedIncrementalIndexed, EPSILON
                 assertEquals "[${importer.fileName}] correct ceded paid ${referenceClaim.dateSummary()}", referenceClaim.paid, cededClaim.paidIncrementalIndexed, EPSILON

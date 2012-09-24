@@ -41,6 +41,7 @@ public class GlobalParameters extends GlobalParameterComponent {
         return parmProjection.projectionPeriods();
     }
 
+    @Global(identifier = "sanityChecks")
     public boolean isRuntimeSanityChecks() {
         return runtimeSanityChecks;
     }

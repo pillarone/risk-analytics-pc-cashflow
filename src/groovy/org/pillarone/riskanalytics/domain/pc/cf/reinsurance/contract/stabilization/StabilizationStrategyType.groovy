@@ -3,9 +3,9 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilizat
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.RunOffIndexSelectionTableConstraints
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -15,19 +15,19 @@ class StabilizationStrategyType extends AbstractParameterObjectClassifier {
     public static final StabilizationStrategyType NONE = new StabilizationStrategyType("none", "NONE", [:])
     public static final StabilizationStrategyType FULL = new StabilizationStrategyType("full", "FULL",
             ['inflationIndices': new ConstrainedMultiDimensionalParameter(
-                Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
-                ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER)),
+                Collections.emptyList(), RunOffIndexSelectionTableConstraints.COLUMN_TITLES,
+                ConstraintsFactory.getConstraints(RunOffIndexSelectionTableConstraints.IDENTIFIER)),
              'stabilizationBasedOn': StabilizationBasedOn.PAID])
     public static final StabilizationStrategyType INTEGRAL = new StabilizationStrategyType("integral", "INTEGRAL",
             ['inflationIndices': new ConstrainedMultiDimensionalParameter(
-                Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
-                ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER)),
+                Collections.emptyList(), RunOffIndexSelectionTableConstraints.COLUMN_TITLES,
+                ConstraintsFactory.getConstraints(RunOffIndexSelectionTableConstraints.IDENTIFIER)),
              'stabilizationBasedOn': StabilizationBasedOn.PAID,
              'franchise': 0d])
     public static final StabilizationStrategyType SIC = new StabilizationStrategyType("sic", "SIC",
             ['inflationIndices': new ConstrainedMultiDimensionalParameter(
-                Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
-                ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER)),
+                Collections.emptyList(), RunOffIndexSelectionTableConstraints.COLUMN_TITLES,
+                ConstraintsFactory.getConstraints(RunOffIndexSelectionTableConstraints.IDENTIFIER)),
              'stabilizationBasedOn': StabilizationBasedOn.PAID,
              'franchise': 0d])
 

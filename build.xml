@@ -62,7 +62,7 @@
             <arg value="compile"/>
             <arg value="--non-interactive"/>
             <env key="GRAILS_HOME" value="${GRAILS_HOME}"/>
-            <env key="JAVA_OPTS" value="-Xmx512m -XX:MaxPermSize=128m -Duser.language='en'"/>
+            <env key="JAVA_OPTS" value="-Xmx512m -XX:MaxPermSize=128m -XX:-UseSplitVerifier -Duser.language='en'"/>
         </exec>
     </target>
 
