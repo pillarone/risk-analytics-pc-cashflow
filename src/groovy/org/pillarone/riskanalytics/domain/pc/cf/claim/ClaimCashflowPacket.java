@@ -31,20 +31,24 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private static Log LOG = LogFactory.getLog(ClaimCashflowPacket.class);
 
     /**
-     *  This property is used for the calculation of derived figures and has to be individually set for every gross, ceded
-     *  and net claim.
+     * This property is used for the calculation of derived figures and has to be individually set for every gross, ceded
+     * and net claim.
      */
     private final IClaimRoot baseClaim;
     /**
-     *  This property is used as key and should be the same for claims derived of a common original claim. Don't use
-     *  it for any calculations!
+     * This property is used as key and should be the same for claims derived of a common original claim. Don't use
+     * it for any calculations!
      */
     private final IClaimRoot keyClaim;
     private ExposureInfo exposureInfo;
 
-    /** is different from 0 only in the occurrence period */
+    /**
+     * is different from 0 only in the occurrence period
+     */
     private double ultimate;
-    /** contains the ultimate value of the occurrence period in every period */
+    /**
+     * contains the ultimate value of the occurrence period in every period
+     */
     private double nominalUltimate;
     private double paidIncrementalIndexed;
     private double paidCumulatedIndexed;
@@ -84,7 +88,17 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this(baseClaim, baseClaim);
     }
 
-    private ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim) {
+    public ClaimCashflowPacket(IClaimRoot baseClaim, DateTime date) {
+        this(baseClaim, baseClaim);
+        this.paidIncrementalIndexed = 0d;
+        this.reportedIncrementalIndexed = 0d;
+        this.changeInReservesIndexed = 0d;
+        this.updateDate = date;
+        setDate(date);
+
+    }
+
+    public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim) {
         this.baseClaim = baseClaim;
         this.keyClaim = keyClaim;
         hasUltimate = true;
@@ -129,7 +143,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double paidIncrementalIndexed, double paidCumulatedIndexed,
                                double reportedIncrementalIndexed, double reportedCumulatedIndexed, double reservesIndexed,
-                               double changeInReservesIndexed, double changeInIBNRIndexed, ExposureInfo exposureInfo, 
+                               double changeInReservesIndexed, double changeInIBNRIndexed, ExposureInfo exposureInfo,
                                DateTime updateDate, int updatePeriod) {
         this(baseClaim, baseClaim, ultimate, paidIncrementalIndexed, paidCumulatedIndexed, reportedIncrementalIndexed,
                 reportedCumulatedIndexed, reservesIndexed, changeInReservesIndexed, changeInIBNRIndexed, exposureInfo,
@@ -152,7 +166,9 @@ public class ClaimCashflowPacket extends MultiValuePacket {
                                DateTime updateDate, int updatePeriod) {
         this(baseClaim, keyClaim);
         this.ultimate = ultimate;
-        if (ultimate != 0) { nominalUltimate = ultimate; }
+        if (ultimate != 0) {
+            nominalUltimate = ultimate;
+        }
         this.paidCumulatedIndexed = paidCumulatedIndexed;
         this.paidIncrementalIndexed = paidIncrementalIndexed;
         this.reportedCumulatedIndexed = reportedCumulatedIndexed;
@@ -168,6 +184,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     /**
      * Creates a ceded claim based on its gross claim and a ClaimStorage
+     *
      * @param grossClaim
      * @param claimStorage
      * @param exposureInfo
@@ -190,7 +207,61 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         discountFactors = grossClaim.discountFactors;
         setDate(grossClaim.getUpdateDate());
     }
-    
+
+    /**
+     * Convienience method for setting a new payment amount based on an old Claim Cashflow
+     */
+    public ClaimCashflowPacket(IClaimRoot baseClaim, ClaimCashflowPacket claimCashflowPacket, double paidIncremental, double cumulatedPaid, boolean setUltimate) {
+        this.baseClaim = baseClaim;
+        this.keyClaim = claimCashflowPacket.getBaseClaim();
+        if(setUltimate) {
+            this.ultimate = baseClaim.getUltimate();
+            this.nominalUltimate = ultimate;
+        } else {
+            this.ultimate = 0d;
+            this.nominalUltimate = 0d;
+        }
+
+        this.updateDate = claimCashflowPacket.getUpdateDate();
+        setDate(claimCashflowPacket.getDate());
+        this.paidIncrementalIndexed = paidIncremental;
+        this.paidCumulatedIndexed = cumulatedPaid;
+
+//      Danger here!!!!!
+        this.reportedIncrementalIndexed = 0;
+        this.reportedCumulatedIndexed = baseClaim.getUltimate();
+        this.reservesIndexed = baseClaim.getUltimate() - cumulatedPaid;
+        changeInReservesIndexed = 0;
+        changeInIBNRIndexed = 0;
+
+
+        updateDate = claimCashflowPacket.getUpdateDate();
+        updatePeriod = claimCashflowPacket.getUpdatePeriod();
+        discountFactors = claimCashflowPacket.getDiscountFactors();
+    }
+
+    public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim, DateTime occurenceDate, double paidIncremental, double cumulatedPaid, int currentPeriod) {
+        this.baseClaim = baseClaim;
+        this.keyClaim = keyClaim;
+        this.ultimate = baseClaim.getUltimate();
+        this.nominalUltimate = ultimate;
+        this.updateDate = occurenceDate;
+        setDate(occurenceDate);
+        this.paidIncrementalIndexed = paidIncremental;
+        this.paidCumulatedIndexed = cumulatedPaid;
+
+//      Danger here!!!!!
+        this.reportedIncrementalIndexed = 0;
+        this.reportedCumulatedIndexed = ultimate;
+        this.reservesIndexed = ultimate - cumulatedPaid;
+        changeInReservesIndexed = -paidIncremental;
+        changeInIBNRIndexed = 0;
+
+        updateDate = occurenceDate;
+        updatePeriod = currentPeriod;
+        discountFactors = null;
+    }
+
 
     /**
      * Used to modify the packet date property according the persistence date on a cloned instance.
@@ -271,12 +342,11 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         }
         return updatePeriod;
     }
-    
+
     private static Integer getUpdatePeriod(IPeriodCounter periodCounter, DateTime updateDate) {
         try {
             return periodCounter.belongsToPeriod(updateDate);
-        }
-        catch (NotInProjectionHorizon ex) {
+        } catch (NotInProjectionHorizon ex) {
             LOG.debug(updateDate + " is not in projection horizon");
         }
         return null;
@@ -288,6 +358,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     /**
      * Delegates of method with same name of baseClaim
+     *
      * @param periodScope
      * @return true if occurrence is in current period
      */
@@ -312,27 +383,37 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return reportedIncrementalIndexed;
     }
 
-    public IPerilMarker peril() { return peril; }
-    public IReserveMarker reserve() { return reserve; }
-    public ISegmentMarker segment() { return segment; }
-    public IReinsuranceContractMarker reinsuranceContract() { return reinsuranceContract; }
-    public ILegalEntityMarker legalEntity() { return legalEntity; }
+    public IPerilMarker peril() {
+        return peril;
+    }
+
+    public IReserveMarker reserve() {
+        return reserve;
+    }
+
+    public ISegmentMarker segment() {
+        return segment;
+    }
+
+    public IReinsuranceContractMarker reinsuranceContract() {
+        return reinsuranceContract;
+    }
+
+    public ILegalEntityMarker legalEntity() {
+        return legalEntity;
+    }
 
     public void setMarker(IComponentMarker marker) {
         if (marker == null) return;
         if (IPerilMarker.class.isAssignableFrom(marker.getClass())) {
             peril = (IPerilMarker) marker;
-        }
-        else if (ISegmentMarker.class.isAssignableFrom(marker.getClass())) {
+        } else if (ISegmentMarker.class.isAssignableFrom(marker.getClass())) {
             segment = (ISegmentMarker) marker;
-        }
-        else if (IReinsuranceContractMarker.class.isAssignableFrom(marker.getClass())) {
+        } else if (IReinsuranceContractMarker.class.isAssignableFrom(marker.getClass())) {
             reinsuranceContract = (IReinsuranceContractMarker) marker;
-        }
-        else if (ILegalEntityMarker.class.isAssignableFrom(marker.getClass())) {
+        } else if (ILegalEntityMarker.class.isAssignableFrom(marker.getClass())) {
             legalEntity = (ILegalEntityMarker) marker;
-        }
-        else if (IReserveMarker.class.isAssignableFrom(marker.getClass())) {
+        } else if (IReserveMarker.class.isAssignableFrom(marker.getClass())) {
             reserve = (IReserveMarker) marker;
         }
     }
@@ -341,17 +422,13 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         if (marker == null) return;
         if (IPerilMarker.class.isAssignableFrom(marker)) {
             peril = null;
-        }
-        else if (ISegmentMarker.class.isAssignableFrom(marker)) {
+        } else if (ISegmentMarker.class.isAssignableFrom(marker)) {
             segment = null;
-        }
-        else if (IReinsuranceContractMarker.class.isAssignableFrom(marker)) {
+        } else if (IReinsuranceContractMarker.class.isAssignableFrom(marker)) {
             reinsuranceContract = null;
-        }
-        else if (ILegalEntityMarker.class.isAssignableFrom(marker)) {
+        } else if (ILegalEntityMarker.class.isAssignableFrom(marker)) {
             legalEntity = null;
-        }
-        else if (IReserveMarker.class.isAssignableFrom(marker)) {
+        } else if (IReserveMarker.class.isAssignableFrom(marker)) {
             reserve = null;
         }
     }
@@ -367,9 +444,11 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public ClaimType getClaimType() {
         return baseClaim.getClaimType();
     }
+
     public ExposureInfo getExposureInfo() {
         return exposureInfo;
     }
+
     public boolean hasExposureInfo() {
         return exposureInfo != null;
     }
@@ -477,7 +556,9 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     }
 
     @Deprecated
-    public boolean hasUltimate() { return hasUltimate; }
+    public boolean hasUltimate() {
+        return hasUltimate;
+    }
 
     public double getNominalUltimate() {
         return nominalUltimate;
@@ -503,7 +584,9 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return keyClaim;
     }
 
-    /** property is normally set in the gross phase of the segment */
+    /**
+     * property is normally set in the gross phase of the segment
+     */
     public List<Factors> getDiscountFactors() {
         return discountFactors;
     }

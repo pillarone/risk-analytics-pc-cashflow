@@ -32,7 +32,7 @@ public class DefaultContractBase extends AbstractContractBase implements IReinsu
         throw new SimulationException(errorMessage);
     }
 
-    public DateTime inceptionDate(PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
+    public DateTime exposureStartDate(PeriodScope periodScope, IRandomNumberGenerator dateGenerator) {
         throw new SimulationException(errorMessage);
     }
 

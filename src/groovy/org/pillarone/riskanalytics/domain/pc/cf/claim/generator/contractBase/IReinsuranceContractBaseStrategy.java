@@ -34,10 +34,11 @@ public interface IReinsuranceContractBaseStrategy {
     DateTime inceptionDate(UnderwritingInfoPacket underwritingInfo);
 
     /**
+     *
      * @param dateGenerator
      * @return a generated date
      */
-    DateTime inceptionDate(PeriodScope periodScope, IRandomNumberGenerator dateGenerator);
+    DateTime exposureStartDate(PeriodScope periodScope, IRandomNumberGenerator dateGenerator);
 
     int splittedClaimsNumber();
 

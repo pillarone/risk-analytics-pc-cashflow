@@ -30,7 +30,7 @@ public class AggregateUpdatingOriginalUltimateMethodology extends AggregateUpdat
                                                     IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, DateTimeUtilities.Days360 days360, PayoutPatternBase base) {
         List<ClaimRoot> baseClaimsWithAdjustedUltimate = new ArrayList<ClaimRoot>();
         IClaimRoot baseClaim = baseClaims.get(0);
-        int occurrencePeriod = baseClaim.getOccurrencePeriod(periodCounter);
+        int occurrencePeriod = baseClaim.getInceptionPeriod(periodCounter);
         AggregateHistoricClaim historicClaim = actualClaims.historicClaims(occurrencePeriod, periodCounter, updateDate, base);
         if(historicClaim.noUpdates()) {
             baseClaimsWithAdjustedUltimate.add((ClaimRoot) baseClaim);

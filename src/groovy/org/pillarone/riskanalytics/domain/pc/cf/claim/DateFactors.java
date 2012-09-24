@@ -6,8 +6,10 @@ import org.joda.time.DateTime;
  * Helper class for PatternPacket users
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
+ *
+ * Compare DateFactors by date.
  */
-public class DateFactors {
+public class DateFactors implements Comparable<DateFactors> {
 
     private DateTime date;
     private double factorIncremental;
@@ -40,6 +42,10 @@ public class DateFactors {
         result.append(SEPARATOR);
         result.append(factorCumulated);
         return result.toString();
+    }
+
+    public int compareTo(DateFactors o) {
+        return o.getDate().compareTo(this.getDate());
     }
 
     private static final String SEPARATOR = ", ";

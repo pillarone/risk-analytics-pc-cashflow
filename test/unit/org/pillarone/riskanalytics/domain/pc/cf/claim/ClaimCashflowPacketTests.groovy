@@ -372,7 +372,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
 
         int period = 0
         int claimNumber = 0
-        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, [factors])
+        List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, [factors], true)
         assertEquals "P$period.0 ultimate", 1000, claims[claimNumber].ultimate()
         assertEquals "P$period.0 developed result", 50, claims[claimNumber].developmentResultCumulative()
         assertEquals "P$period.0 developed ultimate", 1050, claims[claimNumber].developedUltimate()
@@ -401,7 +401,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         periodCounter.next()
         factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(2)), 1.60)
         factors = new Factors(factorsPacket, BaseDateMode.START_OF_PROJECTION, IndexMode.STEPWISE_PREVIOUS, null)
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, [factors]))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, [factors], true))
 
         claimNumber++
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
@@ -420,7 +420,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         periodCounter.next()
         factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(3)), 1.77)
         factors = new Factors(factorsPacket, BaseDateMode.START_OF_PROJECTION, IndexMode.STEPWISE_PREVIOUS, null)
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, [factors]))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, [factors], true))
 
         claimNumber++
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()
@@ -441,7 +441,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         periodCounter.next()
         factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(4)), 1.95)
         factors = new Factors(factorsPacket, BaseDateMode.START_OF_PROJECTION, IndexMode.STEPWISE_PREVIOUS, null)
-        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, [factors]))
+        claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, [factors], true))
 
         claimNumber++
         assertEquals "P$period ultimate", 0, claims[claimNumber].ultimate()

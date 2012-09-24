@@ -126,6 +126,14 @@ public class ClaimRoot implements IClaimRoot, Cloneable {
     }
 
     /**
+     * @param periodScope
+     * @return true if inception period is the same as the current period of the periodScope
+     */
+    public final boolean exposureStartInCurrentPeriod(PeriodScope periodScope) {
+        return periodScope.getPeriodCounter().belongsToCurrentPeriod(exposureStartDate);
+    }
+
+    /**
      * @param periodCounter
      * @return if exposure info is attached return its inception period, else the period the exposureStartDate belongs to
      *          or else the occurrence period. If the exposureStartDate is not within the projection horizon, the projection

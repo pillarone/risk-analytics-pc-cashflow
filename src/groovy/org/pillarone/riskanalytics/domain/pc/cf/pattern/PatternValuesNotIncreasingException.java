@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.pattern;
 
+import org.joda.time.DateTime;
+import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 
 import java.util.List;
@@ -13,5 +15,9 @@ public class PatternValuesNotIncreasingException extends SimulationException {
 
     public PatternValuesNotIncreasingException(List<Double> cumulativePeriods) {
         super(PATTERN_VALUES_NOT_INCREASING + PatternSumNotOneException.getErrorPeriods(cumulativePeriods).toString());
+    }
+
+    public PatternValuesNotIncreasingException(List<Double> cumulativePercentages, List<Period> cumPeriods, String errorMessage, DateTime baseDate) {
+        super(errorMessage + " \n \n  " + PatternSumNotOneException.getErrorPeriods(cumulativePercentages, cumPeriods, baseDate).toString());
     }
 }

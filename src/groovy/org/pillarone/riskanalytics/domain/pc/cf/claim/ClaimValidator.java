@@ -13,6 +13,10 @@ public class ClaimValidator {
     private Map<IClaimRoot, IClaimRoot> invertedByOriginalClaim = new HashMap<IClaimRoot, IClaimRoot>();
 
     public ClaimCashflowPacket invertClaimSign(ClaimCashflowPacket claim) {
+//        Don't tamper with ICededRoot claims.
+        if(claim.getBaseClaim() instanceof ICededRoot) {
+            return claim;
+        }
         if (claim.getNominalUltimate() == 0) {
             return claim;
         }

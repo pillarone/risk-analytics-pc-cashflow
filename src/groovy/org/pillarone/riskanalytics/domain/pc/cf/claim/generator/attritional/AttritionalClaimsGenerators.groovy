@@ -54,6 +54,7 @@ class AttritionalClaimsGenerators extends DynamicMultiPhaseComposedComponent {
         replicateInChannels this, 'inFactors'
         replicateInChannels this, 'inPatterns'
         replicateInChannels this, 'inCommutationState'
+
         replicateOutChannels this, 'outClaims'
     }
 }

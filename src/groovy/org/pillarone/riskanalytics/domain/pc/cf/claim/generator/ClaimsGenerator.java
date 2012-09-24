@@ -96,7 +96,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
                         // add claim only to period store if development is required
                         grossClaimRoots.add(grossClaimRoot);
                     }
-                    claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors));
+                    claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, true));
                 }
                 periodStore.put(GROSS_CLAIMS, grossClaimRoots);
             }
@@ -120,7 +120,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
                 List<GrossClaimRoot> grossClaimRoots = (List<GrossClaimRoot>) periodStore.get(GROSS_CLAIMS, -periodOffset);
                 if (grossClaimRoots != null) {
                     for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
-                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors));
+                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, true));
                     }
                 }
             }
