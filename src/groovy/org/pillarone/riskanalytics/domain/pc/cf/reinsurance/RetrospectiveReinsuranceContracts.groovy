@@ -35,7 +35,7 @@ class RetrospectiveReinsuranceContracts extends DynamicComposedComponent {
     PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> outClaimsInward = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
-    PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoInward = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
+    PacketList<UnderwritingInfoPacket> outUnderwritingInfoInward = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
 
     private List contractsBasedOnGrossClaims = []
     /** contains the relations between reinsurance contracts covering legal entities */
