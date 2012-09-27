@@ -47,7 +47,7 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
     }
 
     private int calculateNumberOfClaimsWithAppliedIndices(int numberOfClaims, PeriodScope periodScope, List<Factors> factors) {
-        numberOfClaims *= IndexUtils.aggregateFactor(factors, periodScope.getCurrentPeriodStartDate());
+        numberOfClaims *= IndexUtils.aggregateFactor(factors, periodScope.getCurrentPeriodStartDate(), periodScope.getPeriodCounter(), periodScope.getCurrentPeriodStartDate());
         return numberOfClaims;
     }
 
