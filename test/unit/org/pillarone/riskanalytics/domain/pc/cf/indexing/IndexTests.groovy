@@ -41,26 +41,26 @@ class IndexTests extends GroovyTestCase {
         index.doCalculation()
 
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2011-01-01", 1d, index.outFactors[0].getFactorAtDate(date20110101) // 1 by definition
+        assertEquals "factor for 2011-01-01", 1.000028716181532, index.outFactors[0].getFactorAtDate(date20110101) // 1 by definition
 
         index.reset()
         index.periodScope.prepareNextPeriod()
         index.doCalculation()
 
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2012-01-01", 1.000028716181532, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1)), EPSILON
+        assertEquals "factor for 2012-01-01", 1.1039751667482924, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1)), EPSILON
 
         index.reset()
         index.periodScope.prepareNextPeriod()
         index.doCalculation()
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2013-01-01", 1.1039751667482924, index.outFactors[0].getFactorAtDate(date20110101.plusYears(2)), EPSILON
+        assertEquals "factor for 2013-01-01", 1.1049224089826477, index.outFactors[0].getFactorAtDate(date20110101.plusYears(2)), EPSILON
 
         index.reset()
         index.periodScope.prepareNextPeriod()
         index.doCalculation()
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2014-01-01", 1.1049224089826477, index.outFactors[0].getFactorAtDate(date20110101.plusYears(3)), EPSILON
+        assertEquals "factor for 2014-01-01", 1.1238156820729095, index.outFactors[0].getFactorAtDate(date20110101.plusYears(3)), EPSILON
     }
 
     void testStochasticIndexSystematicSeverities() {
@@ -81,9 +81,8 @@ class IndexTests extends GroovyTestCase {
         index.doCalculation()
 
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2012-01-01", 1, index.outFactors[0].getFactorAtDate(date20110101)
-        assertEquals "factor for 2012-01-01", 1 + 4.5 * 0.95d, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1))
-
+        assertEquals "factor for 2012-01-01", 1 + 4.5 * 0.95d, index.outFactors[0].getFactorAtDate(date20110101), EPSILON
+        assertEquals "factor for 2012-01-01", 1d, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1))
     }
 
     void testDeterministicAnnualChange() {

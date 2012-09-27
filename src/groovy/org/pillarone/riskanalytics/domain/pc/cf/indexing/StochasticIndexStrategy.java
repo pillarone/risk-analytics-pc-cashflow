@@ -21,7 +21,6 @@ import java.util.Map;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-// todo(sku): use startDate param in the factor calculation, currently its ignored and time serie starts with projection start date
 public class StochasticIndexStrategy extends AbstractParameterObject implements IIndexStrategy {
 
     public static final String START_DATE = "startDate";
@@ -54,7 +53,7 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
         double factor = filteredSeverity == null ? previousPeriodFactor * (1 + indexGenerator.nextValue().doubleValue()) :
                 previousPeriodFactor * (1 + indexGenerator.getDistribution().inverseF(filteredSeverity));
         previousPeriodFactor = factor;
-        factors.add(periodScope.getNextPeriodStartDate(), factor);
+        factors.add(periodScope.getCurrentPeriodStartDate(), factor);
         factors.origin = origin;
         return factors;
     }
@@ -64,13 +63,14 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
             indexGenerator = RandomNumberGeneratorFactory.getGenerator(distribution);
         }
         if (periodScope.isFirstPeriod()) {
-            if (startDate.isBefore(periodScope.getCurrentPeriodStartDate())) {
-                previousPeriodFactor = 1 + indexGenerator.nextValue().doubleValue();
+            DateTime indexDate = new DateTime(startDate);
+            previousPeriodFactor = 1d;
+            factors = new FactorsPacket();
+            while (indexDate.isBefore(periodScope.getCurrentPeriodStartDate())) {
+                previousPeriodFactor *= 1 + indexGenerator.nextValue().doubleValue();
+                factors.add(indexDate, previousPeriodFactor);
+                indexDate = indexDate.plusYears(1);
             }
-            else {
-                previousPeriodFactor = 1d;
-            }
-            factors = new FactorsPacket(periodScope.getCurrentPeriodStartDate(), previousPeriodFactor);
         }
     }
 
