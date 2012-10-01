@@ -117,7 +117,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
             }
         } catch (SimulationException e) {
             throw new SimulationException("Problem in claims generator in Iteration : "
-                    + iterationScope.getCurrentIteration() + ". Period :" + periodScope.getCurrentPeriod() + "with seed : " + simulationScope.getSimulation().getRandomSeed().toString()
+                    + iterationScope.getCurrentIteration() + ". Period :" + periodScope.getCurrentPeriod() + " with seed : " + simulationScope.getSimulation().getRandomSeed().toString()
                      +  "\n \n " + e.getMessage(), e);        }
     }
 
@@ -133,7 +133,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
 //                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(periodScope.getPeriodCounter(), null, false));
         for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
             if (grossClaimRoot.exposureStartInCurrentPeriod(periodScope)) {
-                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(counter, runOffFactors, !this.globalTrivialIndices));
+                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(counter, runOffFactors, false));
                 outOccurenceUltimateClaims.addAll(grossClaimRoot.occurenceCashflow(periodScope));
             }
         }

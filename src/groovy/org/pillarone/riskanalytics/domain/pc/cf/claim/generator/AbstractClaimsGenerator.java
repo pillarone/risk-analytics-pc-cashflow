@@ -119,7 +119,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
                 List<GrossClaimRoot> grossClaimRoots = (List<GrossClaimRoot>) periodStore.get(GROSS_CLAIMS, -periodOffset);
                 if (grossClaimRoots != null) {
                     for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
-                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, !globalTrivialIndices));
+                        claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, false));
                         outOccurenceUltimateClaims.addAll(grossClaimRoot.occurenceCashflow(periodScope));
                     }
                 }
