@@ -8,12 +8,14 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.global.SimulationConstants;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IPaidAllocation;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -73,10 +75,14 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
 
                     cumulatedCededForThisClaim += paidAgainstThisPacket;
                     ClaimCashflowPacket claimCashflowPacket = new ClaimCashflowPacket(cededRoot, cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, setUltimate);
-                    if (cumulatedCededForThisClaim < cededRoot.getUltimate()) {
+                    if (
+                            Math.abs(cumulatedCededForThisClaim) > Math.abs(cededRoot.getUltimate()) + SimulationConstants.EPSILON
+                        ) {
 
-                        String message = "Insanity detected : " + cededRoot.getUltimate() + " has an ultimate of smaller magnitude " +
-                                "than the paid amount " + claimCashflowPacket.getPaidCumulatedIndexed() + "" +
+                        DecimalFormat df = new DecimalFormat("#.##");
+
+                        String message = "Insanity detected : " + df.format(cededRoot.getUltimate())  + " has an ultimate of smaller magnitude " +
+                                "than the paid amount " + df.format(claimCashflowPacket.getPaidCumulatedIndexed()) + ". " +
                                 "This will create inconsistencies in higher structures. Contact development";
                         LOG.error(message);
                         if (sanityChecks) {
