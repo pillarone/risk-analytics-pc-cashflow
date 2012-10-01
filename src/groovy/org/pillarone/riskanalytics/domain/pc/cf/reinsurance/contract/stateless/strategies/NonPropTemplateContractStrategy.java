@@ -39,7 +39,7 @@ public class NonPropTemplateContractStrategy extends AbstractParameterObject imp
             GroovyUtils.toList("[[0d],[0d],[0d]]"),
             AdditionalPremiumConstraints.columnHeaders, ConstraintsFactory.getConstraints(AdditionalPremiumConstraints.IDENTIFIER));
     private ConstrainedMultiDimensionalParameter structure = new ConstrainedMultiDimensionalParameter(
-            GroovyUtils.toList("[[1],[1],[0d],[0d],[0d],[0d],[0d],[0d],['PREMIUM']]"),
+            GroovyUtils.toList("[[1],[1],[1d],[0d],[0d],[0d],[0d],[0d],['PREMIUM']]"),
             LayerConstraints.columnHeaders, ConstraintsFactory.getConstraints(LayerConstraints.IDENTIFIER));
 
     private PeriodLayerParameters contractsByPeriod;
