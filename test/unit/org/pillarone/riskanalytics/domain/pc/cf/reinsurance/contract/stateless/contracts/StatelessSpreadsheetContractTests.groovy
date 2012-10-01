@@ -38,7 +38,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
         IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
         int numberOfLayers = layers.size()
         return new StatelessRIContract(
-                parmContractStrategy: TemplateContractType.getStrategy(
+                parmContractStructure: TemplateContractType.getStrategy(
                         TemplateContractType.NONPROPORTIONAL,
                         ['termLimit': termLimit,
                                 'termExcess': termExcess,
@@ -65,7 +65,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
         IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
         int numberOfLayers = layers.size()
         return new StatelessRIContract(
-                parmContractStrategy: TemplateContractType.getStrategy(
+                parmContractStructure: TemplateContractType.getStrategy(
                         TemplateContractType.NONPROPORTIONAL,
                         ['termLimit': termLimit,
                                 'termExcess': termExcess,

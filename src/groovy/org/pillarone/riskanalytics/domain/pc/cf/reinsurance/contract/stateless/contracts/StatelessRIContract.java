@@ -299,14 +299,6 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         this.outContractFinancials = outContractFinancials;
     }
 
-    public IReinsuranceContractStrategy getParmContractStrategy() {
-        return parmContractStructure;
-    }
-
-    public void setParmContractStrategy(IReinsuranceContractStrategy parmContractStrategy) {
-        this.parmContractStructure = parmContractStrategy;
-    }
-
     public ContractCoverBase getParmCoverageBase() {
         return parmCoverageBase;
     }
