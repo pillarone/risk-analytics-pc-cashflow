@@ -61,7 +61,7 @@ class ReinsuranceContracts extends DynamicComposedComponent {
         for (TermReinsuranceContract contract: componentList) {
             if (contract.parmCover.getType().equals(CoverStrategyType.SELECTED)) {
                 SelectedCoverStrategy coverStrategy = (SelectedCoverStrategy) contract.parmCover
-                coverStrategy.getCoveredReinsuranceContractsAndBase(reinsuranceContracts);
+                coverStrategy.getCoveredReinsuranceContractsAndBase();
                 if (coverStrategy.noCover()) {
                     contractsWithNoCover.add(contract)
                 }
@@ -104,7 +104,7 @@ class ReinsuranceContracts extends DynamicComposedComponent {
         for (TermReinsuranceContract contract: componentList) {
             if (contract.parmCover.getType().equals(CoverStrategyType.SELECTED)
                     && ((SelectedCoverStrategy) contract.parmCover).contractBasedCover()) {
-                List<ReinsuranceContractAndBase> contractsAndBase = ((SelectedCoverStrategy) contract.parmCover).getCoveredReinsuranceContractsAndBase(reinsuranceContracts);
+                List<ReinsuranceContractAndBase> contractsAndBase = ((SelectedCoverStrategy) contract.parmCover).getCoveredReinsuranceContractsAndBase();
 
                 for (ReinsuranceContractAndBase contractAndBase : contractsAndBase) {
                     TermReinsuranceContract sourceContract = reinsuranceContracts.get(contractAndBase.reinsuranceContract.name)
