@@ -15,6 +15,16 @@ public class GlobalParameters extends GlobalParameterComponent {
     private boolean runtimeTrivialPatterns = false;
     private boolean runtimeTrivialIndices = false;
     private boolean runtimeSanityChecks = true;
+    private boolean runtimeRunAtMostFivePeriods = false;
+
+    @Global(identifier = "runAtMostFivePeriods")
+    public boolean isRuntimeRunAtMostFivePeriods() {
+        return runtimeRunAtMostFivePeriods;
+    }
+
+    public void setRuntimeRunAtMostFivePeriods(boolean runtimeRunAtMostFivePeriods) {
+        this.runtimeRunAtMostFivePeriods = runtimeRunAtMostFivePeriods;
+    }
 
     @Global(identifier = "projectionStartDate")
     public DateTime projectionStartDate() {
