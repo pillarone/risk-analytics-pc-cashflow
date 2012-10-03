@@ -43,7 +43,6 @@ class AggregateSplitPerSourceCollectingModeStrategyTests extends ModelTest {
 
     void setUp() {
         super.setUp()
-        assertNotNull new CollectorMapping(collectorName: AggregateSplitPerSourceCollectingModeStrategy.IDENTIFIER).save()
     }
 
     void postSimulationEvaluation() {
@@ -200,16 +199,16 @@ class AggregateSplitPerSourceCollectingModeStrategyTests extends ModelTest {
                 'GIRA:reinsuranceContracts:subMotorHullWxl:segments:subMotorHull:claimsGenerators:subMotorHullSingle:outClaimsNet',
                 'GIRA:reinsuranceContracts:subMotorHullWxl:segments:subMotorHull:claimsGenerators:subMotorHullAttritional:outClaimsNet'
         ]
-        // don't count paths containing subcomponents
-        assertEquals '# of paths correct', paths.size(), collectedPaths.size() - 15
+        // on the KTI branch paths are prepared before simulation starts in a generic way, therefore there are more than on the master
+        assertTrue '# of paths correct', paths.size() < collectedPaths.size()
 
         for (int i = 0; i < collectedPaths.size(); i++) {
             if (collectedPaths[i].pathName.contains("subcomponents")) continue
-//            def init = paths.contains(collectedPaths[i].pathName)
-//            if (!paths.remove(collectedPaths[i].pathName)) {
-//                println collectedPaths[i].pathName
-//            }
-            assertTrue "$i ${collectedPaths[i].pathName} found", paths.remove(collectedPaths[i].pathName)
+            def init = paths.contains(collectedPaths[i].pathName)
+
+            if (!paths.remove(collectedPaths[i].pathName)) {
+                println "additionally collected path ${collectedPaths[i].pathName}"
+            }
         }
 
         assertTrue "all paths found $paths.size()", paths.size() == 0
@@ -217,10 +216,13 @@ class AggregateSplitPerSourceCollectingModeStrategyTests extends ModelTest {
 
     void correctFields(List<String> fields) {
         def collectedFields = FieldMapping.list()
-        assertEquals '# of fields correct', fields.size(), collectedFields.size()
+        // on the KTI branch fields are prepared before simulation starts in a generic way, therefore there are more than on the master
+        assertTrue '# of fields correct', fields.size() < collectedFields.size()
 
         for (FieldMapping field : collectedFields) {
-            assertTrue "${field.fieldName}", fields.remove(field.fieldName)
+            if (!fields.remove(field.fieldName)) {
+                println "additionally collected field ${field.fieldName}"
+            }
         }
         assertTrue 'all field found', fields.size() == 0
     }
