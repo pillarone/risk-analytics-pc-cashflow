@@ -40,8 +40,8 @@ public class ReservesGenerator extends Component implements IReserveMarker {
     private ConstrainedString parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker.class, "");
     private ConstrainedString parmReportingPattern = new ConstrainedString(IReportingPatternMarker.class, "");
     private ConstrainedMultiDimensionalParameter parmIndices = new ConstrainedMultiDimensionalParameter(
-            Collections.emptyList(), ReservesIndexSelectionTableConstraints.COLUMN_TITLES,
-            ConstraintsFactory.getConstraints(ReservesIndexSelectionTableConstraints.IDENTIFIER));
+            Collections.emptyList(), RunOffIndexSelectionTableConstraints.COLUMN_TITLES,
+            ConstraintsFactory.getConstraints(RunOffIndexSelectionTableConstraints.IDENTIFIER));
     private IReserveCalculationStrategy parmUltimateEstimationMethod = ReserveCalculationType.getDefault();
 
     protected void doCalculation() {

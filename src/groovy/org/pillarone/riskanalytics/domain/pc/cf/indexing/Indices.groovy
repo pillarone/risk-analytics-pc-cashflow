@@ -16,20 +16,20 @@ class Indices extends ComposedComponent {
 
     FrequencyIndices subFrequencyIndices = new FrequencyIndices()
     RunOffIndices subRunOffIndices = new RunOffIndices()
+    SeverityIndices subSeverityIndices = new SeverityIndices()
     PolicyIndices subPolicyIndices = new PolicyIndices()
     PremiumIndices subPremiumIndices = new PremiumIndices()
-    ReservesIndices subReservesIndices = new ReservesIndices()
 
     @Override
     void wire() {
         WiringUtils.use(PortReplicatorCategory) {
             this.outFactors = subRunOffIndices.outFactors
-            this.outFactors = subReservesIndices.outFactors
+            this.outFactors = subSeverityIndices.outFactors
             this.outFactors = subFrequencyIndices.outFactors
             this.outFactors = subPolicyIndices.outFactors
             this.outFactors = subPremiumIndices.outFactors
             subRunOffIndices.inEventSeverities = this.inEventSeverities
-            subReservesIndices.inEventSeverities = this.inEventSeverities
+            subSeverityIndices.inEventSeverities = this.inEventSeverities
             subFrequencyIndices.inEventSeverities = this.inEventSeverities
             subPolicyIndices.inEventSeverities = this.inEventSeverities
             subPremiumIndices.inEventSeverities = this.inEventSeverities

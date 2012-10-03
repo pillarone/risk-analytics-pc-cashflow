@@ -4,8 +4,8 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.DefaultContractBase;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.LossesOccurringContractBase;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
@@ -39,7 +39,7 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
                                          PeriodScope periodScope) {
         lazyInitClaimsSizeGenerator();
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return generateClaims(severityScalingFactor, severityFactors, 1, periodScope, new DefaultContractBase());
+        return generateClaims(severityScalingFactor, severityFactors, 1, periodScope, new LossesOccurringContractBase());
     }
 
     public List<ClaimRoot> generateClaims(double scaleFactor, List<Factors> severityFactors, int claimNumber, PeriodScope periodScope,
