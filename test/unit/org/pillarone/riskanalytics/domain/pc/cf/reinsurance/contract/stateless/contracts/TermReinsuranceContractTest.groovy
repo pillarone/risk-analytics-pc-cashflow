@@ -133,12 +133,11 @@ class TermReinsuranceContractTest extends GroovyTestCase {
         TermReinsuranceContract xlAfterXLAllPerilsMarineOnly = TermContractTestUtils.getOneLayerContract(300, 200, date20110101)
         xlAfterXLAllPerilsMarineOnly.parmCover = CoverStrategyType.getStrategy(CoverStrategyType.SELECTED,
                 ['grossClaims': new ComboBoxTableMultiDimensionalParameter(['marine'], ['Covered gross claims'], IPerilMarker.class),
-//                        'claimFilters': new ComboBoxTableMultiDimensionalParameter([], ['Covered gross claims'], IClaimFilterMarker.class),
                         'structures': new ConstrainedMultiDimensionalParameter([['xl all perils'], [ContractBase.CEDED.toString()]],
                                 [ContractBasedOn.CONTRACT, ContractBasedOn.BASED_ON],
                                 ConstraintsFactory.getConstraints(ContractBasedOn.IDENTIFIER))])
         ((SelectedCoverStrategy) xlAfterXLAllPerilsMarineOnly.parmCover).grossClaims.comboBoxValues['marine'] = marine
-        ((SelectedCoverStrategy) xlAfterXLAllPerilsMarineOnly.parmCover).structures.comboBoxValues['xl all perils'] = xlAllPerils
+        ((SelectedCoverStrategy) xlAfterXLAllPerilsMarineOnly.parmCover).structures.comboBoxValues[0] = ['xl all perils': xlAllPerils]
         xlAfterXLAllPerilsMarineOnly.name = 'xl after xl all perils, marine only'
 
 

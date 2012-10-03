@@ -21,8 +21,6 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
 
     private ComboBoxTableMultiDimensionalParameter grossClaims = new ComboBoxTableMultiDimensionalParameter(
             Collections.emptyList(), Arrays.asList("Covered Perils"), IPerilMarker.class);
-    //    private ComboBoxTableMultiDimensionalParameter claimFilters = new ComboBoxTableMultiDimensionalParameter(
-//            Collections.emptyList(), Arrays.asList("Covered Filters"), IClaimFilterMarker.class);
     private ConstrainedMultiDimensionalParameter structures = new ConstrainedMultiDimensionalParameter(
             GroovyUtils.toList("[[],[]]"),
             Arrays.asList(ContractBasedOn.CONTRACT, ContractBasedOn.BASED_ON),
@@ -35,7 +33,6 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
     public Map getParameters() {
         Map params = new HashMap<String, Object>();
         params.put("grossClaims", grossClaims);
-//        params.put("claimFilters", claimFilters);
         params.put("structures", structures);
         return params;
     }
@@ -64,12 +61,11 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
         }
     }
 
-    public List<ReinsuranceContractAndBase> getCoveredReinsuranceContractsAndBase(Map<String, IReinsuranceContractMarker> reinsuranceContracts) {
+    public List<ReinsuranceContractAndBase> getCoveredReinsuranceContractsAndBase() {
         if (coveredContractsAndBase == null) {
             coveredContractsAndBase = new ArrayList<ReinsuranceContractAndBase>();
             for (int row = structures.getTitleRowCount(); row < structures.getRowCount(); row++) {
-                String contractName = (String) structures.getValueAt(row, ReinsuranceContractBasedOn.CONTRACT_COLUMN_INDEX);
-                IReinsuranceContractMarker contract = reinsuranceContracts.get(contractName);
+                IReinsuranceContractMarker contract = (IReinsuranceContractMarker) structures.getValueAtAsObject(row, ReinsuranceContractBasedOn.CONTRACT_COLUMN_INDEX);
                 String contractBase = (String) structures.getValueAt(row, ReinsuranceContractBasedOn.BASED_ON_COLUMN_INDEX);
                 coveredContractsAndBase.add(new ReinsuranceContractAndBase(contract, ReinsuranceContractBase.valueOf(contractBase)));
             }
@@ -127,9 +123,7 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
     }
 
     public boolean perilBasedCover() {
-        return grossClaims.getRowCount() - grossClaims.getTitleRowCount() > 0
-//                || claimFilters.getRowCount() - claimFilters.getTitleRowCount() > 0
-                ;
+        return grossClaims.getRowCount() - grossClaims.getTitleRowCount() > 0;
     }
 }
 
