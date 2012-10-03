@@ -5,7 +5,6 @@ import org.joda.time.Days;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.DefaultContractBase;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.LossesOccurringContractBase;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
@@ -66,10 +65,6 @@ public class ClaimsGeneratorUtils {
                                                  IRandomNumberGenerator dateGenerator, int claimNumber,
                                                  ClaimType claimType, PeriodScope periodScope,
                                                  IReinsuranceContractBaseStrategy contractBase) {
-        if (contractBase instanceof DefaultContractBase) {
-            // temporarily added to keep reproducibility of results
-            return generateClaims(severityScaleFactor, claimSizeGenerator, dateGenerator, claimNumber, claimType, periodScope);
-        }
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
         List<EventPacket> events = generateEventsOrNull(claimType, claimNumber, periodScope, dateGenerator);
         for (int i = 0; i < claimNumber; i++) {
@@ -79,16 +74,7 @@ public class ClaimsGeneratorUtils {
             double ultimate = (Double) claimSizeGenerator.nextValue() * -severityScaleFactor;
             DateTime occurrenceDate = contractBase.occurrenceDate(exposureStartDate, dateGenerator, periodScope, event);
             double scaleFactor = IndexUtils.aggregateFactor(severityFactors, exposureStartDate, periodScope.getPeriodCounter(), exposureStartDate);
-            baseClaims.add(new ClaimRoot(ultimate * scaleFactor, claimType,
-                    exposureStartDate, occurrenceDate, event));
-
-//            double splittedUltimate = ultimate / (double) splittedClaimNumber;
-//            for (int j = 0; j < splittedClaimNumber; j++) {
-//                DateTime occurrenceDate = contractBase.occurrenceDate(inceptionDate, dateGenerator, periodScope, event);
-//                double scaleFactor = IndexUtils.aggregateFactor(severityFactors, occurrenceDate, periodScope.getPeriodCounter(), inceptionDate);
-//                baseClaims.add(new ClaimRoot(splittedUltimate * scaleFactor, claimType,
-//                        inceptionDate, occurrenceDate, event));
-//            }
+            baseClaims.add(new ClaimRoot(ultimate * scaleFactor, claimType, exposureStartDate, occurrenceDate, event));
         }
         return baseClaims;
     }

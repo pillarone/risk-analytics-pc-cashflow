@@ -2,7 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.DefaultContractBase;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.LossesOccurringContractBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -35,7 +35,7 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
         }
         numberOfClaims = calculateNumberOfClaimsWithAppliedIndices(numberOfClaims, periodScope, factors);
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return generateClaims(severityScalingFactor, severityFacotrs, numberOfClaims, periodScope, new DefaultContractBase());
+        return generateClaims(severityScalingFactor, severityFacotrs, numberOfClaims, periodScope, new LossesOccurringContractBase());
     }
 
     public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List<Factors> severityFacotrs, List uwInfosFilterCriteria,
@@ -43,7 +43,7 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
         int numberOfClaims = claimNumberGenerator.nextValue().intValue();
         numberOfClaims = calculateNumberOfClaimsWithAppliedIndices(numberOfClaims, periodScope, factors);
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return generateClaims(severityScalingFactor, severityFacotrs, numberOfClaims, periodScope, new DefaultContractBase());
+        return generateClaims(severityScalingFactor, severityFacotrs, numberOfClaims, periodScope, new LossesOccurringContractBase());
     }
 
     private int calculateNumberOfClaimsWithAppliedIndices(int numberOfClaims, PeriodScope periodScope, List<Factors> factors) {

@@ -3,15 +3,22 @@ package org.pillarone.riskanalytics.domain.pc.cf.output;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
+import org.joda.time.Months;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.pillarone.riskanalytics.core.output.ICollectingModeStrategy;
 import org.pillarone.riskanalytics.core.output.PathMapping;
 import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
 import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.util.PeriodLabelsUtil;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.*;
 
@@ -29,6 +36,8 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     protected static final String PREMIUM_RISK_BASE = "premiumRiskBase";
     protected static final String PREMIUM_AND_RESERVE_RISK_BASE = "premiumAndReserveRiskBase";
     private static final String PERIOD = "period";
+    private boolean displayUnderwritingYearOnly = true;
+    private static final DateTimeFormatter formatter = DateTimeFormat.forPattern(PeriodLabelsUtil.PARAMETER_DISPLAY_FORMAT);
 
     public List<SingleValueResultPOJO> collect(PacketList packets, boolean crashSimulationOnError) throws IllegalAccessException {
         initSimulation();
@@ -45,6 +54,15 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
             String notImplemented = ResourceBundle.getBundle(RESOURCE_BUNDLE).getString("AggregateSplitByInceptionDateCollectingModeStrategy.notImplemented");
             throw new NotImplementedException(notImplemented + "\n(" + packetCollector.getPath() + ")");
         }
+    }
+
+    @Override
+    protected void initSimulation() {
+        super.initSimulation();
+        IPeriodCounter periodCounter = packetCollector.getSimulationScope().getIterationScope().getPeriodScope().getPeriodCounter();
+        boolean projectionStartsOnFirstJanuary = periodCounter.startOfFirstPeriod().dayOfYear().get() == 1;
+        boolean annualPeriods = periodCounter.annualPeriodsOnly();
+        displayUnderwritingYearOnly = projectionStartsOnFirstJanuary && annualPeriods;
     }
 
     @Override
@@ -110,21 +128,32 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     }
     
     private String inceptionPeriod(Packet packet) {
+        DateTime date = null;
         if (packet instanceof ClaimCashflowPacket) {
-            return String.valueOf(((ClaimCashflowPacket) packet).getBaseClaim().getExposureStartDate().getYear());
+            date = ((ClaimCashflowPacket) packet).getBaseClaim().getExposureStartDate();
         }
         else if (packet instanceof UnderwritingInfoPacket) {
-            return String.valueOf(((UnderwritingInfoPacket) packet).getExposure().getInceptionDate().getYear());
+            date = ((UnderwritingInfoPacket) packet).getExposure().getInceptionDate();
         }
         else if (packet instanceof ContractFinancialsPacket) {
-            return String.valueOf(((ContractFinancialsPacket) packet).getInceptionDate().getYear());
+            date = ((ContractFinancialsPacket) packet).getInceptionDate();
         }
         else if (packet instanceof FinancialsPacket) {
-            return String.valueOf(((FinancialsPacket) packet).getInceptionDate().getYear());
+            date = ((FinancialsPacket) packet).getInceptionDate();
         }
         else {
             throw new IllegalArgumentException("Packet type " + packet.getClass() + " is not supported.");
         }
+        if (displayUnderwritingYearOnly) {
+            return String.valueOf(date.getYear());
+        }
+        else {
+            return formatter.print(getPeriodStartDate(date));
+        }
+    }
+
+    private DateTime getPeriodStartDate(DateTime date) {
+        return packetCollector.getSimulationScope().getIterationScope().getPeriodScope().getPeriodCounter().startOfPeriod(date);
     }
 
     protected void addToMap(Packet packet, PathMapping path, Map<PathMapping, Packet> resultMap) {

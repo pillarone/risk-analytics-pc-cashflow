@@ -43,14 +43,14 @@ components {
 				parmIndex[0]=org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.DETERMINISTICINDEXSERIES, ["indices":new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([[new org.joda.time.DateTime(2008,1,1,0,0,0,0), new org.joda.time.DateTime(2009,1,1,0,0,0,0), new org.joda.time.DateTime(2010,1,1,0,0,0,0), new org.joda.time.DateTime(2011,1,1,0,0,0,0), new org.joda.time.DateTime(2012,1,1,0,0,0,0), new org.joda.time.DateTime(2013,1,1,0,0,0,0), new org.joda.time.DateTime(2014,1,1,0,0,0,0), new org.joda.time.DateTime(2015,1,1,0,0,0,0), new org.joda.time.DateTime(2016,1,1,0,0,0,0), new org.joda.time.DateTime(2017,1,1,0,0,0,0), new org.joda.time.DateTime(2018,1,1,0,0,0,0), new org.joda.time.DateTime(2019,1,1,0,0,0,0), new org.joda.time.DateTime(2020,1,1,0,0,0,0)], [100.0, 102.0, 104.04, 106.12, 108.24, 110.41, 120.0, 122.4, 124.85, 127.34, 129.89, 132.49, 135.14]]),["Date","Index Level"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('DETERMINISTICINDEX')),])
 			}
 		}
-		subReservesIndices {
-			subMTPLReserveIndex {
-				parmIndex[0]=org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.STOCHASTIC, ["startDate":new org.joda.time.DateTime(2010, 1, 1, 0, 0, 0, 0),"distribution":org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType.getStrategy(org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType.NORMAL, [mean:0.0, stDev:0.1]),])
-			}
-			subReserveIndex {
-				parmIndex[0]=org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.STOCHASTIC, ["startDate":new org.joda.time.DateTime(2010, 1, 1, 0, 0, 0, 0),"distribution":org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType.getStrategy(org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType.NORMAL, [mean:0.0, stDev:0.1]),])
-			}
-		}
+//		subSeverityIndices {
+//			subMTPLReserveIndex {
+//				parmIndex[0]=org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.STOCHASTIC, ["startDate":new org.joda.time.DateTime(2010, 1, 1, 0, 0, 0, 0),"distribution":org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType.getStrategy(org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType.NORMAL, [mean:0.0, stDev:0.1]),])
+//			}
+//			subReserveIndex {
+//				parmIndex[0]=org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.STOCHASTIC, ["startDate":new org.joda.time.DateTime(2010, 1, 1, 0, 0, 0, 0),"distribution":org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType.getStrategy(org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType.NORMAL, [mean:0.0, stDev:0.1]),])
+//			}
+//		}
 		subRunOffIndices {
 			subSevertity1 {
 				parmIndex[0]=org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType.STOCHASTIC, ["startDate":new org.joda.time.DateTime(2011, 1, 1, 0, 0, 0, 0),"distribution":org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType.getStrategy(org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType.CONSTANT, [constant:-0.1]),])

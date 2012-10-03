@@ -50,6 +50,9 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     // attritional, frequency average attritional, ...
     private ConstrainedString parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker.class, "");
     private ConstrainedString parmReportingPattern = new ConstrainedString(IReportingPatternMarker.class, "");
+    private ConstrainedMultiDimensionalParameter parmSeverityIndices = new ConstrainedMultiDimensionalParameter(
+            Collections.emptyList(), SeverityIndexSelectionTableConstraints.COLUMN_TITLES,
+            ConstraintsFactory.getConstraints(SeverityIndexSelectionTableConstraints.IDENTIFIER));
     private ConstrainedMultiDimensionalParameter parmRunOffIndices = new ConstrainedMultiDimensionalParameter(
             Collections.emptyList(), RunOffIndexSelectionTableConstraints.COLUMN_TITLES,
             ConstraintsFactory.getConstraints(RunOffIndexSelectionTableConstraints.IDENTIFIER));
@@ -61,9 +64,10 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     protected void doCalculation() {
         List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
         IPeriodCounter periodCounter = periodScope.getPeriodCounter();
-        List<Factors> factors = IndexUtils.filterFactors(inFactors, parmRunOffIndices);
-        int number = generateClaimsOfCurrentPeriod(claims, periodCounter, factors);
-        developClaimsOfFormerPeriods(claims, periodCounter, factors);
+        List<Factors> runOffFactors = IndexUtils.filterFactors(inFactors, parmRunOffIndices);
+        List<Factors> severityFactors = IndexUtils.filterFactors(inFactors, parmSeverityIndices);
+        int number = generateClaimsOfCurrentPeriod(claims, periodCounter, severityFactors, runOffFactors);
+        developClaimsOfFormerPeriods(claims, periodCounter, runOffFactors);
         setTechnicalProperties(claims);
         outClaims.addAll(claims);
         outClaimNumber.add(new SingleValuePacket(number));
@@ -72,16 +76,17 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
     /**
      * @param claims
      * @param periodCounter
-     * @param factors
+     * @param runoffFactors
      * @return number of generated claims
      */
-    private int generateClaimsOfCurrentPeriod(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter, List<Factors> factors) {
+    private int generateClaimsOfCurrentPeriod(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter,
+                                              List<Factors> severityFactors, List<Factors> runoffFactors) {
         if (generateNewClaims()) {
             List uwFilterCriteria = (List) parmUnderwritingSegments.getValuesAsObjects(0, true);
             // a nominal ultimate is generated, therefore no factors are applied
             List<ClaimRoot> baseClaims = parmClaimsModel.calculateClaims(inUnderwritingInfo, uwFilterCriteria,
                     inEventSeverities, this, periodScope);
-            baseClaims = parmClaimsModel.generateClaims(baseClaims, inUnderwritingInfo, null, uwFilterCriteria, inFactors, periodScope, inEventFrequencies, this);
+            baseClaims = parmClaimsModel.generateClaims(baseClaims, inUnderwritingInfo, severityFactors, uwFilterCriteria, inFactors, periodScope, inEventFrequencies, this);
             if (!baseClaims.isEmpty()) {
                 baseClaims = parmAssociateExposureInfo.getAllocatedClaims(baseClaims, UnderwritingInfoUtils.filterUnderwritingInfo(inUnderwritingInfo, uwFilterCriteria));
 
@@ -96,7 +101,7 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
                         // add claim only to period store if development is required
                         grossClaimRoots.add(grossClaimRoot);
                     }
-                    claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, factors, true));
+                    claims.addAll(grossClaimRoot.getClaimCashflowPackets(periodCounter, runoffFactors, true));
                 }
                 periodStore.put(GROSS_CLAIMS, grossClaimRoots);
             }
@@ -270,5 +275,13 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
 
     public void setParmAssociateExposureInfo(IRiskAllocatorStrategy parmAssociateExposureInfo) {
         this.parmAssociateExposureInfo = parmAssociateExposureInfo;
+    }
+
+    public ConstrainedMultiDimensionalParameter getParmSeverityIndices() {
+        return parmSeverityIndices;
+    }
+
+    public void setParmSeverityIndices(ConstrainedMultiDimensionalParameter parmSeverityIndices) {
+        this.parmSeverityIndices = parmSeverityIndices;
     }
 }

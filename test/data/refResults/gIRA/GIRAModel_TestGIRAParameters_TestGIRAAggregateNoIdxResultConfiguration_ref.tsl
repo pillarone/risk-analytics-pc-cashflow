@@ -1,91 +1,91 @@
-iteration	period	valueIndex	path	field	value
-1	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
-1	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
-1	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0
-1	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0
-1	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0
-1	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0
-1	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.8017015270658938
-1	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.8017015270658938
-1	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.8017015270658938
-2	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
-2	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
-2	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0
-2	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0
-2	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0
-2	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0
-2	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.7813569598513954
-2	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.7813569598513954
-2	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.7813569598513954
-3	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
-3	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
-3	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0
-3	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0
-3	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0
-3	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0
-3	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.9253640920619568
-3	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.9253640920619568
-3	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.9253640920619568
-4	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
-4	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
-4	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0
-4	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0
-4	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0
-4	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0
-4	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.8392067668290701
-4	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.8392067668290701
-4	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.8392067668290701
-5	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
-5	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
-5	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0
-5	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0
-5	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0
-5	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0
-5	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.30393630360807694
-5	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.30393630360807694
-5	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.30393630360807694
-6	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
-6	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
-6	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0
-6	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0
-6	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0
-6	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0
-6	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.5924284492303049
-6	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.5924284492303049
-6	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.5924284492303049
-7	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
-7	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
-7	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0
-7	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0
-7	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0
-7	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0
-7	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-1.2106078521716557
-7	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-1.2106078521716557
-7	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-1.2106078521716557
-8	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
-8	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
-8	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0
-8	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0
-8	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0
-8	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0
-8	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.5323189430927527
-8	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.5323189430927527
-8	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.5323189430927527
-9	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
-9	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
-9	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0
-9	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0
-9	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0
-9	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0
-9	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.35994678751847287
-9	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.35994678751847287
-9	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.35994678751847287
-10	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0
-10	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0
-10	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0
-10	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0
-10	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0
-10	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0
-10	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.5499271159441852
-10	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.5499271159441852
-10	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.5499271159441852
+iteration	period	valueIndex	path	field	value	date
+1	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0	01-January-2011 24:00:00 000
+1	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+1	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0	01-January-2011 24:00:00 000
+1	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0	01-January-2011 24:00:00 000
+1	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0	01-January-2011 24:00:00 000
+1	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0	01-January-2011 24:00:00 000
+1	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.8640698267442688	01-January-2011 24:00:00 000
+1	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.8640698267442688	01-January-2011 24:00:00 000
+1	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.8640698267442688	01-January-2011 24:00:00 000
+2	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0	01-January-2011 24:00:00 000
+2	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+2	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0	01-January-2011 24:00:00 000
+2	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0	01-January-2011 24:00:00 000
+2	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0	01-January-2011 24:00:00 000
+2	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0	01-January-2011 24:00:00 000
+2	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.27188594377808534	01-January-2011 24:00:00 000
+2	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.27188594377808534	01-January-2011 24:00:00 000
+2	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.27188594377808534	01-January-2011 24:00:00 000
+3	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0	01-January-2011 24:00:00 000
+3	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+3	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0	01-January-2011 24:00:00 000
+3	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0	01-January-2011 24:00:00 000
+3	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0	01-January-2011 24:00:00 000
+3	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0	01-January-2011 24:00:00 000
+3	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-2.132136441227821	01-January-2011 24:00:00 000
+3	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-2.132136441227821	01-January-2011 24:00:00 000
+3	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-2.132136441227821	01-January-2011 24:00:00 000
+4	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0	01-January-2011 24:00:00 000
+4	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+4	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0	01-January-2011 24:00:00 000
+4	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0	01-January-2011 24:00:00 000
+4	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0	01-January-2011 24:00:00 000
+4	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0	01-January-2011 24:00:00 000
+4	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.6589785086012734	01-January-2011 24:00:00 000
+4	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.6589785086012734	01-January-2011 24:00:00 000
+4	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.6589785086012734	01-January-2011 24:00:00 000
+5	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0	01-January-2011 24:00:00 000
+5	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+5	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0	01-January-2011 24:00:00 000
+5	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0	01-January-2011 24:00:00 000
+5	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0	01-January-2011 24:00:00 000
+5	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0	01-January-2011 24:00:00 000
+5	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.24267755592770401	01-January-2011 24:00:00 000
+5	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.24267755592770401	01-January-2011 24:00:00 000
+5	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.24267755592770401	01-January-2011 24:00:00 000
+6	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0	01-January-2011 24:00:00 000
+6	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+6	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0	01-January-2011 24:00:00 000
+6	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0	01-January-2011 24:00:00 000
+6	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0	01-January-2011 24:00:00 000
+6	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0	01-January-2011 24:00:00 000
+6	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.47064656973927443	01-January-2011 24:00:00 000
+6	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.47064656973927443	01-January-2011 24:00:00 000
+6	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.47064656973927443	01-January-2011 24:00:00 000
+7	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0	01-January-2011 24:00:00 000
+7	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+7	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0	01-January-2011 24:00:00 000
+7	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0	01-January-2011 24:00:00 000
+7	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0	01-January-2011 24:00:00 000
+7	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0	01-January-2011 24:00:00 000
+7	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.9780084524204381	01-January-2011 24:00:00 000
+7	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.9780084524204381	01-January-2011 24:00:00 000
+7	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.9780084524204381	01-January-2011 24:00:00 000
+8	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0	01-January-2011 24:00:00 000
+8	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+8	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0	01-January-2011 24:00:00 000
+8	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0	01-January-2011 24:00:00 000
+8	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0	01-January-2011 24:00:00 000
+8	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0	01-January-2011 24:00:00 000
+8	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.5995083375784989	01-January-2011 24:00:00 000
+8	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.5995083375784989	01-January-2011 24:00:00 000
+8	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.5995083375784989	01-January-2011 24:00:00 000
+9	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0	01-January-2011 24:00:00 000
+9	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+9	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0	01-January-2011 24:00:00 000
+9	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0	01-January-2011 24:00:00 000
+9	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0	01-January-2011 24:00:00 000
+9	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0	01-January-2011 24:00:00 000
+9	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.7547682863027165	01-January-2011 24:00:00 000
+9	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.7547682863027165	01-January-2011 24:00:00 000
+9	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.7547682863027165	01-January-2011 24:00:00 000
+10	0	0	GIRA:claimsGenerators:subMarine:outClaimNumber	value	1.0	01-January-2011 24:00:00 000
+10	0	0	GIRA:claimsGenerators:subMarine:outClaims	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+10	0	0	GIRA:claimsGenerators:subMarine:outClaims	appliedIndexValue	0.0	01-January-2011 24:00:00 000
+10	0	0	GIRA:claimsGenerators:subMarine:outClaims	IBNRIndexed	0.0	01-January-2011 24:00:00 000
+10	0	0	GIRA:claimsGenerators:subMarine:outClaims	reservesIndexed	0.0	01-January-2011 24:00:00 000
+10	0	0	GIRA:claimsGenerators:subMarine:outClaims	outstandingIndexed	0.0	01-January-2011 24:00:00 000
+10	0	0	GIRA:claimsGenerators:subMarine:outClaims	paidIncrementalIndexed	-0.21465667865728058	01-January-2011 24:00:00 000
+10	0	0	GIRA:claimsGenerators:subMarine:outClaims	reportedIncrementalIndexed	-0.21465667865728058	01-January-2011 24:00:00 000
+10	0	0	GIRA:claimsGenerators:subMarine:outClaims	ultimate	-0.21465667865728058	01-January-2011 24:00:00 000
