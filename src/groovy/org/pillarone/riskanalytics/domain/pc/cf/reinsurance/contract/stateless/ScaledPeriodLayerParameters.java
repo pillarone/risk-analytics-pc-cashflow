@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.AllPeriodUnderwritingIn
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.*;
 
@@ -48,8 +49,11 @@ public class ScaledPeriodLayerParameters extends PeriodLayerParameters {
 
     public List<LayerParameters> getLayers(int period, IPeriodCounter iPeriodCounter, ExposureBase exposureBase, AllPeriodUnderwritingInfoPacket infoPacket) {
         List<UnderwritingInfoPacket> relevantPackets = new ArrayList<UnderwritingInfoPacket>();
+
+        int periodWithUnderwritingInfo = greatestPeriodWithUnderwritingInformationBeforeCurrent(iPeriodCounter, infoPacket, period);
+
         for (Map.Entry<DateTime, UnderwritingInfoPacket> entry : infoPacket.getUnderwritingInfoPerPeriod().entrySet()) {
-            if (iPeriodCounter.belongsToPeriod(entry.getKey()) == period) {
+            if (iPeriodCounter.belongsToPeriod(entry.getKey()) == periodWithUnderwritingInfo) {
                 relevantPackets.add(entry.getValue());
             }
         }
@@ -59,15 +63,23 @@ public class ScaledPeriodLayerParameters extends PeriodLayerParameters {
                 scaleFactor = 1;
                 break;
             case PREMIUM_WRITTEN:
+                if(relevantPackets.size() == 0) {
+                    throw new SimulationException("Asked to scale the reinsurance contract, but no incoming underwriting information was found. " +
+                            "Did you specify underwriting information for period starting : " + DateTimeUtilities.formatDate.print(iPeriodCounter.getCurrentPeriodStart()));
+                }
                 scaleFactor = UnderwritingInfoUtils.sumPremiumWritten(relevantPackets);
                 break;
             case NUMBER_OF_POLICIES:
+                if(relevantPackets.size() == 0) {
+                    throw new SimulationException("Asked to scale the reinsurance contract, but no incoming underwriting information was found. " +
+                            "Did you specify underwriting information for period starting : " + DateTimeUtilities.formatDate.print(iPeriodCounter.getCurrentPeriodStart()));
+                }
                 scaleFactor = UnderwritingInfoUtils.sumNumberOfPolicies(relevantPackets);
                 break;
             case SUM_INSURED:
                 throw new NotImplementedException("Sum insured not implemented");
             default:
-                throw new SimulationException("");
+                throw new SimulationException("Unknown exposure base");
         }
 
         List<LayerParameters> originalParams = super.getLayers(period);
@@ -98,6 +110,17 @@ public class ScaledPeriodLayerParameters extends PeriodLayerParameters {
             scaledParams.add(tempParam);
         }
         return scaledParams;
+    }
+
+    private int greatestPeriodWithUnderwritingInformationBeforeCurrent(IPeriodCounter iPeriodCounter, AllPeriodUnderwritingInfoPacket infoPacket, int maxPeriod) {
+        int greatestPeriodBeforeCurrent = -1;
+        for (Map.Entry<DateTime, UnderwritingInfoPacket> entry : infoPacket.getUnderwritingInfoPerPeriod().entrySet()) {
+            int aTempPeriod = iPeriodCounter.belongsToPeriod(entry.getKey());
+            if(aTempPeriod > greatestPeriodBeforeCurrent && aTempPeriod <= maxPeriod) {
+                greatestPeriodBeforeCurrent = aTempPeriod;
+            }
+        }
+        return greatestPeriodBeforeCurrent;
     }
 
     public ExposureBase getExposureBase() {

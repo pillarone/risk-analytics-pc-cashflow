@@ -78,7 +78,7 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
 //            claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
             for (int period = 0; period <= periods; period++) {
                 if(period >= grossClaimPeriod) {
-                    claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
+                    claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter, null, false))
                 }
                 periodCounter.next()
             }
@@ -89,6 +89,7 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
                     println "${importer.fileName}\n\tultimate @ ${claim.occurrenceDate} ${claim.ultimate()}"
                     assertEquals "ultimate$index", ultimate, claim.ultimate()
                     assertEquals "occurrence date", occurrenceDate, claim.occurrenceDate
+                    index++
                 }
                 else {
                     println "\tincremental$index @ ${claim.getUpdateDate()} ${claim.getPaidIncrementalIndexed()}"
@@ -96,8 +97,8 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
                 if (claim.getPaidIncrementalIndexed() > 0) {
                     assertEquals "incremental$index @ ${claim.getUpdateDate()}", payments[index]['futurePayment'], claim.getPaidIncrementalIndexed(), EPSILON
                     assertEquals "payoutdates$index", payments[index]['paymentDate'], claim.getUpdateDate().toLocalDate()
+                    index++
                 }
-                index++
             }
             assertEquals "total", ultimate, claims*.getPaidIncrementalIndexed().sum(), EPSILON
 

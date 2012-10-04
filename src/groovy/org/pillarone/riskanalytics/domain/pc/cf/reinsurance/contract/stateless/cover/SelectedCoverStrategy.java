@@ -76,6 +76,10 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
     public void coveredClaims(List<ClaimCashflowPacket> source) {
         List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
         List coveredPerils = getCoveredPerils();
+//        This call to no cover initialises the coveredContracts field... crucial to avoid a null pointer later, and not entirely obvious.
+        if(noCover()) {
+            return;
+        }
         for (ClaimCashflowPacket claim : source) {
             if (perilBasedCover() && contractBasedCover()) {
                 if (coveredContracts.contains(claim.reinsuranceContract()) && claim.reserve() == null
