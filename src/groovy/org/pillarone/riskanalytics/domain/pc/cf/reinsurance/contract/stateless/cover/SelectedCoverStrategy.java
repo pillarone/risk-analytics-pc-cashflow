@@ -78,6 +78,7 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
         List coveredPerils = getCoveredPerils();
 //        This call to no cover initialises the coveredContracts field... crucial to avoid a null pointer later, and not entirely obvious.
         if(noCover()) {
+            source.clear();
             return;
         }
         for (ClaimCashflowPacket claim : source) {
