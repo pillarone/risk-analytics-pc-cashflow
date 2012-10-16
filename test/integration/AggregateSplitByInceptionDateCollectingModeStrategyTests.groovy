@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.core.output.CollectorMapping
 import models.gira.GIRAModel
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceCollectingModeStrategy
 import org.apache.commons.lang.builder.HashCodeBuilder
+import org.pillarone.riskanalytics.core.output.TestDBOutput
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -35,18 +36,11 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
     }
 
     protected ICollectorOutputStrategy getOutputStrategy() {
-        new DBOutput()
+        new TestDBOutput()
     }
 
     int getIterationCount() {
         1
-    }
-
-    void setUp() {
-        super.setUp()
-//        CollectorMapping mapping = new CollectorMapping(collectorName: AggregateSplitPerSourceCollectingModeStrategy.IDENTIFIER)
-//        mapping.save()
-//        assertNotNull mapping.save()
     }
 
     void postSimulationEvaluation() {

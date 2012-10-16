@@ -2,11 +2,9 @@ import org.pillarone.riskanalytics.core.simulation.engine.ModelTest
 import org.pillarone.riskanalytics.core.output.PathMapping
 import org.pillarone.riskanalytics.core.output.FieldMapping
 import org.pillarone.riskanalytics.core.output.SingleValueResult
-import org.pillarone.riskanalytics.core.output.DBOutput
+import org.pillarone.riskanalytics.core.output.TestDBOutput
 import org.pillarone.riskanalytics.core.output.ICollectorOutputStrategy
-import org.pillarone.riskanalytics.core.output.CollectorMapping
 import models.gira.GIRAModel
-import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceCollectingModeStrategy
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -34,15 +32,11 @@ class AggregateSplitPerSourceCollectingModeStrategyTests extends ModelTest {
     }
 
     protected ICollectorOutputStrategy getOutputStrategy() {
-        new DBOutput()
+        new TestDBOutput()
     }
 
     int getIterationCount() {
         1
-    }
-
-    void setUp() {
-        super.setUp()
     }
 
     void postSimulationEvaluation() {
