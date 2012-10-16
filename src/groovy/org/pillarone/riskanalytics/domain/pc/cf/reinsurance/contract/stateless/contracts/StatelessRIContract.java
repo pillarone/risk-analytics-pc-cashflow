@@ -105,29 +105,25 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         List<ICededRoot> allIncurredCededClaims = new ArrayList<ICededRoot>();
         allIncurredCededClaims.addAll(new ArrayList<ICededRoot>(allIncurredCeded));
 
-        ScaledPeriodLayerParameters layerParameters = setupLayerParameters();
         Double termLimit = parmContractStructure.getTermLimit();
         Double termExcess = parmContractStructure.getTermDeductible();
 
-
-//        Incurred calc
         Set<IClaimRoot> incurredClaimsInContractPeriod = RIUtilities.incurredClaimsByDate(periodScope.getCurrentPeriodStartDate(), periodScope.getNextPeriodStartDate().minusMillis(1),
                 incurredClaims, parmCoverageBase, IncurredClaimBase.BASE);
         IncurredClaimAndAP incurredPeriodResult = incurredResultsThisSimPeriod(incurredClaimsInContractPeriod, termLimit, termExcess);
-        IncurredAllocation incurredAllocation = new IncurredAllocation();
-        TermIncurredCalculation incurredCalc = new TermIncurredCalculation();
+
         List<ClaimCashflowPacket> paidClaims;
         List<ContractFinancialsPacket> contractFinancialsPacket;
         try {
-            final Map<Integer, Double> cededIncurredByPeriod = incurredCalc.cededIncurredsByPeriods(incurredClaims.keys(), periodScope, termExcess, termLimit, layerParameters, parmCoverageBase);
+//            Leave this code here for the moment as evaulating the right hand side in the debugger can be useful, but it incurrs a performance penalty when uncommented.
+//            final Map<Integer, Double> cededIncurredByPeriod = new TermIncurredCalculation().cededIncurredsByPeriods(incurredClaims.keys(), periodScope, termExcess, termLimit, setupLayerParameters() , parmCoverageBase);
             final Set<IClaimRoot> allIncurredClaims = RIUtilities.incurredClaims(allCashflowsToDate, IncurredClaimBase.BASE);
-            final List<ICededRoot> cededClaims = incurredAllocation.allocateClaims(incurredPeriodResult.getIncurredClaim(), allIncurredClaims, periodScope, parmCoverageBase);
+            final List<ICededRoot> cededClaims = new IncurredAllocation().allocateClaims(incurredPeriodResult.getIncurredClaim(), allIncurredClaims, periodScope, parmCoverageBase);
             allIncurredCededClaims.addAll(cededClaims);
 
             final Map<Integer, Double> incrementalPaidInThisSimulationPeriod = incrementalPaidAmountByModelPeriod(termLimit, termExcess);
 
-            IPaidAllocation iRiPaidAllocation = new ProportionalToGrossPaidAllocation();
-            paidClaims = iRiPaidAllocation.allocatePaid(incrementalPaidInThisSimulationPeriod, inClaims,
+            paidClaims =  new ProportionalToGrossPaidAllocation().allocatePaid(incrementalPaidInThisSimulationPeriod, inClaims,
                     cededCashflowsToDate, periodScope, parmCoverageBase, allIncurredCededClaims, globalSanityChecks);
             contractFinancialsPacket = ContractFinancialsPacket.getContractFinancialsPacketsByInceptionPeriod(
                     paidClaims, new ArrayList<ClaimCashflowPacket>(), new ArrayList<CededUnderwritingInfoPacket>(),
