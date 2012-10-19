@@ -84,7 +84,7 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         GrossClaimRoot grossClaimRoot1 = TestClaimUtils.getGrossClaim([5i, 15i, 27i], [0.5d, 0.75d, 1d], -100d, start2010, start2010, start2010)
 
         List<ClaimCashflowPacket> cashflowPacketList1 = new ArrayList<ClaimCashflowPacket>()
-        cashflowPacketList1.addAll(grossClaimRoot1.getClaimCashflowPackets(counter))
+        cashflowPacketList1.addAll(grossClaimRoot1.getClaimCashflowPackets(counter, null, false))
 
         // Assume that there are no prior ceded claims.
         List<ClaimCashflowPacket> cededClaimsToDate = new ArrayList<ClaimCashflowPacket>()
@@ -105,7 +105,7 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
 
         periodScope.prepareNextPeriod()
         List<ClaimCashflowPacket> cashflowPacketList2 = new ArrayList<ClaimCashflowPacket>()
-        cashflowPacketList2.addAll(grossClaimRoot1.getClaimCashflowPackets(counter))
+        cashflowPacketList2.addAll(grossClaimRoot1.getClaimCashflowPackets(counter, null, false))
 
         //        Allocation independant of incurred strategy, and paid amount, only contract paid is needed.
         Map<Integer, Double> contractPaidPeriod2 = new HashMap<Integer, Double>()
@@ -114,13 +114,13 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
 
         List<ClaimCashflowPacket> cededPacketsPeriod2 = allocation.allocatePaid(contractPaidPeriod2, cashflowPacketList2, cededCashflows, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims, true)
         assert cededPacketsPeriod2.size() == cashflowPacketList2.size()
-        assertEquals("Check cumulated amount : ", -37.5d, cededPacketsPeriod2.get(0).getPaidCumulatedIndexed() )
+        assertEquals("Check cumulated amount : ", -37.5d, cededPacketsPeriod2.get(1).getPaidCumulatedIndexed() )
         cededCashflows.addAll(cededPacketsPeriod2)
 
 
         periodScope.prepareNextPeriod()
         List<ClaimCashflowPacket> cashflowPacketList3 = new ArrayList<ClaimCashflowPacket>()
-        cashflowPacketList3.addAll(grossClaimRoot1.getClaimCashflowPackets(counter))
+        cashflowPacketList3.addAll(grossClaimRoot1.getClaimCashflowPackets(counter, null, false))
 
         //        Allocation independant of incurred strategy, and paid amount, only contract paid is needed.
         Map<Integer, Double> contractPaidPeriod3 = new HashMap<Integer, Double>()
@@ -134,7 +134,7 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
 
         contractPaidPeriod3.put(0, 12.5d)
         List<ClaimCashflowPacket> cededPacketsPeriod3 = allocation.allocatePaid(contractPaidPeriod3, cashflowPacketList3, cededCashflows, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims, true)
-        assertEquals("Check cumulated amount : ", -50, cededPacketsPeriod3.get(0).getPaidCumulatedIndexed())
+        assertEquals("Check cumulated amount : ", -50, cededPacketsPeriod3.get(1).getPaidCumulatedIndexed())
     }
 
 

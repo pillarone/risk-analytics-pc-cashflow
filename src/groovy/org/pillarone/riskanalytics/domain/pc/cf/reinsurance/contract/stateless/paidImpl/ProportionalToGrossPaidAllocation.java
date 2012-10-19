@@ -48,7 +48,12 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
             for (Map.Entry<IClaimRoot, Collection<ClaimCashflowPacket>> packetEntrys : cashflows.entrySet()) {
                 ICededRoot cededRoot = GRIUtilities.findCededClaimRelatedToGrossClaim(packetEntrys.getKey(), incurredCededClaims);
                 List<ClaimCashflowPacket> cashflowPackets = new ArrayList<ClaimCashflowPacket>(packetEntrys.getValue());
-                double grossIncurredByClaimRatio = packetEntrys.getKey().getUltimate() / grossIncurredInPeriod;
+                double grossIncurredByClaimRatio;
+                if(Math.abs(grossIncurredInPeriod ) == 0  ) {
+                    grossIncurredByClaimRatio = 0d;
+                } else {
+                    grossIncurredByClaimRatio = packetEntrys.getKey().getUltimate() / grossIncurredInPeriod;
+                }
                 double claimPaidInContractYear = grossIncurredByClaimRatio * cededPaidAmountInModelPeriodThisSimPeriod;
 
                 double sumIncrementsOfThisClaim = GRIUtilities.incrementalCashflowSum(cashflowPackets);
