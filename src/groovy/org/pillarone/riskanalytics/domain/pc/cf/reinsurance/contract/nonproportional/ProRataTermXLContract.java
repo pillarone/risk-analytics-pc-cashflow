@@ -75,7 +75,7 @@ public class ProRataTermXLContract extends TermWCXLContract {
                 // if the following two properties are of different values there are several updates for an event in the same period
                 double claimPropertyIncremental = storage.getIncremental(claimPropertyBase);
                 double claimPropertyIncrementalLast = storage.getIncrementalLast(claimPropertyBase);
-                double ceded = Math.min(Math.max(-claimPropertyCumulated - attachmentPoint * stabilizationFactor, 0), limit * stabilizationFactor);
+                double ceded = Math.min(Math.max(claimPropertyCumulated - attachmentPoint * stabilizationFactor, 0), limit * stabilizationFactor);
 
                 double cededAfterAAD = Math.max(0, ceded - periodDeductible.get(claimPropertyBase, stabilizationFactor));
                 double reduceAAD = ceded - cededAfterAAD;

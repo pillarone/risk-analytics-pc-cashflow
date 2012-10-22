@@ -91,10 +91,10 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
         double scaleFactor = parmSeverityBase.factor(inUnderwritingInfo);
         List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(inEventSeverities, filterCriteria);
         if (!eventSeverities.isEmpty()) {
-            return claimsModel(period).calculateClaims(scaleFactor, periodScope, eventSeverities);
+            return claimsModel(period).calculateClaims(- scaleFactor, periodScope, eventSeverities);
         }
         else {
-            return claimsModel(period).generateClaims(scaleFactor, severityFactors, 1, periodScope, contractBase);
+            return claimsModel(period).generateClaims(- scaleFactor, severityFactors, 1, periodScope, contractBase);
         }
     }
 

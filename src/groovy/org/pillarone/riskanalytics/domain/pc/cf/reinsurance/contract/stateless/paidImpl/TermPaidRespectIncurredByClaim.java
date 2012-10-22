@@ -186,7 +186,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
     public double lossAfterAnnualStructure(Collection<ClaimCashflowPacket> layerCashflows, LayerParameters layerParameters) {
         double lossAfterClaimStructure = 0;
         for (ClaimCashflowPacket aClaim : layerCashflows) {
-            lossAfterClaimStructure += Math.min(Math.max(-aClaim.getPaidCumulatedIndexed() - layerParameters.getClaimExcess(), 0), layerParameters.getClaimLimit());
+            lossAfterClaimStructure += Math.min(Math.max(aClaim.getPaidCumulatedIndexed() - layerParameters.getClaimExcess(), 0), layerParameters.getClaimLimit());
         }
         return Math.min(Math.max(lossAfterClaimStructure - layerParameters.getLayerPeriodExcess(), 0), layerParameters.getLayerPeriodLimit());
     }

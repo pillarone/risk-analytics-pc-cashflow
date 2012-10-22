@@ -157,12 +157,12 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                 }
 
                 if (contract.outClaimsCeded.size() > 0) {
-                    assertEquals "[${importer.fileName}, $sheet] period: $period correct ceded ultimates", cededClaims.get(period).ultimate, - (Double) contract.outClaimsCeded*.ultimate().sum(), EPSILON
-                    assertEquals "[${importer.fileName}, $sheet] period: $period correct ceded paid", cededClaims.get(period).paid,- (Double) contract.outClaimsCeded.paidIncrementalIndexed.sum(), EPSILON
+                    assertEquals "[${importer.fileName}, $sheet] period: $period correct ceded ultimates", cededClaims.get(period).ultimate, (Double) contract.outClaimsCeded*.ultimate().sum(), EPSILON
+                    assertEquals "[${importer.fileName}, $sheet] period: $period correct ceded paid", cededClaims.get(period).paid, (Double) contract.outClaimsCeded.paidIncrementalIndexed.sum(), EPSILON
                     int calendarYear = beginOfCover.year
-                    assertEquals "[${importer.fileName}, $sheet] period: $period correct ceded paid CP1", cededClaims.get(period).paidCY1, - TermContractTestUtils.paidSumOfCalendarYear(contract.outClaimsCeded, calendarYear), EPSILON
-                    assertEquals "[${importer.fileName}, $sheet] period: $period correct ceded paid CP2", cededClaims.get(period).paidCY2, - TermContractTestUtils.paidSumOfCalendarYear(contract.outClaimsCeded, ++calendarYear), EPSILON
-                    assertEquals "[${importer.fileName}, $sheet] period: $period correct ceded paid CP3", cededClaims.get(period).paidCY3, - TermContractTestUtils.paidSumOfCalendarYear(contract.outClaimsCeded, ++calendarYear), EPSILON
+                    assertEquals "[${importer.fileName}, $sheet] period: $period correct ceded paid CP1", cededClaims.get(period).paidCY1, TermContractTestUtils.paidSumOfCalendarYear(contract.outClaimsCeded, calendarYear), EPSILON
+                    assertEquals "[${importer.fileName}, $sheet] period: $period correct ceded paid CP2", cededClaims.get(period).paidCY2, TermContractTestUtils.paidSumOfCalendarYear(contract.outClaimsCeded, ++calendarYear), EPSILON
+                    assertEquals "[${importer.fileName}, $sheet] period: $period correct ceded paid CP3", cededClaims.get(period).paidCY3, TermContractTestUtils.paidSumOfCalendarYear(contract.outClaimsCeded, ++calendarYear), EPSILON
                 }
                 contract.reset()
                 contract.iterationScope.periodScope.prepareNextPeriod()

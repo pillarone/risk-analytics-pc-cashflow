@@ -36,14 +36,13 @@ class IncurredCalcTest extends GroovyTestCase {
 
         grossClaims.clear()
 
-        grossClaims << new ClaimRoot(-100, ClaimType.SINGLE, start2010, start2010 )
-        grossClaims << new ClaimRoot(-150, ClaimType.SINGLE, start2010, start2010 )
-        grossClaims << new ClaimRoot(-200, ClaimType.SINGLE, start2010, start2010 )
+        grossClaims << new ClaimRoot(100, ClaimType.SINGLE, start2010, start2010 )
+        grossClaims << new ClaimRoot(150, ClaimType.SINGLE, start2010, start2010 )
+        grossClaims << new ClaimRoot(200, ClaimType.SINGLE, start2010, start2010 )
     }
 
     void testCededIncurred() {
         AnnualIncurredCalc calc = new AnnualIncurredCalc()
-
 
         LayerParameters noLimits = new LayerParameters(1, 0, 0)
         noLimits.addAdditionalPremium(0, 0, 0, APBasis.LOSS)
@@ -136,7 +135,7 @@ class IncurredCalcTest extends GroovyTestCase {
         assertEquals(" ", 0, incurredSecondCalcMap.get(1))
 
 
-        grossClaims.add(new ClaimRoot(-100, ClaimType.SINGLE, new DateTime(2012, 1, 1, 1, 0, 0, 0), new DateTime(2012, 1, 1, 1, 0, 0, 0)))
+        grossClaims.add(new ClaimRoot(100, ClaimType.SINGLE, new DateTime(2012, 1, 1, 1, 0, 0, 0), new DateTime(2012, 1, 1, 1, 0, 0, 0)))
 
         periodScope.prepareNextPeriod()
         double inThirdCalc = calculation.cededIncurredRespectTerm( grossClaims, layerParameters, periodScope, 100, 400, periodScope.getPeriodCounter(), ContractCoverBase.LOSSES_OCCURING )

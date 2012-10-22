@@ -30,7 +30,7 @@ public class IncurredAllocation implements IIncurredAllocation {
 
         ArrayList<ICededRoot> cededIncurred = grossClaimsThisPeriod.collectAll {    it ->
             double incurredRatio = it.getUltimate() / grossIncurred
-            new CededClaimRoot(-incurredRatio * incurredInPeriod, it)
+            new CededClaimRoot(incurredRatio * incurredInPeriod, it)
         }
         return cededIncurred
     }

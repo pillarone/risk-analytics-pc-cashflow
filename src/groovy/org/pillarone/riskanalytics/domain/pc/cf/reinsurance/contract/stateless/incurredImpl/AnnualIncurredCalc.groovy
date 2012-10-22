@@ -33,7 +33,7 @@ public class AnnualIncurredCalc implements IIncurredCalculation {
     private double lossAfterAnnualStructure(Collection<IClaimRoot> incurredClaims, LayerParameters layerParameters) {
         double lossAfterClaimStructure = 0;
         for (IClaimRoot incurredClaim : incurredClaims) {
-            lossAfterClaimStructure += Math.min(Math.max(-incurredClaim.getUltimate() - layerParameters.getClaimExcess(), 0), layerParameters.getClaimLimit());
+            lossAfterClaimStructure += Math.min(Math.max(incurredClaim.getUltimate() - layerParameters.getClaimExcess(), 0), layerParameters.getClaimLimit());
         }
         return Math.min(Math.max(lossAfterClaimStructure - layerParameters.getLayerPeriodExcess(), 0), layerParameters.getLayerPeriodLimit());
     }

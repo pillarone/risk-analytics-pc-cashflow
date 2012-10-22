@@ -61,17 +61,17 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
     void testUsage() {
         AttritionalClaimsGenerator generator = createGenerator()
         doClaimsCalcWithNoCommutation(generator, true)
-        assertEquals "P0 ultimate value", -1000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "P0 ultimate value", 1000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
 
         generator.periodScope.prepareNextPeriod()
         generator.reset()
         doClaimsCalcWithNoCommutation(generator, true)
-        assertEquals "P1 ultimate value", -1000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "P1 ultimate value", 1000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
 
         generator.periodScope.prepareNextPeriod()
         generator.reset()
         doClaimsCalcWithNoCommutation(generator, true)
-        assertEquals "P2 ultimate value", -2000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "P2 ultimate value", 2000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
     }
 
     void testRelativeCalibrationPremium() {
@@ -86,7 +86,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.inUnderwritingInfo.add(underwritingInfo)
         doClaimsCalcWithNoCommutation(generator, true)
         assertEquals "P0 claims", 2 * 12, generator.outClaims.size()
-        assertEquals "P0 ultimate values", -1000000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "P0 ultimate values", 1000000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
 
         generator.reset()
         generator.periodScope.prepareNextPeriod()
@@ -97,7 +97,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.inUnderwritingInfo.add(underwritingInfo)
         doClaimsCalcWithNoCommutation(generator, true)
         assertEquals "P2 claims", 2 * 12 , generator.outClaims.size()
-        assertEquals "P2 ultimate values", -2000000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "P2 ultimate values", 2000000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
     }
 
     void testRelativeCalibrationExposure() {
@@ -112,7 +112,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.inUnderwritingInfo.add(underwritingInfo)
         doClaimsCalcWithNoCommutation(generator, true)
         assertEquals "P0 claims", 2 * 12 , generator.outClaims.size()
-        assertEquals "P0 ultimate values", -20000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "P0 ultimate values", 20000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
 
         generator.reset()
         generator.periodScope.prepareNextPeriod()
@@ -123,7 +123,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.inUnderwritingInfo.add(underwritingInfo)
         doClaimsCalcWithNoCommutation(generator, true)
         assertEquals "P2 claims", 2 * 12 , generator.outClaims.size()
-        assertEquals "P2 ultimate values", -40000d,  (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "P2 ultimate values", 40000d,  (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
     }
 
     void testDeterministicParameterization() {
@@ -135,7 +135,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
 
         doClaimsCalcWithNoCommutation(generator, true)
         assertEquals "P0 claims", 2 * 12, generator.outClaims.size()
-        assertEquals "P0 ultimate values", -1300d,  (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "P0 ultimate values", 1300d,  (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
 
         generator.reset()
         generator.periodScope.prepareNextPeriod()
@@ -148,7 +148,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         doClaimsCalcWithNoCommutation(generator, true)
 
         assertEquals "P2 claims", 2 * 12, generator.outClaims.size()
-        assertEquals "P2 ultimate values", -2100d,  (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "P2 ultimate values", 2100d,  (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
     }
 
     // todo(sku): fix, runs locally but not on Jenkins
@@ -200,21 +200,21 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
 
         generator.inFactors.addAll(severityTimeSeries)
         doClaimsCalcWithNoCommutation(generator, true)
-        assertEquals "P0 ultimate values", -1000d,  (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "P0 ultimate values", 1000d,  (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
 
         generator.reset()
         generator.periodScope.prepareNextPeriod()
         generator.inFactors.addAll(severityTimeSeries)
         doClaimsCalcWithNoCommutation(generator, true)
 
-        assertEquals "P1 ultimate values", -1000d * 0.95 / 1.05, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "P1 ultimate values", 1000d * 0.95 / 1.05, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
 
         generator.reset()
         generator.periodScope.prepareNextPeriod()
         generator.inFactors.addAll(severityTimeSeries)
         doClaimsCalcWithNoCommutation(generator, true)
 
-        assertEquals "P2 ultimate values", -2000d * 1.1 / 1.05,  (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "P2 ultimate values", 2000d * 1.1 / 1.05,  (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
     }
 
     private void doClaimsCalcWithNoCommutation(AttritionalClaimsGenerator generator, boolean addPattern = false) {
@@ -256,7 +256,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         generator.doCalculation(AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION)
         generator.inCommutationState << new CommutationState(true, 1, CommutationBehaviour.DEFAULT, 1d, 1, new DateTime(2012, 12, 31, 0, 0, 0, 0), true)
         generator.doCalculation(AbstractClaimsGenerator.PHASE_STORE_COMMUTATION_STATE)
-        assertEquals "P0 ultimate values", -1000d,  (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "P0 ultimate values", 1000d,  (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
 
         generator.reset()
         generator.periodScope.prepareNextPeriod()

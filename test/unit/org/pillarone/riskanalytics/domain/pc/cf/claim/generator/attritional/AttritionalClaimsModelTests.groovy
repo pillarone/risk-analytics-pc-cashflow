@@ -64,16 +64,16 @@ class AttritionalClaimsModelTests extends GroovyTestCase {
 
         List<ClaimRoot> claimRoot = model.baseClaims(underwritingInfos, systematicFrequencies, events, factors, new LossesOccurringContractBase(), null, periodScope)
         assertEquals "P0 one claim only", 1, claimRoot.size()
-        assertEquals "P0 unmodified ultimate", -1000d, claimRoot[0].ultimate
+        assertEquals "P0 unmodified ultimate", 1000d, claimRoot[0].ultimate
 
         periodScope.prepareNextPeriod()
         claimRoot = model.baseClaims(underwritingInfos, systematicFrequencies, events, factors, new LossesOccurringContractBase(), null, periodScope)
         assertEquals "P1 one claim only", 1, claimRoot.size()
-        assertEquals "P1 unmodified ultimate", -1000d, claimRoot[0].ultimate
+        assertEquals "P1 unmodified ultimate", 1000d, claimRoot[0].ultimate
 
         periodScope.prepareNextPeriod()
         claimRoot = model.baseClaims(underwritingInfos, systematicFrequencies, events, factors, new LossesOccurringContractBase(), null, periodScope)
         assertEquals "P2 one claim only", 1, claimRoot.size()
-        assertEquals "P2 unmodified ultimate", -2000d, claimRoot[0].ultimate
+        assertEquals "P2 unmodified ultimate", 2000d, claimRoot[0].ultimate
     }
 }

@@ -160,8 +160,8 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
     private void checkBaseClaims(List<ClaimRoot> baseClaims) {
         if (globalSanityChecks) {
             for (ClaimRoot baseClaim : baseClaims) {
-                if (baseClaim.getUltimate() > 0) {
-                    throw new SimulationException("Positive claim detected... i.e an inflow of cash!: " + baseClaim.toString());
+                if (baseClaim.getUltimate() < 0) {
+                    throw new SimulationException("Negative claim detected... i.e an inflow of cash!: " + baseClaim.toString());
                 }
                 if(iterationScope.isFirstIteration()) {
                     LOG.info("claim root : " + baseClaim.toString());
@@ -180,8 +180,8 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
     private void checkCashflowClaims(List<ClaimCashflowPacket> cashflowPackets) {
         if (globalSanityChecks) {
             for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
-                if (cashflowPacket.getPaidIncrementalIndexed() > 0) {
-                    throw new SimulationException("Positive claim detected... i.e an inflow of cash!; " + cashflowPacket.toString() + " \n" + "Period Info  " + periodScope.toString());
+                if (cashflowPacket.getPaidIncrementalIndexed() < 0) {
+                    throw new SimulationException("Negative claim detected... i.e an inflow of cash!; " + cashflowPacket.toString() + " \n" + "Period Info  " + periodScope.toString());
                 }
             }
         }

@@ -73,9 +73,9 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                     double paidAgainstThisPacket = 0;
 
                     if (sumIncrementsOfThisClaim == 0 || (cashflowPackets.size() == 1)) {
-                        paidAgainstThisPacket = -claimPaidInContractYear;
+                        paidAgainstThisPacket = claimPaidInContractYear;
                     } else {
-                        paidAgainstThisPacket = claimPaidInContractYear * cashflowPacket.getPaidIncrementalIndexed() / -sumIncrementsOfThisClaim;
+                        paidAgainstThisPacket = claimPaidInContractYear * cashflowPacket.getPaidIncrementalIndexed() / sumIncrementsOfThisClaim;
                     }
 
                     cumulatedCededForThisClaim += paidAgainstThisPacket;

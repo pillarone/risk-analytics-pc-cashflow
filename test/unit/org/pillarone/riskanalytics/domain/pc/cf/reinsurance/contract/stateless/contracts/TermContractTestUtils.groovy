@@ -100,7 +100,7 @@ public class TermContractTestUtils {
                 Double ultimate = (Double) claim["ultimateP$period"]
                 if (ultimate != null) {
                     // invert ultimate sign as claim have a negative sign in pc-cashflow plugin
-                    ultimatesPerPeriod.put(period, -ultimate)
+                    ultimatesPerPeriod.put(period, ultimate)
                 }
             }
         }
