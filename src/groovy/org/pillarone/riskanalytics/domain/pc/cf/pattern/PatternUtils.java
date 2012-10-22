@@ -126,6 +126,13 @@ public class PatternUtils {
         TreeMap<DateTime, Double> absolutePattern = originalPattern.absolutePattern(baseDate, false);
         TreeMap<DateTime, Double> absoluteIncrementalPattern = originalPattern.absolutePattern(baseDate, true);
         double elapsedMonths = days360.days360(baseDate, updateDate) / 30d;
+
+        if(absolutePattern.higherEntry(updateDate) == null ) /* Pattern end before update date !  Payout at update date*/  {
+            cumulativePercentages.add(1d);
+            Period period = new Interval(baseDate, updateDate).toPeriod();
+            cumulativePeriods.add(period);
+            return new PatternPacket(originalPattern, cumulativePercentages, cumulativePeriods);
+        }
         DateTime nextPaymentDate = absolutePattern.higherEntry(updateDate).getKey();
 
 // --------------- Last paid reported interpolation.
