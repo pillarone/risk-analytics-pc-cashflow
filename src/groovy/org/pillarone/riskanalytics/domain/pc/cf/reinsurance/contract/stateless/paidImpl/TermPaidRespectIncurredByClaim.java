@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
+import org.pillarone.riskanalytics.domain.pc.cf.global.SimulationConstants;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 
@@ -50,11 +51,10 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
             if (paidByPeriodUpToFilterFromDate.get(modelPeriod) == null) {
                 paidByPeriod.put(modelPeriod, cumulativePaidToDate.get(modelPeriod));
             } else {
-
                 double paidPriorSimPeriod = paidByPeriodUpToFilterFromDate.get(modelPeriod);
                 double paidToCurrentSimPoint = cumulativePaidToDate.get(modelPeriod);
                 double cumPaid = paidToCurrentSimPoint - paidPriorSimPeriod;
-                if (cumPaid < - 0.000000005) {
+                if (cumPaid < - SimulationConstants.EPSILON) {
 
                     String message = "Insanity detected: incremental paid amount in model period : " + modelPeriod + " is calculated as negative. " + cumPaid +
                             ". Contact support. " ;
