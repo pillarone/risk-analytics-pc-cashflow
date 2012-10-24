@@ -59,7 +59,7 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
         super.initSimulation();
         IPeriodCounter periodCounter = packetCollector.getSimulationScope().getIterationScope().getPeriodScope().getPeriodCounter();
         boolean projectionStartsOnFirstJanuary = periodCounter.startOfFirstPeriod().dayOfYear().get() == 1;
-        boolean annualPeriods = periodCounter.annualPeriodsOnly();
+        boolean annualPeriods = periodCounter.annualPeriodsOnly(false);
         displayUnderwritingYearOnly = projectionStartsOnFirstJanuary && annualPeriods;
     }
 
