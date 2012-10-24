@@ -197,26 +197,35 @@ public final class GrossClaimRoot implements IClaimRoot {
         final ClaimCashflowPacket ultimateOnly = new ClaimCashflowPacket(this, claimRoot, getUltimate(), 0, 0, 0, 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), getExposureStartDate(), ultimatePeriod);
         paidPackets.add(ultimateOnly);
 
-//        Zero packets for every subsequent period. This should ensure that any and every higher component knows that this gross claim exists.
-        List<DateTime> periodStartDates = aLimitedCounter.periodDates();
-        Collection<DateTime> zeroPacketDates = GRIUtilities.filterDates(getExposureStartDate(), periodCounter.endOfLastPeriod(), periodStartDates);
-        for (DateTime zeroPacketDate : zeroPacketDates) {
-            int period = periodCounter.belongsToPeriod(zeroPacketDate);
-            final ClaimCashflowPacket zeroClaim = new ClaimCashflowPacket(this, claimRoot, 0, 0, 0, 0, 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), zeroPacketDate, period);
-            paidPackets.add(zeroClaim);
-        }
         checkPayoutPattern();
 
+        NavigableMap<Integer, ClaimCashflowPacket> latestClaimByPeriod = new TreeMap<Integer, ClaimCashflowPacket>();
+        /* Develop claims according to payout pattern.*/
         TreeMap<DateTime, DateFactors> factors = payoutPattern.dateTimeFactors(startDateForPatterns);
         for (Map.Entry<DateTime, DateFactors> developmentEntry : factors.entrySet()) {
             DateFactors factor = developmentEntry.getValue();
             DateTime cashflowDate = factor.getDate();
-            int period = periodCounter.belongsToPeriod(cashflowDate);
-            double incrementalPaid = this.getUltimate() * factor.getFactorIncremental();
-            double cumulativePaid = this.getUltimate() * factor.getFactorCumulated();
-            final ClaimCashflowPacket zeroClaim = new ClaimCashflowPacket(this, claimRoot, 0, 0, incrementalPaid, cumulativePaid, 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), cashflowDate, period);
+            if (cashflowDate.isBefore(periodCounter.endOfLastPeriod())) {
+                int period = periodCounter.belongsToPeriod(cashflowDate);
+                double incrementalPaid = this.getUltimate() * factor.getFactorIncremental();
+                double cumulativePaid = this.getUltimate() * factor.getFactorCumulated();
+                final ClaimCashflowPacket aClaim = new ClaimCashflowPacket(this, claimRoot, 0, 0, incrementalPaid, cumulativePaid, 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), cashflowDate, period);
+                latestClaimByPeriod.put(period, aClaim);
+                paidPackets.add(aClaim);
+            }
+        }
+
+        //        Zero packets for every subsequent period. This should ensure that any and every higher component knows that this gross claim exists.
+//        Note that is's important that cumulative cashflows are right in order for the higher components to correctly interpret the claim.
+        List<DateTime> periodStartDates = aLimitedCounter.periodDates();
+        Collection<DateTime> zeroPacketDates = GRIUtilities.filterDates(getExposureStartDate(), periodCounter.endOfLastPeriod().minusDays(1), periodStartDates);
+        for (DateTime zeroPacketDate : zeroPacketDates) {
+            int period = periodCounter.belongsToPeriod(zeroPacketDate);
+            ClaimCashflowPacket latestCashflowFromPattern = latestClaimByPeriod.floorEntry(period).getValue();
+            final ClaimCashflowPacket zeroClaim = new ClaimCashflowPacket(this, claimRoot, 0, 0, 0, latestCashflowFromPattern.getPaidCumulatedIndexed(), 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), zeroPacketDate, period);
             paidPackets.add(zeroClaim);
         }
+
         Collections.sort ( paidPackets, new ClaimCashflowDateComparator()  );
         return paidPackets;
     }

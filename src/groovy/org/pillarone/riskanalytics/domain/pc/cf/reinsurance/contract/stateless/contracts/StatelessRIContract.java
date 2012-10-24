@@ -98,42 +98,32 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         claims.addAll(inClaims);
         periodStore.put(GROSS_CLAIMS, claims);
         periodStore.put(CEDED_CLAIMS, new ArrayList<ClaimCashflowPacket>()); /* Otherwise null pointer on startup - overwrite this list later in this method */
-        List<ICededRoot> allIncurredCededClaims = new ArrayList<ICededRoot>();
         List<ClaimCashflowPacket> allCashflowsToDate = allClaimsToDate(periodScope, periodStore, GROSS_CLAIMS);
         List<ClaimCashflowPacket> cededCashflowsToDate = allClaimsToDate(periodScope, periodStore, CEDED_CLAIMS);
         SetMultimap<IClaimRoot, IClaimRoot> incurredClaims = RIUtilities.incurredClaims(allCashflowsToDate);
         Set<ICededRoot> allIncurredCeded = RIUtilities.incurredCededClaims(cededCashflowsToDate, IncurredClaimBase.BASE);
+        List<ICededRoot> allIncurredCededClaims = new ArrayList<ICededRoot>();
         allIncurredCededClaims.addAll(new ArrayList<ICededRoot>(allIncurredCeded));
 
-        ScaledPeriodLayerParameters layerParameters = ((ScaledPeriodLayerParameters) ((NonPropTemplateContractStrategy) parmContractStructure).scalablePeriodLayerParameters());
-        layerParameters.setExposureBase(parmContractBase.exposureBase());
-        layerParameters.setCounter(periodScope.getPeriodCounter());
-        AllPeriodUnderwritingInfoPacket packet = (AllPeriodUnderwritingInfoPacket) iterationStore.get(UWINFO, -periodScope.getCurrentPeriod());
-        layerParameters.setUwInfo(packet);
-        List<LayerParameters> layers = layerParameters.getLayers(periodScope.getCurrentPeriod());
-        Double termLimit = ((NonPropTemplateContractStrategy) parmContractStructure).getTermLimit();
-        Double termExcess = ((NonPropTemplateContractStrategy) parmContractStructure).getTermDeductible();
+        Double termLimit = parmContractStructure.getTermLimit();
+        Double termExcess = parmContractStructure.getTermDeductible();
 
-
-//        Incurred calc
         Set<IClaimRoot> incurredClaimsInContractPeriod = RIUtilities.incurredClaimsByDate(periodScope.getCurrentPeriodStartDate(), periodScope.getNextPeriodStartDate().minusMillis(1),
                 incurredClaims, parmCoverageBase, IncurredClaimBase.BASE);
-        IncurredClaimAndAP incurredPeriodResult = incurredResultsThisSimPeriod(incurredClaimsInContractPeriod);
-        IncurredAllocation incurredAllocation = new IncurredAllocation();
-        TermIncurredCalculation incurredCalc = new TermIncurredCalculation();
+        IncurredClaimAndAP incurredPeriodResult = incurredResultsThisSimPeriod(incurredClaimsInContractPeriod, termLimit, termExcess);
+
         List<ClaimCashflowPacket> paidClaims;
         List<ContractFinancialsPacket> contractFinancialsPacket;
         try {
-            final Map<Integer, Double> cededIncurredByPeriod = incurredCalc.cededIncurredsByPeriods(incurredClaims.keys(), periodScope, termExcess, termLimit, layerParameters, parmCoverageBase);
+//            Leave this code here for the moment as evaulating the right hand side in the debugger can be useful, but it incurrs a performance penalty when uncommented.
+//            final Map<Integer, Double> cededIncurredByPeriod = new TermIncurredCalculation().cededIncurredsByPeriods(incurredClaims.keys(), periodScope, termExcess, termLimit, setupLayerParameters() , parmCoverageBase);
             final Set<IClaimRoot> allIncurredClaims = RIUtilities.incurredClaims(allCashflowsToDate, IncurredClaimBase.BASE);
-            final List<ICededRoot> cededClaims = incurredAllocation.allocateClaims(incurredPeriodResult.getIncurredClaim(), allIncurredClaims, periodScope, parmCoverageBase);
+            final List<ICededRoot> cededClaims = new IncurredAllocation().allocateClaims(incurredPeriodResult.getIncurredClaim(), allIncurredClaims, periodScope, parmCoverageBase);
             allIncurredCededClaims.addAll(cededClaims);
 
+            final Map<Integer, Double> incrementalPaidInThisSimulationPeriod = incrementalPaidAmountByModelPeriod(termLimit, termExcess);
 
-            final Map<Integer, Double> incrementalPaidInThisSimulationPeriod = incrementalPaidAmountByModelPeriod(allCashflowsToDate);
-
-            IPaidAllocation iRiPaidAllocation = new ProportionalToGrossPaidAllocation();
-            paidClaims = iRiPaidAllocation.allocatePaid(incrementalPaidInThisSimulationPeriod, inClaims,
+            paidClaims =  new ProportionalToGrossPaidAllocation().allocatePaid(incrementalPaidInThisSimulationPeriod, inClaims,
                     cededCashflowsToDate, periodScope, parmCoverageBase, allIncurredCededClaims, globalSanityChecks);
             contractFinancialsPacket = ContractFinancialsPacket.getContractFinancialsPacketsByInceptionPeriod(
                     paidClaims, new ArrayList<ClaimCashflowPacket>(), new ArrayList<CededUnderwritingInfoPacket>(),
@@ -149,6 +139,15 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     }
 
+    private ScaledPeriodLayerParameters setupLayerParameters() {
+        AllPeriodUnderwritingInfoPacket packet = (AllPeriodUnderwritingInfoPacket) iterationStore.get(UWINFO, -periodScope.getCurrentPeriod());
+        ScaledPeriodLayerParameters layerParameters = ((NonPropTemplateContractStrategy) parmContractStructure).scalablePeriodLayerParameters();
+        layerParameters.setExposureBase(parmContractBase.exposureBase());
+        layerParameters.setCounter(periodScope.getPeriodCounter());
+        layerParameters.setUwInfo(packet);
+        return layerParameters;
+    }
+
     private void initIteration() {
         if (iterationScope.isFirstIteration() && periodScope.isFirstPeriod()) {
             if (parmContractBase.exposureBase() != ExposureBase.ABSOLUTE) {
@@ -161,18 +160,12 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         }
     }
 
-    private IncurredClaimAndAP incurredResultsThisSimPeriod(Set<IClaimRoot> incurredClaimsInContractPeriod) {
+    private IncurredClaimAndAP incurredResultsThisSimPeriod(Set<IClaimRoot> incurredClaimsInContractPeriod, double termLimit, double termExcess) {
 
         IIncurredCalculation incurredCalc = new TermIncurredCalculation();
 
-        ScaledPeriodLayerParameters layerParameters = ((ScaledPeriodLayerParameters) ((NonPropTemplateContractStrategy) parmContractStructure).scalablePeriodLayerParameters());
-        layerParameters.setExposureBase(parmContractBase.exposureBase());
-        layerParameters.setCounter(periodScope.getPeriodCounter());
-        AllPeriodUnderwritingInfoPacket packet = (AllPeriodUnderwritingInfoPacket) iterationStore.get(UWINFO, -periodScope.getCurrentPeriod());
-        layerParameters.setUwInfo(packet);
+        ScaledPeriodLayerParameters layerParameters = setupLayerParameters();
         List<LayerParameters> layers = layerParameters.getLayers(periodScope.getCurrentPeriod());
-        Double termLimit = ((NonPropTemplateContractStrategy) parmContractStructure).getTermLimit();
-        Double termExcess = ((NonPropTemplateContractStrategy) parmContractStructure).getTermDeductible();
 
         List<ClaimCashflowPacket> claims = allClaimsToDate(periodScope, periodStore, GROSS_CLAIMS);
         List<IClaimRoot> incurredClaims = new ArrayList<IClaimRoot>(RIUtilities.incurredClaims(claims, IncurredClaimBase.BASE));
@@ -182,17 +175,8 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         return new IncurredClaimAndAP(incurredInPeriod, additionalPremiumInperiod);
     }
 
-    private Map<Integer, Double> incrementalPaidAmountByModelPeriod(List<ClaimCashflowPacket> allPaidClaims) {
-        ScaledPeriodLayerParameters layerParameters = ((NonPropTemplateContractStrategy) parmContractStructure).scalablePeriodLayerParameters();
-        layerParameters.setExposureBase(parmContractBase.exposureBase());
-        layerParameters.setCounter(periodScope.getPeriodCounter());
-        AllPeriodUnderwritingInfoPacket packet = (AllPeriodUnderwritingInfoPacket) iterationStore.get(UWINFO, -periodScope.getCurrentPeriod());
-        layerParameters.setUwInfo(packet);
-        List<LayerParameters> layers = layerParameters.getLayers(periodScope.getCurrentPeriod());
-        Double termLimit = ((NonPropTemplateContractStrategy) parmContractStructure).getTermLimit();
-        Double termExcess = ((NonPropTemplateContractStrategy) parmContractStructure).getTermDeductible();
-
-
+    private Map<Integer, Double> incrementalPaidAmountByModelPeriod(double termLimit, double termExcess) {
+        ScaledPeriodLayerParameters layerParameters = setupLayerParameters();
         List<ClaimCashflowPacket> claims = allClaimsToDate(periodScope, periodStore, GROSS_CLAIMS);
 
         TermPaidRespectIncurredByClaim iPaidCalculation = new TermPaidRespectIncurredByClaim();
@@ -297,14 +281,6 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     public void setOutContractFinancials(PacketList<ContractFinancialsPacket> outContractFinancials) {
         this.outContractFinancials = outContractFinancials;
-    }
-
-    public IReinsuranceContractStrategy getParmContractStrategy() {
-        return parmContractStructure;
-    }
-
-    public void setParmContractStrategy(IReinsuranceContractStrategy parmContractStrategy) {
-        this.parmContractStructure = parmContractStrategy;
     }
 
     public ContractCoverBase getParmCoverageBase() {

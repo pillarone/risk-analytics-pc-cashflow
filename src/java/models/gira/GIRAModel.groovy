@@ -151,6 +151,9 @@ class GIRAModel extends StochasticModel {
         if (globalParameters.parmProjection.periodNumberRestricted()) {
             numberOfYears = Math.max(1, Math.ceil(developmentPeriod.months / 12d))
         }
+        if (globalParameters.isRuntimeRunAtMostFivePeriods()) {
+            numberOfYears = Math.min(numberOfYears, 5)
+        }
         return new LimitedContinuousPeriodCounter(globalParameters.parmProjectionStartDate, Period.years(1), numberOfYears)
     }
 

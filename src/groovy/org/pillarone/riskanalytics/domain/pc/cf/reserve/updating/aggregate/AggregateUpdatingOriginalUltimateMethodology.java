@@ -36,10 +36,9 @@ public class AggregateUpdatingOriginalUltimateMethodology extends AggregateUpdat
             baseClaimsWithAdjustedUltimate.add((ClaimRoot) baseClaim);
             return baseClaimsWithAdjustedUltimate;
         } else {
-            // * (-1) as reported claim is entered > 0 and the ultimate is negative
-            double reportedToDate = -historicClaim.reportedToDate(updateDate);
+            double reportedToDate = historicClaim.reportedToDate(updateDate);
             double originalUltimate = baseClaim.getUltimate();
-            double ultimate = Math.min(reportedToDate, originalUltimate);
+            double ultimate = Math.max(reportedToDate, originalUltimate);
             ClaimRoot adjustedBaseClaim = new ClaimRoot(ultimate, baseClaim);
             baseClaimsWithAdjustedUltimate.add(adjustedBaseClaim);
             return baseClaimsWithAdjustedUltimate;

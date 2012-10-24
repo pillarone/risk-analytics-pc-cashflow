@@ -32,7 +32,7 @@ public class NoAggregateActualClaimsStrategy extends AbstractParameterObject imp
 
     public GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
                                                    PeriodScope periodScope, DateTime updateDate, DateTimeUtilities.Days360 days360, boolean sanityChecks, PayoutPatternBase payoutPatternBase) {
-        return new GrossClaimRoot(claimRoot, payoutPattern);
+        return new GrossClaimRoot(claimRoot, payoutPattern, payoutPatternBase.startDateForPayouts(claimRoot, periodScope.getCurrentPeriodStartDate(), null ) );
     }
 
     public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase) {

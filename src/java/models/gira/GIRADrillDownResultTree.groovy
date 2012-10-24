@@ -50,6 +50,7 @@ mappings = {
                     "ultimate" "GIRA:segments:[%segment%]:outClaimsNet:ultimate", {
                         "byPeril" {
                             "[%peril%]" "GIRA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:ultimate"
+                            "[%peril%]" "GIRA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:ultimate"
                         }
                         "byContract" {
                             "[%contract%]" "GIRA:segments:[%segment%]:reinsuranceContracts:[%contract%]:outClaimsNet:ultimate"

@@ -8,12 +8,14 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.global.SimulationConstants;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IPaidAllocation;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -46,7 +48,12 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
             for (Map.Entry<IClaimRoot, Collection<ClaimCashflowPacket>> packetEntrys : cashflows.entrySet()) {
                 ICededRoot cededRoot = GRIUtilities.findCededClaimRelatedToGrossClaim(packetEntrys.getKey(), incurredCededClaims);
                 List<ClaimCashflowPacket> cashflowPackets = new ArrayList<ClaimCashflowPacket>(packetEntrys.getValue());
-                double grossIncurredByClaimRatio = packetEntrys.getKey().getUltimate() / grossIncurredInPeriod;
+                double grossIncurredByClaimRatio;
+                if(Math.abs(grossIncurredInPeriod ) == 0  ) {
+                    grossIncurredByClaimRatio = 0d;
+                } else {
+                    grossIncurredByClaimRatio = packetEntrys.getKey().getUltimate() / grossIncurredInPeriod;
+                }
                 double claimPaidInContractYear = grossIncurredByClaimRatio * cededPaidAmountInModelPeriodThisSimPeriod;
 
                 double sumIncrementsOfThisClaim = GRIUtilities.incrementalCashflowSum(cashflowPackets);
@@ -66,17 +73,21 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                     double paidAgainstThisPacket = 0;
 
                     if (sumIncrementsOfThisClaim == 0 || (cashflowPackets.size() == 1)) {
-                        paidAgainstThisPacket = -claimPaidInContractYear;
+                        paidAgainstThisPacket = claimPaidInContractYear;
                     } else {
-                        paidAgainstThisPacket = claimPaidInContractYear * cashflowPacket.getPaidIncrementalIndexed() / -sumIncrementsOfThisClaim;
+                        paidAgainstThisPacket = claimPaidInContractYear * cashflowPacket.getPaidIncrementalIndexed() / sumIncrementsOfThisClaim;
                     }
 
                     cumulatedCededForThisClaim += paidAgainstThisPacket;
                     ClaimCashflowPacket claimCashflowPacket = new ClaimCashflowPacket(cededRoot, cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, setUltimate);
-                    if (cumulatedCededForThisClaim < cededRoot.getUltimate()) {
+                    if (
+                            Math.abs(cumulatedCededForThisClaim) > Math.abs(cededRoot.getUltimate()) + SimulationConstants.EPSILON
+                        ) {
 
-                        String message = "Insanity detected : " + cededRoot.getUltimate() + " has an ultimate of smaller magnitude " +
-                                "than the paid amount " + claimCashflowPacket.getPaidCumulatedIndexed() + "" +
+                        DecimalFormat df = new DecimalFormat("#.##");
+
+                        String message = "Insanity detected : " + df.format(cededRoot.getUltimate())  + " has an ultimate of smaller magnitude " +
+                                "than the paid amount " + df.format(claimCashflowPacket.getPaidCumulatedIndexed()) + ". " +
                                 "This will create inconsistencies in higher structures. Contact development";
                         LOG.error(message);
                         if (sanityChecks) {

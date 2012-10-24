@@ -2,10 +2,12 @@ package org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate;
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PeriodsNotIncreasingException;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.TreeMap;
@@ -49,8 +51,19 @@ public class AggregateHistoricClaim {
 
     public GrossClaimRoot claimWithAdjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate, DateTimeUtilities.Days360 days360, boolean sanityChecks) {
         DateTime startDateForPatterns = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
-        PatternPacket patternPacket = PatternUtils.adjustedPattern(payoutPattern, claimPaidUpdates, claimRoot.getUltimate(), startDateForPatterns,
-                claimRoot.getOccurrenceDate(), updateDate, lastReportedDate(updateDate), days360);
+
+        PatternPacket patternPacket = null;
+        try {
+            patternPacket = PatternUtils.adjustedPattern(payoutPattern, claimPaidUpdates, claimRoot.getUltimate(), startDateForPatterns,
+                    claimRoot.getOccurrenceDate(), updateDate, lastReportedDate(updateDate), days360);
+        } catch (PeriodsNotIncreasingException e) {
+            throw new SimulationException("Aggregate historic claims caught an exception claiming pattern period values are incorrect. " +
+                    "A potential cause of this" +
+                    "would be if the reported date of a claim was before the start of it's model period. " +
+                    "Is your updating table correct? Please check entries with contract period; " + contractPeriod +
+                    ". Are they consistent with the contract dates. If so, please contact development.", e);
+        }
+
         patternPacket.consistencyCheck(sanityChecks, sanityChecks, sanityChecks, sanityChecks);
         return new GrossClaimRoot(claimRoot, patternPacket , startDateForPatterns);
     }

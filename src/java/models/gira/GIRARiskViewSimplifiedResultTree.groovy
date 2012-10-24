@@ -24,11 +24,12 @@ mappings = {
             "premiumWritten" "GIRA:underwritingSegments:outUnderwritingInfo:premiumWritten"
             "premiumPaid" "GIRA:underwritingSegments:outUnderwritingInfo:premiumPaid"
         }
-        "segments" {
+        "segmentos" {
             "totalOfAllSegments" {
                 "claimsGross" {
                     "ultimate" "GIRA:segments:outClaimsGross:ultimate", {
                         "[%peril%]" "GIRA:segments:claimsGenerators:[%peril%]:outClaimsGross:ultimate"
+                        "[%peril%]" "GIRA:segments:reservesGenerators:[%peril%]:outClaimsGross:ultimate"
                     }
                     "reportedIncrementalIndexed" "GIRA:segments:outClaimsGross:reportedIncrementalIndexed", {
                         "[%peril%]" "GIRA:segments:claimsGenerators:[%peril%]:outClaimsGross:reportedIncrementalIndexed"

@@ -65,7 +65,7 @@ public class ClaimFilterUtils {
     public static double sumPaidIncrementalIndexedInClaimList(List<ClaimCashflowPacket> claims) {
         double paidAmount = 0;
         for (ClaimCashflowPacket claim : claims) {
-                paidAmount += claim.getPaidCumulatedIndexed();
+                paidAmount += claim.getPaidIncrementalIndexed();
         }
         return paidAmount;
     }

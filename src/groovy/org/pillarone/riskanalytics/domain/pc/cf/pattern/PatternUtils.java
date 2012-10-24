@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.pattern;
 
 import org.jfree.data.time.Day;
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
 import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
@@ -123,10 +124,16 @@ public class PatternUtils {
         }
 
         TreeMap<DateTime, Double> absolutePattern = originalPattern.absolutePattern(baseDate, false);
-
+        TreeMap<DateTime, Double> absoluteIncrementalPattern = originalPattern.absolutePattern(baseDate, true);
         double elapsedMonths = days360.days360(baseDate, updateDate) / 30d;
-        Integer nextPatternIndex = originalPattern.thisOrNextPayoutIndex(elapsedMonths);
-        DateTime nextPaymentDate = absolutePattern.ceilingEntry(updateDate).getKey();
+
+        if(absolutePattern.higherEntry(updateDate) == null ) /* Pattern end before update date !  Payout at update date*/  {
+            cumulativePercentages.add(1d);
+            Period period = new Interval(baseDate, updateDate).toPeriod();
+            cumulativePeriods.add(period);
+            return new PatternPacket(originalPattern, cumulativePercentages, cumulativePeriods);
+        }
+        DateTime nextPaymentDate = absolutePattern.higherEntry(updateDate).getKey();
 
 // --------------- Last paid reported interpolation.
 //      The two if statements protect against tail cases. Spec assumes that pattern is zero if lastReportedDate is the same as the base date. See art-863.
@@ -138,29 +145,49 @@ public class PatternUtils {
         if (!nextPaymentDate.equals(baseDate)) {
             cumulatedPaidByNextPaymentDate = RunOffPatternUtils.dateRatioInterpolation(baseDate, null, nextPaymentDate, absolutePattern, days360);
         }
-//        -------------------------
-
         double incrementalPaidByNextPaymentDate = cumulatedPaidByNextPaymentDate - paidByLatestReportedDate;
-        Double lastCumulativeRate = cumulativePercentages.get(cumulativePercentages.size() - 1);
-        double effectiveOutstandingRate = 1 - lastCumulativeRate;
-        double outstandingRate = incrementalPaidByNextPaymentDate + (1 - cumulatedPaidByNextPaymentDate);
-        for (int index = nextPatternIndex; index < originalPattern.size(); index++) {
-            double originalCumulativeValue = originalPattern.getCumulativeValues().get(index);
-            double originalIncrement = index == 0 ? originalCumulativeValue : originalCumulativeValue - originalPattern.getCumulativeValues().get(index - 1);
-            double adjustedIncrement = originalIncrement / outstandingRate;
-            if (index == nextPatternIndex) {
-                adjustedIncrement = incrementalPaidByNextPaymentDate / outstandingRate;
-            }
-            lastCumulativeRate += adjustedIncrement * effectiveOutstandingRate;
-            cumulativePercentages.add(lastCumulativeRate);
-            // Note the "-1" in the date original pay date calculation, this means that when using the period start
-            // date as the payout base a payout specified at month 12 will be seen in the first annual
-            cumulativePeriods.add(originalPattern.getCumulativePeriods().get(index).minusDays(1)); //.minus(differenceBaseDateOccurrenceDate));
-        }
+        double paidAfterNextPaymentDate = 1 - cumulatedPaidByNextPaymentDate;
+        double outstandingToBePaid = incrementalPaidByNextPaymentDate + paidAfterNextPaymentDate;
+        double cumulativeValue = actualCumulativePaid(cumulativePercentages);
+        double scaleFactorForUnpaidAmount = 1 - cumulativeValue;
 
+        TreeMap<DateTime, Double> patternEntriesAfterUpdate = filterMap(absolutePattern, updateDate);
+        boolean firstPass = true;
+        for (Map.Entry<DateTime, Double> entry : patternEntriesAfterUpdate.entrySet()) {
+            Period period = new Interval(baseDate, entry.getKey().minusDays(1)).toPeriod();
+            double incrementalValue = absoluteIncrementalPattern.get(entry.getKey());
+            double scaledPattern = 0d;
+            if(firstPass) {
+                scaledPattern = incrementalPaidByNextPaymentDate / outstandingToBePaid;
+                firstPass = false;
+            } else {
+                scaledPattern = incrementalValue / outstandingToBePaid;
+            }
+            cumulativeValue = cumulativeValue + scaledPattern * scaleFactorForUnpaidAmount;
+            cumulativePeriods.add(period);
+            cumulativePercentages.add(cumulativeValue);
+        }
         checkNonDuplicatedDays(cumulativePeriods, cumulativePercentages, baseDate);
 
         return new PatternPacket(originalPattern, cumulativePercentages, cumulativePeriods);
+    }
+
+    private static double actualCumulativePaid(List<Double> cumulativePercentages) {
+        double cumulativeValue = 0d;
+        if( cumulativePercentages.size() > 0 ) {
+            cumulativeValue = cumulativePercentages.get(cumulativePercentages.size() - 1);
+        }
+        return cumulativeValue;
+    }
+
+    private static TreeMap<DateTime, Double> filterMap(TreeMap<DateTime, Double> aMap, DateTime filterDate) {
+        final TreeMap<DateTime, Double> dateTimeDoubleTreeMap = new TreeMap<DateTime, Double>();
+        for (Map.Entry<DateTime, Double> entry : aMap.entrySet()) {
+            if(entry.getKey().minusDays(1).isAfter(filterDate)) {
+                dateTimeDoubleTreeMap.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return dateTimeDoubleTreeMap;
     }
 
     /**
@@ -182,7 +209,7 @@ public class PatternUtils {
                     cumulativePercentages.remove(index);
                     cumulativePeriods.remove(period);
                 } else throw new PatternValuesNotIncreasingException(cumulativePercentages, cumulativePeriods,
-                        "An inferred pattern carries different values for payouts on the same millisecond(!). Please contact development. " , baseDate );
+                        "An inferred pattern carries different values for payouts on the same millisecond(!). Pattern index : " + index + " Please contact development. " , baseDate );
             }
             priorPeriod = period;
             index++;
