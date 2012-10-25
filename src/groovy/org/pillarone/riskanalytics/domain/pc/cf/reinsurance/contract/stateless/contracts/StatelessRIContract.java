@@ -24,6 +24,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.IExposureBaseStr
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.*;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IContractClaimStore;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.ListOnlyContractClaimStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.CoverStrategyType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ICoverStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
@@ -98,9 +100,10 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         claims.addAll(inClaims);
         periodStore.put(GROSS_CLAIMS, claims);
         periodStore.put(CEDED_CLAIMS, new ArrayList<ClaimCashflowPacket>()); /* Otherwise null pointer on startup - overwrite this list later in this method */
-        List<ClaimCashflowPacket> allCashflowsToDate = allClaimsToDate(periodScope, periodStore, GROSS_CLAIMS);
+        IContractClaimStore claimStore = (IContractClaimStore) iterationStore.get(GROSS_CLAIMS, -periodScope.getCurrentPeriod());
+//        List<ClaimCashflowPacket> allCashflowsToDate = allClaimsToDate(periodScope, periodStore, GROSS_CLAIMS);
         List<ClaimCashflowPacket> cededCashflowsToDate = allClaimsToDate(periodScope, periodStore, CEDED_CLAIMS);
-        SetMultimap<IClaimRoot, IClaimRoot> incurredClaims = RIUtilities.incurredClaims(allCashflowsToDate);
+//        SetMultimap<IClaimRoot, IClaimRoot> incurredClaims = RIUtilities.incurredClaims(allCashflowsToDate);
         Set<ICededRoot> allIncurredCeded = RIUtilities.incurredCededClaims(cededCashflowsToDate, IncurredClaimBase.BASE);
         List<ICededRoot> allIncurredCededClaims = new ArrayList<ICededRoot>();
         allIncurredCededClaims.addAll(new ArrayList<ICededRoot>(allIncurredCeded));
@@ -109,7 +112,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         Double termExcess = parmContractStructure.getTermDeductible();
 
         Set<IClaimRoot> incurredClaimsInContractPeriod = RIUtilities.incurredClaimsByDate(periodScope.getCurrentPeriodStartDate(), periodScope.getNextPeriodStartDate().minusMillis(1),
-                incurredClaims, parmCoverageBase, IncurredClaimBase.BASE);
+                claimStore.incurredClaimsByKey(), parmCoverageBase, IncurredClaimBase.BASE);
         IncurredClaimAndAP incurredPeriodResult = incurredResultsThisSimPeriod(incurredClaimsInContractPeriod, termLimit, termExcess);
 
         List<ClaimCashflowPacket> paidClaims;
@@ -117,7 +120,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         try {
 //            Leave this code here for the moment as evaulating the right hand side in the debugger can be useful, but it incurrs a performance penalty when uncommented.
 //            final Map<Integer, Double> cededIncurredByPeriod = new TermIncurredCalculation().cededIncurredsByPeriods(incurredClaims.keys(), periodScope, termExcess, termLimit, setupLayerParameters() , parmCoverageBase);
-            final Set<IClaimRoot> allIncurredClaims = RIUtilities.incurredClaims(allCashflowsToDate, IncurredClaimBase.BASE);
+            final Set<IClaimRoot> allIncurredClaims = RIUtilities.incurredClaims(claimStore.allClaimCashflowPackets(), IncurredClaimBase.BASE);
             final List<ICededRoot> cededClaims = new IncurredAllocation().allocateClaims(incurredPeriodResult.getIncurredClaim(), allIncurredClaims, periodScope, parmCoverageBase);
             allIncurredCededClaims.addAll(cededClaims);
 
@@ -156,6 +159,9 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
             } else {
                 AllPeriodUnderwritingInfoPacket uwInfo = new AllPeriodUnderwritingInfoPacket();
                 iterationStore.put(UWINFO, uwInfo);
+
+                final IContractClaimStore claimStore = new ListOnlyContractClaimStore();
+                iterationStore.put(UWINFO, GROSS_CLAIMS);
             }
         }
     }
