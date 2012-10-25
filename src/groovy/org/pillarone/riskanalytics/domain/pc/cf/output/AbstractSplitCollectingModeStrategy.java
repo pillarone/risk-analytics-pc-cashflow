@@ -31,6 +31,7 @@ abstract public class AbstractSplitCollectingModeStrategy implements ICollecting
     protected PacketCollector packetCollector;
 
     // the following variables are used for caching purposes
+    protected SimulationRun simulationRun;
     protected String componentPath;
     protected Map<IComponentMarker, PathMapping> markerPaths;
     protected Map<ComposedMarkerKey, PathMapping> markerComposedPaths;
@@ -39,7 +40,8 @@ abstract public class AbstractSplitCollectingModeStrategy implements ICollecting
     protected int period = 0;
 
     protected void initSimulation() {
-        if (componentPath != null) return;
+        if (simulationRun != null) return;
+        simulationRun = packetCollector.getSimulationScope().getSimulation().getSimulationRun();
         componentPath = getComponentPath();
         markerPaths = new HashMap<IComponentMarker, PathMapping>();
         markerComposedPaths = new HashMap<ComposedMarkerKey, PathMapping>();
@@ -68,6 +70,7 @@ abstract public class AbstractSplitCollectingModeStrategy implements ICollecting
                 Double value = (Double) field.getValue();
                 if (checkInvalidValues(fieldName, value, period, iteration, crashSimulationOnError)) continue;
                 SingleValueResultPOJO result = new SingleValueResultPOJO();
+                result.setSimulationRun(simulationRun);
                 result.setIteration(iteration);
                 result.setPeriod(period);
                 result.setDate(packet.getDate());

@@ -4,6 +4,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
+import org.joda.time.Months;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.pillarone.riskanalytics.core.output.ICollectingModeStrategy;
@@ -17,6 +18,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.*;
 
@@ -85,6 +87,7 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
         if (checkInvalidValues(fieldName, value, period, iteration, crashSimulationOnError)) return null;
         else {
             SingleValueResultPOJO result = new SingleValueResultPOJO();
+            result.setSimulationRun(simulationRun);
             result.setIteration(iteration);
             result.setPeriod(period);
             result.setPath(mappingCache.lookupPath(path));
