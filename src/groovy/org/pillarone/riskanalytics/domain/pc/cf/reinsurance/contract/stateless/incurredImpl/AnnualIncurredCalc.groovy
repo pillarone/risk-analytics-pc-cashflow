@@ -1,19 +1,20 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl;
 
 
-import org.pillarone.riskanalytics.domain.pc.cf.claim.CededClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IIncurredAllocation
+
 import org.pillarone.riskanalytics.core.simulation.SimulationException
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.PeriodLayerParameters
+
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AdditionalPremiumPerLayer
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IIncurredCalculation
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ScaledPeriodLayerParameters
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IContractClaimStore
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache
 
 /**
  * author simon.parten @ art-allianz . com
@@ -75,7 +76,7 @@ public class AnnualIncurredCalc implements IIncurredCalculation {
         return additionalPremiumAllLayers;
     }
 
-    public double cededIncurredRespectTerm(List<IClaimRoot> incurredClaims, ScaledPeriodLayerParameters scaledLayerParameters, PeriodScope periodScope, double termExcess, double termLimit, IPeriodCounter counter, ContractCoverBase coverageBase) {
+    public double cededIncurredRespectTerm(IAllContractClaimCache claimStore, ScaledPeriodLayerParameters scaledLayerParameters, PeriodScope periodScope, double termExcess, double termLimit, IPeriodCounter counter, ContractCoverBase coverageBase) {
         throw new SimulationException("Annual calculation was asked for a term calculation. It has no knowledge of this");
     }
 }

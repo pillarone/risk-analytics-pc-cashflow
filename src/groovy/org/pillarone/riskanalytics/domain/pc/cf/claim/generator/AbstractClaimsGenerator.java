@@ -2,7 +2,10 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase;
@@ -39,6 +42,8 @@ import java.util.List;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponent implements IPerilMarker, ICorrelationMarker {
+
+    static Log LOG = LogFactory.getLog(AbstractClaimsGenerator.class);
 
     protected PeriodScope periodScope;
     protected SimulationScope simulationScope;
@@ -191,6 +196,39 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
             claim.origin = this;
         }
     }
+
+
+    protected void checkBaseClaims(List<ClaimRoot> baseClaims, boolean sanityChecks, IterationScope iterationScope) {
+        if (sanityChecks) {
+            for (ClaimRoot baseClaim : baseClaims) {
+                if (baseClaim.getUltimate() < 0) {
+                    throw new SimulationException("Negative claim detected... i.e an inflow of cash!: " + baseClaim.toString());
+                }
+                if(iterationScope.isFirstIteration()) {
+                    LOG.info("claim root : " + baseClaim.toString());
+                }
+            }
+        }
+    }
+
+    /**
+     * Do some checks on the claims in this period.
+     *
+     * @param cashflowPackets
+     * @param sanityChecks
+     */
+
+    protected void checkCashflowClaims(List<ClaimCashflowPacket> cashflowPackets, boolean sanityChecks) {
+        if (sanityChecks) {
+            for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
+                if (cashflowPacket.getPaidIncrementalIndexed() < 0) {
+                    throw new SimulationException("Negative claim detected... i.e an inflow of cash!; " + cashflowPacket.toString() + " \n" + "Period Info  " + periodScope.toString());
+                }
+            }
+        }
+    }
+
+
 
     public void allocateChannelsToPhases() {
 //          Calculation channels --------------------------------------------------------------------------

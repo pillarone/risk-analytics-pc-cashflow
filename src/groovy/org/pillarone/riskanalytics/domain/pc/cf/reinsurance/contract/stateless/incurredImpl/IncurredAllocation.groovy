@@ -6,18 +6,18 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.I
 
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache
 
 /**
  * author simon.parten @ art-allianz . com
  */
 public class IncurredAllocation implements IIncurredAllocation {
 
-    public List<ICededRoot> allocateClaims(double incurredInPeriod, Set<IClaimRoot> allIncurredClaims, PeriodScope periodScope, ContractCoverBase base) {
+    public List<ICededRoot> allocateClaims(double incurredInPeriod, IAllContractClaimCache claimStore, PeriodScope periodScope, ContractCoverBase base) {
 
-        Set<IClaimRoot> grossClaimsThisPeriod = RIUtilities.incurredClaimsByPeriod(periodScope.getCurrentPeriod(), periodScope.getPeriodCounter(), allIncurredClaims, base)
+        Set<IClaimRoot> grossClaimsThisPeriod = claimStore.allIncurredClaimsCurrentModelPeriod(periodScope, base)
 
         Double grossIncurred = (Double) grossClaimsThisPeriod*.getUltimate().sum()
 

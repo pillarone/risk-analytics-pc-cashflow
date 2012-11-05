@@ -87,7 +87,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                         }
                         baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter,
                                 globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), DAYS_360, parmPayoutPatternBase);
-                        checkBaseClaims(baseClaims);
+                        checkBaseClaims(baseClaims, globalSanityChecks, iterationScope);
                         runoffFactors = new ArrayList<Factors>();
                         List<GrossClaimRoot> grossClaimRoots = baseClaimsOfCurrentPeriodAdjustedPattern(baseClaims, parmPayoutPattern, parmActualClaims,
                                 periodScope, parmPayoutPatternBase);
@@ -96,7 +96,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                         claims = cashflowsInCurrentPeriod(claimsAfterSplit, runoffFactors, periodScope);
                     }
                     developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
-                    checkCashflowClaims(claims);
+                    checkCashflowClaims(claims, globalSanityChecks);
                     doCashflowChecks(claims, claimsAfterSplit, baseClaims);
                     setTechnicalProperties(claims);
                     outClaims.addAll(claims);
@@ -155,37 +155,6 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
         if (!grossClaimRoots.isEmpty()) {
             periodStore.put(AbstractClaimsGenerator.GROSS_CLAIMS, claimsNotOcurringThisPeriod);
         }
-    }
-
-    private void checkBaseClaims(List<ClaimRoot> baseClaims) {
-        if (globalSanityChecks) {
-            for (ClaimRoot baseClaim : baseClaims) {
-                if (baseClaim.getUltimate() < 0) {
-                    throw new SimulationException("Negative claim detected... i.e an inflow of cash!: " + baseClaim.toString());
-                }
-                if(iterationScope.isFirstIteration()) {
-                    LOG.info("claim root : " + baseClaim.toString());
-                }
-            }
-        }
-
-    }
-
-    /**
-     * Do some checks on the claims in this period.
-     *
-     * @param cashflowPackets
-     */
-
-    private void checkCashflowClaims(List<ClaimCashflowPacket> cashflowPackets) {
-        if (globalSanityChecks) {
-            for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
-                if (cashflowPacket.getPaidIncrementalIndexed() < 0) {
-                    throw new SimulationException("Negative claim detected... i.e an inflow of cash!; " + cashflowPacket.toString() + " \n" + "Period Info  " + periodScope.toString());
-                }
-            }
-        }
-
     }
 
     /**

@@ -164,7 +164,7 @@ public final class GrossClaimRoot implements IClaimRoot {
     public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter, List<Factors> factors, boolean useIndexes) {
         if(!useIndexes) {
             List<ClaimCashflowPacket> paidPackets = paidPackets(periodCounter);
-            List<ClaimCashflowPacket> filteredClaims = RIUtilities.cashflowClaimsByOccurenceDate(periodCounter.getCurrentPeriodStart(), periodCounter.getCurrentPeriodEnd(), paidPackets);
+            List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>(RIUtilities.cashflowClaimsByOccurenceDate(periodCounter.getCurrentPeriodStart(), periodCounter.getCurrentPeriodEnd(), paidPackets));
             return filteredClaims;
         }
         return getClaimCashflowPackets(periodCounter, factors);

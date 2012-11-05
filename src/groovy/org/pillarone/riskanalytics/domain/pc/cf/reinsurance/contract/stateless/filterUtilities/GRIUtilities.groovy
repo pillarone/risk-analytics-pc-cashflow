@@ -40,7 +40,7 @@ class GRIUtilities {
         return claim
     }
 
-    public static ClaimCashflowPacket findCashflowToGrossClaim(IClaimRoot cededKeyClaim, List<ClaimCashflowPacket> allCashflows, IncurredClaimBase base) {
+    public static ClaimCashflowPacket findCashflowToGrossClaim(IClaimRoot cededKeyClaim, Collection<ClaimCashflowPacket> allCashflows, IncurredClaimBase base) {
         ClaimCashflowPacket claim = allCashflows.find { cededKeyClaim.equals( base.parentClaim(it) )}
 //        There ought to be no prior ceded claims. Pump out a dummy claim.
         if (claim == null) {
@@ -73,9 +73,9 @@ class GRIUtilities {
         return uncoveredClaims;
     }
 
-    public static ArrayList<IClaimRoot> claimsCoveredInPeriod(Collection<IClaimRoot> incurredClaims, PeriodScope periodScope, ContractCoverBase base, int period) {
+    public static Collection<IClaimRoot> claimsCoveredInPeriod(Collection<IClaimRoot> incurredClaims, PeriodScope periodScope, ContractCoverBase base, int period) {
 
-        ArrayList<IClaimRoot> claims = incurredClaims.findAll {
+        Collection<IClaimRoot> claims = incurredClaims.findAll {
             it ->
             DateTime coverDate = base.claimCoverDate(it)
             return periodScope.getPeriodCounter().belongsToPeriod(coverDate) == period
@@ -84,7 +84,7 @@ class GRIUtilities {
         return claims
     }
 
-    public static ArrayList<ClaimCashflowPacket> cashflowsCoveredInModelPeriod(Collection<ClaimCashflowPacket> cashflows, PeriodScope periodScope, ContractCoverBase base, int period) {
+    public static Collection<ClaimCashflowPacket> cashflowsCoveredInModelPeriod(Collection<ClaimCashflowPacket> cashflows, PeriodScope periodScope, ContractCoverBase base, int period) {
 
         return cashflows.findAll {
             it ->

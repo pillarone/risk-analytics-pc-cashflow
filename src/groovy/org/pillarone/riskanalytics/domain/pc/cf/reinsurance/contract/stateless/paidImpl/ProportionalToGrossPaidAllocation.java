@@ -34,7 +34,7 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
         IncurredClaimBase base = IncurredClaimBase.BASE;
 
         List<ClaimCashflowPacket> claimsOfInterest = new ArrayList<ClaimCashflowPacket>();
-        List<ClaimCashflowPacket> latestCededCashflowsByIncurredClaim = RIUtilities.latestCashflowByIncurredClaim(cededCashflowsToDate, base);
+        Collection<ClaimCashflowPacket> latestCededCashflowsByIncurredClaim = RIUtilities.latestCashflowByIncurredClaim(cededCashflowsToDate, base);
 
 //        For each model period
         for (Map.Entry<Integer, Double> entry : incrementalPaidByPeriod.entrySet()) {
