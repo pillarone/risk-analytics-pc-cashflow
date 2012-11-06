@@ -177,7 +177,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
             }
             else {
                 // ignore preset claim data outside the period scope
-                throw new IllegalArgumentException("Preset claim period was outside the bounds of the iteration scope");
+                throw new SimulationException("Preset claim period was outside the bounds of the iteration scope. Check claim in row; " + (row + 1)  + "."  );
             }
         }
         return presetClaimsByPeriod;
