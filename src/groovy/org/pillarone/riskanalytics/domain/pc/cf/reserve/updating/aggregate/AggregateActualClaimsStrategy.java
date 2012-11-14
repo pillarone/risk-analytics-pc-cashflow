@@ -55,6 +55,12 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
             for (int row = history.getTitleRowCount(); row < history.getRowCount(); row++) {
                 DateTime reportedDate = (DateTime) history.getValueAt(row, AggregateHistoricClaimsConstraints.REPORT_DATE_INDEX);
                 if (reportedDate.isAfter(updateDate)) continue; // ignore any claim update after updateDate
+                DateTime simStart = periodCounter.startOfFirstPeriod();
+                if(reportedDate.isBefore(simStart)) {
+                    throw new SimulationException(" Simulation start " + DateTimeUtilities.formatDate.print(simStart) +  " after reported date " +
+                            DateTimeUtilities.formatDate.print(reportedDate) +
+                            " in row " + row + ". This is not allowed.");
+                }
                 Integer contractPeriod = InputFormatConverter.getInt(history.getValueAt(row, AggregateHistoricClaimsConstraints.CONTRACT_PERIOD_INDEX)) - 1; // -1 : difference between UI and internal sight
                 // as this method is called always for initialization in the first iteration and period
                 // iterationStore access without arguments is always reading and writing to period 0
@@ -65,6 +71,12 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
                 }
                 double cumulativePaid = InputFormatConverter.getDouble(history.getValueAt(row, AggregateHistoricClaimsConstraints.PAID_AMOUNT_INDEX));
                 double cumulativeReported = InputFormatConverter.getDouble(history.getValueAt(row, AggregateHistoricClaimsConstraints.REPORTED_AMOUNT_INDEX));
+                if(cumulativePaid < 0 ) {
+                    throw new SimulationException("Paid amount in row " + row + " of table is negative. This is not allowed.");
+                }
+                if(cumulativeReported < 0 ) {
+                    throw new SimulationException("Reporting amount in row " + row + " of table is negative. This is not allowed.");
+                }
                 claim.add(reportedDate, cumulativeReported, cumulativePaid);
             }
         }
