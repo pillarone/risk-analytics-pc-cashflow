@@ -82,7 +82,7 @@ public class ListOnlyContractClaimStore implements IAllContractClaimCache {
         cashflowPackets.addAll(claims);
         allCashflows.addAll(claims);
         if (claimsBySimulationPeriod.get(simulationPeriod) != null) {
-            throw new SimulationException("Attempted to overwrite claimsBySimulationPeriod cache in claim store. Contract development");
+            throw new SimulationException("Attempted to overwrite claimsBySimulationPeriod cache in claim store. Contact development");
         }
         claimsBySimulationPeriod.put(simulationPeriod, cashflowPackets );
     }
