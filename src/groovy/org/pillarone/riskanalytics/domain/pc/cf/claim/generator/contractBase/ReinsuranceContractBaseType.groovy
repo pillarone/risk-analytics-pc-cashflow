@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObjectClassifier
+import org.pillarone.riskanalytics.core.simulation.SimulationException
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -13,10 +14,12 @@ class ReinsuranceContractBaseType extends AbstractParameterObjectClassifier {
             'please select', 'PLEASESELECT', [:])
     public static final ReinsuranceContractBaseType LOSSESOCCURRING = new ReinsuranceContractBaseType(
             'losses occuring', 'LOSSESOCCURRING', [:])
+    public static final ReinsuranceContractBaseType LOSSESOCCURRING_NO_SPLIT = new ReinsuranceContractBaseType(
+            'losses occuring - no split', 'LOSSESOCCURRING', [:])
     public static final ReinsuranceContractBaseType RISKATTACHING = new ReinsuranceContractBaseType(
             'risk attaching', 'RISKATTACHING', [underlyingContractLength: 12])
 
-    public static final all = [PLEASESELECT, LOSSESOCCURRING, RISKATTACHING]
+    public static final all = [PLEASESELECT, LOSSESOCCURRING, RISKATTACHING, LOSSESOCCURRING_NO_SPLIT]
 
     protected static Map types = [:]
     static {
@@ -47,9 +50,13 @@ class ReinsuranceContractBaseType extends AbstractParameterObjectClassifier {
                 return new DefaultContractBase()
             case ReinsuranceContractBaseType.LOSSESOCCURRING:
                 return new LossesOccurringContractBase()
+            case ReinsuranceContractBaseType.LOSSESOCCURRING_NO_SPLIT:
+                return new LossesOccurringNoSplitContractBase()
             case ReinsuranceContractBaseType.RISKATTACHING:
                 return new RiskAttachingContractBase(
                         underlyingContractLength: (Integer) parameters.get('underlyingContractLength'))
+            default:
+                throw new SimulationException("Unknown base type")
         }
     }
 }
