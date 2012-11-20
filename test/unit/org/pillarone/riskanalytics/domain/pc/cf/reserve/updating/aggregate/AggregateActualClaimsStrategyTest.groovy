@@ -1,7 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate
 
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
-import sun.misc.PerfCounter
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.TestPeriodCounterUtilities
 import org.joda.time.DateTime
