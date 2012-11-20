@@ -112,7 +112,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
                 continue;
             }
 
-            double incrementalPaidSimPeriod = cededPaidUpToSimulationPeriod(claimsToSimPeriod, layerParameters, periodScope, termExcess, termLimit, base, period);
+/*            double incrementalPaidSimPeriod = cededPaidUpToSimulationPeriod(claimsToSimPeriod, layerParameters, periodScope, termExcess, termLimit, base, period);
             cumulativePaidInSimulation += incrementalPaidSimPeriod;
 
             if (cumulativePaidInSimulation >= termExcess) {
@@ -121,7 +121,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
 
             } else {
                 period_paid.put(period, 0d);
-            }
+            } */
         }
         return period_paid;
     }

@@ -108,8 +108,8 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
         double incurredInPeriod = new TermIncurredCalculation().cededIncurredRespectTerm(claimStore, setupLayerParameters(), periodScope, termExcess, termLimit, periodScope.getPeriodCounter(), parmCoverageBase);
 
-        List<ClaimCashflowPacket> paidClaims;
-        List<ContractFinancialsPacket> contractFinancialsPacket;
+        final List<ClaimCashflowPacket> paidClaims;
+        final List<ContractFinancialsPacket> contractFinancialsPacket;
         try {
 //            Leave this code here for the moment as evaulating the right hand side in the debugger can be useful, but it incurrs a performance penalty when uncommented.
 //            final Map<Integer, Double> cededIncurredByPeriod = new TermIncurredCalculation().cededIncurredsByPeriods(incurredClaims.keys(), periodScope, termExcess, termLimit, setupLayerParameters() , parmCoverageBase);
