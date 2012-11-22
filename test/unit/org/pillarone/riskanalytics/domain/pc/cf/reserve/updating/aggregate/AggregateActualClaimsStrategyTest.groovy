@@ -19,7 +19,7 @@ class AggregateActualClaimsStrategyTest extends GroovyTestCase {
                 AggregateHistoricClaimsConstraints.COLUMN_HEADERS,
                 ConstraintsFactory.getConstraints(AggregateHistoricClaimsConstraints.IDENTIFIER));;
         AggregateActualClaimsStrategy strategy = new AggregateActualClaimsStrategy(history: history )
-        strategy.lazyInitHistoricClaimsPerContractPeriod(counter, new DateTime(2013, 1, 1, 1, 0, 0, 0), PayoutPatternBase.PERIOD_START_DATE)
+        strategy.lazyInitHistoricClaimsPerContractPeriod(counter, new DateTime(2013, 1, 1, 1, 0, 0, 0), PayoutPatternBase.PERIOD_START_DATE, true)
 
 
 //        Fail on reporting period
@@ -29,7 +29,7 @@ class AggregateActualClaimsStrategyTest extends GroovyTestCase {
                     AggregateHistoricClaimsConstraints.COLUMN_HEADERS,
                     ConstraintsFactory.getConstraints(AggregateHistoricClaimsConstraints.IDENTIFIER));;
             AggregateActualClaimsStrategy aStrategy = new AggregateActualClaimsStrategy(history: aHistory )
-            aStrategy.lazyInitHistoricClaimsPerContractPeriod(counter, new DateTime(2013, 1, 1, 1, 0, 0, 0), PayoutPatternBase.PERIOD_START_DATE)
+            aStrategy.lazyInitHistoricClaimsPerContractPeriod(counter, new DateTime(2013, 1, 1, 1, 0, 0, 0), PayoutPatternBase.PERIOD_START_DATE, true)
         }
 
 //        Fail on -ve reported
@@ -39,7 +39,7 @@ class AggregateActualClaimsStrategyTest extends GroovyTestCase {
                     AggregateHistoricClaimsConstraints.COLUMN_HEADERS,
                     ConstraintsFactory.getConstraints(AggregateHistoricClaimsConstraints.IDENTIFIER));;
             AggregateActualClaimsStrategy aStrategy = new AggregateActualClaimsStrategy(history: aHistory )
-            aStrategy.lazyInitHistoricClaimsPerContractPeriod(counter, new DateTime(2013, 1, 1, 1, 0, 0, 0), PayoutPatternBase.PERIOD_START_DATE)
+            aStrategy.lazyInitHistoricClaimsPerContractPeriod(counter, new DateTime(2013, 1, 1, 1, 0, 0, 0), PayoutPatternBase.PERIOD_START_DATE, true)
         }
 
 //        -ve paid
@@ -49,7 +49,7 @@ class AggregateActualClaimsStrategyTest extends GroovyTestCase {
                     AggregateHistoricClaimsConstraints.COLUMN_HEADERS,
                     ConstraintsFactory.getConstraints(AggregateHistoricClaimsConstraints.IDENTIFIER));;
             AggregateActualClaimsStrategy aStrategy = new AggregateActualClaimsStrategy(history: aHistory )
-            aStrategy.lazyInitHistoricClaimsPerContractPeriod(counter, new DateTime(2013, 1, 1, 1, 0, 0, 0), PayoutPatternBase.PERIOD_START_DATE)
+            aStrategy.lazyInitHistoricClaimsPerContractPeriod(counter, new DateTime(2013, 1, 1, 1, 0, 0, 0), PayoutPatternBase.PERIOD_START_DATE, true)
         }
     }
 

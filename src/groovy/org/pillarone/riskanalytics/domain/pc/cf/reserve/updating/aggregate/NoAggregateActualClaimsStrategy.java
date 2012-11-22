@@ -28,7 +28,7 @@ public class NoAggregateActualClaimsStrategy extends AbstractParameterObject imp
         return Collections.emptyMap();
     }
 
-    public void lazyInitHistoricClaimsPerContractPeriod(IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase) {
+    public void lazyInitHistoricClaimsPerContractPeriod(IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase, boolean sanityChecks) {
     }
 
     public GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
@@ -39,12 +39,12 @@ public class NoAggregateActualClaimsStrategy extends AbstractParameterObject imp
         return new GrossClaimRoot(claimRoot, payoutPattern, payoutPatternBase.startDateForPayouts(claimRoot, periodScope.getCurrentPeriodStartDate(), null ) );
     }
 
-    public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase) {
+    public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase, boolean sanityChecks) {
         return new AggregateHistoricClaim(period, periodCounter, PayoutPatternBase.PERIOD_START_DATE);
     }
 
     public void checkClaimRootOccurenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims,
-                                                              int contractPeriod, IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase) {
+                                                              int contractPeriod, IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase, boolean sanityChecks) {
 //        There are no actual claims by definition of this class so this method is not useful...
     }
 }
