@@ -27,6 +27,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.IAggregateActualClaimsStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.single.ISingleActualClaimsStrategy;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.marker.ICorrelationMarker;
@@ -109,6 +110,32 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     }
 
     /**
+     * Derives gross claim root for the current period (periodCounter) by applying payout pattern and factors.
+     * For actual claims the payout pattern is adjusted according the already existing payout history.
+     *
+     * @param baseClaims
+     * @param parmPayoutPattern
+     * @param periodScope needed to derive the payouts in the current period
+     * @param base
+     * @return GrossClaimRoot objects of this period
+     */
+    protected List<GrossClaimRoot> baseClaimsOfCurrentPeriodAdjustedPattern(
+            List<ClaimRoot> baseClaims, ConstrainedString parmPayoutPattern,
+            ISingleActualClaimsStrategy parmActualClaims, PeriodScope periodScope, PayoutPatternBase base) {
+        PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
+        List<GrossClaimRoot> grossClaimRoots = new ArrayList<GrossClaimRoot>();
+        if (!baseClaims.isEmpty()) {
+            int currentPeriod = periodScope.getCurrentPeriod();
+            for (ClaimRoot baseClaim : baseClaims) {
+                GrossClaimRoot grossClaimRoot = parmActualClaims.claimWithAdjustedPattern(baseClaim, currentPeriod,
+                        payoutPattern, periodScope, globalUpdateDate, DAYS_360, globalSanityChecks, base);
+                grossClaimRoots.add(grossClaimRoot);
+            }
+        }
+        return grossClaimRoots;
+    }
+
+    /**
      * Looping over GROSS_CLAIMS in the periodStore payouts of the current period are identified and corresponding
      * claim packets generated.
      * @param claims resulting claim packets are attached to this list.
@@ -129,6 +156,59 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Sets GROSS_CLAIMS of periodStore with claims not occurring in current period
+     * @param grossClaimRoots
+     * @param periodStore
+     */
+    protected void storeClaimsWhichOccurInFuturePeriods(List<GrossClaimRoot> grossClaimRoots, PeriodStore periodStore) {
+        List<GrossClaimRoot> claimsNotOccurringThisPeriod = new ArrayList<GrossClaimRoot>();
+
+        for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
+            boolean occurrenceInCurrentPeriod = grossClaimRoot.occurrenceInCurrentPeriod(periodScope);
+            if (!grossClaimRoot.hasTrivialPayout() || !occurrenceInCurrentPeriod) {
+                // add claim only to period store if development in future periods is required or occurrence is delayed
+                claimsNotOccurringThisPeriod.add(grossClaimRoot);
+            }
+        }
+
+        if (!grossClaimRoots.isEmpty()) {
+            periodStore.put(AbstractClaimsGenerator.GROSS_CLAIMS, claimsNotOccurringThisPeriod);
+        }
+    }
+
+    /**
+     * Beside returning current period ClaimCashflowPacket outOccurenceUltimateClaims is filled
+     * @param grossClaimRoots
+     * @param runOffFactors
+     * @param periodScope
+     * @return ClaimCashflowPacket of grossClaimRoot with exposure start in current period
+     */
+    protected List<ClaimCashflowPacket> cashflowsInCurrentPeriod(List<GrossClaimRoot> grossClaimRoots,
+                                                                 List<Factors> runOffFactors, PeriodScope periodScope) {
+        List<ClaimCashflowPacket> claimCashflowPackets = new ArrayList<ClaimCashflowPacket>();
+        IPeriodCounter counter = this.periodScope.getPeriodCounter();
+        for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
+            if (grossClaimRoot.exposureStartInCurrentPeriod(periodScope)) {
+                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(counter, runOffFactors, false));
+                outOccurenceUltimateClaims.addAll(grossClaimRoot.occurenceCashflow(periodScope));
+            }
+        }
+        return claimCashflowPackets;
+    }
+
+    /**
+     * Implementation void
+     * @param claims
+     * @param grossClaimRoots
+     * @param baseClaims
+     */
+    protected void doCashflowChecks(List<ClaimCashflowPacket> claims, List<GrossClaimRoot> grossClaimRoots, List<ClaimRoot> baseClaims) {
+        for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
+
         }
     }
 
@@ -183,6 +263,52 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
         return presetClaimsByPeriod;
     }
 
+    /**
+     * A deal may commute before the end of the contract period. We may hence want to terminate claims generation
+     * depending on the outcome in the experience account. Additionally this method does the book keeping for the commutation state
+     * @param phase
+     * @return true if new claims have to be generated
+     */
+    protected boolean provideClaims(String phase) {
+        initIteration(periodStore, periodScope, phase);
+        // In this phase check the commutation state from last period. If we are not commuted then calculate claims.
+        if (phase.equals(PHASE_CLAIMS_CALCULATION)) {
+            CommutationState commutationState = (CommutationState) (periodStore.get(COMMUTATION_STATE));
+
+            return !(commutationState.isCommuted() || commutationState.isCommuteThisPeriod());
+        }
+        return false;
+    }
+
+    /**
+     * In this PHASE_STORE_COMMUTATION_STATE check for incoming commutation information. If there is none, i.e the
+     * inCommutationChannel is null, then assume that we want no commutation behaviour. Add an indefinite commutationState
+     * object to the environment.
+     * @param phase
+     */
+    protected void prepareProvidingClaimsInNextPeriodOrNot(String phase) {
+        if (phase.equals(PHASE_STORE_COMMUTATION_STATE)) {
+            if (inCommutationState != null && inCommutationState.size() == 1) {
+                CommutationState packet = inCommutationState.get(0);
+                periodStore.put(COMMUTATION_STATE, packet, 1);
+            } else {
+                throw new SimulationException("Found different to one commutationState in inCommutationState. Period: "
+                        + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
+            }
+        }
+    }
+
+    /**
+     * Adds a default CommutationState packet to the period store at the start of every iteration
+     * @param periodStore the period store for this object
+     * @param phase to make sure that the packet is added in the PHASE_CLAIMS_CALCULATION only
+     */
+    protected void initIteration(PeriodStore periodStore, PeriodScope periodScope, String phase) {
+        if (periodScope.isFirstPeriod() && phase.equals(PHASE_CLAIMS_CALCULATION)) {
+            periodStore.put(COMMUTATION_STATE, new CommutationState());
+        }
+    }
+
     // period store key
     public static final String GROSS_CLAIMS = "gross claims root";
 
@@ -197,7 +323,10 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
         }
     }
 
-
+    /**
+     * Checks for negative ultimates
+     * @param baseClaims
+     */
     protected void checkBaseClaims(List<ClaimRoot> baseClaims, boolean sanityChecks, IterationScope iterationScope) {
         if (sanityChecks) {
             for (ClaimRoot baseClaim : baseClaims) {
@@ -213,7 +342,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
 
     /**
      * Do some checks on the claims in this period.
-     *
+     * Checks for negative paid claims
      * @param cashflowPackets
      * @param sanityChecks
      */

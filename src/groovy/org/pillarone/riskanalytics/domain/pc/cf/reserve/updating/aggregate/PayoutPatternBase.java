@@ -18,7 +18,7 @@ public enum PayoutPatternBase {
         Log LOG = LogFactory.getLog(PayoutPatternBase.class);
 
         @Override
-        DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate) {
+        public DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate) {
             if(firstActualPaidDate == null) {
                 return claimRoot.getOccurrenceDate();
             }
@@ -33,13 +33,13 @@ public enum PayoutPatternBase {
 
     , PERIOD_START_DATE {
         @Override
-        DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate) {
+        public DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate) {
             return contractPeriodStart;
         }
     };
 
 
-    abstract DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate);
+    public abstract DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate);
 
     public Object getConstructionString(Map parameters) {
         return getClass().getName() + "." + this;
