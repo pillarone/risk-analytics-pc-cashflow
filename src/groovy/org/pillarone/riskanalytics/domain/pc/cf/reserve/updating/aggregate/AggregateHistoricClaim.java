@@ -5,11 +5,13 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.exceptionUtils.ExceptionUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PeriodsNotIncreasingException;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -37,8 +39,14 @@ public class AggregateHistoricClaim {
      * @param cumulativePaid
      */
     public void add(DateTime reportedDate, double cumulativeReported, double cumulativePaid) {
-        claimReportedUpdates.put(reportedDate, cumulativeReported);
-        claimPaidUpdates.put(reportedDate, cumulativePaid);
+        if(claimReportedUpdates.get(reportedDate) == null && claimPaidUpdates.get(reportedDate) == null) {
+            claimReportedUpdates.put(reportedDate, cumulativeReported);
+            claimPaidUpdates.put(reportedDate, cumulativePaid);
+        } else {
+            throw new SimulationException(" For the reporting date ; " + DateTimeUtilities.formatDate.print(reportedDate) + " . And contract period; " + (contractPeriod + 1) +
+                    "the historic claim has attempted to overwrite an existing entry in the claims history. Do you have a duplicate reporting date for this contract period? ");
+        }
+
     }
 
     /**
@@ -60,7 +68,7 @@ public class AggregateHistoricClaim {
             throw new SimulationException("Aggregate historic claims caught an exception claiming pattern period values are incorrect. " +
                     "A potential cause of this" +
                     "would be if the reported date of a claim was before the start of it's model period. " +
-                    "Is your updating table correct? Please check entries with contract period; " + contractPeriod +
+                    "Is your updating table correct? Please check entries with contract period; " + (contractPeriod + 1) +
                     ". Are they consistent with the contract dates. If so, please contact development.", e);
         }
 
@@ -86,6 +94,19 @@ public class AggregateHistoricClaim {
     public double outstandingShare(PatternPacket pattern, DateTime baseDate, DateTime updateDate) {
         double elapsedMonths = DateTimeUtilities.days360(baseDate, updateDate) / 30d;
         return pattern.outstandingShare(elapsedMonths);
+    }
+
+    public void consistencyCheck(boolean sanityChecks){
+        if(sanityChecks) {
+            double priorPaid = -1;
+            for (Map.Entry<DateTime, Double> entry : claimPaidUpdates.entrySet()) {
+                if (priorPaid > entry.getValue()) {
+                    throw new SimulationException("It appears that the cumulative paid values for the historic claim in period; *" + (contractPeriod + 1) +
+                            "* decrease. The entries for this period are ; \n \n" + ExceptionUtils.getErrorDatesAndValues(claimPaidUpdates).toString());
+                }
+                priorPaid = entry.getValue();
+            }
+        }
     }
 
     @Override

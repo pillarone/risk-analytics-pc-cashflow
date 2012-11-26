@@ -158,7 +158,7 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
                                            IPeriodCounter periodCounter, DateTime updateDate,
                                            PayoutPatternBase payoutPatternBase, Integer testContractPeriod) {
         IAggregateActualClaimsStrategy actualClaims = actualClaims(importer, 'Claims', payoutPatternBase, testContractPeriod)
-        TreeMap<DateTime, Double> updates = actualClaims.historicClaims(testContractPeriod - 1, periodCounter, updateDate, payoutPatternBase)?.claimPaidUpdates
+        TreeMap<DateTime, Double> updates = actualClaims.historicClaims(testContractPeriod - 1, periodCounter, updateDate, payoutPatternBase, true)?.claimPaidUpdates
         updates ? updates : new TreeMap<DateTime, Double>()
     }
 

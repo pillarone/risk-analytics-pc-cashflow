@@ -67,7 +67,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                                 severityFactors, parmParameterizationBasis, this, periodScope);
                     }
                     baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter,
-                            globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), DAYS_360, parmPayoutPatternBase);
+                            globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), DAYS_360, parmPayoutPatternBase, globalSanityChecks);
                     checkBaseClaims(baseClaims, globalSanityChecks, iterationScope);
                     runoffFactors = new ArrayList<Factors>();
                     List<GrossClaimRoot> grossClaimRoots = baseClaimsOfCurrentPeriodAdjustedPattern(baseClaims, parmPayoutPattern, parmActualClaims,

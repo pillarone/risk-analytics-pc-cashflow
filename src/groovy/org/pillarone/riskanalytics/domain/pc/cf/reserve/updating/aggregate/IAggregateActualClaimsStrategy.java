@@ -16,14 +16,14 @@ import java.util.List;
  */
 public interface IAggregateActualClaimsStrategy extends IParameterObject {
 
-    void lazyInitHistoricClaimsPerContractPeriod(IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase);
+    void lazyInitHistoricClaimsPerContractPeriod(IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase, boolean sanityChecks);
 
     GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
                                             PeriodScope periodScope, DateTime updateDate, DateTimeUtilities.Days360 days360,
                                             boolean sanityChecks, PayoutPatternBase base);
 
-    AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase base );
+    AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase base, boolean sanityChecks);
 
     void checkClaimRootOccurenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims, int contractPeriod, IPeriodCounter periodCounter,
-                                                       DateTime updateDate, PayoutPatternBase base);
+                                                       DateTime updateDate, PayoutPatternBase base, boolean sanityChecks);
 }

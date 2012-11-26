@@ -263,6 +263,15 @@ public class PatternUtils {
                 cumulativeValues.add(originalPattern.getCumulativeValues().get(index));
             }
         }
+
+        if(cumulativeValues.size() == 0 && cumulativePeriods.size() == 0) {
+//          Update date after end of pattern. Pay entire claim at update date.
+            cumulativeValues.add(0d);
+            cumulativePeriods.add(new Period(0));
+
+            cumulativeValues.add(1d);
+            cumulativePeriods.add(new Period(baseDate, updateDate));
+        }
         return new PatternPacket(originalPattern, cumulativeValues, cumulativePeriods);
     }
 
