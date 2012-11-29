@@ -41,7 +41,7 @@ abstract class AggregateUpdatingMethodologyWithCheckStrategyImpl extends Abstrac
         if (baseClaims.size() != 1) {
             throw new IllegalArgumentException("Aggregate updating strategy recieved different to one claim. Claims recieved: " + baseClaims.size());
         }
-        actualClaims.checkClaimRootOccurenceAgainstFirstActualPaid(baseClaims, contractPeriod, periodCounter, updateDate, base, sanityChecks);
+        actualClaims.checkClaimRootOccurrenceAgainstFirstActualPaid(baseClaims, contractPeriod, periodCounter, updateDate, base, sanityChecks);
     }
 
     protected abstract List<ClaimRoot> updateUltimatePostChecks(List<ClaimRoot> baseClaims, IAggregateActualClaimsStrategy actualClaims, IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns, DateTimeUtilities.Days360 days360, PayoutPatternBase base, boolean sanityChecks);

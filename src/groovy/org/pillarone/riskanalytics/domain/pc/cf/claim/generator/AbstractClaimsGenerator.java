@@ -5,6 +5,7 @@ import com.google.common.collect.ListMultimap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.components.ComposedComponent;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
@@ -27,6 +28,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.IAggregateActualClaimsStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.single.ISingleActualClaimsStrategy;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.marker.ICorrelationMarker;
@@ -41,7 +43,7 @@ import java.util.List;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponent implements IPerilMarker, ICorrelationMarker {
+abstract public class AbstractClaimsGenerator extends ComposedComponent implements IPerilMarker, ICorrelationMarker {
 
     static Log LOG = LogFactory.getLog(AbstractClaimsGenerator.class);
 
@@ -58,7 +60,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     protected PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
     protected PacketList<SystematicFrequencyPacket> inEventFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket.class);
 
-    protected PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState.class);
+//    protected PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState.class);
     /** don't assume any order in this channel */
     protected PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     protected PacketList<ClaimCashflowPacket> outOccurenceUltimateClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
@@ -133,6 +135,59 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     }
 
     /**
+     * Sets GROSS_CLAIMS of periodStore with claims not occurring in current period
+     * @param grossClaimRoots
+     * @param periodStore
+     */
+    protected void storeClaimsWhichOccurInFuturePeriods(List<GrossClaimRoot> grossClaimRoots, PeriodStore periodStore) {
+        List<GrossClaimRoot> claimsNotOccurringThisPeriod = new ArrayList<GrossClaimRoot>();
+
+        for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
+            boolean occurrenceInCurrentPeriod = grossClaimRoot.occurrenceInCurrentPeriod(periodScope);
+            if (!grossClaimRoot.hasTrivialPayout() || !occurrenceInCurrentPeriod) {
+                // add claim only to period store if development in future periods is required or occurrence is delayed
+                claimsNotOccurringThisPeriod.add(grossClaimRoot);
+            }
+        }
+
+        if (!grossClaimRoots.isEmpty()) {
+            periodStore.put(AbstractClaimsGenerator.GROSS_CLAIMS, claimsNotOccurringThisPeriod);
+        }
+    }
+
+    /**
+     * Beside returning current period ClaimCashflowPacket outOccurenceUltimateClaims is filled
+     * @param grossClaimRoots
+     * @param runOffFactors
+     * @param periodScope
+     * @return ClaimCashflowPacket of grossClaimRoot with exposure start in current period
+     */
+    protected List<ClaimCashflowPacket> cashflowsInCurrentPeriod(List<GrossClaimRoot> grossClaimRoots,
+                                                                 List<Factors> runOffFactors, PeriodScope periodScope) {
+        List<ClaimCashflowPacket> claimCashflowPackets = new ArrayList<ClaimCashflowPacket>();
+        IPeriodCounter counter = this.periodScope.getPeriodCounter();
+        for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
+            if (grossClaimRoot.exposureStartInCurrentPeriod(periodScope)) {
+                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(counter, runOffFactors, false));
+                outOccurenceUltimateClaims.addAll(grossClaimRoot.occurenceCashflow(periodScope));
+            }
+        }
+        return claimCashflowPackets;
+    }
+
+    /**
+     * Implementation void
+     * @param claims
+     * @param grossClaimRoots
+     * @param baseClaims
+     */
+    protected void doCashflowChecks(List<ClaimCashflowPacket> claims, List<GrossClaimRoot> grossClaimRoots, List<ClaimRoot> baseClaims) {
+        for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
+
+        }
+    }
+
+    /**
      * List containing <b>deterministic</b> claims per period. Only filled if globalDeterministicMode is true.
      */
     private ListMultimap<Integer, ClaimRoot> presetClaimsByPeriod;
@@ -183,6 +238,52 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
         return presetClaimsByPeriod;
     }
 
+    /**
+     * A deal may commute before the end of the contract period. We may hence want to terminate claims generation
+     * depending on the outcome in the experience account. Additionally this method does the book keeping for the commutation state
+     * @param phase
+     * @return true if new claims have to be generated
+     */
+    protected boolean provideClaims(String phase) {
+        initIteration(periodStore, periodScope, phase);
+        // In this phase check the commutation state from last period. If we are not commuted then calculate claims.
+        if (phase.equals(PHASE_CLAIMS_CALCULATION)) {
+            CommutationState commutationState = (CommutationState) (periodStore.get(COMMUTATION_STATE));
+
+            return !(commutationState.isCommuted() || commutationState.isCommuteThisPeriod());
+        }
+        return false;
+    }
+
+    /**
+     * In this PHASE_STORE_COMMUTATION_STATE check for incoming commutation information. If there is none, i.e the
+     * inCommutationChannel is null, then assume that we want no commutation behaviour. Add an indefinite commutationState
+     * object to the environment.
+     * @param phase
+     */
+//    protected void prepareProvidingClaimsInNextPeriodOrNot(String phase) {
+//        if (phase.equals(PHASE_STORE_COMMUTATION_STATE)) {
+//            if (inCommutationState != null && inCommutationState.size() == 1) {
+//                CommutationState packet = inCommutationState.get(0);
+//                periodStore.put(COMMUTATION_STATE, packet, 1);
+//            } else {
+//                throw new SimulationException("Found different to one commutationState in inCommutationState. Period: "
+//                        + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
+//            }
+//        }
+//    }
+
+    /**
+     * Adds a default CommutationState packet to the period store at the start of every iteration
+     * @param periodStore the period store for this object
+     * @param phase to make sure that the packet is added in the PHASE_CLAIMS_CALCULATION only
+     */
+    protected void initIteration(PeriodStore periodStore, PeriodScope periodScope, String phase) {
+        if (periodScope.isFirstPeriod() && phase.equals(PHASE_CLAIMS_CALCULATION)) {
+            periodStore.put(COMMUTATION_STATE, new CommutationState());
+        }
+    }
+
     // period store key
     public static final String GROSS_CLAIMS = "gross claims root";
 
@@ -197,7 +298,10 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
         }
     }
 
-
+    /**
+     * Checks for negative ultimates
+     * @param baseClaims
+     */
     protected void checkBaseClaims(List<ClaimRoot> baseClaims, boolean sanityChecks, IterationScope iterationScope) {
         if (sanityChecks) {
             for (ClaimRoot baseClaim : baseClaims) {
@@ -213,7 +317,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
 
     /**
      * Do some checks on the claims in this period.
-     *
+     * Checks for negative paid claims
      * @param cashflowPackets
      * @param sanityChecks
      */
@@ -230,20 +334,20 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
 
 
 
-    public void allocateChannelsToPhases() {
-//          Calculation channels --------------------------------------------------------------------------
-        setTransmitterPhaseInput(inPatterns, PHASE_CLAIMS_CALCULATION);
-        setTransmitterPhaseInput(inEventSeverities, PHASE_CLAIMS_CALCULATION);
-        setTransmitterPhaseInput(inEventFrequencies, PHASE_CLAIMS_CALCULATION);
-        setTransmitterPhaseInput(inFactors, PHASE_CLAIMS_CALCULATION);
-        setTransmitterPhaseInput(inUnderwritingInfo, PHASE_CLAIMS_CALCULATION);
-
-        setTransmitterPhaseOutput(outClaims, PHASE_CLAIMS_CALCULATION);
-        setTransmitterPhaseOutput(outOccurenceUltimateClaims, PHASE_CLAIMS_CALCULATION);
-
-//          Commutation channels --------------------------------------------------------------------------
-        setTransmitterPhaseInput(inCommutationState, PHASE_STORE_COMMUTATION_STATE);
-    }
+//    public void allocateChannelsToPhases() {
+////          Calculation channels --------------------------------------------------------------------------
+//        setTransmitterPhaseInput(inPatterns, PHASE_CLAIMS_CALCULATION);
+//        setTransmitterPhaseInput(inEventSeverities, PHASE_CLAIMS_CALCULATION);
+//        setTransmitterPhaseInput(inEventFrequencies, PHASE_CLAIMS_CALCULATION);
+//        setTransmitterPhaseInput(inFactors, PHASE_CLAIMS_CALCULATION);
+//        setTransmitterPhaseInput(inUnderwritingInfo, PHASE_CLAIMS_CALCULATION);
+//
+//        setTransmitterPhaseOutput(outClaims, PHASE_CLAIMS_CALCULATION);
+//        setTransmitterPhaseOutput(outOccurenceUltimateClaims, PHASE_CLAIMS_CALCULATION);
+//
+////          Commutation channels --------------------------------------------------------------------------
+//        setTransmitterPhaseInput(inCommutationState, PHASE_STORE_COMMUTATION_STATE);
+//    }
 
     public PeriodScope getPeriodScope() {
         return periodScope;
@@ -325,13 +429,13 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
         this.globalUpdateDate = globalUpdateDate;
     }
 
-    public PacketList<CommutationState> getInCommutationState() {
-        return inCommutationState;
-    }
-
-    public void setInCommutationState(PacketList<CommutationState> inCommutationState) {
-        this.inCommutationState = inCommutationState;
-    }
+//    public PacketList<CommutationState> getInCommutationState() {
+//        return inCommutationState;
+//    }
+//
+//    public void setInCommutationState(PacketList<CommutationState> inCommutationState) {
+//        this.inCommutationState = inCommutationState;
+//    }
 
     public Integer getGlobalLastCoveredPeriod() {
         return globalLastCoveredPeriod;

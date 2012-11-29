@@ -28,23 +28,28 @@ public class NoAggregateActualClaimsStrategy extends AbstractParameterObject imp
         return Collections.emptyMap();
     }
 
-    public void lazyInitHistoricClaimsPerContractPeriod(IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase, boolean sanityChecks) {
+    public void lazyInitHistoricClaimsPerContractPeriod(IPeriodCounter periodCounter, DateTime updateDate,
+                                                        PayoutPatternBase payoutPatternBase, boolean sanityChecks) {
     }
 
     public GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
-                                                   PeriodScope periodScope, DateTime updateDate, DateTimeUtilities.Days360 days360, boolean sanityChecks, PayoutPatternBase payoutPatternBase) {
+                                                   PeriodScope periodScope, DateTime updateDate, DateTimeUtilities.Days360 days360,
+                                                   boolean sanityChecks, PayoutPatternBase payoutPatternBase) {
         if(!periodScope.getPeriodCounter().startOfFirstPeriod().equals(updateDate)) {
             throw new SimulationException("Non-inception model must have an actual claims strategy");
         }
-        return new GrossClaimRoot(claimRoot, payoutPattern, payoutPatternBase.startDateForPayouts(claimRoot, periodScope.getCurrentPeriodStartDate(), null ) );
+        DateTime startDateForPatterns = payoutPatternBase.startDateForPayouts(claimRoot, periodScope.getCurrentPeriodStartDate(), null);
+        return new GrossClaimRoot(claimRoot, payoutPattern, startDateForPatterns);
     }
 
-    public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase, boolean sanityChecks) {
+    public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate,
+                                                 PayoutPatternBase payoutPatternBase, boolean sanityChecks) {
         return new AggregateHistoricClaim(period, periodCounter, PayoutPatternBase.PERIOD_START_DATE);
     }
 
-    public void checkClaimRootOccurenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims,
-                                                              int contractPeriod, IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase, boolean sanityChecks) {
+    public void checkClaimRootOccurrenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims, int contractPeriod,
+                                                               IPeriodCounter periodCounter, DateTime updateDate,
+                                                               PayoutPatternBase payoutPatternBase, boolean sanityChecks) {
 //        There are no actual claims by definition of this class so this method is not useful...
     }
 }

@@ -18,6 +18,14 @@ public enum PayoutPatternBase {
 
 
     RESERVE_DEVELOPMENT {
+        /**
+         * If the payout pattern ends before the update date, the returned pattern will produce a single payout at the
+         * update date. If the payout pattern
+         * @param originalPattern
+         * @param startDateForPayouts
+         * @param updateDate
+         * @return
+         */
         @Override
         PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
             final NavigableMap<DateTime, Double> theMap = originalPattern.absolutePattern(startDateForPayouts, true);
@@ -30,10 +38,12 @@ public enum PayoutPatternBase {
             cumulativeValues.add(0d);
             cumulativePeriods.add(new Period(0));
 
+            // payout everything at update date
             if (normalisingFactor == 0) {
                 cumulativeValues.add(1d);
                 cumulativePeriods.add(new Period(startDateForPayouts, updateDate));
-            } else {
+            }
+            else {
                 double cumulativePattern = 0d;
                 for (Map.Entry<DateTime, Double> entry : theMapAfterUpdate.entrySet()) {
                     double incrementalPatternEntry = entry.getValue() / normalisingFactor;
@@ -47,7 +57,7 @@ public enum PayoutPatternBase {
         }
 
         @Override
-        DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate) {
+        public DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate) {
             if (firstActualPaidDate != null) {
                 throw new SimulationException(" The reserve pattern has been provided with an actual payment date. This is not allowed.");
             }
@@ -62,7 +72,7 @@ public enum PayoutPatternBase {
         }
 
         @Override
-        DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate) {
+        public DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate) {
             if (firstActualPaidDate == null) {
                 return claimRoot.getOccurrenceDate();
             }
@@ -73,14 +83,16 @@ public enum PayoutPatternBase {
             }
             return claimRoot.getOccurrenceDate();
         }
-    }, PERIOD_START_DATE {
+    },
+
+    PERIOD_START_DATE {
         @Override
         PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
             return PatternUtils.adjustForNoClaimUpdates(originalPattern, startDateForPayouts, updateDate);
         }
 
         @Override
-        DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate) {
+        public DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate) {
             return contractPeriodStart;
         }
     };
@@ -88,7 +100,7 @@ public enum PayoutPatternBase {
     //
     abstract PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate);
 
-    abstract DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate);
+    public abstract DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate);
 
     public Object getConstructionString(Map parameters) {
         return getClass().getName() + "." + this;

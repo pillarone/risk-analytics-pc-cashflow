@@ -39,4 +39,8 @@ public class DefaultContractBase extends AbstractContractBase implements IReinsu
     public List<GrossClaimRoot> splitClaims(List<GrossClaimRoot> claimsAfterUpdate, PeriodScope periodScope) {
         throw new SimulationException(errorMessage);
     }
+
+    public int getContractLength() {
+        throw new SimulationException("Don't use default settings in contract base.");
+    }
 }

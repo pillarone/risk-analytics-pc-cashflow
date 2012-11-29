@@ -291,6 +291,12 @@ public class PatternPacket extends Packet implements Cloneable {
         }
     }
 
+    /**
+     * Replaces the periods with dates using baseDate as starting point. Returned values are incremental or cumulative.
+     * @param baseDate starting point of the pattern
+     * @param incremental if true incremental values will be returned, cumulative else
+     * @return absolute dates with incremental/cumulative values
+     */
     public TreeMap<DateTime, Double> absolutePattern(DateTime baseDate, boolean incremental) {
         TreeMap<DateTime, Double> tempMap = new TreeMap<DateTime, Double>();
         for (int j = 0; j < cumulativePeriods.size(); j++) {

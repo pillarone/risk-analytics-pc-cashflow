@@ -84,4 +84,9 @@ public class LossesOccurringContractBase extends AbstractContractBase implements
         }
         return claimRoots;
     }
+
+    @Override
+    public int getContractLength() {
+        return 0;
+    }
 }

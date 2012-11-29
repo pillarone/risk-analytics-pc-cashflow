@@ -230,7 +230,8 @@ public class PatternUtils {
                                                 double ultimate, DateTime baseDate, DateTime occurrenceDate,
                                                 DateTime updateDate, DateTime lastReportedDate, DateTimeUtilities.Days360 days360) {
         if(Math.abs(ultimate) == 0d ) {
-            throw new SimulationException("Insanity detected; Attempted to develop historic claim with 0 ultimate value. Pattern : " + originalPattern.toString() + " ... \n \n Claim Updates : " + claimUpdates.toString()) ;
+            throw new SimulationException("Insanity detected; Attempted to develop historic claim with 0 ultimate value. Pattern : "
+                    + originalPattern.toString() + " ... \n \n Claim Updates : " + claimUpdates.toString()) ;
         }
 
         if (claimUpdates.isEmpty()) {

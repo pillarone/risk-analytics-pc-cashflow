@@ -45,7 +45,7 @@ public interface IReinsuranceContractBaseStrategy {
     /**
      * Depending on the contract strategy this function will attempt to split the ultimate claim amount into smaller chunks.
      * The smaller chunks will occur on different dates but retain the reference to the root claim. This should split the
-     * claims for the recognising occurence in accounting, but retain the properties required for the RI contracts and payouts.
+     * claims for the recognising occurrence in accounting, but retain the properties required for the RI contracts and payouts.
      *
      *
      *
@@ -54,4 +54,6 @@ public interface IReinsuranceContractBaseStrategy {
      * @return
      */
     List<GrossClaimRoot> splitClaims(List<GrossClaimRoot> claimsAfterUpdate, PeriodScope periodScope);
+
+    int getContractLength();
 }

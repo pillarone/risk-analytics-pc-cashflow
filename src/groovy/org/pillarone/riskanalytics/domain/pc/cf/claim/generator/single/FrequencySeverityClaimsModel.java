@@ -1,4 +1,4 @@
-package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.attritional;
+package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.single;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.pillarone.riskanalytics.core.components.Component;
@@ -9,44 +9,51 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IClaimsGeneratorStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IPeriodDependingClaimsGeneratorStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.IExposureBaseStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.ISeverityIndexMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionTableConstraints;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionType;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.IVaryingParametersDistributionStrategy;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.IVaryingParametersFrequencyDistributionStrategy;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersDistributionType;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersFrequencyDistributionType;
 
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * This component is a parameter holder only containing all parameters needed for attritional claims generation and
- * containing a utility method providing baseClaims.
- *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AttritionalClaimsModel extends Component implements IPeriodDependingClaimsGeneratorStrategy {
+public class FrequencySeverityClaimsModel extends Component {
+
+//    private IExposureBaseStrategy parmFrequencyBase = ExposureBaseType.getDefault();
+    private ComboBoxTableMultiDimensionalParameter parmFrequencyIndices = new ComboBoxTableMultiDimensionalParameter(
+            Arrays.asList(""), Arrays.asList("Frequency Index"), IFrequencyIndexMarker.class);
+
+    private IVaryingParametersDistributionStrategy parmFrequencyDistribution = VaryingParametersDistributionType.getDefault();
+    private DistributionModified parmFrequencyModification = DistributionModifier.getStrategy(DistributionModifier.NONE, Collections.emptyMap());
 
     private IExposureBaseStrategy parmSeverityBase = ExposureBaseType.getDefault();
     private ComboBoxTableMultiDimensionalParameter parmSeverityIndices = new ComboBoxTableMultiDimensionalParameter(
             Arrays.asList(""), Arrays.asList("Severity Index"), ISeverityIndexMarker.class);
     private IVaryingParametersDistributionStrategy parmSeverityDistribution = VaryingParametersDistributionType.getDefault();
-    private DistributionModified parmSeverityModification = DistributionModifier.getStrategy(DistributionModifier.NONE, Collections.emptyMap());
-
+    private DistributionModified parmSeverityModification = DistributionModifier.getStrategy(DistributionModifier.NONE,Collections.emptyMap());
 
     @Override
     protected void doCalculation() {
@@ -59,11 +66,16 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
      */
     public IClaimsGeneratorStrategy claimsModel(int period) {
         // todo: cache to avoid object creation for every period and iteration
-        IClaimsGeneratorStrategy claimsGeneratorStrategy = ClaimsGeneratorType.getStrategy(ClaimsGeneratorType.ATTRITIONAL,
+        IClaimsGeneratorStrategy claimsGeneratorStrategy = ClaimsGeneratorType.getStrategy(ClaimsGeneratorType.FREQUENCY_SEVERITY_SIMPLIFIED_INDEX,
                 ArrayUtils.toMap(new Object[][]
-                        {{"claimsSizeBase", parmSeverityBase.exposureBase()},
+                               {{"frequencyIndices", parmFrequencyIndices},
+//                                {"frequencyBase", parmFrequencyBase},
+                                {"frequencyDistribution", parmFrequencyDistribution.getDistribution(period)},
+                                {"frequencyModification", parmFrequencyModification},
+                                {"claimsSizeBase", parmSeverityBase.exposureBase()},
                                 {"claimsSizeDistribution", parmSeverityDistribution.getDistribution(period)},
-                                {"claimsSizeModification", parmSeverityModification}}));
+                                {"claimsSizeModification", parmSeverityModification},
+                                {"produceClaim", FrequencySeverityClaimType.SINGLE}}));
         return claimsGeneratorStrategy;
     }
 
@@ -88,11 +100,34 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
         double scaleFactor = parmSeverityBase.factor(inUnderwritingInfo);
         List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(inEventSeverities, filterCriteria);
         if (!eventSeverities.isEmpty()) {
-            return claimsModel(period).calculateClaims(- scaleFactor, periodScope, eventSeverities);
+            return claimsModel(period).calculateClaims(-scaleFactor, periodScope, eventSeverities);
         }
         else {
-            return claimsModel(period).generateClaims(- scaleFactor, severityFactors, 1, periodScope, contractBase);
+//            return claimsModel(period).generateClaims(-scaleFactor, severityFactors, 1, periodScope, contractBase);
+            List<ClaimRoot> baseClaims = claimsModel(period).calculateClaims(-scaleFactor, periodScope, eventSeverities);
+            baseClaims = claimsModel(period).generateClaims(baseClaims, inUnderwritingInfo, severityFactors, Collections.emptyList(), new ArrayList<FactorsPacket>(), periodScope, inEventFrequencies, filterCriteria);
+            List<ClaimRoot> baseClaimsCorrectedSign = new ArrayList<ClaimRoot>();
+            for (ClaimRoot claim : baseClaims) {
+                baseClaimsCorrectedSign.add(new ClaimRoot(-claim.getUltimate(), claim));
+            }
+            return baseClaimsCorrectedSign;
         }
+    }
+
+    public IVaryingParametersDistributionStrategy getParmFrequencyDistribution() {
+        return parmFrequencyDistribution;
+    }
+
+    public void setParmFrequencyDistribution(IVaryingParametersDistributionStrategy parmFrequencyDistribution) {
+        this.parmFrequencyDistribution = parmFrequencyDistribution;
+    }
+
+    public DistributionModified getParmFrequencyModification() {
+        return parmFrequencyModification;
+    }
+
+    public void setParmFrequencyModification(DistributionModified parmFrequencyModification) {
+        this.parmFrequencyModification = parmFrequencyModification;
     }
 
     public IExposureBaseStrategy getParmSeverityBase() {
@@ -101,6 +136,14 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
 
     public void setParmSeverityBase(IExposureBaseStrategy parmSeverityBase) {
         this.parmSeverityBase = parmSeverityBase;
+    }
+
+    public ComboBoxTableMultiDimensionalParameter getParmFrequencyIndices() {
+        return parmFrequencyIndices;
+    }
+
+    public void setParmFrequencyIndices(ComboBoxTableMultiDimensionalParameter parmFrequencyIndices) {
+        this.parmFrequencyIndices = parmFrequencyIndices;
     }
 
     public ComboBoxTableMultiDimensionalParameter getParmSeverityIndices() {
@@ -126,6 +169,4 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
     public void setParmSeverityModification(DistributionModified parmSeverityModification) {
         this.parmSeverityModification = parmSeverityModification;
     }
-
-
 }

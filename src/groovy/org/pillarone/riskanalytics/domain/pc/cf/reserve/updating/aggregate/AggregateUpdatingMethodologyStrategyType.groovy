@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedString
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IUpdatingPatternMarker
+import org.apache.commons.lang.NotImplementedException
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -57,6 +58,7 @@ class AggregateUpdatingMethodologyStrategyType extends AbstractParameterObjectCl
                 return new AggregateUpdatingOriginalUltimateMethodology()
             case AggregateUpdatingMethodologyStrategyType.PLEASESELECT:
                 return new NoUpdatingMethodology()
+            default: throw new NotImplementedException(type.toString() + " is not implemented")
         }
     }
 }

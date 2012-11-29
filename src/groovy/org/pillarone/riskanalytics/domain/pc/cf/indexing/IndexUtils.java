@@ -40,6 +40,17 @@ public class IndexUtils {
         return filteredFactors;
     }
 
+    public static List<Factors> filterFactors(List<FactorsPacket> factorsPackets, ConstrainedString criteria,
+                                              IndexMode indexMode, BaseDateMode baseDateMode, DateTime fixedDate) {
+        List<Factors> filteredFactors = new ArrayList<Factors>();
+        for (FactorsPacket factorPacket : factorsPackets) {
+            if (factorPacket.getOrigin().equals(criteria.getSelectedComponent())) {
+                filteredFactors.add(new Factors(factorPacket, baseDateMode, indexMode, fixedDate));
+            }
+        }
+        return filteredFactors;
+    }
+
     public static List<Factors> filterFactors(List<FactorsPacket> factorsPackets, ComboBoxTableMultiDimensionalParameter criteria,
                                               IndexMode indexMode, BaseDateMode baseDateMode, DateTime fixedDate) {
         List<Factors> filteredFactors = new ArrayList<Factors>();

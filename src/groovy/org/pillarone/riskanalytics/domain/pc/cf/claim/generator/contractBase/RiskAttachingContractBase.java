@@ -103,4 +103,9 @@ public class RiskAttachingContractBase extends AbstractContractBase implements I
         return claimRoots;
     }
 
+    @Override
+    public int getContractLength() {
+        return underlyingContractLength;
+    }
+
 }

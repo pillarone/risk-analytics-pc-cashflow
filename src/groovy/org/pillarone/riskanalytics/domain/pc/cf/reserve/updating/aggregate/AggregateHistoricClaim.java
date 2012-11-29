@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
+ * Helper object
+ *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class AggregateHistoricClaim {
@@ -50,14 +52,15 @@ public class AggregateHistoricClaim {
     }
 
     /**
-     * @return true if both there are no claim paid and reported updates
+     * @return true if there are no claim paid and reported updates
      */
     public boolean noUpdates() {
         return claimPaidUpdates.isEmpty() && claimReportedUpdates.isEmpty();
     }
 
 
-    public GrossClaimRoot claimWithAdjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate, DateTimeUtilities.Days360 days360, boolean sanityChecks) {
+    public GrossClaimRoot claimWithAdjustedPattern(PatternPacket payoutPattern, ClaimRoot claimRoot, DateTime updateDate,
+                                                   DateTimeUtilities.Days360 days360, boolean sanityChecks) {
         DateTime startDateForPatterns = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
 
         PatternPacket patternPacket = null;
@@ -111,7 +114,6 @@ public class AggregateHistoricClaim {
 
     @Override
     public String toString() {
-        String separator = ", ";
         StringBuilder result = new StringBuilder();
         result.append(contractPeriod);
         return result.toString();
