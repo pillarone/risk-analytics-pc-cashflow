@@ -26,7 +26,9 @@ public class SingleHistoricClaim {
 
     private String claimID;
     private int contractPeriod;
-    /** contains all cumulative paid claims except the first and last belonging to the claimID */
+    /**
+     * contains all cumulative paid claims except the first and last belonging to the claimID
+     */
     private TreeMap<DateTime, Double> claimCumulativePaidUpdates = new TreeMap<DateTime, Double>();
     private TreeMap<DateTime, Double> claimCumulativeReportedUpdates = new TreeMap<DateTime, Double>();
 
@@ -46,13 +48,17 @@ public class SingleHistoricClaim {
     }
 
     /**
-     * Only claims with same claimID should be added!
      * @param reportedDate
      * @param cumulativePaid
      * @param cumulativeReported
+     * @param claimID
      */
     public void add(DateTime reportedDate, double cumulativePaid, double cumulativeReported,
-                    boolean firstReportOfClaim, IPeriodCounter periodCounter) {
+                    boolean firstReportOfClaim, IPeriodCounter periodCounter, String claimID) {
+        if (!claimID.equals(this.claimID)) {
+            throw new SimulationException("Attempted to add the values from claim ID ; " + claimID + "into claim ; " +
+                    this.claimID + " this should never happen. Contact development");
+        }
         if (reportedDate.isBefore(occurrenceDate)) occurrenceDate = reportedDate;
         if (lastUpdateDate == null || reportedDate.isAfter(lastUpdateDate)) {
             lastUpdateDate = reportedDate;
@@ -63,34 +69,30 @@ public class SingleHistoricClaim {
         claimCumulativePaidUpdates.put(reportedDate, cumulativePaid);
         claimCumulativeReportedUpdates.put(reportedDate, cumulativeReported);
         if (firstReportOfClaim) {
-            try {
-                int reportedPeriod = periodCounter.belongsToPeriod(reportedDate);
-                int occurrencePeriod = periodCounter.belongsToPeriod(occurrenceDate);
-                if (occurrencePeriod < reportedPeriod) {
-                    claimCumulativePaidUpdates.put(occurrenceDate, 0d);
-                }
+            int reportedPeriod = periodCounter.belongsToPeriod(reportedDate);
+            int occurrencePeriod = periodCounter.belongsToPeriod(occurrenceDate);
+            if (occurrencePeriod < reportedPeriod) {
+                claimCumulativePaidUpdates.put(occurrenceDate, 0d);
             }
-            catch (NotInProjectionHorizon ex) {
-                // we can ignore actual claims outside the global start and end date
-            }
-
         }
     }
 
     public void removeReportedDateWithZeroIncrementalPaid() {
-        Double lastCumulativePaid = null;
+        Double lastCumulativePaid = -1d;
         List<DateTime> reportDatesWithNoPayment = new ArrayList<DateTime>();
         for (Map.Entry<DateTime, Double> claimUpdate : claimCumulativePaidUpdates.entrySet()) {
             double cumulativePaid = claimUpdate.getValue();
-            if (lastCumulativePaid == null || cumulativePaid != lastCumulativePaid) {
-                lastCumulativePaid = cumulativePaid;
+            if (cumulativePaid == lastCumulativePaid) {
+                reportDatesWithNoPayment.add(claimUpdate.getKey());
             }
-            else {
-                if (cumulativePaid == lastCumulativePaid) {
-                    reportDatesWithNoPayment.add(claimUpdate.getKey());
-                }
+            if (cumulativePaid < lastCumulativePaid) {
+                throw new SimulationException("Please check the entries for claim with ID ; " + claimID + ". It appears that paid entry with date " +
+                        DateTimeUtilities.formatDate.print(claimUpdate.getKey()) + " has a prior cumulative paid of " + cumulativePaid);
             }
+            lastCumulativePaid = cumulativePaid;
         }
+
+
         for (DateTime reportedDate : reportDatesWithNoPayment) {
             claimCumulativePaidUpdates.remove(reportedDate);
         }
@@ -120,7 +122,7 @@ public class SingleHistoricClaim {
 
     public void applyVolatility(IRandomNumberGenerator volatilityGenerator) {
         double volatilityFactor = (Double) volatilityGenerator.nextValue();
-        lastReported = Math.max((originalLastReported - lastPaid) * volatilityFactor  + getLastCumulativePaid(), getLastCumulativePaid());
+        lastReported = Math.max((originalLastReported - lastPaid) * volatilityFactor + getLastCumulativePaid(), getLastCumulativePaid());
     }
 
     public double getLastCumulativePaid() {

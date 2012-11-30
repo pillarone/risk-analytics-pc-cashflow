@@ -5,11 +5,10 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.ReserveVolatility;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
@@ -61,6 +60,9 @@ public class SingleActualClaimsStrategy extends AbstractParameterObject implemen
             Map<String, SingleHistoricClaim> historicClaimsPerID = new HashMap<String, SingleHistoricClaim>();
             for (int row = history.getTitleRowCount(); row < history.getRowCount(); row++) {
                 DateTime reportedDate = (DateTime) history.getValueAt(row, SingleHistoricClaimsConstraints.REPORT_DATE_INDEX);
+                if(!reportedDate.isAfter(periodCounter.startOfFirstPeriod())) {
+                    throw new SimulationException("Please check reported date in row " + (row + 1) + "of your table. The reported date appears to be before the start of the simulation."  );
+                }
                 lastReportedDate = lastReportedDate.isBefore(reportedDate) ? reportedDate : lastReportedDate;
                 String claimID = (String) history.getValueAt(row, SingleHistoricClaimsConstraints.ID_COLUMN_INDEX);
                 DateTime occurrenceDate = (DateTime) history.getValueAt(row, SingleHistoricClaimsConstraints.OCCURRENCE_DATE_INDEX);
@@ -80,7 +82,7 @@ public class SingleActualClaimsStrategy extends AbstractParameterObject implemen
                 }
                 double cumulativePaid = InputFormatConverter.getDouble(history.getValueAt(row, SingleHistoricClaimsConstraints.PAID_AMOUNT_INDEX));
                 double cumulativeReported = InputFormatConverter.getDouble(history.getValueAt(row, SingleHistoricClaimsConstraints.REPORTED_AMOUNT_INDEX));
-                claim.add(reportedDate, cumulativePaid, cumulativeReported, firstReportOfClaim, periodCounter);
+                claim.add(reportedDate, cumulativePaid, cumulativeReported, firstReportOfClaim, periodCounter, claimID);
             }
         }
     }
