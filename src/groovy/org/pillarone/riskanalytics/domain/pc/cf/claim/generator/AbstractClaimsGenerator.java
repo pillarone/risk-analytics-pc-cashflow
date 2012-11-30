@@ -149,10 +149,7 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
                 claimsNotOccurringThisPeriod.add(grossClaimRoot);
             }
         }
-
-        if (!grossClaimRoots.isEmpty()) {
-            periodStore.put(AbstractClaimsGenerator.GROSS_CLAIMS, claimsNotOccurringThisPeriod);
-        }
+        periodStore.put(AbstractClaimsGenerator.GROSS_CLAIMS, claimsNotOccurringThisPeriod);
     }
 
     /**
