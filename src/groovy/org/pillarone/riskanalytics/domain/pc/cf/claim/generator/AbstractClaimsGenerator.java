@@ -61,7 +61,9 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
     protected PacketList<SystematicFrequencyPacket> inEventFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket.class);
 
 //    protected PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState.class);
-    /** don't assume any order in this channel */
+    /**
+     * don't assume any order in this channel
+     */
     protected PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     protected PacketList<ClaimCashflowPacket> outOccurenceUltimateClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
 
@@ -90,7 +92,7 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
      *
      * @param baseClaims
      * @param parmPayoutPattern
-     * @param periodScope needed to derive the payouts in the current period
+     * @param periodScope       needed to derive the payouts in the current period
      * @param base
      * @return GrossClaimRoot objects of this period
      */
@@ -113,9 +115,10 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
     /**
      * Looping over GROSS_CLAIMS in the periodStore payouts of the current period are identified and corresponding
      * claim packets generated.
-     * @param claims resulting claim packets are attached to this list.
+     *
+     * @param claims        resulting claim packets are attached to this list.
      * @param periodCounter needed to derive the payout in the current period
-     * @param factors for payouts in this period
+     * @param factors       for payouts in this period
      */
     protected void developClaimsOfFormerPeriods(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter, List<Factors> factors) {
         if (!periodScope.isFirstPeriod()) {
@@ -136,6 +139,7 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
 
     /**
      * Sets GROSS_CLAIMS of periodStore with claims not occurring in current period
+     *
      * @param grossClaimRoots
      * @param periodStore
      */
@@ -154,6 +158,7 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
 
     /**
      * Beside returning current period ClaimCashflowPacket outOccurenceUltimateClaims is filled
+     *
      * @param grossClaimRoots
      * @param runOffFactors
      * @param periodScope
@@ -174,6 +179,7 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
 
     /**
      * Implementation void
+     *
      * @param claims
      * @param grossClaimRoots
      * @param baseClaims
@@ -191,8 +197,9 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
 
     /**
      * Provides the same ClaimRoot objects per period for every iteration
+     *
      * @param deterministicClaims parameter containing period and ultimate value
-     * @param periodScope required for occurrence date calculation
+     * @param periodScope         required for occurrence date calculation
      * @param claimType
      * @return unmodified (no relative parameterization) ClaimRoot objects
      */
@@ -206,8 +213,9 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
 
     /**
      * Reads the deterministic claims parameters
+     *
      * @param presetClaims parameter containing period and ultimate value
-     * @param periodScope required for occurrence date calculation
+     * @param periodScope  required for occurrence date calculation
      * @param claimType
      * @return list with claims per period
      */
@@ -226,10 +234,9 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
                 DateTime occurrenceDate = DateTimeUtilities.getDate(periodScope, period, fractionOfPeriod);
                 ClaimRoot claim = new ClaimRoot(claimValue, claimType, occurrenceDate, occurrenceDate);
                 presetClaimsByPeriod.put(period, claim);
-            }
-            else {
+            } else {
                 // ignore preset claim data outside the period scope
-                throw new SimulationException("Preset claim period was outside the bounds of the iteration scope. Check claim in row; " + (row + 1)  + "."  );
+                throw new SimulationException("Preset claim period was outside the bounds of the iteration scope. Check claim in row; " + (row + 1) + ".");
             }
         }
         return presetClaimsByPeriod;
@@ -238,6 +245,7 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
     /**
      * A deal may commute before the end of the contract period. We may hence want to terminate claims generation
      * depending on the outcome in the experience account. Additionally this method does the book keeping for the commutation state
+     *
      * @param phase
      * @return true if new claims have to be generated
      */
@@ -272,8 +280,9 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
 
     /**
      * Adds a default CommutationState packet to the period store at the start of every iteration
+     *
      * @param periodStore the period store for this object
-     * @param phase to make sure that the packet is added in the PHASE_CLAIMS_CALCULATION only
+     * @param phase       to make sure that the packet is added in the PHASE_CLAIMS_CALCULATION only
      */
     protected void initIteration(PeriodStore periodStore, PeriodScope periodScope, String phase) {
         if (periodScope.isFirstPeriod() && phase.equals(PHASE_CLAIMS_CALCULATION)) {
@@ -286,6 +295,7 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
 
     /**
      * Sets the peril marker and origin of each list element
+     *
      * @param claims
      */
     protected void setTechnicalProperties(List<ClaimCashflowPacket> claims) {
@@ -297,6 +307,7 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
 
     /**
      * Checks for negative ultimates
+     *
      * @param baseClaims
      */
     protected void checkBaseClaims(List<ClaimRoot> baseClaims, boolean sanityChecks, IterationScope iterationScope) {
@@ -305,7 +316,7 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
                 if (baseClaim.getUltimate() < 0) {
                     throw new SimulationException("Negative claim detected... i.e an inflow of cash!: " + baseClaim.toString());
                 }
-                if(iterationScope.isFirstIteration()) {
+                if (iterationScope.isFirstIteration()) {
                     LOG.info("claim root : " + baseClaim.toString());
                 }
             }
@@ -315,6 +326,7 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
     /**
      * Do some checks on the claims in this period.
      * Checks for negative paid claims
+     *
      * @param cashflowPackets
      * @param sanityChecks
      */
@@ -328,7 +340,6 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
             }
         }
     }
-
 
 
 //    public void allocateChannelsToPhases() {
