@@ -86,25 +86,25 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
                 if (coveredContracts.contains(claim.reinsuranceContract()) && claim.reserve() == null
                         && coveredPerils.contains(claim.peril())) {
                     if (coveredContractsCoveringCeded.contains(claim.reinsuranceContract())) {
-                        filteredClaims.add(claimValidator.invertClaimSign(claim));
+                        filteredClaims.add(claim);
                     }
                     else {
-                        filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
+                        filteredClaims.add(claim);
                     }
                 }
             }
             else if (perilBasedCover()) {
                 if (coveredPerils.contains(claim.peril())) {
-                    filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
+                    filteredClaims.add(claim);
                 }
             }
             else if (contractBasedCover()) {
                 if (coveredContracts.contains(claim.reinsuranceContract()) && claim.reserve() == null) {
                     if (coveredContractsCoveringCeded.contains(claim.reinsuranceContract())) {
-                        filteredClaims.add(claimValidator.invertClaimSign(claim));
+                        filteredClaims.add(claim);
                     }
                     else {
-                        filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
+                        filteredClaims.add(claim);
                     }
                 }
             }
