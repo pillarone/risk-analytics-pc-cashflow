@@ -204,8 +204,8 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
         List<ClaimCashflowPacket> uncoveredClaims = GRIUtilities.uncoveredClaims(parmCoverageBase, coverStart, coverEnd, inClaims);
         inClaims.removeAll(uncoveredClaims);
-        outClaimsGross.addAll(inClaims);
         parmCover.coveredClaims(inClaims);
+        outClaimsGross.addAll(inClaims);
         parmContractBase.coveredUnderwritingInfo(inUnderwritingInfo);
     }
 
