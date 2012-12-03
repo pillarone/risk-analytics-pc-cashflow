@@ -37,7 +37,7 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
         return params;
     }
 
-    private List<IPerilMarker> getCoveredPerils() {
+    public List<IPerilMarker> getCoveredPerils() {
         return (List<IPerilMarker>) grossClaims.getValuesAsObjects(0, true);
     }
 
