@@ -31,7 +31,7 @@ public class SingleActualClaimsStrategy extends AbstractParameterObject implemen
 
     public Map getParameters() {
         Map<String, Object> parameters = new HashMap<String, Object>(2);
-        parameters.put("singleClaimsHistory", history);
+        parameters.put("history", history);
         parameters.put("reserveVolatility", reserveVolatility);
         return parameters;
     }
