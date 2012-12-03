@@ -27,9 +27,7 @@ import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionMo
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionType;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.IVaryingParametersDistributionStrategy;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.IVaryingParametersFrequencyDistributionStrategy;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersDistributionType;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersFrequencyDistributionType;
 
 
 import java.util.ArrayList;
