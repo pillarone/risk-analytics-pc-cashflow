@@ -145,7 +145,7 @@ public class RIUtilities {
             List<ClaimCashflowPacket> cashflowPackets = cashflowsByKey.get(claimRoot);
             boolean foundNonZeroCashflow = false;
             for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
-                if (cashflowPacket.getDate().isAfter(latestPacket.getDate()) && cashflowPacket.getPaidCumulatedIndexed() < 0) {
+                if (cashflowPacket.getDate().isAfter(latestPacket.getDate()) && cashflowPacket.getPaidCumulatedIndexed() > 0) {
                     latestPacket = cashflowPacket;
                     foundNonZeroCashflow = true;
                 }
@@ -165,6 +165,14 @@ public class RIUtilities {
         return latestUpdates;
 
 
+    }
+
+    public static double incrementalPaidSum(Collection<ClaimCashflowPacket> packets) {
+        return GRIUtilities.incrementalCashflowSum(packets);
+    }
+
+    public static double ultimateSumFromCashflows(Collection<ClaimCashflowPacket> packets) {
+        return GRIUtilities.ultimateSumFromCashflows(packets);
     }
 
     public static ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByRoot(Collection<ClaimCashflowPacket> cashflows, IncurredClaimBase base) {

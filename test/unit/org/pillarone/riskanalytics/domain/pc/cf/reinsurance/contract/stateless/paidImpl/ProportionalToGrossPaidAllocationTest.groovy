@@ -127,10 +127,6 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         contractPaidPeriod3.put(0, 100d)
         contractPaidPeriod3.put(1, 0d)
         contractPaidPeriod3.put(2, 0d)
-        shouldFail {
-            /* Expect an exception here because the claim will pay more than the Root ultimate amount.  */
-            List<ClaimCashflowPacket> cededPacketsPeriod3 = allocation.allocatePaid(contractPaidPeriod3, cashflowPacketList3, cededCashflows, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims, true)
-        }
 
         contractPaidPeriod3.put(0, 12.5d)
         List<ClaimCashflowPacket> cededPacketsPeriod3 = allocation.allocatePaid(contractPaidPeriod3, cashflowPacketList3, cededCashflows, periodScope, ContractCoverBase.LOSSES_OCCURING, cededClaims, true)

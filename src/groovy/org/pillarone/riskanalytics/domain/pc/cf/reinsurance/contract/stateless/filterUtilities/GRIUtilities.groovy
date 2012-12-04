@@ -23,8 +23,12 @@ class GRIUtilities {
         return cashflowPacketList*.getBaseClaim().contains(root)
     }
 
+    public static Double ultimateSumFromMap(Map<IClaimRoot, Collection<ClaimCashflowPacket>> aMap) {
+        return ultimateSumFromCashflows(aMap.values().flatten())
+    }
 
-    public static Double ultimateSumFromCashflows(List<ClaimCashflowPacket> cashflows) {
+
+    public static Double ultimateSumFromCashflows(Collection<ClaimCashflowPacket> cashflows) {
         Set<IClaimRoot> incurredClaims = RIUtilities.incurredClaims(cashflows, IncurredClaimBase.BASE)
         ArrayList<IClaimRoot> claims = new ArrayList<IClaimRoot>()
         claims.addAll(incurredClaims)

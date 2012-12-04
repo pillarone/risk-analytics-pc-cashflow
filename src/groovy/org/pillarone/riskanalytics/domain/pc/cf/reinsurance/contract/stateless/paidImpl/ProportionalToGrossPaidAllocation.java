@@ -24,6 +24,7 @@ import java.util.*;
 public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
 
     private static Log LOG = LogFactory.getLog(ProportionalToGrossPaidAllocation.class);
+    private static DecimalFormat df = new DecimalFormat("#,###.##");
 
     public List<ClaimCashflowPacket> allocatePaid(Map<Integer, Double> incrementalPaidByPeriod, List<ClaimCashflowPacket> grossCashflowsThisPeriod,
                                                   List<ClaimCashflowPacket> cededCashflowsToDate,
@@ -38,6 +39,7 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
 
 //        For each model period
         for (Map.Entry<Integer, Double> entry : incrementalPaidByPeriod.entrySet()) {
+            List<ClaimCashflowPacket> cashflowClaimsForPeriodCheck = new ArrayList<ClaimCashflowPacket>();
             List<ClaimCashflowPacket> cashflowsRelatedToModelPeriod = RIUtilities.cashflowsClaimsByPeriod(entry.getKey(), periodScope.getPeriodCounter(), grossCashflowsThisPeriod, coverageBase);
             double grossIncurredInPeriod = GRIUtilities.ultimateSumFromCashflows(cashflowsRelatedToModelPeriod);
             double cededPaidAmountInModelPeriodThisSimPeriod = (Double) entry.getValue();
@@ -49,7 +51,7 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                 ICededRoot cededRoot = GRIUtilities.findCededClaimRelatedToGrossClaim(packetEntrys.getKey(), incurredCededClaims);
                 List<ClaimCashflowPacket> cashflowPackets = new ArrayList<ClaimCashflowPacket>(packetEntrys.getValue());
                 double grossIncurredByClaimRatio;
-                if(Math.abs(grossIncurredInPeriod ) == 0  ) {
+                if (Math.abs(grossIncurredInPeriod) == 0) {
                     grossIncurredByClaimRatio = 0d;
                 } else {
                     grossIncurredByClaimRatio = packetEntrys.getKey().getUltimate() / grossIncurredInPeriod;
@@ -72,36 +74,59 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                 for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
                     double paidAgainstThisPacket = 0;
 
-                    if (sumIncrementsOfThisClaim == 0 || (cashflowPackets.size() == 1)) {
+                    if (sumIncrementsOfThisClaim == 0) {
                         paidAgainstThisPacket = claimPaidInContractYear;
+                        paidAgainstThisPacket = checkPaidAgainstThisClaim(cededRoot, cumulatedCededForThisClaim, paidAgainstThisPacket);
+                        ClaimCashflowPacket claimCashflowPacket = new ClaimCashflowPacket(cededRoot, cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, setUltimate);
+                        cashflowClaimsForPeriodCheck.add(claimCashflowPacket);
+                        doPaidLessThanIncurredCheck(sanityChecks, cededRoot, cumulatedCededForThisClaim, claimCashflowPacket);
+                        claimsOfInterest.add(claimCashflowPacket);
+                        break;
                     } else {
                         paidAgainstThisPacket = claimPaidInContractYear * cashflowPacket.getPaidIncrementalIndexed() / sumIncrementsOfThisClaim;
+                        paidAgainstThisPacket = checkPaidAgainstThisClaim(cededRoot, cumulatedCededForThisClaim, paidAgainstThisPacket);
                     }
 
                     cumulatedCededForThisClaim += paidAgainstThisPacket;
                     ClaimCashflowPacket claimCashflowPacket = new ClaimCashflowPacket(cededRoot, cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, setUltimate);
-                    if (
-                            Math.abs(cumulatedCededForThisClaim) > Math.abs(cededRoot.getUltimate()) + SimulationConstants.EPSILON
-                        ) {
-
-                        DecimalFormat df = new DecimalFormat("#.##");
-
-                        String message = "Insanity detected : " + df.format(cededRoot.getUltimate())  + " has an ultimate of smaller magnitude " +
-                                "than the paid amount " + df.format(claimCashflowPacket.getPaidCumulatedIndexed()) + ". " +
-                                "This will create inconsistencies in higher structures. Contact development";
-                        LOG.error(message);
-                        if (sanityChecks) {
-                            throw new SimulationException(message);
-                        }
-                    }
+                    cashflowClaimsForPeriodCheck.add(claimCashflowPacket);
+                    doPaidLessThanIncurredCheck(sanityChecks, cededRoot, cumulatedCededForThisClaim, claimCashflowPacket);
                     setUltimate = false;
                     claimsOfInterest.add(claimCashflowPacket);
+
                 }
+            }
+            double checkCededPaidInModelPeriod = GRIUtilities.incrementalCashflowSum(cashflowClaimsForPeriodCheck);
+            if(!((checkCededPaidInModelPeriod - SimulationConstants.EPSILON < entry.getValue()) && (checkCededPaidInModelPeriod < entry.getValue() + SimulationConstants.EPSILON))) {
+
+                throw new SimulationException("Claims in model period; " + entry.getKey()  + " allocated incremental paid " + df.format(checkCededPaidInModelPeriod) + " do not match "
+                        + "the calculated paid amount in the period = " + df.format(entry.getValue()) + ". In simulation period periodScope " + periodScope.getCurrentPeriod() +
+                        " There must be an error in the claim allocation routine. Please forward to development"
+                );
             }
         }
 
         return claimsOfInterest;
 
 
+    }
+
+    private double checkPaidAgainstThisClaim(ICededRoot cededRoot, double cumulatedCededForThisClaim, double paidAgainstThisPacket) {
+        if(cumulatedCededForThisClaim + paidAgainstThisPacket > cededRoot.getUltimate()) {
+            paidAgainstThisPacket = cededRoot.getUltimate() - cumulatedCededForThisClaim;
+        }
+        return paidAgainstThisPacket;
+    }
+
+    private void doPaidLessThanIncurredCheck(boolean sanityChecks, ICededRoot cededRoot, double cumulatedCededForThisClaim, ClaimCashflowPacket claimCashflowPacket) {
+        if (Math.abs(cumulatedCededForThisClaim) > Math.abs(cededRoot.getUltimate()) + SimulationConstants.EPSILON) {
+            String message = "Insanity detected : " + df.format(cededRoot.getUltimate()) + " has an ultimate of smaller magnitude " +
+                    "than the paid amount " + df.format(claimCashflowPacket.getPaidCumulatedIndexed()) + ". " +
+                    "This will create inconsistencies in higher structures. Contact development";
+            LOG.error(message);
+            if (sanityChecks) {
+                throw new SimulationException(message);
+            }
+        }
     }
 }
