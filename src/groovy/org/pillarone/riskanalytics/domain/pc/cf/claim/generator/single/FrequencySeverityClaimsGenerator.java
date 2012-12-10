@@ -2,11 +2,14 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.single;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.packets.SingleValuePacket;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
@@ -51,6 +54,8 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
             ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER));
 
     /* Injected from framework */
+    protected PacketList<SingleValuePacket> outNumberBaseClaims = new PacketList<SingleValuePacket>(SingleValuePacket.class);
+    protected PacketList<SingleValuePacket> outNumberClaimsAfterUpdate = new PacketList<SingleValuePacket>(SingleValuePacket.class);
 
 
     protected void doCalculation() {
@@ -62,14 +67,16 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
             IPeriodCounter periodCounter = periodScope.getPeriodCounter();
             List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
 
+            if(!(parmParameterizationBasis.getType().equals(ReinsuranceContractBaseType.LOSSESOCCURRING))) {
+                throw new SimulationException("Only losses occuring implemented for frequency severity at the moment");
+            }
             List<Factors> runoffFactors = null;
             // Check that the period we are in covers new claims.
             if (periodScope.getCurrentPeriod() < globalLastCoveredPeriod) {
                 List<ClaimRoot> baseClaims;
                 if (globalDeterministicMode) {
                     baseClaims = getDeterministicClaims(parmDeterministicClaims, periodScope, ClaimType.SINGLE);
-                }
-                else {
+                } else {
                     List<Factors> severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices(),
                             IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
                     baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
@@ -80,6 +87,7 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
                 List<GrossClaimRoot> grossClaimRoots = parmUpdatingMethodology.updatingClaims(baseClaims, parmActualClaims,
                         periodCounter, globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), DAYS_360,
                         parmPayoutPatternBase, payoutPattern, globalSanityChecks);
+                outNumberClaimsAfterUpdate.add(new SingleValuePacket(grossClaimRoots.size()));
                 runoffFactors = new ArrayList<Factors>();
                 storeClaimsWhichOccurInFuturePeriods(grossClaimRoots, periodStore);
                 claims = cashflowsInCurrentPeriod(grossClaimRoots, runoffFactors, periodScope);
@@ -92,12 +100,19 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
 //            else {
 //                prepareProvidingClaimsInNextPeriodOrNot(phase);
 //            }
-        }
-        catch (SimulationException e) {
+        } catch (SimulationException e) {
             throw new SimulationException("Problem in claims generator in Iteration : "
                     + iterationScope.getCurrentIteration() + ". Period :" + periodScope.getCurrentPeriod()
                     + " with seed : " + simulationScope.getSimulation().getRandomSeed().toString()
-                    +  "\n \n " + e.getMessage(), e);
+                    + "\n \n " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    protected void checkBaseClaims(List<ClaimRoot> baseClaims, boolean sanityChecks, IterationScope iterationScope) {
+        if (sanityChecks) {
+            outNumberBaseClaims.add(new SingleValuePacket(baseClaims.size()));
+            super.checkBaseClaims(baseClaims, sanityChecks, iterationScope);
         }
     }
 
@@ -157,7 +172,21 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
         this.parmDeterministicClaims = parmDeterministicClaims;
     }
 
+    public PacketList<SingleValuePacket> getOutNumberBaseClaims() {
+        return outNumberBaseClaims;
+    }
 
+    public void setOutNumberBaseClaims(PacketList<SingleValuePacket> outNumberBaseClaims) {
+        this.outNumberBaseClaims = outNumberBaseClaims;
+    }
+
+    public PacketList<SingleValuePacket> getOutNumberClaimsAfterUpdate() {
+        return outNumberClaimsAfterUpdate;
+    }
+
+    public void setOutNumberClaimsAfterUpdate(PacketList<SingleValuePacket> outNumberClaimsAfterUpdate) {
+        this.outNumberClaimsAfterUpdate = outNumberClaimsAfterUpdate;
+    }
 }
 
 

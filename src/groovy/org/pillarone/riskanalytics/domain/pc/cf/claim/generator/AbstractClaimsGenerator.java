@@ -312,12 +312,13 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
      */
     protected void checkBaseClaims(List<ClaimRoot> baseClaims, boolean sanityChecks, IterationScope iterationScope) {
         if (sanityChecks) {
+
             for (ClaimRoot baseClaim : baseClaims) {
                 if (baseClaim.getUltimate() < 0) {
                     throw new SimulationException("Negative claim detected... i.e an inflow of cash!: " + baseClaim.toString());
                 }
                 if (iterationScope.isFirstIteration()) {
-                    LOG.info("claim root : " + baseClaim.toString());
+//                    LOG.debug("claim root : " + baseClaim.toString());
                 }
             }
         }
