@@ -7,9 +7,9 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.*;
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.IAggregateActualClaimsStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.single.SingleUpdatingMethod.ClaimAndRandomDraws;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,10 +34,10 @@ public class NoUpdatingMethodology extends AbstractParameterObject implements IS
     }
 
 
-    public List<GrossClaimRoot> updatingClaims(List<ClaimRoot> baseClaims, ISingleActualClaimsStrategy actualClaims,
-                                               IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns,
-                                               int contractPeriod, DateTimeUtilities.Days360 days360, PayoutPatternBase base,
-                                               PatternPacket payoutPattern, boolean sanityChecks) {
+    public GrossClaimAndRandomDraws updatingClaims(List<ClaimRoot> baseClaims, ISingleActualClaimsStrategy actualClaims,
+                                                   IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns,
+                                                   int contractPeriod, DateTimeUtilities.Days360 days360, PayoutPatternBase base,
+                                                   PatternPacket payoutPattern, boolean sanityChecks) {
         if(updateDate.isAfter(periodCounter.startOfFirstPeriod())) {
             throw new IllegalArgumentException("The update date is " + DateTimeUtilities.formatDate.print(updateDate)
                     + " and the start of the simulation is "
@@ -50,6 +50,6 @@ public class NoUpdatingMethodology extends AbstractParameterObject implements IS
             claims.add(new GrossClaimRoot(baseClaim, new PatternPacket.TrivialPattern(IPayoutPatternMarker.class),
                                                      new PatternPacket.TrivialPattern(IReportingPatternMarker.class)));
         }
-        return claims;
+        return new GrossClaimAndRandomDraws(claims, new SingleUpdatingMethod.ClaimAndRandomDraws(new ArrayList<ClaimRoot>()));
     }
 }

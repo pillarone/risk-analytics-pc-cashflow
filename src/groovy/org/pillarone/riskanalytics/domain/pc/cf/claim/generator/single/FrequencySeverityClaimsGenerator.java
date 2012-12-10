@@ -14,7 +14,6 @@ import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.ReinsuranceContractBaseType;
@@ -54,8 +53,8 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
             ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER));
 
     /* Injected from framework */
-    protected PacketList<SingleValuePacket> outNumberBaseClaims = new PacketList<SingleValuePacket>(SingleValuePacket.class);
-    protected PacketList<SingleValuePacket> outNumberClaimsAfterUpdate = new PacketList<SingleValuePacket>(SingleValuePacket.class);
+    protected PacketList<SingleValuePacket> outUpdatingPoissonDraw = new PacketList<SingleValuePacket>(SingleValuePacket.class);
+    protected PacketList<SingleValuePacket> outUpdatingUniformDraw = new PacketList<SingleValuePacket>(SingleValuePacket.class);
 
 
     protected void doCalculation() {
@@ -84,13 +83,13 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
                 }
                 checkBaseClaims(baseClaims, globalSanityChecks, iterationScope);
                 PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
-                List<GrossClaimRoot> grossClaimRoots = parmUpdatingMethodology.updatingClaims(baseClaims, parmActualClaims,
+                ISingleUpdatingMethodologyStrategy.GrossClaimAndRandomDraws updatingResult = parmUpdatingMethodology.updatingClaims(baseClaims, parmActualClaims,
                         periodCounter, globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), DAYS_360,
                         parmPayoutPatternBase, payoutPattern, globalSanityChecks);
-                outNumberClaimsAfterUpdate.add(new SingleValuePacket(grossClaimRoots.size()));
+                randomDrawInfo(updatingResult);
                 runoffFactors = new ArrayList<Factors>();
-                storeClaimsWhichOccurInFuturePeriods(grossClaimRoots, periodStore);
-                claims = cashflowsInCurrentPeriod(grossClaimRoots, runoffFactors, periodScope);
+                storeClaimsWhichOccurInFuturePeriods(updatingResult.getGrossClaims(), periodStore);
+                claims = cashflowsInCurrentPeriod(updatingResult.getGrossClaims(), runoffFactors, periodScope);
             }
             developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
             checkCashflowClaims(claims, globalSanityChecks);
@@ -108,10 +107,15 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
         }
     }
 
+    private void randomDrawInfo(ISingleUpdatingMethodologyStrategy.GrossClaimAndRandomDraws updatingResult) {
+        if(updatingResult.getRandomDraws().getUniformDraw() > 0) {
+            outUpdatingUniformDraw.add(new SingleValuePacket(updatingResult.getRandomDraws().getUniformDraw()));
+        }
+    }
+
     @Override
     protected void checkBaseClaims(List<ClaimRoot> baseClaims, boolean sanityChecks, IterationScope iterationScope) {
         if (sanityChecks) {
-            outNumberBaseClaims.add(new SingleValuePacket(baseClaims.size()));
             super.checkBaseClaims(baseClaims, sanityChecks, iterationScope);
         }
     }
@@ -172,20 +176,20 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
         this.parmDeterministicClaims = parmDeterministicClaims;
     }
 
-    public PacketList<SingleValuePacket> getOutNumberBaseClaims() {
-        return outNumberBaseClaims;
+    public PacketList<SingleValuePacket> getOutUpdatingPoissonDraw() {
+        return outUpdatingPoissonDraw;
     }
 
-    public void setOutNumberBaseClaims(PacketList<SingleValuePacket> outNumberBaseClaims) {
-        this.outNumberBaseClaims = outNumberBaseClaims;
+    public void setOutUpdatingPoissonDraw(PacketList<SingleValuePacket> outUpdatingPoissonDraw) {
+        this.outUpdatingPoissonDraw = outUpdatingPoissonDraw;
     }
 
-    public PacketList<SingleValuePacket> getOutNumberClaimsAfterUpdate() {
-        return outNumberClaimsAfterUpdate;
+    public PacketList<SingleValuePacket> getOutUpdatingUniformDraw() {
+        return outUpdatingUniformDraw;
     }
 
-    public void setOutNumberClaimsAfterUpdate(PacketList<SingleValuePacket> outNumberClaimsAfterUpdate) {
-        this.outNumberClaimsAfterUpdate = outNumberClaimsAfterUpdate;
+    public void setOutUpdatingUniformDraw(PacketList<SingleValuePacket> outUpdatingUniformDraw) {
+        this.outUpdatingUniformDraw = outUpdatingUniformDraw;
     }
 }
 

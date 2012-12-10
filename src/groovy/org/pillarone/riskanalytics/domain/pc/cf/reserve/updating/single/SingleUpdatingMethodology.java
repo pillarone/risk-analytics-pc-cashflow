@@ -50,15 +50,16 @@ public class SingleUpdatingMethodology extends AbstractParameterObject implement
      * @param sanityChecks
      * @return
      */
-    public List<GrossClaimRoot> updatingClaims(List<ClaimRoot> baseClaims, ISingleActualClaimsStrategy actualClaims,
-                                          IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns,
-                                          int contractPeriod, DateTimeUtilities.Days360 days360, PayoutPatternBase base,
-                                          PatternPacket payoutPattern, boolean sanityChecks) {
+    public GrossClaimAndRandomDraws updatingClaims(List<ClaimRoot> baseClaims, ISingleActualClaimsStrategy actualClaims,
+                                                   IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns,
+                                                   int contractPeriod, DateTimeUtilities.Days360 days360, PayoutPatternBase base,
+                                                   PatternPacket payoutPattern, boolean sanityChecks) {
         List<GrossClaimRoot> modifiedGeneratedAndActualClaims = new ArrayList<GrossClaimRoot>();
         // todo(sku): where do we need the updating pattern, where the payout pattern
         PatternPacket updatePattern = PatternUtils.filterPattern(patterns, updatingPattern, IUpdatingPatternMarker.class);
         DateTime lastReportedDate = actualClaims.lastReportedDate(periodCounter, updateDate, base);
-        List<ClaimRoot> ibnrClaims = methodology.filterIBNRClaims(baseClaims, updateDate, lastReportedDate, updatePattern, periodCounter);
+        SingleUpdatingMethod.ClaimAndRandomDraws updatingResult = methodology.filterIBNRClaims(baseClaims, updateDate, lastReportedDate, updatePattern, periodCounter);
+        List<ClaimRoot> ibnrClaims = updatingResult.getUpdatedClaims();
         for (ClaimRoot ibnrClaim : ibnrClaims) {
             // last arg null as these are generated claims
             DateTime startDateForPatterns = base.startDateForPayouts(ibnrClaim, periodCounter.getCurrentPeriodStart(), null);
@@ -67,7 +68,7 @@ public class SingleUpdatingMethodology extends AbstractParameterObject implement
         }
         int currentPeriod = periodCounter.belongsToPeriod(periodCounter.getCurrentPeriodStart());
         modifiedGeneratedAndActualClaims.addAll(actualClaims.claimWithAdjustedPattern(payoutPattern, base, updateDate, days360, currentPeriod));
-        return modifiedGeneratedAndActualClaims;
+        return new GrossClaimAndRandomDraws(modifiedGeneratedAndActualClaims, updatingResult);
     }
 
 }

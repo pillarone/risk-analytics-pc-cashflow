@@ -29,9 +29,26 @@ public interface ISingleUpdatingMethodologyStrategy extends IParameterObject {
      * @param sanityChecks
      * @return
      */
-    List<GrossClaimRoot> updatingClaims(List<ClaimRoot> baseClaims, ISingleActualClaimsStrategy actualClaims,
-                                     IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns,
-                                     int contractPeriod, DateTimeUtilities.Days360 days360, PayoutPatternBase base,
-                                     PatternPacket payoutPattern, boolean sanityChecks);
+    GrossClaimAndRandomDraws updatingClaims(List<ClaimRoot> baseClaims, ISingleActualClaimsStrategy actualClaims,
+                                            IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns,
+                                            int contractPeriod, DateTimeUtilities.Days360 days360, PayoutPatternBase base,
+                                            PatternPacket payoutPattern, boolean sanityChecks);
 
+    public class GrossClaimAndRandomDraws {
+        private final List<GrossClaimRoot> grossClaims;
+        private final SingleUpdatingMethod.ClaimAndRandomDraws randomDraws;
+
+        public GrossClaimAndRandomDraws(List<GrossClaimRoot> grossClaims, SingleUpdatingMethod.ClaimAndRandomDraws randomDraws) {
+            this.grossClaims = grossClaims;
+            this.randomDraws = randomDraws;
+        }
+
+        public List<GrossClaimRoot> getGrossClaims() {
+            return grossClaims;
+        }
+
+        public SingleUpdatingMethod.ClaimAndRandomDraws getRandomDraws() {
+            return randomDraws;
+        }
+    }
 }
