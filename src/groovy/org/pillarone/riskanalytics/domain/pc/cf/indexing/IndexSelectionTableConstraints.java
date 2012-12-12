@@ -52,4 +52,8 @@ public class IndexSelectionTableConstraints implements IMultiDimensionalConstrai
         }
         return null;
     }
+
+    public boolean emptyComponentSelectionAllowed(int column) {
+        return false;
+    }
 }

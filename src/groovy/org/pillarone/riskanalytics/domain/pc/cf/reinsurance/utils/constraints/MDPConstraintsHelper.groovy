@@ -48,5 +48,9 @@ public abstract class MDPConstraintsHelper implements IMultiDimensionalConstrain
     public Integer getColumnIndex(Class marker) {
         null
     }
+
+    boolean emptyComponentSelectionAllowed(int column) {
+        return false
+    }
 }
 
