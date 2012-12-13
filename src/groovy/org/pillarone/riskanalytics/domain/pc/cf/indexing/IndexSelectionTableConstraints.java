@@ -37,6 +37,10 @@ public class IndexSelectionTableConstraints implements IMultiDimensionalConstrai
         return Arrays.asList(IIndexMarker.class, IndexMode.class, BaseDateMode.class, DateTime.class).get(column);
     }
 
+    public boolean emptyComponentSelectionAllowed(int column) {
+        return false;
+    }
+
     public Integer getColumnIndex(Class marker) {
         if (IIndexMarker.class.isAssignableFrom(marker)) {
             return 0;
@@ -52,4 +56,6 @@ public class IndexSelectionTableConstraints implements IMultiDimensionalConstrai
         }
         return null;
     }
+
+
 }

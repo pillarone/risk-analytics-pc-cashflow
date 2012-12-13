@@ -37,4 +37,8 @@ public class DeterministicIndexTableConstraints implements IMultiDimensionalCons
     public Integer getColumnIndex(Class marker) {
         return null;
     }
+
+    public boolean emptyComponentSelectionAllowed(int column) {
+        return false;
+    }
 }

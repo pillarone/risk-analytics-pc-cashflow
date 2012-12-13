@@ -57,4 +57,7 @@ public class LegalEntityPortionConstraints implements IMultiDimensionalConstrain
         return null;
     }
 
+    public boolean emptyComponentSelectionAllowed(int column) {
+        return false;
+    }
 }

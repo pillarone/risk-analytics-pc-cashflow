@@ -36,5 +36,8 @@ public class YieldCurveTableConstraints implements IMultiDimensionalConstraints 
         return null;
     }
 
+    public boolean emptyComponentSelectionAllowed(int column) {
+        return false;
+    }
 }
 

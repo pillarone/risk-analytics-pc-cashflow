@@ -31,4 +31,7 @@ public class PatternTableConstraints implements IMultiDimensionalConstraints {
         return null;
     }
 
+    public boolean emptyComponentSelectionAllowed(int column) {
+        return false;
+    }
 }
