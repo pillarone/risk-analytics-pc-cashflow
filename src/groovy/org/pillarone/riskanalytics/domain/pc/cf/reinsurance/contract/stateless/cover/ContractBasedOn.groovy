@@ -37,4 +37,8 @@ public class ContractBasedOn implements IMultiDimensionalConstraints {
         }
         return null;
     }
+
+    boolean emptyComponentSelectionAllowed(int column) {
+        return false
+    }
 }

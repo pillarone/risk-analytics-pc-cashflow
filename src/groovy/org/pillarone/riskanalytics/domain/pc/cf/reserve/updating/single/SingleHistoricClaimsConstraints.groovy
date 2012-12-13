@@ -67,4 +67,8 @@ class SingleHistoricClaimsConstraints implements IMultiDimensionalConstraints {
     Integer getColumnIndex(Class marker) {
         return null
     }
+
+    boolean emptyComponentSelectionAllowed(int column) {
+        return false
+    }
 }
