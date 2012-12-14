@@ -54,7 +54,7 @@ class QuotaShareLossParticipationContractSpreadsheetTests extends SpreadsheetUni
 
     void testUsage() {
         // enable the following line while writing/debugging the test case but comment it out before committing!
-        setCheckedForValidationErrors(true)
+//        setCheckedForValidationErrors(true)
         SpreadsheetImporter importer = importers[0]
         ReinsuranceContract contract = getQuotaShareContract(importer, 'Sliding_in_Triangle')
         IterationScope iterationScope = contract.iterationScope
@@ -86,7 +86,7 @@ class QuotaShareLossParticipationContractSpreadsheetTests extends SpreadsheetUni
             contract.reset()
             iterationScope.periodScope.prepareNextPeriod()
         }
-        //        manageValidationErrors(importer)
+        manageValidationErrors(importer)
     }
 
     private ReinsuranceContract getQuotaShareContract(SpreadsheetImporter importer, String sheet) {
