@@ -53,7 +53,6 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
             ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER));
 
     /* Injected from framework */
-    protected PacketList<SingleValuePacket> outUpdatingPoissonDraw = new PacketList<SingleValuePacket>(SingleValuePacket.class);
     protected PacketList<SingleValuePacket> outUpdatingUniformDraw = new PacketList<SingleValuePacket>(SingleValuePacket.class);
 
 
@@ -174,14 +173,6 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
 
     public void setParmDeterministicClaims(ConstrainedMultiDimensionalParameter parmDeterministicClaims) {
         this.parmDeterministicClaims = parmDeterministicClaims;
-    }
-
-    public PacketList<SingleValuePacket> getOutUpdatingPoissonDraw() {
-        return outUpdatingPoissonDraw;
-    }
-
-    public void setOutUpdatingPoissonDraw(PacketList<SingleValuePacket> outUpdatingPoissonDraw) {
-        this.outUpdatingPoissonDraw = outUpdatingPoissonDraw;
     }
 
     public PacketList<SingleValuePacket> getOutUpdatingUniformDraw() {

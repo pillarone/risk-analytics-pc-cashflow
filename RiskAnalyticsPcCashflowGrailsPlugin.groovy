@@ -43,10 +43,11 @@ import org.pillarone.riskanalytics.domain.pc.cf.structure.validation.ClaimTypeSt
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceReducedCollectingModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateReportedClaimCollectingModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.RunOffIndexSelectionTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.output.SingleUltimatePaidClaimCollectingModeStrategy
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.4.33-kti"
+    def version = "0.4.34-kti"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -126,6 +127,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         PacketAggregatorRegistry.registerAggregator(ClaimCashflowPacket, new ClaimPacketAggregator())
         PacketAggregatorRegistry.registerAggregator(UnderwritingInfoPacket, new UnderwritingInfoPacketAggregator())
 
+        /* Collectors should also be registered  in the PCCashflowBootstrap   */
         CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceReducedCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregatePremiumReserveRiskCollectingModeStrategy())
@@ -136,6 +138,8 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         CollectingModeFactory.registerStrategy(new AggregateUltimateReportedPaidClaimCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateUltimateReportedClaimCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateUltimatePaidClaimCollectingModeStrategy())
+
+        CollectingModeFactory.registerStrategy(new SingleUltimatePaidClaimCollectingModeStrategy())
     }
 
     def onChange = { event ->
