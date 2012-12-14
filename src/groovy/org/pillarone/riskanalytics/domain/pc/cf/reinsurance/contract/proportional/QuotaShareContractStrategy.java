@@ -4,12 +4,15 @@ import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.IPeriodDependingThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.ILossParticipationStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.LossParticipationStrategy;
 
 import java.util.*;
 
@@ -19,17 +22,22 @@ import java.util.*;
 public class QuotaShareContractStrategy extends AbstractParameterObject implements IReinsuranceContractStrategy {
 
     private double quotaShare;
+    private ILossParticipationStrategy lossParticipation;
     private ILimitStrategy limit;
     private ICommissionStrategy commission;
 
+    /**not a parameter but updated during calculateCommission() to avoid side effect for the parameter variable
+     * required as we need to share the loss carried forward among different instances */
+    private DoubleValue lossCarriedForward;
 
     public ReinsuranceContractType getType() {
         return ReinsuranceContractType.QUOTASHARE;
     }
 
     public Map getParameters() {
-        Map params = new HashMap(2);
+        Map params = new HashMap(4);
         params.put(QUOTASHARE, quotaShare);
+        params.put(LOSSPARTICIPATION, lossParticipation);
         params.put(LIMIT, limit);
         params.put(COMMISSION, commission);
         return params;
@@ -48,14 +56,17 @@ public class QuotaShareContractStrategy extends AbstractParameterObject implemen
                                                    List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
                                                    IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit) {
         IReinsuranceContract contract;
+        if (period == 0) {
+            lossCarriedForward = commission.getInitialLossCarriedForward();
+        }
         if (limit instanceof NoneLimitStrategy) {
-            contract = new QuotaShareContract(quotaShare, commission.getCalculator());
+            contract = new QuotaShareContract(quotaShare, commission.getCalculator(lossCarriedForward), lossParticipation.getLossParticpation());
         }
         else if (limit instanceof AalLimitStrategy || limit instanceof AalAadLimitStrategy || limit instanceof  AadLimitStrategy) {
-            contract = new AALAADQuotaShareContract(quotaShare, commission.getCalculator(), limit);
+            contract = new AALAADQuotaShareContract(quotaShare, commission.getCalculator(lossCarriedForward), limit, lossParticipation.getLossParticpation());
         }
         else if (limit instanceof EventLimitStrategy) {
-            contract = new EventLimitQuotaShareContract(quotaShare, commission.getCalculator(), (EventLimitStrategy) limit);
+            contract = new EventLimitQuotaShareContract(quotaShare, commission.getCalculator(lossCarriedForward), (EventLimitStrategy) limit, lossParticipation.getLossParticpation());
         }
         else {
             throw new NotImplementedException(limit + " not implemented.");
@@ -72,6 +83,7 @@ public class QuotaShareContractStrategy extends AbstractParameterObject implemen
     }
 
     public static final String QUOTASHARE = "quotaShare";
+    public static final String LOSSPARTICIPATION = "lossParticipation";
     public static final String LIMIT = "limit";
     public static final String COMMISSION = "commission";
 }

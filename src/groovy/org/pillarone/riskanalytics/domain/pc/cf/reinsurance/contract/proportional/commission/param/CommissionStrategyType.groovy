@@ -15,17 +15,11 @@ class CommissionStrategyType extends AbstractParameterObjectClassifier {
 
     public static final CommissionStrategyType NOCOMMISSION = new CommissionStrategyType("no commission", "NOCOMMISSION", [:])
     public static final CommissionStrategyType FIXEDCOMMISSION = new CommissionStrategyType("fixed commission", "FIXEDCOMMISSION", ['commission':0d])
-    public static final CommissionStrategyType SLIDINGCOMMISSION = new CommissionStrategyType("sliding commission", "SLIDINGCOMMISSION",
-           ['commissionBands': new ConstrainedMultiDimensionalParameter(
-                        [[0d], [0d]],
-                        [SlidingCommissionStrategy.LOSS_RATIO, SlidingCommissionStrategy.COMMISSION],
-                        ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
-            'useClaims': BasedOnClaimProperty.PAID])
     public static final CommissionStrategyType INTERPOLATEDSLIDINGCOMMISSION = new CommissionStrategyType(
             "interpolated sliding commission", "INTERPOLATEDSLIDINGCOMMISSION",
            ['commissionBands': new ConstrainedMultiDimensionalParameter(
                         [[0d], [0d]],
-                        [SlidingCommissionStrategy.LOSS_RATIO, SlidingCommissionStrategy.COMMISSION],
+                        [InterpolatedSlidingCommissionStrategy.LOSS_RATIO, InterpolatedSlidingCommissionStrategy.COMMISSION],
                         ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
             'useClaims': BasedOnClaimProperty.PAID])
     public static final CommissionStrategyType PROFITCOMMISSION = new CommissionStrategyType("profit commission", "PROFITCOMMISSION",
@@ -33,7 +27,7 @@ class CommissionStrategyType extends AbstractParameterObjectClassifier {
                     'initialLossCarriedForward':0d,
             'useClaims': BasedOnClaimProperty.PAID])
 
-    public static final all = [NOCOMMISSION, FIXEDCOMMISSION, SLIDINGCOMMISSION, INTERPOLATEDSLIDINGCOMMISSION, PROFITCOMMISSION]
+    public static final all = [NOCOMMISSION, FIXEDCOMMISSION, INTERPOLATEDSLIDINGCOMMISSION, PROFITCOMMISSION]
 
     protected static Map types = [:]
     static {
@@ -80,11 +74,6 @@ class CommissionStrategyType extends AbstractParameterObjectClassifier {
                         costRatio : (Double) parameters['costRatio'],
                         lossCarriedForwardEnabled : (Boolean) parameters['lossCarriedForwardEnabled'],
                         initialLossCarriedForward : (Double) parameters['initialLossCarriedForward'],
-                        useClaims : (BasedOnClaimProperty) parameters['useClaims'])
-                break;
-            case CommissionStrategyType.SLIDINGCOMMISSION:
-                commissionStrategy = new SlidingCommissionStrategy(
-                        commissionBands: (ConstrainedMultiDimensionalParameter) parameters['commissionBands'],
                         useClaims : (BasedOnClaimProperty) parameters['useClaims'])
                 break;
             case CommissionStrategyType.INTERPOLATEDSLIDINGCOMMISSION:

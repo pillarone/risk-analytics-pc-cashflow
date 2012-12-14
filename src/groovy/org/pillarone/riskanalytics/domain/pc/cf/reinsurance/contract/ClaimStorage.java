@@ -83,6 +83,33 @@ public class ClaimStorage {
         }
     }
 
+    public void set(double cummulatedCeded, BasedOnClaimProperty claimProperty) {
+        cummulatedCeded = avoidNegativeZero(cummulatedCeded);
+        switch (claimProperty) {
+            case ULTIMATE:
+                ultimate = cummulatedCeded;
+                if (ultimate != 0) {
+                    nominalUltimate = ultimate;
+                }
+                if (referenceCeded.getClaimType().equals(ClaimType.AGGREGATED_RESERVES)) {
+                    nominalUltimate = referenceCeded.getUltimate();
+                }
+                break;
+            case PAID:
+                incrementalPaidCeded = cummulatedCeded - cumulatedPaidCeded;
+                cumulatedPaidCeded = cummulatedCeded;
+                cededReserves.add(cededReserves());
+                break;
+            case REPORTED:
+                incrementalReportedCeded = cummulatedCeded - cumulatedReportedCeded;
+                cumulatedReportedCeded = cummulatedCeded;
+                cededIbnr.add(cededIBNR());
+                break;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
+        }
+    }
+
     public void setCumulatedUltimateDevelopedCeded(double cumulatedUltimateDevelopedCeded) {
         if (Math.abs(cumulatedUltimateDevelopedCeded) < 1E-10) return;
         this.cumulatedUltimateDevelopedCeded = cumulatedUltimateDevelopedCeded;

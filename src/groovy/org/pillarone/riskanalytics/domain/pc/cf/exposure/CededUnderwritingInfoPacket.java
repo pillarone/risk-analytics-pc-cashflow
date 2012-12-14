@@ -165,6 +165,18 @@ public class CededUnderwritingInfoPacket extends UnderwritingInfoPacket {
         commissionVariable = -premiumPaid * variableCommissionFactor;
     }
 
+    public void apply(double commission, double commissionFixed, double commissionVariable) {
+        this.commission = commission;
+        this.commissionFixed = commissionFixed;
+        this.commissionVariable = commissionVariable;
+    }
+
+    public void add(double commission, double commissionFixed, double commissionVariable) {
+        this.commission += commission;
+        this.commissionFixed += commissionFixed;
+        this.commissionVariable += commissionVariable;
+    }
+
     public void adjustCommissionProperties(double commissionFactor, double fixedCommissionFactor, double variableCommissionFactor) {
         this.commission -= premiumPaid * commissionFactor;
         commissionFixed -= premiumPaid * fixedCommissionFactor;

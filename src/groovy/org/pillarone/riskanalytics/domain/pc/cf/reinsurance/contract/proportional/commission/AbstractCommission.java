@@ -15,29 +15,45 @@ abstract public class AbstractCommission implements ICommission {
 
     protected BasedOnClaimProperty useClaims;
 
-    protected double sumPremiumPaid(List<CededUnderwritingInfoPacket> underwritingInfos) {
+    protected double sumPremium(List<? extends UnderwritingInfoPacket> underwritingInfos) {
         double totalPremium = 0;
-        for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
-            totalPremium += underwritingInfo.getPremiumPaid();
+        if (useClaims.equals(BasedOnClaimProperty.ULTIMATE) || useClaims.equals(BasedOnClaimProperty.REPORTED)) {
+            for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
+                totalPremium += underwritingInfo.getPremiumWritten();
+            }
+            return totalPremium;
         }
-        return totalPremium;
+        else if (useClaims.equals(BasedOnClaimProperty.PAID)) {
+            for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
+                totalPremium += underwritingInfo.getPremiumPaid();
+            }
+            return totalPremium;
+        }
+        else {
+            throw new NotImplementedException("BasedOnClaimProperty " + useClaims.toString() + " not implemented.");
+        }
     }
 
-    protected double sumClaims(List<ClaimCashflowPacket> claims) {
+    /**
+     *
+     * @param claims
+     * @return sum of cumulated values according to the useClaims settings
+     */
+    protected double sumCumulatedClaims(List<ClaimCashflowPacket> claims) {
         double totalClaims = 0;
         if (useClaims.equals(BasedOnClaimProperty.ULTIMATE)) {
             for (ClaimCashflowPacket claim : claims) {
-                totalClaims += claim.ultimate();
+                totalClaims += claim.ultimate() + claim.developmentResultCumulative();
             }
         }
         else if (useClaims.equals(BasedOnClaimProperty.PAID)) {
             for (ClaimCashflowPacket claim : claims) {
-                totalClaims += claim.getPaidIncrementalIndexed();
+                totalClaims += claim.getPaidCumulatedIndexed();
             }
         }
         else if (useClaims.equals(BasedOnClaimProperty.REPORTED)) {
             for (ClaimCashflowPacket claim : claims) {
-                totalClaims += claim.getReportedIncrementalIndexed();
+                totalClaims += claim.getReportedCumulatedIndexed();
             }
         }
         else {
@@ -47,16 +63,21 @@ abstract public class AbstractCommission implements ICommission {
     }
 
     protected void adjustCommissionProperties(List<CededUnderwritingInfoPacket> underwritingInfos, boolean isAdditive,
-                         double commissionFactor, double fixedCommissionFactor, double variableCommissionFactor) {
-
-        if (isAdditive) {
-            for (CededUnderwritingInfoPacket underwritingInfo : underwritingInfos) {
-                underwritingInfo.adjustCommissionProperties(commissionFactor, fixedCommissionFactor, variableCommissionFactor);
-            }
+                         double commission, double fixedCommission, double variableCommission) {
+        double totalCededPremium = 0;
+        for (CededUnderwritingInfoPacket underwritingInfo : underwritingInfos) {
+            totalCededPremium += useClaims.premium(underwritingInfo);
         }
-        else {
-            for (CededUnderwritingInfoPacket underwritingInfo : underwritingInfos) {
-                underwritingInfo.setCommissionProperties(commissionFactor, fixedCommissionFactor, variableCommissionFactor);
+        for (CededUnderwritingInfoPacket underwritingInfo : underwritingInfos) {
+            double premiumRatio = useClaims.premium(underwritingInfo) / totalCededPremium;
+            double commissionShare = premiumRatio * commission;
+            double fixedCommissionShare = premiumRatio * fixedCommission;
+            double variableCommissionShare = premiumRatio * variableCommission;
+            if (isAdditive) {
+                underwritingInfo.add(commissionShare, fixedCommissionShare, variableCommissionShare);
+            }
+            else {
+                underwritingInfo.apply(commissionShare, fixedCommissionShare, variableCommissionShare);
             }
         }
     }

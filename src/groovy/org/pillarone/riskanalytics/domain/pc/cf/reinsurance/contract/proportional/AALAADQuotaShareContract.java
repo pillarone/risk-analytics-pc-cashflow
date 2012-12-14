@@ -6,12 +6,16 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.ILimitStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.ILossParticipation;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.NoLossParticipation;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,29 +27,43 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
     private ThresholdStore periodDeductible;
     private AADReduction aadReduction;
 
-
-
     public AALAADQuotaShareContract(double quotaShare, ICommission commission, ILimitStrategy limit) {
-        super(quotaShare, commission);
+        this(quotaShare, commission, limit, new NoLossParticipation());
+    }
+
+    public AALAADQuotaShareContract(double quotaShare, ICommission commission, ILimitStrategy limit, ILossParticipation lossParticipation) {
+        super(quotaShare, commission, lossParticipation);
         periodLimit = new ThresholdStore(limit.getAAL());
         periodDeductible = new ThresholdStore(limit.getAAD());
         aadReduction = new AADReduction();
     }
 
-    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
-        double quotaShareUltimate = 0;
-        if (!storage.hasReferenceCeded()) {
-            quotaShareUltimate = adjustedQuote(grossClaim.developedUltimate(), grossClaim.nominalUltimate(),
-                    BasedOnClaimProperty.ULTIMATE, storage);
-            storage.lazyInitCededClaimRoot(quotaShareUltimate);
-        }
+    @Override
+    public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaim, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
+        lossParticipation.initPeriod(grossClaim, grossUnderwritingInfo);
+        super.initBasedOnAggregateCalculations(grossClaim, grossUnderwritingInfo);
+    }
 
-        double quotaShareReported = adjustedQuote(grossClaim.getReportedCumulatedIndexed(),
-                grossClaim.getReportedIncrementalIndexed(), BasedOnClaimProperty.REPORTED, storage);
-        double quotaSharePaid = adjustedQuote(grossClaim.getPaidCumulatedIndexed(),
-                grossClaim.getPaidIncrementalIndexed(), BasedOnClaimProperty.PAID, storage);
-        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate,
-                quotaShareReported, quotaSharePaid, true);
+    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
+        ClaimCashflowPacket cededClaim;
+        if (lossParticipation.noLossParticipation()) {
+            double quotaShareUltimate = 0;
+            if (!storage.hasReferenceCeded()) {
+                quotaShareUltimate = adjustedQuote(grossClaim.developedUltimate(), grossClaim.nominalUltimate(),
+                        BasedOnClaimProperty.ULTIMATE, storage);
+                storage.lazyInitCededClaimRoot(quotaShareUltimate);
+            }
+
+            double quotaShareReported = adjustedQuote(grossClaim.getReportedCumulatedIndexed(),
+                    grossClaim.getReportedIncrementalIndexed(), BasedOnClaimProperty.REPORTED, storage);
+            double quotaSharePaid = adjustedQuote(grossClaim.getPaidCumulatedIndexed(),
+                    grossClaim.getPaidIncrementalIndexed(), BasedOnClaimProperty.PAID, storage);
+            cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate,
+                    quotaShareReported, quotaSharePaid, true);
+        }
+        else {
+            cededClaim = lossParticipation.cededClaim(quotaShare, grossClaim, storage, true);
+        }
         add(grossClaim, cededClaim);
         return cededClaim;
     }
