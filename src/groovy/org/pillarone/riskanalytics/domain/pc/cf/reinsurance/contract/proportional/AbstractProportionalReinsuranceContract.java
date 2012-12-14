@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AbstractReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.ILossParticipation;
 
 import java.util.List;
 
@@ -15,9 +16,7 @@ abstract public class AbstractProportionalReinsuranceContract extends AbstractRe
 
     protected ICommission commission;
     protected ProportionalPremiumBase premiumBase;
-
-    /** used to make sure that fixed premium is paid only in first period */
-    private boolean isStartCoverPeriod = true;
+    protected ILossParticipation lossParticipation;
 
     /**
      * Clearing grossUwInfos and cededUwInfos lists
@@ -29,6 +28,7 @@ abstract public class AbstractProportionalReinsuranceContract extends AbstractRe
         super.initPeriod(period, inFactors);
         grossUwInfos.clear();
         cededUwInfos.clear();
+        cededClaims.clear();
     }
 
     /**
@@ -46,11 +46,9 @@ abstract public class AbstractProportionalReinsuranceContract extends AbstractRe
     abstract public void calculatePremium(List<UnderwritingInfoPacket> netUnderwritingInfos, double coveredByReinsurers, boolean fillNet);
 
     public void calculateCommission() {
-        // todo(sku): commission paid over several periods? This would require a different approach than isStartCoverPeriod
-//        if (!isStartCoverPeriod) return;
-//        isStartCoverPeriod = false;
         // todo(sku): check whether all is fine regarding coveredByReinsurers and commissions
-        commission.calculateCommission(cededClaims, cededUwInfos, false, false);
+        // todo(sku): reduce argument numbers
+        commission.calculateCommission(cededClaims, cededUwInfos, false);
     }
 
     public ProportionalPremiumBase premiumBase() {

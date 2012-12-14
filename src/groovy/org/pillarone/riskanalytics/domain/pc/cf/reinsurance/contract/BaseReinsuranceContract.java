@@ -1,7 +1,9 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.SetMultimap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
@@ -11,6 +13,7 @@ import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountUtils;
@@ -66,7 +69,7 @@ import java.util.*;
  *                     inClaims. This is basically a mapping of claims and covering contracts</li>
  *                 <li>consumers are
  *                      <ul>
- *                          <li>initContracts() in order to call contract.initPeriodClaims() (i.e. used for none trivial
+ *                          <li>initContracts() in order to call contract.initBasedOnAggregateCalculations() (i.e. used for none trivial
  *                              allocation/event processing)</li>
  *                          <li>calculateCededClaims() in order to call getCededClaim() on every covered gross claim</li>
  *                      </ul>
@@ -135,7 +138,8 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
     }
 
     /**
-     * Resetting contract member variables like deductibles, limits, ...
+     * Resetting contract member variables like deductibles, limits, ... This function has no effect in period 0 as
+     * REINSURANCE_CONTRACT is initialized afterwards.
      * @param contracts to be prepared for the calculation of the current period
      */
     protected void initPeriod(Set<IReinsuranceContract> contracts) {
@@ -252,19 +256,34 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
     }
 
     /**
-     * Calls contract.initPeriodClaims for each contract
+     * Calls contract.initBasedOnAggregateCalculations for each contract
      * @param contracts
      */
     private void initContracts(Set<IReinsuranceContract> contracts) {
+        SetMultimap<Integer, UnderwritingInfoPacket> uwInfoByInceptionPeriod = HashMultimap.create();
+        for (UnderwritingInfoPacket uwInfo : inUnderwritingInfo) {
+            uwInfoByInceptionPeriod.put(uwInfo.getExposure().getInceptionPeriod(), uwInfo);
+        }
         for (IReinsuranceContract contract : contracts) {
             List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
             List<ClaimCashflowPacket> contractGrossClaims = new ArrayList<ClaimCashflowPacket>();
+            Integer occurrencePeriod = null;
+            IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
             for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
                 if (grossClaim.hasContract(contract)) {
                     contractGrossClaims.add(grossClaim.getGrossClaim());
+                    if (!grossClaim.getGrossClaim().getClaimType().equals(ClaimType.AGGREGATED_RESERVES)) {
+                        // as occurrence period concept is not implemented for reserves
+                        occurrencePeriod = grossClaim.getGrossClaim().occurrencePeriod(periodCounter);
+                    }
                 }
             }
-            contract.initPeriodClaims(contractGrossClaims);
+            if (occurrencePeriod == null) {
+                contract.initBasedOnAggregateCalculations(contractGrossClaims, new ArrayList<UnderwritingInfoPacket>());
+            }
+            else {
+                contract.initBasedOnAggregateCalculations(contractGrossClaims, new ArrayList<UnderwritingInfoPacket>(uwInfoByInceptionPeriod.get(occurrencePeriod)));
+            }
         }
     }
 

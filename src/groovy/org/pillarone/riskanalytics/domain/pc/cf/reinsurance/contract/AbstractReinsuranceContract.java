@@ -26,7 +26,7 @@ abstract public class AbstractReinsuranceContract implements IReinsuranceContrac
     public void initPeriod(int period, List<FactorsPacket> inFactors) {
     }
 
-    public void initPeriodClaims(List<ClaimCashflowPacket> grossClaim) {
+    public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaim, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
     }
 
     protected void add(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim) {

@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportion
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
@@ -52,7 +53,7 @@ public class SurplusContractStrategy extends AbstractParameterObject implements 
                                                    List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
                                                    IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit) {
         return new ArrayList<IReinsuranceContract>(Arrays.asList(
-                new SurplusContract(retention, lines, defaultCededLossShare, commission.getCalculator())));
+                new SurplusContract(retention, lines, defaultCededLossShare, commission.getCalculator(new DoubleValue()))));
     }
 
     public double getTermDeductible() {

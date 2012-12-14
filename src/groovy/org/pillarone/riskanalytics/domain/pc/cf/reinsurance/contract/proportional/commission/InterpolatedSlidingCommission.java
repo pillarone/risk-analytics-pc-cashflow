@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportion
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 
 import java.util.List;
 import java.util.TreeMap;
@@ -14,7 +15,8 @@ import java.util.TreeMap;
 public class InterpolatedSlidingCommission extends AbstractCommission {
 
     private TreeMap<Double, List<Double>> commissionRatesPerLossRatio;
-    private boolean isStartCoverPeriod = true;
+
+    private double summedCumulatedPremiumCeded = 0;
 
     // todo(sku): replace argument with an object
     public InterpolatedSlidingCommission(TreeMap<Double, List<Double>> commissionRatesPerLossRatio,
@@ -23,14 +25,12 @@ public class InterpolatedSlidingCommission extends AbstractCommission {
         super.useClaims = useClaims;
     }
 
-    // todo(sku): add proper handling of Div/0 and corresponding test cases
-    public void calculateCommission(List<ClaimCashflowPacket> claims, List<CededUnderwritingInfoPacket> underwritingInfos,
-                                    boolean isFirstPeriod, boolean isAdditive) {
-//        if (!isStartCoverPeriod) return;
-//        isStartCoverPeriod = false;
-        double summedClaims = sumClaims(claims);
-        double summedPremiumPaid = sumPremiumPaid(underwritingInfos);
-        double totalLossRatio = summedPremiumPaid == 0 ? 0 : summedClaims / -summedPremiumPaid;
+    public void calculateCommission(List<ClaimCashflowPacket> cededClaims,
+                                    List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
+                                    boolean isAdditive) {
+        double summedIncrementalPremiumCeded = sumPremium(cededUnderwritingInfos);
+        summedCumulatedPremiumCeded += summedIncrementalPremiumCeded;
+        double totalLossRatio = summedCumulatedPremiumCeded == 0 ? 0 : sumCumulatedClaims(cededClaims) / -summedCumulatedPremiumCeded;
         double commissionRate;
         double lowestEnteredLossRatio = commissionRatesPerLossRatio.firstKey();
         double highestEnteredLossRatio = commissionRatesPerLossRatio.lastKey();
@@ -52,7 +52,10 @@ public class InterpolatedSlidingCommission extends AbstractCommission {
                     (totalLossRatio - leftLossRatio) / (rightLossRatio - leftLossRatio) * rightCommissionValue;
         }
 
-        double variableCommissionRate = commissionRate - fixedCommissionRate;
-        adjustCommissionProperties(underwritingInfos, isAdditive, commissionRate, fixedCommissionRate, variableCommissionRate);
+        double fixCommission = fixedCommissionRate * -summedIncrementalPremiumCeded;
+        double variableCommission = (commissionRate - fixedCommissionRate) * -summedIncrementalPremiumCeded;
+        double totalIncrementalCommission = commissionRate * -summedIncrementalPremiumCeded;
+        adjustCommissionProperties(cededUnderwritingInfos, isAdditive, totalIncrementalCommission,
+                fixCommission, variableCommission);
     }
 }

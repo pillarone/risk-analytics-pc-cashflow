@@ -22,6 +22,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.FilterStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.ILossParticipationStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -78,6 +80,23 @@ class QuotaShareContractTests extends GroovyTestCase {
         )
     }
 
+    static ReinsuranceContract getQuotaShareContractAADAALLimit(double quotaShare, double aad, double aal, DateTime beginOfCover,
+                                                                int years, ILossParticipationStrategy lossParticipation,
+                                                                ICommissionStrategy commissionStrategy) {
+        IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
+        return new ReinsuranceContract(
+                parmContractStrategy : ReinsuranceContractType.getStrategy(ReinsuranceContractType.QUOTASHARE, [
+                        'quotaShare': quotaShare,
+                        'limit': LimitStrategyType.getStrategy(LimitStrategyType.AALAAD, ['aal' : aal, 'aad': aad]),
+                        'lossParticipation': lossParticipation,
+                        'commission': commissionStrategy]),
+                parmCover : CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS, [filter: FilterStrategyType.getDefault()]),
+                iterationScope: iterationScope,
+                periodStore: iterationScope.periodStores[0],
+                parmCoveredPeriod: PeriodStrategyType.getStrategy(PeriodStrategyType.MONTHS, [startCover: beginOfCover, numberOfMonths: years * 12])
+        )
+    }
+
     void setUp() {
         ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
     }
@@ -107,9 +126,9 @@ class QuotaShareContractTests extends GroovyTestCase {
         assertEquals 'P0.0 ceded premium paid', -200, quotaShare20.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P0.0 ceded premium fixed', -200, quotaShare20.outUnderwritingInfoCeded[0].premiumPaidFixed
         assertEquals 'P0.0 ceded premium variable', 0, quotaShare20.outUnderwritingInfoCeded[0].premiumPaidVariable
-        assertEquals 'P0.0 ceded commission', 42.4, quotaShare20.outUnderwritingInfoCeded[0].commission, EPSILON
-        assertEquals 'P0.0 ceded premium fixed', 20, quotaShare20.outUnderwritingInfoCeded[0].commissionFixed
-        assertEquals 'P0.0 ceded premium variable', 22.4, quotaShare20.outUnderwritingInfoCeded[0].commissionVariable, EPSILON
+        assertEquals 'P0.0 ceded commission', 52.8, quotaShare20.outUnderwritingInfoCeded[0].commission, EPSILON
+        assertEquals 'P0.0 ceded commission fixed', 24, quotaShare20.outUnderwritingInfoCeded[0].commissionFixed
+        assertEquals 'P0.0 ceded commission variable', 28.8, quotaShare20.outUnderwritingInfoCeded[0].commissionVariable, EPSILON
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()

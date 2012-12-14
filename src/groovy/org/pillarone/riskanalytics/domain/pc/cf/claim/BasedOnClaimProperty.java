@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+
 import java.util.Map;
 
 /**
@@ -9,6 +11,11 @@ import java.util.Map;
  */
 public enum BasedOnClaimProperty {
     ULTIMATE {
+        @Override
+        public double premium(UnderwritingInfoPacket underwritingInfo) {
+            return underwritingInfo.getPremiumWritten();
+        }
+
         @Override
         public double incrementalIndexed(ClaimCashflowPacket claim) {
             return claim.ultimate();
@@ -21,6 +28,11 @@ public enum BasedOnClaimProperty {
     },
     REPORTED {
         @Override
+        public double premium(UnderwritingInfoPacket underwritingInfo) {
+            return underwritingInfo.getPremiumWritten();
+        }
+
+        @Override
         public double incrementalIndexed(ClaimCashflowPacket claim) {
             return claim.getReportedIncrementalIndexed();
         }
@@ -30,6 +42,11 @@ public enum BasedOnClaimProperty {
             return claim.getReportedCumulatedIndexed();
         }
     }, PAID {
+        @Override
+        public double premium(UnderwritingInfoPacket underwritingInfo) {
+            return underwritingInfo.getPremiumPaid();
+        }
+
         @Override
         public double incrementalIndexed(ClaimCashflowPacket claim) {
             return claim.getPaidIncrementalIndexed();
@@ -47,4 +64,5 @@ public enum BasedOnClaimProperty {
 
     public abstract double incrementalIndexed(ClaimCashflowPacket claim);
     public abstract double cumulatedIndexed(ClaimCashflowPacket claim);
+    public abstract double premium(UnderwritingInfoPacket underwritingInfo);
 }

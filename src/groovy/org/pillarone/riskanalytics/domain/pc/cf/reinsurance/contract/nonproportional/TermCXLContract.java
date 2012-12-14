@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproport
 
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimStorageContainer;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimsStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
@@ -43,8 +44,9 @@ public class TermCXLContract extends TermXLContract {
     /**
      * reset cededShareByEvent
      * @param grossClaims
+     * @param grossUnderwritingInfo
      */
-    public void initPeriodClaims(List<ClaimCashflowPacket> grossClaims) {
+    public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaims, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
         cededShareByEvent.reset();
     }
 

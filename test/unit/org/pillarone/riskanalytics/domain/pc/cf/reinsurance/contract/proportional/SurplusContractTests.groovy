@@ -1,8 +1,12 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional
 
+import org.joda.time.Period
+import org.pillarone.riskanalytics.core.simulation.ContinuousPeriodCounter
+import org.pillarone.riskanalytics.core.simulation.TestVoidModel
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
+import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.CommissionTests
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
@@ -45,7 +49,7 @@ class SurplusContractTests extends GroovyTestCase {
                          "lines": 5,
                          "defaultCededLossShare": 0d,
                          "coveredByReinsurer": 1d]),
-                i: CommissionTests.getTestSimulationScope())
+                i: getTestSimulationScope())
     }
 
     static ReinsuranceContract getContract1() {
@@ -56,7 +60,7 @@ class SurplusContractTests extends GroovyTestCase {
                      "lines": 5,
                      "coveredByReinsurer": 1d,
                      "defaultCededLossShare": 0.5]),
-                simulationScope: CommissionTests.getTestSimulationScope())
+                simulationScope: getTestSimulationScope())
     }
 
     static ReinsuranceContract getContract(double retention, double lines, double defaultCededLossShare, DateTime beginOfCover) {
@@ -70,6 +74,24 @@ class SurplusContractTests extends GroovyTestCase {
                 parmCover : CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS, [filter: FilterStrategyType.getDefault()]),
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0])
+    }
+
+    /**
+     *  Creates a SimulationScope whose model is a VoidTestModel, and whose IterationScope's PeriodScope's
+     *  PeriodCounter starts at a given year(, month & day) and lasts a given number of years.
+     *  By default the period starts on 1.1.2000 (or 1.1 of a given year) and lasts 1 year.
+     */
+    static SimulationScope getTestSimulationScope(int year = 2000, int month = 1, int day = 1, int years = 1) {
+        new SimulationScope(
+                model: new TestVoidModel(),
+                iterationScope: new IterationScope(
+                        periodScope: new PeriodScope(
+                                periodCounter: new ContinuousPeriodCounter(
+                                        new DateTime(year,month,day,0,0,0,0), Period.years(years)
+                                )
+                        )
+                )
+        )
     }
 
     private List<UnderwritingInfoPacket> getUnderwritingInfos() {
@@ -196,11 +218,11 @@ class SurplusContractTests extends GroovyTestCase {
 
         assertEquals "outClaimsNet.size", 7, contract.outClaimsNet.size()
         assertEquals "net claims ultimate", [-100, -50, -20, -60, -30, -12, -200], contract.outClaimsNet*.ultimate()
-        assertEquals "net claims reported", [-30, -15, -6, -18, -9, -3.5999999999999996, -60], contract.outClaimsNet*.reportedIncrementalIndexed
+        assertEquals "net claims ratioReported", [-30, -15, -6, -18, -9, -3.5999999999999996, -60], contract.outClaimsNet*.reportedIncrementalIndexed
         assertEquals "net claims paid", [0] *7, contract.outClaimsNet*.paidIncrementalIndexed
         assertEquals "outClaims.size", 7, contract.outClaimsCeded.size()
         assertEquals "ceded claims ultimate", [0, 50, 80, 0, 30, 48, 100], contract.outClaimsCeded*.ultimate()
-        assertEquals "ceded claims reported", [0, 15d, 24d, 0d, 9d, 14.4, 30d], contract.outClaimsCeded*.reportedIncrementalIndexed
+        assertEquals "ceded claims ratioReported", [0, 15d, 24d, 0d, 9d, 14.4, 30d], contract.outClaimsCeded*.reportedIncrementalIndexed
         assertEquals "ceded claims paid", [0, 0, 0, 0, 0, 0, 0], contract.outClaimsCeded*.paidIncrementalIndexed
 
         contract.reset()

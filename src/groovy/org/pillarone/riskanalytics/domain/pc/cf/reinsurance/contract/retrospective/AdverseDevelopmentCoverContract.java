@@ -55,7 +55,7 @@ public class AdverseDevelopmentCoverContract extends AbstractReinsuranceContract
     }
 
     @Override
-    public void initPeriodClaims(List<ClaimCashflowPacket> grossClaims) {
+    public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaims, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
         if (aggregateClaimStorage != null) {
             aggregateClaimStorage.resetIncrementsAndFactors();
         }
