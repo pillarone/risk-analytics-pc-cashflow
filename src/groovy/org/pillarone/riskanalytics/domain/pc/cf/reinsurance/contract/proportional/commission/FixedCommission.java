@@ -22,9 +22,9 @@ public class FixedCommission implements ICommission {
                                     boolean isAdditive) {
         if (isAdditive) {
             for (CededUnderwritingInfoPacket underwritingInfo : cededUnderwritingInfos) {
-                double premiumWritten = underwritingInfo.getPremiumWritten();
-                underwritingInfo.setCommission(underwritingInfo.getCommission() - premiumWritten * commission);
-                underwritingInfo.setCommissionFixed(underwritingInfo.getCommissionFixed() - premiumWritten * commission);
+                double premiumPaid = underwritingInfo.getPremiumPaid();
+                underwritingInfo.setCommission(underwritingInfo.getCommission() - premiumPaid * commission);
+                underwritingInfo.setCommissionFixed(underwritingInfo.getCommissionFixed() - premiumPaid * commission);
                 underwritingInfo.setCommissionVariable(underwritingInfo.getCommissionVariable());
             }
         }

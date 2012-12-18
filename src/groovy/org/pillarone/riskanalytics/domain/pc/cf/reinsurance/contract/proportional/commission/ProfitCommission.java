@@ -45,6 +45,7 @@ public class ProfitCommission extends AbstractCommission {
                                     boolean isAdditive) {
         double summedClaimsCeded = sumCumulatedClaims(cededClaims);
         totalPremiumCeded += sumPremium(cededUnderwritingInfos);
+        if (totalPremiumCeded == 0) return;
 
         double fixCommission = -totalPremiumCeded * commissionRatio;
         double incrementalFixCommission = fixCommission - previousCumulatedFixCommission;

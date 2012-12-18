@@ -66,14 +66,17 @@ public class LossParticipation implements ILossParticipation {
         private void update(List<ClaimCashflowPacket> claims, List<UnderwritingInfoPacket> underwritingInfos) {
             ClaimCashflowPacket totalClaim = ClaimUtils.sum(claims, true);
 
-            ultimate += totalClaim.ultimate() + totalClaim.developmentResultCumulative();
-            reported += totalClaim.getReportedIncrementalIndexed();
-            paid += totalClaim.getPaidIncrementalIndexed();
-
+            if (totalClaim != null) {
+                ultimate += totalClaim.ultimate() + totalClaim.developmentResultCumulative();
+                reported += totalClaim.getReportedIncrementalIndexed();
+                paid += totalClaim.getPaidIncrementalIndexed();
+            }
             // add up previous totalUwInfo as UnderwritingInfoPacket does not contain cummulated values
             UnderwritingInfoPacket updateUwInfo = UnderwritingInfoUtils.aggregate(underwritingInfos);
-            premiumWritten += updateUwInfo.getPremiumWritten();
-            premiumPaid += updateUwInfo.getPremiumPaid();
+            if (updateUwInfo != null) {
+                premiumWritten += updateUwInfo.getPremiumWritten();
+                premiumPaid += updateUwInfo.getPremiumPaid();
+            }
         }
 
         @Override
@@ -91,22 +94,34 @@ public class LossParticipation implements ILossParticipation {
 
     public ClaimCashflowPacket cededClaim(double quotaShare, ClaimCashflowPacket grossClaim, ClaimStorage storage, boolean adjustExposureInfo) {
         lazyInitCumulatedCeded(quotaShare);
-        ClaimCashflowPacket packet = ClaimUtils.cededClaim(grossClaim, storage,
-                grossClaim.developedUltimate() / cumulatedGross.ultimate * cumulatedCeded.ultimate,
-                grossClaim.getReportedCumulatedIndexed() / cumulatedGross.reported * cumulatedCeded.reported,
-                grossClaim.getPaidCumulatedIndexed() / cumulatedGross.paid * cumulatedCeded.paid,
-                adjustExposureInfo);
+        double cededUltimate = cumulatedGross.ultimate == 0 ? 0 : grossClaim.developedUltimate() / cumulatedGross.ultimate * cumulatedCeded.ultimate;
+        double cededReported = cumulatedGross.reported == 0 ? 0 : grossClaim.getReportedCumulatedIndexed() / cumulatedGross.reported * cumulatedCeded.reported;
+        double cededPaid = cumulatedGross.paid == 0 ? 0 : grossClaim.getPaidCumulatedIndexed() / cumulatedGross.paid * cumulatedCeded.paid;
+        ClaimCashflowPacket packet = ClaimUtils.cededClaim(grossClaim, storage, cededUltimate, cededReported, cededPaid, adjustExposureInfo);
         return packet;
     }
 
     private void lazyInitCumulatedCeded(double quotaShare) {
         if (cumulatedCeded == null) {
-            double adjustedLossRatio = lossRatioAdjustedByLossParticipation(cumulatedGross.ultimate / cumulatedGross.premiumWritten);
-            double cumulatedCededUltimate = cumulatedGross.premiumWritten * quotaShare * adjustedLossRatio;
-            adjustedLossRatio = lossRatioAdjustedByLossParticipation(cumulatedGross.reported / cumulatedGross.premiumWritten);
-            double cumulatedCededReported = cumulatedGross.premiumWritten * quotaShare * adjustedLossRatio;
-            adjustedLossRatio = lossRatioAdjustedByLossParticipation(cumulatedGross.paid / cumulatedGross.premiumPaid);
-            double cumulatedCededPaid = cumulatedGross.premiumPaid * quotaShare * adjustedLossRatio;
+            double cumulatedCededUltimate = 0;
+            double cumulatedCededReported = 0;
+            double cumulatedCededPaid = 0;
+            if (cumulatedGross.premiumWritten != 0) {
+                double adjustedLossRatio = lossRatioAdjustedByLossParticipation(cumulatedGross.ultimate / cumulatedGross.premiumWritten);
+                cumulatedCededUltimate = cumulatedGross.premiumWritten * quotaShare * adjustedLossRatio;
+                adjustedLossRatio = lossRatioAdjustedByLossParticipation(cumulatedGross.reported / cumulatedGross.premiumWritten);
+                cumulatedCededReported = cumulatedGross.premiumWritten * quotaShare * adjustedLossRatio;
+            }
+            else {
+//                todo log ...
+            }
+            if (cumulatedGross.premiumPaid != 0) {
+                double adjustedLossRatio = lossRatioAdjustedByLossParticipation(cumulatedGross.paid / cumulatedGross.premiumPaid);
+                cumulatedCededPaid = cumulatedGross.premiumPaid * quotaShare * adjustedLossRatio;
+            }
+            else {
+//                todo log ...
+            }
             cumulatedCeded = new AggregateValues(cumulatedCededUltimate, cumulatedCededReported, cumulatedCededPaid);
         }
     }

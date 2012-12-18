@@ -39,9 +39,9 @@ class FixedCommissionStrategyTests extends GroovyTestCase {
         ICommissionStrategy commissionStrategy =
         CommissionStrategyType.getStrategy(CommissionStrategyType.FIXEDCOMMISSION, [commission: 0.3d])
 
-        CededUnderwritingInfoPacket underwritingInfo200 = new CededUnderwritingInfoPacket(premiumWritten: 200,
+        CededUnderwritingInfoPacket underwritingInfo200 = new CededUnderwritingInfoPacket(premiumWritten: 200, premiumPaid: 200,
                 commission: -50, commissionFixed: -40, commissionVariable: -10)
-        CededUnderwritingInfoPacket underwritingInfo100 = new CededUnderwritingInfoPacket(premiumWritten: 100,
+        CededUnderwritingInfoPacket underwritingInfo100 = new CededUnderwritingInfoPacket(premiumWritten: 100, premiumPaid: 100,
                 commission: -5, commissionFixed: -5)
         List underwritingInfos = [underwritingInfo200, underwritingInfo100]
 
