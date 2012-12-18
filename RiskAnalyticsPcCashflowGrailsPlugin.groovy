@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.DeterministicIndexTable
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.PMLClaimsGeneratorStrategyValidator
 import org.pillarone.riskanalytics.core.parameterization.validation.ValidatorRegistry
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverMap
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
 import org.pillarone.riskanalytics.domain.utils.constraint.DateTimeConstraints
 import org.pillarone.riskanalytics.core.util.ResourceBundleRegistry
@@ -91,6 +92,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new SeverityIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new RunOffIndexSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new ReservesIndexSelectionTableConstraints())
+        ConstraintsFactory.registerConstraint(new CoverMap())
         ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
         ConstraintsFactory.registerConstraint(new PatternTableConstraints())
         ConstraintsFactory.registerConstraint(new DoubleConstraints())
