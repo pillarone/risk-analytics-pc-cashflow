@@ -223,8 +223,12 @@ mappings = {
                     }
                 }
                 "commission" "GIRA:segments:outUnderwritingInfoCeded:commission", {
-                    "fixed" "GIRA:segments:outUnderwritingInfoCeded:commissionFixed"
-                    "variable" "GIRA:segments:outUnderwritingInfoCeded:commissionVariable"
+                    "fixed" "GIRA:segments:outUnderwritingInfoCeded:commissionFixed", {
+                        "[%period%]" "GIRA:segments:period:[%period%]:outUnderwritingInfoCeded:commissionFixed"
+                    }
+                    "variable" "GIRA:segments:outUnderwritingInfoCeded:commissionVariable", {
+                        "[%period%]" "GIRA:segments:period:[%period%]:outUnderwritingInfoCeded:commissionVariable"
+                    }
                 }
             }
             "[%segment%]" "GIRA:segments:[%segment%]:outNetFinancials:netCashflow", {
@@ -233,12 +237,16 @@ mappings = {
                     "premium" "GIRA:segments:[%segment%]:outNetFinancials:netPremiumPaid"
                     "commission" "GIRA:segments:[%segment%]:outNetFinancials:commission"
                     "claim" "GIRA:segments:[%segment%]:outNetFinancials:netClaimPaid"
+                    "premiumRisk" "GIRA:segments:[%segment%]:outNetFinancials:premiumRisk"
+                    "reserveRisk" "GIRA:segments:[%segment%]:outNetFinancials:reserveRisk"
                     "[%period%]" {
                         "financialsNetCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:netCashflow", {
                             "lossRatio" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:lossRatio"
                             "premium" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:netPremiumPaid"
                             "commission" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:commission"
                             "claim" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:netClaimPaid"
+                            "premiumRisk" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:premiumRisk"
+                            "reserveRisk" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:reserveRisk"
                         }
                     }
                 }
@@ -371,8 +379,12 @@ mappings = {
                     }
                 }
                 "commission" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commission", {
-                    "fixed" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commissionFixed"
-                    "variable" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commissionVariable"
+                    "fixed" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commissionFixed", {
+                        "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outUnderwritingInfoCeded:commissionFixed"
+                    }
+                    "variable" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commissionVariable", {
+                        "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]::outUnderwritingInfoCeded:commissionVariable"
+                    }
                 }
             }
         }
@@ -731,8 +743,12 @@ mappings = {
                     }
                 }
                 "commission" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commission", {
-                    "fixed" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionFixed"
-                    "variable" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionVariable"
+                    "fixed" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionFixed", {
+                        "[%period%]" "GIRA:reinsuranceContracts:[%contract%]:period:[%period%]:outUnderwritingInfoCeded:commissionFixed"
+                    }
+                    "variable" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionVariable", {
+                        "[%period%]" "GIRA:reinsuranceContracts:[%contract%]:period:[%period%]:outUnderwritingInfoCeded:commissionVariable"
+                    }
                 }
             }
         }

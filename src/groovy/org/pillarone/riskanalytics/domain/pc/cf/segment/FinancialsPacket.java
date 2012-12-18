@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.segment;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import org.apache.log4j.helpers.LogLog;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
@@ -27,12 +28,14 @@ public class FinancialsPacket extends MultiValuePacket {
     private double commission;
     private double lossRatio;
     private DateTime inceptionDate;
+    private double premiumRisk;
+    private double reserveRisk;
 
     public FinancialsPacket() {
     }
 
     public FinancialsPacket(List<UnderwritingInfoPacket> netUwInfos, List<CededUnderwritingInfoPacket> cededUwInfos,
-                            List<ClaimCashflowPacket> netClaims, boolean singlePeriod) {
+                            List<ClaimCashflowPacket> netClaims, boolean singlePeriod, Boolean occurrenceInCurrentPeriod) {
         if (!netUwInfos.isEmpty()) {
             netPremiumWritten = UnderwritingInfoUtils.aggregate(netUwInfos).getPremiumWritten();
             netPremiumPaid = UnderwritingInfoUtils.aggregate(netUwInfos).getPremiumPaid();
@@ -57,6 +60,15 @@ public class FinancialsPacket extends MultiValuePacket {
             }
         }
         netCashflow = netPremiumPaid + netClaimPaid + commission;
+        if (occurrenceInCurrentPeriod == Boolean.TRUE) {
+            premiumRisk = netCashflow;
+        }
+        else if (occurrenceInCurrentPeriod == Boolean.FALSE) {
+            reserveRisk = netCashflow;
+        }
+        else {
+//            Log.debug('occurrenceInCurrentPeriod null!');
+        }
         lossRatio = netPremiumWritten == 0 ? 0 : -netClaimUltimate / netPremiumWritten;
     }
 
@@ -85,7 +97,7 @@ public class FinancialsPacket extends MultiValuePacket {
         List<FinancialsPacket> packets = new ArrayList<FinancialsPacket>();
         for (Integer period : periods) {
             FinancialsPacket packet = new FinancialsPacket(netUwInfoByPeriod.get(period),
-                    cededUwInfoByPeriod.get(period), netClaimsByPeriod.get(period), true);
+                    cededUwInfoByPeriod.get(period), netClaimsByPeriod.get(period), true, period == periodCounter.currentPeriodIndex());
             packets.add(packet);
         }
         return packets;
@@ -99,6 +111,8 @@ public class FinancialsPacket extends MultiValuePacket {
         netPremiumPaid += other.netPremiumPaid;
         netPremiumWritten += other.netPremiumWritten;
         netCashflow = netPremiumPaid + netClaimPaid + commission;
+        premiumRisk += other.premiumRisk;
+        reserveRisk += other.reserveRisk;
         lossRatio = netPremiumWritten == 0 ? 0 : -netClaimUltimate / netPremiumWritten;
         return this;
     }
@@ -109,6 +123,8 @@ public class FinancialsPacket extends MultiValuePacket {
     public final static String NET_PREMIUM_PAID = "netPremiumPaid";
     public final static String NET_PREMIUM_WRITTEN = "netPremiumWritten";
     public final static String NET_CASHFLOW = "netCashflow";
+    public final static String PREMIUM_RISK = "premiumRisk";
+    public final static String RESERVE_RISK = "reserveRisk";
     public final static String LOSS_RATIO = "lossRatio";
 
     @Override
@@ -120,6 +136,8 @@ public class FinancialsPacket extends MultiValuePacket {
         valuesToSave.put(NET_PREMIUM_PAID, netPremiumPaid);
         valuesToSave.put(NET_PREMIUM_WRITTEN, netPremiumWritten);
         valuesToSave.put(NET_CASHFLOW, netCashflow);
+        valuesToSave.put(PREMIUM_RISK, premiumRisk);
+        valuesToSave.put(RESERVE_RISK, reserveRisk);
         valuesToSave.put(LOSS_RATIO, lossRatio);
         return valuesToSave;
     }
@@ -162,6 +180,14 @@ public class FinancialsPacket extends MultiValuePacket {
 
     public void setLossRatio(double lossRatio) {
         this.lossRatio = lossRatio;
+    }
+
+    public double premiumRisk() {
+        return premiumRisk;
+    }
+
+    public double reserveRisk() {
+        return reserveRisk;
     }
 
     public DateTime getInceptionDate() {

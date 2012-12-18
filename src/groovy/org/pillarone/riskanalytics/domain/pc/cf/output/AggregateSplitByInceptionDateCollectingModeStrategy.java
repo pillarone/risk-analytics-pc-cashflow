@@ -47,6 +47,9 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
             if (packets.get(0) instanceof ClaimCashflowPacket) {
                 singleValueResults.addAll(createPremiumReserveRisk(packets, crashSimulationOnError));
             }
+            else if (packets.get(0) instanceof FinancialsPacket) {
+                singleValueResults.addAll(createPremiumReserveRiskForFinancials(packets, crashSimulationOnError));
+            }
             return singleValueResults;
         } else {
             String notImplemented = ResourceBundle.getBundle(RESOURCE_BUNDLE).getString("AggregateSplitByInceptionDateCollectingModeStrategy.notImplemented");
@@ -214,6 +217,47 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
             else if (claim.premiumRisk() != 0) {
                 // belongs to premium risk
                 premiumRisk += claim.premiumRisk();
+            }
+        }
+        if (splitByInceptionPeriod()) {
+            for (Map.Entry<String, Double> reserveRisk : reserveRiskByPeriodPath.entrySet()) {
+                results.add(createSingleValueResult(reserveRisk.getKey(), RESERVE_RISK_BASE, reserveRisk.getValue(), crashSimulationOnError));
+            }
+        }
+        if (premiumRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK_BASE, premiumRisk, crashSimulationOnError));
+        }
+        if (totalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK_BASE, totalReserveRisk, crashSimulationOnError));
+        }
+        if (premiumRisk + totalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk + totalReserveRisk, crashSimulationOnError));
+        }
+        return results;
+    }
+
+    protected List<SingleValueResultPOJO> createPremiumReserveRiskForFinancials(List<FinancialsPacket> financials, boolean crashSimulationOnError) {
+        List<SingleValueResultPOJO> results = new ArrayList<SingleValueResultPOJO>();
+        double totalReserveRisk = 0;
+        double premiumRisk = 0;
+        Map<String, Double> reserveRiskByPeriodPath = new HashMap<String, Double>();
+        for (FinancialsPacket financialPacket : financials) {
+
+            if (financialPacket.reserveRisk() != 0) {
+                // belongs to reserve risk
+                totalReserveRisk += financialPacket.reserveRisk();
+                if (splitByInceptionPeriod()) {
+                    String periodLabel = inceptionPeriod(financialPacket);
+                    String pathExtension = PERIOD + PATH_SEPARATOR + periodLabel;
+                    String pathExtended = getExtendedPath(financialPacket, pathExtension);
+                    Double reserveRisk = reserveRiskByPeriodPath.get(pathExtended);
+                    reserveRisk = reserveRisk == null ? financialPacket.reserveRisk() : reserveRisk + financialPacket.reserveRisk();
+                    reserveRiskByPeriodPath.put(pathExtended, reserveRisk);
+                }
+            }
+            else if (financialPacket.premiumRisk() != 0) {
+                // belongs to premium risk
+                premiumRisk += financialPacket.premiumRisk();
             }
         }
         if (splitByInceptionPeriod()) {
