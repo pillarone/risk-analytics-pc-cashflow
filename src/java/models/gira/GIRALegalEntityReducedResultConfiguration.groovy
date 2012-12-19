@@ -11,7 +11,7 @@ components {
 			outClaimsPrimaryInsurer = "AGGREGATED_ULTIMATE_REPORTED_PAID_CLAIM"
 			outClaimsReinsurer = "AGGREGATED_ULTIMATE_REPORTED_PAID_CLAIM"
 			outDiscountedValues = "AGGREGATED"
-			outNetFinancials = "AGGREGATED"
+			outFinancials = "AGGREGATED"
 			outNetPresentValues = "AGGREGATED"
 			outUnderwritingInfoCeded = "AGGREGATED"
 			outUnderwritingInfoGross = "AGGREGATED"

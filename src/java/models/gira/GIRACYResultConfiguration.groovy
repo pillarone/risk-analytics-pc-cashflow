@@ -65,7 +65,7 @@ components {
 			outClaimsGross = "SPLIT_BY_INCEPTION_DATE"
 			outClaimsNet = "SPLIT_BY_INCEPTION_DATE"
 			outDiscountedValues = "AGGREGATED"
-			outNetFinancials = "AGGREGATED"
+			outFinancials = "AGGREGATED"
 			outNetPresentValues = "AGGREGATED"
 			outUnderwritingInfoCeded = "AGGREGATED"
 			outUnderwritingInfoGross = "AGGREGATED"

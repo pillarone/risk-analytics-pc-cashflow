@@ -136,8 +136,8 @@ class ClaimUtilsTests extends GroovyTestCase {
 //        assertEquals "reserves", -(700 - 490), scaledClaim.reservedIndexed()
 //        assertEquals "IBNR", -(1000 - 800) * factor, scaledClaim.ibnrIndexed(), EPSILON
 //        assertEquals "outstanding", -(560 - 490), scaledClaim.outstandingIndexed(), EPSILON
-//        assertEquals "reserve risk", 0d, scaledClaim.reserveRisk(), EPSILON
-//        assertEquals "premium risk", 0d, scaledClaim.premiumRisk()
+//        assertEquals "reserve risk", 0d, scaledClaim.netReserveRisk(), EPSILON
+//        assertEquals "premium risk", 0d, scaledClaim.netPremiumRisk()
 //
 //        // no link to first period as base claim is created from scratch
 //        assertNotSame "base claim instance", claims[0].baseClaim, scaledClaim.baseClaim

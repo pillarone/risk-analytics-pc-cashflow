@@ -45,12 +45,12 @@ mappings = {
             }
         }
         "segments" {
-            "[%segment%]" "GIRA:segments:[%segment%]:outNetFinancials:netCashflow", {
-                "financialsNetCashflow" "GIRA:segments:[%segment%]:outNetFinancials:netCashflow", {
-                    "lossRatio" "GIRA:segments:[%segment%]:outNetFinancials:lossRatio"
-                    "premium" "GIRA:segments:[%segment%]:outNetFinancials:netPremiumPaid"
-                    "commission" "GIRA:segments:[%segment%]:outNetFinancials:commission"
-                    "claim" "GIRA:segments:[%segment%]:outNetFinancials:netClaimPaid"
+            "[%segment%]" "GIRA:segments:[%segment%]:outFinancials:netCashflow", {
+                "financialsNetCashflow" "GIRA:segments:[%segment%]:outFinancials:netCashflow", {
+                    "lossRatio" "GIRA:segments:[%segment%]:outFinancials:netLossRatioWrittenUltimate"
+                    "premium" "GIRA:segments:[%segment%]:outFinancials:netPremiumPaid"
+                    "commission" "GIRA:segments:[%segment%]:outFinancials:commission"
+                    "claim" "GIRA:segments:[%segment%]:outFinancials:netClaimPaid"
                 }
                 "claimsNet" {
                     "ultimate" "GIRA:segments:[%segment%]:outClaimsNet:ultimate"
@@ -109,12 +109,12 @@ mappings = {
                 }
             }
         }
-        "[%legalEntity%]" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netCashflow", {
-            "financialsNetCashflow" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netCashflow", {
-                "lossRatio" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:lossRatio"
-                "premium" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netPremiumPaid"
-                "commission" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:commission"
-                "claim" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netClaimPaid"
+        "[%legalEntity%]" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netCashflow", {
+            "financialsNetCashflow" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netCashflow", {
+                "lossRatio" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netLossRatioWrittenUltimate"
+                "premium" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netPremiumPaid"
+                "commission" "GIRA:legalEntities:[%legalEntity%]:outFinancials:commission"
+                "claim" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netClaimPaid"
             }
         }
         "structures" {
