@@ -90,7 +90,7 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
                 break
             case CoverAttributeStrategyType.MATRIX:
                 coverStrategy = new MatrixCoverAttributeStrategy(
-                        flexibleCover: (ComboBoxTableMultiDimensionalParameter) parameters['flexibleCover'])
+                        flexibleCover: (ConstrainedMultiDimensionalParameter) parameters['flexibleCover'])
                 break
             default: throw new NotImplementedException("$type not implemented.")
         }
