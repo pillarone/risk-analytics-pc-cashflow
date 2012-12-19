@@ -173,19 +173,6 @@ class GIRAModel extends StochasticModel {
         }
 
         Map<String, Period> claimsGeneratorPatternLengths = new HashMap<String, Period>()
-        for (Pattern pattern: patterns.subPayoutPatterns.componentList) {
-            Period period = pattern.parmPattern.getPattern(IPayoutPatternMarker.class).getLastCumulativePeriod()
-            LOG.debug("payout pattern $pattern.name $period.months")
-            claimsGeneratorPatternLengths.put(pattern.name, period)
-        }
-        for (Pattern pattern: patterns.subReportingPatterns.componentList) {
-            Period period = pattern.parmPattern.getPattern(IReportingPatternMarker.class).getLastCumulativePeriod()
-            LOG.debug("reporting pattern $pattern.name $period.months")
-            Period existingPeriod = claimsGeneratorPatternLengths.get(pattern.name)
-            if (existingPeriod == null || existingPeriod.months < period.months) {
-                claimsGeneratorPatternLengths.put(pattern.name, period)
-            }
-        }
         for (PayoutReportingCombinedPattern pattern: patterns.subPayoutAndReportingPatterns.componentList) {
             Period period = pattern.parmPattern.getPayoutPattern().getLastCumulativePeriod()
             LOG.debug("combined payout reporting pattern $pattern.name $period.months")
