@@ -262,13 +262,11 @@ mappings = {
                         "premiumPaid" "GIRA:segments:[%segment%]:outFinancials:grossPremiumPaid"
                         "claimPaid" "GIRA:segments:[%segment%]:outFinancials:grossClaimPaid"
                         "lossRatioPaidPaid" "GIRA:segments:[%segment%]:outFinancials:grossLossRatioPaidPaid"
-                        "commission" "GIRA:segments:[%segment%]:outFinancials:commission"
                         "[%period%]" {
                             "grossCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossCashflow", {
                                 "premiumPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossPremiumPaid"
                                 "claimPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossClaimPaid"
                                 "lossRatioPaidPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossLossRatioPaidPaid"
-                                "commission" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
                             }
                         }
                     }
@@ -309,7 +307,7 @@ mappings = {
                     }
                 }
                 "bestEstimate" {
-                    "bestEstimateNetDetail" "GIRA:segments:[%segment%]:outFinancials:netCashflow", {
+                    "bestEstimateNetDetail" "GIRA:segments:[%segment%]:outFinancials:netBestEstimate", {
                         "premiumWritten" "GIRA:segments:[%segment%]:outFinancials:netPremiumWritten"
                         "claimInitial" "GIRA:segments:[%segment%]:outFinancials:netClaimUltimate"
                         "lossRatioWrittenUltimate" "GIRA:segments:[%segment%]:outFinancials:netLossRatioWrittenUltimate"
@@ -323,7 +321,7 @@ mappings = {
 //                            }
 //                       }
                     }
-                    "bestEstimateGrossDetail" "GIRA:segments:[%segment%]:outFinancials:grossCashflow", {
+                    "bestEstimateGrossDetail" "GIRA:segments:[%segment%]:outFinancials:grossBestEstimate", {
                         "premiumWritten" "GIRA:segments:[%segment%]:outFinancials:grossPremiumWritten"
                         "claimInitial" "GIRA:segments:[%segment%]:outFinancials:grossClaimUltimate"
                         "lossRatioWrittenUltimate" "GIRA:segments:[%segment%]:outFinancials:grossLossRatioWrittenUltimate"
@@ -337,7 +335,7 @@ mappings = {
 //                            }
 //                       }
                     }
-                    "bestEstimateCededDetail" "GIRA:segments:[%segment%]:outFinancials:cededCashflow", {
+                    "bestEstimateCededDetail" "GIRA:segments:[%segment%]:outFinancials:cededBestEstimate", {
                         "premiumWritten" "GIRA:segments:[%segment%]:outFinancials:cededPremiumWritten"
                         "claimInitial" "GIRA:segments:[%segment%]:outFinancials:cededClaimUltimate"
                         "lossRatioWrittenUltimate" "GIRA:segments:[%segment%]:outFinancials:cededLossRatioWrittenUltimate"

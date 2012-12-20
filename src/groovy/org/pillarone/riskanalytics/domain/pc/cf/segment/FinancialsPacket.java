@@ -294,6 +294,7 @@ public class FinancialsPacket extends MultiValuePacket {
         valuesToSave.put(GROSS_PREMIUM_PAID, grossPremiumPaid);
         valuesToSave.put(GROSS_PREMIUM_WRITTEN, grossPremiumWritten);
         valuesToSave.put(GROSS_CASHFLOW, grossCashflow);
+        valuesToSave.put(GROSS_BEST_ESTIMATE, grossBestEstimate);
         valuesToSave.put(GROSS_PREMIUM_RISK, grossPremiumRisk);
         valuesToSave.put(GROSS_RESERVE_RISK, grossReserveRisk);
         valuesToSave.put(GROSS_PREMIUM_RESERVE_RISK, grossReserveRisk);
@@ -305,6 +306,7 @@ public class FinancialsPacket extends MultiValuePacket {
         valuesToSave.put(NET_PREMIUM_PAID, netPremiumPaid);
         valuesToSave.put(NET_PREMIUM_WRITTEN, netPremiumWritten);
         valuesToSave.put(NET_CASHFLOW, netCashflow);
+        valuesToSave.put(NET_BEST_ESTIMATE, netBestEstimate);
         valuesToSave.put(NET_PREMIUM_RISK, netPremiumRisk);
         valuesToSave.put(NET_RESERVE_RISK, netReserveRisk);
         valuesToSave.put(NET_PREMIUM_RESERVE_RISK, netReserveRisk);
@@ -316,6 +318,7 @@ public class FinancialsPacket extends MultiValuePacket {
         valuesToSave.put(CEDED_PREMIUM_PAID, cededPremiumPaid);
         valuesToSave.put(CEDED_PREMIUM_WRITTEN, cededPremiumWritten);
         valuesToSave.put(CEDED_CASHFLOW, cededCashflow);
+        valuesToSave.put(CEDED_BEST_ESTIMATE, cededBestEstimate);
         valuesToSave.put(CEDED_PREMIUM_RISK, cededPremiumRisk);
         valuesToSave.put(CEDED_RESERVE_RISK, cededReserveRisk);
         valuesToSave.put(CEDED_PREMIUM_RESERVE_RISK, cededReserveRisk);
