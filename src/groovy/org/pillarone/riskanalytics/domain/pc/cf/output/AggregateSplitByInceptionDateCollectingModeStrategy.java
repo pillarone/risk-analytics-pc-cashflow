@@ -33,6 +33,15 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     protected static final String RESERVE_RISK_BASE = "reserveRiskBase";
     protected static final String PREMIUM_RISK_BASE = "premiumRiskBase";
     protected static final String PREMIUM_AND_RESERVE_RISK_BASE = "premiumAndReserveRiskBase";
+    protected static final String GROSS_RESERVE_RISK_BASE = "grossReserveRiskBase";
+    protected static final String GROSS_PREMIUM_RISK_BASE = "grossPremiumRiskBase";
+    protected static final String GROSS_PREMIUM_AND_RESERVE_RISK_BASE = "grossPremiumAndReserveRiskBase";
+    protected static final String NET_RESERVE_RISK_BASE = "netReserveRiskBase";
+    protected static final String NET_PREMIUM_RISK_BASE = "netPremiumRiskBase";
+    protected static final String NET_PREMIUM_AND_RESERVE_RISK_BASE = "netPremiumAndReserveRiskBase";
+    protected static final String CEDED_RESERVE_RISK_BASE = "cededReserveRiskBase";
+    protected static final String CEDED_PREMIUM_RISK_BASE = "cededPremiumRiskBase";
+    protected static final String CEDED_PREMIUM_AND_RESERVE_RISK_BASE = "cededPremiumAndReserveRiskBase";
     private static final String PERIOD = "period";
     private boolean displayUnderwritingYearOnly = true;
     private static final DateTimeFormatter formatter = DateTimeFormat.forPattern(PeriodLabelsUtil.PARAMETER_DISPLAY_FORMAT);
@@ -46,6 +55,9 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
             List<SingleValueResultPOJO> singleValueResults = collectDefaultClaimsProperties(packets, crashSimulationOnError);
             if (packets.get(0) instanceof ClaimCashflowPacket) {
                 singleValueResults.addAll(createPremiumReserveRisk(packets, crashSimulationOnError));
+            }
+            else if (packets.get(0) instanceof FinancialsPacket) {
+                singleValueResults.addAll(createPremiumReserveRiskForFinancials(packets, crashSimulationOnError));
             }
             return singleValueResults;
         } else {
@@ -229,6 +241,114 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
         }
         if (premiumRisk + totalReserveRisk != 0) {
             results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk + totalReserveRisk, crashSimulationOnError));
+        }
+        return results;
+    }
+
+    protected List<SingleValueResultPOJO> createPremiumReserveRiskForFinancials(List<FinancialsPacket> financials, boolean crashSimulationOnError) {
+        List<SingleValueResultPOJO> results = new ArrayList<SingleValueResultPOJO>();
+        double grossTotalReserveRisk = 0;
+        double netTotalReserveRisk = 0;
+        double cededTotalReserveRisk = 0;
+        double grossPremiumRisk = 0;
+        double netPremiumRisk = 0;
+        double cededPremiumRisk = 0;
+        Map<String, Double> grossReserveRiskByPeriodPath = new HashMap<String, Double>();
+        Map<String, Double> netReserveRiskByPeriodPath = new HashMap<String, Double>();
+        Map<String, Double> cededReserveRiskByPeriodPath = new HashMap<String, Double>();
+        for (FinancialsPacket financialPacket : financials) {
+            String periodLabel = inceptionPeriod(financialPacket);
+            String pathExtension = PERIOD + PATH_SEPARATOR + periodLabel;
+            String pathExtended = getExtendedPath(financialPacket, pathExtension);
+
+            if (financialPacket.grossReserveRisk() != 0) {
+                // belongs to reserve risk
+                grossTotalReserveRisk += financialPacket.grossReserveRisk();
+                if (splitByInceptionPeriod()) {
+
+                    Double reserveRisk = grossReserveRiskByPeriodPath.get(pathExtended);
+                    reserveRisk = reserveRisk == null ? financialPacket.grossReserveRisk() : reserveRisk + financialPacket.grossReserveRisk();
+                    grossReserveRiskByPeriodPath.put(pathExtended, reserveRisk);
+                }
+            }
+            else if (financialPacket.grossPremiumRisk() != 0) {
+                // belongs to premium risk
+                grossPremiumRisk += financialPacket.grossPremiumRisk();
+            }
+            
+            if (financialPacket.netReserveRisk() != 0) {
+                // belongs to reserve risk
+                netTotalReserveRisk += financialPacket.netReserveRisk();
+                if (splitByInceptionPeriod()) {
+                    
+                    Double reserveRisk = netReserveRiskByPeriodPath.get(pathExtended);
+                    reserveRisk = reserveRisk == null ? financialPacket.netReserveRisk() : reserveRisk + financialPacket.netReserveRisk();
+                    netReserveRiskByPeriodPath.put(pathExtended, reserveRisk);
+                }
+            }
+            else if (financialPacket.netPremiumRisk() != 0) {
+                // belongs to premium risk
+                netPremiumRisk += financialPacket.netPremiumRisk();
+            }
+
+            if (financialPacket.cededReserveRisk() != 0) {
+                // belongs to reserve risk
+                cededTotalReserveRisk += financialPacket.cededReserveRisk();
+                if (splitByInceptionPeriod()) {
+
+                    Double reserveRisk = cededReserveRiskByPeriodPath.get(pathExtended);
+                    reserveRisk = reserveRisk == null ? financialPacket.cededReserveRisk() : reserveRisk + financialPacket.cededReserveRisk();
+                    cededReserveRiskByPeriodPath.put(pathExtended, reserveRisk);
+                }
+            }
+            else if (financialPacket.cededPremiumRisk() != 0) {
+                // belongs to premium risk
+                cededPremiumRisk += financialPacket.cededPremiumRisk();
+            }
+        }
+        if (splitByInceptionPeriod()) {
+            for (Map.Entry<String, Double> reserveRisk : netReserveRiskByPeriodPath.entrySet()) {
+                results.add(createSingleValueResult(reserveRisk.getKey(), NET_RESERVE_RISK_BASE, reserveRisk.getValue(), crashSimulationOnError));
+            }
+        }
+        if (netPremiumRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), NET_PREMIUM_RISK_BASE, netPremiumRisk, crashSimulationOnError));
+        }
+        if (netTotalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), NET_RESERVE_RISK_BASE, netTotalReserveRisk, crashSimulationOnError));
+        }
+        if (netPremiumRisk + netTotalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), NET_PREMIUM_AND_RESERVE_RISK_BASE, netPremiumRisk + netTotalReserveRisk, crashSimulationOnError));
+        }
+        
+        if (splitByInceptionPeriod()) {
+            for (Map.Entry<String, Double> reserveRisk : grossReserveRiskByPeriodPath.entrySet()) {
+                results.add(createSingleValueResult(reserveRisk.getKey(), GROSS_RESERVE_RISK_BASE, reserveRisk.getValue(), crashSimulationOnError));
+            }
+        }
+        if (grossPremiumRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), GROSS_PREMIUM_RISK_BASE, grossPremiumRisk, crashSimulationOnError));
+        }
+        if (grossTotalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), GROSS_RESERVE_RISK_BASE, grossTotalReserveRisk, crashSimulationOnError));
+        }
+        if (grossPremiumRisk + grossTotalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), GROSS_PREMIUM_AND_RESERVE_RISK_BASE, grossPremiumRisk + grossTotalReserveRisk, crashSimulationOnError));
+        }
+
+        if (splitByInceptionPeriod()) {
+            for (Map.Entry<String, Double> reserveRisk : cededReserveRiskByPeriodPath.entrySet()) {
+                results.add(createSingleValueResult(reserveRisk.getKey(), CEDED_RESERVE_RISK_BASE, reserveRisk.getValue(), crashSimulationOnError));
+            }
+        }
+        if (cededPremiumRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), CEDED_PREMIUM_RISK_BASE, cededPremiumRisk, crashSimulationOnError));
+        }
+        if (cededTotalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), CEDED_RESERVE_RISK_BASE, cededTotalReserveRisk, crashSimulationOnError));
+        }
+        if (cededPremiumRisk + cededTotalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), CEDED_PREMIUM_AND_RESERVE_RISK_BASE, cededPremiumRisk + cededTotalReserveRisk, crashSimulationOnError));
         }
         return results;
     }

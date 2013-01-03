@@ -9,12 +9,12 @@ displayName = "Legal Entity"
 mappings = {
     GIRA {
         "legalEntities" {
-            "[%legalEntity%]" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netCashflow", {
-                "financialsNetCashflow" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netCashflow", {
-                    "lossRatio" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:lossRatio"
-                    "premium" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netPremiumPaid"
-                    "commission" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:commission"
-                    "claim" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netClaimPaid"
+            "[%legalEntity%]" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netCashflow", {
+                "financialsNetCashflow" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netCashflow", {
+                    "lossRatio" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netLossRatioWrittenUltimate"
+                    "premium" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netPremiumPaid"
+                    "commission" "GIRA:legalEntities:[%legalEntity%]:outFinancials:commission"
+                    "claim" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netClaimPaid"
                 }
                 "claimsNet" {
                     "ultimate" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:ultimate"

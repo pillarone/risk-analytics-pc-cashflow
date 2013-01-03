@@ -48,8 +48,13 @@ public class InterpolatedSlidingCommission extends AbstractCommission {
             double leftCommissionValue = commissionRatesPerLossRatio.get(leftLossRatio).get(0);
             int size = commissionRatesPerLossRatio.get(rightLossRatio).size();
             double rightCommissionValue = commissionRatesPerLossRatio.get(rightLossRatio).get(size - 1);
-            commissionRate = (rightLossRatio - totalLossRatio) / (rightLossRatio - leftLossRatio) * leftCommissionValue +
+            if (rightLossRatio != leftLossRatio) {
+                commissionRate = (rightLossRatio - totalLossRatio) / (rightLossRatio - leftLossRatio) * leftCommissionValue +
                     (totalLossRatio - leftLossRatio) / (rightLossRatio - leftLossRatio) * rightCommissionValue;
+            }
+            else {
+                commissionRate = 0;
+            }
         }
 
         double fixCommission = fixedCommissionRate * -summedIncrementalPremiumCeded;

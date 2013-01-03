@@ -164,7 +164,7 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
 
         def results = SingleValueResult.list()
         for (SingleValueResult result : results) {
-            if (result.field.fieldName == "reserveRisk") {
+            if (result.field.fieldName == "netReserveRisk") {
                 assertEquals "${result.path.pathName}, P${result.period}", resultsPerPath.get(new PeriodPath(result)), result.value, 1E-8d
             }
         }
@@ -179,7 +179,7 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
 
         def results = SingleValueResult.list()
         for (SingleValueResult result : results) {
-            if (result.field.fieldName == "premiumRisk") {
+            if (result.field.fieldName == "netPremiumRisk") {
                 assertEquals "${result.path.pathName}, P${result.period}", resultsPerPath.get(new PeriodPath(result)), result.value, 1E-8d
             }
         }

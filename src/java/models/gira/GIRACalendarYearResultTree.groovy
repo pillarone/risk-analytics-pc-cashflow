@@ -80,17 +80,17 @@ mappings = {
         }
         "segments" {
             "totalOfAllSegments" {
-                "financialsNetCashflow" "GIRA:segments:outNetFinancials:netCashflow", {
-                    "lossRatio" "GIRA:segments:outNetFinancials:lossRatio"
-                    "premium" "GIRA:segments:outNetFinancials:netPremiumPaid"
-                    "commission" "GIRA:segments:outNetFinancials:commission"
-                    "claim" "GIRA:segments:outNetFinancials:netClaimPaid"
+                "financialsNetCashflow" "GIRA:segments:outFinancials:netCashflow", {
+                    "lossRatio" "GIRA:segments:outFinancials:netLossRatioWrittenUltimate"
+                    "premium" "GIRA:segments:outFinancials:netPremiumPaid"
+                    "commission" "GIRA:segments:outFinancials:commission"
+                    "claim" "GIRA:segments:outFinancials:netClaimPaid"
                     "[%period%]" {
-                        "financialsNetCashflow" "GIRA:segments:period:[%period%]:outNetFinancials:netCashflow", {
-                            "lossRatio" "GIRA:segments:period:[%period%]:outNetFinancials:lossRatio"
-                            "premium" "GIRA:segments:period:[%period%]:outNetFinancials:netPremiumPaid"
-                            "commission" "GIRA:segments:period:[%period%]:outNetFinancials:commission"
-                            "claim" "GIRA:segments:period:[%period%]:outNetFinancials:netClaimPaid"
+                        "financialsNetCashflow" "GIRA:segments:period:[%period%]:outFinancials:netCashflow", {
+                            "lossRatio" "GIRA:segments:period:[%period%]:outFinancials:netLossRatioWrittenUltimate"
+                            "premium" "GIRA:segments:period:[%period%]:outFinancials:netPremiumPaid"
+                            "commission" "GIRA:segments:period:[%period%]:outFinancials:commission"
+                            "claim" "GIRA:segments:period:[%period%]:outFinancials:netClaimPaid"
                         }
                     }
                 }
@@ -223,23 +223,131 @@ mappings = {
                     }
                 }
                 "commission" "GIRA:segments:outUnderwritingInfoCeded:commission", {
-                    "fixed" "GIRA:segments:outUnderwritingInfoCeded:commissionFixed"
-                    "variable" "GIRA:segments:outUnderwritingInfoCeded:commissionVariable"
+                    "fixed" "GIRA:segments:outUnderwritingInfoCeded:commissionFixed", {
+                        "[%period%]" "GIRA:segments:period:[%period%]:outUnderwritingInfoCeded:commissionFixed"
+                    }
+                    "variable" "GIRA:segments:outUnderwritingInfoCeded:commissionVariable", {
+                        "[%period%]" "GIRA:segments:period:[%period%]:outUnderwritingInfoCeded:commissionVariable"
+                    }
                 }
             }
-            "[%segment%]" "GIRA:segments:[%segment%]:outNetFinancials:netCashflow", {
-                "financialsNetCashflow" "GIRA:segments:[%segment%]:outNetFinancials:netCashflow", {
-                    "lossRatio" "GIRA:segments:[%segment%]:outNetFinancials:lossRatio"
-                    "premium" "GIRA:segments:[%segment%]:outNetFinancials:netPremiumPaid"
-                    "commission" "GIRA:segments:[%segment%]:outNetFinancials:commission"
-                    "claim" "GIRA:segments:[%segment%]:outNetFinancials:netClaimPaid"
-                    "[%period%]" {
-                        "financialsNetCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:netCashflow", {
-                            "lossRatio" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:lossRatio"
-                            "premium" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:netPremiumPaid"
-                            "commission" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:commission"
-                            "claim" "GIRA:segments:[%segment%]:period:[%period%]:outNetFinancials:netClaimPaid"
+            "[%segment%]" "GIRA:segments:[%segment%]:outFinancials:netCashflow", {
+                "cashflow" {
+                    "cashflowNetDetail" "GIRA:segments:[%segment%]:outFinancials:netCashflow", {
+                        "premiumPaid" "GIRA:segments:[%segment%]:outFinancials:netPremiumPaid"
+                        "claimPaid" "GIRA:segments:[%segment%]:outFinancials:netClaimPaid"
+                        "lossRatioPaidPaid" "GIRA:segments:[%segment%]:outFinancials:netLossRatioPaidPaid"
+                        "commission" "GIRA:segments:[%segment%]:outFinancials:commission"
+                        "[%period%]" {
+                            "netCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netCashflow", {
+                                "premiumPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netPremiumPaid"
+                                "claimPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netClaimPaid"
+                                "lossRatioPaidPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netLossRatioPaidPaid"
+                                "commission" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
+                            }
                         }
+                    }
+                    "cashflowNetPeriod" "GIRA:segments:[%segment%]:outFinancials:netCashflow", {
+                        "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netCashflow"
+                    }
+                    "riskNet" {
+                        "premiumRiskOnFinancials" "GIRA:segments:[%segment%]:outFinancials:netPremiumRisk"
+                        "reserveRiskOnFinancials" "GIRA:segments:[%segment%]:outFinancials:netReserveRisk", {
+                            "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netReserveRisk"
+                        }
+                        "premiumAndReserveRiskBasedOnFinancials" "GIRA:segments:[%segment%]:outFinancials:netPremiumReserveRisk"
+                    }
+
+                    "cashflowGrossDetail" "GIRA:segments:[%segment%]:outFinancials:grossCashflow", {
+                        "premiumPaid" "GIRA:segments:[%segment%]:outFinancials:grossPremiumPaid"
+                        "claimPaid" "GIRA:segments:[%segment%]:outFinancials:grossClaimPaid"
+                        "lossRatioPaidPaid" "GIRA:segments:[%segment%]:outFinancials:grossLossRatioPaidPaid"
+                        "[%period%]" {
+                            "grossCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossCashflow", {
+                                "premiumPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossPremiumPaid"
+                                "claimPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossClaimPaid"
+                                "lossRatioPaidPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossLossRatioPaidPaid"
+                            }
+                        }
+                    }
+                    "cashflowGrossPeriod" "GIRA:segments:[%segment%]:outFinancials:grossCashflow", {
+                        "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossCashflow"
+                    }
+                    "riskGross" {
+                        "premiumRiskOnFinancials" "GIRA:segments:[%segment%]:outFinancials:grossPremiumRisk"
+                        "reserveRiskOnFinancials" "GIRA:segments:[%segment%]:outFinancials:grossReserveRisk", {
+                            "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossReserveRisk"
+                        }
+                        "premiumAndReserveRiskBasedOnFinancials" "GIRA:segments:[%segment%]:outFinancials:grossPremiumReserveRisk"
+                    }
+
+                    "cashflowCededDetail" "GIRA:segments:[%segment%]:outFinancials:cededCashflow", {
+                        "premiumPaid" "GIRA:segments:[%segment%]:outFinancials:cededPremiumPaid"
+                        "claimPaid" "GIRA:segments:[%segment%]:outFinancials:cededClaimPaid"
+                        "lossRatioPaidPaid" "GIRA:segments:[%segment%]:outFinancials:cededLossRatioPaidPaid"
+                        "commission" "GIRA:segments:[%segment%]:outFinancials:commission"
+                        "[%period%]" {
+                            "cededCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededCashflow", {
+                                "premiumPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededPremiumPaid"
+                                "claimPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededClaimPaid"
+                                "lossRatioPaidPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededLossRatioPaidPaid"
+                                "commission" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
+                            }
+                        }
+                    }
+                    "cashflowCededPeriod" "GIRA:segments:[%segment%]:outFinancials:cededCashflow", {
+                        "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededCashflow"
+                    }
+                    "riskCeded" {
+                        "premiumRiskOnFinancials" "GIRA:segments:[%segment%]:outFinancials:cededPremiumRisk"
+                        "reserveRiskOnFinancials" "GIRA:segments:[%segment%]:outFinancials:cededReserveRisk", {
+                            "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededReserveRisk"
+                        }
+                        "premiumAndReserveRiskBasedOnFinancials" "GIRA:segments:[%segment%]:outFinancials:cededPremiumReserveRisk"
+                    }
+                }
+                "bestEstimate" {
+                    "bestEstimateNetDetail" "GIRA:segments:[%segment%]:outFinancials:netBestEstimate", {
+                        "premiumWritten" "GIRA:segments:[%segment%]:outFinancials:netPremiumWritten"
+                        "claimInitial" "GIRA:segments:[%segment%]:outFinancials:netClaimUltimate"
+                        "lossRatioWrittenUltimate" "GIRA:segments:[%segment%]:outFinancials:netLossRatioWrittenUltimate"
+//                        "commission" "GIRA:segments:[%segment%]:outFinancials:commission"
+//                        "[%period%]" {
+//                            "netCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netCashflow", {
+//                                "premiumPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netPremiumPaid"
+//                                "claimPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netClaimPaid"
+//                                "lossRatioPaidPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netLossRatioPaidPaid"
+//                                "commission" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
+//                            }
+//                       }
+                    }
+                    "bestEstimateGrossDetail" "GIRA:segments:[%segment%]:outFinancials:grossBestEstimate", {
+                        "premiumWritten" "GIRA:segments:[%segment%]:outFinancials:grossPremiumWritten"
+                        "claimInitial" "GIRA:segments:[%segment%]:outFinancials:grossClaimUltimate"
+                        "lossRatioWrittenUltimate" "GIRA:segments:[%segment%]:outFinancials:grossLossRatioWrittenUltimate"
+//                        "commission" "GIRA:segments:[%segment%]:outFinancials:commission"
+//                        "[%period%]" {
+//                            "grossCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossCashflow", {
+//                                "premiumPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossPremiumPaid"
+//                                "claimPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossClaimPaid"
+//                                "lossRatioPaidPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossLossRatioPaidPaid"
+//                                "commission" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
+//                            }
+//                       }
+                    }
+                    "bestEstimateCededDetail" "GIRA:segments:[%segment%]:outFinancials:cededBestEstimate", {
+                        "premiumWritten" "GIRA:segments:[%segment%]:outFinancials:cededPremiumWritten"
+                        "claimInitial" "GIRA:segments:[%segment%]:outFinancials:cededClaimUltimate"
+                        "lossRatioWrittenUltimate" "GIRA:segments:[%segment%]:outFinancials:cededLossRatioWrittenUltimate"
+//                        "commission" "GIRA:segments:[%segment%]:outFinancials:commission"
+//                        "[%period%]" {
+//                            "cededCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededCashflow", {
+//                                "premiumPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededPremiumPaid"
+//                                "claimPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededClaimPaid"
+//                                "lossRatioPaidPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededLossRatioPaidPaid"
+//                                "commission" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
+//                            }
+//                       }
                     }
                 }
                 "claimsNet" {
@@ -371,23 +479,27 @@ mappings = {
                     }
                 }
                 "commission" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commission", {
-                    "fixed" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commissionFixed"
-                    "variable" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commissionVariable"
+                    "fixed" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commissionFixed", {
+                        "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outUnderwritingInfoCeded:commissionFixed"
+                    }
+                    "variable" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commissionVariable", {
+                        "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]::outUnderwritingInfoCeded:commissionVariable"
+                    }
                 }
             }
         }
-        "[%legalEntity%]" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netCashflow", {
-            "financialsNetCashflow" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netCashflow", {
-                "lossRatio" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:lossRatio"
-                "premium" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netPremiumPaid"
-                "commission" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:commission"
-                "claim" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:netClaimPaid"
+        "[%legalEntity%]" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netCashflow", {
+            "financialsNetCashflow" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netCashflow", {
+                "lossRatio" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netLossRatioWrittenUltimate"
+                "premium" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netPremiumPaid"
+                "commission" "GIRA:legalEntities:[%legalEntity%]:outFinancials:commission"
+                "claim" "GIRA:legalEntities:[%legalEntity%]:outFinancials:netClaimPaid"
                 "[%period%]" {
-                    "financialsNetCashflow" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outNetFinancials:netCashflow", {
-                        "lossRatio" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outNetFinancials:lossRatio"
-                        "premium" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outNetFinancials:netPremiumPaid"
-                        "commission" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outNetFinancials:commission"
-                        "claim" "GIRA:legalEntities:[%legalEntity%]:outNetFinancials:period:[%period%]:netClaimPaid"
+                    "financialsNetCashflow" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outFinancials:netCashflow", {
+                        "lossRatio" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outFinancials:netLossRatioWrittenUltimate"
+                        "premium" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outFinancials:netPremiumPaid"
+                        "commission" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outFinancials:commission"
+                        "claim" "GIRA:legalEntities:[%legalEntity%]:outFinancials:period:[%period%]:netClaimPaid"
                     }
                 }
             }
@@ -731,8 +843,12 @@ mappings = {
                     }
                 }
                 "commission" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commission", {
-                    "fixed" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionFixed"
-                    "variable" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionVariable"
+                    "fixed" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionFixed", {
+                        "[%period%]" "GIRA:reinsuranceContracts:[%contract%]:period:[%period%]:outUnderwritingInfoCeded:commissionFixed"
+                    }
+                    "variable" "GIRA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionVariable", {
+                        "[%period%]" "GIRA:reinsuranceContracts:[%contract%]:period:[%period%]:outUnderwritingInfoCeded:commissionVariable"
+                    }
                 }
             }
         }

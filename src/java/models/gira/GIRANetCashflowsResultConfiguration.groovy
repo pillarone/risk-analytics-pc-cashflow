@@ -5,12 +5,12 @@ displayName = "Net Cashflows (Legal Entites, Segments)"
 components {
 	legalEntities {
 		subsubcomponents {
-			outNetFinancials = "AGGREGATED"
+			outFinancials = "AGGREGATED"
 		}
 	}
 	segments {
 		subsubcomponents {
-			outNetFinancials = "AGGREGATED"
+			outFinancials = "AGGREGATED"
 		}
 	}
 }

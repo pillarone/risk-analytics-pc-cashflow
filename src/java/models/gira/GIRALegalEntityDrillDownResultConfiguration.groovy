@@ -11,7 +11,7 @@ components {
 			outClaimsPrimaryInsurer = "SPLIT_PER_SOURCE"
 			outClaimsReinsurer = "SPLIT_PER_SOURCE"
 			outDiscountedValues = "AGGREGATED"
-			outNetFinancials = "AGGREGATED"
+			outFinancials = "AGGREGATED"
 			outNetPresentValues = "AGGREGATED"
 			outUnderwritingInfoCeded = "SPLIT_PER_SOURCE"
 			outUnderwritingInfoGross = "SPLIT_PER_SOURCE"

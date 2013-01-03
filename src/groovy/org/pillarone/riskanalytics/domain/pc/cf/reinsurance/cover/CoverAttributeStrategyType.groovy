@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover
 
+import org.apache.commons.lang.NotImplementedException
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
@@ -27,9 +28,16 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
             'legal entities', 'LEGALENTITIES',
             ['legalEntities':new ComboBoxTableMultiDimensionalParameter([], ['Legal Entities'], ILegalEntityMarker),
              'legalEntityCoverMode': LegalEntityCoverMode.INWARD])
+    public static final CoverAttributeStrategyType MATRIX = new CoverAttributeStrategyType(
+            'matrix', 'MATRIX',
+            ['flexibleCover': new ConstrainedMultiDimensionalParameter([[], [], [], [], [], []],
+                    [CoverMap.CONTRACT_NET_OF, CoverMap.CONTRACT_CEDED_OF, CoverMap.LEGAL_ENTITY,
+                     CoverMap.SEGMENTS, CoverMap.GENERATORS, CoverMap.LOSS_KIND_OF],
+                ConstraintsFactory.getConstraints(CoverMap.IDENTIFIER))]
+    )
 
 
-    public static final all = [NONE, ORIGINALCLAIMS, CONTRACTS, LEGALENTITIES]
+    public static final all = [NONE, ORIGINALCLAIMS, CONTRACTS, LEGALENTITIES, MATRIX]
 
 
     protected static Map types = [:]
@@ -80,6 +88,11 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
                         legalEntities: (ComboBoxTableMultiDimensionalParameter) parameters['legalEntities'],
                         legalEntityCoverMode: (LegalEntityCoverMode) parameters['legalEntityCoverMode'])
                 break
+            case CoverAttributeStrategyType.MATRIX:
+                coverStrategy = new MatrixCoverAttributeStrategy(
+                        flexibleCover: (ConstrainedMultiDimensionalParameter) parameters['flexibleCover'])
+                break
+            default: throw new NotImplementedException("$type not implemented.")
         }
         return coverStrategy;
     }
