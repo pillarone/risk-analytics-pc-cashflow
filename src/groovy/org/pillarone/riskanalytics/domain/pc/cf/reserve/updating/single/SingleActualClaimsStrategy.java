@@ -63,10 +63,10 @@ public class SingleActualClaimsStrategy extends AbstractParameterObject implemen
                 if(!reportedDate.isAfter(periodCounter.startOfFirstPeriod())) {
                     throw new SimulationException("Please check reported date in row " + (row + 1) + "of your table. The reported date appears to be before the start of the simulation."  );
                 }
+                if (reportedDate.isAfter(updateDate)) continue; // ignore any claim update after updateDate
                 lastReportedDate = lastReportedDate.isBefore(reportedDate) ? reportedDate : lastReportedDate;
                 String claimID = (String) history.getValueAt(row, SingleHistoricClaimsConstraints.ID_COLUMN_INDEX);
                 DateTime occurrenceDate = (DateTime) history.getValueAt(row, SingleHistoricClaimsConstraints.OCCURRENCE_DATE_INDEX);
-                if (reportedDate.isAfter(updateDate)) continue; // ignore any claim update after updateDate
                 Integer contractPeriod = InputFormatConverter.getInt(history.getValueAt(row, SingleHistoricClaimsConstraints.CONTRACT_PERIOD_INDEX)) - 1; // -1 : difference between UI and internal sight
                 SingleHistoricClaim claim = historicClaimsPerID.get(claimID);
                 boolean firstReportOfClaim = claim == null;
