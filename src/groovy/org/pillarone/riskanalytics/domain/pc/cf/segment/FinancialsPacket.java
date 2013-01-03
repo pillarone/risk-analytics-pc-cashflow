@@ -22,7 +22,7 @@ public class FinancialsPacket extends MultiValuePacket {
     private DateTime inceptionDate;
     private double commission;
 
-
+    // todo(sku): use helper objects for gross, ceded, net
     private double grossCashflow;
     private double grossPremiumPaid;
     private double grossClaimPaid;

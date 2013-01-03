@@ -95,6 +95,7 @@ public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplit
             Class markerInterface = componentsExtensibleBy.get(claim.sender);
 
             if (!(ISegmentMarker.class.equals(markerInterface))) {
+                // todo(sku): why SEGMENTS used
                 lobPath = getPathMapping(claim, claim.segment(), SEGMENTS);
             }
             PathMapping contractPath = null;

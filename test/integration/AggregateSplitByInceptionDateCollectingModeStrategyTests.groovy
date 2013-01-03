@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.core.output.DBOutput
 import org.pillarone.riskanalytics.core.output.ICollectorOutputStrategy
 import org.pillarone.riskanalytics.core.output.CollectorMapping
 import models.gira.GIRAModel
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceCollectingModeStrategy
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.pillarone.riskanalytics.core.output.TestDBOutput
@@ -45,9 +46,13 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
 
     void postSimulationEvaluation() {
         correctPaths()
-        correctFields(['developedResultIndexed', 'appliedIndexValue', 'IBNRIndexed', 'reservesIndexed', 'outstandingIndexed',
+        correctFields(['developedResultIndexed', 'IBNRIndexed', 'reservesIndexed', 'outstandingIndexed',
                 'paidIncrementalIndexed', 'reportedIncrementalIndexed', 'ultimate', 'premiumWritten', 'premiumPaid',
-                'reserveRiskBase', 'premiumRiskBase', 'premiumAndReserveRiskBase'])
+                ClaimCashflowPacket.CHANGES_IN_OUTSTANDING_INDEXED, ClaimCashflowPacket.REPORTED_CUMULATIVE_INDEXED,
+                ClaimCashflowPacket.PAID_CUMULATIVE_INDEXED, ClaimCashflowPacket.TOTAL_CUMULATIVE_INDEXED,
+                ClaimCashflowPacket.RESERVE_RISK_BASE, ClaimCashflowPacket.PREMIUM_AND_RESERVE_RISK_BASE,
+                ClaimCashflowPacket.PREMIUM_RISK_BASE])
+
         correctReportingClaimsResults()
         correctPaidClaimsResults()
         correctPremiumResults()
@@ -95,7 +100,7 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
                 println "additionally collected field ${field.fieldName}"
             }
         }
-        assertTrue 'all field found', fields.size() == 0
+        assertTrue "all field found $fields", fields.size() == 0
     }
 
     void correctReportingClaimsResults() {

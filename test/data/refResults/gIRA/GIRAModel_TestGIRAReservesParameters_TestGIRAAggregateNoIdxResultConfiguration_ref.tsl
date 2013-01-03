@@ -1,331 +1,651 @@
-iteration	period	valueIndex	path	field	value
-1	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784
-1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602
-1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.0075181610977406
-1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786
-1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563
-1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941
-1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185
-1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812
-1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877
-1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.095128435975805
-1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14
-1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627
-1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363
-1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833
-1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894
-1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892
-1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.2265438482929016
-1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13
-1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255
-1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232
-1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921
-1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832
-1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296
-1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
-1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0
-1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0
-1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0
-1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946
-1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078
-1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-2	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784
-2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602
-2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.0075181610977406
-2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786
-2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563
-2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941
-2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185
-2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812
-2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877
-2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.095128435975805
-2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14
-2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627
-2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363
-2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833
-2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894
-2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892
-2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.2265438482929016
-2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13
-2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255
-2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232
-2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921
-2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832
-2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296
-2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
-2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0
-2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0
-2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0
-2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946
-2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078
-2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-3	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784
-3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602
-3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.0075181610977406
-3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786
-3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563
-3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941
-3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185
-3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812
-3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877
-3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.095128435975805
-3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14
-3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627
-3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363
-3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833
-3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894
-3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892
-3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.2265438482929016
-3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13
-3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255
-3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232
-3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921
-3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832
-3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296
-3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
-3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0
-3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0
-3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0
-3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946
-3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078
-3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-4	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784
-4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602
-4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.0075181610977406
-4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786
-4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563
-4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941
-4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185
-4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812
-4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877
-4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.095128435975805
-4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14
-4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627
-4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363
-4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833
-4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894
-4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892
-4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.2265438482929016
-4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13
-4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255
-4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232
-4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921
-4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832
-4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296
-4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
-4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0
-4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0
-4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0
-4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946
-4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078
-4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-5	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784
-5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602
-5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.0075181610977406
-5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786
-5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563
-5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941
-5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185
-5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812
-5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877
-5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.095128435975805
-5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14
-5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627
-5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363
-5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833
-5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894
-5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892
-5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.2265438482929016
-5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13
-5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255
-5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232
-5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921
-5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832
-5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296
-5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
-5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0
-5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0
-5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0
-5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946
-5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078
-5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-6	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784
-6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602
-6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.0075181610977406
-6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786
-6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563
-6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941
-6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185
-6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812
-6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877
-6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.095128435975805
-6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14
-6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627
-6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363
-6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833
-6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894
-6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892
-6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.2265438482929016
-6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13
-6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255
-6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232
-6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921
-6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832
-6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296
-6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
-6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0
-6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0
-6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0
-6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946
-6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078
-6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-7	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784
-7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602
-7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.0075181610977406
-7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786
-7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563
-7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941
-7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185
-7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812
-7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877
-7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.095128435975805
-7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14
-7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627
-7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363
-7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833
-7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894
-7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892
-7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.2265438482929016
-7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13
-7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255
-7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232
-7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921
-7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832
-7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296
-7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
-7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0
-7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0
-7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0
-7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946
-7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078
-7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-8	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784
-8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602
-8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.0075181610977406
-8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786
-8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563
-8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941
-8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185
-8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812
-8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877
-8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.095128435975805
-8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14
-8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627
-8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363
-8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833
-8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894
-8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892
-8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.2265438482929016
-8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13
-8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255
-8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232
-8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921
-8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832
-8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296
-8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
-8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0
-8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0
-8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0
-8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946
-8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078
-8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-9	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784
-9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602
-9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.0075181610977406
-9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786
-9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563
-9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941
-9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185
-9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812
-9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877
-9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.095128435975805
-9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14
-9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627
-9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363
-9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833
-9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894
-9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892
-9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.2265438482929016
-9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13
-9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255
-9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232
-9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921
-9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832
-9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296
-9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
-9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0
-9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0
-9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0
-9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946
-9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078
-9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-10	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784
-10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602
-10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.0075181610977406
-10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786
-10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563
-10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941
-10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185
-10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812
-10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877
-10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.095128435975805
-10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14
-10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627
-10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363
-10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833
-10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894
-10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892
-10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.2265438482929016
-10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13
-10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255
-10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232
-10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921
-10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832
-10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
-10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296
-10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	appliedIndexValue	1.9895052204832324
-10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0
-10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0
-10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0
-10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946
-10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078
-10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0
+iteration	period	valueIndex	path	field	value	date
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2600.638037715486	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3420.91608033008	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	-349.5097746792627	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	328.11121704583775	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3092.8048632842424	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812	01-January-2011 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2778.9593513273544	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	463.63541539085776	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	-328.11121704583775	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	135.52419834502	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894	01-January-2012 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2978.6792225726467	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3178.399093817939	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	156.92275597844377	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	156.92275597844372	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3178.3990938179395	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832	01-January-2013 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	199.71987124529238	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	199.71987124529255	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946	01-January-2014 24:00:00 000
+1	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078	01-January-2014 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2600.638037715486	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3420.91608033008	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	-349.5097746792627	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	328.11121704583775	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3092.8048632842424	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812	01-January-2011 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2778.9593513273544	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	463.63541539085776	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	-328.11121704583775	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	135.52419834502	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894	01-January-2012 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2978.6792225726467	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3178.399093817939	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	156.92275597844377	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	156.92275597844372	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3178.3990938179395	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832	01-January-2013 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	199.71987124529238	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	199.71987124529255	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946	01-January-2014 24:00:00 000
+2	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078	01-January-2014 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2600.638037715486	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3420.91608033008	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	-349.5097746792627	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	328.11121704583775	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3092.8048632842424	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812	01-January-2011 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2778.9593513273544	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	463.63541539085776	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	-328.11121704583775	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	135.52419834502	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894	01-January-2012 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2978.6792225726467	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3178.399093817939	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	156.92275597844377	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	156.92275597844372	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3178.3990938179395	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832	01-January-2013 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	199.71987124529238	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	199.71987124529255	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946	01-January-2014 24:00:00 000
+3	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078	01-January-2014 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2600.638037715486	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3420.91608033008	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	-349.5097746792627	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	328.11121704583775	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3092.8048632842424	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812	01-January-2011 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2778.9593513273544	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	463.63541539085776	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	-328.11121704583775	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	135.52419834502	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894	01-January-2012 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2978.6792225726467	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3178.399093817939	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	156.92275597844377	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	156.92275597844372	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3178.3990938179395	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832	01-January-2013 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	199.71987124529238	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	199.71987124529255	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946	01-January-2014 24:00:00 000
+4	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078	01-January-2014 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2600.638037715486	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3420.91608033008	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	-349.5097746792627	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	328.11121704583775	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3092.8048632842424	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812	01-January-2011 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2778.9593513273544	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	463.63541539085776	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	-328.11121704583775	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	135.52419834502	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894	01-January-2012 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2978.6792225726467	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3178.399093817939	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	156.92275597844377	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	156.92275597844372	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3178.3990938179395	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832	01-January-2013 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	199.71987124529238	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	199.71987124529255	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946	01-January-2014 24:00:00 000
+5	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078	01-January-2014 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2600.638037715486	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3420.91608033008	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	-349.5097746792627	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	328.11121704583775	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3092.8048632842424	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812	01-January-2011 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2778.9593513273544	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	463.63541539085776	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	-328.11121704583775	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	135.52419834502	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894	01-January-2012 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2978.6792225726467	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3178.399093817939	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	156.92275597844377	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	156.92275597844372	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3178.3990938179395	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832	01-January-2013 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	199.71987124529238	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	199.71987124529255	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946	01-January-2014 24:00:00 000
+6	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078	01-January-2014 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2600.638037715486	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3420.91608033008	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	-349.5097746792627	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	328.11121704583775	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3092.8048632842424	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812	01-January-2011 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2778.9593513273544	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	463.63541539085776	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	-328.11121704583775	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	135.52419834502	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894	01-January-2012 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2978.6792225726467	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3178.399093817939	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	156.92275597844377	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	156.92275597844372	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3178.3990938179395	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832	01-January-2013 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	199.71987124529238	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	199.71987124529255	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946	01-January-2014 24:00:00 000
+7	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078	01-January-2014 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2600.638037715486	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3420.91608033008	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	-349.5097746792627	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	328.11121704583775	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3092.8048632842424	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812	01-January-2011 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2778.9593513273544	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	463.63541539085776	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	-328.11121704583775	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	135.52419834502	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894	01-January-2012 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2978.6792225726467	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3178.399093817939	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	156.92275597844377	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	156.92275597844372	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3178.3990938179395	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832	01-January-2013 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	199.71987124529238	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	199.71987124529255	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946	01-January-2014 24:00:00 000
+8	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078	01-January-2014 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2600.638037715486	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3420.91608033008	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	-349.5097746792627	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	328.11121704583775	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3092.8048632842424	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812	01-January-2011 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2778.9593513273544	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	463.63541539085776	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	-328.11121704583775	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	135.52419834502	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894	01-January-2012 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2978.6792225726467	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3178.399093817939	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	156.92275597844377	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	156.92275597844372	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3178.3990938179395	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832	01-January-2013 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	199.71987124529238	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	199.71987124529255	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946	01-January-2014 24:00:00 000
+9	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078	01-January-2014 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outNominalUltimates	value	-3256.6283141570784	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	163.82345087283602	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2600.638037715486	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3420.91608033008	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	-349.5097746792627	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	328.11121704583775	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-185.4541661563435	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-820.2780426145941	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	328.11121704583786	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3092.8048632842424	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-492.1668255687563	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-164.0556085229185	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-513.5653832021812	01-January-2011 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	121.0263356059877	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2778.9593513273544	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	463.63541539085776	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	-328.11121704583775	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	135.52419834502	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-356.6426272237363	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	5.6843418860808015E-14	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3135.6019785510907	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-356.64262722373627	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-178.32131361186833	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	285.3141017789894	01-January-2012 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	78.22922033913892	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-2978.6792225726467	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3178.399093817939	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	156.92275597844377	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	156.92275597844372	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-42.79711526684832	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	-199.71987124529232	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-2.2737367544323206E-13	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3178.3990938179395	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-199.71987124529255	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-199.7198712452921	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-42.79711526684832	01-January-2013 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	developedResultIndexed	49.127181957682296	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumRiskBase	0.0	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInOutstandingIndexed	199.71987124529238	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInIBNRIndexed	0.0	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	changesInReservesIndexed	199.71987124529255	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	premiumAndReserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reserveRiskBase	-29.102038381457078	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	outstandingIndexed	0.0	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	ultimate	0.0	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	IBNRIndexed	-0.0	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	totalCumulativeIndexed	-3207.501132199396	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reservesIndexed	-0.0	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	paidIncrementalIndexed	-228.82190962674946	01-January-2014 24:00:00 000
+10	3	0	GIRA:reservesGenerators:subMarineRepBased:outReserves	reportedIncrementalIndexed	-29.102038381457078	01-January-2014 24:00:00 000

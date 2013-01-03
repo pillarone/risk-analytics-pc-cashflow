@@ -70,16 +70,16 @@ public class SingleSplitByInceptionDateCollectingModeStrategy extends AggregateS
             }
         }
         for (Map.Entry<String, Double> reserveRisk : reserveRiskByPeriodPath.entrySet()) {
-            results.add(createSingleValueResult(reserveRisk.getKey(), RESERVE_RISK_BASE, reserveRisk.getValue(), crashSimOnError));
+            results.add(createSingleValueResult(reserveRisk.getKey(), ClaimCashflowPacket.RESERVE_RISK_BASE, reserveRisk.getValue(), crashSimOnError));
         }
         if (premiumRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK_BASE, premiumRisk, crashSimOnError) );
+            results.add(createSingleValueResult(packetCollector.getPath(), ClaimCashflowPacket.PREMIUM_RISK_BASE, premiumRisk, crashSimOnError) );
         }
         if (totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK_BASE, totalReserveRisk, crashSimOnError));
+            results.add(createSingleValueResult(packetCollector.getPath(), ClaimCashflowPacket.RESERVE_RISK_BASE, totalReserveRisk, crashSimOnError));
         }
         if (premiumRisk + totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk + totalReserveRisk, crashSimOnError));
+            results.add(createSingleValueResult(packetCollector.getPath(), ClaimCashflowPacket.PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk + totalReserveRisk, crashSimOnError));
         }
         return results;
     }
