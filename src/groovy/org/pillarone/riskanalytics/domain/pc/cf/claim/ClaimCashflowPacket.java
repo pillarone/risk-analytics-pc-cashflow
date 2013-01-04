@@ -291,6 +291,13 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     }
 
     /**
+     * @return reported incremental - paid incremental
+     */
+    public double changeInOutstandingIndexed() {
+        return reportedIncrementalIndexed - paidIncrementalIndexed;
+    }
+
+    /**
      * @return ultimate * (1 - cumulated payout factor)
      */
     public double reservedIndexed() {
@@ -462,16 +469,29 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     @Override
     public Map<String, Number> getValuesToSave() throws IllegalAccessException {
         Map<String, Number> valuesToSave = new HashMap<String, Number>();
+        // total incremental unindexed
         valuesToSave.put(ULTIMATE, ultimate);    // this and missing default c'tor (final!) leads to failure during result tree building
-        valuesToSave.put(PAID_INDEXED, paidIncrementalIndexed);
-        valuesToSave.put(RESERVES_INDEXED, reservedIndexed());
-//        valuesToSave.put(CHANGES_IN_RESERVES_INDEXED, changeInReservesIndexed);
-        valuesToSave.put(REPORTED_INDEXED, reportedIncrementalIndexed);
-        valuesToSave.put(IBNR_INDEXED, ibnrIndexed());
-//        valuesToSave.put(CHANGES_IN_IBNR_INDEXED, changeInIBNRIndexed);
-        valuesToSave.put(OUTSTANDING_INDEXED, outstandingIndexed());
+        // total incremental
         valuesToSave.put(DEVELOPED_RESULT_INDEXED, developmentResultCumulative());
-        valuesToSave.put(APPLIED_INDEX_VALUE, appliedIndexValue);
+        // total cumulative
+        valuesToSave.put(TOTAL_CUMULATIVE_INDEXED, developedUltimate());
+        // paid incremental indexed
+        valuesToSave.put(PAID_INDEXED, paidIncrementalIndexed);
+        valuesToSave.put(PAID_CUMULATIVE_INDEXED, paidCumulatedIndexed);
+        // reported incremental indexed
+        valuesToSave.put(REPORTED_INDEXED, reportedIncrementalIndexed);
+        valuesToSave.put(REPORTED_CUMULATIVE_INDEXED, reportedCumulatedIndexed);
+        valuesToSave.put(CHANGES_IN_IBNR_INDEXED, changeInIBNRIndexed);
+        valuesToSave.put(IBNR_INDEXED, ibnrIndexed());
+        valuesToSave.put(CHANGES_IN_OUTSTANDING_INDEXED, changeInOutstandingIndexed());
+        valuesToSave.put(OUTSTANDING_INDEXED, outstandingIndexed());
+        // case reserve change
+        valuesToSave.put(CHANGES_IN_RESERVES_INDEXED, changeInReservesIndexed);
+        // case reserve
+        valuesToSave.put(RESERVES_INDEXED, reservedIndexed());
+        valuesToSave.put(PREMIUM_RISK_BASE, premiumRisk());
+        valuesToSave.put(RESERVE_RISK_BASE, reserveRisk());
+        valuesToSave.put(PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk() + reserveRisk());
         return valuesToSave;
     }
 
@@ -522,6 +542,15 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public final static String DEVELOPED_ULTIMATE = "developedUltimateIndexed";
     public final static String DEVELOPED_RESULT_INDEXED = "developedResultIndexed";
     public final static String APPLIED_INDEX_VALUE = "appliedIndexValue";
+    public final static String CHANGES_IN_OUTSTANDING_INDEXED = "changesInOutstandingIndexed";
+    public final static String REPORTED_CUMULATIVE_INDEXED = "reportedCumulativeIndexed";
+    public final static String PAID_CUMULATIVE_INDEXED = "paidCumulativeIndexed";
+    public final static String TOTAL_CUMULATIVE_INDEXED = "totalCumulativeIndexed";
+    public final static String RESERVE_RISK_BASE = "reserveRiskBase";
+    public final static String PREMIUM_RISK_BASE = "premiumRiskBase";
+    public final static String PREMIUM_AND_RESERVE_RISK_BASE = "premiumAndReserveRiskBase";
+
+
 
     public final static List<String> NON_TRIVIAL_PAYOUT_IBNR = Arrays.asList(ULTIMATE, PAID_INDEXED, RESERVES_INDEXED,
             REPORTED_INDEXED, IBNR_INDEXED, OUTSTANDING_INDEXED, DEVELOPED_RESULT_INDEXED, APPLIED_INDEX_VALUE);

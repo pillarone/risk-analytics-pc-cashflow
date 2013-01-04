@@ -22,50 +22,9 @@ public class FinancialsPacket extends MultiValuePacket {
     private DateTime inceptionDate;
     private double commission;
 
-
-    private double grossCashflow;
-    private double grossPremiumPaid;
-    private double grossClaimPaid;
-    private double grossLossRatioPaidPaid;
-
-    private double grossPremiumRisk;
-    private double grossReserveRisk;
-    private double grossPremiumReserveRisk;
-
-    private double grossBestEstimate;
-    private double grossPremiumWritten;
-    private double grossClaimUltimate;
-    private double grossLossRatioWrittenUltimate;
-
-
-    private double netCashflow;
-    private double netPremiumPaid;
-    private double netClaimPaid;
-    private double netLossRatioPaidPaid;
-
-    private double netPremiumRisk;
-    private double netReserveRisk;
-    private double netPremiumReserveRisk;
-
-    private double netBestEstimate;
-    private double netPremiumWritten;
-    private double netClaimUltimate;
-    private double netLossRatioWrittenUltimate;
-
-
-    private double cededCashflow;
-    private double cededPremiumPaid;
-    private double cededClaimPaid;
-    private double cededLossRatioPaidPaid;
-
-    private double cededPremiumRisk;
-    private double cededReserveRisk;
-    private double cededPremiumReserveRisk;
-
-    private double cededBestEstimate;
-    private double cededPremiumWritten;
-    private double cededClaimUltimate;
-    private double cededLossRatioWrittenUltimate;
+    private Financials gross = new Financials();
+    private Financials ceded = new Financials();
+    private Financials net = new Financials();
 
     public FinancialsPacket() {
     }
@@ -85,67 +44,18 @@ public class FinancialsPacket extends MultiValuePacket {
                 inceptionDate = netUwInfos.get(0).getExposure().getInceptionDate();
             }
         }
-        if (!grossUwInfos.isEmpty()) {
-            grossPremiumWritten = UnderwritingInfoUtils.aggregate(grossUwInfos).getPremiumWritten();
-            grossPremiumPaid = UnderwritingInfoUtils.aggregate(grossUwInfos).getPremiumPaid();
-        }
-        if (!grossClaims.isEmpty()) {
-            grossClaimUltimate = ClaimUtils.sum(grossClaims, true).ultimate();
-            grossClaimPaid = ClaimUtils.sum(grossClaims, true).getPaidIncrementalIndexed();
-        }
-        if (!netUwInfos.isEmpty()) {
-            netPremiumWritten = UnderwritingInfoUtils.aggregate(netUwInfos).getPremiumWritten();
-            netPremiumPaid = UnderwritingInfoUtils.aggregate(netUwInfos).getPremiumPaid();
-        }
-        if (!netClaims.isEmpty()) {
-            netClaimUltimate = ClaimUtils.sum(netClaims, true).ultimate();
-            netClaimPaid = ClaimUtils.sum(netClaims, true).getPaidIncrementalIndexed();
-        }
+
+        gross = new Financials(grossUwInfos, grossClaims, occurrenceInCurrentPeriod);
+        net = new Financials(netUwInfos, netClaims, occurrenceInCurrentPeriod);
+        ceded = new Financials();
         if (!cededUwInfos.isEmpty()) {
             CededUnderwritingInfoPacket aggregateCededUwInfoPacket = UnderwritingInfoUtils.aggregateCeded(cededUwInfos);
-            cededPremiumWritten = aggregateCededUwInfoPacket.getPremiumWritten();
-            cededPremiumPaid = aggregateCededUwInfoPacket.getPremiumPaid();
+            ceded.premiumWritten = aggregateCededUwInfoPacket.getPremiumWritten();
+            ceded.premiumPaid = aggregateCededUwInfoPacket.getPremiumPaid();
             commission = aggregateCededUwInfoPacket.getCommission();
         }
-        if (!cededClaims.isEmpty()) {
-            cededClaimUltimate = ClaimUtils.sum(cededClaims, true).ultimate();
-            cededClaimPaid = ClaimUtils.sum(cededClaims, true).getPaidIncrementalIndexed();
-        }
+        ceded.initClaimRelatedFigures(cededClaims, occurrenceInCurrentPeriod);
 
-        grossCashflow = grossPremiumPaid + grossClaimPaid;
-        cededCashflow = cededPremiumPaid + cededClaimPaid + commission;
-        netCashflow = netPremiumPaid + netClaimPaid + commission;
-
-        grossBestEstimate = grossPremiumWritten + grossClaimUltimate;
-        cededBestEstimate = cededPremiumWritten + cededClaimUltimate;
-        netBestEstimate = netPremiumWritten + netClaimUltimate;
-
-        if (occurrenceInCurrentPeriod == Boolean.TRUE) {
-            grossPremiumRisk = grossCashflow;
-            netPremiumRisk = netCashflow;
-            cededPremiumRisk = cededCashflow;
-            
-        }
-        else if (occurrenceInCurrentPeriod == Boolean.FALSE) {
-            grossReserveRisk = grossCashflow;
-            netReserveRisk = netCashflow;
-            cededReserveRisk = cededCashflow;
-        }
-        else {
-//            Log.debug('occurrenceInCurrentPeriod null!');
-        }
-
-        grossPremiumReserveRisk = grossPremiumRisk + grossReserveRisk;
-        grossLossRatioWrittenUltimate = grossPremiumWritten == 0 ? 0 : -grossClaimUltimate / grossPremiumWritten;
-        grossLossRatioPaidPaid = grossPremiumPaid == 0 ? 0 : -grossClaimPaid / grossPremiumPaid;
-        
-        netPremiumReserveRisk = netPremiumRisk + netReserveRisk;
-        netLossRatioWrittenUltimate = netPremiumWritten == 0 ? 0 : -netClaimUltimate / netPremiumWritten;
-        netLossRatioPaidPaid = netPremiumPaid == 0 ? 0 : -netClaimPaid / netPremiumPaid;
-
-        cededPremiumReserveRisk = cededPremiumRisk + cededReserveRisk;
-        cededLossRatioWrittenUltimate = cededPremiumWritten == 0 ? 0 : -cededClaimUltimate / cededPremiumWritten;
-        cededLossRatioPaidPaid = cededPremiumPaid == 0 ? 0 : -cededClaimPaid / cededPremiumPaid;
     }
 
     public static List<FinancialsPacket> getFinancialsPacketsByInceptionPeriod(
@@ -205,43 +115,9 @@ public class FinancialsPacket extends MultiValuePacket {
     public FinancialsPacket plus(FinancialsPacket other) {
         if (other == null) return this;
         commission += other.commission;
-
-        grossClaimPaid += other.grossClaimPaid;
-        grossClaimUltimate += other.grossClaimUltimate;
-        grossPremiumPaid += other.grossPremiumPaid;
-        grossPremiumWritten += other.grossPremiumWritten;
-        grossCashflow = grossPremiumPaid + grossClaimPaid + commission;
-        grossPremiumRisk += other.grossPremiumRisk;
-        grossReserveRisk += other.grossReserveRisk;
-        grossPremiumReserveRisk += other.grossPremiumReserveRisk;
-        grossLossRatioWrittenUltimate = grossPremiumWritten == 0 ? 0 : -grossClaimUltimate / grossPremiumWritten;
-        grossLossRatioPaidPaid = grossPremiumPaid == 0 ? 0 : -grossClaimPaid / grossPremiumPaid;
-        grossBestEstimate = grossPremiumWritten + grossClaimUltimate;
-
-        netClaimPaid += other.netClaimPaid;
-        netClaimUltimate += other.netClaimUltimate;
-        netPremiumPaid += other.netPremiumPaid;
-        netPremiumWritten += other.netPremiumWritten;
-        netCashflow = netPremiumPaid + netClaimPaid + commission;
-        netPremiumRisk += other.netPremiumRisk;
-        netReserveRisk += other.netReserveRisk;
-        netPremiumReserveRisk += other.netPremiumReserveRisk;
-        netLossRatioWrittenUltimate = netPremiumWritten == 0 ? 0 : -netClaimUltimate / netPremiumWritten;
-        netLossRatioPaidPaid = netPremiumPaid == 0 ? 0 : -netClaimPaid / netPremiumPaid;
-        netBestEstimate = netPremiumWritten + netClaimUltimate;
-
-        cededClaimPaid += other.cededClaimPaid;
-        cededClaimUltimate += other.cededClaimUltimate;
-        cededPremiumPaid += other.cededPremiumPaid;
-        cededPremiumWritten += other.cededPremiumWritten;
-        cededCashflow = cededPremiumPaid + cededClaimPaid + commission;
-        cededPremiumRisk += other.cededPremiumRisk;
-        cededReserveRisk += other.cededReserveRisk;
-        cededPremiumReserveRisk += other.cededPremiumReserveRisk;
-        cededLossRatioWrittenUltimate = cededPremiumWritten == 0 ? 0 : -cededClaimUltimate / cededPremiumWritten;
-        cededLossRatioPaidPaid = cededPremiumPaid == 0 ? 0 : -cededClaimPaid / cededPremiumPaid;
-        cededBestEstimate = cededPremiumWritten + cededClaimUltimate;
-
+        gross = gross.plus(other.gross);
+        net = net.plus(other.net);
+        ceded = ceded.plus(other.ceded);
         return this;
     }
 
@@ -289,67 +165,67 @@ public class FinancialsPacket extends MultiValuePacket {
         Map<String, Number> valuesToSave = new HashMap<String, Number>();
         valuesToSave.put(COMMISSION, commission);    // this and missing default c'tor (final!) leads to failure during result tree building
 
-        valuesToSave.put(GROSS_CLAIM_PAID, grossClaimPaid);
-        valuesToSave.put(GROSS_CLAIM_ULTIMATE, grossClaimUltimate);
-        valuesToSave.put(GROSS_PREMIUM_PAID, grossPremiumPaid);
-        valuesToSave.put(GROSS_PREMIUM_WRITTEN, grossPremiumWritten);
-        valuesToSave.put(GROSS_CASHFLOW, grossCashflow);
-        valuesToSave.put(GROSS_BEST_ESTIMATE, grossBestEstimate);
-        valuesToSave.put(GROSS_PREMIUM_RISK, grossPremiumRisk);
-        valuesToSave.put(GROSS_RESERVE_RISK, grossReserveRisk);
-        valuesToSave.put(GROSS_PREMIUM_RESERVE_RISK, grossReserveRisk);
-        valuesToSave.put(GROSS_LOSS_RATIO_WRITTEN_ULTIMATE, grossLossRatioWrittenUltimate);
-        valuesToSave.put(GROSS_LOSS_RATIO_PAID_PAID, grossLossRatioPaidPaid);
-        
-        valuesToSave.put(NET_CLAIM_PAID, netClaimPaid);
-        valuesToSave.put(NET_CLAIM_ULTIMATE, netClaimUltimate);
-        valuesToSave.put(NET_PREMIUM_PAID, netPremiumPaid);
-        valuesToSave.put(NET_PREMIUM_WRITTEN, netPremiumWritten);
-        valuesToSave.put(NET_CASHFLOW, netCashflow);
-        valuesToSave.put(NET_BEST_ESTIMATE, netBestEstimate);
-        valuesToSave.put(NET_PREMIUM_RISK, netPremiumRisk);
-        valuesToSave.put(NET_RESERVE_RISK, netReserveRisk);
-        valuesToSave.put(NET_PREMIUM_RESERVE_RISK, netReserveRisk);
-        valuesToSave.put(NET_LOSS_RATIO_WRITTEN_ULTIMATE, netLossRatioWrittenUltimate);
-        valuesToSave.put(NET_LOSS_RATIO_PAID_PAID, netLossRatioPaidPaid);
+        valuesToSave.put(GROSS_CLAIM_PAID, gross.claimPaid);
+        valuesToSave.put(GROSS_CLAIM_ULTIMATE, gross.claimUltimate);
+        valuesToSave.put(GROSS_PREMIUM_PAID, gross.premiumPaid);
+        valuesToSave.put(GROSS_PREMIUM_WRITTEN, gross.premiumWritten);
+        valuesToSave.put(GROSS_CASHFLOW, gross.cashflow);
+        valuesToSave.put(GROSS_BEST_ESTIMATE, gross.bestEstimate);
+        valuesToSave.put(GROSS_PREMIUM_RISK, gross.premiumRisk);
+        valuesToSave.put(GROSS_RESERVE_RISK, gross.reserveRisk);
+        valuesToSave.put(GROSS_PREMIUM_RESERVE_RISK, gross.premiumReserveRisk);
+        valuesToSave.put(GROSS_LOSS_RATIO_WRITTEN_ULTIMATE, gross.lossRatioWrittenUltimate);
+        valuesToSave.put(GROSS_LOSS_RATIO_PAID_PAID, gross.lossRatioPaidPaid);
 
-        valuesToSave.put(CEDED_CLAIM_PAID, cededClaimPaid);
-        valuesToSave.put(CEDED_CLAIM_ULTIMATE, cededClaimUltimate);
-        valuesToSave.put(CEDED_PREMIUM_PAID, cededPremiumPaid);
-        valuesToSave.put(CEDED_PREMIUM_WRITTEN, cededPremiumWritten);
-        valuesToSave.put(CEDED_CASHFLOW, cededCashflow);
-        valuesToSave.put(CEDED_BEST_ESTIMATE, cededBestEstimate);
-        valuesToSave.put(CEDED_PREMIUM_RISK, cededPremiumRisk);
-        valuesToSave.put(CEDED_RESERVE_RISK, cededReserveRisk);
-        valuesToSave.put(CEDED_PREMIUM_RESERVE_RISK, cededReserveRisk);
-        valuesToSave.put(CEDED_LOSS_RATIO_WRITTEN_ULTIMATE, cededLossRatioWrittenUltimate);
-        valuesToSave.put(CEDED_LOSS_RATIO_PAID_PAID, cededLossRatioPaidPaid);
-        
+        valuesToSave.put(NET_CLAIM_PAID, net.claimPaid);
+        valuesToSave.put(NET_CLAIM_ULTIMATE, net.claimUltimate);
+        valuesToSave.put(NET_PREMIUM_PAID, net.premiumPaid);
+        valuesToSave.put(NET_PREMIUM_WRITTEN, net.premiumWritten);
+        valuesToSave.put(NET_CASHFLOW, net.cashflow);
+        valuesToSave.put(NET_BEST_ESTIMATE, net.bestEstimate);
+        valuesToSave.put(NET_PREMIUM_RISK, net.premiumRisk);
+        valuesToSave.put(NET_RESERVE_RISK, net.reserveRisk);
+        valuesToSave.put(NET_PREMIUM_RESERVE_RISK, net.premiumReserveRisk);
+        valuesToSave.put(NET_LOSS_RATIO_WRITTEN_ULTIMATE, net.lossRatioWrittenUltimate);
+        valuesToSave.put(NET_LOSS_RATIO_PAID_PAID, net.lossRatioPaidPaid);
+
+        valuesToSave.put(CEDED_CLAIM_PAID, ceded.claimPaid);
+        valuesToSave.put(CEDED_CLAIM_ULTIMATE, ceded.claimUltimate);
+        valuesToSave.put(CEDED_PREMIUM_PAID, ceded.premiumPaid);
+        valuesToSave.put(CEDED_PREMIUM_WRITTEN, ceded.premiumWritten);
+        valuesToSave.put(CEDED_CASHFLOW, ceded.cashflow);
+        valuesToSave.put(CEDED_BEST_ESTIMATE, ceded.bestEstimate);
+        valuesToSave.put(CEDED_PREMIUM_RISK, ceded.premiumRisk);
+        valuesToSave.put(CEDED_RESERVE_RISK, ceded.reserveRisk);
+        valuesToSave.put(CEDED_PREMIUM_RESERVE_RISK, ceded.reserveRisk);
+        valuesToSave.put(CEDED_LOSS_RATIO_WRITTEN_ULTIMATE, ceded.lossRatioWrittenUltimate);
+        valuesToSave.put(CEDED_LOSS_RATIO_PAID_PAID, ceded.lossRatioPaidPaid);
+
         return valuesToSave;
     }
 
     public double getNetCashflow() {
-        return netCashflow;
+        return net.cashflow;
     }
 
     public void setNetCashflow(double netCashflow) {
-        this.netCashflow = netCashflow;
+        net.cashflow = netCashflow;
     }
 
     public double getNetPremiumPaid() {
-        return netPremiumPaid;
+        return net.premiumPaid;
     }
 
     public void setNetPremiumPaid(double netPremiumPaid) {
-        this.netPremiumPaid = netPremiumPaid;
+        net.premiumPaid = netPremiumPaid;
     }
 
     public double getNetClaimPaid() {
-        return netClaimPaid;
+        return net.claimPaid;
     }
 
     public void setNetClaimPaid(double netClaimPaid) {
-        this.netClaimPaid = netClaimPaid;
+        net.claimPaid = netClaimPaid;
     }
 
     public double getCommission() {
@@ -361,19 +237,27 @@ public class FinancialsPacket extends MultiValuePacket {
     }
 
     public double getNetLossRatioWrittenUltimate() {
-        return netLossRatioWrittenUltimate;
+        return net.lossRatioWrittenUltimate;
     }
 
     public void setNetLossRatioWrittenUltimate(double netLossRatioWrittenUltimate) {
-        this.netLossRatioWrittenUltimate = netLossRatioWrittenUltimate;
+        net.lossRatioWrittenUltimate = netLossRatioWrittenUltimate;
+    }
+
+    public void setNetPremiumRisk(double netPremiumRisk) {
+        net.premiumRisk = netPremiumRisk;
     }
 
     public double netPremiumRisk() {
-        return netPremiumRisk;
+        return net.premiumRisk;
     }
 
-    public double netReserveRisk() {
-        return netReserveRisk;
+    public void setNetReserveRisk(double netReserveRisk) {
+        net.reserveRisk = netReserveRisk;
+    }
+
+    public double getNetReserveRisk() {
+        return net.reserveRisk;
     }
 
     public DateTime getInceptionDate() {
@@ -385,190 +269,279 @@ public class FinancialsPacket extends MultiValuePacket {
     }
 
     public double getNetPremiumWritten() {
-        return netPremiumWritten;
+        return net.premiumWritten;
     }
 
     public void setNetPremiumWritten(double netPremiumWritten) {
-        this.netPremiumWritten = netPremiumWritten;
+        net.premiumWritten = netPremiumWritten;
     }
 
     public double getNetClaimUltimate() {
-        return netClaimUltimate;
+        return net.claimUltimate;
     }
 
     public void setNetClaimUltimate(double netClaimUltimate) {
-        this.netClaimUltimate = netClaimUltimate;
+        net.claimUltimate = netClaimUltimate;
     }
 
     public double getNetLossRatioPaidPaid() {
-        return netLossRatioPaidPaid;
+        return net.lossRatioPaidPaid;
     }
 
     public void setNetLossRatioPaidPaid(double netLossRatioPaidPaid) {
-        this.netLossRatioPaidPaid = netLossRatioPaidPaid;
+        net.lossRatioPaidPaid = netLossRatioPaidPaid;
     }
 
-    public double netPremiumReserveRisk() {
-        return netPremiumReserveRisk;
+    public void setNetPremiumReserveRisk(double netPremiumReserveRsik) {
+        net.premiumReserveRisk = netPremiumReserveRsik;
+    }
+
+    public double getNetPremiumReserveRisk() {
+        return net.premiumReserveRisk;
     }
 
     public double getGrossCashflow() {
-        return grossCashflow;
+        return gross.cashflow;
     }
 
     public void setGrossCashflow(double grossCashflow) {
-        this.grossCashflow = grossCashflow;
+        gross.cashflow = grossCashflow;
     }
 
     public double getGrossPremiumPaid() {
-        return grossPremiumPaid;
+        return gross.premiumPaid;
     }
 
     public void setGrossPremiumPaid(double grossPremiumPaid) {
-        this.grossPremiumPaid = grossPremiumPaid;
+        gross.premiumPaid = grossPremiumPaid;
     }
 
     public double getGrossClaimPaid() {
-        return grossClaimPaid;
+        return gross.claimPaid;
     }
 
     public void setGrossClaimPaid(double grossClaimPaid) {
-        this.grossClaimPaid = grossClaimPaid;
+        gross.claimPaid = grossClaimPaid;
     }
 
     public double getGrossLossRatioPaidPaid() {
-        return grossLossRatioPaidPaid;
+        return gross.lossRatioPaidPaid;
     }
 
     public void setGrossLossRatioPaidPaid(double grossLossRatioPaidPaid) {
-        this.grossLossRatioPaidPaid = grossLossRatioPaidPaid;
+        gross.lossRatioPaidPaid = grossLossRatioPaidPaid;
     }
 
-    public double grossPremiumRisk() {
-        return grossPremiumRisk;
+    public double getGrossPremiumRisk() {
+        return gross.premiumRisk;
     }
 
-    public double grossReserveRisk() {
-        return grossReserveRisk;
+    public void setGrossPremiumRisk(double grossPremiumRisk) {
+        gross.premiumRisk = grossPremiumRisk;
     }
 
-    public double grossPremiumReserveRisk() {
-        return grossPremiumReserveRisk;
+    public double getGrossReserveRisk() {
+        return gross.reserveRisk;
+    }
+
+    public void setGrossReserveRisk(double grossReserveRisk) {
+        gross.reserveRisk = grossReserveRisk;
+    }
+
+    public double getGrossPremiumReserveRisk() {
+        return gross.premiumReserveRisk;
+    }
+
+    public void setGrossPremiumReserveRisk(double grossPremiumReserveRisk) {
+        gross.premiumReserveRisk = grossPremiumReserveRisk;
     }
 
     public double getGrossBestEstimate() {
-        return grossBestEstimate;
+        return gross.bestEstimate;
     }
 
     public void setGrossBestEstimate(double grossBestEstimate) {
-        this.grossBestEstimate = grossBestEstimate;
+        gross.bestEstimate = grossBestEstimate;
     }
 
     public double getGrossPremiumWritten() {
-        return grossPremiumWritten;
+        return gross.premiumWritten;
     }
 
     public void setGrossPremiumWritten(double grossPremiumWritten) {
-        this.grossPremiumWritten = grossPremiumWritten;
+        gross.premiumWritten = grossPremiumWritten;
     }
 
     public double getGrossClaimUltimate() {
-        return grossClaimUltimate;
+        return gross.claimUltimate;
     }
 
     public void setGrossClaimUltimate(double grossClaimUltimate) {
-        this.grossClaimUltimate = grossClaimUltimate;
+        gross.claimUltimate = grossClaimUltimate;
     }
 
     public double getGrossLossRatioWrittenUltimate() {
-        return grossLossRatioWrittenUltimate;
+        return gross.lossRatioWrittenUltimate;
     }
 
     public void setGrossLossRatioWrittenUltimate(double grossLossRatioWrittenUltimate) {
-        this.grossLossRatioWrittenUltimate = grossLossRatioWrittenUltimate;
+        gross.lossRatioWrittenUltimate = grossLossRatioWrittenUltimate;
     }
 
     public double getNetBestEstimate() {
-        return netBestEstimate;
+        return net.bestEstimate;
     }
 
     public void setNetBestEstimate(double netBestEstimate) {
-        this.netBestEstimate = netBestEstimate;
+        net.bestEstimate = netBestEstimate;
     }
 
     public double getCededCashflow() {
-        return cededCashflow;
+        return ceded.cashflow;
     }
 
     public void setCededCashflow(double cededCashflow) {
-        this.cededCashflow = cededCashflow;
+        ceded.cashflow = cededCashflow;
     }
 
     public double getCededPremiumPaid() {
-        return cededPremiumPaid;
+        return ceded.premiumPaid;
     }
 
     public void setCededPremiumPaid(double cededPremiumPaid) {
-        this.cededPremiumPaid = cededPremiumPaid;
+        ceded.premiumPaid = cededPremiumPaid;
     }
 
     public double getCededClaimPaid() {
-        return cededClaimPaid;
+        return ceded.claimPaid;
     }
 
     public void setCededClaimPaid(double cededClaimPaid) {
-        this.cededClaimPaid = cededClaimPaid;
+        ceded.claimPaid = cededClaimPaid;
     }
 
     public double getCededLossRatioPaidPaid() {
-        return cededLossRatioPaidPaid;
+        return ceded.lossRatioPaidPaid;
     }
 
     public void setCededLossRatioPaidPaid(double cededLossRatioPaidPaid) {
-        this.cededLossRatioPaidPaid = cededLossRatioPaidPaid;
+        ceded.lossRatioPaidPaid = cededLossRatioPaidPaid;
     }
 
-    public double cededPremiumRisk() {
-        return cededPremiumRisk;
+    public void setCededPremiumRisk(double cededPremiumRisk) {
+        ceded.premiumRisk = cededPremiumRisk;
     }
 
-    public double cededReserveRisk() {
-        return cededReserveRisk;
+    public double getCededPremiumRisk() {
+        return ceded.premiumRisk;
     }
 
-    public double cededPremiumReserveRisk() {
-        return cededPremiumReserveRisk;
+    public void setCededReserveRisk(double cededReserveRisk) {
+        ceded.reserveRisk = cededReserveRisk;
+    }
+
+    public double getCededReserveRisk() {
+        return ceded.reserveRisk;
+    }
+
+    public void setCededPremiumReserveRisk(double premiumReserveRisk) {
+        ceded.premiumReserveRisk = premiumReserveRisk;
+    }
+
+    public double getCededPremiumReserveRisk() {
+        return ceded.premiumReserveRisk;
     }
 
     public double getCededBestEstimate() {
-        return cededBestEstimate;
+        return ceded.bestEstimate;
     }
 
     public void setCededBestEstimate(double cededBestEstimate) {
-        this.cededBestEstimate = cededBestEstimate;
+        ceded.bestEstimate = cededBestEstimate;
     }
 
     public double getCededPremiumWritten() {
-        return cededPremiumWritten;
+        return ceded.premiumWritten;
     }
 
     public void setCededPremiumWritten(double cededPremiumWritten) {
-        this.cededPremiumWritten = cededPremiumWritten;
+        ceded.premiumWritten = cededPremiumWritten;
     }
 
     public double getCededClaimUltimate() {
-        return cededClaimUltimate;
+        return ceded.claimUltimate;
     }
 
     public void setCededClaimUltimate(double cededClaimUltimate) {
-        this.cededClaimUltimate = cededClaimUltimate;
+        ceded.claimUltimate = cededClaimUltimate;
     }
 
     public double getCededLossRatioWrittenUltimate() {
-        return cededLossRatioWrittenUltimate;
+        return ceded.lossRatioWrittenUltimate;
     }
 
     public void setCededLossRatioWrittenUltimate(double cededLossRatioWrittenUltimate) {
-        this.cededLossRatioWrittenUltimate = cededLossRatioWrittenUltimate;
+        ceded.lossRatioWrittenUltimate = cededLossRatioWrittenUltimate;
+    }
+    
+    private class Financials {
+        double cashflow;
+        double premiumPaid;
+        double claimPaid;
+        double lossRatioPaidPaid;
+
+        double premiumRisk;
+        double reserveRisk;
+        double premiumReserveRisk;
+
+        double bestEstimate;
+        double premiumWritten;
+        double claimUltimate;
+        double lossRatioWrittenUltimate;
+
+        public Financials() {
+        }
+
+        public Financials(List<UnderwritingInfoPacket> uwInfos, List<ClaimCashflowPacket> claims, Boolean occurrenceInCurrentPeriod) {
+            if (!uwInfos.isEmpty()) {
+                premiumWritten = UnderwritingInfoUtils.aggregate(uwInfos).getPremiumWritten();
+                premiumPaid = UnderwritingInfoUtils.aggregate(uwInfos).getPremiumPaid();
+            }
+            initClaimRelatedFigures(claims, occurrenceInCurrentPeriod);
+        }
+
+        public void initClaimRelatedFigures(List<ClaimCashflowPacket> claims, Boolean occurrenceInCurrentPeriod) {
+            if (!claims.isEmpty()) {
+                claimUltimate = ClaimUtils.sum(claims, true).ultimate();
+                claimPaid = ClaimUtils.sum(claims, true).getPaidIncrementalIndexed();
+            }
+            cashflow = premiumPaid + claimPaid;
+            bestEstimate = premiumWritten + claimUltimate;
+            if (occurrenceInCurrentPeriod == Boolean.TRUE) {
+                premiumRisk = cashflow;
+            }
+            else if (occurrenceInCurrentPeriod == Boolean.FALSE) {
+                reserveRisk = cashflow;
+            }
+            premiumReserveRisk = premiumRisk + reserveRisk;
+            lossRatioWrittenUltimate = premiumWritten == 0 ? 0 : -claimUltimate / premiumWritten;
+            lossRatioPaidPaid = premiumPaid == 0 ? 0 : -claimPaid / premiumPaid;
+        }
+
+        public Financials plus(Financials other) {
+            if (other == null) return this;
+            claimPaid += other.claimPaid;
+            claimUltimate += other.claimUltimate;
+            premiumPaid += other.premiumPaid;
+            premiumWritten += other.premiumWritten;
+            cashflow = premiumPaid + claimPaid + commission;
+            premiumRisk += other.premiumRisk;
+            reserveRisk += other.reserveRisk;
+            premiumReserveRisk += other.premiumReserveRisk;
+            lossRatioWrittenUltimate = premiumWritten == 0 ? 0 : -claimUltimate / premiumWritten;
+            lossRatioPaidPaid = premiumPaid == 0 ? 0 : -claimPaid / premiumPaid;
+            bestEstimate = premiumWritten + claimUltimate;
+            return this;
+        }
     }
 }

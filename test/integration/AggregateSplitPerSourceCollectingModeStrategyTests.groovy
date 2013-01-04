@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.output.SingleValueResult
 import org.pillarone.riskanalytics.core.output.TestDBOutput
 import org.pillarone.riskanalytics.core.output.ICollectorOutputStrategy
 import models.gira.GIRAModel
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -41,9 +42,12 @@ class AggregateSplitPerSourceCollectingModeStrategyTests extends ModelTest {
 
     void postSimulationEvaluation() {
         correctPaths()
-        correctFields(['developedResultIndexed', 'appliedIndexValue', 'IBNRIndexed', 'reservesIndexed', 'outstandingIndexed',
+        correctFields(['developedResultIndexed', 'IBNRIndexed', 'reservesIndexed', 'outstandingIndexed',
                 'paidIncrementalIndexed', 'reportedIncrementalIndexed', 'ultimate', 'premiumWritten', 'premiumPaid',
-                'commissionFixed', 'commissionVariable', 'premiumPaidVariable', 'commission', 'premiumPaidFixed'])
+                ClaimCashflowPacket.CHANGES_IN_OUTSTANDING_INDEXED, ClaimCashflowPacket.REPORTED_CUMULATIVE_INDEXED,
+                ClaimCashflowPacket.PAID_CUMULATIVE_INDEXED, ClaimCashflowPacket.TOTAL_CUMULATIVE_INDEXED,
+                ClaimCashflowPacket.RESERVE_RISK_BASE, ClaimCashflowPacket.PREMIUM_AND_RESERVE_RISK_BASE,
+                ClaimCashflowPacket.PREMIUM_RISK_BASE])
         correctUltimateClaimsResults()
         correctCommissionsResults()
         correctPremiumResults()

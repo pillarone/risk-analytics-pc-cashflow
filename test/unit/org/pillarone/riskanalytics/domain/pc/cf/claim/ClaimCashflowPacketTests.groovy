@@ -178,7 +178,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         int claimNumber = 0
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
         
-        assertEquals "#collected fields", 8, claims[claimNumber].valuesToSave.size()
+        assertEquals "#collected fields", 16, claims[claimNumber].valuesToSave.size()
         
         assertEquals "P$period ultimate", 1000, claims[claimNumber].ultimate()
         assertEquals "P$period developed result", 0, claims[claimNumber].developmentResultCumulative()

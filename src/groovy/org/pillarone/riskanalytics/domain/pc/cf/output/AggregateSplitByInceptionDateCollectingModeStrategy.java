@@ -30,9 +30,7 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     protected static Log LOG = LogFactory.getLog(AggregateSplitByInceptionDateCollectingModeStrategy.class);
 
     static final String IDENTIFIER = "SPLIT_BY_INCEPTION_DATE";
-    protected static final String RESERVE_RISK_BASE = "reserveRiskBase";
-    protected static final String PREMIUM_RISK_BASE = "premiumRiskBase";
-    protected static final String PREMIUM_AND_RESERVE_RISK_BASE = "premiumAndReserveRiskBase";
+
     protected static final String GROSS_RESERVE_RISK_BASE = "grossReserveRiskBase";
     protected static final String GROSS_PREMIUM_RISK_BASE = "grossPremiumRiskBase";
     protected static final String GROSS_PREMIUM_AND_RESERVE_RISK_BASE = "grossPremiumAndReserveRiskBase";
@@ -207,13 +205,9 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     
     protected List<SingleValueResultPOJO> createPremiumReserveRisk(List<ClaimCashflowPacket> claims, boolean crashSimulationOnError) {
         List<SingleValueResultPOJO> results = new ArrayList<SingleValueResultPOJO>();
-        double totalReserveRisk = 0;
-        double premiumRisk = 0;
         Map<String, Double> reserveRiskByPeriodPath = new HashMap<String, Double>();
         for (ClaimCashflowPacket claim : claims) {
             if (claim.reserveRisk() != 0) {
-                // belongs to reserve risk
-                totalReserveRisk += claim.reserveRisk();
                 if (splitByInceptionPeriod()) {
                     String periodLabel = inceptionPeriod(claim);
                     String pathExtension = PERIOD + PATH_SEPARATOR + periodLabel;
@@ -223,24 +217,11 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
                     reserveRiskByPeriodPath.put(pathExtended, reserveRisk);
                 }
             }
-            else if (claim.premiumRisk() != 0) {
-                // belongs to premium risk
-                premiumRisk += claim.premiumRisk();
-            }
         }
         if (splitByInceptionPeriod()) {
             for (Map.Entry<String, Double> reserveRisk : reserveRiskByPeriodPath.entrySet()) {
-                results.add(createSingleValueResult(reserveRisk.getKey(), RESERVE_RISK_BASE, reserveRisk.getValue(), crashSimulationOnError));
+                results.add(createSingleValueResult(reserveRisk.getKey(), ClaimCashflowPacket.RESERVE_RISK_BASE, reserveRisk.getValue(), crashSimulationOnError));
             }
-        }
-        if (premiumRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK_BASE, premiumRisk, crashSimulationOnError));
-        }
-        if (totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK_BASE, totalReserveRisk, crashSimulationOnError));
-        }
-        if (premiumRisk + totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk + totalReserveRisk, crashSimulationOnError));
         }
         return results;
     }
@@ -261,28 +242,28 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
             String pathExtension = PERIOD + PATH_SEPARATOR + periodLabel;
             String pathExtended = getExtendedPath(financialPacket, pathExtension);
 
-            if (financialPacket.grossReserveRisk() != 0) {
+            if (financialPacket.getGrossReserveRisk() != 0) {
                 // belongs to reserve risk
-                grossTotalReserveRisk += financialPacket.grossReserveRisk();
+                grossTotalReserveRisk += financialPacket.getGrossReserveRisk();
                 if (splitByInceptionPeriod()) {
 
                     Double reserveRisk = grossReserveRiskByPeriodPath.get(pathExtended);
-                    reserveRisk = reserveRisk == null ? financialPacket.grossReserveRisk() : reserveRisk + financialPacket.grossReserveRisk();
+                    reserveRisk = reserveRisk == null ? financialPacket.getGrossReserveRisk() : reserveRisk + financialPacket.getGrossReserveRisk();
                     grossReserveRiskByPeriodPath.put(pathExtended, reserveRisk);
                 }
             }
-            else if (financialPacket.grossPremiumRisk() != 0) {
+            else if (financialPacket.getGrossPremiumRisk() != 0) {
                 // belongs to premium risk
-                grossPremiumRisk += financialPacket.grossPremiumRisk();
+                grossPremiumRisk += financialPacket.getGrossPremiumRisk();
             }
             
-            if (financialPacket.netReserveRisk() != 0) {
+            if (financialPacket.getNetReserveRisk() != 0) {
                 // belongs to reserve risk
-                netTotalReserveRisk += financialPacket.netReserveRisk();
+                netTotalReserveRisk += financialPacket.getNetReserveRisk();
                 if (splitByInceptionPeriod()) {
                     
                     Double reserveRisk = netReserveRiskByPeriodPath.get(pathExtended);
-                    reserveRisk = reserveRisk == null ? financialPacket.netReserveRisk() : reserveRisk + financialPacket.netReserveRisk();
+                    reserveRisk = reserveRisk == null ? financialPacket.getNetReserveRisk() : reserveRisk + financialPacket.getNetReserveRisk();
                     netReserveRiskByPeriodPath.put(pathExtended, reserveRisk);
                 }
             }
@@ -291,19 +272,19 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
                 netPremiumRisk += financialPacket.netPremiumRisk();
             }
 
-            if (financialPacket.cededReserveRisk() != 0) {
+            if (financialPacket.getCededReserveRisk() != 0) {
                 // belongs to reserve risk
-                cededTotalReserveRisk += financialPacket.cededReserveRisk();
+                cededTotalReserveRisk += financialPacket.getCededReserveRisk();
                 if (splitByInceptionPeriod()) {
 
                     Double reserveRisk = cededReserveRiskByPeriodPath.get(pathExtended);
-                    reserveRisk = reserveRisk == null ? financialPacket.cededReserveRisk() : reserveRisk + financialPacket.cededReserveRisk();
+                    reserveRisk = reserveRisk == null ? financialPacket.getCededReserveRisk() : reserveRisk + financialPacket.getCededReserveRisk();
                     cededReserveRiskByPeriodPath.put(pathExtended, reserveRisk);
                 }
             }
-            else if (financialPacket.cededPremiumRisk() != 0) {
+            else if (financialPacket.getCededPremiumRisk() != 0) {
                 // belongs to premium risk
-                cededPremiumRisk += financialPacket.cededPremiumRisk();
+                cededPremiumRisk += financialPacket.getCededPremiumRisk();
             }
         }
         if (splitByInceptionPeriod()) {
