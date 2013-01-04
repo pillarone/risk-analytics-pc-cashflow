@@ -27,6 +27,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.single.ISingleU
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.single.SingleActualClaimsStrategyType;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.single.SingleUpdatingMethodologyStrategyType;
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -101,7 +102,7 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
         } catch (SimulationException e) {
             throw new SimulationException("Problem in claims generator in Iteration : "
                     + iterationScope.getCurrentIteration() + ". Period :" + periodScope.getCurrentPeriod()
-                    + " with seed : " + simulationScope.getSimulation().getRandomSeed().toString()
+                    + " with seed : " + simulationScope.getSimulation().getRandomSeed().toString() + " update date:  " + DateTimeUtilities.formatDate.print( globalUpdateDate )
                     + "\n \n " + e.getMessage(), e);
         }
     }

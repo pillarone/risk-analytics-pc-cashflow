@@ -52,14 +52,23 @@ public class SingleHistoricClaim {
      * @param cumulativePaid
      * @param cumulativeReported
      * @param claimID
+     * @param occurenceDate
      */
     public void add(DateTime reportedDate, double cumulativePaid, double cumulativeReported,
-                    boolean firstReportOfClaim, IPeriodCounter periodCounter, String claimID) {
+                    boolean firstReportOfClaim, IPeriodCounter periodCounter, String claimID, DateTime occurenceDate) {
         if (!claimID.equals(this.claimID)) {
-            throw new SimulationException("Attempted to add the values from claim ID ; " + claimID + "into claim ; " +
+            throw new SimulationException("Attempted to add the values from historic claim ID ; " + claimID + "into claim ; " +
                     this.claimID + " this should never happen. Contact development");
         }
-        if (reportedDate.isBefore(occurrenceDate)) occurrenceDate = reportedDate;
+        if (!occurenceDate.equals(this.occurrenceDate)) {
+            throw new SimulationException("Historic Claim with ID " + this.claimID + " was initialized with an occurence date of " + DateTimeUtilities.formatDate.print(this.occurrenceDate) +
+                    " but being updated with an occurence date of " + DateTimeUtilities.formatDate.print(occurenceDate) + ". This is invalid; a claim cannot change it's date of occurence." +
+                    "Did you mean to change the report date of the claim?");
+        }
+        if (reportedDate.isBefore(occurrenceDate)) {
+            throw new SimulationException(" Historic claim with ID ; " + this.claimID + " has a reported date to the insurer " + DateTimeUtilities.formatDate.print(reportedDate)
+                    + " before it's occurence date of " + DateTimeUtilities.formatDate.print(occurenceDate) + ". This cannot be true. Please check your historic claim table" );
+        }
         if (lastUpdateDate == null || reportedDate.isAfter(lastUpdateDate)) {
             lastUpdateDate = reportedDate;
             lastPaid = cumulativePaid;
@@ -117,7 +126,7 @@ public class SingleHistoricClaim {
         DateTime baseDate = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
         PatternPacket adjustedPayoutPattern = PatternUtils.adjustedPattern(originalPayoutPattern, claimCumulativePaidUpdates, ultimate,
                 baseDate, occurrenceDate, updateDate, lastUpdateDate, days360);
-        return new GrossClaimRoot(ultimate, ClaimType.SINGLE, exposureStartDate, occurrenceDate, adjustedPayoutPattern, null);
+        return new GrossClaimRoot(ultimate, ClaimType.SINGLE, exposureStartDate, occurrenceDate, adjustedPayoutPattern, null, baseDate);
     }
 
     public void applyVolatility(IRandomNumberGenerator volatilityGenerator) {
