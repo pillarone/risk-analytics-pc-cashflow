@@ -82,7 +82,7 @@ public class SingleActualClaimsStrategy extends AbstractParameterObject implemen
                 }
                 double cumulativePaid = InputFormatConverter.getDouble(history.getValueAt(row, SingleHistoricClaimsConstraints.PAID_AMOUNT_INDEX));
                 double cumulativeReported = InputFormatConverter.getDouble(history.getValueAt(row, SingleHistoricClaimsConstraints.REPORTED_AMOUNT_INDEX));
-                claim.add(reportedDate, cumulativePaid, cumulativeReported, firstReportOfClaim, periodCounter, claimID);
+                claim.add(reportedDate, cumulativePaid, cumulativeReported, firstReportOfClaim, periodCounter, claimID, occurrenceDate);
             }
         }
     }
