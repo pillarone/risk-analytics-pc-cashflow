@@ -55,6 +55,7 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
 
     /* Injected from framework */
     protected PacketList<SingleValuePacket> outUpdatingUniformDraw = new PacketList<SingleValuePacket>(SingleValuePacket.class);
+    protected PacketList<SingleValuePacket> outUpdatingOriginalFrequencyDraw = new PacketList<SingleValuePacket>(SingleValuePacket.class);
 
 
     protected void doCalculation() {
@@ -108,8 +109,14 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
     }
 
     private void randomDrawInfo(ISingleUpdatingMethodologyStrategy.GrossClaimAndRandomDraws updatingResult) {
-        if(updatingResult.getRandomDraws().getUniformDraw() > 0) {
+        if(updatingResult.getRandomDraws().getUniformDraw() > 0 && globalSanityChecks) {
             outUpdatingUniformDraw.add(new SingleValuePacket(updatingResult.getRandomDraws().getUniformDraw()));
+        }
+    }
+
+    private void poissonDrawInfo(int numberClaims){
+        if(globalSanityChecks) {
+            outUpdatingOriginalFrequencyDraw.add(new SingleValuePacket(numberClaims));
         }
     }
 
@@ -117,6 +124,7 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
     protected void checkBaseClaims(List<ClaimRoot> baseClaims, boolean sanityChecks, IterationScope iterationScope) {
         if (sanityChecks) {
             super.checkBaseClaims(baseClaims, sanityChecks, iterationScope);
+            poissonDrawInfo(baseClaims.size());
         }
     }
 
@@ -182,6 +190,14 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
 
     public void setOutUpdatingUniformDraw(PacketList<SingleValuePacket> outUpdatingUniformDraw) {
         this.outUpdatingUniformDraw = outUpdatingUniformDraw;
+    }
+
+    public PacketList<SingleValuePacket> getOutUpdatingOriginalFrequencyDraw() {
+        return outUpdatingOriginalFrequencyDraw;
+    }
+
+    public void setOutUpdatingOriginalFrequencyDraw(PacketList<SingleValuePacket> outUpdatingOriginalFrequencyDraw) {
+        this.outUpdatingOriginalFrequencyDraw = outUpdatingOriginalFrequencyDraw;
     }
 }
 
