@@ -141,9 +141,9 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         CollectingModeFactory.registerStrategy(new AggregateUltimatePaidClaimCollectingModeStrategy())
 
         CollectingModeFactory.registerStrategy(new SingleUltimatePaidClaimCollectingModeStrategy())
-//        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([],[]))
-//        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_PERIOD],[]))
-//        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_SOURCE],[]))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([],[]))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_PERIOD],[]))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_SOURCE],[]))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_SOURCE, SplitAndFilterCollectionModeStrategy.SPLIT_BY_PERIOD],[ClaimCashflowPacket.REPORTED_INDEXED, ClaimCashflowPacket.PAID_INDEXED]))
     }
 

@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.output;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -25,21 +26,23 @@ import java.util.*;
  */
 public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectingModeStrategy {
 
-    public static final String SPLIT_BY_PERIOD = "byPeriod";
-    public static final String SPLIT_BY_SOURCE = "bySource";
+    public static final String SPLIT_BY_PERIOD = "SPLIT_PER_PERIOD";
+    public static final String SPLIT_BY_SOURCE = "SPLIT_PER_SOURCE";
     private static final String PERILS = "claimsGenerators";
     private static final String CONTRACTS = "reinsuranceContracts";
     private static final String SEGMENTS = "segments";
 
     private final Map<Component, Class> componentsExtensibleBy = new HashMap<Component, Class>();
 
-    private List<String> splitModes;
-    private List<String> fieldFilter;
+    private final List<String> splitModes;
+    private final List<String> fieldFilter;
     private boolean displayUnderwritingYearOnly = true;
     private static final DateTimeFormatter formatter = DateTimeFormat.forPattern(PeriodLabelsUtil.PARAMETER_DISPLAY_FORMAT);
 
     // required for serialization by gridgain
     public SplitAndFilterCollectionModeStrategy() {
+        splitModes = new ArrayList<String>();
+        fieldFilter = new ArrayList<String>();
     }
 
     public SplitAndFilterCollectionModeStrategy(List<String> splitModes, List<String> fieldFilter) {
@@ -56,8 +59,7 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         if (isCompatibleWith(packets.get(0).getClass())) {
             Map<PathMapping, Packet> resultMap = allPathMappingsIncludingSplit(packets);
             return createSingleValueResults(resultMap, crashSimulationOnError);
-        }
-        else {
+        } else {
             String notImplemented = ResourceBundle.getBundle(RESOURCE_BUNDLE).getString("SplitAndFilterCollectionModeStrategy.notImplemented");
             throw new NotImplementedException(notImplemented + "\n(" + packetCollector.getPath() + ")");
         }
@@ -74,8 +76,7 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         if (splitModes.contains(SPLIT_BY_SOURCE)) {
             if (packets.get(0) instanceof ClaimCashflowPacket) {
                 resultMap.putAll(splitBySourePathsForClaims(packets));
-            }
-            else if (packets.get(0) instanceof UnderwritingInfoPacket) {
+            } else if (packets.get(0) instanceof UnderwritingInfoPacket) {
                 resultMap.putAll(splitBySourePathsForUwInfos(packets));
             }
         }
@@ -290,13 +291,16 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
     @Override
     public String getIdentifier() {
         StringBuilder identifier = new StringBuilder("AGGREGATE_");
+        if (splitModes.size() == 0 && fieldFilter.size() == 0) {
+            identifier.append("NO-SPLIT_NO-FILTER").append("_");
+        }
         for (String splitMode : splitModes) {
             identifier.append(splitMode).append("_");
         }
         for (String filter : fieldFilter) {
             identifier.append(filter).append("_");
         }
-        return identifier.substring(0, identifier.length() - 1);
+        return StringUtils.removeEnd(identifier.toString(), "_");
     }
 
     @Override
