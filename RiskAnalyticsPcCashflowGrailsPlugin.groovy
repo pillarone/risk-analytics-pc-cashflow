@@ -1,3 +1,4 @@
+import org.pillarone.riskanalytics.core.output.DrillDownMode
 import org.pillarone.riskanalytics.domain.pc.cf.output.SplitAndFilterCollectionModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternTableConstraints
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
@@ -142,9 +143,9 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
 
         CollectingModeFactory.registerStrategy(new SingleUltimatePaidClaimCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([],[]))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_PERIOD],[]))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_SOURCE],[]))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_SOURCE, SplitAndFilterCollectionModeStrategy.SPLIT_BY_PERIOD],[ClaimCashflowPacket.REPORTED_INDEXED, ClaimCashflowPacket.PAID_INDEXED]))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD],[]))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE],[]))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD],[ClaimCashflowPacket.REPORTED_INDEXED, ClaimCashflowPacket.PAID_INDEXED]))
     }
 
     def onChange = { event ->

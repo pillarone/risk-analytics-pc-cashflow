@@ -5,6 +5,7 @@ import models.gira.GIRAModel
 import org.joda.time.DateTime
 import org.joda.time.Period
 import org.pillarone.riskanalytics.core.output.CollectorMapping
+import org.pillarone.riskanalytics.core.output.DrillDownMode
 import org.pillarone.riskanalytics.core.output.FieldMapping
 import org.pillarone.riskanalytics.core.output.PacketCollector
 import org.pillarone.riskanalytics.core.output.PathMapping
@@ -69,7 +70,7 @@ class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
         def packet = new ClaimCashflowPacket()
         packet.baseClaim.exposureStartDate = simulationStart
         packets.add(packet)
-        setupStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_PERIOD], [], simulationStart)
+        setupStrategy([DrillDownMode.BY_PERIOD], [], simulationStart)
         List<SingleValueResultPOJO> result = strategy.collect(packets, false)
         assert 2 * packet.valuesToSave.size() == result.size()
     }
@@ -82,7 +83,7 @@ class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
         packet.senderChannelName = 'senderChannelName'
         packet.setSender(new Segment())
         packet.setMarker(new ClaimsGenerator(name: "testClaimsGenerator"))
-        setupStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_SOURCE], [], simulationStart)
+        setupStrategy([DrillDownMode.BY_SOURCE], [], simulationStart)
         List<SingleValueResultPOJO> result = strategy.collect(packets, false)
         assert 2 * packet.valuesToSave.size() == result.size()
     }
@@ -96,7 +97,7 @@ class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
         packet.senderChannelName = 'senderChannelName'
         packet.setSender(new Segment())
         packet.setMarker(new ClaimsGenerator(name: "testClaimsGenerator"))
-        setupStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_SOURCE, SplitAndFilterCollectionModeStrategy.SPLIT_BY_PERIOD], [], simulationStart)
+        setupStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [], simulationStart)
         List<SingleValueResultPOJO> result = strategy.collect(packets, false)
         assert 3 * packet.valuesToSave.size() == result.size()
     }
@@ -110,7 +111,7 @@ class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
         packet.senderChannelName = 'senderChannelName'
         packet.setSender(new Segment())
         packet.setMarker(new ClaimsGenerator(name: "testClaimsGenerator"))
-        setupStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_SOURCE, SplitAndFilterCollectionModeStrategy.SPLIT_BY_PERIOD], [ClaimCashflowPacket.CHANGES_IN_IBNR_INDEXED], simulationStart)
+        setupStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [ClaimCashflowPacket.CHANGES_IN_IBNR_INDEXED], simulationStart)
         List<SingleValueResultPOJO> result = strategy.collect(packets, false)
         assert 3 == result.size()
     }
@@ -120,11 +121,11 @@ class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
         assert 'AGGREGATE_NO-SPLIT_NO-FILTER' == strategy.identifier
         setupStrategy()
         assert 'AGGREGATE_NO-SPLIT_NO-FILTER' == strategy.identifier
-        setupStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_PERIOD])
-        assert 'AGGREGATE_SPLIT_PER_PERIOD' == strategy.identifier
-        setupStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_PERIOD, SplitAndFilterCollectionModeStrategy.SPLIT_BY_SOURCE])
-        assert 'AGGREGATE_SPLIT_PER_PERIOD_SPLIT_PER_SOURCE' == strategy.identifier
-        setupStrategy([SplitAndFilterCollectionModeStrategy.SPLIT_BY_PERIOD],['field1'])
-        assert 'AGGREGATE_SPLIT_PER_PERIOD_field1' == strategy.identifier
+        setupStrategy([DrillDownMode.BY_PERIOD])
+        assert 'AGGREGATE_BY_PERIOD' == strategy.identifier
+        setupStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD])
+        assert 'AGGREGATE_BY_SOURCE_BY_PERIOD' == strategy.identifier
+        setupStrategy([DrillDownMode.BY_PERIOD],['field1'])
+        assert 'AGGREGATE_BY_PERIOD_field1' == strategy.identifier
     }
 }

@@ -7,6 +7,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.DynamicComposedComponent;
+import org.pillarone.riskanalytics.core.output.DrillDownMode;
 import org.pillarone.riskanalytics.core.output.PathMapping;
 import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
 import org.pillarone.riskanalytics.core.packets.Packet;
@@ -26,27 +27,25 @@ import java.util.*;
  */
 public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectingModeStrategy {
 
-    public static final String SPLIT_BY_PERIOD = "SPLIT_PER_PERIOD";
-    public static final String SPLIT_BY_SOURCE = "SPLIT_PER_SOURCE";
     private static final String PERILS = "claimsGenerators";
     private static final String CONTRACTS = "reinsuranceContracts";
     private static final String SEGMENTS = "segments";
 
     private final Map<Component, Class> componentsExtensibleBy = new HashMap<Component, Class>();
 
-    private final List<String> splitModes;
+    private final List<DrillDownMode> drillDownModes;
     private final List<String> fieldFilter;
     private boolean displayUnderwritingYearOnly = true;
     private static final DateTimeFormatter formatter = DateTimeFormat.forPattern(PeriodLabelsUtil.PARAMETER_DISPLAY_FORMAT);
 
     // required for serialization by gridgain
     public SplitAndFilterCollectionModeStrategy() {
-        splitModes = new ArrayList<String>();
+        drillDownModes = new ArrayList<DrillDownMode>();
         fieldFilter = new ArrayList<String>();
     }
 
-    public SplitAndFilterCollectionModeStrategy(List<String> splitModes, List<String> fieldFilter) {
-        this.splitModes = splitModes;
+    public SplitAndFilterCollectionModeStrategy(List<DrillDownMode> drillDownModes, List<String> fieldFilter) {
+        this.drillDownModes = drillDownModes;
         this.fieldFilter = fieldFilter;
     }
 
@@ -73,14 +72,14 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
             addToMap(packet, path, resultMap);
         }
 
-        if (splitModes.contains(SPLIT_BY_SOURCE)) {
+        if (drillDownModes.contains(DrillDownMode.BY_SOURCE)) {
             if (packets.get(0) instanceof ClaimCashflowPacket) {
                 resultMap.putAll(splitBySourePathsForClaims(packets));
             } else if (packets.get(0) instanceof UnderwritingInfoPacket) {
                 resultMap.putAll(splitBySourePathsForUwInfos(packets));
             }
         }
-        if (splitModes.contains(SPLIT_BY_PERIOD)) {
+        if (drillDownModes.contains(DrillDownMode.BY_PERIOD)) {
             resultMap.putAll(splitByInceptionPeriodPaths(packets));
         }
         return resultMap;
@@ -291,11 +290,11 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
     @Override
     public String getIdentifier() {
         StringBuilder identifier = new StringBuilder("AGGREGATE_");
-        if (splitModes.size() == 0 && fieldFilter.size() == 0) {
+        if (drillDownModes.size() == 0 && fieldFilter.size() == 0) {
             identifier.append("NO-SPLIT_NO-FILTER").append("_");
         }
-        for (String splitMode : splitModes) {
-            identifier.append(splitMode).append("_");
+        for (DrillDownMode splitMode : drillDownModes) {
+            identifier.append(splitMode.name()).append("_");
         }
         for (String filter : fieldFilter) {
             identifier.append(filter).append("_");
@@ -309,4 +308,11 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
                 || FinancialsPacket.class.isAssignableFrom(packetClass);
     }
 
+    public List<DrillDownMode> getDrillDownModes() {
+        List<DrillDownMode> result = new ArrayList<DrillDownMode>();
+        for (DrillDownMode mode : drillDownModes) {
+            result.add(mode);
+        }
+        return result;
+    }
 }

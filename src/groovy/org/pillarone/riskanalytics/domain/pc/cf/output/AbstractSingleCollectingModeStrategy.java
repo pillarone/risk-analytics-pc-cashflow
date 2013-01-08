@@ -65,4 +65,5 @@ abstract public class AbstractSingleCollectingModeStrategy extends AbstractColle
         return filteredValuesToSave;
     }
 
+
 }

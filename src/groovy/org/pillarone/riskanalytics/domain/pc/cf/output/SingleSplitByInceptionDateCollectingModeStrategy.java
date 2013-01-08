@@ -21,7 +21,7 @@ import java.util.*;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class SingleSplitByInceptionDateCollectingModeStrategy extends AggregateSplitByInceptionDateCollectingModeStrategy implements ICollectingModeStrategy {
+public class SingleSplitByInceptionDateCollectingModeStrategy extends AggregateSplitByInceptionDateCollectingModeStrategy {
 
     protected static Log LOG = LogFactory.getLog(SingleSplitByInceptionDateCollectingModeStrategy.class);
 

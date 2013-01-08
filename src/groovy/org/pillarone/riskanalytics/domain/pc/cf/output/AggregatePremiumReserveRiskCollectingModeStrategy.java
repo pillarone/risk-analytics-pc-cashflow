@@ -10,7 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AggregatePremiumReserveRiskCollectingModeStrategy extends AggregateSplitByInceptionDateCollectingModeStrategy implements ICollectingModeStrategy {
+public class AggregatePremiumReserveRiskCollectingModeStrategy extends AggregateSplitByInceptionDateCollectingModeStrategy {
 
     protected static Log LOG = LogFactory.getLog(AggregatePremiumReserveRiskCollectingModeStrategy.class);
 

@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.pillarone.riskanalytics.core.output.DrillDownMode;
 import org.pillarone.riskanalytics.core.output.ICollectingModeStrategy;
 import org.pillarone.riskanalytics.core.output.PathMapping;
 import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
@@ -25,7 +26,7 @@ import java.util.*;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AggregateSplitByInceptionDateCollectingModeStrategy extends AbstractSplitCollectingModeStrategy implements ICollectingModeStrategy {
+public class AggregateSplitByInceptionDateCollectingModeStrategy extends AbstractSplitCollectingModeStrategy {
 
     protected static Log LOG = LogFactory.getLog(AggregateSplitByInceptionDateCollectingModeStrategy.class);
 
@@ -349,5 +350,9 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     public boolean isCompatibleWith(Class packetClass) {
         return super.isCompatibleWith(packetClass) || ContractFinancialsPacket.class.isAssignableFrom(packetClass)
                 || FinancialsPacket.class.isAssignableFrom(packetClass);
+    }
+
+    public List<DrillDownMode> getDrillDownModes() {
+        return DrillDownMode.getDrillDownModesByPeriod();
     }
 }
