@@ -315,4 +315,9 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         }
         return result;
     }
+
+    @Override
+    public Object[] getArguments() {
+        return new Object[]{drillDownModes, fieldFilter};
+    }
 }

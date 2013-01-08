@@ -224,4 +224,8 @@ abstract public class AbstractSplitCollectingModeStrategy implements ICollecting
     public boolean isCompatibleWith(Class packetClass) {
         return ClaimCashflowPacket.class.isAssignableFrom(packetClass) || UnderwritingInfoPacket.class.isAssignableFrom(packetClass);
     }
+
+    public Object[] getArguments() {
+        return new Object[0];
+    }
 }

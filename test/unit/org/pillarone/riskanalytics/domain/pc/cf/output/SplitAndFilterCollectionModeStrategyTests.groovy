@@ -128,4 +128,12 @@ class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
         setupStrategy([DrillDownMode.BY_PERIOD],['field1'])
         assert 'AGGREGATE_BY_PERIOD_field1' == strategy.identifier
     }
+
+    void testNewInstance() {
+        setupStrategy()
+        // calls the empty constructor.
+        strategy.class.newInstance(new Object[0])
+        // calls the constructor matching the given arguments
+        strategy.class.newInstance(strategy.arguments)
+    }
 }
