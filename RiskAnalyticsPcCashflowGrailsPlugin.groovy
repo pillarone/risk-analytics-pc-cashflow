@@ -102,7 +102,6 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new ClaimTypeSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new YieldCurveTableConstraints())
         ConstraintsFactory.registerConstraint(new SegmentPortion())
-        ConstraintsFactory.registerConstraint(new CoverMap())
 
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
         ValidatorRegistry.addValidator(new PatternStrategyValidator())
