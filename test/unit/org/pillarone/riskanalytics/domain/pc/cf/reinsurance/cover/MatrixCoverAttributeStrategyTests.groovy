@@ -71,9 +71,9 @@ class MatrixCoverAttributeStrategyTests extends GrailsUnitTestCase {
         setupParams([[''], [''], [''], [''], [''], ['AGGREGATED_EVENT']])
         MatrixCoverAttributeStrategy.RowFilter filter = new MatrixCoverAttributeStrategy.RowFilter(1, params)
         def source = new PacketList<ClaimCashflowPacket>()
-        def expectedPacket1 = new ClaimCashflowPacket(new ClaimRoot(10, ClaimType.AGGREGATED_EVENT, null, null), null)
+        def expectedPacket1 = new ClaimCashflowPacket(new ClaimRoot(0, ClaimType.AGGREGATED_EVENT, null, null), null)
         source.add(expectedPacket1)
-        def expectedPacket2 = new ClaimCashflowPacket(new ClaimRoot(20, ClaimType.AGGREGATED_EVENT, null, null), null)
+        def expectedPacket2 = new ClaimCashflowPacket(new ClaimRoot(0, ClaimType.AGGREGATED_EVENT, null, null), null)
         source.add(expectedPacket2)
         source.add(new ClaimCashflowPacket())
         source.add(new ClaimCashflowPacket())
@@ -120,13 +120,13 @@ class MatrixCoverAttributeStrategyTests extends GrailsUnitTestCase {
         assert 1 == filter.filter(source).size()
     }
 
-    void testMultipleParamLines() {
-        setupParams([['contract1',''], ['',''], ['',''], ['',''], ['',''], ['ANY','AGGREGATED_EVENT']])
+    void testMultipleParamLines_collectPacketsByDifferentCriterias() {
+        setupParams([['contract1',''], ['',''], ['',''], ['',''], ['',''], ['AGGREGATED_EVENT','ANY']])
         def source = new PacketList<ClaimCashflowPacket>()
         source.add(new ClaimCashflowPacket(marker: contract1))
         source.add(new ClaimCashflowPacket(marker: contract2))
         MatrixCoverAttributeStrategy strategy = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.MATRIX,['flexibleCover':params])
-        assert 1 == strategy.coveredClaims(source).size()
+        assert 2 == strategy.coveredClaims(source).size()
     }
 
 }

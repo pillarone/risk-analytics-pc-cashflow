@@ -103,7 +103,7 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
                         (segment == null || segment == claim.segment()) &&
                         (peril == null || peril == claim.peril()) &&
                         claimTypeMatches(claimTypeSelector, claim)) {
-                    result.add(claim);
+                    result.add(ClaimValidator.positiveNominalUltimate(claim));
                 }
             }
             source.removeAll(result);
