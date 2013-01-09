@@ -24,7 +24,7 @@ mappings = {
             "premiumWritten" "GIRA:underwritingSegments:outUnderwritingInfo:premiumWritten"
             "premiumPaid" "GIRA:underwritingSegments:outUnderwritingInfo:premiumPaid"
         }
-        "segmentos" {
+        "segments" {
             "totalOfAllSegments" {
                 "claimsGross" {
                     "ultimate" "GIRA:segments:outClaimsGross:ultimate", {
