@@ -58,9 +58,9 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
     protected PacketList<SingleValuePacket> outUpdatingOriginalFrequencyDraw = new PacketList<SingleValuePacket>(SingleValuePacket.class);
 
 
-    protected void doCalculation() {
+    protected void doCalculation(String phase) {
         try {
-//            if (provideClaims(phase)) {
+            if (provideClaims(phase)) {
             // A deal may commute before the end of the contract period. We may hence want to terminate claims generation
             // Depending on the outcome in the experience account.
             initIteration(periodStore, periodScope, PHASE_CLAIMS_CALCULATION);
@@ -96,10 +96,10 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
             checkCashflowClaims(claims, globalSanityChecks);
             setTechnicalProperties(claims);
             outClaims.addAll(claims);
-//            }
-//            else {
-//                prepareProvidingClaimsInNextPeriodOrNot(phase);
-//            }
+            }
+            else {
+                prepareProvidingClaimsInNextPeriodOrNot(phase);
+            }
         } catch (SimulationException e) {
             throw new SimulationException("Problem in claims generator in Iteration : "
                     + iterationScope.getCurrentIteration() + ". Period :" + periodScope.getCurrentPeriod()

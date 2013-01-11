@@ -33,7 +33,11 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
             ['flexibleCover': new ConstrainedMultiDimensionalParameter([[], [], [], [], [], []],
                     [CoverMap.CONTRACT_NET_OF, CoverMap.CONTRACT_CEDED_OF, CoverMap.LEGAL_ENTITY,
                      CoverMap.SEGMENTS, CoverMap.GENERATORS, CoverMap.LOSS_KIND_OF],
-                ConstraintsFactory.getConstraints(CoverMap.IDENTIFIER))]
+                ConstraintsFactory.getConstraints(CoverMap.IDENTIFIER)),
+            'benefitContracts': new ConstrainedMultiDimensionalParameter([[]],
+                    [ReinsuranceContractBasedOn.CONTRACT],
+                    ConstraintsFactory.getConstraints(ReinsuranceContractBasedOn.IDENTIFIER))]
+
     )
 
 
@@ -90,7 +94,8 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
                 break
             case CoverAttributeStrategyType.MATRIX:
                 coverStrategy = new MatrixCoverAttributeStrategy(
-                        flexibleCover: (ConstrainedMultiDimensionalParameter) parameters['flexibleCover'])
+                        flexibleCover: (ConstrainedMultiDimensionalParameter) parameters['flexibleCover'],
+                        benefitContracts: (ConstrainedMultiDimensionalParameter) parameters['benefitContracts'])
                 break
             default: throw new NotImplementedException("$type not implemented.")
         }
