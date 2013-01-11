@@ -2,10 +2,13 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import groovy.lang.GroovyObject;
+import groovy.lang.MetaClass;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.groovy.runtime.InvokerHelper;
 import org.joda.time.DateTime;
-import org.pillarone.riskanalytics.core.components.ComposedComponent;
+import org.pillarone.riskanalytics.core.components.MultiPhaseComposedComponent;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
@@ -43,7 +46,7 @@ import java.util.List;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-abstract public class AbstractClaimsGenerator extends ComposedComponent implements IPerilMarker, ICorrelationMarker {
+abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponent implements IPerilMarker, ICorrelationMarker, GroovyObject {
 
     static Log LOG = LogFactory.getLog(AbstractClaimsGenerator.class);
 
@@ -60,7 +63,7 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
     protected PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
     protected PacketList<SystematicFrequencyPacket> inEventFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket.class);
 
-//    protected PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState.class);
+    protected PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState.class);
     /**
      * don't assume any order in this channel
      */
@@ -266,17 +269,17 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
      * object to the environment.
      * @param phase
      */
-//    protected void prepareProvidingClaimsInNextPeriodOrNot(String phase) {
-//        if (phase.equals(PHASE_STORE_COMMUTATION_STATE)) {
-//            if (inCommutationState != null && inCommutationState.size() == 1) {
-//                CommutationState packet = inCommutationState.get(0);
-//                periodStore.put(COMMUTATION_STATE, packet, 1);
-//            } else {
-//                throw new SimulationException("Found different to one commutationState in inCommutationState. Period: "
-//                        + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
-//            }
-//        }
-//    }
+    protected void prepareProvidingClaimsInNextPeriodOrNot(String phase) {
+        if (phase.equals(PHASE_STORE_COMMUTATION_STATE)) {
+            if (inCommutationState != null && inCommutationState.size() == 1) {
+                CommutationState packet = inCommutationState.get(0);
+                periodStore.put(COMMUTATION_STATE, packet, 1);
+            } else {
+                throw new SimulationException("Found different to one commutationState in inCommutationState. Period: "
+                        + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
+            }
+        }
+    }
 
     /**
      * Adds a default CommutationState packet to the period store at the start of every iteration
@@ -343,20 +346,20 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
     }
 
 
-//    public void allocateChannelsToPhases() {
-////          Calculation channels --------------------------------------------------------------------------
-//        setTransmitterPhaseInput(inPatterns, PHASE_CLAIMS_CALCULATION);
-//        setTransmitterPhaseInput(inEventSeverities, PHASE_CLAIMS_CALCULATION);
-//        setTransmitterPhaseInput(inEventFrequencies, PHASE_CLAIMS_CALCULATION);
-//        setTransmitterPhaseInput(inFactors, PHASE_CLAIMS_CALCULATION);
-//        setTransmitterPhaseInput(inUnderwritingInfo, PHASE_CLAIMS_CALCULATION);
-//
-//        setTransmitterPhaseOutput(outClaims, PHASE_CLAIMS_CALCULATION);
-//        setTransmitterPhaseOutput(outOccurenceUltimateClaims, PHASE_CLAIMS_CALCULATION);
-//
-////          Commutation channels --------------------------------------------------------------------------
-//        setTransmitterPhaseInput(inCommutationState, PHASE_STORE_COMMUTATION_STATE);
-//    }
+    public void allocateChannelsToPhases() {
+//          Calculation channels --------------------------------------------------------------------------
+        setTransmitterPhaseInput(inPatterns, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inEventSeverities, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inEventFrequencies, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inFactors, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inUnderwritingInfo, PHASE_CLAIMS_CALCULATION);
+
+        setTransmitterPhaseOutput(outClaims, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseOutput(outOccurenceUltimateClaims, PHASE_CLAIMS_CALCULATION);
+
+//          Commutation channels --------------------------------------------------------------------------
+        setTransmitterPhaseInput(inCommutationState, PHASE_STORE_COMMUTATION_STATE);
+    }
 
     public PeriodScope getPeriodScope() {
         return periodScope;
@@ -438,13 +441,13 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
         this.globalUpdateDate = globalUpdateDate;
     }
 
-//    public PacketList<CommutationState> getInCommutationState() {
-//        return inCommutationState;
-//    }
-//
-//    public void setInCommutationState(PacketList<CommutationState> inCommutationState) {
-//        this.inCommutationState = inCommutationState;
-//    }
+    public PacketList<CommutationState> getInCommutationState() {
+        return inCommutationState;
+    }
+
+    public void setInCommutationState(PacketList<CommutationState> inCommutationState) {
+        this.inCommutationState = inCommutationState;
+    }
 
     public Integer getGlobalLastCoveredPeriod() {
         return globalLastCoveredPeriod;
@@ -501,4 +504,34 @@ abstract public class AbstractClaimsGenerator extends ComposedComponent implemen
     public void setIterationScope(IterationScope iterationScope) {
         this.iterationScope = iterationScope;
     }
+
+    // the following block has been added due to ART-983, while using Grails 1.3.7 with Groovy 1.7.8
+    // it might be removed in future Groovy versions
+
+    // never persist the MetaClass
+    private transient MetaClass metaClass;
+
+    public Object getProperty(String property) {
+        return getMetaClass().getProperty(this, property);
+    }
+
+    public void setProperty(String property, Object newValue) {
+        getMetaClass().setProperty(this, property, newValue);
+    }
+
+    public Object invokeMethod(String name, Object args) {
+        return getMetaClass().invokeMethod(this, name, args);
+    }
+
+    public MetaClass getMetaClass() {
+        if (metaClass == null) {
+            metaClass = InvokerHelper.getMetaClass(getClass());
+        }
+        return metaClass;
+    }
+
+    public void setMetaClass(MetaClass metaClass) {
+        this.metaClass = metaClass;
+    }
+    // ----------------------------- end of ART-983 work-around ----------------------------------------
 }

@@ -51,16 +51,14 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
             GroovyUtils.convertToListOfList(new Object[]{0d, 0d}), Arrays.asList(REAL_PERIOD, CLAIM_VALUE),
             ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER));
 
-    @Override
-//    protected void doCalculation(String phase) {
-    protected void doCalculation() {
+    protected void doCalculation(String phase) {
         try {
 //        A deal may commute before the end of the contract period. We may hence want to terminate claims generation
 //        Depending on the outcome in the experience account.
             initIteration(periodStore, periodScope, PHASE_CLAIMS_CALCULATION);
 
 //        In this phase check the commutation state from last period. If we are not commuted then calculate claims.
-//            if (provideClaims(phase)) {
+            if (provideClaims(phase)) {
                 IPeriodCounter periodCounter = periodScope.getPeriodCounter();
                 List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
                 List<GrossClaimRoot> claimsAfterSplit = new ArrayList<GrossClaimRoot>();
@@ -92,10 +90,10 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 doCashflowChecks(claims, claimsAfterSplit, baseClaims);
                 setTechnicalProperties(claims);
                 outClaims.addAll(claims);
-//            }
-//            else {
-//                prepareProvidingClaimsInNextPeriodOrNot(phase);
-//            }
+            }
+            else {
+                prepareProvidingClaimsInNextPeriodOrNot(phase);
+            }
         }
         catch (SimulationException e) {
             throw new SimulationException("Problem in claims generator in iteration : "
