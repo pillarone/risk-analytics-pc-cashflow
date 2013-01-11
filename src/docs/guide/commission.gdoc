@@ -1,0 +1,24 @@
+h3. Commission
+
+h4. Fix Commission
+The fixed commission ratio is applied on the ceded paid premium.
+{formula}commission = gross premium * quota share * commission ratio{formula}
+
+h4. Sliding Commission
+The sliding commission depends on the loss ratio. This loss ratio is calculated similar as for the loss participation.
+Basically different fix commission ratios are defined for different loss ratios. In between the commission ratio is
+linearly interpolated. The first commission rate is applied for any loss ratio below the first defined. The last commission
+rate is applied for any loss ratio above the last defined loss ratio.
+
+
+Additionally it is possible to select the base for the loss ratio calculation: initial (ultimate claim)/premium written,
+reported claim/premium written and paid claim/paid premium are possible.<br>
+This commission is split up in a fixed and variable part. The fixed part is calculated by multiplying the commission rate
+for the max defined loss ratio with the ceded premium. (Commission rates have to be decreasing).
+
+h4. Profit Commission
+As described by its name this method depends on the profit of a contract. The fixed part of this commission is calculated
+by multiplying the fixed commission rate parameter with the ceded premium. The variable part applies the profit participation
+rate on the positive 'profit' calculated as
+{formula}profit r/i result = ceded premium - (1 - loss ratio - commission rate fixed - cost ratio){formula}
+The profit is reduced by a loss carry forward. The loss ratio is calculated as described in the loss participation section.
