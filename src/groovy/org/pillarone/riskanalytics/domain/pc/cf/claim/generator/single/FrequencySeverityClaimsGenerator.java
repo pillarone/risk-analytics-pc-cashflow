@@ -128,6 +128,12 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
         }
     }
 
+    public void allocateChannelsToPhases() {
+        super.allocateChannelsToPhases();
+        setTransmitterPhaseOutput(outUpdatingUniformDraw, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseOutput(outUpdatingOriginalFrequencyDraw, PHASE_CLAIMS_CALCULATION);
+    }
+
     public FrequencySeverityClaimsModel getSubClaimsModel() {
         return subClaimsModel;
     }
