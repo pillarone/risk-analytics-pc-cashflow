@@ -25,7 +25,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.*;
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.single.ISingleActualClaimsStrategy;
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints;
 
 import java.util.ArrayList;
@@ -76,7 +75,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                                 severityFactors, parmParameterizationBasis, this, periodScope);
                     }
                     baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter,
-                            globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), DAYS_360, parmPayoutPatternBase, globalSanityChecks);
+                            globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), US_DAYS_360, parmPayoutPatternBase, globalSanityChecks);
                     checkBaseClaims(baseClaims, globalSanityChecks, iterationScope);
                     runoffFactors = new ArrayList<Factors>();
                     List<GrossClaimRoot> grossClaimRoots = baseClaimsOfCurrentPeriodAdjustedPattern(baseClaims, parmPayoutPattern, parmActualClaims,
@@ -122,7 +121,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
             int currentPeriod = periodScope.getCurrentPeriod();
             for (ClaimRoot baseClaim : baseClaims) {
                 GrossClaimRoot grossClaimRoot = parmActualClaims.claimWithAdjustedPattern(baseClaim, currentPeriod,
-                        payoutPattern, periodScope, globalUpdateDate, DAYS_360, globalSanityChecks, base);
+                        payoutPattern, periodScope, globalUpdateDate, US_DAYS_360, globalSanityChecks, base);
                 grossClaimRoots.add(grossClaimRoot);
             }
         }

@@ -13,7 +13,6 @@ import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase;
-import org.pillarone.riskanalytics.core.components.MultiPhaseComposedComponent;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
@@ -31,7 +30,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.IAggregateActualClaimsStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.single.ISingleActualClaimsStrategy;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.marker.ICorrelationMarker;
@@ -82,7 +80,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     public static final String PHASE_CLAIMS_CALCULATION = "Claims Calculation";
     public static final String PHASE_STORE_COMMUTATION_STATE = "Store Commutation State";
 
-    public static final DateTimeUtilities.Days360 DAYS_360 = DateTimeUtilities.Days360.US;
+    public static final DateTimeUtilities.Days360 US_DAYS_360 = DateTimeUtilities.Days360.US;
 
     @Override
     public void wire() {
@@ -108,7 +106,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
             int currentPeriod = periodScope.getCurrentPeriod();
             for (ClaimRoot baseClaim : baseClaims) {
                 GrossClaimRoot grossClaimRoot = parmActualClaims.claimWithAdjustedPattern(baseClaim, currentPeriod,
-                        payoutPattern, periodScope, globalUpdateDate, DAYS_360, globalSanityChecks, base);
+                        payoutPattern, periodScope, globalUpdateDate, US_DAYS_360, globalSanityChecks, base);
                 grossClaimRoots.add(grossClaimRoot);
             }
         }

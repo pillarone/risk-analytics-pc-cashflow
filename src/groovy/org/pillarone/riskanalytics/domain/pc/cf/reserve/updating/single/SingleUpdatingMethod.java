@@ -29,7 +29,7 @@ public enum SingleUpdatingMethod {
     ORIGINAL_ULTIMATE {
         @Override
         public ClaimAndRandomDraws filterIBNRClaims(List<ClaimRoot> baseClaims, DateTime updateDate, DateTime lastReportedDate,
-                                                    PatternPacket updatingPattern, IPeriodCounter periodCounter) {
+                                                    PatternPacket updatingPattern, IPeriodCounter periodCounter, DateTimeUtilities.Days360 days360) {
             return new ClaimAndRandomDraws(baseClaims);
         }
     },
@@ -39,12 +39,13 @@ public enum SingleUpdatingMethod {
     REPORTED_BF {
         @Override
         public ClaimAndRandomDraws filterIBNRClaims(List<ClaimRoot> baseClaims, DateTime updateDate, DateTime lastReportedDate,
-                                                    PatternPacket updatingPattern, IPeriodCounter periodCounter) {
+                                                    PatternPacket updatingPattern, IPeriodCounter periodCounter, DateTimeUtilities.Days360 days360) {
             // adjusted implementation taken form BornhuetterFergusonMethodReportedFrequency.requiredSimulatedClaims()
             if (baseClaims == null || baseClaims.isEmpty()) {
                 return new ClaimAndRandomDraws(new ArrayList<ClaimRoot>());
             }
-            double monthsDeveloped = Days.daysBetween(periodCounter.getCurrentPeriodStart(), lastReportedDate).dividedBy(30).getDays();
+
+            double monthsDeveloped = ((double) days360.days360(periodCounter.getCurrentPeriodStart(), lastReportedDate)) / 30d ;
             double elapsedMonths = DateTimeUtilities.deriveNumberOfMonths(periodCounter.getCurrentPeriodStart().withDayOfMonth(1), lastReportedDate);
             Integer nextReportedIndex = updatingPattern.thisOrNextPayoutIndex(elapsedMonths);
             if (nextReportedIndex == null){
@@ -73,7 +74,7 @@ public enum SingleUpdatingMethod {
     FILTER_ON_CLAIMS_OCCURRENCE_DATE {
         @Override
         public ClaimAndRandomDraws filterIBNRClaims(List<ClaimRoot> baseClaims, DateTime updateDate, DateTime lastReportedDate,
-                                                    PatternPacket updatingPattern, IPeriodCounter periodCounter) {
+                                                    PatternPacket updatingPattern, IPeriodCounter periodCounter, DateTimeUtilities.Days360 days360) {
             List<ClaimRoot> filteredClaims = new ArrayList<ClaimRoot>();
             for (ClaimRoot claim : baseClaims) {
                 if (!claim.getOccurrenceDate().isBefore(updateDate)) {
@@ -85,7 +86,7 @@ public enum SingleUpdatingMethod {
     };
 
     abstract public ClaimAndRandomDraws filterIBNRClaims(List<ClaimRoot> baseClaims, DateTime updateDate, DateTime lastReportedDate,
-                                                         PatternPacket updatingPattern, IPeriodCounter periodCounter);
+                                                         PatternPacket updatingPattern, IPeriodCounter periodCounter, DateTimeUtilities.Days360 days360);
 
     public static class ClaimAndRandomDraws {
         private final List<ClaimRoot> updatedClaims;

@@ -47,8 +47,12 @@ public class NoUpdatingMethodology extends AbstractParameterObject implements IS
         }
         List<GrossClaimRoot> claims = new ArrayList<GrossClaimRoot>();
         for (ClaimRoot baseClaim : baseClaims) {
-            claims.add(new GrossClaimRoot(baseClaim, new PatternPacket.TrivialPattern(IPayoutPatternMarker.class),
-                                                     new PatternPacket.TrivialPattern(IReportingPatternMarker.class)));
+//            This pushes the pattern calculation through the updating code. It should result in a single source of pattern problems, maybe a small performance impact.
+            DateTime startDateforPatterns = base.startDateForPayouts(baseClaim, periodCounter.getCurrentPeriodStart(), null);
+            PatternPacket packet = base.patternAccordingToPayoutBase(payoutPattern, startDateforPatterns, updateDate);
+            claims.add(new GrossClaimRoot(baseClaim, packet,
+                    new PatternPacket.TrivialPattern(IReportingPatternMarker.class),
+                    startDateforPatterns));
         }
         return new GrossClaimAndRandomDraws(claims, new SingleUpdatingMethod.ClaimAndRandomDraws(new ArrayList<ClaimRoot>()));
     }
