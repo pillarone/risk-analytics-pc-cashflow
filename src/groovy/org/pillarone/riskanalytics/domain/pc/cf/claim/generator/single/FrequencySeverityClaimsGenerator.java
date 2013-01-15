@@ -58,9 +58,9 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
     protected PacketList<SingleValuePacket> outUpdatingOriginalFrequencyDraw = new PacketList<SingleValuePacket>(SingleValuePacket.class);
 
 
-    protected void doCalculation() {
+    protected void doCalculation(String phase) {
         try {
-//            if (provideClaims(phase)) {
+            if (provideClaims(phase)) {
             // A deal may commute before the end of the contract period. We may hence want to terminate claims generation
             // Depending on the outcome in the experience account.
             initIteration(periodStore, periodScope, PHASE_CLAIMS_CALCULATION);
@@ -85,7 +85,7 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
                 checkBaseClaims(baseClaims, globalSanityChecks, iterationScope);
                 PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
                 ISingleUpdatingMethodologyStrategy.GrossClaimAndRandomDraws updatingResult = parmUpdatingMethodology.updatingClaims(baseClaims, parmActualClaims,
-                        periodCounter, globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), DAYS_360,
+                        periodCounter, globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), US_DAYS_360,
                         parmPayoutPatternBase, payoutPattern, globalSanityChecks);
                 randomDrawInfo(updatingResult);
                 runoffFactors = new ArrayList<Factors>();
@@ -96,10 +96,10 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
             checkCashflowClaims(claims, globalSanityChecks);
             setTechnicalProperties(claims);
             outClaims.addAll(claims);
-//            }
-//            else {
-//                prepareProvidingClaimsInNextPeriodOrNot(phase);
-//            }
+            }
+            else {
+                prepareProvidingClaimsInNextPeriodOrNot(phase);
+            }
         } catch (SimulationException e) {
             throw new SimulationException("Problem in claims generator in Iteration : "
                     + iterationScope.getCurrentIteration() + ". Period :" + periodScope.getCurrentPeriod()
@@ -126,6 +126,14 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
             super.checkBaseClaims(baseClaims, sanityChecks, iterationScope);
             poissonDrawInfo(baseClaims.size());
         }
+    }
+
+    @Override
+    public void allocateChannelsToPhases() {
+        super.allocateChannelsToPhases();
+        setTransmitterPhaseOutput(outUpdatingOriginalFrequencyDraw, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseOutput(outUpdatingUniformDraw, PHASE_CLAIMS_CALCULATION);
+
     }
 
     public FrequencySeverityClaimsModel getSubClaimsModel() {

@@ -14,7 +14,7 @@ public interface ICoverAttributeStrategy extends IParameterObject {
     /**
      * Make sure to use an appropriate ClaimValidator method before adding a claim to the covered list.
      * This is especially crucial if ceded claims are covered!
-     * @param source
+     * @param source is modified and contains the same elements as the returned list
      * @return
      */
     List<ClaimCashflowPacket> coveredClaims(List<ClaimCashflowPacket> source);

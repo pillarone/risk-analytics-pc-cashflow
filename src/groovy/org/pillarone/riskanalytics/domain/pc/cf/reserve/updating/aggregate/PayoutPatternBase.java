@@ -27,7 +27,7 @@ public enum PayoutPatternBase {
          * @return
          */
         @Override
-        PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
+        public PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
             final NavigableMap<DateTime, Double> theMap = originalPattern.absolutePattern(startDateForPayouts, true);
             final SortedMap<DateTime, Double> theMapAfterUpdate = theMap.tailMap(updateDate);
             double normalisingFactor = DateTimeUtilities.sumDateTimeDoubleMapByDateRange(theMapAfterUpdate, updateDate.minusDays(1), theMap.lastKey().plusDays(1));
@@ -67,7 +67,7 @@ public enum PayoutPatternBase {
 
     CLAIM_OCCURANCE_DATE {
         @Override
-        PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
+        public PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
             return PatternUtils.adjustForNoClaimUpdates(originalPattern, startDateForPayouts, updateDate);
         }
 
@@ -87,7 +87,7 @@ public enum PayoutPatternBase {
 
     PERIOD_START_DATE {
         @Override
-        PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
+        public PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
             return PatternUtils.adjustForNoClaimUpdates(originalPattern, startDateForPayouts, updateDate);
         }
 
@@ -98,7 +98,7 @@ public enum PayoutPatternBase {
     };
 
     //
-    abstract PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate);
+    public abstract PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate);
 
     public abstract DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate);
 

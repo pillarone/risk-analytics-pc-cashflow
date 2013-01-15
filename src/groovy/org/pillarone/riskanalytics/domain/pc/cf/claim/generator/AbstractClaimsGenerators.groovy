@@ -14,39 +14,37 @@ import org.pillarone.riskanalytics.core.components.DynamicComposedComponent
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-//public abstract class AbstractClaimsGenerators extends DynamicMultiPhaseComposedComponent {
-public abstract class AbstractClaimsGenerators extends DynamicComposedComponent {
+public abstract class AbstractClaimsGenerators extends DynamicMultiPhaseComposedComponent {
 
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
     PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket)
     PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
 
-//    PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState)
+    PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState)
 
-//    protected void doCalculation(String phase) {
-//        for (Component component : componentList) {
-//            ((MultiPhaseComposedComponent) component).doCalculation phase
-//        }
-//    }
+    protected void doCalculation(String phase) {
+        for (Component component : componentList) {
+            ((MultiPhaseComposedComponent) component).doCalculation phase
+        }
+    }
 
-//    void allocateChannelsToPhases() {
-//        setTransmitterPhaseInput(inUnderwritingInfo, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
-//        setTransmitterPhaseInput(inFactors, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
-//        setTransmitterPhaseInput(inPatterns, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
-//
-//        setTransmitterPhaseOutput(outClaims, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
-//
-//        setTransmitterPhaseInput(inCommutationState, AbstractClaimsGenerator.PHASE_STORE_COMMUTATION_STATE )
-//
-//    }
+    void allocateChannelsToPhases() {
+        setTransmitterPhaseInput(inUnderwritingInfo, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
+        setTransmitterPhaseInput(inFactors, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
+        setTransmitterPhaseInput(inPatterns, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
+
+        setTransmitterPhaseOutput(outClaims, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
+
+        setTransmitterPhaseInput(inCommutationState, AbstractClaimsGenerator.PHASE_STORE_COMMUTATION_STATE )
+    }
 
     @Override
     void wire() {
         replicateInChannels this, 'inUnderwritingInfo'
         replicateInChannels this, 'inFactors'
         replicateInChannels this, 'inPatterns'
-//        replicateInChannels this, 'inCommutationState'
+        replicateInChannels this, 'inCommutationState'
 
         replicateOutChannels this, 'outClaims'
     }

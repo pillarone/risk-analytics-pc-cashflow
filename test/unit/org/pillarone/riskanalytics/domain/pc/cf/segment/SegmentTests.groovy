@@ -52,14 +52,17 @@ class SegmentTests extends GroovyTestCase {
     PeriodScope periodScope = iterationScope.periodScope
     PeriodStore periodStore
 
-    Segments segments = new Segments()
-    Segment segment = new Segment()
+//    Segments segments = new Segments()
+    Segment segment //= new Segment()
     Discounting discounting
 
     ClaimsGenerator motorClaimsGenerator = new ClaimsGenerator(name: 'subMotor')
     ClaimsGenerator marineClaimsGenerator = new ClaimsGenerator(name: 'subMarine')
     // is ignored as it is not part of included claims generators
     ClaimsGenerator paClaimsGenerator = new ClaimsGenerator(name: 'subPersonalAccident')
+
+    RiskBands motorRisk = new RiskBands(name: 'subMotor')
+    RiskBands marineRisk = new RiskBands(name: 'subMarine')
 
     ClaimCashflowPacket marine1000 = getClaimCashflowPacket(null, -1000, -200, updateDate1, updateDate1,
             true, periodScope, marineClaimsGenerator)
@@ -92,22 +95,12 @@ class SegmentTests extends GroovyTestCase {
                         DeterministicIndexTableConstraints.COLUMN_TITLES,
                         ConstraintsFactory.getConstraints(DeterministicIndexTableConstraints.IDENTIFIER))]))
 
-        segment.iterationScope = iterationScope
         iterationScope.numberOfPeriods = 2
-        segment.periodStore = new PeriodStore(segment.iterationScope.periodScope)
-        segment.parmClaimsPortions = new ConstrainedMultiDimensionalParameter(
-                [['subMarine', 'subMotor'], [1d, 0.5d]], [Segment.PERIL, Segment.PORTION],
-                ConstraintsFactory.getConstraints(PerilPortion.IDENTIFIER))
-        segment.parmUnderwritingPortions = new ConstrainedMultiDimensionalParameter(
-                [['subMarine', 'subMotor'], [1d, 0.6d]], [Segment.UNDERWRITING, Segment.PORTION],
-                ConstraintsFactory.getConstraints(UnderwritingPortion.IDENTIFIER))
-        segment.parmReservesPortions = new ConstrainedMultiDimensionalParameter(
-                [['subMarineReserve', 'subMotorReserve'], [1d, 0.5d]], [Segment.RESERVE, Segment.PORTION],
-                ConstraintsFactory.getConstraints(ReservePortion.IDENTIFIER))
-        ComboBoxTableMultiDimensionalParameter discountComboBox = new ComboBoxTableMultiDimensionalParameter(
-                ["subDiscountIndex"], ["Discount Index"], IDiscountMarker)
-        discountComboBox.comboBoxValues.put('subDiscountIndex', discounting)
-        segment.setParmDiscounting(discountComboBox)
+        segment = TestSegment.get('segment', iterationScope,
+                [(motorClaimsGenerator): 0.5d, (marineClaimsGenerator): 1d],
+                [(marineRisk): 1d, (motorRisk): 0.6d],
+                [(marineReservesGenerator): 1d, (motorReservesGenerator): 0.5d],
+                 discounting)
 
         WiringUtils.use(WireCategory) {
             segment.inFactors = discounting.outFactors
@@ -120,13 +113,11 @@ class SegmentTests extends GroovyTestCase {
     /** apply weight for motor claim, ignore personal accident claim, net calculation        */
     void testUsage() {
 
-        RiskBands marineRisk = new RiskBands(name: 'subMarine')
         UnderwritingInfoPacket marineUwInfo600 = new UnderwritingInfoPacket(
                 premiumWritten: 600, premiumPaid: 500, numberOfPolicies: 10, riskBand: marineRisk
         )
         marineUwInfo600.exposure = new ExposureInfo(new DateTime(2011, 1, 1, 0,0,0,0), 0, 10000, 15000, ExposureBase.ABSOLUTE)
 
-        RiskBands motorRisk = new RiskBands(name: 'subMotor')
         UnderwritingInfoPacket motorUwInfo450 = new UnderwritingInfoPacket(
                 premiumWritten: 450, premiumPaid: 400, numberOfPolicies: 5, riskBand: motorRisk
         )
