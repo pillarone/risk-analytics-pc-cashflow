@@ -14,6 +14,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntity;
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ICoverAttributeStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixCoverAttributeStrategy;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
@@ -41,11 +42,15 @@ public abstract class MultiCounterPartyBaseReinsuranceContract extends BaseReins
     private ICoverAttributeStrategy parmCover = CoverAttributeStrategyType.getDefault();
 
 
-    /** This object is filled with the initial counter party factors according to parmReinsurers */
+    /**
+     * This object is filled with the initial counter party factors according to parmReinsurers
+     */
     protected CounterPartyState counterPartyFactorsInit;
-    /** Contains the covered ratio per counter party and date for a whole iteration. Before every iteration it is re-filled
-     *  according to counterPartyFactorsInit. Whenever a default occurs, the factor of that specific counter party and
-     *  the overall factor have to be adjusted (updateCounterPartyFactors()). */
+    /**
+     * Contains the covered ratio per counter party and date for a whole iteration. Before every iteration it is re-filled
+     * according to counterPartyFactorsInit. Whenever a default occurs, the factor of that specific counter party and
+     * the overall factor have to be adjusted (updateCounterPartyFactors()).
+     */
     protected CounterPartyState counterPartyFactors;
 
 
@@ -56,7 +61,9 @@ public abstract class MultiCounterPartyBaseReinsuranceContract extends BaseReins
         splitCededUnderwritingInfoByCounterParty();
     }
 
-    /** initialize counterPartyFactorsInit */
+    /**
+     * initialize counterPartyFactorsInit
+     */
     @Override
     protected void initSimulation() {
         if (firstIterationAndPeriod()) {
@@ -71,7 +78,9 @@ public abstract class MultiCounterPartyBaseReinsuranceContract extends BaseReins
         }
     }
 
-    /** reset counterPartyFactors */
+    /**
+     * reset counterPartyFactors
+     */
     @Override
     protected void initIteration() {
         if (iterationScope.getPeriodScope().isFirstPeriod()) {
@@ -102,7 +111,9 @@ public abstract class MultiCounterPartyBaseReinsuranceContract extends BaseReins
      * filter according to covered claims generators, segments and companies (parmCover)
      */
     protected void coverFilter() {
-        parmCover.coveredClaims(inClaims);
+        if (!(parmCover instanceof MatrixCoverAttributeStrategy && ((MatrixCoverAttributeStrategy) parmCover).mergerRequired())) {
+            parmCover.coveredClaims(inClaims);
+        }
         parmCover.coveredUnderwritingInfo(inUnderwritingInfo, inClaims);
     }
 
@@ -113,7 +124,7 @@ public abstract class MultiCounterPartyBaseReinsuranceContract extends BaseReins
 
     /**
      * This method fills the outClaimsInward channel if it is wired.
-     * Whereas the outClaimsCeded channel contains the total ceded claim, the outClaimsInward channel needs the ceded 
+     * Whereas the outClaimsCeded channel contains the total ceded claim, the outClaimsInward channel needs the ceded
      * claim splitted up by counter party by applying the factors provided by counterPartyFactors. The sign is reverted.
      */
     private void splitCededClaimsByCounterParty() {
@@ -132,8 +143,8 @@ public abstract class MultiCounterPartyBaseReinsuranceContract extends BaseReins
 
     /**
      * This method fills the outUnderwritingInfoInward channel if it is wired.
-     * Whereas the outUnderwritingInfoInward channel contains the total ceded claim, the outUnderwritingInfoCeded channel 
-     * needs the ceded claim splitted up by counter party by applying the factors provided by counterPartyFactors. The 
+     * Whereas the outUnderwritingInfoInward channel contains the total ceded claim, the outUnderwritingInfoCeded channel
+     * needs the ceded claim splitted up by counter party by applying the factors provided by counterPartyFactors. The
      * sign is reverted.
      */
     private void splitCededUnderwritingInfoByCounterParty() {

@@ -8,9 +8,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -67,6 +65,16 @@ public class ClaimUtils {
         return summedClaims;
     }
 
+    public static ClaimCashflowPacket findClaimByBaseClaim(List<ClaimCashflowPacket> claims, IClaimRoot baseClaim) {
+        for (ClaimCashflowPacket claim : claims) {
+            if (claim.getBaseClaim().equals(baseClaim)) {
+                return claim;
+            }
+        }
+        return null;
+    }
+
+    //TODO (dbr, sku) use method returning a map here. when doing so, check if test : AggregateSplitPerSourceCollectingModeStrategyTests works.
     public static List<ClaimCashflowPacket> aggregateByBaseClaim(List<ClaimCashflowPacket> claims) {
         List<ClaimCashflowPacket> aggregateByBaseClaim = new ArrayList<ClaimCashflowPacket>();
         ListMultimap<IClaimRoot, ClaimCashflowPacket> claimsByBaseClaim = ArrayListMultimap.create();
@@ -121,6 +129,68 @@ public class ClaimUtils {
                 aggregateClaim.setAppliedIndexValue(appliedIndex);
                 applyMarkers(claims.get(0), aggregateClaim);
                 aggregateByBaseClaim.add(aggregateClaim);
+            }
+        }
+        return aggregateByBaseClaim;
+    }
+
+    /**
+     * @param claims
+     * @return key: original keyClaim, value aggregated claims
+     */
+    public static Map<IClaimRoot, ClaimCashflowPacket> aggregateByBaseClaimGroupByKeyClaim(List<ClaimCashflowPacket> claims) {
+        Map<IClaimRoot, ClaimCashflowPacket> aggregateByBaseClaim = new HashMap<IClaimRoot, ClaimCashflowPacket>();
+        ListMultimap<IClaimRoot, ClaimCashflowPacket> claimsByBaseClaim = ArrayListMultimap.create();
+        for (ClaimCashflowPacket claim : claims) {
+            claimsByBaseClaim.put(claim.getBaseClaim(), claim);
+        }
+        for (Collection<ClaimCashflowPacket> claimsWithSameBaseClaim : claimsByBaseClaim.asMap().values()) {
+            ClaimCashflowPacket firstClaim = claimsWithSameBaseClaim.iterator().next();
+            if (claimsWithSameBaseClaim.size() == 1) {
+                aggregateByBaseClaim.put(firstClaim.getKeyClaim(), firstClaim);
+            } else {
+                double ultimate = 0;
+                double nominalUltimate = 0;
+                double paidIncremental = 0;
+                double paidCumulated = 0;
+                double reportedIncremental = 0;
+                double reportedCumulated = 0;
+                DateTime mostRecentClaimUpdate = null;
+                double latestReserves = 0;
+                double appliedIndex = 1;
+                double changeInReservesIndexed = 0;
+                double changeInIBNRIndexed = 0;
+                for (ClaimCashflowPacket claim : claimsWithSameBaseClaim) {
+                    ultimate += claim.ultimate();
+                    nominalUltimate = claim.nominalUltimate();  // don't sum up as every CCP contains the same value!
+                    paidIncremental += claim.getPaidIncrementalIndexed();
+                    reportedIncremental += claim.getReportedIncrementalIndexed();
+                    appliedIndex *= claim.getAppliedIndexValue();
+                    if (mostRecentClaimUpdate == null || claim.getUpdateDate().isAfter(mostRecentClaimUpdate)) {
+                        mostRecentClaimUpdate = claim.getUpdateDate();
+                        reportedCumulated = claim.getReportedCumulatedIndexed();
+                        paidCumulated = claim.getPaidCumulatedIndexed();
+                        latestReserves = claim.reservedIndexed();
+                        changeInReservesIndexed += claim.getChangeInReservesIndexed();
+                        changeInIBNRIndexed += claim.getChangeInIBNRIndexed();
+                    }
+                }
+                IClaimRoot baseClaim = null;
+                if (claims.get(0).getBaseClaim() instanceof GrossClaimRoot) {
+                    baseClaim = new GrossClaimRoot((GrossClaimRoot) claims.get(0).getBaseClaim());
+                } else {
+                    baseClaim = new ClaimRoot(ultimate, claims.get(0).getBaseClaim());
+                }
+                int updatePeriod = 0;
+                if (claims.get(0).getUpdatePeriod() != null) {
+                    updatePeriod = claims.get(0).getUpdatePeriod();
+                }
+                ClaimCashflowPacket aggregateClaim = new ClaimCashflowPacket(baseClaim, ultimate, nominalUltimate,
+                        paidIncremental, paidCumulated, reportedIncremental, reportedCumulated, latestReserves,
+                        changeInReservesIndexed, changeInIBNRIndexed, null, mostRecentClaimUpdate, updatePeriod);
+                aggregateClaim.setAppliedIndexValue(appliedIndex);
+                applyMarkers(claims.get(0), aggregateClaim);
+                aggregateByBaseClaim.put(firstClaim.getKeyClaim(), aggregateClaim);
             }
         }
         return aggregateByBaseClaim;
@@ -195,8 +265,12 @@ public class ClaimUtils {
      */
     public static ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, ClaimStorage storage, double scaleFactorUltimate,
                                                     double scaleFactorReported, double scaleFactorPaid, boolean adjustExposureInfo) {
-        if (scaleFactorReported == -0) { scaleFactorReported = 0; }
-        if (scaleFactorPaid == -0) { scaleFactorPaid = 0; }
+        if (scaleFactorReported == -0) {
+            scaleFactorReported = 0;
+        }
+        if (scaleFactorPaid == -0) {
+            scaleFactorPaid = 0;
+        }
         storage.lazyInitCededClaimRoot(scaleFactorUltimate);
         double cededPaidIncremental = grossClaim.getPaidIncrementalIndexed() * scaleFactorPaid;
         double cededReportedIncremental = grossClaim.getReportedIncrementalIndexed() * scaleFactorReported;
@@ -212,7 +286,7 @@ public class ClaimUtils {
     }
 
     public static ClaimCashflowPacket cededClaim(ClaimCashflowPacket grossClaim, ClaimStorage storage, double cededUltimate,
-                                                    double cededReportedCummulated, double cededPaidCummulated, boolean adjustExposureInfo) {
+                                                 double cededReportedCummulated, double cededPaidCummulated, boolean adjustExposureInfo) {
         double scaleFactorUltimate = cededUltimate / grossClaim.developedUltimate();
         storage.lazyInitCededClaimRoot(scaleFactorUltimate);
         storage.set(cededUltimate, BasedOnClaimProperty.ULTIMATE);
@@ -249,8 +323,10 @@ public class ClaimUtils {
      * @return
      */
     public static ClaimCashflowPacket getCededClaimReportedAbsolute(ClaimCashflowPacket grossClaim, ClaimStorage storage, double scaleFactorUltimate,
-                                                    double cededValueReported, double scaleFactorPaid, boolean adjustExposureInfo) {
-        if (scaleFactorPaid == -0) { scaleFactorPaid = 0; }
+                                                                    double cededValueReported, double scaleFactorPaid, boolean adjustExposureInfo) {
+        if (scaleFactorPaid == -0) {
+            scaleFactorPaid = 0;
+        }
         storage.lazyInitCededClaimRoot(scaleFactorUltimate);
         double cededPaidIncremental = grossClaim.getPaidIncrementalIndexed() * scaleFactorPaid;
         storage.update(grossClaim.ultimate() * scaleFactorUltimate, BasedOnClaimProperty.ULTIMATE);
@@ -293,38 +369,36 @@ public class ClaimUtils {
         }
     }
 
-    public static ClaimCashflowPacket getNetClaim(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim, 
+    public static ClaimCashflowPacket getNetClaim(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim,
                                                   IClaimRoot netBaseClaim, IReinsuranceContractMarker contractMarker) {
         if (cededClaim == null || cededClaim.getUpdateDate() == null) {
             ClaimCashflowPacket netClaim = (ClaimCashflowPacket) grossClaim.clone();
             netClaim.setMarker(contractMarker);
             return netClaim;
-        }
-        else if (grossClaim == null) {
+        } else if (grossClaim == null) {
             DateTime occurrenceDate = cededClaim.getOccurrenceDate();
             IClaimRoot baseClaim = new ClaimRoot(0, ClaimType.AGGREGATED, occurrenceDate, occurrenceDate);
             return new ClaimCashflowPacket(baseClaim, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, occurrenceDate, cededClaim.getUpdatePeriod());
-        }
-        else {
+        } else {
             boolean isProportionalContract = cededClaim.reinsuranceContract() != null && cededClaim.reinsuranceContract().isProportionalContract();
             double factor = 0;
             ExposureInfo netExposureInfo = isProportionalContract && grossClaim.getExposureInfo() != null
                     ? grossClaim.getExposureInfo().withScale(factor) : grossClaim.getExposureInfo();
             ClaimCashflowPacket netClaim = new ClaimCashflowPacket(
-                netBaseClaim,
-                grossClaim.getKeyClaim(),
-                grossClaim.ultimate() + cededClaim.ultimate(),
-                grossClaim.nominalUltimate() + cededClaim.nominalUltimate(),
-                grossClaim.getPaidIncrementalIndexed() + cededClaim.getPaidIncrementalIndexed(),
-                grossClaim.getPaidCumulatedIndexed() + cededClaim.getPaidCumulatedIndexed(),
-                grossClaim.getReportedIncrementalIndexed() + cededClaim.getReportedIncrementalIndexed(),
-                grossClaim.getReportedCumulatedIndexed() + cededClaim.getReportedCumulatedIndexed(),
-                grossClaim.reservedIndexed() + cededClaim.reservedIndexed(),
-                grossClaim.getChangeInReservesIndexed() + cededClaim.getChangeInReservesIndexed(),
-                grossClaim.getChangeInIBNRIndexed() + cededClaim.getChangeInIBNRIndexed(),
-                netExposureInfo,
-                grossClaim.getUpdateDate(),
-                grossClaim.getUpdatePeriod());
+                    netBaseClaim,
+                    grossClaim.getKeyClaim(),
+                    grossClaim.ultimate() + cededClaim.ultimate(),
+                    grossClaim.nominalUltimate() + cededClaim.nominalUltimate(),
+                    grossClaim.getPaidIncrementalIndexed() + cededClaim.getPaidIncrementalIndexed(),
+                    grossClaim.getPaidCumulatedIndexed() + cededClaim.getPaidCumulatedIndexed(),
+                    grossClaim.getReportedIncrementalIndexed() + cededClaim.getReportedIncrementalIndexed(),
+                    grossClaim.getReportedCumulatedIndexed() + cededClaim.getReportedCumulatedIndexed(),
+                    grossClaim.reservedIndexed() + cededClaim.reservedIndexed(),
+                    grossClaim.getChangeInReservesIndexed() + cededClaim.getChangeInReservesIndexed(),
+                    grossClaim.getChangeInIBNRIndexed() + cededClaim.getChangeInIBNRIndexed(),
+                    netExposureInfo,
+                    grossClaim.getUpdateDate(),
+                    grossClaim.getUpdatePeriod());
             netClaim.setDiscountFactors(grossClaim.getDiscountFactors());
             applyMarkers(cededClaim, netClaim);
             return netClaim;
@@ -370,7 +444,7 @@ public class ClaimUtils {
     }
 
     public static ClaimCashflowPacket calculateNetClaim(List<ClaimCashflowPacket> claimsGross,
-                                                               List<ClaimCashflowPacket> claimsCeded) {
+                                                        List<ClaimCashflowPacket> claimsCeded) {
         if (claimsGross == null && claimsCeded == null) return null;
         if (claimsGross.size() == 0 && claimsCeded.size() == 0) return null;
         List<ClaimCashflowPacket> aggregateClaimsCededByBaseClaim = ClaimUtils.aggregateByBaseClaim(claimsCeded);
@@ -379,9 +453,21 @@ public class ClaimUtils {
         ClaimCashflowPacket claimGross = ClaimUtils.sum(aggregateClaimsGrossByBaseClaim, true);
         if (claimCeded == null) {
             return getNetClaim(claimGross, null, null);
-        }
-        else {
+        } else {
             return getNetClaim(claimGross, claimCeded, claimCeded.reinsuranceContract());
+        }
+    }
+
+    public static List<ClaimCashflowPacket> correctClaimSign(List<ClaimCashflowPacket> claims, boolean invertSign) {
+        if (invertSign) {
+            List<ClaimCashflowPacket> result = new ArrayList<ClaimCashflowPacket>();
+            ClaimValidator claimValidator = new ClaimValidator();
+            for (ClaimCashflowPacket claim : claims) {
+                result.add(claimValidator.invertClaimSign(claim));
+            }
+            return result;
+        } else {
+            return ClaimValidator.positiveNominalUltimates(claims);
         }
     }
 

@@ -53,6 +53,7 @@ class TestSegment {
         segment.parmDiscounting = discountComboBox
         if (company) {
             segment.parmCompany = new ConstrainedString(ILegalEntityMarker, company.name)
+            segment.parmCompany.selectedComponent = company
         }
         return segment
     }

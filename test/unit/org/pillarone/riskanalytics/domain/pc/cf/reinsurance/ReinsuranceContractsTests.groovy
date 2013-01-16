@@ -27,7 +27,6 @@ import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.*
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
-import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
 
 /**
@@ -40,9 +39,9 @@ class ReinsuranceContractsTests extends GroovyTestCase {
     PatternPacket trivialReportingPattern = new PatternPacket.TrivialPattern(IReportingPatternMarker.class);
     PatternPacket trivialPayoutPattern = new PatternPacket.TrivialPattern(IPayoutPatternMarker.class);
 
-    DateTime date20110101 = new DateTime(2011,1,1,0,0,0,0)
-    DateTime date20110418 = new DateTime(2011,4,18,0,0,0,0)
-    DateTime date20110701 = new DateTime(2011,7,1,0,0,0,0)
+    DateTime date20110101 = new DateTime(2011, 1, 1, 0, 0, 0, 0)
+    DateTime date20110418 = new DateTime(2011, 4, 18, 0, 0, 0, 0)
+    DateTime date20110701 = new DateTime(2011, 7, 1, 0, 0, 0, 0)
 
     void setUp() {
         ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
@@ -55,22 +54,22 @@ class ReinsuranceContractsTests extends GroovyTestCase {
 
         ReinsuranceContract quotaShareMarine = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
         quotaShareMarine.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS,
-                ["filter":FilterStrategyType.getStrategy(FilterStrategyType.PERILS,
-                    ['perils':new ComboBoxTableMultiDimensionalParameter([['marine']],['Covered Perils'], IPerilMarker),]),])
+                ["filter": FilterStrategyType.getStrategy(FilterStrategyType.PERILS,
+                        ['perils': new ComboBoxTableMultiDimensionalParameter([['marine']], ['Covered Perils'], IPerilMarker),]),])
         quotaShareMarine.name = 'marine'
         ((OriginalClaimsCoverAttributeStrategy) quotaShareMarine.parmCover).filter.perils.comboBoxValues['marine'] = marine
         IPeriodCounter periodCounter = quotaShareMarine.iterationScope.periodScope.periodCounter
 
         ReinsuranceContract quotaShareMotor = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
         quotaShareMotor.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS,
-                ["filter":FilterStrategyType.getStrategy(FilterStrategyType.PERILS,
-                    ['perils':new ComboBoxTableMultiDimensionalParameter([['motor']],['Covered Perils'], IPerilMarker),]),])
+                ["filter": FilterStrategyType.getStrategy(FilterStrategyType.PERILS,
+                        ['perils': new ComboBoxTableMultiDimensionalParameter([['motor']], ['Covered Perils'], IPerilMarker),]),])
         quotaShareMotor.name = 'motor'
         ((OriginalClaimsCoverAttributeStrategy) quotaShareMotor.parmCover).filter.perils.comboBoxValues['motor'] = motor
 
 
-        List<ClaimCashflowPacket> marineClaims = grossClaims(periodCounter, [marine], 1000)
-        List<ClaimCashflowPacket> motorClaims = grossClaims(periodCounter, [motor], 400)
+        List<ClaimCashflowPacket> marineClaims = getClaims(periodCounter, [marine], 1000)
+        List<ClaimCashflowPacket> motorClaims = getClaims(periodCounter, [motor], 400)
 
         ReinsuranceContracts contracts = new ReinsuranceContracts()
         contracts.addSubComponent(quotaShareMarine)
@@ -96,21 +95,21 @@ class ReinsuranceContractsTests extends GroovyTestCase {
 
         ReinsuranceContract quotaShareMarine = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
         quotaShareMarine.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS,
-                ["filter":FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS,
-                    ['segments':new ComboBoxTableMultiDimensionalParameter([['marine']],['Covered Perils'], ISegmentMarker),]),])
+                ["filter": FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS,
+                        ['segments': new ComboBoxTableMultiDimensionalParameter([['marine']], ['Covered Perils'], ISegmentMarker),]),])
         quotaShareMarine.name = 'marine'
         ((OriginalClaimsCoverAttributeStrategy) quotaShareMarine.parmCover).filter.segments.comboBoxValues['marine'] = marine
         IPeriodCounter periodCounter = quotaShareMarine.iterationScope.periodScope.periodCounter
 
         ReinsuranceContract quotaShareMotor = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
         quotaShareMotor.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS,
-                ["filter":FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS,
-                    ['segments':new ComboBoxTableMultiDimensionalParameter([['motor']],['Covered Perils'], ISegmentMarker),]),])
+                ["filter": FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS,
+                        ['segments': new ComboBoxTableMultiDimensionalParameter([['motor']], ['Covered Perils'], ISegmentMarker),]),])
         quotaShareMotor.name = 'motor'
         ((OriginalClaimsCoverAttributeStrategy) quotaShareMotor.parmCover).filter.segments.comboBoxValues['motor'] = motor
 
-        List<ClaimCashflowPacket> marineClaims = grossClaims(periodCounter, [marine], 1000)
-        List<ClaimCashflowPacket> motorClaims = grossClaims(periodCounter, [motor], 400)
+        List<ClaimCashflowPacket> marineClaims = getClaims(periodCounter, [marine], 1000)
+        List<ClaimCashflowPacket> motorClaims = getClaims(periodCounter, [motor], 400)
 
         ReinsuranceContracts contracts = new ReinsuranceContracts()
         contracts.addSubComponent(quotaShareMarine)
@@ -138,10 +137,10 @@ class ReinsuranceContractsTests extends GroovyTestCase {
 
         ReinsuranceContract quotaShareMarine = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
         quotaShareMarine.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS,
-                ["filter":FilterStrategyType.getStrategy(FilterStrategyType.PERILSSEGMENTS,
-                    ['segments':new ComboBoxTableMultiDimensionalParameter([['marine']],['Segments'], ISegmentMarker),
-                     'perils':new ComboBoxTableMultiDimensionalParameter([['attritional marine']],['Perils'], IPerilMarker),
-                     'connection': LogicArguments.AND]),])
+                ["filter": FilterStrategyType.getStrategy(FilterStrategyType.PERILSSEGMENTS,
+                        ['segments': new ComboBoxTableMultiDimensionalParameter([['marine']], ['Segments'], ISegmentMarker),
+                                'perils': new ComboBoxTableMultiDimensionalParameter([['attritional marine']], ['Perils'], IPerilMarker),
+                                'connection': LogicArguments.AND]),])
         quotaShareMarine.name = 'marine'
         ((OriginalClaimsCoverAttributeStrategy) quotaShareMarine.parmCover).filter.segments.comboBoxValues['marine'] = marine
         ((OriginalClaimsCoverAttributeStrategy) quotaShareMarine.parmCover).filter.perils.comboBoxValues['attritional marine'] = attritionalMarine
@@ -149,17 +148,17 @@ class ReinsuranceContractsTests extends GroovyTestCase {
 
         ReinsuranceContract quotaShareMotor = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
         quotaShareMotor.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS,
-                ["filter":FilterStrategyType.getStrategy(FilterStrategyType.PERILSSEGMENTS,
-                    ['segments':new ComboBoxTableMultiDimensionalParameter([['motor']],['Segments'], ISegmentMarker),
-                     'perils':new ComboBoxTableMultiDimensionalParameter([['attritional motor']],['Perils'], IPerilMarker),
-                     'connection': LogicArguments.OR])])
+                ["filter": FilterStrategyType.getStrategy(FilterStrategyType.PERILSSEGMENTS,
+                        ['segments': new ComboBoxTableMultiDimensionalParameter([['motor']], ['Segments'], ISegmentMarker),
+                                'perils': new ComboBoxTableMultiDimensionalParameter([['attritional motor']], ['Perils'], IPerilMarker),
+                                'connection': LogicArguments.OR])])
         quotaShareMotor.name = 'motor'
         ((OriginalClaimsCoverAttributeStrategy) quotaShareMotor.parmCover).filter.segments.comboBoxValues['motor'] = motor
         ((OriginalClaimsCoverAttributeStrategy) quotaShareMotor.parmCover).filter.perils.comboBoxValues['attritional motor'] = attritionalMotor
 
-        List<ClaimCashflowPacket> marineClaims = grossClaims(periodCounter, [marine, attritionalMarine], 1000)
-        List<ClaimCashflowPacket> motorClaims = grossClaims(periodCounter, [motor], 400)
-        List<ClaimCashflowPacket> motorAttritionalClaims = grossClaims(periodCounter, [attritionalMotor], 500)
+        List<ClaimCashflowPacket> marineClaims = getClaims(periodCounter, [marine, attritionalMarine], 1000)
+        List<ClaimCashflowPacket> motorClaims = getClaims(periodCounter, [motor], 400)
+        List<ClaimCashflowPacket> motorAttritionalClaims = getClaims(periodCounter, [attritionalMotor], 500)
 
         ReinsuranceContracts contracts = new ReinsuranceContracts()
         contracts.addSubComponent(quotaShareMarine)
@@ -187,21 +186,21 @@ class ReinsuranceContractsTests extends GroovyTestCase {
         ReinsuranceContract quotaShareMarine = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
         quotaShareMarine.name = 'marine'
         quotaShareMarine.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.LEGALENTITIES,
-                ['legalEntityCoverMode' : LegalEntityCoverMode.ORIGINALCLAIMS,
-                 'legalEntities' : new ComboBoxTableMultiDimensionalParameter([['marine']],['Covered Legal Entities'], ILegalEntityMarker),])
+                ['legalEntityCoverMode': LegalEntityCoverMode.ORIGINALCLAIMS,
+                        'legalEntities': new ComboBoxTableMultiDimensionalParameter([['marine']], ['Covered Legal Entities'], ILegalEntityMarker),])
         IPeriodCounter periodCounter = quotaShareMarine.iterationScope.periodScope.periodCounter
         ((InwardLegalEntitiesCoverAttributeStrategy) quotaShareMarine.parmCover).legalEntities.comboBoxValues['marine'] = marine
 
         ReinsuranceContract quotaShareMotor = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
         quotaShareMotor.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.LEGALENTITIES,
-                ['legalEntityCoverMode' : LegalEntityCoverMode.ORIGINALCLAIMS,
-                 'legalEntities':new ComboBoxTableMultiDimensionalParameter([['motor']],['Covered Legal Entities'], ILegalEntityMarker),])
+                ['legalEntityCoverMode': LegalEntityCoverMode.ORIGINALCLAIMS,
+                        'legalEntities': new ComboBoxTableMultiDimensionalParameter([['motor']], ['Covered Legal Entities'], ILegalEntityMarker),])
         quotaShareMotor.name = 'motor'
         ((InwardLegalEntitiesCoverAttributeStrategy) quotaShareMotor.parmCover).legalEntities.comboBoxValues['motor'] = motor
 
 
-        List<ClaimCashflowPacket> marineClaims = grossClaims(periodCounter, [marine], 1000)
-        List<ClaimCashflowPacket> motorClaims = grossClaims(periodCounter, [motor], 400)
+        List<ClaimCashflowPacket> marineClaims = getClaims(periodCounter, [marine], 1000)
+        List<ClaimCashflowPacket> motorClaims = getClaims(periodCounter, [motor], 400)
 
         ReinsuranceContracts contracts = new ReinsuranceContracts()
         contracts.addSubComponent(quotaShareMarine)
@@ -230,31 +229,31 @@ class ReinsuranceContractsTests extends GroovyTestCase {
 
         ReinsuranceContract quotaShareMarineOnGross = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
         quotaShareMarineOnGross.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS,
-                ["filter":FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS,
-                    ['segments':new ComboBoxTableMultiDimensionalParameter([['marine']],['Segments'], ISegmentMarker),]),])
+                ["filter": FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS,
+                        ['segments': new ComboBoxTableMultiDimensionalParameter([['marine']], ['Segments'], ISegmentMarker),]),])
         quotaShareMarineOnGross.name = 'qs marine, gross'
         ((OriginalClaimsCoverAttributeStrategy) quotaShareMarineOnGross.parmCover).filter.segments.comboBoxValues['marine'] = marine
         IPeriodCounter periodCounter = quotaShareMarineOnGross.iterationScope.periodScope.periodCounter
 
         ReinsuranceContract quotaShareMarineAttritionalOnNet = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
         quotaShareMarineAttritionalOnNet.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.CONTRACTS,
-                ['contracts':new ConstrainedMultiDimensionalParameter([['qs marine, gross'], ['NET']],['Covered Contracts','Based On'],
+                ['contracts': new ConstrainedMultiDimensionalParameter([['qs marine, gross'], ['NET']], ['Covered Contracts', 'Based On'],
                         ConstraintsFactory.getConstraints('CONTRACT_BASEDON')),
-                 'filter': FilterStrategyType.getDefault()])
+                        'filter': FilterStrategyType.getDefault()])
         quotaShareMarineAttritionalOnNet.name = 'qs marine, attritional net'
         ((ContractsCoverAttributeStrategy) quotaShareMarineAttritionalOnNet.parmCover).contracts.comboBoxValues['qs marine, gross'] = quotaShareMarineOnGross
 
         ReinsuranceContract quotaShareMarineAttritionalOnCeded = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
         quotaShareMarineAttritionalOnCeded.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.CONTRACTS,
-                ['contracts':new ConstrainedMultiDimensionalParameter([['qs marine, gross'], ['CEDED']],['Covered Contracts','Based On'],
+                ['contracts': new ConstrainedMultiDimensionalParameter([['qs marine, gross'], ['CEDED']], ['Covered Contracts', 'Based On'],
                         ConstraintsFactory.getConstraints('CONTRACT_BASEDON')),
-                 'filter': FilterStrategyType.getDefault()])
+                        'filter': FilterStrategyType.getDefault()])
         quotaShareMarineAttritionalOnCeded.name = 'qs marine, attritional ceded'
         ((ContractsCoverAttributeStrategy) quotaShareMarineAttritionalOnCeded.parmCover).contracts.comboBoxValues['qs marine, gross'] = quotaShareMarineOnGross
 
-        List<ClaimCashflowPacket> marineClaimsAttritional = grossClaims(periodCounter, [marine, attritionalMarine], 1000)
-        List<ClaimCashflowPacket> marineClaimsSingle = grossClaims(periodCounter, [marine, singleMarine], 500)
-        List<ClaimCashflowPacket> motorClaims = grossClaims(periodCounter, [motor, attritionalMotor], 400)
+        List<ClaimCashflowPacket> marineClaimsAttritional = getClaims(periodCounter, [marine, attritionalMarine], 1000)
+        List<ClaimCashflowPacket> marineClaimsSingle = getClaims(periodCounter, [marine, singleMarine], 500)
+        List<ClaimCashflowPacket> motorClaims = getClaims(periodCounter, [motor, attritionalMotor], 400)
 
         ReinsuranceContracts contracts = new ReinsuranceContracts()
         contracts.addSubComponent(quotaShareMarineOnGross)
@@ -294,35 +293,35 @@ class ReinsuranceContractsTests extends GroovyTestCase {
 
         ReinsuranceContract quotaShareMarineOnGross = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
         quotaShareMarineOnGross.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS,
-                ["filter":FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS,
-                    ['segments':new ComboBoxTableMultiDimensionalParameter([['marine']],['Segments'], ISegmentMarker),]),])
+                ["filter": FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS,
+                        ['segments': new ComboBoxTableMultiDimensionalParameter([['marine']], ['Segments'], ISegmentMarker),]),])
         quotaShareMarineOnGross.name = 'qs marine, gross'
         ((OriginalClaimsCoverAttributeStrategy) quotaShareMarineOnGross.parmCover).filter.segments.comboBoxValues['marine'] = marine
         IPeriodCounter periodCounter = quotaShareMarineOnGross.iterationScope.periodScope.periodCounter
 
         ReinsuranceContract quotaShareMarineAttritionalOnNet = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
         quotaShareMarineAttritionalOnNet.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.CONTRACTS,
-                ['contracts':new ConstrainedMultiDimensionalParameter([['qs marine, gross'], ['NET']],['Contracts','Based On'],
+                ['contracts': new ConstrainedMultiDimensionalParameter([['qs marine, gross'], ['NET']], ['Contracts', 'Based On'],
                         ConstraintsFactory.getConstraints('CONTRACT_BASEDON')),
-                 'filter': FilterStrategyType.getStrategy(FilterStrategyType.PERILS, [
-                    'perils':new ComboBoxTableMultiDimensionalParameter([['attritional marine']],['Perils'], IPerilMarker),])])
+                        'filter': FilterStrategyType.getStrategy(FilterStrategyType.PERILS, [
+                                'perils': new ComboBoxTableMultiDimensionalParameter([['attritional marine']], ['Perils'], IPerilMarker),])])
         ((ContractsCoverAttributeStrategy) quotaShareMarineAttritionalOnNet.parmCover).contracts.comboBoxValues['qs marine, gross'] = quotaShareMarineOnGross
         ((ContractsCoverAttributeStrategy) quotaShareMarineAttritionalOnNet.parmCover).filter.perils.comboBoxValues['attritional marine'] = attritionalMarine
         quotaShareMarineAttritionalOnNet.name = 'qs marine, attritional net'
 
         ReinsuranceContract quotaShareMarineAttritionalOnCeded = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
         quotaShareMarineAttritionalOnCeded.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.CONTRACTS,
-                ['contracts':new ConstrainedMultiDimensionalParameter([['qs marine, gross'], ['CEDED']],['Contracts','Based On'],
+                ['contracts': new ConstrainedMultiDimensionalParameter([['qs marine, gross'], ['CEDED']], ['Contracts', 'Based On'],
                         ConstraintsFactory.getConstraints('CONTRACT_BASEDON')),
-                 'filter': FilterStrategyType.getStrategy(FilterStrategyType.PERILS, [
-                    'perils':new ComboBoxTableMultiDimensionalParameter([['attritional marine']],['Perils'], IPerilMarker),])])
+                        'filter': FilterStrategyType.getStrategy(FilterStrategyType.PERILS, [
+                                'perils': new ComboBoxTableMultiDimensionalParameter([['attritional marine']], ['Perils'], IPerilMarker),])])
         quotaShareMarineAttritionalOnCeded.name = 'qs marine, attritional ceded'
         ((ContractsCoverAttributeStrategy) quotaShareMarineAttritionalOnCeded.parmCover).contracts.comboBoxValues['qs marine, gross'] = quotaShareMarineOnGross
         ((ContractsCoverAttributeStrategy) quotaShareMarineAttritionalOnCeded.parmCover).filter.perils.comboBoxValues['attritional marine'] = attritionalMarine
 
-        List<ClaimCashflowPacket> marineClaimsAttritional = grossClaims(periodCounter, [marine, attritionalMarine], 1000)
-        List<ClaimCashflowPacket> marineClaimsSingle = grossClaims(periodCounter, [marine, singleMarine], 500)
-        List<ClaimCashflowPacket> motorClaims = grossClaims(periodCounter, [motor, attritionalMotor], 400)
+        List<ClaimCashflowPacket> marineClaimsAttritional = getClaims(periodCounter, [marine, attritionalMarine], 1000)
+        List<ClaimCashflowPacket> marineClaimsSingle = getClaims(periodCounter, [marine, singleMarine], 500)
+        List<ClaimCashflowPacket> motorClaims = getClaims(periodCounter, [motor, attritionalMotor], 400)
 
         ReinsuranceContracts contracts = new ReinsuranceContracts()
         contracts.addSubComponent(quotaShareMarineOnGross)
@@ -360,36 +359,36 @@ class ReinsuranceContractsTests extends GroovyTestCase {
 
         ReinsuranceContract quotaShareMarineOnGross = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
         quotaShareMarineOnGross.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS,
-                ["filter":FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS,
-                    ['segments':new ComboBoxTableMultiDimensionalParameter([['marine']],['Segments'], ISegmentMarker),]),])
+                ["filter": FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS,
+                        ['segments': new ComboBoxTableMultiDimensionalParameter([['marine']], ['Segments'], ISegmentMarker),]),])
         quotaShareMarineOnGross.name = 'qs marine, gross'
         ((OriginalClaimsCoverAttributeStrategy) quotaShareMarineOnGross.parmCover).filter.segments.comboBoxValues['marine'] = marine
         IPeriodCounter periodCounter = quotaShareMarineOnGross.iterationScope.periodScope.periodCounter
 
         ReinsuranceContract quotaShareMarineAttritionalOnNet = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
         quotaShareMarineAttritionalOnNet.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.CONTRACTS,
-                ['contracts':new ConstrainedMultiDimensionalParameter([['qs marine, gross'], ['NET']],['Contracts','Based On'],
+                ['contracts': new ConstrainedMultiDimensionalParameter([['qs marine, gross'], ['NET']], ['Contracts', 'Based On'],
                         ConstraintsFactory.getConstraints('CONTRACT_BASEDON')),
-                 'filter': FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS, [
-                    'segments':new ComboBoxTableMultiDimensionalParameter([['marine']],['Segments'], ISegmentMarker),])])
+                        'filter': FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS, [
+                                'segments': new ComboBoxTableMultiDimensionalParameter([['marine']], ['Segments'], ISegmentMarker),])])
         ((ContractsCoverAttributeStrategy) quotaShareMarineAttritionalOnNet.parmCover).contracts.comboBoxValues['qs marine, gross'] = quotaShareMarineOnGross
         ((ContractsCoverAttributeStrategy) quotaShareMarineAttritionalOnNet.parmCover).filter.segments.comboBoxValues['marine'] = marine
         quotaShareMarineAttritionalOnNet.name = 'qs marine, attritional net'
 
         ReinsuranceContract quotaShareMarineAttritionalOnCeded = ReinsuranceContractTests.getQuotaShareContract(0.3, date20110101)
         quotaShareMarineAttritionalOnCeded.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.CONTRACTS,
-                ['contracts':new ConstrainedMultiDimensionalParameter([['qs marine, gross'], ['CEDED']],['Contracts','Based On'],
+                ['contracts': new ConstrainedMultiDimensionalParameter([['qs marine, gross'], ['CEDED']], ['Contracts', 'Based On'],
                         ConstraintsFactory.getConstraints('CONTRACT_BASEDON')),
-                 'filter': FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS, [
-                    'segments':new ComboBoxTableMultiDimensionalParameter([['marine']],['Segments'], ISegmentMarker),])])
+                        'filter': FilterStrategyType.getStrategy(FilterStrategyType.SEGMENTS, [
+                                'segments': new ComboBoxTableMultiDimensionalParameter([['marine']], ['Segments'], ISegmentMarker),])])
         quotaShareMarineAttritionalOnCeded.name = 'qs marine, attritional ceded'
         ((ContractsCoverAttributeStrategy) quotaShareMarineAttritionalOnCeded.parmCover).contracts.comboBoxValues['qs marine, gross'] = quotaShareMarineOnGross
         ((ContractsCoverAttributeStrategy) quotaShareMarineAttritionalOnCeded.parmCover).filter.segments.comboBoxValues['marine'] = marine
 
 
-        List<ClaimCashflowPacket> marineClaimsAttritional = grossClaims(periodCounter, [marine, attritionalMarine], 1000)
-        List<ClaimCashflowPacket> marineClaimsSingle = grossClaims(periodCounter, [marine, singleMarine], 500)
-        List<ClaimCashflowPacket> motorClaims = grossClaims(periodCounter, [motor, attritionalMotor], 400)
+        List<ClaimCashflowPacket> marineClaimsAttritional = getClaims(periodCounter, [marine, attritionalMarine], 1000)
+        List<ClaimCashflowPacket> marineClaimsSingle = getClaims(periodCounter, [marine, singleMarine], 500)
+        List<ClaimCashflowPacket> motorClaims = getClaims(periodCounter, [motor, attritionalMotor], 400)
 
         ReinsuranceContracts contracts = new ReinsuranceContracts()
         contracts.addSubComponent(quotaShareMarineOnGross)
@@ -446,9 +445,9 @@ class ReinsuranceContractsTests extends GroovyTestCase {
         quotaShareMotor.name = 'motor'
         ((InwardLegalEntitiesCoverAttributeStrategy) quotaShareMotor.parmCover).legalEntities.comboBoxValues['motor'] = motor
 
-        List<ClaimCashflowPacket> marineClaimsAttritional = grossClaims(periodCounter, [marine], 1000)
-//         List<ClaimCashflowPacket> marineClaimsSingle = grossClaims(periodCounter, [marine, singleMarine], 500)
-//         List<ClaimCashflowPacket> motorClaims = grossClaims(periodCounter, [motor, attritionalMotor], 400)
+        List<ClaimCashflowPacket> marineClaimsAttritional = getClaims(periodCounter, [marine], 1000)
+//         List<ClaimCashflowPacket> marineClaimsSingle = getClaims(periodCounter, [marine, singleMarine], 500)
+//         List<ClaimCashflowPacket> motorClaims = getClaims(periodCounter, [motor, attritionalMotor], 400)
 
         ReinsuranceContracts contracts = new ReinsuranceContracts()
         contracts.addSubComponent(quotaShareMarine)
@@ -474,9 +473,9 @@ class ReinsuranceContractsTests extends GroovyTestCase {
         xl500xs500.parmVirtual = true
         ReinsuranceContract quoteOnXLNet = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
         quoteOnXLNet.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.CONTRACTS,
-                ["contracts":new ConstrainedMultiDimensionalParameter([["xl 500 xs 500"], ["NET"]],["Covered Contracts","Based On"],
-                    ConstraintsFactory.getConstraints('RI_CONTRACT_BASEDON')),
-                 "filter":FilterStrategyType.getStrategy(FilterStrategyType.ALL, [:]),])
+                ["contracts": new ConstrainedMultiDimensionalParameter([["xl 500 xs 500"], ["NET"]], ["Covered Contracts", "Based On"],
+                        ConstraintsFactory.getConstraints('RI_CONTRACT_BASEDON')),
+                        "filter": FilterStrategyType.getStrategy(FilterStrategyType.ALL, [:]),])
         ((ContractsCoverAttributeStrategy) quoteOnXLNet.parmCover).contracts.comboBoxValues['xl 500 xs 500'] = xl500xs500
         quoteOnXLNet.name = 'Quote on XL net'
 
@@ -486,7 +485,7 @@ class ReinsuranceContractsTests extends GroovyTestCase {
         contracts.addSubComponent(xl500xs500)
         contracts.addSubComponent(quoteOnXLNet)
         contracts.internalWiring()
-        contracts.inClaims.addAll(grossClaims(periodCounter, [marine, attritionalMarine], 700d, ClaimType.SINGLE))
+        contracts.inClaims.addAll(getClaims(periodCounter, [marine, attritionalMarine], 700d, ClaimType.SINGLE))
         contracts.inUnderwritingInfo.addAll(grossUnderwritingInfo(1000d, marine, periodCounter))
 
         List contractsCededClaims = new TestProbe(contracts, 'outClaimsCeded').result
@@ -516,14 +515,14 @@ class ReinsuranceContractsTests extends GroovyTestCase {
 
     }
 
-    private List<ClaimCashflowPacket> grossClaims(IPeriodCounter periodCounter, List<IComponentMarker> perils, double ultimate, ClaimType claimType = ClaimType.AGGREGATED) {
+    private List<ClaimCashflowPacket> getClaims(IPeriodCounter periodCounter, List<IComponentMarker> markers, double ultimate, ClaimType claimType = ClaimType.AGGREGATED) {
         GrossClaimRoot claimRoot = new GrossClaimRoot(-ultimate, claimType,
                 date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
-        perils.each { peril -> claims*.setMarker(peril) }
+        markers.each { claims*.setMarker(it) }
         return claims
     }
-    
+
     private List<UnderwritingInfoPacket> grossUnderwritingInfo(double premium, ISegmentMarker segment, IPeriodCounter periodCounter) {
         [new UnderwritingInfoPacket(segment: segment, premiumWritten: premium, premiumPaid: premium, numberOfPolicies: 1,
                 exposure: new ExposureInfo(date20110101, periodCounter))]

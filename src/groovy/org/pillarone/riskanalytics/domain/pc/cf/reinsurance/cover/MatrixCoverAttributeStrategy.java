@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover;
 
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
+import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
@@ -26,11 +27,9 @@ import java.util.Map;
  */
 public class MatrixCoverAttributeStrategy extends AbstractParameterObject implements ICoverAttributeStrategy, IContractCover {
 
-    private ICoverAttributeStrategy filter;
-    private ClaimValidator claimValidator;
-    private ConstrainedMultiDimensionalParameter flexibleCover;
-    private ConstrainedMultiDimensionalParameter benefitContracts;
-    private List<RowFilter> rowFilters;
+    ConstrainedMultiDimensionalParameter flexibleCover;
+    ComboBoxTableMultiDimensionalParameter benefitContracts;
+    private List<MatrixCoverAttributeRow> rowFilters;
 
     public IParameterObjectClassifier getType() {
         return CoverAttributeStrategyType.MATRIX;
@@ -43,13 +42,21 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
         return parameters;
     }
 
-    public List<ClaimCashflowPacket> coveredClaims(List<ClaimCashflowPacket> source) {
-        if (claimValidator == null) {
-            claimValidator = new ClaimValidator();
+    public List<IReinsuranceContractMarker> getBenefitContracts() {
+        List<IReinsuranceContractMarker> result = new ArrayList<IReinsuranceContractMarker>();
+        List<List<IReinsuranceContractMarker>> objects = benefitContracts.getValuesAsObjects();
+        for (List<IReinsuranceContractMarker> markers : objects) {
+            for (IReinsuranceContractMarker marker : markers) {
+                result.add(marker);
+            }
         }
+        return result;
+    }
+
+    public List<ClaimCashflowPacket> coveredClaims(List<ClaimCashflowPacket> source) {
         initRowFilters();
         List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
-        for (RowFilter rowFilter : rowFilters) {
+        for (MatrixCoverAttributeRow rowFilter : getRowFilters()) {
             filteredClaims.addAll(rowFilter.filter(source));
         }
         source.clear();
@@ -57,11 +64,51 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
         return filteredClaims;
     }
 
-    private void initRowFilters() {
-        rowFilters = new ArrayList<RowFilter>();
+    public void initRowFilters() {
+        rowFilters = new ArrayList<MatrixCoverAttributeRow>();
         for (int row = flexibleCover.getTitleRowCount(); row < flexibleCover.getRowCount(); row++) {
-            rowFilters.add(new RowFilter(row, flexibleCover));
+            rowFilters.add(new MatrixCoverAttributeRow(row, flexibleCover));
         }
+    }
+
+    public boolean coverGrossClaimsOnly() {
+        if (hasBenefitContracts()) {
+            return false;
+        }
+        for (MatrixCoverAttributeRow rowFilter : getRowFilters()) {
+            if (!rowFilter.coverGrossClaimsOnly()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<IReinsuranceContractMarker> coveredCededOfContracts() {
+        List<IReinsuranceContractMarker> cededOfContracts = new ArrayList<IReinsuranceContractMarker>();
+        for (MatrixCoverAttributeRow rowFilter : getRowFilters()) {
+            if (rowFilter.getCededContract() != null) {
+                cededOfContracts.add(rowFilter.getCededContract());
+            }
+        }
+        return cededOfContracts;
+    }
+
+    public List<IReinsuranceContractMarker> coveredNetOfContracts() {
+        List<IReinsuranceContractMarker> netOfContracts = new ArrayList<IReinsuranceContractMarker>();
+        for (MatrixCoverAttributeRow rowFilter : getRowFilters()) {
+            if (rowFilter.getNetContract() != null) {
+                netOfContracts.add(rowFilter.getNetContract());
+            }
+        }
+        return netOfContracts;
+    }
+
+    public boolean mergerRequired() {
+        return hasBenefitContracts() || getRowFilters().size() > 1 && !coverGrossClaimsOnly();
+    }
+
+    private boolean hasBenefitContracts() {
+        return getBenefitContracts().size() > 0;
     }
 
     public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
@@ -77,41 +124,10 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    static class RowFilter {
-        IReinsuranceContractMarker netContract;
-        IReinsuranceContractMarker cededContract;
-        ILegalEntityMarker legalEntity;
-        ISegmentMarker segment;
-        IPerilMarker peril;
-        ClaimTypeSelector claimTypeSelector;
-
-        RowFilter(int rowIndex, ConstrainedMultiDimensionalParameter flexibleCover) {
-            netContract = (IReinsuranceContractMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.CONTRACT_NET_OF_COLUMN_INDEX);
-            cededContract = (IReinsuranceContractMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.CONTRACT_CEDED_OF_COLUMN_INDEX);
-            legalEntity = (ILegalEntityMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.LEGAL_ENTITY_OF_COLUMN_INDEX);
-            segment = (ISegmentMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.SEGMENTS_OF_COLUMN_INDEX);
-            peril = (IPerilMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.GENERATORS_OF_COLUMN_INDEX);
-            claimTypeSelector = ClaimTypeSelector.valueOf((String) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.LOSS_KIND_OF_OF_COLUMN_INDEX));
+    public List<MatrixCoverAttributeRow> getRowFilters() {
+        if (rowFilters == null){
+            initRowFilters();
         }
-
-        public List<ClaimCashflowPacket> filter(List<ClaimCashflowPacket> source) {
-            List<ClaimCashflowPacket> result = new ArrayList<ClaimCashflowPacket>();
-            for (ClaimCashflowPacket claim : source) {
-                if ((netContract == null || netContract == claim.reinsuranceContract()) &&
-                        (cededContract == null || cededContract == claim.reinsuranceContract()) &&
-                        (legalEntity == null || legalEntity == claim.legalEntity()) &&
-                        (segment == null || segment == claim.segment()) &&
-                        (peril == null || peril == claim.peril()) &&
-                        claimTypeMatches(claimTypeSelector, claim)) {
-                    result.add(ClaimValidator.positiveNominalUltimate(claim));
-                }
-            }
-            source.removeAll(result);
-            return result;
-        }
-
-        private boolean claimTypeMatches(ClaimTypeSelector claimTypeSelector, ClaimCashflowPacket claim) {
-            return claimTypeSelector == ClaimTypeSelector.ANY || ClaimType.valueOf(claimTypeSelector.name()) == claim.getClaimType();
-        }
+        return rowFilters;
     }
 }
