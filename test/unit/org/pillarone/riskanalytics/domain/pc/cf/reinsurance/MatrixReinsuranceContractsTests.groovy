@@ -75,7 +75,7 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
         benefitContract = createTestContract('benefit1', [[''], [''], [''], ['segmentHome'], [''], ['ANY']], 0.4d)
     }
 
-    private Map setupParameters(List parameters = [[''], [''], [''], [''], [''], ['ANY']], List benefitContracts = []) {
+    private Map setupParameters(List parameters = [[''], [''], [''], [''], [''], ['ANY']], Map benefitContracts = [:]) {
         def result = [:]
         result.flexibleCover = new ConstrainedMultiDimensionalParameter(parameters,
                 [CoverMap.CONTRACT_NET_OF, CoverMap.CONTRACT_CEDED_OF, CoverMap.LEGAL_ENTITY,
@@ -91,8 +91,12 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
             claimTypeColumnValues.put(it.name(), it)
         }
         result.flexibleCover.comboBoxValues[5] = claimTypeColumnValues
-        result.benefitContracts = new ComboBoxTableMultiDimensionalParameter(benefitContracts, ['Benefit Contracts'], IReinsuranceContractMarker)
-        result.benefitContracts.comboBoxValues['benefit1'] = benefitContract
+        result.benefitContracts = new ConstrainedMultiDimensionalParameter(benefitContracts.keySet() as List, ['Benefit Contracts'], ConstraintsFactory.getConstraints(ReinsuranceContractBasedOn.IDENTIFIER))
+        def validBenefitContracts = ['': null]
+        benefitContracts.each { k, v ->
+            validBenefitContracts.put(k, v)
+        }
+        result.benefitContracts.comboBoxValues[0] = validBenefitContracts
         return result
     }
 
@@ -350,7 +354,7 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
     //PMO-2233 Test 11
     void testNetEqualsNet() {
         ReinsuranceContract treatyWithoutBenefit = createTestContract('treatyWithoutBenefit', [['benefit1'], [''], [''], [''], [''], ['ANY']])
-        ReinsuranceContract treatyWithBenefit = createTestContract('treatyWithBenefit', [[''], [''], [''], ['segmentHome'], [''], ['ANY']], 0.2d, ['benefit1'])
+        ReinsuranceContract treatyWithBenefit = createTestContract('treatyWithBenefit', [[''], [''], [''], ['segmentHome'], [''], ['ANY']], 0.2d, ['benefit1': benefitContract])
 
         WiringUtils.use(WireCategory) {
             segmentHome.inClaims = claimGeneratorCat.outClaims
@@ -386,7 +390,7 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
         benefitContract = ReinsuranceContractTests.getWXLContract(100, 300, 1000, 100, treaty.iterationScope.periodScope.currentPeriodStartDate)
         benefitContract.parmCover = getMatrixCover([[''], [''], [''], ['segmentHome'], [''], ['ANY']])
         benefitContract.name = 'benefitContract'
-        ReinsuranceContract quotaShareTreaty = createTestContract('quotaShareTreaty', [[''], ['benefit1'], [''], [''], [''], ['ANY']], 0.2d, ['benefit1'])
+        ReinsuranceContract quotaShareTreaty = createTestContract('quotaShareTreaty', [[''], ['benefit1'], [''], [''], [''], ['ANY']], 0.2d, ['benefit1': benefitContract])
 
 
         contracts.addSubComponent(quotaShareTreaty)
@@ -435,7 +439,7 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
 
         ReinsuranceContract treatyWithBenefit = createTestContract('treatyWithBenefit', [
                 [''], [''], [''], ['segmentCottage'], [''], [ClaimTypeSelector.ANY.name()]
-        ], 0.2d, ['benefit1'])
+        ], 0.2d, ['benefit1': benefitContract])
 
         contracts.addSubComponent(treatyWithoutBenefit)
         contracts.addSubComponent(treatyWithBenefit)
@@ -486,14 +490,14 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
 
     }
 
-    private ReinsuranceContract createTestContract(String contractName, List matrixParams, Double qoutaShare = 0.2d, List benefitContracts = []) {
+    private ReinsuranceContract createTestContract(String contractName, List matrixParams, Double qoutaShare = 0.2d, Map benefitContracts = [:]) {
         def contract = ReinsuranceContractTests.getQuotaShareContract(qoutaShare, date20110101)
         contract.name = contractName
         contract.parmCover = getMatrixCover(matrixParams, benefitContracts)
         return contract
     }
 
-    private ICoverAttributeStrategy getMatrixCover(List matrixParams, List benefitContracts = []) {
+    private ICoverAttributeStrategy getMatrixCover(List matrixParams, Map benefitContracts = [:]) {
         CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.MATRIX, setupParameters(matrixParams, benefitContracts))
     }
 

@@ -36,8 +36,8 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
                     [CoverMap.CONTRACT_NET_OF, CoverMap.CONTRACT_CEDED_OF, CoverMap.LEGAL_ENTITY,
                      CoverMap.SEGMENTS, CoverMap.GENERATORS, CoverMap.LOSS_KIND_OF],
                 ConstraintsFactory.getConstraints(CoverMap.IDENTIFIER)),
-            'benefitContracts': new ComboBoxTableMultiDimensionalParameter(
-                    Arrays.asList(""), Arrays.asList("Benefit Contract"), IReinsuranceContractMarker.class)]
+            'benefitContracts': new ConstrainedMultiDimensionalParameter([[]],Arrays.asList("Benefit Contract"),
+                    ConstraintsFactory.getConstraints(ReinsuranceContractBasedOn.IDENTIFIER))]
     )
 
     public static final all = [NONE, ORIGINALCLAIMS, CONTRACTS, LEGALENTITIES, MATRIX]
@@ -93,8 +93,8 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
                 break
             case CoverAttributeStrategyType.MATRIX:
                 coverStrategy = new MatrixCoverAttributeStrategy(
-                        flexibleCover: (ConstrainedMultiDimensionalParameter) parameters['flexibleCover'],
-                        benefitContracts: (ComboBoxTableMultiDimensionalParameter) parameters['benefitContracts'])
+                        flexibleCover: parameters['flexibleCover'],
+                        benefitContracts: parameters['benefitContracts'])
                 break
             default: throw new NotImplementedException("$type not implemented.")
         }

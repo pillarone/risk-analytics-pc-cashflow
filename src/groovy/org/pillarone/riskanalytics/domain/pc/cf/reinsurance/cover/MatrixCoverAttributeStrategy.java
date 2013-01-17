@@ -28,7 +28,7 @@ import java.util.Map;
 public class MatrixCoverAttributeStrategy extends AbstractParameterObject implements ICoverAttributeStrategy, IContractCover {
 
     ConstrainedMultiDimensionalParameter flexibleCover;
-    ComboBoxTableMultiDimensionalParameter benefitContracts;
+    ConstrainedMultiDimensionalParameter benefitContracts;
     private List<MatrixCoverAttributeRow> rowFilters;
 
     public IParameterObjectClassifier getType() {
@@ -43,14 +43,7 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
     }
 
     public List<IReinsuranceContractMarker> getBenefitContracts() {
-        List<IReinsuranceContractMarker> result = new ArrayList<IReinsuranceContractMarker>();
-        List<List<IReinsuranceContractMarker>> objects = benefitContracts.getValuesAsObjects();
-        for (List<IReinsuranceContractMarker> markers : objects) {
-            for (IReinsuranceContractMarker marker : markers) {
-                result.add(marker);
-            }
-        }
-        return result;
+        return benefitContracts.getValuesAsObjects(0);
     }
 
     public List<ClaimCashflowPacket> coveredClaims(List<ClaimCashflowPacket> source) {

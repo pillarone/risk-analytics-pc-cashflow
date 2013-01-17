@@ -29,7 +29,7 @@ class CoverAttributeValidatorTests extends GrailsUnitTestCase {
     private void setupParamCover(List selection = [[''], [''], [''], [''], [''], ['ANY']]) {
         def flexibleCover = new ConstrainedMultiDimensionalParameter(selection, ['', '', '', '', '', ''], ConstraintsFactory.getConstraints(CoverMap.IDENTIFIER))
         parameters = new ArrayList<ParameterHolder>()
-        def benefitContracts = new ComboBoxTableMultiDimensionalParameter([], [''], IReinsuranceContractMarker)
+        def benefitContracts = new ConstrainedMultiDimensionalParameter([[]], [''], ConstraintsFactory.getConstraints(ReinsuranceContractBasedOn.BASED_ON))
         ParameterObjectParameterHolder holder = new ParameterObjectParameterHolder("subContract2:parmCover", 1, new MatrixCoverAttributeStrategy(flexibleCover: flexibleCover, benefitContracts: benefitContracts))
         parameters << holder
 
