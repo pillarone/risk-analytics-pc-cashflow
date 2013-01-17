@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator
 
+import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
 import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
@@ -42,20 +43,15 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
     RandomFrequencyDistribution systematicFrequency2
 
     void setUp() {
-
-        claimsGenerator = new ClaimsGenerator(name: "motor hull")
-        claimsGenerator2 = new ClaimsGenerator(name: "hail")
-        claimsGenerator.periodScope = TestPeriodScopeUtilities.getPeriodScope(date20110101, 5)
-        claimsGenerator.periodStore = new PeriodStore(claimsGenerator.periodScope)
+        IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(date20110101, 5)
+        claimsGenerator = TestClaimsGenerator.getAttritionalClaimsGenerator('motor hull', iterationScope, 123d)
+        claimsGenerator2 = TestClaimsGenerator.getAttritionalClaimsGenerator('hail', iterationScope, 0d)
+//        claimsGenerator.periodScope = TestPeriodScopeUtilities.getPeriodScope(date20110101, 5)
+//        claimsGenerator.periodStore = new PeriodStore(claimsGenerator.periodScope)
         ComboBoxTableMultiDimensionalParameter uwInfoComboBox = new ComboBoxTableMultiDimensionalParameter(
                 ["motor hull"], ["Underwriting Information"], IUnderwritingInfoMarker)
         uwInfoComboBox.comboBoxValues.put('motor hull', riskBands)
         claimsGenerator.setParmUnderwritingSegments(uwInfoComboBox)
-        claimsGenerator.setParmClaimsModel(ClaimsGeneratorType.getStrategy(
-                ClaimsGeneratorType.ATTRITIONAL, [
-                        "claimsSizeBase": ExposureBase.ABSOLUTE,
-                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
-                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),]))
         ConstraintsFactory.registerConstraint(new DoubleConstraints())
 
         EventSeverity severity1 = new EventSeverity(value: 0.8, event: new EventPacket(new DateTime(2011, 1, 2, 0, 0, 0, 0)))

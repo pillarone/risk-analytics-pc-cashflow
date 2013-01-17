@@ -5,10 +5,12 @@ import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimen
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ISeverityIndexMarker
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -34,12 +36,9 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
                     [CoverMap.CONTRACT_NET_OF, CoverMap.CONTRACT_CEDED_OF, CoverMap.LEGAL_ENTITY,
                      CoverMap.SEGMENTS, CoverMap.GENERATORS, CoverMap.LOSS_KIND_OF],
                 ConstraintsFactory.getConstraints(CoverMap.IDENTIFIER)),
-            'benefitContracts': new ConstrainedMultiDimensionalParameter([[]],
-                    [ReinsuranceContractBasedOn.CONTRACT],
+            'benefitContracts': new ConstrainedMultiDimensionalParameter([[]],Arrays.asList("Benefit Contract"),
                     ConstraintsFactory.getConstraints(ReinsuranceContractBasedOn.IDENTIFIER))]
-
     )
-
 
     public static final all = [NONE, ORIGINALCLAIMS, CONTRACTS, LEGALENTITIES, MATRIX]
 
@@ -94,8 +93,8 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
                 break
             case CoverAttributeStrategyType.MATRIX:
                 coverStrategy = new MatrixCoverAttributeStrategy(
-                        flexibleCover: (ConstrainedMultiDimensionalParameter) parameters['flexibleCover'],
-                        benefitContracts: (ConstrainedMultiDimensionalParameter) parameters['benefitContracts'])
+                        flexibleCover: parameters['flexibleCover'],
+                        benefitContracts: parameters['benefitContracts'])
                 break
             default: throw new NotImplementedException("$type not implemented.")
         }
