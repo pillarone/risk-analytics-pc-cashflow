@@ -130,4 +130,11 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
         }
         return rowFilters;
     }
+
+    public boolean hasGrossFilters() {
+        for (MatrixCoverAttributeRow rowFilter : getRowFilters()) {
+            if (rowFilter.coverGrossClaimsOnly()) return true;
+        }
+        return false;
+    }
 }

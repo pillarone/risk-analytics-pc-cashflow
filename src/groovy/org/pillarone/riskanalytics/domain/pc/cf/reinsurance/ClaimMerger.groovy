@@ -56,34 +56,34 @@ class ClaimMerger extends Component {
                     }
 
                 }
-            } else {
+            }
+            else {
                 if (severalNetContractsCovered()) {
                     //benefit net matrix case
-                    for (ClaimCashflowPacket netClaim : netClaimsByBase) {
-                        ClaimCashflowPacket grossClaim = ClaimUtils.findClaimByBaseClaim(inClaimsGross, netClaim.baseClaim)
-                        ClaimCashflowPacket cededClaim = cededClaimsByBase.get(netClaim.baseClaim)
+                    for (ClaimCashflowPacket netClaim : netClaimsByBase.values()) {
+                        ClaimCashflowPacket grossClaim = ClaimUtils.findClaimByBaseClaim(inClaimsGross, netClaim.keyClaim)
+                        ClaimCashflowPacket cededClaim = cededClaimsByBase.get(netClaim.keyClaim)
                         ClaimCashflowPacket netClaimBeforeBenefit = ClaimUtils.getNetClaim(grossClaim, cededClaim, netClaim.reinsuranceContract())
-                        ClaimCashflowPacket benefitClaim = benefitClaimsByBase.get(netClaim.baseClaim)
+                        ClaimCashflowPacket benefitClaim = benefitClaimsByBase.get(netClaim.keyClaim)
                         //TODO (sku) check  valid size of benefit claim.
                         ClaimCashflowPacket netClaimAfterBenefit = ClaimUtils.getNetClaim(netClaimBeforeBenefit, benefitClaim, netClaim.reinsuranceContract())
                         outClaims.add(netClaimAfterBenefit)
                     }
                 } else if (severalCededContractsCovered()){
                     //benefit ceded matrix case
-                    for (ClaimCashflowPacket cededClaimBase : cededClaimsByBase) {
-                        ClaimCashflowPacket cededClaim = cededClaimsByBase.get(cededClaimBase.baseClaim)
-                        ClaimCashflowPacket benefitClaim = benefitClaimsByBase.get(cededClaimBase.baseClaim)
-                        ClaimCashflowPacket invertedCededClaim = ClaimUtils.scale(cededClaim, -1)
+                    for (ClaimCashflowPacket cededClaimBase : cededClaimsByBase.values()) {
+                        ClaimCashflowPacket cededClaim = cededClaimsByBase.get(cededClaimBase.keyClaim)
+                        ClaimCashflowPacket benefitClaim = benefitClaimsByBase.get(cededClaimBase.keyClaim)
                         //TODO (sku) check  valid size of benefit claim.
-                        ClaimCashflowPacket netClaim = ClaimUtils.getNetClaim(invertedCededClaim, benefitClaim, cededClaimBase.reinsuranceContract())
+                        ClaimCashflowPacket netClaim = ClaimUtils.getNetClaim(cededClaim, benefitClaim, cededClaimBase?.reinsuranceContract())
                         outClaims.add(netClaim)
                     }
                 } else if (netAndCededContractsCovered()){
                     // TODO might be part of condition 1 (severalNetContractsCovered())
                 } else if (grossCovered()){
-                    for (ClaimCashflowPacket grossClaimBase : inClaimsGross) {
-                        ClaimCashflowPacket benefitClaim = benefitClaimsByBase.get(grossClaimBase.baseClaim)
-                        ClaimCashflowPacket netClaim = ClaimUtils.getNetClaim(grossClaimBase,benefitClaim,benefitClaim.reinsuranceContract())
+                    for (ClaimCashflowPacket grossClaimBase : filterGrossClaims()) {
+                        ClaimCashflowPacket benefitClaim = benefitClaimsByBase.get(grossClaimBase.keyClaim)
+                        ClaimCashflowPacket netClaim = ClaimUtils.getNetClaim(grossClaimBase,benefitClaim,benefitClaim?.reinsuranceContract())
                         outClaims.add(netClaim)
                     }
                 }
@@ -93,6 +93,13 @@ class ClaimMerger extends Component {
             // TODO think, do we need that at all  ?
             outClaims.addAll(ClaimUtils.aggregateByBaseClaim(inClaimsCeded))
         }
+        if (coverAttributeStrategy.hasGrossFilters() && !hasBenefitContracts()) {
+            outClaims.addAll(filterGrossClaims())
+        }
+    }
+
+    private List<ClaimCashflowPacket> filterGrossClaims() {
+        return coverAttributeStrategy.coveredClaims(new ArrayList(inClaimsGross))
     }
 
     private boolean grossCovered() {
