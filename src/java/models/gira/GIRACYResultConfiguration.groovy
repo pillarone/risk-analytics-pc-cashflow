@@ -17,7 +17,7 @@ components {
 			outClaimsPrimaryInsurer = "AGGREGATED"
 			outClaimsReinsurer = "AGGREGATED"
 			outDiscountedValues = "AGGREGATED"
-			outNetFinancials = "AGGREGATED"
+			outFinancials = "AGGREGATED"
 			outNetPresentValues = "AGGREGATED"
 			outUnderwritingInfoCeded = "AGGREGATED"
 			outUnderwritingInfoGross = "AGGREGATED"
@@ -73,7 +73,7 @@ components {
 		}
 	}
 	structures {
-		subsubcomponents {
+        substructure {
 			outClaimsCeded = "AGGREGATED"
 			outClaimsGross = "AGGREGATED"
 			outClaimsNet = "AGGREGATED"
