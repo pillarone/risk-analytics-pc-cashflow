@@ -113,8 +113,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ValidatorRegistry.addValidator(new MultipleProbabilitiesCopulaValidator())
         ValidatorRegistry.addValidator(new XLStrategyValidator())
         ValidatorRegistry.addValidator(new ClaimTypeStructuringValidator())
-//TODO (dbr) make this work again.
-//        ValidatorRegistry.addValidator(new CoverAttributeValidator())
+        ValidatorRegistry.addValidator(new CoverAttributeValidator())
 
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.pMLClaimsGeneratorStrategyValidator")
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.patternStrategyValidator")

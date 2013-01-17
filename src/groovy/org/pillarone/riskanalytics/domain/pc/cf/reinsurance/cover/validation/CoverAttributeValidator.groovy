@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.validation
 
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
+import org.pillarone.riskanalytics.core.components.ComponentUtils
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.validation.AbstractParameterValidationService
 import org.pillarone.riskanalytics.core.parameterization.validation.IParameterizationValidator
@@ -64,18 +65,18 @@ class CoverAttributeValidator implements IParameterizationValidator {
 
     private List checkIdenticalContracts(ConstrainedMultiDimensionalParameter parameter) {
         for (int row = parameter.getTitleRowCount(); row < parameter.getRowCount(); row++) {
-            MatrixCoverAttributeRow filterRow = new MatrixCoverAttributeRow(row, parameter)
-            if (filterRow.cededContract && filterRow.netContract && filterRow.cededContract == filterRow.netContract){
-                return [ValidationType.ERROR, IDENTICAL_NET_AND_CEDED_CONTRACTS,filterRow.cededContract.normalizedName]
+            CoverAttributeValidationRow filterRow = new CoverAttributeValidationRow(row, parameter)
+            if (filterRow.cededContractName && filterRow.netContractName && filterRow.cededContractName == filterRow.netContractName){
+                return [ValidationType.ERROR, IDENTICAL_NET_AND_CEDED_CONTRACTS,normalizeName(filterRow.netContractName)]
             }
         }
         return null
     }
 
     private List multipleIdenticalFilters(ConstrainedMultiDimensionalParameter parameter) {
-        Set<MatrixCoverAttributeRow> filters = new HashSet<MatrixCoverAttributeRow>();
+        Set<CoverAttributeValidationRow> filters = new HashSet<CoverAttributeValidationRow>();
         for (int row = parameter.getTitleRowCount(); row < parameter.getRowCount(); row++) {
-            MatrixCoverAttributeRow coverAttributeRow = new MatrixCoverAttributeRow(row, parameter)
+            CoverAttributeValidationRow coverAttributeRow = new CoverAttributeValidationRow(row, parameter)
             if (!filters.add(coverAttributeRow)) {
                 return [ValidationType.ERROR, IDENTICAL_FILTER]
             }
@@ -85,19 +86,23 @@ class CoverAttributeValidator implements IParameterizationValidator {
     }
 
     private List checkContracts(ConstrainedMultiDimensionalParameter parameter, String currentContractPath) {
-        List<ReinsuranceContract> netContracts = parameter.getValuesAsObjects(CoverMap.CONTRACT_NET_OF_COLUMN_INDEX)
-        List<ReinsuranceContract> cededContracts = parameter.getValuesAsObjects(CoverMap.CONTRACT_CEDED_OF_COLUMN_INDEX)
-        ReinsuranceContract conflictingContract = null
-        netContracts?.each { ReinsuranceContract contract ->
-            if (currentContractPath.endsWith(contract.name)) {
-                conflictingContract = contract
+        List<String> netContracts = parameter.getColumn(CoverMap.CONTRACT_NET_OF_COLUMN_INDEX)
+        List<String> cededContracts = parameter.getColumn(CoverMap.CONTRACT_CEDED_OF_COLUMN_INDEX)
+        String conflictingContractName = null
+        netContracts?.each { contractName ->
+            if (contractName && currentContractPath.endsWith(contractName)) {
+                conflictingContractName = contractName
             }
         }
-        cededContracts?.each { ReinsuranceContract contract ->
-            if (currentContractPath.endsWith(contract.name)) {
-                conflictingContract = contract
+        cededContracts?.each { contractName ->
+            if (contractName && currentContractPath.endsWith(contractName)) {
+                conflictingContractName = contractName
             }
         }
-        return conflictingContract ? [ValidationType.ERROR, SAME_CONTRACT_SELECTED, conflictingContract.normalizedName] : null
+        return conflictingContractName ? [ValidationType.ERROR, SAME_CONTRACT_SELECTED, normalizeName(conflictingContractName)] : null
+    }
+
+    private String normalizeName(String conflictingContractName) {
+        ComponentUtils.getNormalizedName(conflictingContractName)
     }
 }

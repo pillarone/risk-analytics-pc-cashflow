@@ -17,9 +17,6 @@ import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarke
 
 class CoverAttributeValidatorTests extends GrailsUnitTestCase {
     List<ParameterHolder> parameters
-    ReinsuranceContract contract1
-    ReinsuranceContract contract2
-
 
     @Override
     protected void setUp() {
@@ -31,20 +28,9 @@ class CoverAttributeValidatorTests extends GrailsUnitTestCase {
 
     private void setupParamCover(List selection = [[''], [''], [''], [''], [''], ['ANY']]) {
         def flexibleCover = new ConstrainedMultiDimensionalParameter(selection, ['', '', '', '', '', ''], ConstraintsFactory.getConstraints(CoverMap.IDENTIFIER))
-
         parameters = new ArrayList<ParameterHolder>()
         def benefitContracts = new ComboBoxTableMultiDimensionalParameter([], [''], IReinsuranceContractMarker)
         ParameterObjectParameterHolder holder = new ParameterObjectParameterHolder("subContract2:parmCover", 1, new MatrixCoverAttributeStrategy(flexibleCover: flexibleCover, benefitContracts: benefitContracts))
-        def parmCover = holder.classifierParameters.flexibleCover.value
-        contract1 = new ReinsuranceContract(name: 'subContract1')
-        contract2 = new ReinsuranceContract(name: 'subContract2')
-        parmCover.comboBoxValues[0] = ['': null, 'subContract1': contract1, 'subContract2': contract2]
-        parmCover.comboBoxValues[1] = ['': null, 'subContract1': contract1, 'subContract2': contract2]
-        parmCover.comboBoxValues[2] = ['': null]
-        parmCover.comboBoxValues[3] = ['': null]
-        parmCover.comboBoxValues[4] = ['': null]
-        parmCover.comboBoxValues[5] = ['ANY': ClaimTypeSelector.ANY, 'SINGLE': ClaimTypeSelector.SINGLE]
-
         parameters << holder
 
     }
@@ -77,7 +63,7 @@ class CoverAttributeValidatorTests extends GrailsUnitTestCase {
         ParameterValidation validationError = result[0]
         assert ValidationType.ERROR == validationError.getValidationType()
         assert CoverAttributeValidator.SAME_CONTRACT_SELECTED == validationError.msg
-        assert contract2.normalizedName == validationError.args[0]
+        assert 'Contract 2' == validationError.args[0]
     }
 
     void testValidateErrors_sameCededAndSameNetContractSelected() {
@@ -87,11 +73,11 @@ class CoverAttributeValidatorTests extends GrailsUnitTestCase {
         ParameterValidation validationError = result[0]
         assert ValidationType.ERROR == validationError.getValidationType()
         assert CoverAttributeValidator.SAME_CONTRACT_SELECTED == validationError.msg
-        assert contract2.normalizedName == validationError.args[0]
+        assert 'Contract 2' == validationError.args[0]
         validationError = result[1]
         assert ValidationType.ERROR == validationError.getValidationType()
         assert CoverAttributeValidator.IDENTICAL_NET_AND_CEDED_CONTRACTS == validationError.msg
-        assert contract2.normalizedName == validationError.args[0]
+        assert 'Contract 2' == validationError.args[0]
     }
 
     void testValidateErrors_sameNetContractMultipleLines() {
@@ -101,7 +87,7 @@ class CoverAttributeValidatorTests extends GrailsUnitTestCase {
         ParameterValidation validationError = result[0]
         assert ValidationType.ERROR == validationError.getValidationType()
         assert CoverAttributeValidator.SAME_CONTRACT_SELECTED == validationError.msg
-        assert contract2.normalizedName == validationError.args[0]
+        assert 'Contract 2' == validationError.args[0]
     }
 
     void testMultipleIdenticalFilters() {
@@ -123,6 +109,6 @@ class CoverAttributeValidatorTests extends GrailsUnitTestCase {
         ParameterValidation validationError = result[0]
         assert ValidationType.ERROR == validationError.getValidationType()
         assert CoverAttributeValidator.IDENTICAL_NET_AND_CEDED_CONTRACTS == validationError.msg
-        assert contract1.normalizedName == validationError.args[0]
+        assert 'Contract 1' == validationError.args[0]
     }
 }
