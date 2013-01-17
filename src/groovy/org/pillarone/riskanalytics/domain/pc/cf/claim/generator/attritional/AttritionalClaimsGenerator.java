@@ -71,8 +71,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                     } else {
                         List<Factors> severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices(),
                                 IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
-                        baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
-                                severityFactors, parmParameterizationBasis, this, periodScope);
+                        baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, severityFactors, parmParameterizationBasis, this, periodScope, inProbabilities);
                     }
                     baseClaims = parmUpdatingMethodology.updatingUltimate(baseClaims, parmActualClaims, periodCounter,
                             globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), US_DAYS_360, parmPayoutPatternBase, globalSanityChecks);

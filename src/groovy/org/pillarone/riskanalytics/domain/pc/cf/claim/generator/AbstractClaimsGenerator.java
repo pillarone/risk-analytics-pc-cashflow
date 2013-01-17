@@ -34,6 +34,7 @@ import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.marker.ICorrelationMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +59,10 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     protected PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     protected PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     protected PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket.class);
+//    What is this channel ?
     protected PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
     protected PacketList<SystematicFrequencyPacket> inEventFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket.class);
+    protected PacketList<DependancePacket> inProbabilities = new PacketList<DependancePacket>(DependancePacket.class);
 
     protected PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState.class);
     /**
@@ -347,8 +350,9 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     public void allocateChannelsToPhases() {
 //          Calculation channels --------------------------------------------------------------------------
         setTransmitterPhaseInput(inPatterns, PHASE_CLAIMS_CALCULATION);
-        setTransmitterPhaseInput(inEventSeverities, PHASE_CLAIMS_CALCULATION);
+//        setTransmitterPhaseInput(inEventSeverities, PHASE_CLAIMS_CALCULATION);
         setTransmitterPhaseInput(inEventFrequencies, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inProbabilities, PHASE_CLAIMS_CALCULATION);
         setTransmitterPhaseInput(inFactors, PHASE_CLAIMS_CALCULATION);
         setTransmitterPhaseInput(inUnderwritingInfo, PHASE_CLAIMS_CALCULATION);
 
@@ -407,13 +411,13 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
         this.outClaims = outClaims;
     }
 
-    public PacketList<EventDependenceStream> getInEventSeverities() {
-        return inEventSeverities;
-    }
+//    public PacketList<EventDependenceStream> getInEventSeverities() {
+//        return inEventSeverities;
+//    }
 
-    public void setInEventSeverities(PacketList<EventDependenceStream> inEventSeverities) {
-        this.inEventSeverities = inEventSeverities;
-    }
+//    public void setInEventSeverities(PacketList<EventDependenceStream> inEventSeverities) {
+//        this.inEventSeverities = inEventSeverities;
+//    }
 
     public PacketList<SystematicFrequencyPacket> getInEventFrequencies() {
         return inEventFrequencies;
@@ -501,6 +505,14 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
 
     public void setIterationScope(IterationScope iterationScope) {
         this.iterationScope = iterationScope;
+    }
+
+    public PacketList<DependancePacket> getInProbabilities() {
+        return inProbabilities;
+    }
+
+    public void setInProbabilities(PacketList<DependancePacket> inProbabilities) {
+        this.inProbabilities = inProbabilities;
     }
 
     // the following block has been added due to ART-983, while using Grails 1.3.7 with Groovy 1.7.8

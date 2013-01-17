@@ -16,6 +16,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.LossesOccurringContractBase
+import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors
+import com.google.common.collect.Lists
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -60,19 +63,20 @@ class AttritionalClaimsModelTests extends GroovyTestCase {
         PacketList<UnderwritingInfoPacket> underwritingInfos = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
         PacketList<SystematicFrequencyPacket> systematicFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket)
         PacketList<EventDependenceStream> events = new PacketList<EventDependenceStream>(EventDependenceStream)
-        PacketList<FactorsPacket> factors = new PacketList<FactorsPacket>(FactorsPacket)
+        List<Factors> factors = Lists.newArrayList()
+        List<DependancePacket> dependancePackets = Lists.newArrayList()
 
-        List<ClaimRoot> claimRoot = model.baseClaims(underwritingInfos, systematicFrequencies, events, factors, new LossesOccurringContractBase(), null, periodScope)
+        List<ClaimRoot> claimRoot = model.baseClaims(underwritingInfos, factors, new LossesOccurringContractBase(), null, periodScope, dependancePackets)
         assertEquals "P0 one claim only", 1, claimRoot.size()
         assertEquals "P0 unmodified ultimate", 1000d, claimRoot[0].ultimate
 
         periodScope.prepareNextPeriod()
-        claimRoot = model.baseClaims(underwritingInfos, systematicFrequencies, events, factors, new LossesOccurringContractBase(), null, periodScope)
+        claimRoot = model.baseClaims( underwritingInfos, factors, new LossesOccurringContractBase(), null, periodScope, dependancePackets)
         assertEquals "P1 one claim only", 1, claimRoot.size()
         assertEquals "P1 unmodified ultimate", 1000d, claimRoot[0].ultimate
 
         periodScope.prepareNextPeriod()
-        claimRoot = model.baseClaims(underwritingInfos, systematicFrequencies, events, factors, new LossesOccurringContractBase(), null, periodScope)
+        claimRoot = model.baseClaims(underwritingInfos, factors, new LossesOccurringContractBase(), null, periodScope, dependancePackets)
         assertEquals "P2 one claim only", 1, claimRoot.size()
         assertEquals "P2 unmodified ultimate", 2000d, claimRoot[0].ultimate
     }

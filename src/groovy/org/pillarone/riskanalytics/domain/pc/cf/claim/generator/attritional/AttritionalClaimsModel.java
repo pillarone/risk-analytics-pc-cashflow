@@ -4,26 +4,20 @@ import org.apache.commons.lang.ArrayUtils;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
-import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
-import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
-import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorType;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IClaimsGeneratorStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IPeriodDependingClaimsGeneratorStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.IExposureBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.ISeverityIndexMarker;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionTableConstraints;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.IVaryingParametersDistributionStrategy;
@@ -67,31 +61,26 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
         return claimsGeneratorStrategy;
     }
 
-    /**
-     *
-     * @param inUnderwritingInfo is combined with parmSeverityBase in order to filter matching underwriting info and calculate the scale factor
-     * @param inEventFrequencies ignored for attritional claims
-     * @param inEventSeverities
-     * @param severityFactors
-     * @param filterCriteria for inEventSeverities
-     * @param periodScope
-     * @return ClaimRoot objects
-     */
-    public List<ClaimRoot> baseClaims(PacketList<UnderwritingInfoPacket> inUnderwritingInfo,
-                                      PacketList<SystematicFrequencyPacket> inEventFrequencies,
-                                      PacketList<EventDependenceStream> inEventSeverities,
-                                      List<Factors> severityFactors,
-                                      IReinsuranceContractBaseStrategy contractBase,
-                                      IPerilMarker filterCriteria,
-                                      PeriodScope periodScope) {
+    public List<ClaimRoot> baseClaims(PacketList<UnderwritingInfoPacket> inUnderwritingInfo, List<Factors> severityFactors, IReinsuranceContractBaseStrategy contractBase, IPerilMarker filterCriteria, PeriodScope periodScope, List<DependancePacket> dependancePacketList) {
         int period = periodScope.getCurrentPeriod();
-        double scaleFactor = - parmSeverityBase.factor(inUnderwritingInfo);
-        List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(inEventSeverities, filterCriteria);
-        if (!eventSeverities.isEmpty()) {
-            return claimsModel(period).calculateClaims(scaleFactor, periodScope, eventSeverities);
+        double underwritingScaleFactor = - parmSeverityBase.factor(inUnderwritingInfo);
+        DependancePacket dependancePacket = new DependancePacket();
+        boolean foundPacket = false;
+        for(DependancePacket aPacket : dependancePacketList  ) {
+            if(aPacket.isDependantGenerator(filterCriteria)) {
+                if(foundPacket) {
+                    throw new SimulationException("Found two dependance packets which claim to have information for this claims generator: " + filterCriteria.getName()
+                     + " Have you selected this generator twice in two different dependance components? This is not allowed. If that is not the case please contact development");
+                }
+                foundPacket = true;
+                dependancePacket = aPacket;
+            }
+        }
+        if ( foundPacket ) {
+            return claimsModel(period).calculateDependantClaimsWithContractBase(dependancePacket,filterCriteria, periodScope, contractBase, underwritingScaleFactor, severityFactors);
         }
         else {
-            return claimsModel(period).generateClaims(scaleFactor, severityFactors, 1, periodScope, contractBase);
+            return claimsModel(period).generateClaims(underwritingScaleFactor, severityFactors, 1, periodScope, contractBase);
         }
     }
 
@@ -126,6 +115,4 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
     public void setParmSeverityModification(DistributionModified parmSeverityModification) {
         this.parmSeverityModification = parmSeverityModification;
     }
-
-
 }

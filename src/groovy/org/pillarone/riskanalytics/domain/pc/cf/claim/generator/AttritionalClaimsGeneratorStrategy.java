@@ -1,9 +1,11 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
+import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
@@ -11,10 +13,14 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket;
+import org.pillarone.riskanalytics.domain.utils.math.dependance.MarginalAndEvent;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +63,17 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
         return generateClaim(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, periodScope);
     }
 
+    @Override
+    public List<ClaimRoot> calculateDependantClaimsWithContractBase(DependancePacket dependancePacket, IPerilMarker filterCriteria, PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase, Double underwritingInfoScaleFactor, List<Factors> indexSeverityFactors) {
+        MarginalAndEvent marginalAndEvent = dependancePacket.getMarginal(filterCriteria, periodScope);
+        List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
+        DateTime exposureStartDate = contractBase.exposureStartDate(periodScope, getDateGenerator() );
+        double scaleFactor = IndexUtils.aggregateFactor(indexSeverityFactors, exposureStartDate, periodScope.getPeriodCounter(), exposureStartDate);
+        DateTime occurrenceDate = contractBase.occurrenceDate(exposureStartDate, dateGenerator, periodScope, null);
+        double claimValue = (getModifiedClaimsSizeDistribution().inverseF(marginalAndEvent.getMarginalProbability()) + shift) * - underwritingInfoScaleFactor * scaleFactor;
+        baseClaims.add(new ClaimRoot( claimValue, claimType(), exposureStartDate, occurrenceDate));
+        return baseClaims;
+    }
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria,

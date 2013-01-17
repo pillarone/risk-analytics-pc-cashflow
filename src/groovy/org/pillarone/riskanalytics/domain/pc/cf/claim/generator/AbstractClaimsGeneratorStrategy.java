@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
@@ -13,6 +14,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
+import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.*;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
@@ -81,6 +84,10 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
         return calculateClaims(severityScalingFactor, periodScope, eventSeverities);
     }
 
+    public List<ClaimRoot> calculateDependantClaimsWithContractBase(DependancePacket dependancePacket, IPerilMarker filterCriteria, PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase, Double underwritingInfoScaleFactor, List<Factors> indexSeverityFactors) {
+        throw new SimulationException("Not implemented !");
+    }
+
     public List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope,
                                            List<EventSeverity> eventSeverities) {
         return ClaimsGeneratorUtils.calculateClaims(scaleFactor, modifiedClaimsSizeDistribution, claimType(), periodScope,
@@ -99,6 +106,10 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
             baseClaims.add(new ClaimRoot(claimValues.get(i) * -1, claimType(), exposureStartDate, occurrenceDate, event));
         }
         return baseClaims;
+    }
+
+    public IRandomNumberGenerator getDateGenerator() {
+        return dateGenerator;
     }
 
     protected void setGenerator(RandomDistribution distribution) {
