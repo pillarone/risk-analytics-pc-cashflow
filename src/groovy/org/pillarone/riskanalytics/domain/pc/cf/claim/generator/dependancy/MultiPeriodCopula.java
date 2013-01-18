@@ -20,7 +20,6 @@ public class MultiPeriodCopula extends Component {
     private boolean globalSanityChecks;
     private PeriodScope periodScope;
     private PeriodStore periodStore;
-    private IterationStore iterationStore;
 
     public static final String ALL_PERIOD_DEPENDANCY = "All period dependancy";
 
@@ -29,7 +28,7 @@ public class MultiPeriodCopula extends Component {
     @Override
     protected void doCalculation() {
         initIteration();
-        DependancePacket dependancePacket = (DependancePacket) iterationStore.get(ALL_PERIOD_DEPENDANCY, -periodScope.getCurrentPeriod());
+        DependancePacket dependancePacket = (DependancePacket) periodStore.get(ALL_PERIOD_DEPENDANCY, -periodScope.getCurrentPeriod());
         if(dependancePacket == null) {
             throw new SimulationException("No dependancies generated. Contract development");
         }
@@ -39,7 +38,7 @@ public class MultiPeriodCopula extends Component {
     private void initIteration() {
         if(periodScope.isFirstPeriod()) {
            DependancePacket dependancePacket = parmCopulaStrategy.getDependanceAllPeriod(globalLastCoveredPeriod);
-           iterationStore.put(ALL_PERIOD_DEPENDANCY, dependancePacket);
+            periodStore.put(ALL_PERIOD_DEPENDANCY, dependancePacket);
         }
     }
 
@@ -81,13 +80,5 @@ public class MultiPeriodCopula extends Component {
 
     public void setPeriodStore(PeriodStore periodStore) {
         this.periodStore = periodStore;
-    }
-
-    public IterationStore getIterationStore() {
-        return iterationStore;
-    }
-
-    public void setIterationStore(IterationStore iterationStore) {
-        this.iterationStore = iterationStore;
     }
 }

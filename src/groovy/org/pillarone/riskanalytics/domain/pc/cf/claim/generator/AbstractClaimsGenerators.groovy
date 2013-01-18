@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.core.components.DynamicComposedComponent
+import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -22,6 +23,7 @@ public abstract class AbstractClaimsGenerators extends DynamicMultiPhaseComposed
     PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
 
     PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState)
+    PacketList<DependancePacket> inProbabilities = new PacketList<DependancePacket>(DependancePacket)
 
     protected void doCalculation(String phase) {
         for (Component component : componentList) {
@@ -33,6 +35,7 @@ public abstract class AbstractClaimsGenerators extends DynamicMultiPhaseComposed
         setTransmitterPhaseInput(inUnderwritingInfo, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
         setTransmitterPhaseInput(inFactors, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
         setTransmitterPhaseInput(inPatterns, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
+        setTransmitterPhaseInput(inProbabilities, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
 
         setTransmitterPhaseOutput(outClaims, AbstractClaimsGenerator.PHASE_CLAIMS_CALCULATION )
 
@@ -45,6 +48,7 @@ public abstract class AbstractClaimsGenerators extends DynamicMultiPhaseComposed
         replicateInChannels this, 'inFactors'
         replicateInChannels this, 'inPatterns'
         replicateInChannels this, 'inCommutationState'
+        replicateInChannels this, inProbabilities
 
         replicateOutChannels this, 'outClaims'
     }

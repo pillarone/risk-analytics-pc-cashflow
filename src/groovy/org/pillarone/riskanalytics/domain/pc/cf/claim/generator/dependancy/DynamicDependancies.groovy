@@ -13,7 +13,7 @@ import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket
  */
 class DynamicDependancies extends DynamicComposedComponent {
 
-    private PacketList<DependancePacket> outProbabilities = new PacketList(DependancePacket.class);
+    private PacketList<DependancePacket> outProbabilities = new PacketList<DependancePacket>(DependancePacket);
 
     public MultiPeriodCopula createDefaultSubComponent() {
         return new MultiPeriodCopula(
