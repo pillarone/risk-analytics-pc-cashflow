@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
@@ -70,6 +71,7 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
         DateTime exposureStartDate = contractBase.exposureStartDate(periodScope, getDateGenerator() );
         double scaleFactor = IndexUtils.aggregateFactor(indexSeverityFactors, exposureStartDate, periodScope.getPeriodCounter(), exposureStartDate);
         DateTime occurrenceDate = contractBase.occurrenceDate(exposureStartDate, dateGenerator, periodScope, null);
+        setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
         double claimValue = (getModifiedClaimsSizeDistribution().inverseF(marginalAndEvent.getMarginalProbability()) + shift) * - underwritingInfoScaleFactor * scaleFactor;
         baseClaims.add(new ClaimRoot( claimValue, claimType(), exposureStartDate, occurrenceDate));
         return baseClaims;

@@ -134,6 +134,9 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     protected final static String OCCURRENCE_DATE_DISTRIBUTION = "occurrenceDateDistribution";
 
     public Distribution getModifiedClaimsSizeDistribution() {
+        if(modifiedClaimsSizeDistribution == null) {
+            throw new SimulationException("claims distribution is null. Have you called the lazyInit method ? Have you initialised the component correctly? ");
+        }
         return modifiedClaimsSizeDistribution;
     }
 
