@@ -80,7 +80,7 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
 
     void testUsage() {
         // enable the following line while writing/debugging the test case but comment it out before committing!
-        setCheckedForValidationErrors(true)
+//        setCheckedForValidationErrors(true)
         for (SpreadsheetImporter importer : importers) {
             ReinsuranceContract contract = getQuotaShareContract(importer, 'Sliding_in_Triangle')
             IterationScope iterationScope = contract.iterationScope
