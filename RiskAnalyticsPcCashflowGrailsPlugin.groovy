@@ -27,7 +27,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimTypeSelectionTableCon
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.validation.CopulaValidator
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.validation.MultipleProbabilitiesCopulaValidator
 import org.pillarone.riskanalytics.core.output.aggregation.PacketAggregatorRegistry
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket as CCP
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimPacketAggregator
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.YieldCurveTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceCollectingModeStrategy
@@ -132,7 +132,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         // doc urls
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.HELP, "org/pillarone/riskanalytics/domain/pc/cf/ComponentHelp")
 
-        PacketAggregatorRegistry.registerAggregator(ClaimCashflowPacket, new ClaimPacketAggregator())
+        PacketAggregatorRegistry.registerAggregator(CCP, new ClaimPacketAggregator())
         PacketAggregatorRegistry.registerAggregator(UnderwritingInfoPacket, new UnderwritingInfoPacketAggregator())
 
         /* Collectors should also be registered  in the PCCashflowBootstrap   */
@@ -148,10 +148,50 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         CollectingModeFactory.registerStrategy(new AggregateUltimatePaidClaimCollectingModeStrategy())
 
         CollectingModeFactory.registerStrategy(new SingleUltimatePaidClaimCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([],[]))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD],[]))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE],[]))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD],[ClaimCashflowPacket.REPORTED_INDEXED, ClaimCashflowPacket.PAID_INDEXED]))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], []))
+        // PMO-2231
+
+        def f = [
+                paid_inc: CCP.PAID_INDEXED,
+                paid_cum: CCP.PAID_CUMULATIVE_INDEXED,
+                cres_inc: CCP.CHANGES_IN_RESERVES_INDEXED,
+                cres_cum: CCP.RESERVES_INDEXED,
+                IBNR_inc: CCP.CHANGES_IN_IBNR_INDEXED,
+                IBNR_cum: CCP.IBNR_INDEXED,
+                outst_inc: CCP.CHANGES_IN_OUTSTANDING_INDEXED,
+                outst_cum: CCP.OUTSTANDING_INDEXED,
+                rep_inc: CCP.REPORTED_INDEXED,
+                rep_cum: CCP.REPORTED_CUMULATIVE_INDEXED,
+                total_uix_inc: CCP.ULTIMATE,
+                total_inc: CCP.DEVELOPED_RESULT_INDEXED,
+                total_cum: CCP.TOTAL_CUMULATIVE_INDEXED,
+                rb_claim_premium: CCP.PREMIUM_RISK_BASE,
+                rb_claim_reserves: CCP.RESERVE_RISK_BASE,
+                rb_claim_total: CCP.PREMIUM_AND_RESERVE_RISK_BASE,
+                rb_fin_premium: '',
+                rb_fin_reserves: '',
+                rb_fin_total: '']
+        def fields = [f.paid_inc, f.paid_cum, f.cres_inc, f.cres_cum, f.IBNR_inc, f.IBNR_cum, f.outst_inc, f.outst_cum,
+                f.rep_inc, f.rep_cum, f.total_uix_inc, f.total_inc, f.total_cum, f.rb_claim_premium, f.rb_claim_reserves,
+                f.rb_claim_total, f.rb_fin_premium, f.rb_fin_reserves, f.rb_fin_total]
+
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], []))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], []))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE], []))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], []))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [0, 3, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18].collect { fields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [0, 3, 5, 7, 8, 10, 11, 12].collect { fields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [7, 11, 16, 17, 18].collect { fields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE], [7, 11, 16, 17, 18].collect { fields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [7, 11, 16, 17, 18].collect { fields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [7, 11, 16, 17, 18].collect { fields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [7, 11, 13, 14, 15].collect { fields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE], [7, 11, 13, 14, 15].collect { fields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [7, 11, 13, 14, 15].collect { fields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [7, 11, 13, 14, 15].collect { fields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [7, 10, 11, 12, 13, 14, 15, 16, 17, 18].collect { fields[it] }))
+
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD],[CCP.REPORTED_INDEXED, CCP.PAID_INDEXED]))
     }
 
     def onChange = { event ->
