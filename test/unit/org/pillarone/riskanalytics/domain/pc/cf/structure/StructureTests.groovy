@@ -1,5 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.structure
 
+import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.pillarone.riskanalytics.domain.pc.cf.segment.Segment
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
@@ -39,6 +42,7 @@ class StructureTests extends GroovyTestCase {
     UnderwritingInfoPacket underwritingInfoMotor50 = new UnderwritingInfoPacket(segment: segmentMotor, premiumWritten: 50)
     UnderwritingInfoPacket underwritingInfoMotorHull40 = new UnderwritingInfoPacket(segment: segmentMotorHull, premiumWritten: 40)
     UnderwritingInfoPacket underwritingInfoAccident30 = new UnderwritingInfoPacket(segment: segmentAccident, premiumWritten: 30)
+    PeriodScope periodScope
 
     void setUp() {
         claimMotor100.setMarker(segmentMotor)
@@ -47,13 +51,16 @@ class StructureTests extends GroovyTestCase {
         claimMotorHull500.setMarker(perilMotorHull)
         claimAccident80.setMarker(segmentAccident)
         claimAccident80.setMarker(perilAccident)
+        DateTime projectionStart = new DateTime(2010, 1, 1, 0, 0, 0, 0)
+        IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(projectionStart, 2)
+        periodScope = iterationScope.periodScope
         ConstraintsFactory.registerConstraint(new ClaimTypeSelectionTableConstraints())
     }
 
 
     void testSegments() {
 
-        structure = new Structure()
+        structure = new Structure(periodScope: periodScope)
 
         ComboBoxTableMultiDimensionalParameter selectedSegments = new ComboBoxTableMultiDimensionalParameter(["motor", "motor hull"],
                 [SegmentsStructuringStrategy.SEGMENT], ISegmentMarker)
@@ -76,7 +83,7 @@ class StructureTests extends GroovyTestCase {
 
     void testSegmentsPerils() {
 
-        structure = new Structure()
+        structure = new Structure(periodScope: periodScope)
 
         ComboBoxTableMultiDimensionalParameter selectedSegments = new ComboBoxTableMultiDimensionalParameter(["motor", "motor hull"],
                 [SegmentsStructuringStrategy.SEGMENT], ISegmentMarker)
@@ -120,7 +127,7 @@ class StructureTests extends GroovyTestCase {
 
     void testClaimTypes() {
 
-        structure = new Structure()
+        structure = new Structure(periodScope: periodScope)
 
         ConstrainedMultiDimensionalParameter selectedTypes = new ConstrainedMultiDimensionalParameter([[ClaimType.ATTRITIONAL.toString(), ClaimType.SINGLE.toString()]],
                 ClaimTypeSelectionTableConstraints.COLUMN_TITLES, ConstraintsFactory.getConstraints(ClaimTypeSelectionTableConstraints.IDENTIFIER))

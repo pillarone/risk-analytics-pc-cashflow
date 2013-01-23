@@ -45,8 +45,8 @@ public class FinancialsPacket extends MultiValuePacket {
             }
         }
 
-        gross = new Financials(grossUwInfos, grossClaims, occurrenceInCurrentPeriod);
-        net = new Financials(netUwInfos, netClaims, occurrenceInCurrentPeriod);
+        gross = new Financials(grossUwInfos, grossClaims, occurrenceInCurrentPeriod, Boolean.FALSE);
+        net = new Financials(netUwInfos, netClaims, occurrenceInCurrentPeriod, Boolean.FALSE);
         ceded = new Financials();
         if (!cededUwInfos.isEmpty()) {
             CededUnderwritingInfoPacket aggregateCededUwInfoPacket = UnderwritingInfoUtils.aggregateCeded(cededUwInfos);
@@ -54,8 +54,7 @@ public class FinancialsPacket extends MultiValuePacket {
             ceded.premiumPaid = aggregateCededUwInfoPacket.getPremiumPaid();
             commission = aggregateCededUwInfoPacket.getCommission();
         }
-        ceded.initClaimRelatedFigures(cededClaims, occurrenceInCurrentPeriod);
-
+        ceded.initClaimRelatedFigures(cededClaims, occurrenceInCurrentPeriod, Boolean.TRUE);
     }
 
     public static List<FinancialsPacket> getFinancialsPacketsByInceptionPeriod(
@@ -488,6 +487,7 @@ public class FinancialsPacket extends MultiValuePacket {
         double cashflow;
         double premiumPaid;
         double claimPaid;
+        double claimOutstanding;
         double lossRatioPaidPaid;
 
         double premiumRisk;
@@ -502,26 +502,30 @@ public class FinancialsPacket extends MultiValuePacket {
         public Financials() {
         }
 
-        public Financials(List<UnderwritingInfoPacket> uwInfos, List<ClaimCashflowPacket> claims, Boolean occurrenceInCurrentPeriod) {
+        public Financials(List<UnderwritingInfoPacket> uwInfos, List<ClaimCashflowPacket> claims,
+                          Boolean occurrenceInCurrentPeriod, Boolean cededFigures) {
             if (!uwInfos.isEmpty()) {
                 premiumWritten = UnderwritingInfoUtils.aggregate(uwInfos).getPremiumWritten();
                 premiumPaid = UnderwritingInfoUtils.aggregate(uwInfos).getPremiumPaid();
             }
-            initClaimRelatedFigures(claims, occurrenceInCurrentPeriod);
+            initClaimRelatedFigures(claims, occurrenceInCurrentPeriod, cededFigures);
         }
 
-        public void initClaimRelatedFigures(List<ClaimCashflowPacket> claims, Boolean occurrenceInCurrentPeriod) {
+        public void initClaimRelatedFigures(List<ClaimCashflowPacket> claims, Boolean occurrenceInCurrentPeriod, Boolean cededFigures) {
             if (!claims.isEmpty()) {
-                claimUltimate = ClaimUtils.sum(claims, true).ultimate();
-                claimPaid = ClaimUtils.sum(claims, true).getPaidIncrementalIndexed();
+                ClaimCashflowPacket sum = ClaimUtils.sum(claims, true);
+                claimUltimate = sum.ultimate();
+                claimPaid = sum.getPaidIncrementalIndexed();
+                claimOutstanding = sum.outstandingIndexed();
             }
             cashflow = premiumPaid + claimPaid;
             bestEstimate = premiumWritten + claimUltimate;
+            double financialRisk = (cededFigures == Boolean.TRUE) ? cashflow + claimOutstanding + commission : cashflow + claimOutstanding;
             if (occurrenceInCurrentPeriod == Boolean.TRUE) {
-                premiumRisk = cashflow;
+                premiumRisk = financialRisk;
             }
             else if (occurrenceInCurrentPeriod == Boolean.FALSE) {
-                reserveRisk = cashflow;
+                reserveRisk = financialRisk;
             }
             premiumReserveRisk = premiumRisk + reserveRisk;
             lossRatioWrittenUltimate = premiumWritten == 0 ? 0 : -claimUltimate / premiumWritten;

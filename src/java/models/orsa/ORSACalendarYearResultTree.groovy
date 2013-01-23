@@ -311,43 +311,39 @@ mappings = {
                         "premiumWritten" "ORSA:segments:[%segment%]:outFinancials:netPremiumWritten"
                         "claimInitial" "ORSA:segments:[%segment%]:outFinancials:netClaimUltimate"
                         "lossRatioWrittenUltimate" "ORSA:segments:[%segment%]:outFinancials:netLossRatioWrittenUltimate"
-//                        "commission" "ORSA:segments:[%segment%]:outFinancials:commission"
-//                        "[%period%]" {
-//                            "netCashflow" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netCashflow", {
-//                                "premiumPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netPremiumPaid"
-//                                "claimPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netClaimPaid"
-//                                "lossRatioPaidPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netLossRatioPaidPaid"
-//                                "commission" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
-//                            }
-//                       }
+                        "[%period%]" {
+                            "netCashflow" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netCashflow", {
+                                "premiumPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netPremiumPaid"
+                                "claimPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netClaimPaid"
+                                "lossRatioPaidPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netLossRatioPaidPaid"
+                            }
+                        }
                     }
                     "bestEstimateGrossDetail" "ORSA:segments:[%segment%]:outFinancials:grossBestEstimate", {
                         "premiumWritten" "ORSA:segments:[%segment%]:outFinancials:grossPremiumWritten"
                         "claimInitial" "ORSA:segments:[%segment%]:outFinancials:grossClaimUltimate"
                         "lossRatioWrittenUltimate" "ORSA:segments:[%segment%]:outFinancials:grossLossRatioWrittenUltimate"
-//                        "commission" "ORSA:segments:[%segment%]:outFinancials:commission"
-//                        "[%period%]" {
-//                            "grossCashflow" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossCashflow", {
-//                                "premiumPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossPremiumPaid"
-//                                "claimPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossClaimPaid"
-//                                "lossRatioPaidPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossLossRatioPaidPaid"
-//                                "commission" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
-//                            }
-//                       }
+                        "[%period%]" {
+                            "grossCashflow" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossCashflow", {
+                                "premiumPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossPremiumPaid"
+                                "claimPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossClaimPaid"
+                                "lossRatioPaidPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossLossRatioPaidPaid"
+                            }
+                        }
                     }
                     "bestEstimateCededDetail" "ORSA:segments:[%segment%]:outFinancials:cededBestEstimate", {
                         "premiumWritten" "ORSA:segments:[%segment%]:outFinancials:cededPremiumWritten"
                         "claimInitial" "ORSA:segments:[%segment%]:outFinancials:cededClaimUltimate"
                         "lossRatioWrittenUltimate" "ORSA:segments:[%segment%]:outFinancials:cededLossRatioWrittenUltimate"
-//                        "commission" "ORSA:segments:[%segment%]:outFinancials:commission"
-//                        "[%period%]" {
-//                            "cededCashflow" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededCashflow", {
-//                                "premiumPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededPremiumPaid"
-//                                "claimPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededClaimPaid"
-//                                "lossRatioPaidPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededLossRatioPaidPaid"
-//                                "commission" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
-//                            }
-//                       }
+                        "commission" "ORSA:segments:[%segment%]:outFinancials:commission"
+                        "[%period%]" {
+                            "cededCashflow" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededCashflow", {
+                                "premiumPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededPremiumPaid"
+                                "claimPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededClaimPaid"
+                                "lossRatioPaidPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededLossRatioPaidPaid"
+                                "commission" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
+                            }
+                        }
                     }
                 }
                 "claimsNet" {
@@ -627,6 +623,120 @@ mappings = {
         }
         "structures" {
             "[%structure%]" {
+                "cashflow" {
+                    "cashflowNetDetail" "ORSA:structures:[%structure%]:outFinancials:netCashflow", {
+                        "premiumPaid" "ORSA:structures:[%structure%]:outFinancials:netPremiumPaid"
+                        "claimPaid" "ORSA:structures:[%structure%]:outFinancials:netClaimPaid"
+                        "lossRatioPaidPaid" "ORSA:structures:[%structure%]:outFinancials:netLossRatioPaidPaid"
+                        "commission" "ORSA:structures:[%structure%]:outFinancials:commission"
+                        "[%period%]" {
+                            "netCashflow" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netCashflow", {
+                                "premiumPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netPremiumPaid"
+                                "claimPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netClaimPaid"
+                                "lossRatioPaidPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netLossRatioPaidPaid"
+                                "commission" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:commission"
+                            }
+                        }
+                    }
+                    "cashflowNetPeriod" "ORSA:structures:[%structure%]:outFinancials:netCashflow", {
+                        "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netCashflow"
+                    }
+                    "riskNet" {
+                        "premiumRiskOnFinancials" "ORSA:structures:[%structure%]:outFinancials:netPremiumRisk"
+                        "reserveRiskOnFinancials" "ORSA:structures:[%structure%]:outFinancials:netReserveRisk", {
+                            "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netReserveRisk"
+                        }
+                        "premiumAndReserveRiskBasedOnFinancials" "ORSA:structures:[%structure%]:outFinancials:netPremiumReserveRisk"
+                    }
+
+                    "cashflowGrossDetail" "ORSA:structures:[%structure%]:outFinancials:grossCashflow", {
+                        "premiumPaid" "ORSA:structures:[%structure%]:outFinancials:grossPremiumPaid"
+                        "claimPaid" "ORSA:structures:[%structure%]:outFinancials:grossClaimPaid"
+                        "lossRatioPaidPaid" "ORSA:structures:[%structure%]:outFinancials:grossLossRatioPaidPaid"
+                        "[%period%]" {
+                            "grossCashflow" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossCashflow", {
+                                "premiumPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossPremiumPaid"
+                                "claimPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossClaimPaid"
+                                "lossRatioPaidPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossLossRatioPaidPaid"
+                            }
+                        }
+                    }
+                    "cashflowGrossPeriod" "ORSA:structures:[%structure%]:outFinancials:grossCashflow", {
+                        "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossCashflow"
+                    }
+                    "riskGross" {
+                        "premiumRiskOnFinancials" "ORSA:structures:[%structure%]:outFinancials:grossPremiumRisk"
+                        "reserveRiskOnFinancials" "ORSA:structures:[%structure%]:outFinancials:grossReserveRisk", {
+                            "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossReserveRisk"
+                        }
+                        "premiumAndReserveRiskBasedOnFinancials" "ORSA:structures:[%structure%]:outFinancials:grossPremiumReserveRisk"
+                    }
+
+                    "cashflowCededDetail" "ORSA:structures:[%structure%]:outFinancials:cededCashflow", {
+                        "premiumPaid" "ORSA:structures:[%structure%]:outFinancials:cededPremiumPaid"
+                        "claimPaid" "ORSA:structures:[%structure%]:outFinancials:cededClaimPaid"
+                        "lossRatioPaidPaid" "ORSA:structures:[%structure%]:outFinancials:cededLossRatioPaidPaid"
+                        "commission" "ORSA:structures:[%structure%]:outFinancials:commission"
+                        "[%period%]" {
+                            "cededCashflow" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededCashflow", {
+                                "premiumPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededPremiumPaid"
+                                "claimPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededClaimPaid"
+                                "lossRatioPaidPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededLossRatioPaidPaid"
+                                "commission" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:commission"
+                            }
+                        }
+                    }
+                    "cashflowCededPeriod" "ORSA:structures:[%structure%]:outFinancials:cededCashflow", {
+                        "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededCashflow"
+                    }
+                    "riskCeded" {
+                        "premiumRiskOnFinancials" "ORSA:structures:[%structure%]:outFinancials:cededPremiumRisk"
+                        "reserveRiskOnFinancials" "ORSA:structures:[%structure%]:outFinancials:cededReserveRisk", {
+                            "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededReserveRisk"
+                        }
+                        "premiumAndReserveRiskBasedOnFinancials" "ORSA:structures:[%structure%]:outFinancials:cededPremiumReserveRisk"
+                    }
+                }
+                "bestEstimate" {
+                    "bestEstimateNetDetail" "ORSA:structures:[%structure%]:outFinancials:netBestEstimate", {
+                        "premiumWritten" "ORSA:structures:[%structure%]:outFinancials:netPremiumWritten"
+                        "claimInitial" "ORSA:structures:[%structure%]:outFinancials:netClaimUltimate"
+                        "lossRatioWrittenUltimate" "ORSA:structures:[%structure%]:outFinancials:netLossRatioWrittenUltimate"
+                        "[%period%]" {
+                            "netCashflow" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netCashflow", {
+                                "premiumPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netPremiumPaid"
+                                "claimPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netClaimPaid"
+                                "lossRatioPaidPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netLossRatioPaidPaid"
+                            }
+                        }
+                    }
+                    "bestEstimateGrossDetail" "ORSA:structures:[%structure%]:outFinancials:grossBestEstimate", {
+                        "premiumWritten" "ORSA:structures:[%structure%]:outFinancials:grossPremiumWritten"
+                        "claimInitial" "ORSA:structures:[%structure%]:outFinancials:grossClaimUltimate"
+                        "lossRatioWrittenUltimate" "ORSA:structures:[%structure%]:outFinancials:grossLossRatioWrittenUltimate"
+                        "[%period%]" {
+                            "grossCashflow" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossCashflow", {
+                                "premiumPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossPremiumPaid"
+                                "claimPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossClaimPaid"
+                                "lossRatioPaidPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossLossRatioPaidPaid"
+                            }
+                        }
+                    }
+                    "bestEstimateCededDetail" "ORSA:structures:[%structure%]:outFinancials:cededBestEstimate", {
+                        "premiumWritten" "ORSA:structures:[%structure%]:outFinancials:cededPremiumWritten"
+                        "claimInitial" "ORSA:structures:[%structure%]:outFinancials:cededClaimUltimate"
+                        "lossRatioWrittenUltimate" "ORSA:structures:[%structure%]:outFinancials:cededLossRatioWrittenUltimate"
+                        "commission" "ORSA:structures:[%structure%]:outFinancials:commission"
+                        "[%period%]" {
+                            "cededCashflow" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededCashflow", {
+                                "premiumPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededPremiumPaid"
+                                "claimPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededClaimPaid"
+                                "lossRatioPaidPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededLossRatioPaidPaid"
+                                "commission" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:commission"
+                            }
+                        }
+                    }
+                }
                 "claimsNet" {
                     "ultimate" "ORSA:structures:[%structure%]:outClaimsNet:ultimate"
                     "reportedIncrementalIndexed" "ORSA:structures:[%structure%]:outClaimsNet:reportedIncrementalIndexed", {
@@ -848,126 +958,6 @@ mappings = {
                     }
                     "variable" "ORSA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionVariable", {
                         "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outUnderwritingInfoCeded:commissionVariable"
-                    }
-                }
-            }
-        }
-        "retroactive" {
-            "[%contract%]" {
-                "Financials" {
-                    "result" "ORSA:retrospectiveReinsurance:[%contract%]:outContractFinancials:contractResult", {
-                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outContractFinancials:contractResult", {
-                            "premium" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outContractFinancials:cededPremium"
-                            "commission" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outContractFinancials:cededCommission"
-                            "claim" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outContractFinancials:cededClaim"
-                        }
-                    }
-                }
-                "claimsNet" {
-                    "ultimate" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:ultimate"
-                    "reportedIncrementalIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:reportedIncrementalIndexed", {
-                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:reportedIncrementalIndexed"
-                    }
-                    "paidIncrementalIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:paidIncrementalIndexed", {
-                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:paidIncrementalIndexed"
-                    }
-                    "outstandingIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:outstandingIndexed", {
-                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:outstandingIndexed"
-                    }
-                    "IBNRIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:IBNRIndexed", {
-                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:IBNRIndexed"
-                    }
-                    "reservesIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:reservesIndexed", {
-                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:reservesIndexed"
-                    }
-                    "increaseDueToIndex" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:developedResultIndexed", {
-                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:developedResultIndexed"
-                    }
-                    "premiumRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:premiumRiskBase"
-                    "reserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:reserveRiskBase", {
-                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:reserveRiskBase"
-                    }
-                    "premiumAndReserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:premiumAndReserveRiskBase"
-                    "claimsGross" {
-                        "ultimate" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:ultimate"
-                        "reportedIncrementalIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:reportedIncrementalIndexed", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:reportedIncrementalIndexed"
-                        }
-                        "paidIncrementalIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:paidIncrementalIndexed", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:paidIncrementalIndexed"
-                        }
-                        "outstandingIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:outstandingIndexed", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:outstandingIndexed"
-                        }
-                        "IBNRIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:IBNRIndexed", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:IBNRIndexed"
-                        }
-                        "reservesIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:reservesIndexed", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:reservesIndexed"
-                        }
-                        "increaseDueToIndex" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:developedResultIndexed", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:developedResultIndexed"
-                        }
-                        "premiumRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:premiumRiskBase"
-                        "reserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:reserveRiskBase", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:reserveRiskBase"
-                        }
-                        "premiumAndReserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:premiumAndReserveRiskBase"
-                    }
-                    "claimsCeded" {
-                        "ultimate" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:ultimate"
-                        "reportedIncrementalIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:reportedIncrementalIndexed", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:reportedIncrementalIndexed"
-                        }
-                        "paidIncrementalIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:paidIncrementalIndexed", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:paidIncrementalIndexed"
-                        }
-                        "outstandingIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:outstandingIndexed", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:outstandingIndexed"
-                        }
-                        "IBNRIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:IBNRIndexed", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:IBNRIndexed"
-                        }
-                        "reservesIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:reservesIndexed", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:reservesIndexed"
-                        }
-                        "increaseDueToIndex" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:developedResultIndexed", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:developedResultIndexed"
-                        }
-                        "premiumRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:premiumRiskBase"
-                        "reserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:reserveRiskBase", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:reserveRiskBase"
-                        }
-                        "premiumAndReserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:premiumAndReserveRiskBase"
-                    }
-                }
-                "premium" {
-                    "premiumWrittenNet" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoNet:premiumWritten", {
-                        "gross" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoGross:premiumWritten"
-                        "ceded" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:premiumWritten"
-                    }
-                    "premiumPaidNet" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoNet:premiumPaid", {
-                        "netByUnderwritingYear" {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outUnderwritingInfoNet:premiumPaid"
-                        }
-                        "gross" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoGross:premiumPaid", {
-                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outUnderwritingInfoGross:premiumPaid"
-                        }
-                        "ceded" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:premiumPaid", {
-                            "cededByUnderwritingYear" {
-                                "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outUnderwritingInfoCeded:premiumPaid"
-                            }
-                            "fixed" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:premiumPaidFixed"
-                            "variable" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:premiumPaidVariable"
-                        }
-                    }
-                }
-                "commission" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:commission", {
-                    "fixed" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:commissionFixed", {
-                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outUnderwritingInfoCeded:commissionFixed"
-                    }
-                    "variable" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:commissionVariable", {
-                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outUnderwritingInfoCeded:commissionVariable"
                     }
                 }
             }
