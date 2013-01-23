@@ -60,6 +60,14 @@ class PeriodStrategyType extends AbstractParameterObjectClassifier {
         return PeriodStrategyType.getStrategy(PeriodStrategyType.ONEYEAR, [:])
     }
 
+    public static IPeriodStrategy getRetroActiveDefault() {
+        DateTime baseDate = new DateTime().withDayOfYear(1)
+        return PeriodStrategyType.getStrategy(PeriodStrategyType.RETROACTIVE,
+                ['coveredOccurencePeriodFrom': baseDate,
+                 'coveredOccurencePeriodTo': baseDate.plusYears(1),
+                 'coveredDevelopmentPeriodStartDate': baseDate.plusYears(1)])
+    }
+
     public static IPeriodStrategy getStrategy(PeriodStrategyType type, Map parameters) {
         IPeriodStrategy strategy;
         switch (type) {

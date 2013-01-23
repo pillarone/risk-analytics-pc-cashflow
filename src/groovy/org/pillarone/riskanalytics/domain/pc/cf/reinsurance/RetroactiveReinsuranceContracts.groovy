@@ -51,20 +51,20 @@ class RetroactiveReinsuranceContracts extends DynamicComposedComponent {
                     Collections.emptyList(), LegalEntityPortionConstraints.COLUMN_TITLES,
                     ConstraintsFactory.getConstraints(LegalEntityPortionConstraints.IDENTIFIER)),
                 parmCover : CoverAttributeStrategyType.getDefault(),
-                parmCoveredPeriod : PeriodStrategyType.getDefault(),
+                parmCoveredPeriod : PeriodStrategyType.getRetroActiveDefault(),
                 parmContractStrategy : ReinsuranceContractType.getDefault());
     }
 
     @Override
     void wire() {
         if (noneTrivialContracts()) {
-            replicateInChannels this, 'inLegalEntityDefault'
-            replicateInChannels this, 'inClaims'
-            replicateInChannels this, 'inUnderwritingInfo'
-            replicateOutChannels this, 'outClaimsInward'
-            replicateOutChannels this, 'outUnderwritingInfoInward'
-            replicateOutChannels this, 'outUnderwritingInfoCeded'
-            replicateOutChannels this, 'outClaimsCeded'
+            replicateInChannels this, inLegalEntityDefault
+            replicateInChannels this, inClaims
+            replicateInChannels this, inUnderwritingInfo
+            replicateOutChannels this, outClaimsInward
+            replicateOutChannels this, outUnderwritingInfoInward
+            replicateOutChannels this, outUnderwritingInfoCeded
+            replicateOutChannels this, outClaimsCeded
         }
     }
 

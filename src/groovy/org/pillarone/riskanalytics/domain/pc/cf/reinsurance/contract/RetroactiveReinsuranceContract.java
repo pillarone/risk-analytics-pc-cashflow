@@ -20,8 +20,8 @@ import java.util.Set;
  */
 public class RetroactiveReinsuranceContract extends MultiCounterPartyBaseReinsuranceContract implements IReinsuranceContractMarker {
 
+    private IPeriodStrategy parmCoveredPeriod = PeriodStrategyType.getRetroActiveDefault();
     private IReinsuranceContractStrategy parmContractStrategy = ReinsuranceContractType.getDefault();
-    private IPeriodStrategy parmCoveredPeriod = PeriodStrategyType.getDefault();
 
     private int startOfDevPeriod;
 
@@ -84,19 +84,19 @@ public class RetroactiveReinsuranceContract extends MultiCounterPartyBaseReinsur
         return getCoveredPeriod().isCoverStartsInPeriod(iterationScope.getPeriodScope());
     }
 
-    public IReinsuranceContractStrategy getParmContractStrategy() {
-        return parmContractStrategy;
-    }
-
-    public void setParmContractStrategy(IReinsuranceContractStrategy parmContractStrategy) {
-        this.parmContractStrategy = parmContractStrategy;
-    }
-
     public IPeriodStrategy getParmCoveredPeriod() {
         return parmCoveredPeriod;
     }
 
     public void setParmCoveredPeriod(IPeriodStrategy parmCoveredPeriod) {
         this.parmCoveredPeriod = parmCoveredPeriod;
+    }
+
+    public IReinsuranceContractStrategy getParmContractStrategy() {
+        return parmContractStrategy;
+    }
+
+    public void setParmContractStrategy(IReinsuranceContractStrategy parmContractStrategy) {
+        this.parmContractStrategy = parmContractStrategy;
     }
 }
