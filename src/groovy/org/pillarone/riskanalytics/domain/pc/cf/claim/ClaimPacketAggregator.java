@@ -1,7 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
 import org.pillarone.riskanalytics.core.output.aggregation.IPacketAggregator;
-import org.pillarone.riskanalytics.core.packets.PacketList;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ import java.util.List;
  */
 public class ClaimPacketAggregator implements IPacketAggregator<ClaimCashflowPacket> {
 
-    public ClaimCashflowPacket aggregate(PacketList<ClaimCashflowPacket> packetList) {
+    public ClaimCashflowPacket aggregate(List<ClaimCashflowPacket> packetList) {
         List<ClaimCashflowPacket> aggregateClaimsByBaseClaim = ClaimUtils.aggregateByBaseClaim(packetList);
         return ClaimUtils.sum(aggregateClaimsByBaseClaim, true);
     }

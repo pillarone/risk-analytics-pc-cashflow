@@ -224,7 +224,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
      * @param currentPeriod used to get the applicable contract from the periodStore
      * @param claim is used to fill currentPeriodGrossClaims
      */
-    private void updateCurrentPeriodGrossClaims(Set<IReinsuranceContract> contracts,
+    protected void updateCurrentPeriodGrossClaims(Set<IReinsuranceContract> contracts,
                                                 List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims,
                                                 int currentPeriod, ClaimCashflowPacket claim, ClaimStorageContainer claimsHistories) {
         IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
@@ -304,21 +304,22 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             ListMultimap<ClaimCashflowPacket, ClaimCashflowPacket> cededClaimsByGrossClaim = ArrayListMultimap.create();
             if (!grossClaim.isTrivialContract()) {
                 cededClaim = grossClaim.getCededClaim(periodCounter);
-                double coveredByReinsurers = coveredByReinsurers(grossClaim.getUpdateDate());
-                if (coveredByReinsurers != 1) {
-                    cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers, true, true);
-                }
-                ClaimUtils.applyMarkers(grossClaim.getGrossClaim(), cededClaim);
-                cededClaim.setMarker(this);
-                if (hasMultipleContractsPerPeriod) {
-                    cededClaimsByGrossClaim.put(grossClaim.getGrossClaim(), cededClaim);
-                }
-                else {
-                    outClaimsCeded.add(cededClaim);
-                    if (isSenderWired(outClaimsGross) || isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues)) {
-                        // fill outClaimsGross temporarily if discounting or net present values are calculated as they are relaying on it
-                        outClaimsGross.add(grossClaim.getGrossClaim());
+                if (cededClaim != null) {
+                    double coveredByReinsurers = coveredByReinsurers(grossClaim.getUpdateDate());
+                    if (coveredByReinsurers != 1) {
+                        cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers, true, true);
                     }
+                    ClaimUtils.applyMarkers(grossClaim.getGrossClaim(), cededClaim);
+                    cededClaim.setMarker(this);
+                    if (hasMultipleContractsPerPeriod) {
+                        cededClaimsByGrossClaim.put(grossClaim.getGrossClaim(), cededClaim);
+                    } else {
+                        outClaimsCeded.add(cededClaim);
+                    }
+                }
+                if (!hasMultipleContractsPerPeriod && (isSenderWired(outClaimsGross) || isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues))) {
+                    // fill outClaimsGross temporarily if discounting or net present values are calculated as they are relaying on it
+                    outClaimsGross.add(grossClaim.getGrossClaim());
                 }
             }
             if (hasMultipleContractsPerPeriod) {

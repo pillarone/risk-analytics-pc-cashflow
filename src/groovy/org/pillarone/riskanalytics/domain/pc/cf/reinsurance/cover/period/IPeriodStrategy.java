@@ -12,6 +12,11 @@ public interface IPeriodStrategy extends IParameterObject {
 
     DateTime getStartCover();
     DateTime getEndCover();
+
+    /**
+     * We assume all periods are annual.
+     * @return number of years
+     */
     int getNumberOfPeriods();
 
     /**

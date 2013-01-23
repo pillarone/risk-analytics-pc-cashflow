@@ -209,7 +209,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     }
 
     /**
-     * Convienience method for setting a new payment amount based on an old Claim Cashflow
+     * Convenience method for setting a new payment amount based on an old Claim Cashflow
      */
     public ClaimCashflowPacket(IClaimRoot baseClaim, ClaimCashflowPacket claimCashflowPacket, double paidIncremental, double cumulatedPaid, boolean setUltimate) {
         this.baseClaim = baseClaim;
