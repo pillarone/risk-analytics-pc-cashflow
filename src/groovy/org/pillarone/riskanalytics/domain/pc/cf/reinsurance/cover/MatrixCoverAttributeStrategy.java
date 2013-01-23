@@ -17,10 +17,7 @@ import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -105,15 +102,31 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
     }
 
     public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
+        // todo: avoid code copy from LE Strategy
         List<UnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
+        Set<ISegmentMarker> coveredSegments = new HashSet<ISegmentMarker>();
+        for (ClaimCashflowPacket claim : coveredGrossClaims) {
+            coveredSegments.add(claim.segment());
+        }
+        for (UnderwritingInfoPacket underwritingInfo: source) {
+            if (coveredSegments.contains(underwritingInfo.segment())) {
+                filteredUnderwritingInfo.add(underwritingInfo);
+            }
+        }
+        source.clear();
+        if (!filteredUnderwritingInfo.isEmpty()) {
+            source.addAll(filteredUnderwritingInfo);
+        }
         return filteredUnderwritingInfo;
     }
 
     public List<IReinsuranceContractMarker> getCoveredReinsuranceContracts() {
+        // todo
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public List<ReinsuranceContractAndBase> getCoveredReinsuranceContractsAndBase(Map<String, ReinsuranceContract> reinsuranceContracts) {
+        // todo
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

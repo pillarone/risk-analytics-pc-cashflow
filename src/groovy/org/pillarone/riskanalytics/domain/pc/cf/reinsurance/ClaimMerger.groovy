@@ -40,6 +40,7 @@ class ClaimMerger extends Component {
                         outClaims.add(getNetClaim(netClaim, cededClaimsForNetByBase));
                     }
                     else if (severalCededContractsCovered()) {
+                        // todo: think: this won't be used as netClaimsByBase is empty
                         outClaims.addAll(ClaimUtils.aggregateByBaseClaim(claimsCeded))
                     }
                     else if (netAndCededContractsCovered()) {
@@ -49,12 +50,14 @@ class ClaimMerger extends Component {
                         }
                         ClaimCashflowPacket mergedClaim = ClaimUtils.getNetClaim(netClaimPacket, cededClaimsByBase.get(netClaim.key), netClaim.value.reinsuranceContract())
                         outClaims.add(mergedClaim)
-
                     }
-                    if (coverAttributeStrategy.coveredNetOfContracts().contains(netClaim.value.reinsuranceContract() && coverAttributeStrategy.coveredCededOfContracts().contains(netClaim.value.reinsuranceContract()))){
+                    if (coverAttributeStrategy.coveredNetOfContracts().contains(netClaim.value.reinsuranceContract()
+                            && coverAttributeStrategy.coveredCededOfContracts().contains(netClaim.value.reinsuranceContract()))){
                         outClaims.add(netClaim.value)
                     }
-
+                }
+                if (netClaimsByBase.isEmpty() && severalCededContractsCovered()) {
+                    outClaims.addAll(ClaimUtils.aggregateByBaseClaim(claimsCeded))
                 }
             }
             else {

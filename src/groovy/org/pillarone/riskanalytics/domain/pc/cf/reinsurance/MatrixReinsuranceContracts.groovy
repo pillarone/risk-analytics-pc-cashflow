@@ -82,6 +82,7 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
     }
 
     private void wireWithMerger() {
+        // todo: wire uw info
         for (ReinsuranceContract contract : componentList) {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
             if (strategy.mergerRequired()) {
@@ -101,6 +102,9 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
                     for (IReinsuranceContractMarker benefitContract : benefitContracts) {
                         doWire WC, claimMerger, 'inClaimsBenefit', benefitContract, 'outClaimsCeded'
                     }
+                    doWire PRC, claimMerger, 'inClaimsGross', this, 'inClaims'
+                }
+                else if (strategy.hasGrossFilters()) {
                     doWire PRC, claimMerger, 'inClaimsGross', this, 'inClaims'
                 }
                 doWire WC, contract, 'inClaims', claimMerger, 'outClaims'
