@@ -52,18 +52,21 @@ public class ProfitCommission extends AbstractCommission {
         previousCumulatedFixCommission = fixCommission;
 
         double reinsuranceResult = -totalPremiumCeded * (1 + summedClaimsCeded / totalPremiumCeded - commissionRatio - costRatio);
-        double reinsuranceResultAfterLCF = reinsuranceResult - previousReinsuranceResult + lossCarriedForward.value;
+//        double reinsuranceResultIncremental = reinsuranceResult - previousReinsuranceResult;
         if (lossCarriedForwardEnabled) {
-            if (reinsuranceResultAfterLCF != reinsuranceResult && reinsuranceResult > 0) {
-                lossCarriedForward.plus(reinsuranceResultAfterLCF - lossCarriedForward.value);
-            }
+            double reinsuranceResultAfterLCF = reinsuranceResult + lossCarriedForward.value;
+////            if (reinsuranceResultAfterLCF != reinsuranceResult && reinsuranceResult > 0) {
+////                lossCarriedForward.plus(reinsuranceResultAfterLCF - lossCarriedForward.value);
+////            }
+//            reinsuranceResultIncremental = reinsuranceResultAfterLCF;
+            reinsuranceResult = reinsuranceResultAfterLCF;
         }
         previousReinsuranceResult = reinsuranceResult;
-        double cumulatedProfitCommission = profitCommissionRatio * Math.max(0, reinsuranceResultAfterLCF);
+        double cumulatedProfitCommission = profitCommissionRatio * Math.max(0, reinsuranceResult);
         double incrementalProfitCommission = cumulatedProfitCommission - previousCumulatedProfitCommission;
         previousCumulatedProfitCommission = cumulatedProfitCommission;
 
-        if (incrementalFixCommission + incrementalProfitCommission > 0) {
+        if (incrementalFixCommission != 0 || incrementalProfitCommission != 0) {
             adjustCommissionProperties(cededUnderwritingInfos, isAdditive, incrementalFixCommission + incrementalProfitCommission,
                     incrementalFixCommission, incrementalProfitCommission);
         }
