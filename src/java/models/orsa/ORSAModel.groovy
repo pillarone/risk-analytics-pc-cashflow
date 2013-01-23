@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory
 import org.joda.time.DateTime
 import org.joda.time.Period
 import org.pillarone.riskanalytics.core.model.StochasticModel
+import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.LimitedContinuousPeriodCounter
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
@@ -24,6 +25,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.Patterns
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PayoutReportingCombinedPattern
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.MatrixReinsuranceContracts
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.RetroactiveReinsuranceContracts
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerators
 import org.pillarone.riskanalytics.domain.pc.cf.segment.Segments
@@ -49,9 +53,9 @@ class ORSAModel extends StochasticModel {
     EventGenerators eventGenerators
     LegalEntities legalEntities
     Segments segments
-    Structures structures
     MatrixReinsuranceContracts reinsuranceContracts
     RetroactiveReinsuranceContracts retrospectiveReinsurance
+    Structures structures
 
     @Override
     void initComponents() {
@@ -145,6 +149,46 @@ class ORSAModel extends StochasticModel {
                 legalEntities.inUnderwritingInfoInward2 = retrospectiveReinsurance.outUnderwritingInfoInward
             }
         }
+    }
+
+    @Override
+    List<IParameterObjectClassifier> configureClassifier(String path, List<IParameterObjectClassifier> classifiers) {
+        if (path.matches("reinsuranceContracts:(.*):parmCover") || path.matches("retrospectiveReinsurance:(.*):parmCover")) {
+            return [
+                    CoverAttributeStrategyType.NONE,
+                    CoverAttributeStrategyType.MATRIX,
+            ]
+        }
+        if (path.matches("reinsuranceContracts:(.*):parmCoveredPeriod")) {
+            return [
+                    PeriodStrategyType.ANNUAL,
+                    PeriodStrategyType.CUSTOM,
+                    PeriodStrategyType.MONTHS,
+                    PeriodStrategyType.ONEYEAR,
+            ]
+        }
+        if (path.matches("reinsuranceContracts:(.*):parmContractStrategy")) {
+            return [
+                    ReinsuranceContractType.CXL,
+                    ReinsuranceContractType.WXL,
+                    ReinsuranceContractType.QUOTASHARE,
+                    ReinsuranceContractType.SURPLUS,
+                    ReinsuranceContractType.STOPLOSS,
+                    ReinsuranceContractType.TRIVIAL,
+            ]
+        }
+        if (path.matches("retrospectiveReinsurance:(.*):parmCoveredPeriod")) {
+            return [
+                    PeriodStrategyType.RETROACTIVE,
+            ]
+        }
+        if (path.matches("retrospectiveReinsurance:(.*):parmContractStrategy")) {
+            return [
+                    ReinsuranceContractType.TRIVIAL,
+                    ReinsuranceContractType.UNIFIEDADCLPT,
+            ]
+        }
+        return classifiers
     }
 
     @Override
