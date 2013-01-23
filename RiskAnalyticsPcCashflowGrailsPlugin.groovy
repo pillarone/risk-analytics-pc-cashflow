@@ -35,6 +35,7 @@ import org.pillarone.riskanalytics.core.output.CollectingModeFactory
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.XLStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacketAggregator
+import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractContraints
 import org.pillarone.riskanalytics.domain.utils.constraint.SegmentPortion
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateClaimCollectingModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateReportedPaidClaimCollectingModeStrategy
@@ -103,6 +104,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new ClaimTypeSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new YieldCurveTableConstraints())
         ConstraintsFactory.registerConstraint(new SegmentPortion())
+        ConstraintsFactory.registerConstraint(new ReinsuranceContractContraints())
 
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
         ValidatorRegistry.addValidator(new PatternStrategyValidator())
@@ -148,7 +150,6 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         CollectingModeFactory.registerStrategy(new AggregateUltimatePaidClaimCollectingModeStrategy())
 
         CollectingModeFactory.registerStrategy(new SingleUltimatePaidClaimCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], []))
         // PMO-2231
 
         def f = [
