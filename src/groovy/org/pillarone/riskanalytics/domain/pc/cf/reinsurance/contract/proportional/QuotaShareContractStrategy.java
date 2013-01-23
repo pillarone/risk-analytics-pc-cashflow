@@ -6,10 +6,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.IPeriodDependingThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy;
@@ -29,7 +26,7 @@ public class QuotaShareContractStrategy extends AbstractParameterObject implemen
 
     /**not a parameter but updated during calculateCommission() to avoid side effect for the parameter variable
      * required as we need to share the loss carried forward among different instances */
-    private DoubleValue lossCarriedForward;
+    private DoubleValuePerPeriod lossCarriedForward;
 
     public ReinsuranceContractType getType() {
         return ReinsuranceContractType.QUOTASHARE;

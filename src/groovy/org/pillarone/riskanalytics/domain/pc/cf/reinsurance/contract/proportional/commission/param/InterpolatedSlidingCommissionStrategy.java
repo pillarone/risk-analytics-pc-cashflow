@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.InterpolatedSlidingCommission;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
@@ -37,7 +38,8 @@ public class InterpolatedSlidingCommissionStrategy extends AbstractCommissionStr
         return map;
     }
 
-    public ICommission getCalculator(DoubleValue lossCarriedForward) {
+    @Override
+    public ICommission getCalculator(DoubleValuePerPeriod lossCarriedForward) {
         TreeMap<Double, List<Double>> commissionRatesPerLossRatio;
         int numberOfEntries = commissionBands.getValueRowCount();
         commissionRatesPerLossRatio = new TreeMap<Double, List<Double>>();

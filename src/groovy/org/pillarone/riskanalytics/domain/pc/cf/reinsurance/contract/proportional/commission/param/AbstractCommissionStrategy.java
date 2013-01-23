@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod;
 
 import java.util.HashMap;
 import java.util.List;
@@ -73,7 +74,8 @@ abstract public class AbstractCommissionStrategy extends AbstractParameterObject
         }
     }
 
-    public DoubleValue getInitialLossCarriedForward() {
-        return new DoubleValue();
+    @Override
+    public DoubleValuePerPeriod getInitialLossCarriedForward() {
+        return new DoubleValuePerPeriod();
     }
 }

@@ -1,14 +1,10 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional;
 
-import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.IPeriodDependingThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy;
 
@@ -58,7 +54,7 @@ public class SurplusContractStrategy extends AbstractParameterObject implements 
                                                    List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
                                                    IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit, List<ClaimCashflowPacket> claims) {
         return new ArrayList<IReinsuranceContract>(Arrays.asList(
-                new SurplusContract(retention, lines, defaultCededLossShare, commission.getCalculator(new DoubleValue()))));
+                new SurplusContract(retention, lines, defaultCededLossShare, commission.getCalculator(new DoubleValuePerPeriod()))));
     }
 
     public double getTermDeductible() {

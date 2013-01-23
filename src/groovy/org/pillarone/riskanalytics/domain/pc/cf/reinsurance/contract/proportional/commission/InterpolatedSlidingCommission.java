@@ -18,6 +18,9 @@ public class InterpolatedSlidingCommission extends AbstractCommission {
 
     private double summedCumulatedPremiumCeded = 0;
 
+    private double previousCumulatedFixCommission = 0d;
+    private double previousCumulatedVariableCommission = 0d;
+
     // todo(sku): replace argument with an object
     public InterpolatedSlidingCommission(TreeMap<Double, List<Double>> commissionRatesPerLossRatio,
                                          BasedOnClaimProperty useClaims) {
@@ -57,10 +60,13 @@ public class InterpolatedSlidingCommission extends AbstractCommission {
             }
         }
 
-        double fixCommission = fixedCommissionRate * -summedIncrementalPremiumCeded;
-        double variableCommission = (commissionRate - fixedCommissionRate) * -summedIncrementalPremiumCeded;
-        double totalIncrementalCommission = commissionRate * -summedIncrementalPremiumCeded;
-        adjustCommissionProperties(cededUnderwritingInfos, isAdditive, totalIncrementalCommission,
-                fixCommission, variableCommission);
+        double cumulatedFixCommission = fixedCommissionRate * -summedCumulatedPremiumCeded;
+        double incrementalFixCommission = cumulatedFixCommission  - previousCumulatedFixCommission;
+        previousCumulatedFixCommission = cumulatedFixCommission;
+        double cumulatedVariableCommission = commissionRate * -summedCumulatedPremiumCeded - cumulatedFixCommission;
+        double incrementalVariableCommission = cumulatedVariableCommission - previousCumulatedVariableCommission;
+        previousCumulatedVariableCommission = cumulatedVariableCommission;
+        adjustCommissionProperties(cededUnderwritingInfos, isAdditive, incrementalFixCommission + incrementalVariableCommission,
+                incrementalFixCommission, incrementalVariableCommission);
     }
 }

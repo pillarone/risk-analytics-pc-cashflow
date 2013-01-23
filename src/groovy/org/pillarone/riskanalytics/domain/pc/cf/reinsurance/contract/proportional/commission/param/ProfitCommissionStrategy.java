@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportion
 
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ProfitCommission;
 
@@ -32,12 +33,12 @@ public class ProfitCommissionStrategy extends AbstractCommissionStrategy {
         return map;
     }
 
-    public ICommission getCalculator(DoubleValue lossCarriedForward) {
+    public ICommission getCalculator(DoubleValuePerPeriod lossCarriedForward) {
         return new ProfitCommission(profitCommissionRatio, commissionRatio, costRatio, lossCarriedForwardEnabled,
-                initialLossCarriedForward, lossCarriedForward, useClaims);
+                                    lossCarriedForward, useClaims);
     }
 
-    public DoubleValue getInitialLossCarriedForward() {
-        return new DoubleValue(initialLossCarriedForward);
+    public DoubleValuePerPeriod getInitialLossCarriedForward() {
+        return new DoubleValuePerPeriod(initialLossCarriedForward);
     }
 }

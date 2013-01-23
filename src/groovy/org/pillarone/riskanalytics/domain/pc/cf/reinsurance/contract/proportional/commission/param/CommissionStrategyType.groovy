@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param
 
+import org.apache.commons.lang.NotImplementedException
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
@@ -81,6 +82,8 @@ class CommissionStrategyType extends AbstractParameterObjectClassifier {
                         commissionBands: (ConstrainedMultiDimensionalParameter) parameters['commissionBands'],
                         useClaims : (BasedOnClaimProperty) parameters['useClaims'])
                 break;
+            default:
+                throw new NotImplementedException("$type is not implemented");
         }
         return commissionStrategy;
     }

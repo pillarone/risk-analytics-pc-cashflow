@@ -365,17 +365,18 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
     private void processUnderwritingInfo() {
         int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
         // map underwriting info to corresponding contracts
-        Set<IReinsuranceContract> contracts = new HashSet<IReinsuranceContract>();
+        SortedMap<Integer, IReinsuranceContract> contracts = new TreeMap<Integer, IReinsuranceContract>();
         if (!inUnderwritingInfo.isEmpty()) {
             for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
                 int inceptionPeriod = currentPeriod;
                 if (underwritingInfo.getExposure() != null) {
                     inceptionPeriod = underwritingInfo.getExposure().getInceptionPeriod();
                 }
-                List<IReinsuranceContract> periodContracts = (List<IReinsuranceContract>) periodStore.get(REINSURANCE_CONTRACT, inceptionPeriod - currentPeriod);
+                int periodOffset = inceptionPeriod - currentPeriod;
+                List<IReinsuranceContract> periodContracts = (List<IReinsuranceContract>) periodStore.get(REINSURANCE_CONTRACT, periodOffset);
                 if (periodContracts != null) {
                     for (IReinsuranceContract contract : periodContracts) {
-                        contracts.add(contract);
+                        contracts.put(periodOffset, contract);
                         contract.add(underwritingInfo);
                     }
                 }
@@ -383,10 +384,11 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         }
         else {
             for (int period = 0; period <= currentPeriod; period++) {
-                List<IReinsuranceContract> periodContracts = (List<IReinsuranceContract>) periodStore.get(REINSURANCE_CONTRACT, period - currentPeriod);
+                int periodOffset = period - currentPeriod;
+                List<IReinsuranceContract> periodContracts = (List<IReinsuranceContract>) periodStore.get(REINSURANCE_CONTRACT, periodOffset);
                 if (periodContracts != null) {
                     for (IReinsuranceContract contract : periodContracts) {
-                        contracts.add(contract);
+                        contracts.put(periodOffset, contract);
                     }
                 }
             }
@@ -396,7 +398,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         }
         boolean senderUwInfoNetWired = isSenderWired(outUnderwritingInfoNet);
         DateTime currentPeriodStartDate = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
-        for (IReinsuranceContract contract : contracts) {
+        for (IReinsuranceContract contract : contracts.values()) {
             double coveredByReinsurers = coveredByReinsurers(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
             contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, coveredByReinsurers,
                     senderUwInfoNetWired);

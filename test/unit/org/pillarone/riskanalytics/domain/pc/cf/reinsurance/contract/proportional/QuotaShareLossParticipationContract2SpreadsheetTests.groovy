@@ -23,6 +23,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.InterpolatedSlidingCommissionStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.ILossParticipationStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.LossParticipationStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.LossParticipationStrategyType
@@ -46,31 +47,31 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
         [
          'PMO-2198_a___SSC_usual.xlsx',
          'PMO-2198_a___SSC_usual_1.xlsx',
-//         'PMO-2198_a___SSC_usual_2.xlsx',  // implement sliding commission in test
+         'PMO-2198_a___SSC_usual_2.xlsx',
          'PMO-2198_a___SSC_usual_3.xlsx',                 //C247
          'PMO-2198_a___SSC_usual_4.xlsx',                 //C247
          'PMO-2198_a___SSC_usual_5.xlsx',                 //C247
-//         'PMO-2198_a___SSC_usual_6.xlsx', // implement sliding commission in test
+         'PMO-2198_a___SSC_usual_6.xlsx',
          'PMO-2198_a___SSC_usual_7.xlsx',                   //C247, C209
          'PMO-2198_b___SSC_decreasing_losses_1.xlsx',  //C247
-//         'PMO-2198_b___SSC_decreasing_losses_2.xlsx', // implement sliding commission in test
+         'PMO-2198_b___SSC_decreasing_losses_2.xlsx',
          'PMO-2198_b___SSC_decreasing_losses_3.xlsx',     //C247
          'PMO-2198_b___SSC_decreasing_losses_4.xlsx',       //C247
          'PMO-2198_b___SSC_decreasing_losses_5.xlsx',
-//         'PMO-2198_b___SSC_decreasing_losses_6.xlsx',   // implement sliding commission in test
+         'PMO-2198_b___SSC_decreasing_losses_6.xlsx',
          'PMO-2198_b___SSC_decreasing_losses_7.xlsx',
          'PMO-2198_c___SSC_usual_LP100_5.xlsx',
-//         'PMO-2198_c___SSC_usual_LP100_6.xlsx', // implement sliding commission in test
+         'PMO-2198_c___SSC_usual_LP100_6.xlsx',             // total commission fails
          'PMO-2198_c___SSC_usual_LP100_7.xlsx',
 //         'PMO-2198_d___SSC_usual_AAD_AAL_1.xlsx',   // fail on 01.01.2012
-//         'PMO-2198_d___SSC_usual_AAD_AAL_2.xlsx',   // implement sliding commission in test
+//         'PMO-2198_d___SSC_usual_AAD_AAL_2.xlsx',
 //         'PMO-2198_d___SSC_usual_AAD_AAL_3.xlsx',
 //         'PMO-2198_d___SSC_usual_AAD_AAL_4.xlsx',
 //         'PMO-2198_d___SSC_usual_AAD_AAL_5.xlsx',
-//         'PMO-2198_d___SSC_usual_AAD_AAL_6.xlsx',   // implement sliding commission in test
+//         'PMO-2198_d___SSC_usual_AAD_AAL_6.xlsx',
 //         'PMO-2198_d___SSC_usual_AAD_AAL_7.xlsx',
          'PMO-2198_e___SSC_decreasing_losses_LP100_5.xlsx',
-//         'PMO-2198_e___SSC_decreasing_losses_LP100_6.xlsx', // implement sliding commission in test
+         'PMO-2198_e___SSC_decreasing_losses_LP100_6.xlsx',
          'PMO-2198_e___SSC_decreasing_losses_LP100_7.xlsx',
 //         'PMO-2198_f___SSC_no_increments_4.xlsx',
 //         'PMO-2198_g___SSC_decreasing_losses_LP100_AADAAL_7.xlsx',
@@ -80,7 +81,7 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
 
     void testUsage() {
         // enable the following line while writing/debugging the test case but comment it out before committing!
-        setCheckedForValidationErrors(true)
+//        setCheckedForValidationErrors(true)
         for (SpreadsheetImporter importer : importers) {
             ReinsuranceContract contract = getQuotaShareContract(importer, 'Sliding_in_Triangle')
             IterationScope iterationScope = contract.iterationScope
@@ -111,6 +112,7 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
                     if (Math.abs(referenceTotalCommission - cededUwInfo.commission) > EPSILON) {
                         println "[${importer.fileName}] correct total commission ${format(cededUwInfo.exposure.inceptionDate)} ${format(cededUwInfo.date)} ${referenceTotalCommission} ${cededUwInfo.commission}"
                     }
+                    assertEquals "[${importer.fileName}] correct total commission ${format(cededUwInfo.exposure.inceptionDate)} ${format(cededUwInfo.date)}", referenceTotalCommission, cededUwInfo.commission, EPSILON
                     double referenceFixCommission = fixCommission.referenceValue(cededUwInfo)
 //                    if (Math.abs(referenceFixCommission - cededUwInfo.commissionFixed) > EPSILON) {
 //                        println "[${importer.fileName}] correct fix commission ${format(cededUwInfo.exposure.inceptionDate)} ${format(cededUwInfo.date)} ${referenceFixCommission} ${cededUwInfo.commissionFixed}"
@@ -126,9 +128,11 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
 
     private ReinsuranceContract getQuotaShareContract(SpreadsheetImporter importer, String sheet) {
         Map contractParams = importer.cells([sheet: sheet, cellMap: ['C22': 'quote', 'C25': 'aad', 'D25': 'aal']])
+        ICommissionStrategy commission = getCommission(importer, sheet)
+        ILossParticipationStrategy participation = getLossParticipation(importer, sheet)
         QuotaShareContractTests.getQuotaShareContractAADAALLimit(contractParams.quote, contractParams.aad ?: 0,
                 contractParams.aal, beginOfCover, 4,
-                getLossParticipation(importer, sheet), getCommission(importer, sheet))
+                participation, commission)
     }
 
     private static ILossParticipationStrategy getLossParticipation(SpreadsheetImporter importer, String sheet) {
@@ -197,7 +201,7 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
         int lastNonTrivialValue = 0
         for (int i = 0; i < values.size(); i++) {
             if (values[i] != null) {
-                lastNonTrivialValue = i
+                lastNonTrivialValue = i + 1
             }
         }
         return lastNonTrivialValue
@@ -223,7 +227,15 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
                      'useClaims': BasedOnClaimProperty.PAID])
         }
         else if (commissionParams.commissionType == 'sliding') {
-            throw new NotImplementedException()
+            List<Double> fromLR = getColumnValues(importer, sheet, 'D', 100, 4)
+            List<Double> commission = getColumnValues(importer, sheet, 'E', 100, 4)
+            int listLength = Math.max(lastElementNotZero(fromLR), lastElementNotZero(commission))
+            return CommissionStrategyType.getStrategy(CommissionStrategyType.INTERPOLATEDSLIDINGCOMMISSION,
+                   ['commissionBands': new ConstrainedMultiDimensionalParameter(
+                    [fromLR.subList(0, listLength), commission.subList(0, listLength)],
+                    [InterpolatedSlidingCommissionStrategy.LOSS_RATIO, InterpolatedSlidingCommissionStrategy.COMMISSION],
+                    ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
+                    'useClaims': BasedOnClaimProperty.PAID])
         }
         throw new NotImplementedException()
     }
@@ -249,22 +261,6 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
     private DateTime beginOfCover = new DateTime(2012,1,1,0,0,0,0)
 
     private static final double EPSILON = 1E-8
-
-//    private ReferenceClaimContainer initCededReferenceClaims(Triangle triangle) {
-//        ReferenceClaimContainer cededReferenceClaims = new ReferenceClaimContainer()
-//        int underwritingPeriod = 0
-//        for (DateTime periodStartDate : triangle.underwritingPeriodStartDates) {
-//            for (int devPeriod = 0; devPeriod < triangle.numberOfUnderwritingPeriods() - underwritingPeriod; devPeriod++) {
-//                double ultimate = triangle.latestValue(periodStartDate);
-//                double paid = triangle.valuesBy(periodStartDate)[devPeriod]
-//                cededReferenceClaims.add(
-//                    new ReferenceClaim(periodStartDate, triangle.underwritingPeriodStartDates[devPeriod], ultimate, ultimate, paid)
-//                )
-//                underwritingPeriod++
-//            }
-//        }
-//        return cededReferenceClaims
-//    }
 
     private SetMultimap<Integer, UnderwritingInfoPacket> initGrossPremium(Triangle triangle, IPeriodCounter periodCounter) {
         SetMultimap<Integer, UnderwritingInfoPacket> grossUwPerUwYear = HashMultimap.create()

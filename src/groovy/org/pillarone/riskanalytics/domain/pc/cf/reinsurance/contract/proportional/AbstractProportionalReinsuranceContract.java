@@ -46,8 +46,6 @@ abstract public class AbstractProportionalReinsuranceContract extends AbstractRe
     abstract public void calculatePremium(List<UnderwritingInfoPacket> netUnderwritingInfos, double coveredByReinsurers, boolean fillNet);
 
     public void calculateCommission() {
-        // todo(sku): check whether all is fine regarding coveredByReinsurers and commissions
-        // todo(sku): reduce argument numbers
         commission.calculateCommission(cededClaims, cededUwInfos, false);
     }
 
