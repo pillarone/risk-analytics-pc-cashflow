@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission
 
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
@@ -50,7 +51,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
         List underwritingInfos = [underwritingInfo200, underwritingInfo100]
         List claims = [claim10, claim70]
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.2, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.2, underwritingInfos[0].commissionFixed
@@ -61,7 +62,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(claim25)
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals 'underwritingInfo200', 200 * 0.2, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.2, underwritingInfos[0].commissionFixed
         assertEquals 'underwritingInfo200', 0d, underwritingInfos[0].commissionVariable
@@ -71,7 +72,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(claim100)
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals 'underwritingInfo200', 200 * 0.2, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.2, underwritingInfos[0].commissionFixed
         assertEquals 'underwritingInfo200', 0d, underwritingInfos[0].commissionVariable
@@ -79,7 +80,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
         assertEquals 'underwritingInfo100', 100 * 0.2, underwritingInfos[1].commissionFixed
         assertEquals 'underwritingInfo100', 0d, underwritingInfos[1].commissionVariable
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, true)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, true)
         assertEquals 'underwritingInfo200', 200 * 0.2 + 200 * 0.2, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.2 + 200 * 0.2, underwritingInfos[0].commissionFixed
         assertEquals 'underwritingInfo200', 0d, underwritingInfos[0].commissionVariable
@@ -93,7 +94,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
         underwritingInfos[1].commission = 30
         underwritingInfos[1].commissionFixed = 25
         underwritingInfos[1].commissionVariable = 5
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, true)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, true)
         assertEquals 'underwritingInfo200', 200 * 0.2 + 25, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.2 + 10, underwritingInfos[0].commissionFixed
         assertEquals 'underwritingInfo200', 15d, underwritingInfos[0].commissionVariable
@@ -117,7 +118,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
         List underwritingInfos = [underwritingInfo200, underwritingInfo100]
         List claims = [claim60, claim10]
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, true)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, true)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.4 + 50, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.3 + 10, underwritingInfos[0].commissionFixed
@@ -126,7 +127,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
         assertEquals 'underwritingInfo100', 100 * 0.3 + 2, underwritingInfos[1].commissionFixed, EPSILON
         assertEquals 'underwritingInfo100', 100 * 0.1 + 3, underwritingInfos[1].commissionVariable, EPSILON
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.4, underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.3, underwritingInfos[0].commissionFixed, EPSILON
@@ -137,7 +138,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(claim20)
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.4, underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.3, underwritingInfos[0].commissionFixed, EPSILON
@@ -148,7 +149,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 30, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
 //        assertEquals 'underwritingInfo200', 200 * (0.4 * 0.5 + 0.3 * 0.5), underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.3, underwritingInfos[0].commissionFixed, EPSILON
@@ -159,7 +160,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 15, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * (0.4 * 0.25 + 0.3 * 0.75), underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.3, underwritingInfos[0].commissionFixed, EPSILON
@@ -170,7 +171,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 15, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, true)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, true)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * (0.4 * 0.25 + 0.3 * 0.75) + 200 * 0.3, underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.3 + 200 * 0.3, underwritingInfos[0].commissionFixed, EPSILON
@@ -179,7 +180,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
         assertEquals 'underwritingInfo100', 100 * 0.3 + 100 * 0.3, underwritingInfos[1].commissionFixed, EPSILON
         assertEquals 'underwritingInfo100', 100 * 0.025 + 0d, underwritingInfos[1].commissionVariable, EPSILON
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.3, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.3, underwritingInfos[0].commissionFixed
@@ -212,7 +213,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
         List underwritingInfos = [underwritingInfo200, underwritingInfo100]
         List claims = [claim30]
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, true)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, true)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.6 + 50, underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.01 + 10, underwritingInfos[0].commissionFixed, EPSILON
@@ -221,7 +222,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
         assertEquals 'underwritingInfo100', 100 * 0.01 + 2, underwritingInfos[1].commissionFixed, EPSILON
         assertEquals 'underwritingInfo100', 100 * 0.59 + 3, underwritingInfos[1].commissionVariable, EPSILON
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.6, underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.01, underwritingInfos[0].commissionFixed, EPSILON
@@ -232,7 +233,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 30, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, true)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, true)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.5 + 200 * 0.6, underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.01 + 200 * 0.01, underwritingInfos[0].commissionFixed, EPSILON
@@ -241,7 +242,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
         assertEquals 'underwritingInfo100', 100 * 0.01 + 100 * 0.01, underwritingInfos[1].commissionFixed, EPSILON
         assertEquals 'underwritingInfo100', 100 * 0.49 + 100 * 0.59, underwritingInfos[1].commissionVariable, EPSILON
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.5, underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.01, underwritingInfos[0].commissionFixed, EPSILON
@@ -252,7 +253,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 15, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.45, underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.01, underwritingInfos[0].commissionFixed, EPSILON
@@ -263,7 +264,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 15, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.2, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.01, underwritingInfos[0].commissionFixed
@@ -274,7 +275,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 15, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.15, underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.01, underwritingInfos[0].commissionFixed, EPSILON
@@ -285,7 +286,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 7.5, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * (0.75 * 0.1 + 0.25 * 0.2), underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.01, underwritingInfos[0].commissionFixed, EPSILON
@@ -296,7 +297,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 7.5, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.1, underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.01, underwritingInfos[0].commissionFixed, EPSILON
@@ -307,7 +308,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 15, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * (0.5 * 0.1 + 0.5 * 0.05), underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.01, underwritingInfos[0].commissionFixed, EPSILON
@@ -318,7 +319,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 15, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.01, underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.01, underwritingInfos[0].commissionFixed, EPSILON
@@ -329,7 +330,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 50, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.01, underwritingInfos[0].commission, EPSILON
         assertEquals 'underwritingInfo200', 200 * 0.01, underwritingInfos[0].commissionFixed, EPSILON
@@ -354,7 +355,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
         List<CededUnderwritingInfoPacket> underwritingInfos = [underwritingInfo200, underwritingInfo100]
         List<ClaimCashflowPacket> claims = [claim15]
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, true)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, true)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.6 + 50, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.3 + 20, underwritingInfos[0].commissionFixed, EPSILON
@@ -363,7 +364,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
         assertEquals 'underwritingInfo100', 100 * 0.3 + 1, underwritingInfos[1].commissionFixed, EPSILON
         assertEquals 'underwritingInfo100', 100 * 0.3 + 4, underwritingInfos[1].commissionVariable, EPSILON
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.6, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.3, underwritingInfos[0].commissionFixed, EPSILON
@@ -374,7 +375,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 15, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.4, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.3, underwritingInfos[0].commissionFixed, EPSILON
@@ -385,7 +386,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 25, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.4, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.3, underwritingInfos[0].commissionFixed, EPSILON
@@ -396,7 +397,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 5, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.3, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.3, underwritingInfos[0].commissionFixed, EPSILON
@@ -407,7 +408,7 @@ class InterpolatedSlidingCommissionStrategyTests extends GroovyTestCase {
 
         claims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 30, null))
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfos, false)
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', 200 * 0.3, underwritingInfos[0].commission
         assertEquals 'underwritingInfo200', 200 * 0.3, underwritingInfos[0].commissionFixed, EPSILON

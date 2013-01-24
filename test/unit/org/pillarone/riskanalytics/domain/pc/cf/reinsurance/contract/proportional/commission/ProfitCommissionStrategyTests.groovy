@@ -1,6 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission
 
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
@@ -39,7 +39,7 @@ class ProfitCommissionStrategyTests extends GroovyTestCase {
         CededUnderwritingInfoPacket underwritingInfo100 = new CededUnderwritingInfoPacket(premiumPaid: -100, commission: 0)
         List<CededUnderwritingInfoPacket> underwritingInfo = [underwritingInfo100]
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfo, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfo, false)
 
         assertEquals '# outUnderwritingInfo packets', 1, underwritingInfo.size()
         assertEquals 'underwritingInfo100 commission', 0.8999999999999999, underwritingInfo[0].commission
@@ -62,7 +62,7 @@ class ProfitCommissionStrategyTests extends GroovyTestCase {
         CededUnderwritingInfoPacket underwritingInfo50 = new CededUnderwritingInfoPacket(premiumPaid: -50, commission: 1, commissionFixed: 0.3, commissionVariable: 0.7)
         List underwritingInfo = [underwritingInfo20, underwritingInfo30, underwritingInfo50]
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfo, true) // test that prior commission is added
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfo, true) // test that prior commission is added
 
         // todo(sku): adjust values due to new definition in PMO-2198
     }
@@ -76,7 +76,7 @@ class ProfitCommissionStrategyTests extends GroovyTestCase {
         CededUnderwritingInfoPacket underwritingInfo100 = new CededUnderwritingInfoPacket(premiumPaid: -100, commission: 1)
         List underwritingInfo = [underwritingInfo100]
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfo, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfo, false)
 
         // todo(sku): adjust values due to new definition in PMO-2198
     }
@@ -90,7 +90,7 @@ class ProfitCommissionStrategyTests extends GroovyTestCase {
         CededUnderwritingInfoPacket underwritingInfo200 = new CededUnderwritingInfoPacket(premiumPaid: -200, commission: 7)
         List underwritingInfo = [underwritingInfo200]
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfo, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfo, false)
 
         // todo(sku): adjust values due to new definition in PMO-2198
     }
@@ -105,7 +105,7 @@ class ProfitCommissionStrategyTests extends GroovyTestCase {
                 commissionVariable: 0.9, commissionFixed: 0.1)
         List underwritingInfo = [underwritingInfo100]
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfo, true)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfo, true)
 
         // todo(sku): adjust values due to new definition in PMO-2198
     }
@@ -120,7 +120,7 @@ class ProfitCommissionStrategyTests extends GroovyTestCase {
         CededUnderwritingInfoPacket underwritingInfo100 = new CededUnderwritingInfoPacket(premiumPaid: -100, commission: 5)
         List underwritingInfo = [underwritingInfo100]
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfo, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfo, false)
         // todo(sku): adjust values due to new definition in PMO-2198
     }
 
@@ -135,7 +135,7 @@ class ProfitCommissionStrategyTests extends GroovyTestCase {
         CededUnderwritingInfoPacket underwritingInfo100 = new CededUnderwritingInfoPacket(premiumPaid: -100, commission: 1)
         List underwritingInfo = [underwritingInfo100]
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfo, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfo, false)
         // todo(sku): adjust values due to new definition in PMO-2198
     }
 
@@ -150,7 +150,7 @@ class ProfitCommissionStrategyTests extends GroovyTestCase {
         CededUnderwritingInfoPacket underwritingInfo100 = new CededUnderwritingInfoPacket(premiumPaid: -100, commission: 0)
         List<CededUnderwritingInfoPacket> underwritingInfo = [underwritingInfo100]
 
-        commissionStrategy.getCalculator(new DoubleValue()).calculateCommission(claims, underwritingInfo, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(claims, underwritingInfo, false)
 
         assertEquals '# outUnderwritingInfo packets', 1, underwritingInfo.size()
         // todo(sku): adjust values due to new definition in PMO-2198
