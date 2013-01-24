@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.validation
 
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverMap
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixStructureContraints
 
 class CoverAttributeValidationRow {
     final String netContractName
@@ -10,14 +11,18 @@ class CoverAttributeValidationRow {
     final String segmentName
     final String perilName
     final String lossKind
+    final boolean alternativeAggregation
 
-    CoverAttributeValidationRow(int rowIndex, ConstrainedMultiDimensionalParameter flexibleCover) {
-        netContractName = flexibleCover.getValueAt(rowIndex, CoverMap.CONTRACT_NET_OF_COLUMN_INDEX);
-        cededContractName = flexibleCover.getValueAt(rowIndex, CoverMap.CONTRACT_CEDED_OF_COLUMN_INDEX);
-        legalEntityName = flexibleCover.getValueAt(rowIndex, CoverMap.LEGAL_ENTITY_OF_COLUMN_INDEX);
-        segmentName = flexibleCover.getValueAt(rowIndex, CoverMap.SEGMENTS_OF_COLUMN_INDEX);
-        perilName = flexibleCover.getValueAt(rowIndex, CoverMap.GENERATORS_OF_COLUMN_INDEX);
-        lossKind = flexibleCover.getValueAt(rowIndex, CoverMap.LOSS_KIND_OF_OF_COLUMN_INDEX);
+    CoverAttributeValidationRow(int rowIndex, boolean alternativeAggregation, ConstrainedMultiDimensionalParameter flexibleCover) {
+        this.alternativeAggregation = alternativeAggregation
+        if (!alternativeAggregation) {
+            netContractName = flexibleCover.getValueAt(rowIndex, CoverMap.CONTRACT_NET_OF_COLUMN_INDEX);
+            cededContractName = flexibleCover.getValueAt(rowIndex, CoverMap.CONTRACT_CEDED_OF_COLUMN_INDEX);
+        }
+        legalEntityName = flexibleCover.getValueAt(rowIndex, alternativeAggregation ? MatrixStructureContraints.LEGAL_ENTITY_OF_COLUMN_INDEX : CoverMap.LEGAL_ENTITY_OF_COLUMN_INDEX);
+        segmentName = flexibleCover.getValueAt(rowIndex, alternativeAggregation ? MatrixStructureContraints.SEGMENTS_OF_COLUMN_INDEX : CoverMap.SEGMENTS_OF_COLUMN_INDEX);
+        perilName = flexibleCover.getValueAt(rowIndex, alternativeAggregation ? MatrixStructureContraints.GENERATORS_OF_COLUMN_INDEX : CoverMap.GENERATORS_OF_COLUMN_INDEX);
+        lossKind = flexibleCover.getValueAt(rowIndex, alternativeAggregation ? MatrixStructureContraints.LOSS_KIND_OF_OF_COLUMN_INDEX : CoverMap.LOSS_KIND_OF_OF_COLUMN_INDEX);
     }
 
     boolean equals(o) {
@@ -26,10 +31,12 @@ class CoverAttributeValidationRow {
 
         CoverAttributeValidationRow that = (CoverAttributeValidationRow) o
 
-        if (cededContractName != that.cededContractName) return false
+        if (!alternativeAggregation) {
+            if (cededContractName != that.cededContractName) return false
+            if (netContractName != that.netContractName) return false
+        }
         if (legalEntityName != that.legalEntityName) return false
         if (lossKind != that.lossKind) return false
-        if (netContractName != that.netContractName) return false
         if (perilName != that.perilName) return false
         if (segmentName != that.segmentName) return false
 

@@ -4,7 +4,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimTypeSelector;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimValidator;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
@@ -22,21 +22,23 @@ public class MatrixCoverAttributeRow {
     IPerilMarker peril;
     ClaimTypeSelector claimTypeSelector;
 
-    public MatrixCoverAttributeRow(int rowIndex, ConstrainedMultiDimensionalParameter flexibleCover) {
-        netContract = (IReinsuranceContractMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.CONTRACT_NET_OF_COLUMN_INDEX);
-        cededContract = (IReinsuranceContractMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.CONTRACT_CEDED_OF_COLUMN_INDEX);
-        legalEntity = (ILegalEntityMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.LEGAL_ENTITY_OF_COLUMN_INDEX);
-        segment = (ISegmentMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.SEGMENTS_OF_COLUMN_INDEX);
-        peril = (IPerilMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.GENERATORS_OF_COLUMN_INDEX);
-        claimTypeSelector = ClaimTypeSelector.valueOf((String) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.LOSS_KIND_OF_OF_COLUMN_INDEX));
+    public MatrixCoverAttributeRow(int rowIndex, boolean isStructure, ConstrainedMultiDimensionalParameter flexibleCover) {
+        if (!isStructure) {
+            netContract = (IReinsuranceContractMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.CONTRACT_NET_OF_COLUMN_INDEX);
+            cededContract = (IReinsuranceContractMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.CONTRACT_CEDED_OF_COLUMN_INDEX);
+        }
+        legalEntity = (ILegalEntityMarker) flexibleCover.getValueAtAsObject(rowIndex, isStructure ? MatrixStructureContraints.LEGAL_ENTITY_OF_COLUMN_INDEX : CoverMap.LEGAL_ENTITY_OF_COLUMN_INDEX);
+        segment = (ISegmentMarker) flexibleCover.getValueAtAsObject(rowIndex, isStructure ? MatrixStructureContraints.SEGMENTS_OF_COLUMN_INDEX : CoverMap.SEGMENTS_OF_COLUMN_INDEX);
+        peril = (IPerilMarker) flexibleCover.getValueAtAsObject(rowIndex, isStructure ? MatrixStructureContraints.GENERATORS_OF_COLUMN_INDEX : CoverMap.GENERATORS_OF_COLUMN_INDEX);
+        claimTypeSelector = ClaimTypeSelector.valueOf((String) flexibleCover.getValueAtAsObject(rowIndex, isStructure ? MatrixStructureContraints.LOSS_KIND_OF_OF_COLUMN_INDEX : CoverMap.LOSS_KIND_OF_OF_COLUMN_INDEX));
     }
 
     public List<ClaimCashflowPacket> filter(List<ClaimCashflowPacket> source) {
         List<ClaimCashflowPacket> result = new ArrayList<ClaimCashflowPacket>();
         for (ClaimCashflowPacket claim : source) {
-            if (netContract == null && cededContract == null && claim.reinsuranceContract() != null){
+            if (netContract == null && cededContract == null && claim.reinsuranceContract() != null) {
                 // covers gross claims only.
-            }else if ((netContract == null || netContract == claim.reinsuranceContract()) &&
+            } else if ((netContract == null || netContract == claim.reinsuranceContract()) &&
                     (cededContract == null || cededContract == claim.reinsuranceContract()) &&
                     (legalEntity == null || legalEntity == claim.legalEntity()) &&
                     (segment == null || segment == claim.segment()) &&
@@ -46,6 +48,17 @@ public class MatrixCoverAttributeRow {
             }
         }
         source.removeAll(result);
+        return result;
+    }
+
+    public List filterUnderwritingInfos(List source) {
+        List result = new ArrayList();
+        for (Object underwritingInfo : source) {
+            if ((legalEntity == null || legalEntity == ((UnderwritingInfoPacket) underwritingInfo).legalEntity()) &&
+                    (segment == null || segment == ((UnderwritingInfoPacket) underwritingInfo).segment())) {
+                result.add(underwritingInfo);
+            }
+        }
         return result;
     }
 

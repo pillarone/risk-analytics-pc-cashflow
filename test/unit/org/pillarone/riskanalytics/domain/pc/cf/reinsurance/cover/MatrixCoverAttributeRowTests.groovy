@@ -62,7 +62,7 @@ class MatrixCoverAttributeRowTests extends GrailsUnitTestCase {
 
     void testRowFilter_by_ceded_contract() {
         setupParams([[''], ['contract1'], [''], [''], [''], ['ANY']])
-        MatrixCoverAttributeRow filter = new MatrixCoverAttributeRow(1, params)
+        MatrixCoverAttributeRow filter = new MatrixCoverAttributeRow(1, false, params)
         def source = new PacketList<ClaimCashflowPacket>()
         source.add(new ClaimCashflowPacket(marker: contract1))
         source.add(new ClaimCashflowPacket(marker: contract2))
@@ -72,7 +72,7 @@ class MatrixCoverAttributeRowTests extends GrailsUnitTestCase {
 
     void testRowFilter_by_segment() {
         setupParams([[''], [''], [''], ['segment1'], [''], ['ANY']])
-        MatrixCoverAttributeRow filter = new MatrixCoverAttributeRow(1, params)
+        MatrixCoverAttributeRow filter = new MatrixCoverAttributeRow(1, false, params)
         def source = new PacketList<ClaimCashflowPacket>()
         source.add(new ClaimCashflowPacket(marker: segment1))
         source.add(new ClaimCashflowPacket(marker: segment2))
@@ -81,7 +81,7 @@ class MatrixCoverAttributeRowTests extends GrailsUnitTestCase {
 
     void testRowFilter_by_peril() {
         setupParams([[''], [''], [''], [''], ['peril1'], ['ANY']])
-        MatrixCoverAttributeRow filter = new MatrixCoverAttributeRow(1, params)
+        MatrixCoverAttributeRow filter = new MatrixCoverAttributeRow(1, false, params)
         def source = new PacketList<ClaimCashflowPacket>()
         source.add(new ClaimCashflowPacket(marker: peril1))
         source.add(new ClaimCashflowPacket(marker: peril2))
@@ -90,7 +90,7 @@ class MatrixCoverAttributeRowTests extends GrailsUnitTestCase {
 
     void testRowFilter_by_legalEntity() {
         setupParams([[''], [''], ['legalEntity1'], [''], [''], ['ANY']])
-        MatrixCoverAttributeRow filter = new MatrixCoverAttributeRow(1, params)
+        MatrixCoverAttributeRow filter = new MatrixCoverAttributeRow(1, false, params)
         def source = new PacketList<ClaimCashflowPacket>()
         source.add(new ClaimCashflowPacket(marker: legalEntity1))
         source.add(new ClaimCashflowPacket(marker: legalEntity2))
@@ -99,7 +99,7 @@ class MatrixCoverAttributeRowTests extends GrailsUnitTestCase {
 
     void testRowFilter_by_net_contract() {
         setupParams([['contract1'], [''], [''], [''], [''], ['ANY']])
-        MatrixCoverAttributeRow filter = new MatrixCoverAttributeRow(1, params)
+        MatrixCoverAttributeRow filter = new MatrixCoverAttributeRow(1, false, params)
         def source = new PacketList<ClaimCashflowPacket>()
         source.add(new ClaimCashflowPacket(marker: contract1))
         source.add(new ClaimCashflowPacket(marker: contract2))
@@ -108,7 +108,7 @@ class MatrixCoverAttributeRowTests extends GrailsUnitTestCase {
 
     void testRowFilter_by_claim_type() {
         setupParams([[''], [''], [''], [''], [''], ['AGGREGATED_EVENT']])
-        MatrixCoverAttributeRow filter = new MatrixCoverAttributeRow(1, params)
+        MatrixCoverAttributeRow filter = new MatrixCoverAttributeRow(1, false, params)
         def source = new PacketList<ClaimCashflowPacket>()
         def expectedPacket1 = new ClaimCashflowPacket(new ClaimRoot(0, ClaimType.AGGREGATED_EVENT, null, null), null)
         source.add(expectedPacket1)

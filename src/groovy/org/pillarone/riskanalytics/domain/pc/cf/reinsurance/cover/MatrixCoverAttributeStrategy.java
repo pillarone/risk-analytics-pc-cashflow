@@ -1,19 +1,14 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover;
 
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
-import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimTypeSelector;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimValidator;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract;
-import org.pillarone.riskanalytics.domain.utils.constant.ReinsuranceContractBase;
-import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn;
-import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
-import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.structure.IStructuringStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.structure.StructuringType;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
@@ -22,20 +17,23 @@ import java.util.*;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class MatrixCoverAttributeStrategy extends AbstractParameterObject implements ICoverAttributeStrategy, IContractCover {
+public class MatrixCoverAttributeStrategy extends AbstractParameterObject implements ICoverAttributeStrategy, IContractCover, IStructuringStrategy {
 
     ConstrainedMultiDimensionalParameter flexibleCover;
     ConstrainedMultiDimensionalParameter benefitContracts;
     private List<MatrixCoverAttributeRow> rowFilters;
+    boolean alternativeAggregation;
 
     public IParameterObjectClassifier getType() {
-        return CoverAttributeStrategyType.MATRIX;
+        return alternativeAggregation ? StructuringType.MATRIX : CoverAttributeStrategyType.MATRIX;
     }
 
     public Map getParameters() {
         Map<String, Object> parameters = new HashMap<String, Object>(2);
         parameters.put("flexibleCover", flexibleCover);
-        parameters.put("benefitContracts", benefitContracts);
+        if (!alternativeAggregation) {
+            parameters.put("benefitContracts", benefitContracts);
+        }
         return parameters;
     }
 
@@ -57,7 +55,7 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
     public void initRowFilters() {
         rowFilters = new ArrayList<MatrixCoverAttributeRow>();
         for (int row = flexibleCover.getTitleRowCount(); row < flexibleCover.getRowCount(); row++) {
-            rowFilters.add(new MatrixCoverAttributeRow(row, flexibleCover));
+            rowFilters.add(new MatrixCoverAttributeRow(row, alternativeAggregation, flexibleCover));
         }
     }
 
@@ -108,7 +106,7 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
         for (ClaimCashflowPacket claim : coveredGrossClaims) {
             coveredSegments.add(claim.segment());
         }
-        for (UnderwritingInfoPacket underwritingInfo: source) {
+        for (UnderwritingInfoPacket underwritingInfo : source) {
             if (coveredSegments.contains(underwritingInfo.segment())) {
                 filteredUnderwritingInfo.add(underwritingInfo);
             }
@@ -131,7 +129,7 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
     }
 
     public List<MatrixCoverAttributeRow> getRowFilters() {
-        if (rowFilters == null){
+        if (rowFilters == null) {
             initRowFilters();
         }
         return rowFilters;
@@ -143,4 +141,27 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
         }
         return false;
     }
+
+    public List<ClaimCashflowPacket> filterClaims(List<ClaimCashflowPacket> claims) {
+        return coveredClaims(claims);
+    }
+
+    public List<UnderwritingInfoPacket> filterUnderwritingInfos(List<UnderwritingInfoPacket> underwritingInfos) {
+        initRowFilters();
+        List<UnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
+        for (MatrixCoverAttributeRow rowFilter : getRowFilters()) {
+            filteredUnderwritingInfo.addAll(rowFilter.filterUnderwritingInfos(underwritingInfos));
+        }
+        return filteredUnderwritingInfo;
+    }
+
+    public List<CededUnderwritingInfoPacket> filterUnderwritingInfosCeded(List<CededUnderwritingInfoPacket> underwritingInfos) {
+        initRowFilters();
+        List<CededUnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<CededUnderwritingInfoPacket>();
+        for (MatrixCoverAttributeRow rowFilter : getRowFilters()) {
+            filteredUnderwritingInfo.addAll(rowFilter.filterUnderwritingInfos(underwritingInfos));
+        }
+        return filteredUnderwritingInfo;
+    }
+
 }

@@ -1,19 +1,16 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.validation
 
 import grails.test.GrailsUnitTestCase
-import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.parameterization.validation.ParameterValidation
 import org.pillarone.riskanalytics.core.parameterization.validation.ValidationType
 import org.pillarone.riskanalytics.core.simulation.item.parameter.ParameterHolder
 import org.pillarone.riskanalytics.core.simulation.item.parameter.ParameterObjectParameterHolder
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimTypeSelector
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverMap
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixCoverAttributeStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixStructureContraints
 import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
-import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
 
 class CoverAttributeValidatorTests extends GrailsUnitTestCase {
     List<ParameterHolder> parameters
@@ -23,6 +20,7 @@ class CoverAttributeValidatorTests extends GrailsUnitTestCase {
         super.setUp()
         ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
         ConstraintsFactory.registerConstraint(new CoverMap())
+        ConstraintsFactory.registerConstraint(new MatrixStructureContraints())
         setupParamCover()
     }
 
@@ -99,7 +97,7 @@ class CoverAttributeValidatorTests extends GrailsUnitTestCase {
         assert CoverAttributeValidator.IDENTICAL_FILTER == validationError.msg
     }
 
-    void testSameNetAndCededContract(){
+    void testSameNetAndCededContract() {
         setupParamCover([[''], [''], [''], [''], [''], ['ANY']])
         List result = new CoverAttributeValidator().validate(parameters)
         assert 0 == result.size()
@@ -110,5 +108,17 @@ class CoverAttributeValidatorTests extends GrailsUnitTestCase {
         assert ValidationType.ERROR == validationError.getValidationType()
         assert CoverAttributeValidator.IDENTICAL_NET_AND_CEDED_CONTRACTS == validationError.msg
         assert 'Contract 1' == validationError.args[0]
+    }
+
+    void testAlternativeAggregations() {
+        def flexibleCover = new ConstrainedMultiDimensionalParameter([['',''], ['',''], ['',''], ['','']], ['', '', '', ''], ConstraintsFactory.getConstraints(MatrixStructureContraints.IDENTIFIER))
+        parameters = new ArrayList<ParameterHolder>()
+        ParameterObjectParameterHolder holder = new ParameterObjectParameterHolder("subContract2:parmCover", 1, new MatrixCoverAttributeStrategy(alternativeAggregation: true, flexibleCover: flexibleCover))
+        parameters << holder
+        List result = new CoverAttributeValidator().validate(parameters)
+        assert 1 == result.size()
+        ParameterValidation validationError = result[0]
+        assert ValidationType.ERROR == validationError.getValidationType()
+        assert CoverAttributeValidator.IDENTICAL_FILTER == validationError.msg
     }
 }

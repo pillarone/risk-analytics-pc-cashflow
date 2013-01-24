@@ -10,10 +10,9 @@ import org.pillarone.riskanalytics.core.parameterization.validation.ParameterVal
 import org.pillarone.riskanalytics.core.parameterization.validation.ValidationType
 import org.pillarone.riskanalytics.core.simulation.item.parameter.ParameterHolder
 import org.pillarone.riskanalytics.core.simulation.item.parameter.ParameterObjectParameterHolder
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverMap
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixCoverAttributeRow
+import org.pillarone.riskanalytics.domain.pc.cf.structure.StructuringType
 import org.pillarone.riskanalytics.domain.utils.validation.ParameterValidationServiceImpl
 
 class CoverAttributeValidator implements IParameterizationValidator {
@@ -35,7 +34,7 @@ class CoverAttributeValidator implements IParameterizationValidator {
         List<ParameterValidation> errors = []
 
         for (ParameterHolder parameter in parameters) {
-            if (parameter instanceof ParameterObjectParameterHolder && parameter.classifier instanceof CoverAttributeStrategyType) {
+            if (parameter instanceof ParameterObjectParameterHolder && (parameter.classifier instanceof CoverAttributeStrategyType || parameter.classifier instanceof StructuringType)) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug "validating ${parameter.path}"
                 }
@@ -55,7 +54,11 @@ class CoverAttributeValidator implements IParameterizationValidator {
         }
 
         validationService.register(CoverAttributeStrategyType.MATRIX) { Map parameters ->
-            return multipleIdenticalFilters(parameters.flexibleCover)
+            return multipleIdenticalFilters(parameters.flexibleCover, false)
+        }
+
+        validationService.register(StructuringType.MATRIX) { Map parameters ->
+            return multipleIdenticalFilters(parameters.flexibleCover, true)
         }
 
         validationService.register(CoverAttributeStrategyType.MATRIX) { Map parameters ->
@@ -65,18 +68,18 @@ class CoverAttributeValidator implements IParameterizationValidator {
 
     private List checkIdenticalContracts(ConstrainedMultiDimensionalParameter parameter) {
         for (int row = parameter.getTitleRowCount(); row < parameter.getRowCount(); row++) {
-            CoverAttributeValidationRow filterRow = new CoverAttributeValidationRow(row, parameter)
-            if (filterRow.cededContractName && filterRow.netContractName && filterRow.cededContractName == filterRow.netContractName){
-                return [ValidationType.ERROR, IDENTICAL_NET_AND_CEDED_CONTRACTS,normalizeName(filterRow.netContractName)]
+            CoverAttributeValidationRow filterRow = new CoverAttributeValidationRow(row, false, parameter)
+            if (filterRow.cededContractName && filterRow.netContractName && filterRow.cededContractName == filterRow.netContractName) {
+                return [ValidationType.ERROR, IDENTICAL_NET_AND_CEDED_CONTRACTS, normalizeName(filterRow.netContractName)]
             }
         }
         return null
     }
 
-    private List multipleIdenticalFilters(ConstrainedMultiDimensionalParameter parameter) {
+    private List multipleIdenticalFilters(ConstrainedMultiDimensionalParameter parameter, boolean alternativeAggregation) {
         Set<CoverAttributeValidationRow> filters = new HashSet<CoverAttributeValidationRow>();
         for (int row = parameter.getTitleRowCount(); row < parameter.getRowCount(); row++) {
-            CoverAttributeValidationRow coverAttributeRow = new CoverAttributeValidationRow(row, parameter)
+            CoverAttributeValidationRow coverAttributeRow = new CoverAttributeValidationRow(row, alternativeAggregation, parameter)
             if (!filters.add(coverAttributeRow)) {
                 return [ValidationType.ERROR, IDENTICAL_FILTER]
             }
