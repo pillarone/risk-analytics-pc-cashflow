@@ -17,16 +17,26 @@ import org.pillarone.riskanalytics.domain.test.SpreadsheetImporter
 class TestTriangle {
     String name
     List<DateTime> underwritingPeriodStartDates = []
+    List<DateTime> developmentPeriodStartDates = []
     private Map<TestReferenceClaimKey, Double> values = [:]
     private Map<DateTime, List<Double>> valuesByUnderwritingYear = [:]
     private Map<DateTime, List<Period>> periodsByUnderwritingYear = [:]
 
     TestTriangle(SpreadsheetImporter importer, String sheet, String name, int firstYear, int numberOfYears, String topLeftCell, boolean buildIncrements = false) {
+        this(importer, sheet, name, firstYear, numberOfYears, numberOfYears, topLeftCell, buildIncrements)
+    }
+
+    TestTriangle(SpreadsheetImporter importer, String sheet, String name, int firstYear, int numberOfUnderwritingYears,
+                 int numberOfDevelopmentYears, String topLeftCell, boolean buildIncrements = false) {
         this.name = name
         Character column = topLeftCell[0]
         int row = Integer.parseInt(topLeftCell.substring(1))
-        for (int i = 0; i < numberOfYears; i++) {
-            List<Double> rowValues = getRowValues(importer, sheet, column, row + i, numberOfYears - i)
+        for (int i = 0; i < numberOfDevelopmentYears; i++) {
+            DateTime updateDate = new DateTime(firstYear + i, 1, 1, 0, 0, 0, 0)
+            developmentPeriodStartDates << updateDate
+        }
+        for (int i = 0; i < numberOfUnderwritingYears; i++) {
+            List<Double> rowValues = getRowValues(importer, sheet, column, row + i, numberOfDevelopmentYears - i)
             DateTime occurrenceDate = new DateTime(firstYear + i, 1, 1, 0, 0, 0, 0)
             valuesByUnderwritingYear[occurrenceDate] = rowValues
             underwritingPeriodStartDates << occurrenceDate
@@ -63,7 +73,7 @@ class TestTriangle {
         if (periods == null) {
             periods = []
             DateTime firstPeriodStartDate
-            for (DateTime periodStartDate : underwritingPeriodStartDates) {
+            for (DateTime periodStartDate : developmentPeriodStartDates) {
                 if (!periodStartDate.isBefore(underwritingPeriodStartDate)) {
                     if (firstPeriodStartDate) {
                         periods << new Period(firstPeriodStartDate, periodStartDate)
@@ -91,7 +101,7 @@ class TestTriangle {
     }
 
     Integer maxYear() {
-        underwritingPeriodStartDates[-1].year
+        developmentPeriodStartDates[-1].year
     }
 
     /**
