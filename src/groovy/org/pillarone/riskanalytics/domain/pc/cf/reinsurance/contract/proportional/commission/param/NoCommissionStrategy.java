@@ -30,12 +30,10 @@ public class NoCommissionStrategy extends AbstractParameterObject implements ICo
                                     boolean isFirstPeriod, boolean isAdditive) {
     }
 
-    @Override
     public ICommission getCalculator(DoubleValuePerPeriod lossCarriedForward) {
         return new NoCommission();
     }
 
-    @Override
     public DoubleValuePerPeriod getInitialLossCarriedForward() {
         return new DoubleValuePerPeriod();
     }
