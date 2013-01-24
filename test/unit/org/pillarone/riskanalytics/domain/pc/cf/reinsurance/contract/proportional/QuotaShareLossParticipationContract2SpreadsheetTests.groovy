@@ -3,12 +3,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportion
 import com.google.common.collect.HashMultimap
 import com.google.common.collect.SetMultimap
 import org.apache.commons.lang.NotImplementedException
-import org.apache.commons.lang.builder.HashCodeBuilder
-import org.grails.plugins.excelimport.ExpectedPropertyType
 import org.joda.time.DateTime
 import org.joda.time.Period
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.DateTimeFormatter
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
@@ -30,6 +26,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportiona
 import org.pillarone.riskanalytics.domain.test.SpreadsheetImporter
 import org.pillarone.riskanalytics.domain.test.SpreadsheetUnitTest
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
+import static org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.TestReferenceClaimKey.format
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -85,14 +82,14 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
         for (SpreadsheetImporter importer : importers) {
             ReinsuranceContract contract = getQuotaShareContract(importer, 'Sliding_in_Triangle')
             IterationScope iterationScope = contract.iterationScope
-            Triangle grossClaims = new Triangle(importer, SLIDING_IN__TRIANGLE, 'gross claims', 2012, 4, 'C10')
+            TestTriangle grossClaims = new TestTriangle(importer, SLIDING_IN__TRIANGLE, 'gross claims', 2012, 4, 'C10')
             Map<Integer, GrossClaimRoot> claimsByPeriod = getClaimsByUnderwritingPeriod(grossClaims)
-            Triangle cededClaims = new Triangle(importer, SLIDING_IN__TRIANGLE, 'ceded claims', 2012, 4, 'C247')
-            Triangle grossPremium = new Triangle(importer, SLIDING_IN__TRIANGLE, 'gross premium', 2012, 4, 'C16')
+            TestTriangle cededClaims = new TestTriangle(importer, SLIDING_IN__TRIANGLE, 'ceded claims', 2012, 4, 'C247')
+            TestTriangle grossPremium = new TestTriangle(importer, SLIDING_IN__TRIANGLE, 'gross premium', 2012, 4, 'C16')
             IPeriodCounter periodCounter = iterationScope.periodScope.periodCounter
             SetMultimap<Integer, UnderwritingInfoPacket> grossUwInfoByPeriod = initGrossPremium(grossPremium, periodCounter)
-            Triangle totalCommission = new Triangle(importer, SLIDING_IN__TRIANGLE, 'total commission', 2012, 4, 'C209', true)
-            Triangle fixCommission = new Triangle(importer, SLIDING_IN__TRIANGLE, 'fix commission', 2012, 4, 'C215', true)
+            TestTriangle totalCommission = new TestTriangle(importer, SLIDING_IN__TRIANGLE, 'total commission', 2012, 4, 'C209', true)
+            TestTriangle fixCommission = new TestTriangle(importer, SLIDING_IN__TRIANGLE, 'fix commission', 2012, 4, 'C215', true)
             for (int period = 2012; period <= grossClaims.maxYear(); period++) {
                 for (int i = 2012; i <= period; i++) {
 
@@ -240,8 +237,7 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
         throw new NotImplementedException()
     }
 
-
-    private static Map<Integer, GrossClaimRoot> getClaimsByUnderwritingPeriod(Triangle triangle) {
+    private static Map<Integer, GrossClaimRoot> getClaimsByUnderwritingPeriod(TestTriangle triangle) {
         Map<Integer, GrossClaimRoot> claimsByOccurrenceYear = [:]
         for (DateTime startOfUnderwritingPeriod : triangle.underwritingPeriodStartDates) {
             List<Period> cummulativePeriods = triangle.cummulativePeriods(startOfUnderwritingPeriod)
@@ -262,7 +258,7 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
 
     private static final double EPSILON = 1E-8
 
-    private SetMultimap<Integer, UnderwritingInfoPacket> initGrossPremium(Triangle triangle, IPeriodCounter periodCounter) {
+    private SetMultimap<Integer, UnderwritingInfoPacket> initGrossPremium(TestTriangle triangle, IPeriodCounter periodCounter) {
         SetMultimap<Integer, UnderwritingInfoPacket> grossUwPerUwYear = HashMultimap.create()
         int inceptionPeriod = 0
         for (DateTime calendarYearStartDate : triangle.underwritingPeriodStartDates) {
@@ -282,192 +278,6 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
             inceptionPeriod++
         }
         grossUwPerUwYear
-    }
-
-
-    private class ReferenceClaimContainer {
-
-        Map<ReferenceClaimKey, ReferenceClaim> container = [:]
-
-        void add(ReferenceClaim claim) {
-            container.put(new ReferenceClaimKey(claim.occurrenceDate, claim.updateDate), claim)
-        }
-
-        ReferenceClaim get(ClaimCashflowPacket claim) {
-            container.get(new ReferenceClaimKey(claim.occurrenceDate, claim.updateDate))
-        }
-    }
-
-
-    private class ReferenceClaimKey {
-        DateTime occurrenceDate
-        DateTime updateDate
-
-        ReferenceClaimKey(DateTime occurrenceDate, DateTime updateDate) {
-            this.occurrenceDate = occurrenceDate
-            this.updateDate = updateDate
-        }
-
-        @Override
-        int hashCode() {
-            HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
-            hashCodeBuilder.append(occurrenceDate);
-            hashCodeBuilder.append(updateDate);
-            return hashCodeBuilder.toHashCode();
-        }
-
-        @Override
-        boolean equals(Object obj) {
-            if (obj instanceof ReferenceClaimKey) {
-                return ((ReferenceClaimKey) obj).occurrenceDate.equals(occurrenceDate) && ((ReferenceClaimKey) obj).updateDate.equals(updateDate)
-            } else {
-                return false;
-            }
-        }
-
-        @Override
-        String toString() {
-            "${format(occurrenceDate)} (${format(updateDate)})"
-        }
-    }
-
-
-    private class ReferenceClaim {
-
-        DateTime occurrenceDate
-        DateTime inceptionDate
-        DateTime eventDate
-        DateTime updateDate
-
-        double ultimate
-        double reported
-        double paid
-
-        ReferenceClaim(DateTime occurrenceDate, DateTime updateDate, double ultimate, double reported, double paid) {
-            this.occurrenceDate = occurrenceDate
-            this.inceptionDate = occurrenceDate
-            this.eventDate = occurrenceDate
-            this.updateDate = updateDate
-            this.ultimate = ultimate
-            this.reported = reported
-            this.paid = paid
-        }
-
-        ReferenceClaim(DateTime occurrenceDate, DateTime inceptionDate, DateTime eventDate, DateTime updateDate, double ultimate, double reported, double paid) {
-            this.occurrenceDate = occurrenceDate
-            this.inceptionDate = inceptionDate
-            this.eventDate = eventDate
-            this.updateDate = updateDate
-            this.ultimate = ultimate
-            this.reported = reported
-            this.paid = paid
-        }
-
-        String dateSummary() {
-            "${format(occurrenceDate)} (${format(updateDate)})"
-        }
-
-        @Override
-        String toString() {
-            "${dateSummary()} $ultimate $reported $paid"
-        }
-    }
-
-    private static final String DEFAULT_DATE_FORMAT = "dd.MM.yyyy"
-    private static DateTimeFormatter formatter = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
-
-    /**
-     * @param dateTime
-     * @return "dd.MM.yyyy"
-     */
-    private static String format(DateTime dateTime) {
-        if (dateTime == null) {
-            return "";
-        }
-        return formatter.print(dateTime);
-    }
-
-    private class Triangle {
-        String name
-        List<DateTime> underwritingPeriodStartDates = []
-        private Map<ReferenceClaimKey, Double> values = [:]
-        private Map<DateTime, List<Double>> valuesByUnderwritingYear = [:]
-        private Map<DateTime, List<Period>> periodsByUnderwritingYear = [:]
-
-        Triangle(SpreadsheetImporter importer, String sheet, String name, int firstYear, int numberOfYears, String topLeftCell, boolean buildIncrements = false) {
-            this.name = name
-            Character column = topLeftCell[0]
-            int row = Integer.parseInt(topLeftCell.substring(1))
-            for (int i = 0; i < numberOfYears; i++) {
-                List<Double> rowValues = getRowValues(importer, sheet, column, row + i, numberOfYears - i)
-                DateTime occurrenceDate = new DateTime(firstYear + i, 1,1,0,0,0,0)
-                valuesByUnderwritingYear[occurrenceDate] = rowValues
-                underwritingPeriodStartDates << occurrenceDate
-                for (int j = 0; j < rowValues.size(); j++) {
-                    DateTime updateDate = new DateTime(firstYear + i + j,1,1,0,0,0,0)
-                    if (j > 0 && buildIncrements) {
-                        values[new ReferenceClaimKey(occurrenceDate, updateDate)] = rowValues[j] - rowValues[j-1]
-                    }
-                    else {
-                        values[new ReferenceClaimKey(occurrenceDate, updateDate)] = rowValues[j]
-                    }
-                }
-                column = column.next()
-            }
-        }
-
-        void add(DateTime inceptionDate, DateTime updateDate, double value) {
-            values.put(new ReferenceClaimKey(inceptionDate, updateDate), value)
-        }
-
-        boolean sameValue(DateTime inceptionDate, DateTime updateDate, double value) {
-            value == values.get(new ReferenceClaimKey(inceptionDate, updateDate))
-        }
-
-        double referenceValue(ClaimCashflowPacket claim) {
-            values.get(new ReferenceClaimKey(claim.occurrenceDate, claim.updateDate))
-        }
-
-        double referenceValue(UnderwritingInfoPacket uwInfo) {
-            values.get(new ReferenceClaimKey(uwInfo.exposure.inceptionDate, uwInfo.date))
-        }
-
-        List<Period> cummulativePeriods(DateTime underwritingPeriodStartDate) {
-            List<Period> periods = periodsByUnderwritingYear[underwritingPeriodStartDate]
-            if (periods == null) {
-                periods = []
-                DateTime firstPeriodStartDate
-                for (DateTime periodStartDate : underwritingPeriodStartDates) {
-                    if (!periodStartDate.isBefore(underwritingPeriodStartDate)) {
-                        if (firstPeriodStartDate) {
-                            periods << new Period(firstPeriodStartDate, periodStartDate)
-                        }
-                        else {
-                            firstPeriodStartDate = periodStartDate
-                            periods << Period.years(0)
-                        }
-                    }
-                }
-                periodsByUnderwritingYear[underwritingPeriodStartDate] = periods
-            }
-            return periods
-        }
-
-        List<Double> valuesBy(DateTime underwritingPeriodStartDate) {
-            valuesByUnderwritingYear[underwritingPeriodStartDate]
-        }
-
-        double latestValue(DateTime underwritingPeriodStartDate) {
-            valuesByUnderwritingYear[underwritingPeriodStartDate][-1]
-        }
-
-        int numberOfUnderwritingPeriods() {
-            underwritingPeriodStartDates.size()
-        }
-
-        Integer maxYear() {
-            underwritingPeriodStartDates[-1].year
-        }
     }
 
 }
