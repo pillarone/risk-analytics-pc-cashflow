@@ -1,5 +1,5 @@
 iteration	period	valueIndex	path	field	value	date
-1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	premiumRiskBase	-100.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	paidCumulativeIndexed	-30.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	reportedCumulativeIndexed	-100.0	31-December-2012 24:00:00 000
@@ -15,7 +15,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	reservesIndexed	-70.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	paidIncrementalIndexed	-30.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	reportedIncrementalIndexed	-100.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	premiumRiskBase	-100.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	paidCumulativeIndexed	-30.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	reportedCumulativeIndexed	-100.0	31-December-2012 24:00:00 000
@@ -31,7 +31,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	reservesIndexed	-70.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	paidIncrementalIndexed	-30.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	reportedIncrementalIndexed	-100.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	premiumRiskBase	-100.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	paidCumulativeIndexed	-30.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	reportedCumulativeIndexed	-100.0	31-December-2012 24:00:00 000
@@ -47,7 +47,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	reservesIndexed	-70.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	paidIncrementalIndexed	-30.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	reportedIncrementalIndexed	-100.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	premiumRiskBase	-60.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	paidCumulativeIndexed	-18.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	reportedCumulativeIndexed	-60.0	31-December-2012 24:00:00 000
@@ -63,7 +63,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	reservesIndexed	-42.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	paidIncrementalIndexed	-18.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	reportedIncrementalIndexed	-60.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsReinsurer	premiumRiskBase	-40.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsReinsurer	paidCumulativeIndexed	-12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsReinsurer	reportedCumulativeIndexed	-40.0	31-December-2012 24:00:00 000
@@ -153,7 +153,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMotorCesar:outUnderwritingInfoGross	premiumPaid	810.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outUnderwritingInfoGross	premiumWritten	180.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outUnderwritingInfoGross	premiumPaid	162.0	01-January-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	premiumRiskBase	-420.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	paidCumulativeIndexed	-126.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	reportedCumulativeIndexed	-420.0	01-January-2012 24:00:00 000
@@ -169,7 +169,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	reservesIndexed	-294.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	paidIncrementalIndexed	-126.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	reportedIncrementalIndexed	-420.0	01-January-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	premiumRiskBase	40.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	paidCumulativeIndexed	12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	reportedCumulativeIndexed	40.0	31-December-2012 24:00:00 000
@@ -185,7 +185,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	reservesIndexed	28.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	paidIncrementalIndexed	12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	reportedIncrementalIndexed	40.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	premiumRiskBase	40.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	paidCumulativeIndexed	12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	reportedCumulativeIndexed	40.0	31-December-2012 24:00:00 000
@@ -201,7 +201,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	reservesIndexed	28.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	paidIncrementalIndexed	12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	reportedIncrementalIndexed	40.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	premiumRiskBase	40.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	paidCumulativeIndexed	12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	reportedCumulativeIndexed	40.0	31-December-2012 24:00:00 000
@@ -217,7 +217,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	reservesIndexed	28.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	paidIncrementalIndexed	12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	reportedIncrementalIndexed	40.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	premiumRiskBase	24.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	paidCumulativeIndexed	7.2	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	reportedCumulativeIndexed	24.0	31-December-2012 24:00:00 000
@@ -233,7 +233,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	reservesIndexed	16.8	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	paidIncrementalIndexed	7.2	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	reportedIncrementalIndexed	24.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	premiumRiskBase	16.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	paidCumulativeIndexed	4.800000000000001	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	reportedCumulativeIndexed	16.0	31-December-2012 24:00:00 000
@@ -249,7 +249,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	reservesIndexed	11.2	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	paidIncrementalIndexed	4.800000000000001	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	reportedIncrementalIndexed	16.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsNet	premiumRiskBase	-380.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsNet	paidCumulativeIndexed	-114.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsNet	reportedCumulativeIndexed	-380.0	01-January-2012 24:00:00 000
@@ -265,7 +265,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsNet	reservesIndexed	-266.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsNet	paidIncrementalIndexed	-114.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsNet	reportedIncrementalIndexed	-380.0	01-January-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsPrimaryInsurer	premiumRiskBase	-320.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsPrimaryInsurer	paidCumulativeIndexed	-96.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-320.0	31-December-2012 24:00:00 000
@@ -281,7 +281,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsPrimaryInsurer	reservesIndexed	-224.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsPrimaryInsurer	paidIncrementalIndexed	-96.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:outClaimsPrimaryInsurer	reportedIncrementalIndexed	-320.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMotor:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMotor:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMotor:outClaimsPrimaryInsurer	premiumRiskBase	-320.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMotor:outClaimsPrimaryInsurer	paidCumulativeIndexed	-96.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMotor:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-320.0	31-December-2012 24:00:00 000
@@ -297,7 +297,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMotor:outClaimsPrimaryInsurer	reservesIndexed	-224.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMotor:outClaimsPrimaryInsurer	paidIncrementalIndexed	-96.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMotor:outClaimsPrimaryInsurer	reportedIncrementalIndexed	-320.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMotorCesar:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMotorCesar:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMotorCesar:outClaimsPrimaryInsurer	premiumRiskBase	-320.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMotorCesar:outClaimsPrimaryInsurer	paidCumulativeIndexed	-96.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subMixedCesar:segments:subMotorCesar:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-320.0	31-December-2012 24:00:00 000
@@ -386,7 +386,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outDiscountedValues	discountedReservedNet	-378.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outDiscountedValues	discountedReservedGross	-420.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outDiscountedValues	discountedReservedCeded	42.0	01-January-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	premiumRiskBase	-600.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	paidCumulativeIndexed	-180.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-600.0	31-December-2012 24:00:00 000
@@ -402,7 +402,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	reservesIndexed	-420.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	paidIncrementalIndexed	-180.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	reportedIncrementalIndexed	-600.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	premiumRiskBase	-600.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	paidCumulativeIndexed	-180.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-600.0	31-December-2012 24:00:00 000
@@ -418,7 +418,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	reservesIndexed	-420.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	paidIncrementalIndexed	-180.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	reportedIncrementalIndexed	-600.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	premiumRiskBase	-600.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	paidCumulativeIndexed	-180.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-600.0	31-December-2012 24:00:00 000
@@ -434,7 +434,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	reservesIndexed	-420.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	paidIncrementalIndexed	-180.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	reportedIncrementalIndexed	-600.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	premiumRiskBase	-540.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	paidCumulativeIndexed	-162.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	reportedCumulativeIndexed	-540.0	01-January-2012 24:00:00 000
@@ -450,7 +450,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	reservesIndexed	-378.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	paidIncrementalIndexed	-162.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	reportedIncrementalIndexed	-540.0	01-January-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	premiumRiskBase	60.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	paidCumulativeIndexed	18.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	reportedCumulativeIndexed	60.0	31-December-2012 24:00:00 000
@@ -466,7 +466,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	reservesIndexed	42.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	paidIncrementalIndexed	18.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	reportedIncrementalIndexed	60.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	premiumRiskBase	60.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	paidCumulativeIndexed	18.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	reportedCumulativeIndexed	60.0	31-December-2012 24:00:00 000
@@ -482,7 +482,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	reservesIndexed	42.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	paidIncrementalIndexed	18.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	reportedIncrementalIndexed	60.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	premiumRiskBase	60.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	paidCumulativeIndexed	18.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	reportedCumulativeIndexed	60.0	31-December-2012 24:00:00 000
@@ -498,7 +498,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	reservesIndexed	42.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	paidIncrementalIndexed	18.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	reportedIncrementalIndexed	60.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	premiumRiskBase	60.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	paidCumulativeIndexed	18.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	reportedCumulativeIndexed	60.0	31-December-2012 24:00:00 000
@@ -514,7 +514,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	reservesIndexed	42.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	paidIncrementalIndexed	18.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	reportedIncrementalIndexed	60.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsGross	premiumRiskBase	-600.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsGross	paidCumulativeIndexed	-180.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outClaimsGross	reportedCumulativeIndexed	-600.0	01-January-2012 24:00:00 000
@@ -536,7 +536,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outUnderwritingInfoGross	premiumPaid	648.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outUnderwritingInfoGross	premiumWritten	720.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeAlpha:outUnderwritingInfoGross	premiumPaid	648.0	01-January-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	premiumRiskBase	-400.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	paidCumulativeIndexed	-120.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	reportedCumulativeIndexed	-400.0	01-January-2012 24:00:00 000
@@ -552,7 +552,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	reservesIndexed	-280.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	paidIncrementalIndexed	-120.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	reportedIncrementalIndexed	-400.0	01-January-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	premiumRiskBase	40.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	paidCumulativeIndexed	12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	reportedCumulativeIndexed	40.0	31-December-2012 24:00:00 000
@@ -568,7 +568,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	reservesIndexed	28.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	paidIncrementalIndexed	12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	reportedIncrementalIndexed	40.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	premiumRiskBase	40.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	paidCumulativeIndexed	12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	reportedCumulativeIndexed	40.0	31-December-2012 24:00:00 000
@@ -584,7 +584,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	reservesIndexed	28.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	paidIncrementalIndexed	12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	reportedIncrementalIndexed	40.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	premiumRiskBase	40.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	paidCumulativeIndexed	12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	reportedCumulativeIndexed	40.0	31-December-2012 24:00:00 000
@@ -600,7 +600,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	reservesIndexed	28.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	paidIncrementalIndexed	12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	reportedIncrementalIndexed	40.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsCeded	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsCeded	premiumRiskBase	40.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsCeded	paidCumulativeIndexed	12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsCeded	reportedCumulativeIndexed	40.0	31-December-2012 24:00:00 000
@@ -650,7 +650,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeBeta:outFinancials	cededClaimUltimate	40.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outFinancials	grossClaimUltimate	-400.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outFinancials	grossPremiumRisk	312.0	01-January-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	premiumRiskBase	-360.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	paidCumulativeIndexed	-108.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	reportedCumulativeIndexed	-360.0	01-January-2012 24:00:00 000
@@ -666,7 +666,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	reservesIndexed	-252.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	paidIncrementalIndexed	-108.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	reportedIncrementalIndexed	-360.0	01-January-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	premiumRiskBase	-400.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	paidCumulativeIndexed	-120.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-400.0	31-December-2012 24:00:00 000
@@ -682,7 +682,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	reservesIndexed	-280.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	paidIncrementalIndexed	-120.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	reportedIncrementalIndexed	-400.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	premiumRiskBase	-400.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	paidCumulativeIndexed	-120.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-400.0	31-December-2012 24:00:00 000
@@ -698,7 +698,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	reservesIndexed	-280.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	paidIncrementalIndexed	-120.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	reportedIncrementalIndexed	-400.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsPrimaryInsurer	premiumRiskBase	-400.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsPrimaryInsurer	paidCumulativeIndexed	-120.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-400.0	31-December-2012 24:00:00 000
@@ -749,7 +749,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeBeta:outDiscountedValues	discountedReservedNet	-252.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outDiscountedValues	discountedReservedGross	-280.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outDiscountedValues	discountedReservedCeded	28.0	01-January-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReDelta:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReDelta:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsGross	premiumRiskBase	-27.999999999999996	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsGross	paidCumulativeIndexed	-8.4	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsGross	reportedCumulativeIndexed	-27.999999999999996	01-January-2012 24:00:00 000
@@ -765,7 +765,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsGross	reservesIndexed	-19.599999999999998	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsGross	paidIncrementalIndexed	-8.4	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsGross	reportedIncrementalIndexed	-27.999999999999996	01-January-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	premiumRiskBase	-27.999999999999996	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	paidCumulativeIndexed	-8.4	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	reportedCumulativeIndexed	-27.999999999999996	31-December-2012 24:00:00 000
@@ -781,7 +781,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	reservesIndexed	-19.599999999999998	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	paidIncrementalIndexed	-8.4	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	reportedIncrementalIndexed	-27.999999999999996	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	premiumRiskBase	-27.999999999999996	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	paidCumulativeIndexed	-8.4	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	reportedCumulativeIndexed	-27.999999999999996	31-December-2012 24:00:00 000
@@ -797,7 +797,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	reservesIndexed	-19.599999999999998	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	paidIncrementalIndexed	-8.4	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	reportedIncrementalIndexed	-27.999999999999996	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	premiumRiskBase	-27.999999999999996	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	paidCumulativeIndexed	-8.4	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	reportedCumulativeIndexed	-27.999999999999996	31-December-2012 24:00:00 000
@@ -813,7 +813,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	reservesIndexed	-19.599999999999998	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	paidIncrementalIndexed	-8.4	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	reportedIncrementalIndexed	-27.999999999999996	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	premiumRiskBase	-16.799999999999997	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	paidCumulativeIndexed	-5.04	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	reportedCumulativeIndexed	-16.799999999999997	31-December-2012 24:00:00 000
@@ -829,7 +829,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	reservesIndexed	-11.76	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	paidIncrementalIndexed	-5.04	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	reportedIncrementalIndexed	-16.799999999999997	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	premiumRiskBase	-11.2	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	paidCumulativeIndexed	-3.3600000000000003	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	reportedCumulativeIndexed	-11.2	31-December-2012 24:00:00 000
@@ -845,7 +845,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	reservesIndexed	-7.839999999999999	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	paidIncrementalIndexed	-3.3600000000000003	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	reportedIncrementalIndexed	-11.2	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReDelta:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReDelta:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsNet	premiumRiskBase	-27.999999999999996	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsNet	paidCumulativeIndexed	-8.4	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReDelta:outClaimsNet	reportedCumulativeIndexed	-27.999999999999996	01-January-2012 24:00:00 000
@@ -927,7 +927,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outUnderwritingInfoGross	premiumPaid	19.439999999999998	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outUnderwritingInfoGross	premiumWritten	14.399999999999999	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outUnderwritingInfoGross	premiumPaid	12.96	01-January-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReEcho:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReEcho:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outClaimsNet	premiumRiskBase	-12.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outClaimsNet	paidCumulativeIndexed	-3.6000000000000005	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outClaimsNet	reportedCumulativeIndexed	-12.0	01-January-2012 24:00:00 000
@@ -947,7 +947,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReEcho:outUnderwritingInfoReinsurer	premiumPaid	32.4	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outUnderwritingInfoNet	premiumWritten	36.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outUnderwritingInfoNet	premiumPaid	32.4	01-January-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	premiumRiskBase	-12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	paidCumulativeIndexed	-3.6000000000000005	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	reportedCumulativeIndexed	-12.0	31-December-2012 24:00:00 000
@@ -963,7 +963,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	reservesIndexed	-8.4	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	paidIncrementalIndexed	-3.6000000000000005	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	reportedIncrementalIndexed	-12.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	premiumRiskBase	-12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	paidCumulativeIndexed	-3.6000000000000005	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	reportedCumulativeIndexed	-12.0	31-December-2012 24:00:00 000
@@ -979,7 +979,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	reservesIndexed	-8.4	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	paidIncrementalIndexed	-3.6000000000000005	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	reportedIncrementalIndexed	-12.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	premiumRiskBase	-12.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	paidCumulativeIndexed	-3.6000000000000005	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	reportedCumulativeIndexed	-12.0	31-December-2012 24:00:00 000
@@ -995,7 +995,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	reservesIndexed	-8.4	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	paidIncrementalIndexed	-3.6000000000000005	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	reportedIncrementalIndexed	-12.0	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	premiumRiskBase	-7.199999999999999	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	paidCumulativeIndexed	-2.16	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	reportedCumulativeIndexed	-7.199999999999999	31-December-2012 24:00:00 000
@@ -1011,7 +1011,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	reservesIndexed	-5.04	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	paidIncrementalIndexed	-2.16	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	reportedIncrementalIndexed	-7.199999999999999	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	premiumRiskBase	-4.8	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	paidCumulativeIndexed	-1.4400000000000002	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	reportedCumulativeIndexed	-4.8	31-December-2012 24:00:00 000
@@ -1027,7 +1027,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	reservesIndexed	-3.36	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	paidIncrementalIndexed	-1.4400000000000002	31-December-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	reportedIncrementalIndexed	-4.8	31-December-2012 24:00:00 000
-1	0	0	GIRA:legalEntities:subReEcho:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:legalEntities:subReEcho:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outClaimsGross	premiumRiskBase	-12.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outClaimsGross	paidCumulativeIndexed	-3.6000000000000005	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outClaimsGross	reportedCumulativeIndexed	-12.0	01-January-2012 24:00:00 000
@@ -1077,7 +1077,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReEcho:outFinancials	cededClaimUltimate	0.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outFinancials	grossClaimUltimate	-12.0	01-January-2012 24:00:00 000
 1	0	0	GIRA:legalEntities:subReEcho:outFinancials	grossPremiumRisk	28.799999999999997	01-January-2012 24:00:00 000
-1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	paidCumulativeIndexed	-100.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	reportedCumulativeIndexed	-100.0	31-December-2013 24:00:00 000
@@ -1093,7 +1093,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	paidIncrementalIndexed	-70.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	paidCumulativeIndexed	-100.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	reportedCumulativeIndexed	-100.0	31-December-2013 24:00:00 000
@@ -1109,7 +1109,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	paidIncrementalIndexed	-70.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	paidCumulativeIndexed	-100.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	reportedCumulativeIndexed	-100.0	31-December-2013 24:00:00 000
@@ -1125,7 +1125,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	paidIncrementalIndexed	-70.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMarine:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	paidCumulativeIndexed	-60.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	reportedCumulativeIndexed	-60.0	31-December-2013 24:00:00 000
@@ -1141,7 +1141,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	reservesIndexed	-0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	paidIncrementalIndexed	-42.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsReinsurer	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsReinsurer	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsReinsurer	paidCumulativeIndexed	-40.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsReinsurer	reportedCumulativeIndexed	-40.0	31-December-2013 24:00:00 000
@@ -1232,7 +1232,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subMixedCesar:outUnderwritingInfoGross	premiumPaid	12.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outUnderwritingInfoGross	premiumWritten	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outUnderwritingInfoGross	premiumPaid	7.199999999999999	01-January-2012 24:00:00 000
-1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	paidCumulativeIndexed	-100.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	reportedCumulativeIndexed	-100.0	01-January-2013 24:00:00 000
@@ -1248,7 +1248,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	reservesIndexed	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	paidIncrementalIndexed	-70.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	developedResultIndexed	-40.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	totalIncrementalIndexed	-40.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	paidCumulativeIndexed	28.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -1264,7 +1264,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	reservesIndexed	-28.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	paidIncrementalIndexed	28.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsCeded	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	developedResultIndexed	-40.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	totalIncrementalIndexed	-40.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	paidCumulativeIndexed	28.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -1280,7 +1280,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	reservesIndexed	-28.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	paidIncrementalIndexed	28.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:claimsGenerators:subMarine:outClaimsCeded	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	developedResultIndexed	-40.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	totalIncrementalIndexed	-40.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	paidCumulativeIndexed	28.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -1296,7 +1296,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	reservesIndexed	-28.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	paidIncrementalIndexed	28.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:reinsuranceContracts:subQuoteMotor:outClaimsCeded	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	developedResultIndexed	-24.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	totalIncrementalIndexed	-24.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	paidCumulativeIndexed	16.8	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -1312,7 +1312,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	reservesIndexed	-16.8	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	paidIncrementalIndexed	16.8	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineAlpha:outClaimsCeded	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	developedResultIndexed	-16.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	totalIncrementalIndexed	-16.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	paidCumulativeIndexed	11.200000000000001	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -1328,7 +1328,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	reservesIndexed	-11.200000000000001	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	paidIncrementalIndexed	11.200000000000001	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:segments:subMarineBeta:outClaimsCeded	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsNet	developedResultIndexed	-40.0	01-January-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsNet	totalIncrementalIndexed	-40.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsNet	paidCumulativeIndexed	-72.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subMixedCesar:outClaimsNet	reportedCumulativeIndexed	-100.0	01-January-2013 24:00:00 000
@@ -1418,7 +1418,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outDiscountedValues	discountedReservedNet	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outDiscountedValues	discountedReservedGross	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outDiscountedValues	discountedReservedCeded	0.0	01-January-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	paidCumulativeIndexed	-600.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-600.0	31-December-2013 24:00:00 000
@@ -1434,7 +1434,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	paidIncrementalIndexed	-420.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsPrimaryInsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	paidCumulativeIndexed	-600.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-600.0	31-December-2013 24:00:00 000
@@ -1450,7 +1450,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	paidIncrementalIndexed	-420.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsPrimaryInsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	paidCumulativeIndexed	-600.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-600.0	31-December-2013 24:00:00 000
@@ -1466,7 +1466,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	paidIncrementalIndexed	-420.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsPrimaryInsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	paidCumulativeIndexed	-540.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	reportedCumulativeIndexed	-540.0	01-January-2013 24:00:00 000
@@ -1482,7 +1482,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	reservesIndexed	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	paidIncrementalIndexed	-378.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	paidCumulativeIndexed	60.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	reportedCumulativeIndexed	60.0	31-December-2013 24:00:00 000
@@ -1498,7 +1498,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	paidIncrementalIndexed	42.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsCeded	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	paidCumulativeIndexed	60.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	reportedCumulativeIndexed	60.0	31-December-2013 24:00:00 000
@@ -1514,7 +1514,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	paidIncrementalIndexed	42.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:claimsGenerators:subMarine:outClaimsCeded	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	paidCumulativeIndexed	60.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	reportedCumulativeIndexed	60.0	31-December-2013 24:00:00 000
@@ -1530,7 +1530,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	paidIncrementalIndexed	42.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:reinsuranceContracts:subQuoteMarine:outClaimsCeded	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	paidCumulativeIndexed	60.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	reportedCumulativeIndexed	60.0	31-December-2013 24:00:00 000
@@ -1546,7 +1546,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	paidIncrementalIndexed	42.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:segments:subMarineAlpha:outClaimsCeded	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsGross	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsGross	paidCumulativeIndexed	-600.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeAlpha:outClaimsGross	reportedCumulativeIndexed	-600.0	01-January-2013 24:00:00 000
@@ -1571,7 +1571,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subPrimeBeta:outNetPresentValues	netPresentValueGross	-400.0	01-January-2013 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outNetPresentValues	netPresentValueNet	-360.0	01-January-2013 24:00:00 000
 1	0	0	GIRA:legalEntities:subPrimeBeta:outNetPresentValues	netPresentValueCeded	40.0	01-January-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	paidCumulativeIndexed	-400.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	reportedCumulativeIndexed	-400.0	01-January-2013 24:00:00 000
@@ -1587,7 +1587,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	reservesIndexed	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	paidIncrementalIndexed	-280.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	paidCumulativeIndexed	40.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	reportedCumulativeIndexed	40.0	31-December-2013 24:00:00 000
@@ -1603,7 +1603,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	paidIncrementalIndexed	28.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsCeded	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	paidCumulativeIndexed	40.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	reportedCumulativeIndexed	40.0	31-December-2013 24:00:00 000
@@ -1619,7 +1619,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	paidIncrementalIndexed	28.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsCeded	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	paidCumulativeIndexed	40.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	reportedCumulativeIndexed	40.0	31-December-2013 24:00:00 000
@@ -1635,7 +1635,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	paidIncrementalIndexed	28.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:reinsuranceContracts:subQuoteMarine:outClaimsCeded	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsCeded	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsCeded	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsCeded	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsCeded	paidCumulativeIndexed	40.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsCeded	reportedCumulativeIndexed	40.0	31-December-2013 24:00:00 000
@@ -1685,7 +1685,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeBeta:outFinancials	cededClaimUltimate	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outFinancials	grossClaimUltimate	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outFinancials	grossPremiumRisk	0.0	01-January-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	paidCumulativeIndexed	-360.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	reportedCumulativeIndexed	-360.0	01-January-2013 24:00:00 000
@@ -1701,7 +1701,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	reservesIndexed	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	paidIncrementalIndexed	-252.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	paidCumulativeIndexed	-400.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-400.0	31-December-2013 24:00:00 000
@@ -1717,7 +1717,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	paidIncrementalIndexed	-280.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outClaimsPrimaryInsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	paidCumulativeIndexed	-400.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-400.0	31-December-2013 24:00:00 000
@@ -1733,7 +1733,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	reservesIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	paidIncrementalIndexed	-280.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:claimsGenerators:subMarine:outClaimsPrimaryInsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsPrimaryInsurer	developedResultIndexed	0.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsPrimaryInsurer	totalIncrementalIndexed	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsPrimaryInsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsPrimaryInsurer	paidCumulativeIndexed	-400.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:segments:subMarineBeta:outClaimsPrimaryInsurer	reportedCumulativeIndexed	-400.0	31-December-2013 24:00:00 000
@@ -1784,7 +1784,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subPrimeBeta:outDiscountedValues	discountedReservedNet	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outDiscountedValues	discountedReservedGross	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subPrimeBeta:outDiscountedValues	discountedReservedCeded	0.0	01-January-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subReDelta:outClaimsGross	developedResultIndexed	27.999999999999996	01-January-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReDelta:outClaimsGross	totalIncrementalIndexed	27.999999999999996	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsGross	paidCumulativeIndexed	-19.6	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsGross	reportedCumulativeIndexed	0.0	01-January-2013 24:00:00 000
@@ -1800,7 +1800,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsGross	reservesIndexed	19.6	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsGross	paidIncrementalIndexed	-19.6	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	developedResultIndexed	27.999999999999996	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	totalIncrementalIndexed	27.999999999999996	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	paidCumulativeIndexed	-19.6	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -1816,7 +1816,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	reservesIndexed	19.6	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	paidIncrementalIndexed	-19.6	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	developedResultIndexed	27.999999999999996	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	totalIncrementalIndexed	27.999999999999996	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	paidCumulativeIndexed	-19.6	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -1832,7 +1832,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	reservesIndexed	19.6	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	paidIncrementalIndexed	-19.6	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:claimsGenerators:subMarine:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	developedResultIndexed	27.999999999999996	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	totalIncrementalIndexed	27.999999999999996	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	paidCumulativeIndexed	-19.6	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -1848,7 +1848,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	reservesIndexed	19.6	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	paidIncrementalIndexed	-19.6	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	developedResultIndexed	16.799999999999997	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	totalIncrementalIndexed	16.799999999999997	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	paidCumulativeIndexed	-11.76	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -1864,7 +1864,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	reservesIndexed	11.76	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	paidIncrementalIndexed	-11.76	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineAlpha:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	developedResultIndexed	11.2	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	totalIncrementalIndexed	11.2	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	paidCumulativeIndexed	-7.84	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -1880,7 +1880,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	reservesIndexed	7.84	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	paidIncrementalIndexed	-7.84	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:segments:subMarineBeta:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subReDelta:outClaimsNet	developedResultIndexed	27.999999999999996	01-January-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReDelta:outClaimsNet	totalIncrementalIndexed	27.999999999999996	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsNet	paidCumulativeIndexed	-19.6	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReDelta:outClaimsNet	reportedCumulativeIndexed	0.0	01-January-2013 24:00:00 000
@@ -1965,7 +1965,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outUnderwritingInfoGross	premiumPaid	0.864	01-January-2012 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outUnderwritingInfoGross	premiumWritten	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outUnderwritingInfoGross	premiumPaid	0.576	01-January-2012 24:00:00 000
-1	1	0	GIRA:legalEntities:subReEcho:outClaimsNet	developedResultIndexed	12.0	01-January-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReEcho:outClaimsNet	totalIncrementalIndexed	12.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:outClaimsNet	paidCumulativeIndexed	-8.4	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:outClaimsNet	reportedCumulativeIndexed	0.0	01-January-2013 24:00:00 000
@@ -1988,7 +1988,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:legalEntities:subReEcho:outNetPresentValues	netPresentValueCeded	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:outUnderwritingInfoNet	premiumWritten	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:outUnderwritingInfoNet	premiumPaid	1.44	01-January-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	developedResultIndexed	12.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	totalIncrementalIndexed	12.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	paidCumulativeIndexed	-8.4	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -2004,7 +2004,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	reservesIndexed	8.4	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	paidIncrementalIndexed	-8.4	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	developedResultIndexed	12.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	totalIncrementalIndexed	12.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	paidCumulativeIndexed	-8.4	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -2020,7 +2020,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	reservesIndexed	8.4	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	paidIncrementalIndexed	-8.4	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:claimsGenerators:subMarine:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	developedResultIndexed	12.0	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	totalIncrementalIndexed	12.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	paidCumulativeIndexed	-8.4	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -2036,7 +2036,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	reservesIndexed	8.4	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	paidIncrementalIndexed	-8.4	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:reinsuranceContracts:subQuoteMotor:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	developedResultIndexed	7.199999999999999	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	totalIncrementalIndexed	7.199999999999999	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	paidCumulativeIndexed	-5.04	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -2052,7 +2052,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	reservesIndexed	5.04	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	paidIncrementalIndexed	-5.04	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineAlpha:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	developedResultIndexed	4.8	31-December-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	totalIncrementalIndexed	4.8	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	premiumRiskBase	0.0	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	paidCumulativeIndexed	-3.3600000000000003	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	reportedCumulativeIndexed	0.0	31-December-2013 24:00:00 000
@@ -2068,7 +2068,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	reservesIndexed	3.3600000000000003	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	paidIncrementalIndexed	-3.3600000000000003	31-December-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:segments:subMarineBeta:outClaimsReinsurer	reportedIncrementalIndexed	0.0	31-December-2013 24:00:00 000
-1	1	0	GIRA:legalEntities:subReEcho:outClaimsGross	developedResultIndexed	12.0	01-January-2013 24:00:00 000
+1	1	0	GIRA:legalEntities:subReEcho:outClaimsGross	totalIncrementalIndexed	12.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:outClaimsGross	paidCumulativeIndexed	-8.4	01-January-2013 24:00:00 000
 1	1	0	GIRA:legalEntities:subReEcho:outClaimsGross	reportedCumulativeIndexed	0.0	01-January-2013 24:00:00 000

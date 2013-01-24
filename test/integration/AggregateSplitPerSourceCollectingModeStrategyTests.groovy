@@ -42,7 +42,7 @@ class AggregateSplitPerSourceCollectingModeStrategyTests extends ModelTest {
 
     void postSimulationEvaluation() {
         correctPaths()
-        correctFields(['developedResultIndexed', 'IBNRIndexed', 'reservesIndexed', 'outstandingIndexed',
+        correctFields(['totalIncrementalIndexed', 'IBNRIndexed', 'reservesIndexed', 'outstandingIndexed',
                 'paidIncrementalIndexed', 'reportedIncrementalIndexed', 'ultimate', 'premiumWritten', 'premiumPaid',
                 ClaimCashflowPacket.CHANGES_IN_OUTSTANDING_INDEXED, ClaimCashflowPacket.REPORTED_CUMULATIVE_INDEXED,
                 ClaimCashflowPacket.PAID_CUMULATIVE_INDEXED, ClaimCashflowPacket.TOTAL_CUMULATIVE_INDEXED,

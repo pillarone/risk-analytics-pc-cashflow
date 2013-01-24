@@ -139,7 +139,6 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         PacketAggregatorRegistry.registerAggregator(CCP, new ClaimPacketAggregator())
         PacketAggregatorRegistry.registerAggregator(UnderwritingInfoPacket, new UnderwritingInfoPacketAggregator())
 
-        /* Collectors should also be registered  in the PCCashflowBootstrap   */
         CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceReducedCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregatePremiumReserveRiskCollectingModeStrategy())
@@ -166,7 +165,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
                 rep_inc: CCP.REPORTED_INDEXED,
                 rep_cum: CCP.REPORTED_CUMULATIVE_INDEXED,
                 total_uix_inc: CCP.ULTIMATE,
-                total_inc: CCP.DEVELOPED_RESULT_INDEXED,
+                total_inc: CCP.TOTAL_INCREMENTAL_INDEXED,
                 total_cum: CCP.TOTAL_CUMULATIVE_INDEXED,
                 rb_claim_premium: CCP.PREMIUM_RISK_BASE,
                 rb_claim_reserves: CCP.RESERVE_RISK_BASE,

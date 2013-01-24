@@ -27,8 +27,8 @@ mappings = {
             "reservesIndexed" "GIRA:claimsGenerators:outClaims:reservesIndexed", {
                 "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:reservesIndexed"
             }
-            "increaseDueToIndex" "GIRA:claimsGenerators:outClaims:developedResultIndexed", {
-                "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:developedResultIndexed"
+            "increaseDueToIndex" "GIRA:claimsGenerators:outClaims:totalIncrementalIndexed", {
+                "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:totalIncrementalIndexed"
             }
             "numberOfClaims" {
                 "[%claimsGenerator%]" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaimNumber:value"

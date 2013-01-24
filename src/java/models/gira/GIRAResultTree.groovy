@@ -16,7 +16,7 @@ mappings = {
                 "outstandingIndexed" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:outstandingIndexed"
                 "IBNRIndexed" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:IBNRIndexed"
                 "reservesIndexed" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:reservesIndexed"
-                "increaseDueToIndex" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:developedResultIndexed"
+                "increaseDueToIndex" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:totalIncrementalIndexed"
                 "numberOfClaims" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaimNumber:value"
                 "severityIndices" {
                     "appliedIndexSingle" "GIRA:claimsGenerators:[%claimsGenerator%]:outClaims:appliedIndexValue"
@@ -31,7 +31,7 @@ mappings = {
                 "outstandingIndexed" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:outstandingIndexed"
                 "IBNRIndexed" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:IBNRIndexed"
                 "reservesIndexed" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:reservesIndexed"
-                "increaseDueToIndex" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:developedResultIndexed"
+                "increaseDueToIndex" "GIRA:reservesGenerators:[%reservesGenerator%]:outReserves:totalIncrementalIndexed"
             }
         }
         "grossUnderwritingWritten" "GIRA:underwritingSegments:outUnderwritingInfo:premiumWritten"
@@ -59,7 +59,7 @@ mappings = {
                     "outstandingIndexed" "GIRA:segments:[%segment%]:outClaimsNet:outstandingIndexed"
                     "IBNRIndexed" "GIRA:segments:[%segment%]:outClaimsNet:IBNRIndexed"
                     "reservesIndexed" "GIRA:segments:[%segment%]:outClaimsNet:reservesIndexed"
-                    "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsNet:developedResultIndexed"
+                    "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsNet:totalIncrementalIndexed"
                     "claimsGross" {
                         "ultimate" "GIRA:segments:[%segment%]:outClaimsGross:ultimate"
                         "reportedIncrementalIndexed" "GIRA:segments:[%segment%]:outClaimsGross:reportedIncrementalIndexed"
@@ -67,7 +67,7 @@ mappings = {
                         "outstandingIndexed" "GIRA:segments:[%segment%]:outClaimsGross:outstandingIndexed"
                         "IBNRIndexed" "GIRA:segments:[%segment%]:outClaimsGross:IBNRIndexed"
                         "reservesIndexed" "GIRA:segments:[%segment%]:outClaimsGross:reservesIndexed"
-                        "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsGross:developedResultIndexed"
+                        "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsGross:totalIncrementalIndexed"
                     }
                     "claimsCeded" {
                         "ultimate" "GIRA:segments:[%segment%]:outClaimsCeded:ultimate"
@@ -76,7 +76,7 @@ mappings = {
                         "outstandingIndexed" "GIRA:segments:[%segment%]:outClaimsCeded:outstandingIndexed"
                         "IBNRIndexed" "GIRA:segments:[%segment%]:outClaimsCeded:IBNRIndexed"
                         "reservesIndexed" "GIRA:segments:[%segment%]:outClaimsCeded:reservesIndexed"
-                        "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsCeded:developedResultIndexed"
+                        "increaseDueToIndex" "GIRA:segments:[%segment%]:outClaimsCeded:totalIncrementalIndexed"
                     }
                 }
                 "discountedValues" {
@@ -126,7 +126,7 @@ mappings = {
                     "outstandingIndexed" "GIRA:structures:[%structure%]:outClaimsNet:outstandingIndexed"
                     "IBNRIndexed" "GIRA:structures:[%structure%]:outClaimsNet:IBNRIndexed"
                     "reservesIndexed" "GIRA:structures:[%structure%]:outClaimsNet:reservesIndexed"
-                    "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsNet:developedResultIndexed"
+                    "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsNet:totalIncrementalIndexed"
                     "claimsGross" {
                         "ultimate" "GIRA:structures:[%structure%]:outClaimsGross:ultimate"
                         "reportedIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsGross:reportedIncrementalIndexed"
@@ -134,7 +134,7 @@ mappings = {
                         "outstandingIndexed" "GIRA:structures:[%structure%]:outClaimsGross:outstandingIndexed"
                         "IBNRIndexed" "GIRA:structures:[%structure%]:outClaimsGross:IBNRIndexed"
                         "reservesIndexed" "GIRA:structures:[%structure%]:outClaimsGross:reservesIndexed"
-                        "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsGross:developedResultIndexed"
+                        "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsGross:totalIncrementalIndexed"
                     }
                     "claimsCeded" {
                         "ultimate" "GIRA:structures:[%structure%]:outClaimsCeded:ultimate"
@@ -143,7 +143,7 @@ mappings = {
                         "outstandingIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:outstandingIndexed"
                         "IBNRIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:IBNRIndexed"
                         "reservesIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:reservesIndexed"
-                        "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsCeded:developedResultIndexed"
+                        "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsCeded:totalIncrementalIndexed"
                     }
                 }
                 "premium" {
@@ -174,7 +174,7 @@ mappings = {
                     "outstandingIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:outstandingIndexed"
                     "IBNRIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:IBNRIndexed"
                     "reservesIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:reservesIndexed"
-                    "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:developedResultIndexed"
+                    "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:totalIncrementalIndexed"
                     "claimsGross" {
                         "ultimate" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:ultimate"
                         "reportedIncrementalIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:reportedIncrementalIndexed"
@@ -182,7 +182,7 @@ mappings = {
                         "outstandingIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:outstandingIndexed"
                         "IBNRIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:IBNRIndexed"
                         "reservesIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:reservesIndexed"
-                        "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:developedResultIndexed"
+                        "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:totalIncrementalIndexed"
                     }
                     "claimsCeded" {
                         "ultimate" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:ultimate"
@@ -191,7 +191,7 @@ mappings = {
                         "outstandingIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:outstandingIndexed"
                         "IBNRIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:IBNRIndexed"
                         "reservesIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:reservesIndexed"
-                        "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:developedResultIndexed"
+                        "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:totalIncrementalIndexed"
                     }
                 }
                 "premium" {

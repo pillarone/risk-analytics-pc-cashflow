@@ -11,14 +11,29 @@ mappings = {
         "grossClaims" {
             "[%claimsGenerator%]" {
                 "ultimate" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:ultimate"
+                "totalCumulative" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:totalCumulativeIndexed", {
+                    "[%period%]" "ORSA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:totalCumulativeIndexed"
+                }
+                "totalIncremental" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:totalIncrementalIndexed", {
+                    "[%period%]" "ORSA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:totalIncrementalIndexed"
+                }
+                "reportedCumulativeIndexed" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:reportedCumulativeIndexed", {
+                    "[%period%]" "ORSA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:reportedCumulativeIndexed"
+                }
                 "reportedIncrementalIndexed" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:reportedIncrementalIndexed", {
                     "[%period%]" "ORSA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:reportedIncrementalIndexed"
+                }
+                "paidCumulativeIndexed" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:paidCumulativeIndexed",{
+                    "[%period%]" "ORSA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:paidCumulativeIndexed"
                 }
                 "paidIncrementalIndexed" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:paidIncrementalIndexed",{
                     "[%period%]" "ORSA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:paidIncrementalIndexed"
                 }
                 "outstandingIndexed" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:outstandingIndexed", {
                     "[%period%]" "ORSA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:outstandingIndexed"
+                }
+                "changesInOutstandingIndexed" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:changesInOutstandingIndexed", {
+                    "[%period%]" "ORSA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:changesInOutstandingIndexed"
                 }
                 "IBNRIndexed" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:IBNRIndexed", {
                     "[%period%]" "ORSA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:IBNRIndexed"
@@ -32,9 +47,6 @@ mappings = {
                 "changesInReservesIndexed" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:changesInReservesIndexed", {
                     "[%period%]" "ORSA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:changesInReservesIndexed"
                 }
-                "increaseDueToIndex" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:developedResultIndexed", {
-                    "[%period%]" "ORSA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:developedResultIndexed"
-                }
                 "premiumRiskBase" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:premiumRiskBase"
                 "reserveRiskBase" "ORSA:claimsGenerators:[%claimsGenerator%]:outClaims:reserveRiskBase", {
                     "[%period%]" "ORSA:claimsGenerators:[%claimsGenerator%]:period:[%period%]:outClaims:reserveRiskBase"
@@ -44,30 +56,48 @@ mappings = {
         }
         "reservesIndexed" {
             "[%reservesGenerator%]" {
-                "ultimateFromInceptionPeriod" "ORSA:reservesGenerators:[%reservesGenerator%]:outNominalUltimates:value"
-                "reportedIncrementalIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outReserves:reportedIncrementalIndexed", {
-                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outReserves:reportedIncrementalIndexed"
+                "ultimate" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:ultimate"
+                "totalCumulative" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:totalCumulativeIndexed", {
+                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outClaims:totalCumulativeIndexed"
                 }
-                "paidIncrementalIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outReserves:paidIncrementalIndexed", {
-                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outReserves:paidIncrementalIndexed"
+                "totalIncremental" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:totalIncrementalIndexed", {
+                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outClaims:totalIncrementalIndexed"
                 }
-                "outstandingIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outReserves:outstandingIndexed", {
-                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outReserves:outstandingIndexed"
+                "reportedCumulativeIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:reportedCumulativeIndexed", {
+                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outClaims:reportedCumulativeIndexed"
                 }
-                "IBNRIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outReserves:IBNRIndexed", {
-                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outReserves:IBNRIndexed"
+                "reportedIncrementalIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:reportedIncrementalIndexed", {
+                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outClaims:reportedIncrementalIndexed"
                 }
-                "reservesIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outReserves:reservesIndexed", {
-                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outReserves:reservesIndexed"
+                "paidCumulativeIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:paidCumulativeIndexed",{
+                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outClaims:paidCumulativeIndexed"
                 }
-                "increaseDueToIndex" "ORSA:reservesGenerators:[%reservesGenerator%]:outReserves:developedResultIndexed", {
-                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outReserves:developedResultIndexed"
+                "paidIncrementalIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:paidIncrementalIndexed",{
+                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outClaims:paidIncrementalIndexed"
                 }
-                "premiumRiskBase" "ORSA:reservesGenerators:[%reservesGenerator%]:outReserves:premiumRiskBase"
-                "reserveRiskBase" "ORSA:reservesGenerators:[%reservesGenerator%]:outReserves:reserveRiskBase", {
-                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outReserves:reserveRiskBase"
+                "outstandingIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:outstandingIndexed", {
+                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outClaims:outstandingIndexed"
                 }
-                "premiumAndReserveRiskBase" "ORSA:reservesGenerators:[%reservesGenerator%]:outReserves:premiumAndReserveRiskBase"
+                "changesInOutstandingIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:changesInOutstandingIndexed", {
+                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outClaims:changesInOutstandingIndexed"
+                }
+                "IBNRIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:IBNRIndexed", {
+                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outClaims:IBNRIndexed"
+                }
+                "changesInIBNRIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:changesInIBNRIndexed", {
+                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outClaims:changesInIBNRIndexed"
+                }
+                "reservesIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:reservesIndexed", {
+                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outClaims:reservesIndexed"
+                }
+                "changesInReservesIndexed" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:changesInReservesIndexed", {
+                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outClaims:changesInReservesIndexed"
+                }
+                "premiumRiskBase" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:premiumRiskBase"
+                "reserveRiskBase" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:reserveRiskBase", {
+                    "[%period%]" "ORSA:reservesGenerators:[%reservesGenerator%]:period:[%period%]:outClaims:reserveRiskBase"
+                }
+                "premiumAndReserveRiskBase" "ORSA:reservesGenerators:[%reservesGenerator%]:outClaims:premiumAndReserveRiskBase"
             }
         }
         "grossUnderwritingBySegment" {
@@ -117,8 +147,8 @@ mappings = {
                     "changesInReservesIndexed" "ORSA:segments:outClaimsNet:changesInReservesIndexed", {
                         "[%period%]" "ORSA:segments:period:[%period%]:outClaimsNet:changesInReservesIndexed"
                     }
-                    "increaseDueToIndex" "ORSA:segments:outClaimsNet:developedResultIndexed", {
-                        "[%period%]" "ORSA:segments:period:[%period%]:outClaimsNet:developedResultIndexed"
+                    "totalIncremental" "ORSA:segments:outClaimsNet:totalIncrementalIndexed", {
+                        "[%period%]" "ORSA:segments:period:[%period%]:outClaimsNet:totalIncrementalIndexed"
                     }
                     "premiumRiskBase" "ORSA:segments:outClaimsNet:premiumRiskBase"
                     "reserveRiskBase" "ORSA:segments:outClaimsNet:reserveRiskBase", {
@@ -148,8 +178,8 @@ mappings = {
                         "changesInReservesIndexed" "ORSA:segments:outClaimsGross:changesInReservesIndexed", {
                             "[%period%]" "ORSA:segments:period:[%period%]:outClaimsGross:changesInReservesIndexed"
                         }
-                        "increaseDueToIndex" "ORSA:segments:outClaimsGross:developedResultIndexed", {
-                            "[%period%]" "ORSA:segments:period:[%period%]:outClaimsGross:developedResultIndexed"
+                        "totalIncremental" "ORSA:segments:outClaimsGross:totalIncrementalIndexed", {
+                            "[%period%]" "ORSA:segments:period:[%period%]:outClaimsGross:totalIncrementalIndexed"
                         }
                         "premiumRiskBase" "ORSA:segments:outClaimsGross:premiumRiskBase"
                         "reserveRiskBase" "ORSA:segments:outClaimsGross:reserveRiskBase", {
@@ -180,8 +210,8 @@ mappings = {
                         "changesInReservesIndexed" "ORSA:segments:outClaimsCeded:changesInReservesIndexed", {
                             "[%period%]" "ORSA:segments:period:[%period%]:outClaimsCeded:changesInReservesIndexed"
                         }
-                        "increaseDueToIndex" "ORSA:segments:outClaimsCeded:developedResultIndexed", {
-                            "[%period%]" "ORSA:segments:period:[%period%]:outClaimsCeded:developedResultIndexed"
+                        "totalIncremental" "ORSA:segments:outClaimsCeded:totalIncrementalIndexed", {
+                            "[%period%]" "ORSA:segments:period:[%period%]:outClaimsCeded:totalIncrementalIndexed"
                         }
                         "premiumRiskBase" "ORSA:segments:outClaimsCeded:premiumRiskBase"
                         "reserveRiskBase" "ORSA:segments:outClaimsCeded:reserveRiskBase", {
@@ -348,14 +378,29 @@ mappings = {
                 }
                 "claimsNet" {
                     "ultimate" "ORSA:segments:[%segment%]:outClaimsNet:ultimate"
+                    "totalCumulative" "ORSA:segments:[%segment%]:outClaimsNet:totalCumulativeIndexed", {
+                        "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsNet:totalCumulativeIndexed"
+                    }
+                    "totalIncremental" "ORSA:segments:[%segment%]:outClaimsNet:totalIncrementalIndexed", {
+                        "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsNet:totalIncrementalIndexed"
+                    }
+                    "reportedCumulativeIndexed" "ORSA:segments:[%segment%]:outClaimsNet:reportedCumulativeIndexed", {
+                        "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsNet:reportedCumulativeIndexed"
+                    }
                     "reportedIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsNet:reportedIncrementalIndexed", {
                         "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsNet:reportedIncrementalIndexed"
                     }
-                    "paidIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsNet:paidIncrementalIndexed", {
+                    "paidCumulativeIndexed" "ORSA:segments:[%segment%]:outClaimsNet:paidCumulativeIndexed",{
+                        "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsNet:paidCumulativeIndexed"
+                    }
+                    "paidIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsNet:paidIncrementalIndexed",{
                         "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsNet:paidIncrementalIndexed"
                     }
                     "outstandingIndexed" "ORSA:segments:[%segment%]:outClaimsNet:outstandingIndexed", {
                         "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsNet:outstandingIndexed"
+                    }
+                    "changesInOutstandingIndexed" "ORSA:segments:[%segment%]:outClaimsNet:changesInOutstandingIndexed", {
+                        "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsNet:changesInOutstandingIndexed"
                     }
                     "IBNRIndexed" "ORSA:segments:[%segment%]:outClaimsNet:IBNRIndexed", {
                         "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsNet:IBNRIndexed"
@@ -369,24 +414,35 @@ mappings = {
                     "changesInReservesIndexed" "ORSA:segments:[%segment%]:outClaimsNet:changesInReservesIndexed", {
                         "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsNet:changesInReservesIndexed"
                     }
-                    "increaseDueToIndex" "ORSA:segments:[%segment%]:outClaimsNet:developedResultIndexed", {
-                        "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsNet:developedResultIndexed"
-                    }
                     "premiumRiskBase" "ORSA:segments:[%segment%]:outClaimsNet:premiumRiskBase"
                     "reserveRiskBase" "ORSA:segments:[%segment%]:outClaimsNet:reserveRiskBase", {
                         "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsNet:reserveRiskBase"
                     }
                     "premiumAndReserveRiskBase" "ORSA:segments:[%segment%]:outClaimsNet:premiumAndReserveRiskBase"
                     "claimsGross" {
-                        "ultimate" "ORSA:segments:[%segment%]:outClaimsGross:ultimate"
+                        "totalCumulative" "ORSA:segments:[%segment%]:outClaimsGross:totalCumulativeIndexed", {
+                            "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsGross:totalCumulativeIndexed"
+                        }
+                        "totalIncremental" "ORSA:segments:[%segment%]:outClaimsGross:totalIncrementalIndexed", {
+                            "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsGross:totalIncrementalIndexed"
+                        }
+                        "reportedCumulativeIndexed" "ORSA:segments:[%segment%]:outClaimsGross:reportedCumulativeIndexed", {
+                            "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsGross:reportedCumulativeIndexed"
+                        }
                         "reportedIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsGross:reportedIncrementalIndexed", {
                             "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsGross:reportedIncrementalIndexed"
                         }
-                        "paidIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsGross:paidIncrementalIndexed", {
+                        "paidCumulativeIndexed" "ORSA:segments:[%segment%]:outClaimsGross:paidCumulativeIndexed",{
+                            "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsGross:paidCumulativeIndexed"
+                        }
+                        "paidIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsGross:paidIncrementalIndexed",{
                             "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsGross:paidIncrementalIndexed"
                         }
                         "outstandingIndexed" "ORSA:segments:[%segment%]:outClaimsGross:outstandingIndexed", {
                             "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsGross:outstandingIndexed"
+                        }
+                        "changesInOutstandingIndexed" "ORSA:segments:[%segment%]:outClaimsGross:changesInOutstandingIndexed", {
+                            "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsGross:changesInOutstandingIndexed"
                         }
                         "IBNRIndexed" "ORSA:segments:[%segment%]:outClaimsGross:IBNRIndexed", {
                             "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsGross:IBNRIndexed"
@@ -400,9 +456,6 @@ mappings = {
                         "changesInReservesIndexed" "ORSA:segments:[%segment%]:outClaimsGross:changesInReservesIndexed", {
                             "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsGross:changesInReservesIndexed"
                         }
-                        "increaseDueToIndex" "ORSA:segments:[%segment%]:outClaimsGross:developedResultIndexed", {
-                            "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsGross:developedResultIndexed"
-                        }
                         "premiumRiskBase" "ORSA:segments:[%segment%]:outClaimsGross:premiumRiskBase"
                         "reserveRiskBase" "ORSA:segments:[%segment%]:outClaimsGross:reserveRiskBase", {
                             "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsGross:reserveRiskBase"
@@ -410,15 +463,29 @@ mappings = {
                         "premiumAndReserveRiskBase" "ORSA:segments:[%segment%]:outClaimsGross:premiumAndReserveRiskBase"
                     }
                     "claimsCeded" {
-                        "ultimate" "ORSA:segments:[%segment%]:outClaimsCeded:ultimate"
+                        "totalCumulative" "ORSA:segments:[%segment%]:outClaimsCeded:totalCumulativeIndexed", {
+                            "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsCeded:totalCumulativeIndexed"
+                        }
+                        "totalIncremental" "ORSA:segments:[%segment%]:outClaimsCeded:totalIncrementalIndexed", {
+                            "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsCeded:totalIncrementalIndexed"
+                        }
+                        "reportedCumulativeIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:reportedCumulativeIndexed", {
+                            "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsCeded:reportedCumulativeIndexed"
+                        }
                         "reportedIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:reportedIncrementalIndexed", {
                             "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsCeded:reportedIncrementalIndexed"
                         }
-                        "paidIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:paidIncrementalIndexed", {
+                        "paidCumulativeIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:paidCumulativeIndexed",{
+                            "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsCeded:paidCumulativeIndexed"
+                        }
+                        "paidIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:paidIncrementalIndexed",{
                             "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsCeded:paidIncrementalIndexed"
                         }
                         "outstandingIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:outstandingIndexed", {
                             "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsCeded:outstandingIndexed"
+                        }
+                        "changesInOutstandingIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:changesInOutstandingIndexed", {
+                            "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsCeded:changesInOutstandingIndexed"
                         }
                         "IBNRIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:IBNRIndexed", {
                             "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsCeded:IBNRIndexed"
@@ -431,9 +498,6 @@ mappings = {
                         }
                         "changesInReservesIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:changesInReservesIndexed", {
                             "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsCeded:changesInReservesIndexed"
-                        }
-                        "increaseDueToIndex" "ORSA:segments:[%segment%]:outClaimsCeded:developedResultIndexed", {
-                            "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsCeded:developedResultIndexed"
                         }
                         "premiumRiskBase" "ORSA:segments:[%segment%]:outClaimsCeded:premiumRiskBase"
                         "reserveRiskBase" "ORSA:segments:[%segment%]:outClaimsCeded:reserveRiskBase", {
@@ -754,8 +818,8 @@ mappings = {
                     "reservesIndexed" "ORSA:structures:[%structure%]:outClaimsNet:reservesIndexed", {
                         "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outClaimsNet:reservesIndexed"
                     }
-                    "increaseDueToIndex" "ORSA:structures:[%structure%]:outClaimsNet:developedResultIndexed", {
-                        "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outClaimsNet:developedResultIndexed"
+                    "increaseDueToIndex" "ORSA:structures:[%structure%]:outClaimsNet:totalIncrementalIndexed", {
+                        "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outClaimsNet:totalIncrementalIndexed"
                     }
                     "premiumRiskBase" "ORSA:structures:[%structure%]:outClaimsNet:premiumRiskBase"
                     "reserveRiskBase" "ORSA:structures:[%structure%]:outClaimsNet:reserveRiskBase", {
@@ -779,8 +843,8 @@ mappings = {
                         "reservesIndexed" "ORSA:structures:[%structure%]:outClaimsGross:reservesIndexed", {
                             "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outClaimsGross:reservesIndexed"
                         }
-                        "increaseDueToIndex" "ORSA:structures:[%structure%]:outClaimsGross:developedResultIndexed", {
-                            "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outClaimsGross:developedResultIndexed"
+                        "increaseDueToIndex" "ORSA:structures:[%structure%]:outClaimsGross:totalIncrementalIndexed", {
+                            "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outClaimsGross:totalIncrementalIndexed"
                         }
                         "premiumRiskBase" "ORSA:structures:[%structure%]:outClaimsGross:premiumRiskBase"
                         "reserveRiskBase" "ORSA:structures:[%structure%]:outClaimsGross:reserveRiskBase", {
@@ -805,8 +869,8 @@ mappings = {
                         "reservesIndexed" "ORSA:structures:[%structure%]:outClaimsCeded:reservesIndexed", {
                             "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outClaimsCeded:reservesIndexed"
                         }
-                        "increaseDueToIndex" "ORSA:structures:[%structure%]:outClaimsCeded:developedResultIndexed", {
-                            "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outClaimsCeded:developedResultIndexed"
+                        "increaseDueToIndex" "ORSA:structures:[%structure%]:outClaimsCeded:totalIncrementalIndexed", {
+                            "[%period%]" "ORSA:structures:[%structure%]:period:[%period%]:outClaimsCeded:totalIncrementalIndexed"
                         }
                         "premiumRiskBase" "ORSA:structures:[%structure%]:outClaimsCeded:premiumRiskBase"
                         "reserveRiskBase" "ORSA:structures:[%structure%]:outClaimsCeded:reserveRiskBase", {
@@ -855,23 +919,41 @@ mappings = {
                 }
                 "claimsNet" {
                     "ultimate" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:ultimate"
+                    "totalCumulative" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:totalCumulativeIndexed", {
+                        "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsNet:totalCumulativeIndexed"
+                    }
+                    "totalIncremental" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:totalIncrementalIndexed", {
+                        "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsNet:totalIncrementalIndexed"
+                    }
+                    "reportedCumulativeIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:reportedCumulativeIndexed", {
+                        "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsNet:reportedCumulativeIndexed"
+                    }
                     "reportedIncrementalIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:reportedIncrementalIndexed", {
                         "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsNet:reportedIncrementalIndexed"
                     }
-                    "paidIncrementalIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:paidIncrementalIndexed", {
+                    "paidCumulativeIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:paidCumulativeIndexed",{
+                        "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsNet:paidCumulativeIndexed"
+                    }
+                    "paidIncrementalIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:paidIncrementalIndexed",{
                         "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsNet:paidIncrementalIndexed"
                     }
                     "outstandingIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:outstandingIndexed", {
                         "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsNet:outstandingIndexed"
                     }
+                    "changesInOutstandingIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:changesInOutstandingIndexed", {
+                        "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsNet:changesInOutstandingIndexed"
+                    }
                     "IBNRIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:IBNRIndexed", {
                         "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsNet:IBNRIndexed"
+                    }
+                    "changesInIBNRIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:changesInIBNRIndexed", {
+                        "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsNet:changesInIBNRIndexed"
                     }
                     "reservesIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:reservesIndexed", {
                         "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsNet:reservesIndexed"
                     }
-                    "increaseDueToIndex" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:developedResultIndexed", {
-                        "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsNet:developedResultIndexed"
+                    "changesInReservesIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:changesInReservesIndexed", {
+                        "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsNet:changesInReservesIndexed"
                     }
                     "premiumRiskBase" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:premiumRiskBase"
                     "reserveRiskBase" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:reserveRiskBase", {
@@ -880,23 +962,41 @@ mappings = {
                     "premiumAndReserveRiskBase" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:premiumAndReserveRiskBase"
                     "claimsGross" {
                         "ultimate" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:ultimate"
+                        "totalCumulative" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:totalCumulativeIndexed", {
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsGross:totalCumulativeIndexed"
+                        }
+                        "totalIncremental" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:totalIncrementalIndexed", {
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsGross:totalIncrementalIndexed"
+                        }
+                        "reportedCumulativeIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:reportedCumulativeIndexed", {
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsGross:reportedCumulativeIndexed"
+                        }
                         "reportedIncrementalIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:reportedIncrementalIndexed", {
                             "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsGross:reportedIncrementalIndexed"
                         }
-                        "paidIncrementalIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:paidIncrementalIndexed", {
+                        "paidCumulativeIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:paidCumulativeIndexed",{
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsGross:paidCumulativeIndexed"
+                        }
+                        "paidIncrementalIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:paidIncrementalIndexed",{
                             "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsGross:paidIncrementalIndexed"
                         }
                         "outstandingIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:outstandingIndexed", {
                             "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsGross:outstandingIndexed"
                         }
+                        "changesInOutstandingIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:changesInOutstandingIndexed", {
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsGross:changesInOutstandingIndexed"
+                        }
                         "IBNRIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:IBNRIndexed", {
                             "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsGross:IBNRIndexed"
+                        }
+                        "changesInIBNRIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:changesInIBNRIndexed", {
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsGross:changesInIBNRIndexed"
                         }
                         "reservesIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:reservesIndexed", {
                             "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsGross:reservesIndexed"
                         }
-                        "increaseDueToIndex" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:developedResultIndexed", {
-                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsGross:developedResultIndexed"
+                        "changesInReservesIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:changesInReservesIndexed", {
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsGross:changesInReservesIndexed"
                         }
                         "premiumRiskBase" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:premiumRiskBase"
                         "reserveRiskBase" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:reserveRiskBase", {
@@ -906,23 +1006,41 @@ mappings = {
                     }
                     "claimsCeded" {
                         "ultimate" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:ultimate"
+                        "totalCumulative" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:totalCumulativeIndexed", {
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsCeded:totalCumulativeIndexed"
+                        }
+                        "totalIncremental" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:totalIncrementalIndexed", {
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsCeded:totalIncrementalIndexed"
+                        }
+                        "reportedCumulativeIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:reportedCumulativeIndexed", {
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsCeded:reportedCumulativeIndexed"
+                        }
                         "reportedIncrementalIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:reportedIncrementalIndexed", {
                             "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsCeded:reportedIncrementalIndexed"
                         }
-                        "paidIncrementalIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:paidIncrementalIndexed", {
+                        "paidCumulativeIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:paidCumulativeIndexed",{
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsCeded:paidCumulativeIndexed"
+                        }
+                        "paidIncrementalIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:paidIncrementalIndexed",{
                             "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsCeded:paidIncrementalIndexed"
                         }
                         "outstandingIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:outstandingIndexed", {
                             "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsCeded:outstandingIndexed"
                         }
+                        "changesInOutstandingIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:changesInOutstandingIndexed", {
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsCeded:changesInOutstandingIndexed"
+                        }
                         "IBNRIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:IBNRIndexed", {
                             "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsCeded:IBNRIndexed"
+                        }
+                        "changesInIBNRIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:changesInIBNRIndexed", {
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsCeded:changesInIBNRIndexed"
                         }
                         "reservesIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:reservesIndexed", {
                             "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsCeded:reservesIndexed"
                         }
-                        "increaseDueToIndex" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:developedResultIndexed", {
-                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsCeded:developedResultIndexed"
+                        "changesInReservesIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:changesInReservesIndexed", {
+                            "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outClaimsCeded:changesInReservesIndexed"
                         }
                         "premiumRiskBase" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:premiumRiskBase"
                         "reserveRiskBase" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:reserveRiskBase", {
@@ -958,6 +1076,180 @@ mappings = {
                     }
                     "variable" "ORSA:reinsuranceContracts:[%contract%]:outUnderwritingInfoCeded:commissionVariable", {
                         "[%period%]" "ORSA:reinsuranceContracts:[%contract%]:period:[%period%]:outUnderwritingInfoCeded:commissionVariable"
+                    }
+                }
+            }
+        }
+        "retrospectiveReinsurance" {
+            "[%contract%]" {
+                "Financials" {
+                    "result" "ORSA:retrospectiveReinsurance:[%contract%]:outContractFinancials:contractResult", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outContractFinancials:contractResult", {
+                            "premium" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outContractFinancials:cededPremium"
+                            "commission" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outContractFinancials:cededCommission"
+                            "claim" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outContractFinancials:cededClaim"
+                        }
+                    }
+                }
+                "claimsNet" {
+                    "ultimate" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:ultimate"
+                    "totalCumulative" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:totalCumulativeIndexed", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:totalCumulativeIndexed"
+                    }
+                    "totalIncremental" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:totalIncrementalIndexed", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:totalIncrementalIndexed"
+                    }
+                    "reportedCumulativeIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:reportedCumulativeIndexed", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:reportedCumulativeIndexed"
+                    }
+                    "reportedIncrementalIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:reportedIncrementalIndexed", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:reportedIncrementalIndexed"
+                    }
+                    "paidCumulativeIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:paidCumulativeIndexed",{
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:paidCumulativeIndexed"
+                    }
+                    "paidIncrementalIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:paidIncrementalIndexed",{
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:paidIncrementalIndexed"
+                    }
+                    "outstandingIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:outstandingIndexed", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:outstandingIndexed"
+                    }
+                    "changesInOutstandingIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:changesInOutstandingIndexed", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:changesInOutstandingIndexed"
+                    }
+                    "IBNRIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:IBNRIndexed", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:IBNRIndexed"
+                    }
+                    "changesInIBNRIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:changesInIBNRIndexed", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:changesInIBNRIndexed"
+                    }
+                    "reservesIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:reservesIndexed", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:reservesIndexed"
+                    }
+                    "changesInReservesIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:changesInReservesIndexed", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:changesInReservesIndexed"
+                    }
+                    "premiumRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:premiumRiskBase"
+                    "reserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:reserveRiskBase", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsNet:reserveRiskBase"
+                    }
+                    "premiumAndReserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:premiumAndReserveRiskBase"
+                    "claimsGross" {
+                        "ultimate" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:ultimate"
+                        "totalCumulative" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:totalCumulativeIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:totalCumulativeIndexed"
+                        }
+                        "totalIncremental" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:totalIncrementalIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:totalIncrementalIndexed"
+                        }
+                        "reportedCumulativeIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:reportedCumulativeIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:reportedCumulativeIndexed"
+                        }
+                        "reportedIncrementalIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:reportedIncrementalIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:reportedIncrementalIndexed"
+                        }
+                        "paidCumulativeIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:paidCumulativeIndexed",{
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:paidCumulativeIndexed"
+                        }
+                        "paidIncrementalIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:paidIncrementalIndexed",{
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:paidIncrementalIndexed"
+                        }
+                        "outstandingIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:outstandingIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:outstandingIndexed"
+                        }
+                        "changesInOutstandingIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:changesInOutstandingIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:changesInOutstandingIndexed"
+                        }
+                        "IBNRIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:IBNRIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:IBNRIndexed"
+                        }
+                        "changesInIBNRIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:changesInIBNRIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:changesInIBNRIndexed"
+                        }
+                        "reservesIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:reservesIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:reservesIndexed"
+                        }
+                        "changesInReservesIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:changesInReservesIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:changesInReservesIndexed"
+                        }
+                        "premiumRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:premiumRiskBase"
+                        "reserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:reserveRiskBase", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsGross:reserveRiskBase"
+                        }
+                        "premiumAndReserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:premiumAndReserveRiskBase"
+                    }
+                    "claimsCeded" {
+                        "ultimate" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:ultimate"
+                        "totalCumulative" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:totalCumulativeIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:totalCumulativeIndexed"
+                        }
+                        "totalIncremental" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:totalIncrementalIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:totalIncrementalIndexed"
+                        }
+                        "reportedCumulativeIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:reportedCumulativeIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:reportedCumulativeIndexed"
+                        }
+                        "reportedIncrementalIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:reportedIncrementalIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:reportedIncrementalIndexed"
+                        }
+                        "paidCumulativeIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:paidCumulativeIndexed",{
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:paidCumulativeIndexed"
+                        }
+                        "paidIncrementalIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:paidIncrementalIndexed",{
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:paidIncrementalIndexed"
+                        }
+                        "outstandingIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:outstandingIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:outstandingIndexed"
+                        }
+                        "changesInOutstandingIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:changesInOutstandingIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:changesInOutstandingIndexed"
+                        }
+                        "IBNRIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:IBNRIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:IBNRIndexed"
+                        }
+                        "changesInIBNRIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:changesInIBNRIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:changesInIBNRIndexed"
+                        }
+                        "reservesIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:reservesIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:reservesIndexed"
+                        }
+                        "changesInReservesIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:changesInReservesIndexed", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:changesInReservesIndexed"
+                        }
+                        "premiumRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:premiumRiskBase"
+                        "reserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:reserveRiskBase", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outClaimsCeded:reserveRiskBase"
+                        }
+                        "premiumAndReserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:premiumAndReserveRiskBase"
+                    }
+                }
+                "premium" {
+                    "premiumWrittenNet" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoNet:premiumWritten", {
+                        "gross" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoGross:premiumWritten"
+                        "ceded" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:premiumWritten"
+                    }
+                    "premiumPaidNet" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoNet:premiumPaid", {
+                        "netByUnderwritingYear" {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outUnderwritingInfoNet:premiumPaid"
+                        }
+                        "gross" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoGross:premiumPaid", {
+                            "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outUnderwritingInfoGross:premiumPaid"
+                        }
+                        "ceded" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:premiumPaid", {
+                            "cededByUnderwritingYear" {
+                                "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outUnderwritingInfoCeded:premiumPaid"
+                            }
+                            "fixed" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:premiumPaidFixed"
+                            "variable" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:premiumPaidVariable"
+                        }
+                    }
+                }
+                "commission" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:commission", {
+                    "fixed" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:commissionFixed", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outUnderwritingInfoCeded:commissionFixed"
+                    }
+                    "variable" "ORSA:retrospectiveReinsurance:[%contract%]:outUnderwritingInfoCeded:commissionVariable", {
+                        "[%period%]" "ORSA:retrospectiveReinsurance:[%contract%]:period:[%period%]:outUnderwritingInfoCeded:commissionVariable"
                     }
                 }
             }

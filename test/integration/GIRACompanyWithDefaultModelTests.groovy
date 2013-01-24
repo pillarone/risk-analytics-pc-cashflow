@@ -12,7 +12,7 @@ class GIRACompanyWithDefaultModelTests extends ModelTest {
 
     @Override
     String getResultConfigurationFileName() {
-        'GIRALegalEntityDrillDownResultConfiguration'
+        'TestGIRALegalEntityDrillDownResultConfiguration'
     }
 
     String getResultConfigurationDisplayName() {

@@ -25,7 +25,7 @@ mappings = {
                         "outstandingIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:outstandingIndexed"
                         "IBNRIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:IBNRIndexed"
                         "reservesIndexed" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:reservesIndexed"
-                        "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:developedResultIndexed"
+                        "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsNet:totalIncrementalIndexed"
                         "claimsGross" {
                             "ultimate" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:ultimate", {
                                 "bySegment" {
@@ -75,12 +75,12 @@ mappings = {
                                     "[%peril%]" "GIRA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:reservesIndexed"
                                 }
                             }
-                            "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:developedResultIndexed", {
+                            "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsGross:totalIncrementalIndexed", {
                                 "bySegment" {
-                                    "[%segment%]" "GIRA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:developedResultIndexed"
+                                    "[%segment%]" "GIRA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:totalIncrementalIndexed"
                                 }
                                 "byPerils" {
-                                    "[%peril%]" "GIRA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:developedResultIndexed"
+                                    "[%peril%]" "GIRA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:totalIncrementalIndexed"
                                 }
                             }
                         }
@@ -133,12 +133,12 @@ mappings = {
                                     "[%peril%]" "GIRA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:reservesIndexed"
                                 }
                             }
-                            "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:developedResultIndexed", {
+                            "increaseDueToIndex" "GIRA:reinsuranceContracts:[%contract%]:outClaimsCeded:totalIncrementalIndexed", {
                                 "bySegment" {
-                                    "[%segment%]" "GIRA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:developedResultIndexed"
+                                    "[%segment%]" "GIRA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:totalIncrementalIndexed"
                                 }
                                 "byPerils" {
-                                    "[%peril%]" "GIRA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:developedResultIndexed"
+                                    "[%peril%]" "GIRA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:totalIncrementalIndexed"
                                 }
                             }
                         }

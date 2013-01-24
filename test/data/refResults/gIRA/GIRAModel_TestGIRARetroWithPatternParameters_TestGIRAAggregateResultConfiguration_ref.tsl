@@ -1,6 +1,6 @@
 iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:reservesGenerators:subMarineReserves:outNominalUltimates	value	-4000.0	01-January-2011 24:00:00 000
-1	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -16,7 +16,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2011 24:00:00 000
@@ -32,7 +32,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	2000.0	01-January-2011 24:00:00 000
-1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -48,7 +48,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2011 24:00:00 000
@@ -64,7 +64,7 @@ iteration	period	valueIndex	path	field	value	date
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 1	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2011 24:00:00 000
-1	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -80,7 +80,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2012 24:00:00 000
@@ -96,7 +96,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -112,7 +112,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
@@ -128,7 +128,7 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 1	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-1	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+1	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -144,7 +144,7 @@ iteration	period	valueIndex	path	field	value	date
 1	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-0.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
@@ -160,7 +160,7 @@ iteration	period	valueIndex	path	field	value	date
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	0.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	2000.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -176,7 +176,7 @@ iteration	period	valueIndex	path	field	value	date
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	0.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
@@ -193,7 +193,7 @@ iteration	period	valueIndex	path	field	value	date
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2013 24:00:00 000
 1	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 2	0	0	GIRA:reservesGenerators:subMarineReserves:outNominalUltimates	value	-4000.0	01-January-2011 24:00:00 000
-2	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -209,7 +209,7 @@ iteration	period	valueIndex	path	field	value	date
 2	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2011 24:00:00 000
@@ -225,7 +225,7 @@ iteration	period	valueIndex	path	field	value	date
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	2000.0	01-January-2011 24:00:00 000
-2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -241,7 +241,7 @@ iteration	period	valueIndex	path	field	value	date
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2011 24:00:00 000
@@ -257,7 +257,7 @@ iteration	period	valueIndex	path	field	value	date
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 2	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2011 24:00:00 000
-2	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+2	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -273,7 +273,7 @@ iteration	period	valueIndex	path	field	value	date
 2	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2012 24:00:00 000
@@ -289,7 +289,7 @@ iteration	period	valueIndex	path	field	value	date
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -305,7 +305,7 @@ iteration	period	valueIndex	path	field	value	date
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
@@ -321,7 +321,7 @@ iteration	period	valueIndex	path	field	value	date
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 2	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-2	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+2	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -337,7 +337,7 @@ iteration	period	valueIndex	path	field	value	date
 2	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-0.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
@@ -353,7 +353,7 @@ iteration	period	valueIndex	path	field	value	date
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	0.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	2000.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -369,7 +369,7 @@ iteration	period	valueIndex	path	field	value	date
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	0.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
@@ -386,7 +386,7 @@ iteration	period	valueIndex	path	field	value	date
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2013 24:00:00 000
 2	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 3	0	0	GIRA:reservesGenerators:subMarineReserves:outNominalUltimates	value	-4000.0	01-January-2011 24:00:00 000
-3	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -402,7 +402,7 @@ iteration	period	valueIndex	path	field	value	date
 3	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2011 24:00:00 000
@@ -418,7 +418,7 @@ iteration	period	valueIndex	path	field	value	date
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	2000.0	01-January-2011 24:00:00 000
-3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -434,7 +434,7 @@ iteration	period	valueIndex	path	field	value	date
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2011 24:00:00 000
@@ -450,7 +450,7 @@ iteration	period	valueIndex	path	field	value	date
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 3	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2011 24:00:00 000
-3	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+3	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -466,7 +466,7 @@ iteration	period	valueIndex	path	field	value	date
 3	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2012 24:00:00 000
@@ -482,7 +482,7 @@ iteration	period	valueIndex	path	field	value	date
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -498,7 +498,7 @@ iteration	period	valueIndex	path	field	value	date
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
@@ -514,7 +514,7 @@ iteration	period	valueIndex	path	field	value	date
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 3	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-3	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+3	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -530,7 +530,7 @@ iteration	period	valueIndex	path	field	value	date
 3	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-0.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
@@ -546,7 +546,7 @@ iteration	period	valueIndex	path	field	value	date
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	0.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	2000.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -562,7 +562,7 @@ iteration	period	valueIndex	path	field	value	date
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	0.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
@@ -579,7 +579,7 @@ iteration	period	valueIndex	path	field	value	date
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2013 24:00:00 000
 3	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 4	0	0	GIRA:reservesGenerators:subMarineReserves:outNominalUltimates	value	-4000.0	01-January-2011 24:00:00 000
-4	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -595,7 +595,7 @@ iteration	period	valueIndex	path	field	value	date
 4	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2011 24:00:00 000
@@ -611,7 +611,7 @@ iteration	period	valueIndex	path	field	value	date
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	2000.0	01-January-2011 24:00:00 000
-4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -627,7 +627,7 @@ iteration	period	valueIndex	path	field	value	date
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2011 24:00:00 000
@@ -643,7 +643,7 @@ iteration	period	valueIndex	path	field	value	date
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 4	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2011 24:00:00 000
-4	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+4	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -659,7 +659,7 @@ iteration	period	valueIndex	path	field	value	date
 4	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2012 24:00:00 000
@@ -675,7 +675,7 @@ iteration	period	valueIndex	path	field	value	date
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -691,7 +691,7 @@ iteration	period	valueIndex	path	field	value	date
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
@@ -707,7 +707,7 @@ iteration	period	valueIndex	path	field	value	date
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 4	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-4	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+4	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -723,7 +723,7 @@ iteration	period	valueIndex	path	field	value	date
 4	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-0.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
@@ -739,7 +739,7 @@ iteration	period	valueIndex	path	field	value	date
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	0.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	2000.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -755,7 +755,7 @@ iteration	period	valueIndex	path	field	value	date
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	0.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
@@ -772,7 +772,7 @@ iteration	period	valueIndex	path	field	value	date
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2013 24:00:00 000
 4	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 5	0	0	GIRA:reservesGenerators:subMarineReserves:outNominalUltimates	value	-4000.0	01-January-2011 24:00:00 000
-5	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -788,7 +788,7 @@ iteration	period	valueIndex	path	field	value	date
 5	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2011 24:00:00 000
@@ -804,7 +804,7 @@ iteration	period	valueIndex	path	field	value	date
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	2000.0	01-January-2011 24:00:00 000
-5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -820,7 +820,7 @@ iteration	period	valueIndex	path	field	value	date
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2011 24:00:00 000
@@ -836,7 +836,7 @@ iteration	period	valueIndex	path	field	value	date
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 5	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2011 24:00:00 000
-5	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+5	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -852,7 +852,7 @@ iteration	period	valueIndex	path	field	value	date
 5	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2012 24:00:00 000
@@ -868,7 +868,7 @@ iteration	period	valueIndex	path	field	value	date
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -884,7 +884,7 @@ iteration	period	valueIndex	path	field	value	date
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
@@ -900,7 +900,7 @@ iteration	period	valueIndex	path	field	value	date
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 5	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-5	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+5	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -916,7 +916,7 @@ iteration	period	valueIndex	path	field	value	date
 5	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-0.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
@@ -932,7 +932,7 @@ iteration	period	valueIndex	path	field	value	date
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	0.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	2000.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -948,7 +948,7 @@ iteration	period	valueIndex	path	field	value	date
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	0.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
@@ -965,7 +965,7 @@ iteration	period	valueIndex	path	field	value	date
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2013 24:00:00 000
 5	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 6	0	0	GIRA:reservesGenerators:subMarineReserves:outNominalUltimates	value	-4000.0	01-January-2011 24:00:00 000
-6	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -981,7 +981,7 @@ iteration	period	valueIndex	path	field	value	date
 6	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2011 24:00:00 000
@@ -997,7 +997,7 @@ iteration	period	valueIndex	path	field	value	date
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	2000.0	01-January-2011 24:00:00 000
-6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -1013,7 +1013,7 @@ iteration	period	valueIndex	path	field	value	date
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2011 24:00:00 000
@@ -1029,7 +1029,7 @@ iteration	period	valueIndex	path	field	value	date
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 6	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2011 24:00:00 000
-6	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+6	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -1045,7 +1045,7 @@ iteration	period	valueIndex	path	field	value	date
 6	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2012 24:00:00 000
@@ -1061,7 +1061,7 @@ iteration	period	valueIndex	path	field	value	date
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -1077,7 +1077,7 @@ iteration	period	valueIndex	path	field	value	date
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
@@ -1093,7 +1093,7 @@ iteration	period	valueIndex	path	field	value	date
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 6	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-6	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+6	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -1109,7 +1109,7 @@ iteration	period	valueIndex	path	field	value	date
 6	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-0.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
@@ -1125,7 +1125,7 @@ iteration	period	valueIndex	path	field	value	date
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	0.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	2000.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -1141,7 +1141,7 @@ iteration	period	valueIndex	path	field	value	date
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	0.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
@@ -1158,7 +1158,7 @@ iteration	period	valueIndex	path	field	value	date
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2013 24:00:00 000
 6	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 7	0	0	GIRA:reservesGenerators:subMarineReserves:outNominalUltimates	value	-4000.0	01-January-2011 24:00:00 000
-7	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -1174,7 +1174,7 @@ iteration	period	valueIndex	path	field	value	date
 7	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2011 24:00:00 000
@@ -1190,7 +1190,7 @@ iteration	period	valueIndex	path	field	value	date
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	2000.0	01-January-2011 24:00:00 000
-7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -1206,7 +1206,7 @@ iteration	period	valueIndex	path	field	value	date
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2011 24:00:00 000
@@ -1222,7 +1222,7 @@ iteration	period	valueIndex	path	field	value	date
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 7	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2011 24:00:00 000
-7	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+7	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -1238,7 +1238,7 @@ iteration	period	valueIndex	path	field	value	date
 7	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2012 24:00:00 000
@@ -1254,7 +1254,7 @@ iteration	period	valueIndex	path	field	value	date
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -1270,7 +1270,7 @@ iteration	period	valueIndex	path	field	value	date
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
@@ -1286,7 +1286,7 @@ iteration	period	valueIndex	path	field	value	date
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 7	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-7	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+7	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -1302,7 +1302,7 @@ iteration	period	valueIndex	path	field	value	date
 7	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-0.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
@@ -1318,7 +1318,7 @@ iteration	period	valueIndex	path	field	value	date
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	0.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	2000.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -1334,7 +1334,7 @@ iteration	period	valueIndex	path	field	value	date
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	0.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
@@ -1351,7 +1351,7 @@ iteration	period	valueIndex	path	field	value	date
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2013 24:00:00 000
 7	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 8	0	0	GIRA:reservesGenerators:subMarineReserves:outNominalUltimates	value	-4000.0	01-January-2011 24:00:00 000
-8	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -1367,7 +1367,7 @@ iteration	period	valueIndex	path	field	value	date
 8	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2011 24:00:00 000
@@ -1383,7 +1383,7 @@ iteration	period	valueIndex	path	field	value	date
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	2000.0	01-January-2011 24:00:00 000
-8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -1399,7 +1399,7 @@ iteration	period	valueIndex	path	field	value	date
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2011 24:00:00 000
@@ -1415,7 +1415,7 @@ iteration	period	valueIndex	path	field	value	date
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 8	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2011 24:00:00 000
-8	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+8	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -1431,7 +1431,7 @@ iteration	period	valueIndex	path	field	value	date
 8	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2012 24:00:00 000
@@ -1447,7 +1447,7 @@ iteration	period	valueIndex	path	field	value	date
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -1463,7 +1463,7 @@ iteration	period	valueIndex	path	field	value	date
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
@@ -1479,7 +1479,7 @@ iteration	period	valueIndex	path	field	value	date
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 8	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-8	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+8	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -1495,7 +1495,7 @@ iteration	period	valueIndex	path	field	value	date
 8	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-0.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
@@ -1511,7 +1511,7 @@ iteration	period	valueIndex	path	field	value	date
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	0.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	2000.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -1527,7 +1527,7 @@ iteration	period	valueIndex	path	field	value	date
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	0.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
@@ -1544,7 +1544,7 @@ iteration	period	valueIndex	path	field	value	date
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2013 24:00:00 000
 8	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 9	0	0	GIRA:reservesGenerators:subMarineReserves:outNominalUltimates	value	-4000.0	01-January-2011 24:00:00 000
-9	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -1560,7 +1560,7 @@ iteration	period	valueIndex	path	field	value	date
 9	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2011 24:00:00 000
@@ -1576,7 +1576,7 @@ iteration	period	valueIndex	path	field	value	date
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	2000.0	01-January-2011 24:00:00 000
-9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -1592,7 +1592,7 @@ iteration	period	valueIndex	path	field	value	date
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2011 24:00:00 000
@@ -1608,7 +1608,7 @@ iteration	period	valueIndex	path	field	value	date
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 9	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2011 24:00:00 000
-9	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+9	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -1624,7 +1624,7 @@ iteration	period	valueIndex	path	field	value	date
 9	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2012 24:00:00 000
@@ -1640,7 +1640,7 @@ iteration	period	valueIndex	path	field	value	date
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -1656,7 +1656,7 @@ iteration	period	valueIndex	path	field	value	date
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
@@ -1672,7 +1672,7 @@ iteration	period	valueIndex	path	field	value	date
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 9	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-9	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+9	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -1688,7 +1688,7 @@ iteration	period	valueIndex	path	field	value	date
 9	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-0.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
@@ -1704,7 +1704,7 @@ iteration	period	valueIndex	path	field	value	date
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	0.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	2000.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -1720,7 +1720,7 @@ iteration	period	valueIndex	path	field	value	date
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	0.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
@@ -1737,7 +1737,7 @@ iteration	period	valueIndex	path	field	value	date
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2013 24:00:00 000
 9	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 10	0	0	GIRA:reservesGenerators:subMarineReserves:outNominalUltimates	value	-4000.0	01-January-2011 24:00:00 000
-10	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -1753,7 +1753,7 @@ iteration	period	valueIndex	path	field	value	date
 10	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2011 24:00:00 000
@@ -1769,7 +1769,7 @@ iteration	period	valueIndex	path	field	value	date
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	2000.0	01-January-2011 24:00:00 000
-10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2011 24:00:00 000
@@ -1785,7 +1785,7 @@ iteration	period	valueIndex	path	field	value	date
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	-4000.0	01-January-2011 24:00:00 000
-10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2011 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2011 24:00:00 000
@@ -1801,7 +1801,7 @@ iteration	period	valueIndex	path	field	value	date
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2011 24:00:00 000
 10	0	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2011 24:00:00 000
-10	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+10	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -1817,7 +1817,7 @@ iteration	period	valueIndex	path	field	value	date
 10	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2012 24:00:00 000
@@ -1833,7 +1833,7 @@ iteration	period	valueIndex	path	field	value	date
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	2000.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2012 24:00:00 000
@@ -1849,7 +1849,7 @@ iteration	period	valueIndex	path	field	value	date
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	-4000.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2012 24:00:00 000
+10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
@@ -1865,7 +1865,7 @@ iteration	period	valueIndex	path	field	value	date
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reservesIndexed	-2000.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidIncrementalIndexed	0.0	01-January-2012 24:00:00 000
 10	1	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedIncrementalIndexed	0.0	01-January-2012 24:00:00 000
-10	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+10	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -1881,7 +1881,7 @@ iteration	period	valueIndex	path	field	value	date
 10	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reservesIndexed	-0.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:reservesGenerators:subMarineReserves:outReserves	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedCumulativeIndexed	2000.0	01-January-2013 24:00:00 000
@@ -1897,7 +1897,7 @@ iteration	period	valueIndex	path	field	value	date
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reservesIndexed	0.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	paidIncrementalIndexed	2000.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsCeded	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedCumulativeIndexed	-4000.0	01-January-2013 24:00:00 000
@@ -1913,7 +1913,7 @@ iteration	period	valueIndex	path	field	value	date
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reservesIndexed	0.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	paidIncrementalIndexed	-4000.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsGross	reportedIncrementalIndexed	0.0	01-January-2013 24:00:00 000
-10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	developedResultIndexed	0.0	01-January-2013 24:00:00 000
+10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	totalIncrementalIndexed	0.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	premiumRiskBase	0.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
 10	2	0	GIRA:retrospectiveReinsurance:subElPeTe:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2013 24:00:00 000
