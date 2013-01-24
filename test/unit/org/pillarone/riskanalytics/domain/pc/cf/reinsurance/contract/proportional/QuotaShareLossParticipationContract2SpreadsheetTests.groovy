@@ -42,6 +42,7 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
     @Override
     List<String> getSpreadsheetNames() {
         [
+         'PMO2292__LP___SSC_LP_in_the_run_off.xlsx',
          'PMO-2198_a___SSC_usual.xlsx',
          'PMO-2198_a___SSC_usual_1.xlsx',
          'PMO-2198_a___SSC_usual_2.xlsx',

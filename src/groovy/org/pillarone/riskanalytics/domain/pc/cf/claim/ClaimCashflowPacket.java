@@ -58,6 +58,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private double changeInReservesIndexed;
     private double changeInIBNRIndexed;
     private double appliedIndexValue;
+    private double premiumRisk;
+    private double reserveRisk;
 
     private DateTime updateDate;
     private Integer updatePeriod;
@@ -95,7 +97,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.changeInReservesIndexed = 0d;
         this.updateDate = date;
         setDate(date);
-
+        initRiskBased();
     }
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim) {
@@ -111,6 +113,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.reservesIndexed = 0;
         updateDate = baseClaim.getOccurrenceDate();
         setDate(updateDate);
+        initRiskBased();
     }
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double nominalUltimate, double paidIncrementalIndexed,
@@ -180,6 +183,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.updatePeriod = updatePeriod;
         this.exposureInfo = exposureInfo;
         setDate(updateDate);
+        initRiskBased();
     }
 
     /**
@@ -206,6 +210,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         updatePeriod = grossClaim.updatePeriod;
         discountFactors = grossClaim.discountFactors;
         setDate(grossClaim.getUpdateDate());
+        initRiskBased();
     }
 
     /**
@@ -238,6 +243,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         updateDate = claimCashflowPacket.getUpdateDate();
         updatePeriod = claimCashflowPacket.getUpdatePeriod();
         discountFactors = claimCashflowPacket.getDiscountFactors();
+        initRiskBased();
     }
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim, DateTime occurenceDate, double paidIncremental, double cumulatedPaid, int currentPeriod) {
@@ -260,8 +266,13 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         updateDate = occurenceDate;
         updatePeriod = currentPeriod;
         discountFactors = null;
+        initRiskBased();
     }
 
+    private void initRiskBased() {
+        premiumRisk = ultimate() == 0d ? 0 : reportedIncrementalIndexed + changeInIBNRIndexed;
+        reserveRisk = ultimate() != 0d ? 0 : reportedIncrementalIndexed + changeInIBNRIndexed;
+    }
 
     /**
      * Used to modify the packet date property according the persistence date on a cloned instance.
@@ -329,14 +340,6 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         // check necessary due to rounding/rationale numbers
         if (Math.abs(developedUltimate() / nominalUltimate - 1) < 1E-4) return 0d;
         return developedUltimate() - nominalUltimate;
-    }
-
-    public double premiumRisk() {
-        return ultimate() == 0d ? 0 : reportedIncrementalIndexed + changeInIBNRIndexed;
-    }
-
-    public double reserveRisk() {
-        return ultimate() != 0d ? 0 : reportedIncrementalIndexed + changeInIBNRIndexed;
     }
 
     /**
@@ -472,7 +475,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         // total incremental unindexed
         valuesToSave.put(ULTIMATE, ultimate);    // this and missing default c'tor (final!) leads to failure during result tree building
         // total incremental
-        valuesToSave.put(DEVELOPED_RESULT_INDEXED, developmentResultCumulative());
+        valuesToSave.put(TOTAL_INCREMENTAL_INDEXED, (ultimate == 0) ? developedUltimate() - nominalUltimate() : ultimate);
         // total cumulative
         valuesToSave.put(TOTAL_CUMULATIVE_INDEXED, developedUltimate());
         // paid incremental indexed
@@ -489,9 +492,9 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         valuesToSave.put(CHANGES_IN_RESERVES_INDEXED, changeInReservesIndexed);
         // case reserve
         valuesToSave.put(RESERVES_INDEXED, reservedIndexed());
-        valuesToSave.put(PREMIUM_RISK_BASE, premiumRisk());
-        valuesToSave.put(RESERVE_RISK_BASE, reserveRisk());
-        valuesToSave.put(PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk() + reserveRisk());
+        valuesToSave.put(PREMIUM_RISK_BASE, premiumRisk);
+        valuesToSave.put(RESERVE_RISK_BASE, reserveRisk);
+        valuesToSave.put(PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk + reserveRisk);
         return valuesToSave;
     }
 
@@ -532,6 +535,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     }
 
     public final static String ULTIMATE = "ultimate";
+    public final static String TOTAL_CUMULATIVE_INDEXED = "totalCumulativeIndexed";
+    public final static String TOTAL_INCREMENTAL_INDEXED = "totalIncrementalIndexed";
     public final static String REPORTED_INDEXED = "reportedIncrementalIndexed";
     public final static String PAID_INDEXED = "paidIncrementalIndexed";
     public final static String IBNR_INDEXED = "IBNRIndexed";
@@ -539,13 +544,11 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public final static String RESERVES_INDEXED = "reservesIndexed";
     public final static String CHANGES_IN_RESERVES_INDEXED = "changesInReservesIndexed";
     public final static String OUTSTANDING_INDEXED = "outstandingIndexed";
-    public final static String DEVELOPED_ULTIMATE = "developedUltimateIndexed";
-    public final static String DEVELOPED_RESULT_INDEXED = "developedResultIndexed";
+    public final static String DEVELOPED_RESULT_INDEXED = "totalIncrementalIndexed";
     public final static String APPLIED_INDEX_VALUE = "appliedIndexValue";
     public final static String CHANGES_IN_OUTSTANDING_INDEXED = "changesInOutstandingIndexed";
     public final static String REPORTED_CUMULATIVE_INDEXED = "reportedCumulativeIndexed";
     public final static String PAID_CUMULATIVE_INDEXED = "paidCumulativeIndexed";
-    public final static String TOTAL_CUMULATIVE_INDEXED = "totalCumulativeIndexed";
     public final static String RESERVE_RISK_BASE = "reserveRiskBase";
     public final static String PREMIUM_RISK_BASE = "premiumRiskBase";
     public final static String PREMIUM_AND_RESERVE_RISK_BASE = "premiumAndReserveRiskBase";
@@ -639,4 +642,20 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 //    public void setChangeInIBNRIndexed(double changeInIBNRIndexed) {
 //        this.changeInIBNRIndexed = changeInIBNRIndexed;
 //    }
+
+    public double getPremiumRisk() {
+        return premiumRisk;
+    }
+
+    public void setPremiumRisk(double premiumRisk) {
+        this.premiumRisk = premiumRisk;
+    }
+
+    public double getReserveRisk() {
+        return reserveRisk;
+    }
+
+    public void setReserveRisk(double reserveRisk) {
+        this.reserveRisk = reserveRisk;
+    }
 }

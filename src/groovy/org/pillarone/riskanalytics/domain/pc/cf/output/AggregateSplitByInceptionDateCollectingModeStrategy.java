@@ -7,7 +7,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.pillarone.riskanalytics.core.output.DrillDownMode;
-import org.pillarone.riskanalytics.core.output.ICollectingModeStrategy;
 import org.pillarone.riskanalytics.core.output.PathMapping;
 import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
 import org.pillarone.riskanalytics.core.packets.Packet;
@@ -208,13 +207,13 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
         List<SingleValueResultPOJO> results = new ArrayList<SingleValueResultPOJO>();
         Map<String, Double> reserveRiskByPeriodPath = new HashMap<String, Double>();
         for (ClaimCashflowPacket claim : claims) {
-            if (claim.reserveRisk() != 0) {
+            if (claim.getReserveRisk() != 0) {
                 if (splitByInceptionPeriod()) {
                     String periodLabel = inceptionPeriod(claim);
                     String pathExtension = PERIOD + PATH_SEPARATOR + periodLabel;
                     String pathExtended = getExtendedPath(claim, pathExtension);
                     Double reserveRisk = reserveRiskByPeriodPath.get(pathExtended);
-                    reserveRisk = reserveRisk == null ? claim.reserveRisk() : reserveRisk + claim.reserveRisk();
+                    reserveRisk = reserveRisk == null ? claim.getReserveRisk() : reserveRisk + claim.getReserveRisk();
                     reserveRiskByPeriodPath.put(pathExtended, reserveRisk);
                 }
             }

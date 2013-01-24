@@ -39,6 +39,8 @@ public class ClaimUtils {
         double appliedIndex = 1;
         double changeInReservesIndexed = 0;
         double changeInIBNRIndexed = 0;
+        double premiumRisk = 0;
+        double reserveRisk = 0;
         for (ClaimCashflowPacket claim : claims) {
             ultimate += claim.ultimate();
             nominalUltimate += claim.nominalUltimate();
@@ -50,6 +52,8 @@ public class ClaimUtils {
             appliedIndex *= claim.getAppliedIndexValue();
             changeInReservesIndexed += claim.getChangeInReservesIndexed();
             changeInIBNRIndexed += claim.getChangeInIBNRIndexed();
+            premiumRisk += claim.getPremiumRisk();
+            reserveRisk += claim.getReserveRisk();
         }
         ClaimRoot baseClaim = new ClaimRoot(ultimate, claims.get(0).getBaseClaim());
         DateTime updateDate = claims.get(0).getUpdateDate();
@@ -62,6 +66,8 @@ public class ClaimUtils {
                 changeInIBNRIndexed, null, updateDate, updatePeriod);
         applyMarkers(claims.get(0), summedClaims);
         summedClaims.setAppliedIndexValue(claims.size() == 0 ? 1d : Math.pow(appliedIndex, 1d / claims.size()));
+        summedClaims.setPremiumRisk(premiumRisk);
+        summedClaims.setReserveRisk(reserveRisk);
         return summedClaims;
     }
 
@@ -97,12 +103,16 @@ public class ClaimUtils {
                 double appliedIndex = 1;
                 double changeInReservesIndexed = 0;
                 double changeInIBNRIndexed = 0;
+                double premiumRisk = 0;
+                double reserveRisk = 0;
                 for (ClaimCashflowPacket claim : claimsWithSameBaseClaim) {
                     ultimate += claim.ultimate();
                     nominalUltimate = claim.nominalUltimate();  // don't sum up as every CCP contains the same value!
                     paidIncremental += claim.getPaidIncrementalIndexed();
                     reportedIncremental += claim.getReportedIncrementalIndexed();
                     appliedIndex *= claim.getAppliedIndexValue();
+                    premiumRisk += claim.getPremiumRisk();
+                    reserveRisk += claim.getReserveRisk();
                     if (mostRecentClaimUpdate == null || claim.getUpdateDate().isAfter(mostRecentClaimUpdate)) {
                         mostRecentClaimUpdate = claim.getUpdateDate();
                         reportedCumulated = claim.getReportedCumulatedIndexed();
@@ -127,6 +137,8 @@ public class ClaimUtils {
                         paidIncremental, paidCumulated, reportedIncremental, reportedCumulated, latestReserves,
                         changeInReservesIndexed, changeInIBNRIndexed, null, mostRecentClaimUpdate, updatePeriod);
                 aggregateClaim.setAppliedIndexValue(appliedIndex);
+                aggregateClaim.setPremiumRisk(premiumRisk);
+                aggregateClaim.setReserveRisk(reserveRisk);
                 applyMarkers(claims.get(0), aggregateClaim);
                 aggregateByBaseClaim.add(aggregateClaim);
             }
@@ -160,12 +172,16 @@ public class ClaimUtils {
                 double appliedIndex = 1;
                 double changeInReservesIndexed = 0;
                 double changeInIBNRIndexed = 0;
+                double premiumRisk = 0;
+                double reserveRisk = 0;
                 for (ClaimCashflowPacket claim : claimsWithSameBaseClaim) {
                     ultimate += claim.ultimate();
                     nominalUltimate = claim.nominalUltimate();  // don't sum up as every CCP contains the same value!
                     paidIncremental += claim.getPaidIncrementalIndexed();
                     reportedIncremental += claim.getReportedIncrementalIndexed();
                     appliedIndex *= claim.getAppliedIndexValue();
+                    premiumRisk += claim.getPremiumRisk();
+                    reserveRisk += claim.getReserveRisk();
                     if (mostRecentClaimUpdate == null || claim.getUpdateDate().isAfter(mostRecentClaimUpdate)) {
                         mostRecentClaimUpdate = claim.getUpdateDate();
                         reportedCumulated = claim.getReportedCumulatedIndexed();
@@ -189,6 +205,8 @@ public class ClaimUtils {
                         paidIncremental, paidCumulated, reportedIncremental, reportedCumulated, latestReserves,
                         changeInReservesIndexed, changeInIBNRIndexed, null, mostRecentClaimUpdate, updatePeriod);
                 aggregateClaim.setAppliedIndexValue(appliedIndex);
+                aggregateClaim.setPremiumRisk(premiumRisk);
+                aggregateClaim.setReserveRisk(reserveRisk);
                 applyMarkers(claims.get(0), aggregateClaim);
                 aggregateByBaseClaim.put(firstClaim.getKeyClaim(), aggregateClaim);
             }
@@ -218,12 +236,16 @@ public class ClaimUtils {
             IClaimRoot keyClaim = keepKeyClaim ? claim.getKeyClaim() : scaledBaseClaim;
             double scaledChangeInReserves = claim.getChangeInReservesIndexed() * factor;
             double scaledChangeInIBNR = claim.getChangeInIBNRIndexed() * factor;
+            double scaledPremiumRisk = claim.getPremiumRisk() * factor;
+            double scaledReserveRisk = claim.getReserveRisk() * factor;
             ClaimCashflowPacket scaledClaim = new ClaimCashflowPacket(scaledBaseClaim, keyClaim, scaledUltimate, scaledNominalUltimate,
                     scaledPaidIncremental, scaledPaidCumulated, scaledReportedIncremental, scaledReportedCumulated,
                     scaledReserves, scaledChangeInReserves, scaledChangeInIBNR, claim.getExposureInfo(), claim.getUpdateDate(),
                     claim.getUpdatePeriod());
             scaledClaim.setDiscountFactors(claim.getDiscountFactors());
             applyMarkers(claim, scaledClaim);
+            scaledClaim.setPremiumRisk(scaledPremiumRisk);
+            scaledClaim.setReserveRisk(scaledReserveRisk);
             return scaledClaim;
         }
         return claim;

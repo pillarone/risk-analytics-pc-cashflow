@@ -3,15 +3,9 @@ package org.pillarone.riskanalytics.domain.pc.cf.output;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.pillarone.riskanalytics.core.output.ICollectingModeStrategy;
-import org.pillarone.riskanalytics.core.output.PathMapping;
 import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
-import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.*;
@@ -53,20 +47,20 @@ public class SingleSplitByInceptionDateCollectingModeStrategy extends AggregateS
         double premiumRisk = 0;
         Map<String, Double> reserveRiskByPeriodPath = new HashMap<String, Double>();
         for (ClaimCashflowPacket claim : claims) {
-            if (claim.reserveRisk() != 0) {
+            if (claim.getReserveRisk() != 0) {
                 // belongs to reserve risk
-                totalReserveRisk += claim.reserveRisk();
+                totalReserveRisk += claim.getReserveRisk();
                 String datePath = DateTimeUtilities.formatDate.print(claim.getDate());
                 String pathExtension = datePath.replace(" ", "_") + PATH_SEPARATOR ;
 
                 String pathExtended = getExtendedPath(claim, pathExtension);
                 Double reserveRisk = reserveRiskByPeriodPath.get(pathExtended);
-                reserveRisk = reserveRisk == null ? claim.reserveRisk() : reserveRisk + claim.reserveRisk();
+                reserveRisk = reserveRisk == null ? claim.getReserveRisk() : reserveRisk + claim.getReserveRisk();
                 reserveRiskByPeriodPath.put(pathExtended, reserveRisk);
             }
-            else if (claim.premiumRisk() != 0) {
+            else if (claim.getPremiumRisk() != 0) {
                 // belongs to premium risk
-                premiumRisk += claim.premiumRisk();
+                premiumRisk += claim.getPremiumRisk();
             }
         }
         for (Map.Entry<String, Double> reserveRisk : reserveRiskByPeriodPath.entrySet()) {
