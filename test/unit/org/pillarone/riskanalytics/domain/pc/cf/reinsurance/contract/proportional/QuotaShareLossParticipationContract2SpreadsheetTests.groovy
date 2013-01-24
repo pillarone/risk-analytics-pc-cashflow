@@ -61,21 +61,21 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
          'PMO-2198_b___SSC_decreasing_losses_6.xlsx',
          'PMO-2198_b___SSC_decreasing_losses_7.xlsx',
          'PMO-2198_c___SSC_usual_LP100_5.xlsx',
-         'PMO-2198_c___SSC_usual_LP100_6.xlsx',             // total commission fails
+         'PMO-2198_c___SSC_usual_LP100_6.xlsx',
          'PMO-2198_c___SSC_usual_LP100_7.xlsx',
-//         'PMO-2198_d___SSC_usual_AAD_AAL_1.xlsx',   // fail on 01.01.2012
-//         'PMO-2198_d___SSC_usual_AAD_AAL_2.xlsx',
-//         'PMO-2198_d___SSC_usual_AAD_AAL_3.xlsx',
-//         'PMO-2198_d___SSC_usual_AAD_AAL_4.xlsx',
-//         'PMO-2198_d___SSC_usual_AAD_AAL_5.xlsx',
-//         'PMO-2198_d___SSC_usual_AAD_AAL_6.xlsx',
-//         'PMO-2198_d___SSC_usual_AAD_AAL_7.xlsx',
+         'PMO-2198_d___SSC_usual_AAD_AAL_1.xlsx',
+         'PMO-2198_d___SSC_usual_AAD_AAL_2.xlsx',
+         'PMO-2198_d___SSC_usual_AAD_AAL_3.xlsx',
+         'PMO-2198_d___SSC_usual_AAD_AAL_4.xlsx',
+         'PMO-2198_d___SSC_usual_AAD_AAL_5.xlsx',
+         'PMO-2198_d___SSC_usual_AAD_AAL_6.xlsx',
+         'PMO-2198_d___SSC_usual_AAD_AAL_7.xlsx',
          'PMO-2198_e___SSC_decreasing_losses_LP100_5.xlsx',
          'PMO-2198_e___SSC_decreasing_losses_LP100_6.xlsx',
          'PMO-2198_e___SSC_decreasing_losses_LP100_7.xlsx',
-//         'PMO-2198_f___SSC_no_increments_4.xlsx',
-//         'PMO-2198_g___SSC_decreasing_losses_LP100_AADAAL_7.xlsx',
-//         'PMO-2198_h___SSC_decreasing_losses_LP100_AADAAL_100PercentQ_7.xlsx',
+         'PMO-2198_f___SSC_no_increments_4.xlsx',
+         'PMO-2198_g___SSC_decreasing_losses_LP100_AADAAL_7.xlsx',
+         'PMO-2198_h___SSC_decreasing_losses_LP100_AADAAL_100PercentQ_7.xlsx',
         ]
     }
 
@@ -86,7 +86,7 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
             ReinsuranceContract contract = getQuotaShareContract(importer, 'Sliding_in_Triangle')
             IterationScope iterationScope = contract.iterationScope
             Triangle grossClaims = new Triangle(importer, SLIDING_IN__TRIANGLE, 'gross claims', 2012, 4, 'C10')
-            Map<Integer, GrossClaimRoot> claimsByPeriod = grossClaims.claimsByUnderwritingPeriod
+            Map<Integer, GrossClaimRoot> claimsByPeriod = getClaimsByUnderwritingPeriod(grossClaims)
             Triangle cededClaims = new Triangle(importer, SLIDING_IN__TRIANGLE, 'ceded claims', 2012, 4, 'C247')
             Triangle grossPremium = new Triangle(importer, SLIDING_IN__TRIANGLE, 'gross premium', 2012, 4, 'C16')
             IPeriodCounter periodCounter = iterationScope.periodScope.periodCounter
@@ -169,6 +169,30 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
     }
 
     /**
+     * @param importer
+     * @param sheet
+     * @param column
+     * @param startRow
+     * @param numberOfRows
+     * @return all values of $column$startRow:$column$(startRow+numberOfRows), missing values are mapped to zero
+     */
+    public static List<Double> getRowValues(SpreadsheetImporter importer, String sheet, Character startColumn, int row, int numberOfColumns) {
+        Map cellMap = [:]
+        Character col = startColumn
+        for (int column = 0; column < numberOfColumns; column++) {
+            String cell = "${col}${row}"
+            cellMap[cell] = cell
+            col = col.next()
+        }
+        Map params = importer.cells([sheet: sheet, cellMap: cellMap])
+        List result = new ArrayList<Double>()
+        for (String cell : cellMap.keySet()) {
+            result << (params[cell] ? params[cell] : 0d)
+        }
+        return result
+    }
+
+    /**
      * Useful for determining limits of sublists
      * @param values
      * @return last element of the list not equal to zero
@@ -216,6 +240,24 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
         throw new NotImplementedException()
     }
 
+
+    private static Map<Integer, GrossClaimRoot> getClaimsByUnderwritingPeriod(Triangle triangle) {
+        Map<Integer, GrossClaimRoot> claimsByOccurrenceYear = [:]
+        for (DateTime startOfUnderwritingPeriod : triangle.underwritingPeriodStartDates) {
+            List<Period> cummulativePeriods = triangle.cummulativePeriods(startOfUnderwritingPeriod)
+            List<Double> cummulativeValues = triangle.valuesBy(startOfUnderwritingPeriod)
+            List<Double> cummulativeRatios = []
+            for (Double value : cummulativeValues) {
+                cummulativeRatios << value / triangle.latestValue(startOfUnderwritingPeriod)
+            }
+            PatternPacket payoutPattern = new PatternPacket(IPayoutPatternMarker, cummulativeRatios, cummulativePeriods)
+            claimsByOccurrenceYear[startOfUnderwritingPeriod.year] = new GrossClaimRoot(
+                    new ClaimRoot(triangle.latestValue(startOfUnderwritingPeriod), ClaimType.ATTRITIONAL,
+                            startOfUnderwritingPeriod, startOfUnderwritingPeriod), payoutPattern)
+        }
+        return claimsByOccurrenceYear
+    }
+
     private DateTime beginOfCover = new DateTime(2012,1,1,0,0,0,0)
 
     private static final double EPSILON = 1E-8
@@ -242,6 +284,95 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
         grossUwPerUwYear
     }
 
+
+    private class ReferenceClaimContainer {
+
+        Map<ReferenceClaimKey, ReferenceClaim> container = [:]
+
+        void add(ReferenceClaim claim) {
+            container.put(new ReferenceClaimKey(claim.occurrenceDate, claim.updateDate), claim)
+        }
+
+        ReferenceClaim get(ClaimCashflowPacket claim) {
+            container.get(new ReferenceClaimKey(claim.occurrenceDate, claim.updateDate))
+        }
+    }
+
+
+    private class ReferenceClaimKey {
+        DateTime occurrenceDate
+        DateTime updateDate
+
+        ReferenceClaimKey(DateTime occurrenceDate, DateTime updateDate) {
+            this.occurrenceDate = occurrenceDate
+            this.updateDate = updateDate
+        }
+
+        @Override
+        int hashCode() {
+            HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
+            hashCodeBuilder.append(occurrenceDate);
+            hashCodeBuilder.append(updateDate);
+            return hashCodeBuilder.toHashCode();
+        }
+
+        @Override
+        boolean equals(Object obj) {
+            if (obj instanceof ReferenceClaimKey) {
+                return ((ReferenceClaimKey) obj).occurrenceDate.equals(occurrenceDate) && ((ReferenceClaimKey) obj).updateDate.equals(updateDate)
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        String toString() {
+            "${format(occurrenceDate)} (${format(updateDate)})"
+        }
+    }
+
+
+    private class ReferenceClaim {
+
+        DateTime occurrenceDate
+        DateTime inceptionDate
+        DateTime eventDate
+        DateTime updateDate
+
+        double ultimate
+        double reported
+        double paid
+
+        ReferenceClaim(DateTime occurrenceDate, DateTime updateDate, double ultimate, double reported, double paid) {
+            this.occurrenceDate = occurrenceDate
+            this.inceptionDate = occurrenceDate
+            this.eventDate = occurrenceDate
+            this.updateDate = updateDate
+            this.ultimate = ultimate
+            this.reported = reported
+            this.paid = paid
+        }
+
+        ReferenceClaim(DateTime occurrenceDate, DateTime inceptionDate, DateTime eventDate, DateTime updateDate, double ultimate, double reported, double paid) {
+            this.occurrenceDate = occurrenceDate
+            this.inceptionDate = inceptionDate
+            this.eventDate = eventDate
+            this.updateDate = updateDate
+            this.ultimate = ultimate
+            this.reported = reported
+            this.paid = paid
+        }
+
+        String dateSummary() {
+            "${format(occurrenceDate)} (${format(updateDate)})"
+        }
+
+        @Override
+        String toString() {
+            "${dateSummary()} $ultimate $reported $paid"
+        }
+    }
+
     private static final String DEFAULT_DATE_FORMAT = "dd.MM.yyyy"
     private static DateTimeFormatter formatter = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
 
@@ -255,4 +386,88 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
         }
         return formatter.print(dateTime);
     }
+
+    private class Triangle {
+        String name
+        List<DateTime> underwritingPeriodStartDates = []
+        private Map<ReferenceClaimKey, Double> values = [:]
+        private Map<DateTime, List<Double>> valuesByUnderwritingYear = [:]
+        private Map<DateTime, List<Period>> periodsByUnderwritingYear = [:]
+
+        Triangle(SpreadsheetImporter importer, String sheet, String name, int firstYear, int numberOfYears, String topLeftCell, boolean buildIncrements = false) {
+            this.name = name
+            Character column = topLeftCell[0]
+            int row = Integer.parseInt(topLeftCell.substring(1))
+            for (int i = 0; i < numberOfYears; i++) {
+                List<Double> rowValues = getRowValues(importer, sheet, column, row + i, numberOfYears - i)
+                DateTime occurrenceDate = new DateTime(firstYear + i, 1,1,0,0,0,0)
+                valuesByUnderwritingYear[occurrenceDate] = rowValues
+                underwritingPeriodStartDates << occurrenceDate
+                for (int j = 0; j < rowValues.size(); j++) {
+                    DateTime updateDate = new DateTime(firstYear + i + j,1,1,0,0,0,0)
+                    if (j > 0 && buildIncrements) {
+                        values[new ReferenceClaimKey(occurrenceDate, updateDate)] = rowValues[j] - rowValues[j-1]
+                    }
+                    else {
+                        values[new ReferenceClaimKey(occurrenceDate, updateDate)] = rowValues[j]
+                    }
+                }
+                column = column.next()
+            }
+        }
+
+        void add(DateTime inceptionDate, DateTime updateDate, double value) {
+            values.put(new ReferenceClaimKey(inceptionDate, updateDate), value)
+        }
+
+        boolean sameValue(DateTime inceptionDate, DateTime updateDate, double value) {
+            value == values.get(new ReferenceClaimKey(inceptionDate, updateDate))
+        }
+
+        double referenceValue(ClaimCashflowPacket claim) {
+            values.get(new ReferenceClaimKey(claim.occurrenceDate, claim.updateDate))
+        }
+
+        double referenceValue(UnderwritingInfoPacket uwInfo) {
+            values.get(new ReferenceClaimKey(uwInfo.exposure.inceptionDate, uwInfo.date))
+        }
+
+        List<Period> cummulativePeriods(DateTime underwritingPeriodStartDate) {
+            List<Period> periods = periodsByUnderwritingYear[underwritingPeriodStartDate]
+            if (periods == null) {
+                periods = []
+                DateTime firstPeriodStartDate
+                for (DateTime periodStartDate : underwritingPeriodStartDates) {
+                    if (!periodStartDate.isBefore(underwritingPeriodStartDate)) {
+                        if (firstPeriodStartDate) {
+                            periods << new Period(firstPeriodStartDate, periodStartDate)
+                        }
+                        else {
+                            firstPeriodStartDate = periodStartDate
+                            periods << Period.years(0)
+                        }
+                    }
+                }
+                periodsByUnderwritingYear[underwritingPeriodStartDate] = periods
+            }
+            return periods
+        }
+
+        List<Double> valuesBy(DateTime underwritingPeriodStartDate) {
+            valuesByUnderwritingYear[underwritingPeriodStartDate]
+        }
+
+        double latestValue(DateTime underwritingPeriodStartDate) {
+            valuesByUnderwritingYear[underwritingPeriodStartDate][-1]
+        }
+
+        int numberOfUnderwritingPeriods() {
+            underwritingPeriodStartDates.size()
+        }
+
+        Integer maxYear() {
+            underwritingPeriodStartDates[-1].year
+        }
+    }
+
 }

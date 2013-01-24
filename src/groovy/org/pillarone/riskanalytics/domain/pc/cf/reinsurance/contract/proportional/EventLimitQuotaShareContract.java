@@ -11,6 +11,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.EventLimitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.ILimitStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.ILossParticipation;
 
@@ -26,17 +27,19 @@ public class EventLimitQuotaShareContract extends QuotaShareContract {
     private Map<IClaimRoot, ClaimCashflowPacket> cumulatedCededClaims;
     private Map<EventPacket, EventLimitTracking> limitTrackingPerEvent;
     private double eventLimit;
+    private ILimitStrategy limit;
 
     public EventLimitQuotaShareContract(double quotaShare, ICommission commission, EventLimitStrategy limit, ILossParticipation lossParticipation) {
         super(quotaShare, commission, lossParticipation);
         cumulatedCededClaims = new HashMap<IClaimRoot, ClaimCashflowPacket>();
         limitTrackingPerEvent = new HashMap<EventPacket, EventLimitTracking>();
+        this.limit = limit;
         eventLimit = limit.getEventLimit();
     }
 
     @Override
     public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaim, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
-        lossParticipation.initPeriod(grossClaim, grossUnderwritingInfo);
+        lossParticipation.initPeriod(grossClaim, grossUnderwritingInfo, limit);
         super.initBasedOnAggregateCalculations(grossClaim, grossUnderwritingInfo);
     }
 

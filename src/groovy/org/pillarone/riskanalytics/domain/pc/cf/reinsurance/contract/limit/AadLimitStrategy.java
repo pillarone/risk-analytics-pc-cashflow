@@ -2,6 +2,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit;
 
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,4 +28,12 @@ public class AadLimitStrategy extends AbstractParameterObject implements ILimitS
     public double getAAD() { return aad; }
 
     public double getAAL() { return Double.MAX_VALUE; }
+
+    public double appliedLimit(ClaimCashflowPacket claim, BasedOnClaimProperty claimProperty) {
+        return appliedLimit(claimProperty.cumulatedIndexed(claim));
+    }
+
+    public double appliedLimit(double value) {
+        return Math.max(0, value - aad);
+    }
 }

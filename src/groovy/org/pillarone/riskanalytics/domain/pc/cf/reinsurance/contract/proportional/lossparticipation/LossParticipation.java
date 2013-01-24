@@ -1,11 +1,13 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation;
 
 
+import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.ILimitStrategy;
 
 import java.util.List;
 import java.util.SortedMap;
@@ -20,6 +22,7 @@ public class LossParticipation implements ILossParticipation {
     private AggregateValues cumulatedGrossPreviousPeriod;
     private AggregateValues cumulatedCeded;
     private AggregateValues cumulatedCededPreviousPeriod;
+    private ILimitStrategy limit;
 
     public LossParticipation(SortedMap<Double, Double> table) {
         this.table = table;
@@ -30,11 +33,12 @@ public class LossParticipation implements ILossParticipation {
         return table.isEmpty();
     }
 
-    public void initPeriod(List<ClaimCashflowPacket> claims, List<UnderwritingInfoPacket> underwritingInfos) {
+    public void initPeriod(List<ClaimCashflowPacket> claims, List<UnderwritingInfoPacket> underwritingInfos, ILimitStrategy limit) {
         cumulatedGrossPreviousPeriod = new AggregateValues(cumulatedGross);
         cumulatedGross.update(claims, underwritingInfos);
         cumulatedCededPreviousPeriod = new AggregateValues();
         cumulatedCeded = null;
+        this.limit = limit;
     }
 
     private class AggregateValues {
@@ -107,16 +111,16 @@ public class LossParticipation implements ILossParticipation {
             double cumulatedCededReported = 0;
             double cumulatedCededPaid = 0;
             if (cumulatedGross.premiumWritten != 0) {
-                double adjustedLossRatio = lossRatioAdjustedByLossParticipation(cumulatedGross.ultimate / cumulatedGross.premiumWritten);
+                double adjustedLossRatio = lossRatioAdjustedByLossParticipation(limit.appliedLimit(cumulatedGross.ultimate) / cumulatedGross.premiumWritten);
                 cumulatedCededUltimate = cumulatedGross.premiumWritten * quotaShare * adjustedLossRatio;
-                adjustedLossRatio = lossRatioAdjustedByLossParticipation(cumulatedGross.reported / cumulatedGross.premiumWritten);
+                adjustedLossRatio = lossRatioAdjustedByLossParticipation(limit.appliedLimit(cumulatedGross.reported) / cumulatedGross.premiumWritten);
                 cumulatedCededReported = cumulatedGross.premiumWritten * quotaShare * adjustedLossRatio;
             }
             else {
 //                todo log ...
             }
             if (cumulatedGross.premiumPaid != 0) {
-                double adjustedLossRatio = lossRatioAdjustedByLossParticipation(cumulatedGross.paid / cumulatedGross.premiumPaid);
+                double adjustedLossRatio = lossRatioAdjustedByLossParticipation(limit.appliedLimit(cumulatedGross.paid) / cumulatedGross.premiumPaid);
                 cumulatedCededPaid = cumulatedGross.premiumPaid * quotaShare * adjustedLossRatio;
             }
             else {

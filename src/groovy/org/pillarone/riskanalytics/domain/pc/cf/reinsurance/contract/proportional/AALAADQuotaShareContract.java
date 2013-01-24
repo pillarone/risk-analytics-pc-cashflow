@@ -26,6 +26,7 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
     private ThresholdStore periodLimit;
     private ThresholdStore periodDeductible;
     private AADReduction aadReduction;
+    private ILimitStrategy limit;
 
     public AALAADQuotaShareContract(double quotaShare, ICommission commission, ILimitStrategy limit) {
         this(quotaShare, commission, limit, new NoLossParticipation());
@@ -33,6 +34,7 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
 
     public AALAADQuotaShareContract(double quotaShare, ICommission commission, ILimitStrategy limit, ILossParticipation lossParticipation) {
         super(quotaShare, commission, lossParticipation);
+        this.limit = limit;
         periodLimit = new ThresholdStore(limit.getAAL());
         periodDeductible = new ThresholdStore(limit.getAAD());
         aadReduction = new AADReduction();
@@ -40,8 +42,7 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
 
     @Override
     public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaim, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
-        lossParticipation.initPeriod(grossClaim, grossUnderwritingInfo);
-        super.initBasedOnAggregateCalculations(grossClaim, grossUnderwritingInfo);
+        lossParticipation.initPeriod(grossClaim, grossUnderwritingInfo, limit);
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {

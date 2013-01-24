@@ -69,15 +69,25 @@ abstract public class AbstractCommission implements ICommission {
             totalCededPremium += useClaims.premium(underwritingInfo);
         }
         for (CededUnderwritingInfoPacket underwritingInfo : underwritingInfos) {
-            double premiumRatio = useClaims.premium(underwritingInfo) / totalCededPremium;
-            double commissionShare = premiumRatio * commission;
-            double fixedCommissionShare = premiumRatio * fixedCommission;
-            double variableCommissionShare = premiumRatio * variableCommission;
-            if (isAdditive) {
-                underwritingInfo.add(commissionShare, fixedCommissionShare, variableCommissionShare);
+            if (totalCededPremium == 0) {
+                if (isAdditive) {
+                    underwritingInfo.add(commission, fixedCommission, variableCommission);
+                }
+                else {
+                    underwritingInfo.apply(commission, fixedCommission, variableCommission);
+                }
             }
             else {
-                underwritingInfo.apply(commissionShare, fixedCommissionShare, variableCommissionShare);
+                double premiumRatio = useClaims.premium(underwritingInfo) / totalCededPremium;
+                double commissionShare = premiumRatio * commission;
+                double fixedCommissionShare = premiumRatio * fixedCommission;
+                double variableCommissionShare = premiumRatio * variableCommission;
+                if (isAdditive) {
+                    underwritingInfo.add(commissionShare, fixedCommissionShare, variableCommissionShare);
+                }
+                else {
+                    underwritingInfo.apply(commissionShare, fixedCommissionShare, variableCommissionShare);
+                }
             }
         }
     }

@@ -62,9 +62,15 @@ public class ProfitCommission extends AbstractCommission {
             }
             if (dateOfCurrentPeriod != null) {
                 double reinsuranceResultAfterLCF = reinsuranceResult + lossCarriedForward.getValue(dateOfCurrentPeriod);
-                if (reinsuranceResultAfterLCF != reinsuranceResult && reinsuranceResult > 0) {
+                if (reinsuranceResult > 0 && reinsuranceResultAfterLCF < 0) {
+                    lossCarriedForward.plus(reinsuranceResult);
+                }
+                else if (reinsuranceResultAfterLCF != reinsuranceResult && reinsuranceResult != 0) {
                     Double usedLossCarriedForward = reinsuranceResult - reinsuranceResultAfterLCF;
                     lossCarriedForward.plus(usedLossCarriedForward);
+                }
+                else if (reinsuranceResultAfterLCF == reinsuranceResult && reinsuranceResult < 0) {
+                    lossCarriedForward.plus(reinsuranceResult);
                 }
                 reinsuranceResult = reinsuranceResultAfterLCF;
             }
