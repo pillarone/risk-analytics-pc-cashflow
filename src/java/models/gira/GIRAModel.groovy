@@ -22,6 +22,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntities
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ReinsuranceContracts
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.RetrospectiveCoverAttributeStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerators
@@ -150,7 +151,7 @@ class GIRAModel extends StochasticModel {
 
     @Override
     List<IParameterObjectClassifier> configureClassifier(String path, List<IParameterObjectClassifier> classifiers) {
-        if (path.matches("reinsuranceContracts:(.*):parmCover") || path.matches("retrospectiveReinsurance:(.*):parmCover")) {
+        if (path.matches("reinsuranceContracts:(.*):parmCover")) {
             return [
                     CoverAttributeStrategyType.NONE,
                     CoverAttributeStrategyType.ORIGINALCLAIMS,
