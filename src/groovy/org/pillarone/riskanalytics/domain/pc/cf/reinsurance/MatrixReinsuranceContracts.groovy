@@ -56,10 +56,10 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
     @Override
     void wire() {
         if (noneTrivialContracts()) {
-            replicateInChannels this, 'inFactors'
-            replicateInChannels this, 'inLegalEntityDefault'
-            replicateOutChannels this, 'outClaimsInward'
-            replicateOutChannels this, 'outUnderwritingInfoInward'
+            replicateInChannels this, inFactors
+            replicateInChannels this, inLegalEntityDefault
+            replicateOutChannels this, outClaimsInward
+            replicateOutChannels this, outUnderwritingInfoInward
             wireContractsBasedOnGross()
             wireContractsBaseOnNetContracts()
             wireContractsBaseOnCededContracts()

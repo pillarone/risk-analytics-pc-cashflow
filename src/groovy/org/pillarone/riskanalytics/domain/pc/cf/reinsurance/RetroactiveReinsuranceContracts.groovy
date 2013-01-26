@@ -74,7 +74,7 @@ class RetroactiveReinsuranceContracts extends DynamicComposedComponent {
     private boolean noneTrivialContracts() {
         List<RetrospectiveReinsuranceContract> contractsWithNoCover = new ArrayList<RetrospectiveReinsuranceContract>()
         for (RetrospectiveReinsuranceContract contract: componentList) {
-            if (contract.parmCover.getType().equals(RetrospectiveCoverAttributeStrategyType.NONE)) {
+            if (contract.parmCover.getType().equals(CoverAttributeStrategyType.NONE)) {
                 contractsWithNoCover.add(contract)
             }
         }

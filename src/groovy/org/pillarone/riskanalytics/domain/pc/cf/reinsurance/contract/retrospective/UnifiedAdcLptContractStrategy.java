@@ -4,6 +4,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimPacketAggregator;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
@@ -62,14 +63,20 @@ public class UnifiedAdcLptContractStrategy extends AbstractParameterObject imple
         double scaledAttachmentPoint = attachmentPoint;
         double scaledLimit = limit;
         ClaimCashflowPacket aggregateClaim = new ClaimPacketAggregator().aggregate(claims);
-        double paidCumulative = -aggregateClaim.getPaidCumulatedIndexed();
-        double totalOutstanding = -aggregateClaim.outstandingIndexed();
+        double paidCumulative = (aggregateClaim != null) ? -aggregateClaim.getPaidCumulatedIndexed() : 0;
         switch (contractBase) {
             case ABSOLUTE:
                 break;
             case OUTSTANDING_PERCENTAGE:
-                scaledAttachmentPoint *= totalOutstanding;
-                scaledLimit *= totalOutstanding;
+                if (aggregateClaim != null) {
+                    double totalOutstanding = -aggregateClaim.outstandingIndexed();
+                    scaledAttachmentPoint *= totalOutstanding;
+                    scaledLimit *= totalOutstanding;
+                }
+                else {
+                    throw new SimulationException("Contract base set to outstanding percentage does not work as there " +
+                            "are no claims provided for scaling.");
+                }
                 break;
             default:
                 throw new NotImplementedException("UnifiedADCLPTBase " + contractBase.toString() + " not implemented.");
