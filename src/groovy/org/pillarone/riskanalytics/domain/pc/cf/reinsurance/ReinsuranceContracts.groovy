@@ -76,10 +76,10 @@ class ReinsuranceContracts extends DynamicComposedComponent {
     void wire() {
         if (noneTrivialContracts()) {
             init()
-            replicateInChannels this, 'inFactors'
-            replicateInChannels this, 'inLegalEntityDefault'
-            replicateOutChannels this, 'outClaimsInward'
-            replicateOutChannels this, 'outUnderwritingInfoInward'
+            replicateInChannels this, inFactors
+            replicateInChannels this, inLegalEntityDefault
+            replicateOutChannels this, outClaimsInward
+            replicateOutChannels this, outUnderwritingInfoInward
             wireContractsBasedOnGross()
             wireContractsBaseOnContracts()
             wireContractsIncludingInwardBusiness()

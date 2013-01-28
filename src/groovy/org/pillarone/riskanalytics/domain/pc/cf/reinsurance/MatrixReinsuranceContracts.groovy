@@ -85,7 +85,7 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
         // todo: wire uw info
         for (ReinsuranceContract contract : componentList) {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
-            if (strategy.mergerRequired()) {
+            if (strategy?.mergerRequired()) {
                 ClaimMerger claimMerger = new ClaimMerger(coverAttributeStrategy: strategy)
                 claimMergers << claimMerger
                 List<IReinsuranceContractMarker> benefitContracts = strategy.benefitContracts
@@ -125,7 +125,7 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
     private void wireContractsBaseOnNetContracts() {
         for (ReinsuranceContract contract : componentList) {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
-            if (!strategy?.mergerRequired()) {
+            if (strategy && !strategy?.mergerRequired()) {
                 for (IReinsuranceContractMarker coveredContract : strategy.coveredNetOfContracts()) {
                     doWire WC, contract, 'inClaims', coveredContract, 'outClaimsNet'
                     doWire WC, contract, 'inUnderwritingInfo', coveredContract, 'outUnderwritingInfoGNPI'
@@ -137,7 +137,7 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
     private void wireContractsBaseOnCededContracts() {
         for (ReinsuranceContract contract : componentList) {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
-            if (!strategy?.mergerRequired()) {
+            if (strategy && !strategy?.mergerRequired()) {
                 for (IReinsuranceContractMarker coveredContract : strategy.coveredCededOfContracts()) {
                     doWire WC, contract, 'inClaims', coveredContract, 'outClaimsCeded'
                     doWire WC, contract, 'inUnderwritingInfo', coveredContract, 'outUnderwritingInfoCeded'
