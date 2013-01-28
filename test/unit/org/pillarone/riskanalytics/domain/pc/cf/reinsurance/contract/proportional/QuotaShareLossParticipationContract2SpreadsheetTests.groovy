@@ -89,11 +89,10 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
             TestTriangle grossPremium = new TestTriangle(importer, SLIDING_IN__TRIANGLE, 'gross premium', 2012, 4, 'C16')
             IPeriodCounter periodCounter = iterationScope.periodScope.periodCounter
             SetMultimap<Integer, UnderwritingInfoPacket> grossUwInfoByPeriod = initGrossPremium(grossPremium, periodCounter)
-            TestTriangle totalCommission = new TestTriangle(importer, SLIDING_IN__TRIANGLE, 'total commission', 2012, 4, 'C209', true)
-            TestTriangle fixCommission = new TestTriangle(importer, SLIDING_IN__TRIANGLE, 'fix commission', 2012, 4, 'C215', true)
+            TestTriangle totalCommission = new TestTriangle(importer, SLIDING_IN__TRIANGLE, 'total commission', 2012, 4, 'C209', 1, true)
+            TestTriangle fixCommission = new TestTriangle(importer, SLIDING_IN__TRIANGLE, 'fix commission', 2012, 4, 'C215', 1, true)
             for (int period = 2012; period <= grossClaims.maxYear(); period++) {
                 for (int i = 2012; i <= period; i++) {
-
                     contract.inClaims.addAll claimsByPeriod.get(i).getClaimCashflowPackets(periodCounter)
                 }
                 contract.inUnderwritingInfo.addAll grossUwInfoByPeriod.get(period)

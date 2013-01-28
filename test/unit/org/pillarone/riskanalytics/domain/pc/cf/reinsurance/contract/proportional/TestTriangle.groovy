@@ -22,12 +22,12 @@ class TestTriangle {
     private Map<DateTime, List<Double>> valuesByUnderwritingYear = [:]
     private Map<DateTime, List<Period>> periodsByUnderwritingYear = [:]
 
-    TestTriangle(SpreadsheetImporter importer, String sheet, String name, int firstYear, int numberOfYears, String topLeftCell, boolean buildIncrements = false) {
-        this(importer, sheet, name, firstYear, numberOfYears, numberOfYears, topLeftCell, buildIncrements)
+    TestTriangle(SpreadsheetImporter importer, String sheet, String name, int firstYear, int numberOfYears, String topLeftCell, int sign = 1, boolean buildIncrements = false) {
+        this(importer, sheet, name, firstYear, numberOfYears, numberOfYears, topLeftCell, sign, buildIncrements)
     }
 
     TestTriangle(SpreadsheetImporter importer, String sheet, String name, int firstYear, int numberOfUnderwritingYears,
-                 int numberOfDevelopmentYears, String topLeftCell, boolean buildIncrements = false) {
+                 int numberOfDevelopmentYears, String topLeftCell, int sign = 1, boolean buildIncrements = false) {
         this.name = name
         Character column = topLeftCell[0]
         int row = Integer.parseInt(topLeftCell.substring(1))
@@ -36,7 +36,7 @@ class TestTriangle {
             developmentPeriodStartDates << updateDate
         }
         for (int i = 0; i < numberOfUnderwritingYears; i++) {
-            List<Double> rowValues = getRowValues(importer, sheet, column, row + i, numberOfDevelopmentYears - i)
+            List<Double> rowValues = getRowValues(importer, sheet, column, row + i, numberOfDevelopmentYears - i, sign)
             DateTime occurrenceDate = new DateTime(firstYear + i, 1, 1, 0, 0, 0, 0)
             valuesByUnderwritingYear[occurrenceDate] = rowValues
             underwritingPeriodStartDates << occurrenceDate
@@ -112,7 +112,7 @@ class TestTriangle {
      * @param numberOfRows
      * @return all values of $column$startRow:$column$(startRow+numberOfRows), missing values are mapped to zero
      */
-    List<Double> getRowValues(SpreadsheetImporter importer, String sheet, Character startColumn, int row, int numberOfColumns) {
+    List<Double> getRowValues(SpreadsheetImporter importer, String sheet, Character startColumn, int row, int numberOfColumns, int sign = 1) {
         Map cellMap = [:]
         Character col = startColumn
         for (int column = 0; column < numberOfColumns; column++) {
@@ -123,7 +123,7 @@ class TestTriangle {
         Map params = importer.cells([sheet: sheet, cellMap: cellMap])
         List result = new ArrayList<Double>()
         for (String cell : cellMap.keySet()) {
-            result << (params[cell] ? params[cell] : 0d)
+            result << (params[cell] ? sign * params[cell] : 0d)
         }
         return result
     }

@@ -7,11 +7,8 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacketTests
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
@@ -39,20 +36,20 @@ class RetroactiveReinsuranceContractTests extends SpreadsheetUnitTest {
     }
 
     void testReadData() {
-        setCheckedForValidationErrors(true)
+        // enable the following line while writing/debugging the test case but comment it out before committing!
+//        setCheckedForValidationErrors(true)
         for (SpreadsheetImporter spreadsheet : importers) {
             doTest(spreadsheet)
-
+            manageValidationErrors(spreadsheet)
         }
     }
 
     void doTest(SpreadsheetImporter spreadsheet) {
-
         Map contractValues = spreadsheet.cells([sheet: 'Retroactive', cellMap: [F3: 'cededShare', F6: 'absolute',
                 F8: 'attachmentPoint', F9: 'limit', F12: 'coveredFrom', F13: 'coveredTo', F14: 'coveredDevelopmentPeriod']])
         contractValues.contractBase = contractValues.absolute.asBoolean() ? UnifiedADCLPTBase.ABSOLUTE : UnifiedADCLPTBase.OUTSTANDING_PERCENTAGE
 
-        def midnight = new LocalTime(0)
+        def midnight = new LocalTime(0,0,0)
         DateTime coveredFrom = contractValues.coveredFrom.toDateTime(midnight)
         DateTime coveredTo = contractValues.coveredTo.toDateTime(midnight)
         DateTime coveredDevelopmentPeriod = contractValues.coveredDevelopmentPeriod.toDateTime(midnight)
@@ -65,25 +62,29 @@ class RetroactiveReinsuranceContractTests extends SpreadsheetUnitTest {
                         coveredDevelopmentPeriodStartDate: coveredDevelopmentPeriod
                 ])
         )
-        IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(coveredDevelopmentPeriod, 10)
+        Map dates = spreadsheet.cells([sheet: RETROACTIVE, cellMap: [E17: 'firstDevelopment', R17: 'lastDevelopment', D18: 'firstOccurrence', D27: 'lastOccurrence']])
+        int startYear = dates.firstOccurrence.year
+        IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(new DateTime(startYear,1,1,0,0,0,0), 10)
 
         contract.iterationScope = iterationScope
         contract.periodStore = iterationScope.periodStores[0]
         IPeriodCounter periodCounter = iterationScope.periodScope.periodCounter
+        int numberOfUnderwritingYears = new Period(dates.firstOccurrence, dates.lastOccurrence).years + 1
+        int numberOfDevelopmentYears = new Period(dates.firstDevelopment, dates.lastDevelopment).years + 1
 
-        Map dates = spreadsheet.cells([sheet: RETROACTIVE, cellMap: [E17: 'firstDevelopment', R17: 'lastDevelopment', D18: 'firstOccurrence', D27: 'lastOccurrence']])
-        int startYear = dates.firstOccurrence.year
-        int numberOfUnderwritingYears = new Period(dates.firstOccurrence, dates.lastOccurrence).years
-        int numberOfDevelopmentYears = new Period(dates.firstDevelopment, dates.lastDevelopment).years
-
-        TestTriangle grossClaimsUltimates = new TestTriangle(spreadsheet, RETROACTIVE, 'gross ultimates', startYear, numberOfUnderwritingYears, numberOfDevelopmentYears, 'E46')
-        TestTriangle grossClaimsReported = new TestTriangle(spreadsheet, RETROACTIVE, 'gross reported', startYear, numberOfUnderwritingYears, numberOfDevelopmentYears, 'E31')
-        TestTriangle grossClaimsPaid = new TestTriangle(spreadsheet, RETROACTIVE, 'gross paid', startYear, numberOfUnderwritingYears, numberOfDevelopmentYears, 'E18')
+        TestTriangle grossClaimsUltimates = new TestTriangle(spreadsheet, RETROACTIVE, 'gross ultimates', startYear, numberOfUnderwritingYears, numberOfDevelopmentYears, 'E46', -1)
+        TestTriangle grossClaimsReported = new TestTriangle(spreadsheet, RETROACTIVE, 'gross reported', startYear, numberOfUnderwritingYears, numberOfDevelopmentYears, 'E31', -1)
+        TestTriangle grossClaimsPaid = new TestTriangle(spreadsheet, RETROACTIVE, 'gross paid', startYear, numberOfUnderwritingYears, numberOfDevelopmentYears, 'E18', -1)
         Map<Integer, GrossClaimRoot> claimsByPeriod = getClaimsByUnderwritingPeriod(grossClaimsUltimates, grossClaimsReported, grossClaimsPaid)
 
-        for (int period = startYear; period <= numberOfDevelopmentYears; period++) {
-            contract.inClaims.addAll claimsByPeriod.get(period).getClaimCashflowPackets(periodCounter)
+        for (int developmentPeriod = 0; developmentPeriod < numberOfDevelopmentYears; developmentPeriod++) {
+            int minPeriod = Math.min(startYear + developmentPeriod, startYear + numberOfUnderwritingYears - 1);
+            for (int underwritingPeriod = startYear; underwritingPeriod <= minPeriod; underwritingPeriod++) {
+                contract.inClaims.addAll claimsByPeriod.get(underwritingPeriod).getClaimCashflowPackets(periodCounter)
+            }
+            println "year:${developmentPeriod + startYear} before calc ${contract.inClaims.size()}"
             contract.doCalculation()
+            println "year:${developmentPeriod + startYear} after calc ${contract.inClaims.size()}"
 
             contract.reset()
             iterationScope.periodScope.prepareNextPeriod()
