@@ -98,10 +98,10 @@ public class LossParticipation implements ILossParticipation {
 
     public ClaimCashflowPacket cededClaim(double quotaShare, ClaimCashflowPacket grossClaim, ClaimStorage storage, boolean adjustExposureInfo) {
         lazyInitCumulatedCeded(quotaShare);
-        double cededUltimate = cumulatedGross.ultimate == 0 ? 0 : grossClaim.developedUltimate() / cumulatedGross.ultimate * cumulatedCeded.ultimate;
+//        double cededUltimate = cumulatedGross.ultimate == 0 ? 0 : grossClaim.developedUltimate() / cumulatedGross.ultimate * cumulatedCeded.ultimate;
         double cededReported = cumulatedGross.reported == 0 ? 0 : grossClaim.getReportedCumulatedIndexed() / cumulatedGross.reported * cumulatedCeded.reported;
         double cededPaid = cumulatedGross.paid == 0 ? 0 : grossClaim.getPaidCumulatedIndexed() / cumulatedGross.paid * cumulatedCeded.paid;
-        ClaimCashflowPacket packet = ClaimUtils.cededClaim(grossClaim, storage, cededUltimate, cededReported, cededPaid, adjustExposureInfo);
+        ClaimCashflowPacket packet = ClaimUtils.cededClaim(grossClaim, storage, 0, cededReported, cededPaid, adjustExposureInfo);
         return packet;
     }
 
