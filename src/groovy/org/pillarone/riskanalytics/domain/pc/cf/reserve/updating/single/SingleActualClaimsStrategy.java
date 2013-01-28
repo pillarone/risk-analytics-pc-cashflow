@@ -54,6 +54,10 @@ public class SingleActualClaimsStrategy extends AbstractParameterObject implemen
      */
     public void lazyInitHistoricClaimsPerContractPeriod(IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase) {
         // key: contractPeriod
+        if(reserveVolatility != ReserveVolatility.NONE) {
+            throw new SimulationException("Reserve volatility is currently not implemented. PLease contract " +
+                    "development if you wish to enable this feature.");
+        }
         if (historicClaimsPerContractPeriod == null) {
             lastReportedDate = periodCounter.startOfFirstPeriod();
             historicClaimsPerContractPeriod = new HashMap<Integer, List<SingleHistoricClaim>>();
