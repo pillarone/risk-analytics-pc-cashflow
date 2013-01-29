@@ -12,7 +12,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorag
 import java.util.List;
 
 /**
- *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class UnifiedAdcLptContract extends AbstractReinsuranceContract implements INonPropReinsuranceContract {
@@ -21,7 +20,9 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
     private double attachmentPoint;
     private double limit;
 
-    /** used to trigger return of a single ceded claim packet */
+    /**
+     * used to trigger return of a single ceded claim packet
+     */
     private IClaimRoot firstClaimKey;
 
     private ClaimCashflowPacket aggregateIncrementalCededReserveClaim;
@@ -33,6 +34,7 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
 
     /**
      * All provided values have to be absolute! Scaling is done within the parameter strategy.
+     *
      * @param cededShare
      * @param attachmentPoint
      * @param limit
@@ -64,13 +66,13 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
                         cumulativePaid, cumulativePaid, cumulativeReported, cumulativeReported,
                         reserves, changeInReserves, changeInIBNR, null, occurrenceDate, updatePeriod);
                 aggregateIncrementalCededReserveClaim = ClaimUtils.scale(aggregateCumulativeCededReserveClaim, 1);
-            }
-            else {
+            } else {
                 aggregateIncrementalCededReserveClaim = new ClaimCashflowPacket(
                         aggregateCumulativeCededReserveClaim.getKeyClaim(), aggregateCumulativeCededReserveClaim.getKeyClaim(),
-                        cumulativeUltimate, aggregateCumulativeCededReserveClaim.nominalUltimate(), cumulativePaid, cumulativePaid - previousCumulativePaid,
-                        cumulativeReported - previousCumulativeReported, cumulativeReported, reserves,
-                        aggregateCumulativeCededReserveClaim.reservedIndexed() - reserves,
+                        cumulativeUltimate, aggregateCumulativeCededReserveClaim.nominalUltimate(),
+                        cumulativePaid - previousCumulativePaid, cumulativePaid,
+                        cumulativeReported - previousCumulativeReported, cumulativeReported,
+                        reserves, aggregateCumulativeCededReserveClaim.reservedIndexed() - reserves,
                         ibnr - previousIBNR, null,
                         aggregateCumulativeCededReserveClaim.getOccurrenceDate(), aggregateCumulativeCededReserveClaim.getUpdatePeriod()
                 );
@@ -98,10 +100,11 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
 
     /**
      * Not implemented as not required PMO-2235
+     *
      * @param cededUnderwritingInfos
      * @param netUnderwritingInfos
      * @param coveredByReinsurers
-     * @param fillNet if true the second list is filled too
+     * @param fillNet                if true the second list is filled too
      */
     public void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
                                           List<UnderwritingInfoPacket> netUnderwritingInfos,

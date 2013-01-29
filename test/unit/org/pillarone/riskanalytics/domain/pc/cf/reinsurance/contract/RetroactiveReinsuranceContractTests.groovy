@@ -23,6 +23,8 @@ import org.pillarone.riskanalytics.domain.test.SpreadsheetUnitTest
 
 class RetroactiveReinsuranceContractTests extends SpreadsheetUnitTest {
     private static final String RETROACTIVE = 'Retroactive'
+    private static final RESULT_OFFSET = 4
+    private static final double EPSILON = 10e-8d
 
     @Override
     List<String> getSpreadsheetNames() {
@@ -49,11 +51,11 @@ class RetroactiveReinsuranceContractTests extends SpreadsheetUnitTest {
                 F8: 'attachmentPoint', F9: 'limit', F12: 'coveredFrom', F13: 'coveredTo', F14: 'coveredDevelopmentPeriod']])
         contractValues.contractBase = contractValues.absolute.asBoolean() ? UnifiedADCLPTBase.ABSOLUTE : UnifiedADCLPTBase.OUTSTANDING_PERCENTAGE
 
-        def midnight = new LocalTime(0,0,0)
+        def midnight = new LocalTime(0, 0, 0)
         DateTime coveredFrom = contractValues.coveredFrom.toDateTime(midnight)
         DateTime coveredTo = contractValues.coveredTo.toDateTime(midnight)
         DateTime coveredDevelopmentPeriod = contractValues.coveredDevelopmentPeriod.toDateTime(midnight)
-        ReinsuranceContract contract = new ReinsuranceContract(
+        RetroactiveReinsuranceContract contract = new RetroactiveReinsuranceContract(
                 parmContractStrategy: ReinsuranceContractType.getStrategy(ReinsuranceContractType.UNIFIEDADCLPT, contractValues),
                 parmCover: CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS, [filter: FilterStrategyType.getDefault()]),
                 parmCoveredPeriod: PeriodStrategyType.getStrategy(PeriodStrategyType.RETROACTIVE, [
@@ -64,7 +66,7 @@ class RetroactiveReinsuranceContractTests extends SpreadsheetUnitTest {
         )
         Map dates = spreadsheet.cells([sheet: RETROACTIVE, cellMap: [E17: 'firstDevelopment', R17: 'lastDevelopment', D18: 'firstOccurrence', D27: 'lastOccurrence']])
         int startYear = dates.firstOccurrence.year
-        IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(new DateTime(startYear,1,1,0,0,0,0), 10)
+        IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(new DateTime(startYear, 1, 1, 0, 0, 0, 0), 10)
 
         contract.iterationScope = iterationScope
         contract.periodStore = iterationScope.periodStores[0]
@@ -82,55 +84,57 @@ class RetroactiveReinsuranceContractTests extends SpreadsheetUnitTest {
             for (int underwritingPeriod = startYear; underwritingPeriod <= minPeriod; underwritingPeriod++) {
                 contract.inClaims.addAll claimsByPeriod.get(underwritingPeriod).getClaimCashflowPackets(periodCounter)
             }
-            println "year:${developmentPeriod + startYear} before calc ${contract.inClaims.size()}"
             contract.doCalculation()
-            println "year:${developmentPeriod + startYear} after calc ${contract.inClaims.size()}"
 
+            def column = getColumn(developmentPeriod + RESULT_OFFSET)
+            if (minPeriod >= coveredDevelopmentPeriod.year) {
+                // development period 2017 does not return values as the cover starts in 2018
+                assertExpectedValue(contract.outClaimsCeded*.getPaidCumulatedIndexed(), spreadsheet, column, 84, 'Paid Cumulated')
+                assertExpectedValue(contract.outClaimsCeded*.getReportedCumulatedIndexed(), spreadsheet, column, 85, 'Reported Cumulated')
+                assertExpectedValue(contract.outClaimsCeded*.ultimate(), spreadsheet, column, 86, 'Total Culumated')
+            }
             contract.reset()
             iterationScope.periodScope.prepareNextPeriod()
         }
-
-        def expectedValues = [:]
-        ('E'..'R').eachWithIndex { col, colIdx ->
-            (18..27).eachWithIndex { row, rowIdx ->
-                expectedValues.put("$col$row", "cell_row${rowIdx}_col${colIdx}")
-            }
-        }
-        def resultValues = spreadsheet.cells([sheet: 'Retroactive', cellMap: expectedValues])
-
-        def expectedPaidCumulative = getValues(spreadsheet, 'E'..'R', 60, 'paidCumulative')
-        def expectedReported = getValues(spreadsheet, 'E'..'R', 61, 'reported')
-        def expectedTotalCumulative = getValues(spreadsheet, 'E'..'R', 62, 'totalCumulative')
-        def expectedOutstanding = getValues(spreadsheet, 'E'..'R', 63, 'outstanding')
-
-        def valuesAtStartOfCover = spreadsheet.cells([sheet: 'Retroactive', cellMap: ['E66': 'paidCumulativeAtStartOfCover', 'E67': 'reportedAtStartOfCover', 'E68': 'totalCumulativeAtStartOfCover', 'E69': 'outstandingr']])
-        println valuesAtStartOfCover
-
     }
 
-    /**
-     *
-     * @param ultimateTriangle
-     * @param reportedTriangle
-     * @param paidTriangle
-     * @return key: year
-     */
+    String getColumn(int columnAsNumber) {
+        ('A'..'Z')[columnAsNumber]
+    }
+
+    private assertExpectedValue(def calculatedValues, SpreadsheetImporter importer, String column, int row, String description) {
+        def spreadsheetValue = importer.cells([sheet: 'Retroactive', cellMap: ["$column$row": 'cumulatedValue']])
+        if (!spreadsheetValue) {
+            assert (calculatedValues.sum() == null ? 0d : calculatedValues.sum()) == 0d
+        } else {
+            assertEquals("$description: ($column$row) does not contain calculated value. ${spreadsheetValue.cumulatedValue} != ${calculatedValues.sum()} ",
+                    spreadsheetValue.cumulatedValue, calculatedValues.sum(), EPSILON)
+        }
+    }
+
+/**
+ *
+ * @param ultimateTriangle
+ * @param reportedTriangle
+ * @param paidTriangle
+ * @return key: year
+ */
     private static Map<Integer, GrossClaimRoot> getClaimsByUnderwritingPeriod(TestTriangle ultimateTriangle, TestTriangle reportedTriangle, TestTriangle paidTriangle) {
         Map<Integer, GrossClaimRoot> claimsByOccurrenceYear = [:]
         for (DateTime startOfUnderwritingPeriod : reportedTriangle.underwritingPeriodStartDates) {
-            List<Period> cummulativePeriods = reportedTriangle.cummulativePeriods(startOfUnderwritingPeriod)
-            List<Double> cummulativeReportedValues = reportedTriangle.valuesBy(startOfUnderwritingPeriod)
-            List<Double> cummulativePaidValues = paidTriangle.valuesBy(startOfUnderwritingPeriod)
-            List<Double> cummulativeReportedRatios = []
-            List<Double> cummulativePaidRatios = []
-            for (Double value : cummulativeReportedValues) {
-                cummulativeReportedRatios << value / ultimateTriangle.latestValue(startOfUnderwritingPeriod)
+            List<Period> cumulativePeriods = reportedTriangle.cummulativePeriods(startOfUnderwritingPeriod)
+            List<Double> cumulativeReportedValues = reportedTriangle.valuesBy(startOfUnderwritingPeriod)
+            List<Double> cumulativePaidValues = paidTriangle.valuesBy(startOfUnderwritingPeriod)
+            List<Double> cumulativeReportedRatios = []
+            List<Double> cumulativePaidRatios = []
+            for (Double value : cumulativeReportedValues) {
+                cumulativeReportedRatios << value / ultimateTriangle.latestValue(startOfUnderwritingPeriod)
             }
-            for (Double value : cummulativePaidValues) {
-                cummulativePaidRatios  << value / ultimateTriangle.latestValue(startOfUnderwritingPeriod)
+            for (Double value : cumulativePaidValues) {
+                cumulativePaidRatios << value / ultimateTriangle.latestValue(startOfUnderwritingPeriod)
             }
-            PatternPacket reportingPattern = new PatternPacket(IPayoutPatternMarker, cummulativeReportedRatios, cummulativePeriods)
-            PatternPacket payoutPattern = new PatternPacket(IPayoutPatternMarker, cummulativePaidRatios, cummulativePeriods)
+            PatternPacket reportingPattern = new PatternPacket(IPayoutPatternMarker, cumulativeReportedRatios, cumulativePeriods)
+            PatternPacket payoutPattern = new PatternPacket(IPayoutPatternMarker, cumulativePaidRatios, cumulativePeriods)
             claimsByOccurrenceYear[startOfUnderwritingPeriod.year] = new GrossClaimRoot(
                     new ClaimRoot(ultimateTriangle.latestValue(startOfUnderwritingPeriod), ClaimType.ATTRITIONAL,
                             startOfUnderwritingPeriod, startOfUnderwritingPeriod), payoutPattern, reportingPattern)
