@@ -21,8 +21,10 @@ public class MatrixCoverAttributeRow {
     ISegmentMarker segment;
     IPerilMarker peril;
     ClaimTypeSelector claimTypeSelector;
+    boolean isStructure;
 
     public MatrixCoverAttributeRow(int rowIndex, boolean isStructure, ConstrainedMultiDimensionalParameter flexibleCover) {
+        this.isStructure = isStructure;
         if (!isStructure) {
             netContract = (IReinsuranceContractMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.CONTRACT_NET_OF_COLUMN_INDEX);
             cededContract = (IReinsuranceContractMarker) flexibleCover.getValueAtAsObject(rowIndex, CoverMap.CONTRACT_CEDED_OF_COLUMN_INDEX);
@@ -36,7 +38,7 @@ public class MatrixCoverAttributeRow {
     public List<ClaimCashflowPacket> filter(List<ClaimCashflowPacket> source) {
         List<ClaimCashflowPacket> result = new ArrayList<ClaimCashflowPacket>();
         for (ClaimCashflowPacket claim : source) {
-            if (netContract == null && cededContract == null && claim.reinsuranceContract() != null) {
+            if (!isStructure && netContract == null && cededContract == null && claim.reinsuranceContract() != null) {
                 // covers gross claims only.
             } else if ((netContract == null || netContract == claim.reinsuranceContract()) &&
                     (cededContract == null || cededContract == claim.reinsuranceContract()) &&
