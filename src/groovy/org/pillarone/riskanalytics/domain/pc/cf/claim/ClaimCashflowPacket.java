@@ -269,9 +269,14 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         initRiskBased();
     }
 
+    /**
+     * When building aggregate claims, this function is not sufficient. Instead the setter methods of premium and reserve
+     * risk should be used.
+     */
     private void initRiskBased() {
-        premiumRisk = ultimate() == 0d ? 0 : reportedIncrementalIndexed + changeInIBNRIndexed;
-        reserveRisk = ultimate() != 0d ? 0 : reportedIncrementalIndexed + changeInIBNRIndexed;
+        double riskBased = reportedIncrementalIndexed + changeInIBNRIndexed;
+        premiumRisk = (ultimate != 0) ? riskBased : 0;
+        reserveRisk = (ultimate == 0) ? riskBased : 0;
     }
 
     /**

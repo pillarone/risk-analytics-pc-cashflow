@@ -4,8 +4,6 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod;
 
 import java.util.List;
@@ -42,7 +40,8 @@ public class ProfitCommission extends AbstractCommission {
 
     public void calculateCommission(List<ClaimCashflowPacket> cededClaims,
                                     List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
-                                    boolean isAdditive) {
+                                    boolean isAdditive, Integer occurrencePeriod) {
+        if (cededClaims.size() == 0 && cededUnderwritingInfos.size() == 0) return;  // as there is no change in commission
         double summedClaimsCeded = sumCumulatedClaims(cededClaims);
         totalPremiumCeded += sumPremium(cededUnderwritingInfos);
         if (totalPremiumCeded == 0) return;
@@ -53,6 +52,8 @@ public class ProfitCommission extends AbstractCommission {
 
         double reinsuranceResult = -totalPremiumCeded * (1 + summedClaimsCeded / totalPremiumCeded - commissionRatio - costRatio);
         if (lossCarriedForwardEnabled) {
+            // if loss carried forward is enabled execution order of calculateCommission on period contracts needs to be the same
+            // in order to get reproducible results
             DateTime dateOfCurrentPeriod = null;
             if (cededClaims.size() > 0) {
                 dateOfCurrentPeriod = cededClaims.get(0).getUpdateDate();
@@ -81,8 +82,15 @@ public class ProfitCommission extends AbstractCommission {
         previousCumulatedProfitCommission = cumulatedProfitCommission;
 
         if (incrementalFixCommission != 0 || incrementalProfitCommission != 0) {
-            adjustCommissionProperties(cededUnderwritingInfos, isAdditive, incrementalFixCommission + incrementalProfitCommission,
+            if (cededUnderwritingInfos.isEmpty() || cededUnderwritingInfos.size() == 0) {
+                DateTime inceptionDate = cededClaims.get(0).getOccurrenceDate();
+                cededUnderwritingInfos.add(extraPacketForCommission(incrementalProfitCommission,
+                        incrementalFixCommission, inceptionDate, occurrencePeriod));
+            }
+            else {
+                adjustCommissionProperties(cededUnderwritingInfos, isAdditive, incrementalFixCommission + incrementalProfitCommission,
                     incrementalFixCommission, incrementalProfitCommission);
+            }
         }
     }
 }

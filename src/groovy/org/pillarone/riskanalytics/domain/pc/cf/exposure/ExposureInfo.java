@@ -31,6 +31,11 @@ public class ExposureInfo {
         }
     }
 
+    public ExposureInfo(DateTime inceptionDate, int inceptionPeriod) {
+        this.inceptionDate = inceptionDate;
+        this.inceptionPeriod = inceptionPeriod;
+    }
+
     public ExposureInfo(PeriodScope periodScope) {
         this(periodScope.getPeriodCounter().getCurrentPeriodStart(), periodScope.getPeriodCounter());
     }

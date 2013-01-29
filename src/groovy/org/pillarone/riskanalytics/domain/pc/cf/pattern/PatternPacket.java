@@ -413,6 +413,10 @@ public class PatternPacket extends Packet implements Cloneable {
         }
     }
 
+    public Class<? extends IPatternMarker> getPatternMarker() {
+        return patternMarker;
+    }
+
     private void checkIncreasingIncrements() {
         List<Double> increments = getIncrementalValues(false);
         for (Double increment : increments) {

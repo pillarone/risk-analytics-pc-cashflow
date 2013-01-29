@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate;
 
 import org.joda.time.DateTime;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTGeomRect;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
@@ -63,6 +64,9 @@ public class AggregateHistoricClaim {
                                                    DateTimeUtilities.Days360 days360, boolean sanityChecks) {
         DateTime startDateForPatterns = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
 
+        if(claimRoot.getUltimate() == 0) {
+            return new GrossClaimRoot(claimRoot, new PatternPacket.TrivialPattern(payoutPattern.getPatternMarker()), startDateForPatterns);
+        }
         PatternPacket patternPacket = null;
         try {
             patternPacket = PatternUtils.adjustedPattern(payoutPattern, claimPaidUpdates, claimRoot.getUltimate(), startDateForPatterns,

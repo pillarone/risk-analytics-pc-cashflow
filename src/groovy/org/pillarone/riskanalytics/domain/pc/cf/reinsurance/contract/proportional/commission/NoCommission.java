@@ -2,7 +2,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportion
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class NoCommission implements ICommission {
     public NoCommission() {
     }
 
-    public void calculateCommission(List<ClaimCashflowPacket> grossClaims,
-                                    List<CededUnderwritingInfoPacket> cededUnderwritingInfos, boolean isAdditive) {
+    public void calculateCommission(List<ClaimCashflowPacket> grossClaims, List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
+                                    boolean isAdditive, Integer occurrencePeriod) {
     }
 }
