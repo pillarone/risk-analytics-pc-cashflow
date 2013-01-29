@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
  * This collecting mode strategy calculates the premium and reserve risk
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
+ * @deprecated Use general {@link SplitAndFilterCollectionModeStrategy} class for collecting results.
  */
 public class AggregatePremiumReserveRiskTriangleCollectingModeStrategy extends AggregateSplitByInceptionDateCollectingModeStrategy {
 

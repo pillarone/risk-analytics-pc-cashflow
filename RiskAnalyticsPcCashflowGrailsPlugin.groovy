@@ -141,10 +141,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
 
         CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceReducedCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new AggregatePremiumReserveRiskCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new AggregateIncludingPremiumReserveRiskCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new AggregatePremiumReserveRiskTriangleCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new AggregateSplitByInceptionDateCollectingModeStrategy())
+
         CollectingModeFactory.registerStrategy(new AggregateUltimateClaimCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateUltimateReportedPaidClaimCollectingModeStrategy())
         CollectingModeFactory.registerStrategy(new AggregateUltimateReportedClaimCollectingModeStrategy())
