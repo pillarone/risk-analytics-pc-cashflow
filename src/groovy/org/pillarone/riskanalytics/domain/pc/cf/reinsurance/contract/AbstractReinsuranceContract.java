@@ -23,7 +23,12 @@ abstract public class AbstractReinsuranceContract implements IReinsuranceContrac
     protected List<UnderwritingInfoPacket> grossUwInfos = new ArrayList<UnderwritingInfoPacket>();
     protected List<CededUnderwritingInfoPacket> cededUwInfos = new ArrayList<CededUnderwritingInfoPacket>();
 
+    protected Integer occurrencePeriod;
+
     public void initPeriod(int period, List<FactorsPacket> inFactors) {
+        if (occurrencePeriod == null) {
+            occurrencePeriod = period;
+        }
     }
 
     public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaim, List<UnderwritingInfoPacket> grossUnderwritingInfo) {

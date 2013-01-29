@@ -19,7 +19,7 @@ class FixedCommissionStrategyTests extends GroovyTestCase {
                 premiumPaid: 100, commission: -5, commissionFixed: -5)
         List underwritingInfos = [underwritingInfo200, underwritingInfo100]
 
-        commissionStrategy.getCalculator(commissionStrategy.initialLossCarriedForward).calculateCommission(null, underwritingInfos, false)
+        commissionStrategy.getCalculator(commissionStrategy.initialLossCarriedForward).calculateCommission(null, underwritingInfos, false, 0)
 
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', -200 * 0.3, underwritingInfos[0].commission
@@ -45,7 +45,7 @@ class FixedCommissionStrategyTests extends GroovyTestCase {
                 commission: -5, commissionFixed: -5)
         List underwritingInfos = [underwritingInfo200, underwritingInfo100]
 
-        commissionStrategy.getCalculator(commissionStrategy.initialLossCarriedForward).calculateCommission null, underwritingInfos, true
+        commissionStrategy.getCalculator(commissionStrategy.initialLossCarriedForward).calculateCommission null, underwritingInfos, true, 0
 
         assertEquals '# outUnderwritingInfo packets', 2, underwritingInfos.size()
         assertEquals 'underwritingInfo200', -50 - 200 * 0.3, underwritingInfos[0].commission

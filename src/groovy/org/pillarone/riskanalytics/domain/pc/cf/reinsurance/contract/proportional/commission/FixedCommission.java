@@ -1,8 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission;
 
+import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class FixedCommission implements ICommission {
 
     public void calculateCommission(List<ClaimCashflowPacket> grossClaims,
                                     List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
-                                    boolean isAdditive) {
+                                    boolean isAdditive, Integer occurrencePeriod) {
         if (isAdditive) {
             for (CededUnderwritingInfoPacket underwritingInfo : cededUnderwritingInfos) {
                 double premiumPaid = underwritingInfo.getPremiumPaid();
@@ -36,4 +36,5 @@ public class FixedCommission implements ICommission {
             }
         }
     }
+
 }

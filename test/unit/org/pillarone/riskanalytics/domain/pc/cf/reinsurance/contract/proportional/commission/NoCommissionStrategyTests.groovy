@@ -19,7 +19,7 @@ class NoCommissionStrategyTests extends GroovyTestCase {
         CededUnderwritingInfoPacket underwritingInfo200plus50 = new CededUnderwritingInfoPacket(premiumPaid: 200, commission: 50)
         List underwritingInfos = [underwritingInfo100, underwritingInfo100plus5, underwritingInfo200plus50]
 
-        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(null, underwritingInfos, false)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(null, underwritingInfos, false, 0)
 
         assertEquals '# outUnderwritingInfo packets', 3, underwritingInfos.size()
         assertEquals 'underwritingInfo100', 0, underwritingInfos[0].commission
@@ -40,7 +40,7 @@ class NoCommissionStrategyTests extends GroovyTestCase {
         CededUnderwritingInfoPacket underwritingInfo200plus50 = new CededUnderwritingInfoPacket(premiumPaid: 200, commission: 50)
         List underwritingInfos = [underwritingInfo100, underwritingInfo100plus5, underwritingInfo200plus50]
 
-        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(null, underwritingInfos, true)
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(null, underwritingInfos, true, 0)
 
         assertEquals '# outUnderwritingInfo packets', 3, underwritingInfos.size()
         assertEquals 'underwritingInfo100', 0, underwritingInfos[0].commission

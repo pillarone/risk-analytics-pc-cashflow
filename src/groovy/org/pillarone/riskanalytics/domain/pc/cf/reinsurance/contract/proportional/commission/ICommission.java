@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface ICommission {
 
-    void calculateCommission(List<ClaimCashflowPacket> cededClaims,
-                             List<CededUnderwritingInfoPacket> cededUnderwritingInfos, boolean isAdditive);
+    void calculateCommission(List<ClaimCashflowPacket> cededClaims, List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
+                             boolean isAdditive, Integer occurrencePeriod);
 }

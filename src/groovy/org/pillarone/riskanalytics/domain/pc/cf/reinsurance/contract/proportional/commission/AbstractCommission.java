@@ -1,10 +1,14 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
 import java.util.List;
 
@@ -14,6 +18,11 @@ import java.util.List;
 abstract public class AbstractCommission implements ICommission {
 
     protected BasedOnClaimProperty useClaims;
+
+    // the following two properties allow an approximation if commission is paid after ceded uw info is updated
+    // it is required for a trivial allocation.
+    private ISegmentMarker firstSegment;
+    private ILegalEntityMarker firstLegalEntity;
 
     protected double sumPremium(List<? extends UnderwritingInfoPacket> underwritingInfos) {
         double totalPremium = 0;
@@ -62,8 +71,24 @@ abstract public class AbstractCommission implements ICommission {
         return totalClaims;
     }
 
+    protected CededUnderwritingInfoPacket extraPacketForCommission(double fixedCommission, double variableCommission,
+                                                                   DateTime inceptionDate, Integer inceptionPeriod) {
+        CededUnderwritingInfoPacket underwritingInfo = new CededUnderwritingInfoPacket();
+        underwritingInfo.setExposure(new ExposureInfo(inceptionDate, inceptionPeriod));
+        underwritingInfo.setCommission(fixedCommission + variableCommission);
+        underwritingInfo.setCommissionFixed(fixedCommission);
+        underwritingInfo.setCommissionVariable(variableCommission);
+        underwritingInfo.setMarker(firstSegment);
+        underwritingInfo.setMarker(firstLegalEntity);
+        return underwritingInfo;
+    }
+
     protected void adjustCommissionProperties(List<CededUnderwritingInfoPacket> underwritingInfos, boolean isAdditive,
                          double commission, double fixedCommission, double variableCommission) {
+        if (firstSegment == null && !underwritingInfos.isEmpty()) {
+            firstSegment = underwritingInfos.get(0).segment();
+            firstLegalEntity = underwritingInfos.get(0).legalEntity();
+        }
         double totalCededPremium = 0;
         for (CededUnderwritingInfoPacket underwritingInfo : underwritingInfos) {
             totalCededPremium += useClaims.premium(underwritingInfo);
@@ -76,6 +101,7 @@ abstract public class AbstractCommission implements ICommission {
                 else {
                     underwritingInfo.apply(commission, fixedCommission, variableCommission);
                 }
+                break;  // no distribution of commission among several packets
             }
             else {
                 double premiumRatio = useClaims.premium(underwritingInfo) / totalCededPremium;

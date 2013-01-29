@@ -51,11 +51,6 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
     }
 
     @Override
-    public void initPeriod(int period, List<FactorsPacket> inFactors) {
-        super.initPeriod(period, inFactors);
-    }
-
-    @Override
     public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaims, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
         if (aggregateClaimStorage != null) {
             aggregateClaimStorage.resetIncrementsAndFactors();
