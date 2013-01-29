@@ -6,7 +6,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AbstractReinsuranceContract;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimsStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 
 import java.util.List;
@@ -27,10 +26,17 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
 
     private ClaimCashflowPacket aggregateIncrementalCededReserveClaim;
     private ClaimCashflowPacket aggregateCumulativeCededReserveClaim;
-    private double previousCumulativeUltimate;
-    private double previousCumulativeReported;
-    private double previousCumulativePaid;
-    private double previousIBNR;
+
+    // the following three properties are required as claim updates are not received after an individual claim pattern
+    // has ended
+    private double cumulativeUltimate;
+    private double cumulativeReported;
+    private double cumulativePaid;
+
+    private double previousCumulativeUltimateCeded;
+    private double previousCumulativeReportedCeded;
+    private double previousCumulativePaidCeded;
+    private double previousIBNRCeded;
 
     /**
      * All provided values have to be absolute! Scaling is done within the parameter strategy.
@@ -51,36 +57,47 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
         if (grossClaims.size() > 0) {
             firstClaimKey = grossClaims.get(0).getKeyClaim();
             ClaimCashflowPacket aggregateGrossClaim = new ClaimPacketAggregator().aggregate(grossClaims);
-            double cumulativeUltimate = cededCumulativeValue(aggregateGrossClaim.developedUltimate());
-            double cumulativeReported = cededCumulativeValue(aggregateGrossClaim.getReportedCumulatedIndexed());
-            double cumulativePaid = cededCumulativeValue(aggregateGrossClaim.getPaidCumulatedIndexed());
-            double reserves = cumulativeUltimate - cumulativePaid;
-            double ibnr = cumulativeUltimate - cumulativeReported;
+            if (aggregateCumulativeCededReserveClaim == null) {
+                cumulativeUltimate = aggregateGrossClaim.developedUltimate();
+                cumulativeReported = aggregateGrossClaim.getReportedCumulatedIndexed();
+                cumulativePaid = aggregateGrossClaim.getPaidCumulatedIndexed();
+            }
+            else {
+                cumulativeUltimate += aggregateGrossClaim.developedUltimate() - aggregateGrossClaim.nominalUltimate();
+                cumulativeReported += aggregateGrossClaim.getReportedIncrementalIndexed();
+                cumulativePaid += aggregateGrossClaim.getPaidIncrementalIndexed();
+            }
+            double cumulativeUltimateCeded = cededCumulativeValue(cumulativeUltimate);
+            double cumulativeReportedCeded = cededCumulativeValue(cumulativeReported);
+            double cumulativePaidCeded = cededCumulativeValue(cumulativePaid);
+            double reserves = cumulativeUltimateCeded - cumulativePaidCeded;
+            double ibnr = cumulativeUltimateCeded - cumulativeReportedCeded;
             if (aggregateCumulativeCededReserveClaim == null) {
                 DateTime occurrenceDate = grossClaims.get(0).getUpdateDate().withDayOfYear(1);
-                IClaimRoot keyClaim = new ClaimRoot(cumulativeUltimate, ClaimType.AGGREGATED_RESERVES, occurrenceDate, occurrenceDate);
+                IClaimRoot keyClaim = new ClaimRoot(cumulativeUltimateCeded, ClaimType.AGGREGATED_RESERVES, occurrenceDate, occurrenceDate);
                 double changeInReserves = reserves; // todo(sku): verify
-                double changeInIBNR = cumulativeUltimate - cumulativeReported; // todo(sku): verify
+                double changeInIBNR = cumulativeUltimateCeded - cumulativeReportedCeded; // todo(sku): verify
                 int updatePeriod = grossClaims.get(0).getUpdatePeriod();
-                aggregateCumulativeCededReserveClaim = new ClaimCashflowPacket(keyClaim, keyClaim, cumulativeUltimate,
-                        cumulativePaid, cumulativePaid, cumulativeReported, cumulativeReported,
+                aggregateCumulativeCededReserveClaim = new ClaimCashflowPacket(keyClaim, keyClaim, cumulativeUltimateCeded,
+                        cumulativePaidCeded, cumulativePaidCeded, cumulativeReportedCeded, cumulativeReportedCeded,
                         reserves, changeInReserves, changeInIBNR, null, occurrenceDate, updatePeriod);
                 aggregateIncrementalCededReserveClaim = ClaimUtils.scale(aggregateCumulativeCededReserveClaim, 1);
-            } else {
+            }
+            else {
                 aggregateIncrementalCededReserveClaim = new ClaimCashflowPacket(
                         aggregateCumulativeCededReserveClaim.getKeyClaim(), aggregateCumulativeCededReserveClaim.getKeyClaim(),
-                        cumulativeUltimate, aggregateCumulativeCededReserveClaim.nominalUltimate(),
-                        cumulativePaid - previousCumulativePaid, cumulativePaid,
-                        cumulativeReported - previousCumulativeReported, cumulativeReported,
+                        cumulativeUltimateCeded - previousCumulativeUltimateCeded, aggregateCumulativeCededReserveClaim.nominalUltimate(),
+                        cumulativePaidCeded - previousCumulativePaidCeded, cumulativePaidCeded,
+                        cumulativeReportedCeded - previousCumulativeReportedCeded, cumulativeReportedCeded,
                         reserves, aggregateCumulativeCededReserveClaim.reservedIndexed() - reserves,
-                        ibnr - previousIBNR, null,
+                        ibnr - previousIBNRCeded, null,
                         aggregateCumulativeCededReserveClaim.getOccurrenceDate(), aggregateCumulativeCededReserveClaim.getUpdatePeriod()
                 );
             }
-            previousCumulativeUltimate = cumulativeUltimate;
-            previousCumulativeReported = cumulativeReported;
-            previousCumulativePaid = cumulativePaid;
-            previousIBNR = ibnr;
+            previousCumulativeUltimateCeded = cumulativeUltimateCeded;
+            previousCumulativeReportedCeded = cumulativeReportedCeded;
+            previousCumulativePaidCeded = cumulativePaidCeded;
+            previousIBNRCeded = ibnr;
         }
     }
 

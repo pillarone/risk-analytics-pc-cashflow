@@ -91,7 +91,7 @@ class RetroactiveReinsuranceContractTests extends SpreadsheetUnitTest {
                 // development period 2017 does not return values as the cover starts in 2018
                 assertExpectedValue(contract.outClaimsCeded*.getPaidCumulatedIndexed(), spreadsheet, column, 84, 'Paid Cumulated')
                 assertExpectedValue(contract.outClaimsCeded*.getReportedCumulatedIndexed(), spreadsheet, column, 85, 'Reported Cumulated')
-                assertExpectedValue(contract.outClaimsCeded*.ultimate(), spreadsheet, column, 86, 'Total Culumated')
+                assertExpectedValue(contract.outClaimsCeded*.developedUltimate(), spreadsheet, column, 86, 'Total Culumated')
             }
             contract.reset()
             iterationScope.periodScope.prepareNextPeriod()

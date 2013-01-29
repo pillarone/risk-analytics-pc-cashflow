@@ -23,11 +23,11 @@ class UnifiedAdcLptContractTests extends GrailsUnitTestCase {
         assert 0d == cededClaim.paidCumulatedIndexed
         grossClaims = []
         // 2019
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -475, -500, null, true))
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -350, -500, null, true))
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -325, -500, null, true))
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -200, -400, null, true))
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -175, -350, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -125, 0, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -25, 0, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -125, -100, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -25, -50, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -125, -250, null, true))
         contract.initBasedOnAggregateCalculations(grossClaims, null)
         cededClaim = contract.calculateClaimCeded(grossClaims[0], null, null)
         assert 300d == cededClaim.developedUltimate()
@@ -35,11 +35,11 @@ class UnifiedAdcLptContractTests extends GrailsUnitTestCase {
         assert 0d == cededClaim.paidCumulatedIndexed
         grossClaims = []
         // 2020
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -500, -500, null, true))
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -475, -500, null, true))
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -350, -500, null, true))
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -325, -500, null, true))
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -200, -400, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -25, 0, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -125, 0, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -25, 0, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -125, -100, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -25, -50, null, true))
         contract.initBasedOnAggregateCalculations(grossClaims, null)
         cededClaim = contract.calculateClaimCeded(grossClaims[0], null, null)
         assert 300d == cededClaim.developedUltimate()
@@ -47,11 +47,11 @@ class UnifiedAdcLptContractTests extends GrailsUnitTestCase {
         assert 0d == cededClaim.paidCumulatedIndexed
         grossClaims = []
         // 2021
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -500, -500, null, true))
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -500, -500, null, true))
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -475, -500, null, true))
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -350, -500, null, true))
-        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -325, -500, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, 0, 0, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -25, 0, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -125, 0, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -25, 0, null, true))
+        grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(0, -125, 0, null, true))
         contract.initBasedOnAggregateCalculations(grossClaims, null)
         cededClaim = contract.calculateClaimCeded(grossClaims[0], null, null)
         assert 300d == cededClaim.developedUltimate()
