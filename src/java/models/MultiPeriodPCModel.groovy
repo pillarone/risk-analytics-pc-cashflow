@@ -27,7 +27,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerators
 import org.pillarone.riskanalytics.domain.pc.cf.segment.Segments
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
 
-abstract class AbstractModel extends StochasticModel {
+abstract class MultiPeriodPCModel extends StochasticModel {
     protected Log logger = LogFactory.getLog(getClass())
 
     GlobalParameters globalParameters

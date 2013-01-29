@@ -1,42 +1,18 @@
 package models.gira
 
-import models.AbstractModel
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
-import org.joda.time.DateTime
-import org.joda.time.Period
-import org.pillarone.riskanalytics.core.model.StochasticModel
+import models.MultiPeriodPCModel
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
-import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
-import org.pillarone.riskanalytics.core.simulation.LimitedContinuousPeriodCounter
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerators
-import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.CreditDefault
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.Dependencies
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventGenerators
-import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountingYieldCurves
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingSegments
-import org.pillarone.riskanalytics.domain.pc.cf.global.GlobalParameters
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.Indices
-import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntities
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ReinsuranceContracts
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.RetrospectiveCoverAttributeStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerator
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerators
-import org.pillarone.riskanalytics.domain.pc.cf.segment.Segments
 import org.pillarone.riskanalytics.domain.pc.cf.structure.Structures
-import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.*
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.RetrospectiveReinsuranceContracts
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class GIRAModel extends AbstractModel {
+class GIRAModel extends MultiPeriodPCModel {
 
     ReinsuranceContracts reinsuranceContracts
     RetrospectiveReinsuranceContracts retrospectiveReinsurance

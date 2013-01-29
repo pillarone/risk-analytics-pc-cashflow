@@ -1,6 +1,6 @@
 package models.orsa
 
-import models.AbstractModel
+import models.MultiPeriodPCModel
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.MatrixReinsuranceContracts
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.RetroactiveReinsuranceContracts
@@ -12,7 +12,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.structure.Structures
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class ORSAModel extends AbstractModel {
+class ORSAModel extends MultiPeriodPCModel {
 
     MatrixReinsuranceContracts reinsuranceContracts
     RetroactiveReinsuranceContracts retrospectiveReinsurance
