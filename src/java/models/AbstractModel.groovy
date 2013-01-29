@@ -79,8 +79,29 @@ abstract class AbstractModel extends StochasticModel {
         reservesGenerators.inPatterns = patterns.outPatterns
         legalEntities.inPatterns = patterns.outPatterns
         indices.inEventSeverities = dependencies.outEventSeverities
+        if (segments.subComponentCount() == 0) {
+            wireWithoutSegments()
+        } else {
+            segments.inClaims = claimsGenerators.outClaims
+            segments.inClaims = reservesGenerators.outReserves
+            segments.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
+            segments.inFactors = discounting.outFactors
+            wireWithSegments()
+            if (legalEntities.subComponentCount() > 0) {
+                legalEntities.inDefaultProbabilities = creditDefault.outDefaultProbabilities
+                segments.inLegalEntityDefault = legalEntities.outLegalEntityDefault
+                legalEntities.inClaims = segments.outClaimsGross
+                legalEntities.inUnderwritingInfo = segments.outUnderwritingInfoGross
+                wireWithLegalEntities()
+            }
+        }
     }
 
+    abstract void wireWithoutSegments()
+
+    abstract void wireWithSegments()
+
+    abstract void wireWithLegalEntities()
 
     public int maxNumberOfFullyDistinctPeriods() {
         1
@@ -167,9 +188,6 @@ abstract class AbstractModel extends StochasticModel {
         }
         periodLabels
     }
-
-
-
 
     //abstract void wireWithoutSegments()
 

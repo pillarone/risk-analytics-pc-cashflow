@@ -27,62 +27,56 @@ class ORSAModel extends AbstractModel {
     }
 
     @Override
-    void wireComponents() {
-        super.wireComponents()
-        if (segments.subComponentCount() == 0) {
-            reinsuranceContracts.inClaims = claimsGenerators.outClaims
-            reinsuranceContracts.inClaims = reservesGenerators.outReserves
-            reinsuranceContracts.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
-            reinsuranceContracts.inFactors = indices.outFactors
-            retrospectiveReinsurance.inClaims = claimsGenerators.outClaims
-            retrospectiveReinsurance.inClaims = reservesGenerators.outReserves
-            retrospectiveReinsurance.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
-            if (structures.subComponentCount() > 0) {
-                structures.inClaimsGross = claimsGenerators.outClaims
-                structures.inClaimsCeded = reinsuranceContracts.outClaimsCeded
-                structures.inClaimsCeded = retrospectiveReinsurance.outClaimsCeded
-                structures.inUnderwritingInfoGross = underwritingSegments.outUnderwritingInfo
-                structures.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
-                structures.inUnderwritingInfoCeded = retrospectiveReinsurance.outUnderwritingInfoCeded
-            }
-        }
-        else {
-            segments.inClaims = claimsGenerators.outClaims
-            segments.inClaims = reservesGenerators.outReserves
-            segments.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
-            segments.inFactors = discounting.outFactors
-            reinsuranceContracts.inClaims = segments.outClaimsGross
-            reinsuranceContracts.inUnderwritingInfo = segments.outUnderwritingInfoGross
-            segments.inClaimsCeded = reinsuranceContracts.outClaimsCeded
-            segments.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
-            retrospectiveReinsurance.inClaims = segments.outClaimsGross
-            retrospectiveReinsurance.inUnderwritingInfo = segments.outUnderwritingInfoGross
-            segments.inClaimsCeded = retrospectiveReinsurance.outClaimsCeded
-            segments.inUnderwritingInfoCeded = retrospectiveReinsurance.outUnderwritingInfoCeded
-            if (structures.subComponentCount() > 0) {
-                structures.inClaimsGross = segments.outClaimsGross
-                structures.inClaimsCeded = segments.outClaimsCeded
-                structures.inUnderwritingInfoGross = segments.outUnderwritingInfoGross
-                structures.inUnderwritingInfoCeded = segments.outUnderwritingInfoCeded
-            }
-            if (legalEntities.subComponentCount() > 0) {
-                legalEntities.inDefaultProbabilities = creditDefault.outDefaultProbabilities
-                segments.inLegalEntityDefault = legalEntities.outLegalEntityDefault
-                reinsuranceContracts.inLegalEntityDefault = legalEntities.outLegalEntityDefault
-                retrospectiveReinsurance.inLegalEntityDefault = legalEntities.outLegalEntityDefault
-                legalEntities.inClaims = segments.outClaimsGross
-                legalEntities.inUnderwritingInfo = segments.outUnderwritingInfoGross
-                legalEntities.inClaimsCeded = reinsuranceContracts.outClaimsCeded
-                legalEntities.inClaimsInward = reinsuranceContracts.outClaimsInward
-                legalEntities.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
-                legalEntities.inUnderwritingInfoInward = reinsuranceContracts.outUnderwritingInfoInward
-                legalEntities.inClaimsCeded2 = retrospectiveReinsurance.outClaimsCeded
-                legalEntities.inClaimsInward2 = retrospectiveReinsurance.outClaimsInward
-                legalEntities.inUnderwritingInfoCeded2 = retrospectiveReinsurance.outUnderwritingInfoCeded
-                legalEntities.inUnderwritingInfoInward2 = retrospectiveReinsurance.outUnderwritingInfoInward
-            }
+    void wireWithoutSegments() {
+        reinsuranceContracts.inClaims = claimsGenerators.outClaims
+        reinsuranceContracts.inClaims = reservesGenerators.outReserves
+        reinsuranceContracts.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
+        reinsuranceContracts.inFactors = indices.outFactors
+        retrospectiveReinsurance.inClaims = claimsGenerators.outClaims
+        retrospectiveReinsurance.inClaims = reservesGenerators.outReserves
+        retrospectiveReinsurance.inUnderwritingInfo = underwritingSegments.outUnderwritingInfo
+        if (structures.subComponentCount() > 0) {
+            structures.inClaimsGross = claimsGenerators.outClaims
+            structures.inClaimsCeded = reinsuranceContracts.outClaimsCeded
+            structures.inClaimsCeded = retrospectiveReinsurance.outClaimsCeded
+            structures.inUnderwritingInfoGross = underwritingSegments.outUnderwritingInfo
+            structures.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
+            structures.inUnderwritingInfoCeded = retrospectiveReinsurance.outUnderwritingInfoCeded
         }
     }
+
+    @Override
+    void wireWithSegments() {
+        reinsuranceContracts.inClaims = segments.outClaimsGross
+        reinsuranceContracts.inUnderwritingInfo = segments.outUnderwritingInfoGross
+        segments.inClaimsCeded = reinsuranceContracts.outClaimsCeded
+        segments.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
+        retrospectiveReinsurance.inClaims = segments.outClaimsGross
+        retrospectiveReinsurance.inUnderwritingInfo = segments.outUnderwritingInfoGross
+        segments.inClaimsCeded = retrospectiveReinsurance.outClaimsCeded
+        segments.inUnderwritingInfoCeded = retrospectiveReinsurance.outUnderwritingInfoCeded
+        if (structures.subComponentCount() > 0) {
+            structures.inClaimsGross = segments.outClaimsGross
+            structures.inClaimsCeded = segments.outClaimsCeded
+            structures.inUnderwritingInfoGross = segments.outUnderwritingInfoGross
+            structures.inUnderwritingInfoCeded = segments.outUnderwritingInfoCeded
+        }
+    }
+
+    @Override
+    void wireWithLegalEntities() {
+        reinsuranceContracts.inLegalEntityDefault = legalEntities.outLegalEntityDefault
+        retrospectiveReinsurance.inLegalEntityDefault = legalEntities.outLegalEntityDefault
+        legalEntities.inClaimsCeded = reinsuranceContracts.outClaimsCeded
+        legalEntities.inClaimsInward = reinsuranceContracts.outClaimsInward
+        legalEntities.inUnderwritingInfoCeded = reinsuranceContracts.outUnderwritingInfoCeded
+        legalEntities.inUnderwritingInfoInward = reinsuranceContracts.outUnderwritingInfoInward
+        legalEntities.inClaimsCeded2 = retrospectiveReinsurance.outClaimsCeded
+        legalEntities.inClaimsInward2 = retrospectiveReinsurance.outClaimsInward
+        legalEntities.inUnderwritingInfoCeded2 = retrospectiveReinsurance.outUnderwritingInfoCeded
+        legalEntities.inUnderwritingInfoInward2 = retrospectiveReinsurance.outUnderwritingInfoInward
+    }
+
 
     @Override
     List<IParameterObjectClassifier> configureClassifier(String path, List<IParameterObjectClassifier> classifiers) {
