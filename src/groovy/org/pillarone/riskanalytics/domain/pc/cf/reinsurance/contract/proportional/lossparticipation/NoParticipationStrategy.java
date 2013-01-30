@@ -18,7 +18,6 @@ public class NoParticipationStrategy extends AbstractParameterObject implements 
         return Collections.emptyMap();
     }
 
-    @Override
     public ILossParticipation getLossParticpation() {
         return new NoLossParticipation();
     }

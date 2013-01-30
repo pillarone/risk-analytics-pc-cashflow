@@ -20,6 +20,10 @@ public class LossParticipationStrategy extends AbstractParameterObject implement
     public static final int LOSS_RATIO_COLUMN_INDEX = 0;
     public static final int LOSS_PART_COLUMN_INDEX = 1;
 
+    private SortedMap<Double, Double> table;
+    private Double[] lossRatios;
+    private Double[] lossParts;
+
     private ConstrainedMultiDimensionalParameter participation = new ConstrainedMultiDimensionalParameter(
             GroovyUtils.convertToListOfList(new Object[]{0d, 0d}),
             Arrays.asList(LOSS_RATIO, LOSS_PART_BY_CEDANT),
@@ -35,14 +39,16 @@ public class LossParticipationStrategy extends AbstractParameterObject implement
         return map;
     }
 
-    private SortedMap<Double, Double> table;
-
     private void initTable() {
         if (table == null) {
             table = new TreeMap<Double, Double>();
+            lossRatios = new Double[participation.getValueRowCount() - participation.getTitleRowCount() + 1];
+            lossParts = new Double[participation.getValueRowCount() - participation.getTitleRowCount() + 1];
             for (int i = participation.getTitleRowCount(); i <= participation.getValueRowCount(); i++) {
                 double lossRatio = InputFormatConverter.getDouble(participation.getValueAt(i, LOSS_RATIO_COLUMN_INDEX));
                 double lossParticipation = InputFormatConverter.getDouble(participation.getValueAt(i, LOSS_PART_COLUMN_INDEX));
+                lossRatios[i - participation.getTitleRowCount()] = lossRatio;
+                lossParts[i - participation.getTitleRowCount()] = lossParticipation;
                 table.put(lossRatio, lossParticipation);
             }
         }
@@ -51,5 +57,15 @@ public class LossParticipationStrategy extends AbstractParameterObject implement
     public ILossParticipation getLossParticpation() {
         initTable();
         return new LossParticipation(table);
+    }
+
+    Double[] getLossRatios() {
+        initTable();
+        return lossRatios;
+    }
+
+    Double[] getLossParts() {
+        initTable();
+        return lossParts;
     }
 }

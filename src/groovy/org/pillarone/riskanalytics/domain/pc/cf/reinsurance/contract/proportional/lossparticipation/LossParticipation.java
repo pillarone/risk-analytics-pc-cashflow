@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorag
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.ILimitStrategy;
 
 import java.util.List;
+import java.util.Set;
 import java.util.SortedMap;
 
 /**
@@ -31,6 +32,10 @@ public class LossParticipation implements ILossParticipation {
 
     public boolean noLossParticipation() {
         return table.isEmpty();
+    }
+
+    SortedMap<Double, Double> getLossRatios() {
+        return table;
     }
 
     public void initPeriod(List<ClaimCashflowPacket> claims, List<UnderwritingInfoPacket> underwritingInfos, ILimitStrategy limit) {

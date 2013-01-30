@@ -17,11 +17,9 @@ public class NoLossParticipation implements ILossParticipation {
         return true;
     }
 
-    @Override
     public void initPeriod(List<ClaimCashflowPacket> claims, List<UnderwritingInfoPacket> underwritingInfos, ILimitStrategy limit) {
     }
 
-    @Override
     public ClaimCashflowPacket cededClaim(double quotaShare, ClaimCashflowPacket grossClaim, ClaimStorage storage, boolean adjustExposureInfo) {
         throw new NotImplementedException();
     }
