@@ -126,14 +126,29 @@ mappings = {
                 }
                 "claimsNet" {
                     "ultimate" "GIRA:segments:outClaimsNet:ultimate"
+                    "totalCumulative" "GIRA:segments:outClaimsNet:totalCumulativeIndexed", {
+                        "[%period%]" "GIRA:segments:period:[%period%]:outClaimsNet:totalCumulativeIndexed"
+                    }
+                    "totalIncremental" "GIRA:segments:outClaimsNet:totalIncrementalIndexed", {
+                        "[%period%]" "GIRA:segments:period:[%period%]:outClaimsNet:totalIncrementalIndexed"
+                    }
+                    "reportedCumulativeIndexed" "GIRA:segments:outClaimsNet:reportedCumulativeIndexed", {
+                        "[%period%]" "GIRA:segments:period:[%period%]:outClaimsNet:reportedCumulativeIndexed"
+                    }
                     "reportedIncrementalIndexed" "GIRA:segments:outClaimsNet:reportedIncrementalIndexed", {
                         "[%period%]" "GIRA:segments:period:[%period%]:outClaimsNet:reportedIncrementalIndexed"
                     }
-                    "paidIncrementalIndexed" "GIRA:segments:outClaimsNet:paidIncrementalIndexed", {
+                    "paidCumulativeIndexed" "GIRA:segments:outClaimsNet:paidCumulativeIndexed",{
+                        "[%period%]" "GIRA:segments:period:[%period%]:outClaimsNet:paidCumulativeIndexed"
+                    }
+                    "paidIncrementalIndexed" "GIRA:segments:outClaimsNet:paidIncrementalIndexed",{
                         "[%period%]" "GIRA:segments:period:[%period%]:outClaimsNet:paidIncrementalIndexed"
                     }
                     "outstandingIndexed" "GIRA:segments:outClaimsNet:outstandingIndexed", {
                         "[%period%]" "GIRA:segments:period:[%period%]:outClaimsNet:outstandingIndexed"
+                    }
+                    "changesInOutstandingIndexed" "GIRA:segments:outClaimsNet:changesInOutstandingIndexed", {
+                        "[%period%]" "GIRA:segments:period:[%period%]:outClaimsNet:changesInOutstandingIndexed"
                     }
                     "IBNRIndexed" "GIRA:segments:outClaimsNet:IBNRIndexed", {
                         "[%period%]" "GIRA:segments:period:[%period%]:outClaimsNet:IBNRIndexed"
@@ -147,9 +162,6 @@ mappings = {
                     "changesInReservesIndexed" "GIRA:segments:outClaimsNet:changesInReservesIndexed", {
                         "[%period%]" "GIRA:segments:period:[%period%]:outClaimsNet:changesInReservesIndexed"
                     }
-                    "totalIncremental" "GIRA:segments:outClaimsNet:totalIncrementalIndexed", {
-                        "[%period%]" "GIRA:segments:period:[%period%]:outClaimsNet:totalIncrementalIndexed"
-                    }
                     "premiumRiskBase" "GIRA:segments:outClaimsNet:premiumRiskBase"
                     "reserveRiskBase" "GIRA:segments:outClaimsNet:reserveRiskBase", {
                         "[%period%]" "GIRA:segments:period:[%period%]:outClaimsNet:reserveRiskBase"
@@ -157,14 +169,29 @@ mappings = {
                     "premiumAndReserveRiskBase" "GIRA:segments:outClaimsNet:premiumAndReserveRiskBase"
                     "claimsGross" {
                         "ultimate" "GIRA:segments:outClaimsGross:ultimate"
+                        "totalCumulative" "GIRA:segments:outClaimsGross:totalCumulativeIndexed", {
+                            "[%period%]" "GIRA:segments:period:[%period%]:outClaimsGross:totalCumulativeIndexed"
+                        }
+                        "totalIncremental" "GIRA:segments:outClaimsGross:totalIncrementalIndexed", {
+                            "[%period%]" "GIRA:segments:period:[%period%]:outClaimsGross:totalIncrementalIndexed"
+                        }
+                        "reportedCumulativeIndexed" "GIRA:segments:outClaimsGross:reportedCumulativeIndexed", {
+                            "[%period%]" "GIRA:segments:period:[%period%]:outClaimsGross:reportedCumulativeIndexed"
+                        }
                         "reportedIncrementalIndexed" "GIRA:segments:outClaimsGross:reportedIncrementalIndexed", {
                             "[%period%]" "GIRA:segments:period:[%period%]:outClaimsGross:reportedIncrementalIndexed"
                         }
-                        "paidIncrementalIndexed" "GIRA:segments:outClaimsGross:paidIncrementalIndexed", {
+                        "paidCumulativeIndexed" "GIRA:segments:outClaimsGross:paidCumulativeIndexed",{
+                            "[%period%]" "GIRA:segments:period:[%period%]:outClaimsGross:paidCumulativeIndexed"
+                        }
+                        "paidIncrementalIndexed" "GIRA:segments:outClaimsGross:paidIncrementalIndexed",{
                             "[%period%]" "GIRA:segments:period:[%period%]:outClaimsGross:paidIncrementalIndexed"
                         }
                         "outstandingIndexed" "GIRA:segments:outClaimsGross:outstandingIndexed", {
                             "[%period%]" "GIRA:segments:period:[%period%]:outClaimsGross:outstandingIndexed"
+                        }
+                        "changesInOutstandingIndexed" "GIRA:segments:outClaimsGross:changesInOutstandingIndexed", {
+                            "[%period%]" "GIRA:segments:period:[%period%]:outClaimsGross:changesInOutstandingIndexed"
                         }
                         "IBNRIndexed" "GIRA:segments:outClaimsGross:IBNRIndexed", {
                             "[%period%]" "GIRA:segments:period:[%period%]:outClaimsGross:IBNRIndexed"
@@ -178,9 +205,6 @@ mappings = {
                         "changesInReservesIndexed" "GIRA:segments:outClaimsGross:changesInReservesIndexed", {
                             "[%period%]" "GIRA:segments:period:[%period%]:outClaimsGross:changesInReservesIndexed"
                         }
-                        "totalIncremental" "GIRA:segments:outClaimsGross:totalIncrementalIndexed", {
-                            "[%period%]" "GIRA:segments:period:[%period%]:outClaimsGross:totalIncrementalIndexed"
-                        }
                         "premiumRiskBase" "GIRA:segments:outClaimsGross:premiumRiskBase"
                         "reserveRiskBase" "GIRA:segments:outClaimsGross:reserveRiskBase", {
                             "[%period%]" "GIRA:segments:period:[%period%]:outClaimsGross:reserveRiskBase"
@@ -189,14 +213,29 @@ mappings = {
                     }
                     "claimsCeded" {
                         "ultimate" "GIRA:segments:outClaimsCeded:ultimate"
+                        "totalCumulative" "GIRA:segments:outClaimsCeded:totalCumulativeIndexed", {
+                            "[%period%]" "GIRA:segments:period:[%period%]:outClaimsCeded:totalCumulativeIndexed"
+                        }
+                        "totalIncremental" "GIRA:segments:outClaimsCeded:totalIncrementalIndexed", {
+                            "[%period%]" "GIRA:segments:period:[%period%]:outClaimsCeded:totalIncrementalIndexed"
+                        }
+                        "reportedCumulativeIndexed" "GIRA:segments:outClaimsCeded:reportedCumulativeIndexed", {
+                            "[%period%]" "GIRA:segments:period:[%period%]:outClaimsCeded:reportedCumulativeIndexed"
+                        }
                         "reportedIncrementalIndexed" "GIRA:segments:outClaimsCeded:reportedIncrementalIndexed", {
                             "[%period%]" "GIRA:segments:period:[%period%]:outClaimsCeded:reportedIncrementalIndexed"
                         }
-                        "paidIncrementalIndexed" "GIRA:segments:outClaimsCeded:paidIncrementalIndexed", {
+                        "paidCumulativeIndexed" "GIRA:segments:outClaimsCeded:paidCumulativeIndexed",{
+                            "[%period%]" "GIRA:segments:period:[%period%]:outClaimsCeded:paidCumulativeIndexed"
+                        }
+                        "paidIncrementalIndexed" "GIRA:segments:outClaimsCeded:paidIncrementalIndexed",{
                             "[%period%]" "GIRA:segments:period:[%period%]:outClaimsCeded:paidIncrementalIndexed"
                         }
                         "outstandingIndexed" "GIRA:segments:outClaimsCeded:outstandingIndexed", {
                             "[%period%]" "GIRA:segments:period:[%period%]:outClaimsCeded:outstandingIndexed"
+                        }
+                        "changesInOutstandingIndexed" "GIRA:segments:outClaimsCeded:changesInOutstandingIndexed", {
+                            "[%period%]" "GIRA:segments:period:[%period%]:outClaimsCeded:changesInOutstandingIndexed"
                         }
                         "IBNRIndexed" "GIRA:segments:outClaimsCeded:IBNRIndexed", {
                             "[%period%]" "GIRA:segments:period:[%period%]:outClaimsCeded:IBNRIndexed"
@@ -209,9 +248,6 @@ mappings = {
                         }
                         "changesInReservesIndexed" "GIRA:segments:outClaimsCeded:changesInReservesIndexed", {
                             "[%period%]" "GIRA:segments:period:[%period%]:outClaimsCeded:changesInReservesIndexed"
-                        }
-                        "totalIncremental" "GIRA:segments:outClaimsCeded:totalIncrementalIndexed", {
-                            "[%period%]" "GIRA:segments:period:[%period%]:outClaimsCeded:totalIncrementalIndexed"
                         }
                         "premiumRiskBase" "GIRA:segments:outClaimsCeded:premiumRiskBase"
                         "reserveRiskBase" "GIRA:segments:outClaimsCeded:reserveRiskBase", {
@@ -347,7 +383,7 @@ mappings = {
                                 "claimPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netClaimPaid"
                                 "lossRatioPaidPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netLossRatioPaidPaid"
                             }
-                       }
+                        }
                     }
                     "bestEstimateGrossDetail" "GIRA:segments:[%segment%]:outFinancials:grossBestEstimate", {
                         "premiumWritten" "GIRA:segments:[%segment%]:outFinancials:grossPremiumWritten"
@@ -359,7 +395,7 @@ mappings = {
                                 "claimPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossClaimPaid"
                                 "lossRatioPaidPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossLossRatioPaidPaid"
                             }
-                       }
+                        }
                     }
                     "bestEstimateCededDetail" "GIRA:segments:[%segment%]:outFinancials:cededBestEstimate", {
                         "premiumWritten" "GIRA:segments:[%segment%]:outFinancials:cededPremiumWritten"
@@ -373,7 +409,7 @@ mappings = {
                                 "lossRatioPaidPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededLossRatioPaidPaid"
                                 "commission" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
                             }
-                       }
+                        }
                     }
                 }
                 "claimsNet" {
@@ -543,7 +579,7 @@ mappings = {
                         "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outUnderwritingInfoCeded:commissionFixed"
                     }
                     "variable" "GIRA:segments:[%segment%]:outUnderwritingInfoCeded:commissionVariable", {
-                        "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]::outUnderwritingInfoCeded:commissionVariable"
+                        "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outUnderwritingInfoCeded:commissionVariable"
                     }
                 }
             }
@@ -565,20 +601,41 @@ mappings = {
             }
             "claimsNet" {
                 "ultimate" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:ultimate"
+                "totalCumulative" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:totalCumulativeIndexed", {
+                    "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsNet:totalCumulativeIndexed"
+                }
+                "totalIncremental" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:totalIncrementalIndexed", {
+                    "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsNet:totalIncrementalIndexed"
+                }
+                "reportedCumulativeIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:reportedCumulativeIndexed", {
+                    "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsNet:reportedCumulativeIndexed"
+                }
                 "reportedIncrementalIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:reportedIncrementalIndexed", {
                     "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsNet:reportedIncrementalIndexed"
                 }
-                "paidIncrementalIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:paidIncrementalIndexed", {
+                "paidCumulativeIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:paidCumulativeIndexed",{
+                    "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsNet:paidCumulativeIndexed"
+                }
+                "paidIncrementalIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:paidIncrementalIndexed",{
                     "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsNet:paidIncrementalIndexed"
                 }
                 "outstandingIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:outstandingIndexed", {
                     "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsNet:outstandingIndexed"
                 }
+                "changesInOutstandingIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:changesInOutstandingIndexed", {
+                    "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsNet:changesInOutstandingIndexed"
+                }
                 "IBNRIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:IBNRIndexed", {
                     "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsNet:IBNRIndexed"
                 }
+                "changesInIBNRIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:changesInIBNRIndexed", {
+                    "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsNet:changesInIBNRIndexed"
+                }
                 "reservesIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:reservesIndexed", {
                     "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsNet:reservesIndexed"
+                }
+                "changesInReservesIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:changesInReservesIndexed", {
+                    "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsNet:changesInReservesIndexed"
                 }
                 "premiumRiskBase" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:premiumRiskBase"
                 "reserveRiskBase" "GIRA:legalEntities:[%legalEntity%]:outClaimsNet:reserveRiskBase", {
@@ -590,12 +647,44 @@ mappings = {
                         "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:ultimate"
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:ultimate"
                     }
+                    "totalCumulative" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:totalCumulativeIndexed", {
+                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:totalCumulativeIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsPrimaryInsurer:totalCumulativeIndexed"
+                        }
+                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:totalCumulativeIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsReinsurer:totalCumulativeIndexed"
+                        }
+                    }
+                    "totalIncremental" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:totalIncrementalIndexed", {
+                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:totalIncrementalIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsPrimaryInsurer:totalIncrementalIndexed"
+                        }
+                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:totalIncrementalIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsReinsurer:totalIncrementalIndexed"
+                        }
+                    }
+                    "reportedCumulativeIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:reportedCumulativeIndexed", {
+                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:reportedCumulativeIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsPrimaryInsurer:reportedCumulativeIndexed"
+                        }
+                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reportedCumulativeIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsReinsurer:reportedCumulativeIndexed"
+                        }
+                    }
                     "reportedIncrementalIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:reportedIncrementalIndexed", {
                         "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed", {
                             "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed"
                         }
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reportedIncrementalIndexed", {
                             "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsReinsurer:reportedIncrementalIndexed"
+                        }
+                    }
+                    "paidCumulativeIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:paidCumulativeIndexed",{
+                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:paidCumulativeIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsPrimaryInsurer:paidCumulativeIndexed"
+                        }
+                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:paidCumulativeIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsReinsurer:paidCumulativeIndexed"
                         }
                     }
                     "paidIncrementalIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:paidIncrementalIndexed", {
@@ -614,12 +703,28 @@ mappings = {
                             "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsReinsurer:outstandingIndexed"
                         }
                     }
+                    "changesInOutstandingIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:changesInOutstandingIndexed", {
+                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:changesInOutstandingIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsPrimaryInsurer:changesInOutstandingIndexed"
+                        }
+                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:changesInOutstandingIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsReinsurer:changesInOutstandingIndexed"
+                        }
+                    }
                     "IBNRIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:IBNRIndexed", {
                         "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:IBNRIndexed", {
                             "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsPrimaryInsurer:IBNRIndexed"
                         }
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:IBNRIndexed", {
                             "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsReinsurer:IBNRIndexed"
+                        }
+                    }
+                    "changesInIBNRIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:changesInIBNRIndexed", {
+                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:changesInIBNRIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsPrimaryInsurer:changesInIBNRIndexed"
+                        }
+                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:changesInIBNRIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsReinsurer:changesInIBNRIndexed"
                         }
                     }
                     "reservesIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:reservesIndexed", {
@@ -630,6 +735,14 @@ mappings = {
                             "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsReinsurer:reservesIndexed"
                         }
                     }
+                    "changesInReservesIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:changesInReservesIndexed", {
+                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:changesInReservesIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsPrimaryInsurer:changesInReservesIndexed"
+                        }
+                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:changesInReservesIndexed", {
+                            "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsReinsurer:changesInReservesIndexed"
+                        }
+                    }
                     "premiumRiskBase" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:premiumRiskBase"
                     "reserveRiskBase" "GIRA:legalEntities:[%legalEntity%]:outClaimsGross:reserveRiskBase", {
                         "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsGross:reserveRiskBase"
@@ -638,20 +751,41 @@ mappings = {
                 }
                 "claimsCeded" {
                     "ultimate" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:ultimate"
+                    "totalCumulative" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:totalCumulativeIndexed", {
+                        "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsCeded:totalCumulativeIndexed"
+                    }
+                    "totalIncremental" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:totalIncrementalIndexed", {
+                        "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsCeded:totalIncrementalIndexed"
+                    }
+                    "reportedCumulativeIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:reportedCumulativeIndexed", {
+                        "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsCeded:reportedCumulativeIndexed"
+                    }
                     "reportedIncrementalIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:reportedIncrementalIndexed", {
                         "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsCeded:reportedIncrementalIndexed"
                     }
-                    "paidIncrementalIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:paidIncrementalIndexed", {
+                    "paidCumulativeIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:paidCumulativeIndexed",{
+                        "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsCeded:paidCumulativeIndexed"
+                    }
+                    "paidIncrementalIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:paidIncrementalIndexed",{
                         "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsCeded:paidIncrementalIndexed"
                     }
                     "outstandingIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:outstandingIndexed", {
                         "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsCeded:outstandingIndexed"
                     }
+                    "changesInOutstandingIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:changesInOutstandingIndexed", {
+                        "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsCeded:changesInOutstandingIndexed"
+                    }
                     "IBNRIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:IBNRIndexed", {
                         "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsCeded:IBNRIndexed"
                     }
+                    "changesInIBNRIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:changesInIBNRIndexed", {
+                        "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsCeded:changesInIBNRIndexed"
+                    }
                     "reservesIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:reservesIndexed", {
                         "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsCeded:reservesIndexed"
+                    }
+                    "changesInReservesIndexed" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:changesInReservesIndexed", {
+                        "[%period%]" "GIRA:legalEntities:[%legalEntity%]:period:[%period%]:outClaimsCeded:changesInReservesIndexed"
                     }
                     "premiumRiskBase" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:premiumRiskBase"
                     "reserveRiskBase" "GIRA:legalEntities:[%legalEntity%]:outClaimsCeded:reserveRiskBase", {
@@ -803,23 +937,41 @@ mappings = {
                 }
                 "claimsNet" {
                     "ultimate" "GIRA:structures:[%structure%]:outClaimsNet:ultimate"
+                    "totalCumulative" "GIRA:structures:[%structure%]:outClaimsNet:totalCumulativeIndexed", {
+                        "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsNet:totalCumulativeIndexed"
+                    }
+                    "totalIncremental" "GIRA:structures:[%structure%]:outClaimsNet:totalIncrementalIndexed", {
+                        "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsNet:totalIncrementalIndexed"
+                    }
+                    "reportedCumulativeIndexed" "GIRA:structures:[%structure%]:outClaimsNet:reportedCumulativeIndexed", {
+                        "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsNet:reportedCumulativeIndexed"
+                    }
                     "reportedIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsNet:reportedIncrementalIndexed", {
                         "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsNet:reportedIncrementalIndexed"
                     }
-                    "paidIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsNet:paidIncrementalIndexed", {
+                    "paidCumulativeIndexed" "GIRA:structures:[%structure%]:outClaimsNet:paidCumulativeIndexed",{
+                        "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsNet:paidCumulativeIndexed"
+                    }
+                    "paidIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsNet:paidIncrementalIndexed",{
                         "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsNet:paidIncrementalIndexed"
                     }
                     "outstandingIndexed" "GIRA:structures:[%structure%]:outClaimsNet:outstandingIndexed", {
                         "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsNet:outstandingIndexed"
                     }
+                    "changesInOutstandingIndexed" "GIRA:structures:[%structure%]:outClaimsNet:changesInOutstandingIndexed", {
+                        "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsNet:changesInOutstandingIndexed"
+                    }
                     "IBNRIndexed" "GIRA:structures:[%structure%]:outClaimsNet:IBNRIndexed", {
                         "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsNet:IBNRIndexed"
+                    }
+                    "changesInIBNRIndexed" "GIRA:structures:[%structure%]:outClaimsNet:changesInIBNRIndexed", {
+                        "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsNet:changesInIBNRIndexed"
                     }
                     "reservesIndexed" "GIRA:structures:[%structure%]:outClaimsNet:reservesIndexed", {
                         "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsNet:reservesIndexed"
                     }
-                    "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsNet:totalIncrementalIndexed", {
-                        "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsNet:totalIncrementalIndexed"
+                    "changesInReservesIndexed" "GIRA:structures:[%structure%]:outClaimsNet:changesInReservesIndexed", {
+                        "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsNet:changesInReservesIndexed"
                     }
                     "premiumRiskBase" "GIRA:structures:[%structure%]:outClaimsNet:premiumRiskBase"
                     "reserveRiskBase" "GIRA:structures:[%structure%]:outClaimsNet:reserveRiskBase", {
@@ -828,23 +980,41 @@ mappings = {
                     "premiumAndReserveRiskBase" "GIRA:structures:[%structure%]:outClaimsNet:premiumAndReserveRiskBase"
                     "claimsGross" {
                         "ultimate" "GIRA:structures:[%structure%]:outClaimsGross:ultimate"
+                        "totalCumulative" "GIRA:structures:[%structure%]:outClaimsGross:totalCumulativeIndexed", {
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsGross:totalCumulativeIndexed"
+                        }
+                        "totalIncremental" "GIRA:structures:[%structure%]:outClaimsGross:totalIncrementalIndexed", {
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsGross:totalIncrementalIndexed"
+                        }
+                        "reportedCumulativeIndexed" "GIRA:structures:[%structure%]:outClaimsGross:reportedCumulativeIndexed", {
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsGross:reportedCumulativeIndexed"
+                        }
                         "reportedIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsGross:reportedIncrementalIndexed", {
                             "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsGross:reportedIncrementalIndexed"
                         }
-                        "paidIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsGross:paidIncrementalIndexed", {
+                        "paidCumulativeIndexed" "GIRA:structures:[%structure%]:outClaimsGross:paidCumulativeIndexed",{
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsGross:paidCumulativeIndexed"
+                        }
+                        "paidIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsGross:paidIncrementalIndexed",{
                             "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsGross:paidIncrementalIndexed"
                         }
                         "outstandingIndexed" "GIRA:structures:[%structure%]:outClaimsGross:outstandingIndexed", {
                             "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsGross:outstandingIndexed"
                         }
+                        "changesInOutstandingIndexed" "GIRA:structures:[%structure%]:outClaimsGross:changesInOutstandingIndexed", {
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsGross:changesInOutstandingIndexed"
+                        }
                         "IBNRIndexed" "GIRA:structures:[%structure%]:outClaimsGross:IBNRIndexed", {
                             "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsGross:IBNRIndexed"
+                        }
+                        "changesInIBNRIndexed" "GIRA:structures:[%structure%]:outClaimsGross:changesInIBNRIndexed", {
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsGross:changesInIBNRIndexed"
                         }
                         "reservesIndexed" "GIRA:structures:[%structure%]:outClaimsGross:reservesIndexed", {
                             "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsGross:reservesIndexed"
                         }
-                        "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsGross:totalIncrementalIndexed", {
-                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsGross:totalIncrementalIndexed"
+                        "changesInReservesIndexed" "GIRA:structures:[%structure%]:outClaimsGross:changesInReservesIndexed", {
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsGross:changesInReservesIndexed"
                         }
                         "premiumRiskBase" "GIRA:structures:[%structure%]:outClaimsGross:premiumRiskBase"
                         "reserveRiskBase" "GIRA:structures:[%structure%]:outClaimsGross:reserveRiskBase", {
@@ -854,23 +1024,41 @@ mappings = {
                     }
                     "claimsCeded" {
                         "ultimate" "GIRA:structures:[%structure%]:outClaimsCeded:ultimate"
+                        "totalCumulative" "GIRA:structures:[%structure%]:outClaimsCeded:totalCumulativeIndexed", {
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsCeded:totalCumulativeIndexed"
+                        }
+                        "totalIncremental" "GIRA:structures:[%structure%]:outClaimsCeded:totalIncrementalIndexed", {
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsCeded:totalIncrementalIndexed"
+                        }
+                        "reportedCumulativeIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:reportedCumulativeIndexed", {
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsCeded:reportedCumulativeIndexed"
+                        }
                         "reportedIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:reportedIncrementalIndexed", {
                             "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsCeded:reportedIncrementalIndexed"
                         }
-                        "paidIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:paidIncrementalIndexed", {
+                        "paidCumulativeIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:paidCumulativeIndexed",{
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsCeded:paidCumulativeIndexed"
+                        }
+                        "paidIncrementalIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:paidIncrementalIndexed",{
                             "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsCeded:paidIncrementalIndexed"
                         }
                         "outstandingIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:outstandingIndexed", {
                             "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsCeded:outstandingIndexed"
                         }
+                        "changesInOutstandingIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:changesInOutstandingIndexed", {
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsCeded:changesInOutstandingIndexed"
+                        }
                         "IBNRIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:IBNRIndexed", {
                             "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsCeded:IBNRIndexed"
+                        }
+                        "changesInIBNRIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:changesInIBNRIndexed", {
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsCeded:changesInIBNRIndexed"
                         }
                         "reservesIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:reservesIndexed", {
                             "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsCeded:reservesIndexed"
                         }
-                        "increaseDueToIndex" "GIRA:structures:[%structure%]:outClaimsCeded:totalIncrementalIndexed", {
-                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsCeded:totalIncrementalIndexed"
+                        "changesInReservesIndexed" "GIRA:structures:[%structure%]:outClaimsCeded:changesInReservesIndexed", {
+                            "[%period%]" "GIRA:structures:[%structure%]:period:[%period%]:outClaimsCeded:changesInReservesIndexed"
                         }
                         "premiumRiskBase" "GIRA:structures:[%structure%]:outClaimsCeded:premiumRiskBase"
                         "reserveRiskBase" "GIRA:structures:[%structure%]:outClaimsCeded:reserveRiskBase", {
@@ -1079,7 +1267,7 @@ mappings = {
                     }
                 }
             }
-        }        
+        }
         "retrospectiveReinsurance" {
             "[%contract%]" {
                 "Financials" {
