@@ -8,7 +8,7 @@ class UnifiedAdcLptContractTests extends GrailsUnitTestCase {
 
     // PMO-2235 Values taken from Spreadsheet
     void testInitBasedOnAggregateCalculations() {
-        UnifiedAdcLptContract contract = new UnifiedAdcLptContract(0.6d, 2100, 300)
+        UnifiedAdcLptContract contract = new UnifiedAdcLptContract(1d, 2100, 300)
         List<ClaimCashflowPacket> grossClaims = new ArrayList<ClaimCashflowPacket>()
         // 2018
         grossClaims.add(ClaimCashflowPacketTests.getClaimCashflowPacket(-500, -350, -500, null, true))

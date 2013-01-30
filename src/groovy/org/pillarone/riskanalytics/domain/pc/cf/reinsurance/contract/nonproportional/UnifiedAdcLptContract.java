@@ -112,7 +112,7 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
     }
 
     private double cededCumulativeValue(double grossCumulativeValue) {
-        return Math.max(0, Math.min(limit, -grossCumulativeValue - attachmentPoint));
+        return cededShare * Math.max(0, Math.min(limit, -grossCumulativeValue - attachmentPoint));
     }
 
     /**
