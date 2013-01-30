@@ -18,11 +18,16 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket;
-import org.pillarone.riskanalytics.domain.utils.marker.*;
+import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.IStructureMarker;
 
 import java.util.*;
 
 /**
+ * Generic way of collection information.
+ *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectingModeStrategy {
@@ -37,16 +42,23 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
     private final List<String> fieldFilter;
     private boolean displayUnderwritingYearOnly = true;
     private static final DateTimeFormatter formatter = DateTimeFormat.forPattern(PeriodLabelsUtil.PARAMETER_DISPLAY_FORMAT);
+    private final List<Class<Packet>> compatibleClasses;
 
     // required for serialization by gridgain
     public SplitAndFilterCollectionModeStrategy() {
+        compatibleClasses = new ArrayList<Class<Packet>>();
         drillDownModes = new ArrayList<DrillDownMode>();
         fieldFilter = new ArrayList<String>();
     }
 
-    public SplitAndFilterCollectionModeStrategy(List<DrillDownMode> drillDownModes, List<String> fieldFilter) {
+    public SplitAndFilterCollectionModeStrategy(List<DrillDownMode> drillDownModes, List<String> fieldFilter, List<Class<Packet>> compatibleClasses) {
         this.drillDownModes = drillDownModes;
         this.fieldFilter = fieldFilter;
+        this.compatibleClasses = compatibleClasses;
+    }
+
+    public SplitAndFilterCollectionModeStrategy(List<DrillDownMode> drillDownModes, List<String> fieldFilter) {
+        this(drillDownModes, fieldFilter, new ArrayList<Class<Packet>>());
     }
 
     @Override
@@ -302,10 +314,24 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         return StringUtils.removeEnd(identifier.toString(), "_");
     }
 
+    /**
+     * Checks if the packet class is compatible with the configured compatible classes.
+     * If any compatible class is provided the check is done exclusively on the provided list.
+     * Otherwise the compatible list of the super class is taken into account.
+     * @param packetClass The packet class.
+     * @return true if compatible, false otherwise.
+     */
     @Override
     public boolean isCompatibleWith(Class packetClass) {
-        return super.isCompatibleWith(packetClass) || ContractFinancialsPacket.class.isAssignableFrom(packetClass)
-                || FinancialsPacket.class.isAssignableFrom(packetClass);
+        boolean compatibleWith = false;
+        if (compatibleClasses.size() > 0) {
+            for (Class<Packet> compatibleClass : compatibleClasses) {
+                compatibleWith |= compatibleClass.isAssignableFrom(packetClass);
+            }
+            return compatibleWith;
+        } else {
+            return super.isCompatibleWith(packetClass);
+        }
     }
 
     public List<DrillDownMode> getDrillDownModes() {
@@ -318,6 +344,6 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
 
     @Override
     public Object[] getArguments() {
-        return new Object[]{drillDownModes, fieldFilter};
+        return new Object[]{drillDownModes, fieldFilter, compatibleClasses};
     }
 }
