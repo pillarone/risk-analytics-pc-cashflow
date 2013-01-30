@@ -60,42 +60,42 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
 
     protected void doCalculation(String phase) {
         try {
-            if (provideClaims(phase)) {
-            // A deal may commute before the end of the contract period. We may hence want to terminate claims generation
-            // Depending on the outcome in the experience account.
             initIteration(periodStore, periodScope, PHASE_CLAIMS_CALCULATION);
-            IPeriodCounter periodCounter = periodScope.getPeriodCounter();
-            List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
+            if (provideClaims(phase)) {
+                // A deal may commute before the end of the contract period. We may hence want to terminate claims generation
+                // Depending on the outcome in the experience account.
+                IPeriodCounter periodCounter = periodScope.getPeriodCounter();
+                List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
 
-            if(!(parmParameterizationBasis.getType().equals(ReinsuranceContractBaseType.LOSSESOCCURRING))) {
-                throw new SimulationException("Only losses occuring implemented for frequency severity at the moment");
-            }
-            List<Factors> runoffFactors = null;
-            // Check that the period we are in covers new claims.
-            if (periodScope.getCurrentPeriod() < globalLastCoveredPeriod) {
-                List<ClaimRoot> baseClaims;
-                if (globalDeterministicMode) {
-                    baseClaims = getDeterministicClaims(parmDeterministicClaims, periodScope, ClaimType.SINGLE);
-                } else {
-                    List<Factors> severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices(),
-                            IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
-                    baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
-                            severityFactors, parmParameterizationBasis, this, periodScope);
+                if(!(parmParameterizationBasis.getType().equals(ReinsuranceContractBaseType.LOSSESOCCURRING))) {
+                    throw new SimulationException("Only losses occuring implemented for frequency severity at the moment");
                 }
-                checkBaseClaims(baseClaims, globalSanityChecks, iterationScope);
-                PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
-                ISingleUpdatingMethodologyStrategy.GrossClaimAndRandomDraws updatingResult = parmUpdatingMethodology.updatingClaims(baseClaims, parmActualClaims,
-                        periodCounter, globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), US_DAYS_360,
-                        parmPayoutPatternBase, payoutPattern, globalSanityChecks);
-                randomDrawInfo(updatingResult);
-                runoffFactors = new ArrayList<Factors>();
-                storeClaimsWhichOccurInFuturePeriods(updatingResult.getGrossClaims(), periodStore);
-                claims = cashflowsInCurrentPeriod(updatingResult.getGrossClaims(), runoffFactors, periodScope);
-            }
-            developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
-            checkCashflowClaims(claims, globalSanityChecks);
-            setTechnicalProperties(claims);
-            outClaims.addAll(claims);
+                List<Factors> runoffFactors = null;
+                // Check that the period we are in covers new claims.
+                if (periodScope.getCurrentPeriod() < globalLastCoveredPeriod) {
+                    List<ClaimRoot> baseClaims;
+                    if (globalDeterministicMode) {
+                        baseClaims = getDeterministicClaims(parmDeterministicClaims, periodScope, ClaimType.SINGLE);
+                    } else {
+                        List<Factors> severityFactors = IndexUtils.filterFactors(inFactors, subClaimsModel.getParmSeverityIndices(),
+                                IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
+                        baseClaims = subClaimsModel.baseClaims(inUnderwritingInfo, inEventFrequencies, inEventSeverities,
+                                severityFactors, parmParameterizationBasis, this, periodScope, inProbabilities);
+                    }
+                    checkBaseClaims(baseClaims, globalSanityChecks, iterationScope);
+                    PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
+                    ISingleUpdatingMethodologyStrategy.GrossClaimAndRandomDraws updatingResult = parmUpdatingMethodology.updatingClaims(baseClaims, parmActualClaims,
+                            periodCounter, globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), US_DAYS_360,
+                            parmPayoutPatternBase, payoutPattern, globalSanityChecks);
+                    randomDrawInfo(updatingResult);
+                    runoffFactors = new ArrayList<Factors>();
+                    storeClaimsWhichOccurInFuturePeriods(updatingResult.getGrossClaims(), periodStore);
+                    claims = cashflowsInCurrentPeriod(updatingResult.getGrossClaims(), runoffFactors, periodScope);
+                }
+                developClaimsOfFormerPeriods(claims, periodCounter, runoffFactors);
+                checkCashflowClaims(claims, globalSanityChecks);
+                setTechnicalProperties(claims);
+                outClaims.addAll(claims);
             }
             else {
                 prepareProvidingClaimsInNextPeriodOrNot(phase);
@@ -106,6 +106,7 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
                     + " with seed : " + simulationScope.getSimulation().getRandomSeed().toString() + " update date:  " + DateTimeUtilities.formatDate.print( globalUpdateDate )
                     + "\n \n " + e.getMessage(), e);
         }
+
     }
 
     private void randomDrawInfo(ISingleUpdatingMethodologyStrategy.GrossClaimAndRandomDraws updatingResult) {

@@ -4,9 +4,12 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang.NotImplementedException;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
+import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
+import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket;
 
 import java.util.*;
 
@@ -492,5 +495,23 @@ public class ClaimUtils {
             return ClaimValidator.positiveNominalUltimates(claims);
         }
     }
+
+    public static DependancePacket checkForDependance(IPerilMarker filterCriteria, List<DependancePacket> dependancePacketList) {
+        DependancePacket dependancePacket = new DependancePacket();
+        boolean foundPacket = false;
+        for(DependancePacket aPacket : dependancePacketList  ) {
+            if(aPacket.isDependantGenerator(filterCriteria)) {
+                if(foundPacket) {
+                    throw new SimulationException("Found two dependance packets which claim to have information for this claims generator: " + filterCriteria.getName()
+                            + " Have you selected this generator twice in two different dependance components? This is not allowed. If that is not the case please contact development");
+                }
+                foundPacket = true;
+                dependancePacket = aPacket;
+            }
+        }
+        return dependancePacket;
+    }
+
+
 
 }

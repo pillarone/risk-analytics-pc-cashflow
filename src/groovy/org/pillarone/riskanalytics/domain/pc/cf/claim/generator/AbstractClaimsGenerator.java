@@ -254,7 +254,6 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
      * @return true if new claims have to be generated
      */
     protected boolean provideClaims(String phase) {
-        initIteration(periodStore, periodScope, phase);
         // In this phase check the commutation state from last period. If we are not commuted then calculate claims.
         if (phase.equals(PHASE_CLAIMS_CALCULATION)) {
             CommutationState commutationState = (CommutationState) (periodStore.get(COMMUTATION_STATE));

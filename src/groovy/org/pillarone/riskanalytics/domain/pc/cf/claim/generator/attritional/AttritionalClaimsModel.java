@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimen
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IClaimsGeneratorStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IPeriodDependingClaimsGeneratorStrategy;
@@ -64,19 +65,8 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
     public List<ClaimRoot> baseClaims(PacketList<UnderwritingInfoPacket> inUnderwritingInfo, List<Factors> severityFactors, IReinsuranceContractBaseStrategy contractBase, IPerilMarker filterCriteria, PeriodScope periodScope, List<DependancePacket> dependancePacketList) {
         int period = periodScope.getCurrentPeriod();
         double underwritingScaleFactor = - parmSeverityBase.factor(inUnderwritingInfo);
-        DependancePacket dependancePacket = new DependancePacket();
-        boolean foundPacket = false;
-        for(DependancePacket aPacket : dependancePacketList  ) {
-            if(aPacket.isDependantGenerator(filterCriteria)) {
-                if(foundPacket) {
-                    throw new SimulationException("Found two dependance packets which claim to have information for this claims generator: " + filterCriteria.getName()
-                     + " Have you selected this generator twice in two different dependance components? This is not allowed. If that is not the case please contact development");
-                }
-                foundPacket = true;
-                dependancePacket = aPacket;
-            }
-        }
-        if ( foundPacket ) {
+        DependancePacket dependancePacket = ClaimUtils.checkForDependance(filterCriteria, dependancePacketList);
+        if ( dependancePacket.isDependantGenerator(filterCriteria) ) {
             return claimsModel(period).calculateDependantClaimsWithContractBase(dependancePacket,filterCriteria, periodScope, contractBase, underwritingScaleFactor, severityFactors);
         }
         else {

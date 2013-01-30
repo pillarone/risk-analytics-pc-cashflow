@@ -4,8 +4,10 @@ import org.apache.commons.lang.ArrayUtils;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorUtils;
@@ -19,6 +21,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.IExposureBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.IVaryingParametersDistributionStrategy;
@@ -88,12 +91,15 @@ public class FrequencySeverityClaimsModel extends Component {
                                       List<Factors> severityFactors,
                                       IReinsuranceContractBaseStrategy contractBase,
                                       IPerilMarker filterCriteria,
-                                      PeriodScope periodScope) {
+                                      PeriodScope periodScope,
+                                      List<DependancePacket> dependancePackets) {
         int period = periodScope.getCurrentPeriod();
         double scaleFactor = parmSeverityBase.factor(inUnderwritingInfo);
         List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(inEventSeverities, filterCriteria);
-        if (!eventSeverities.isEmpty()) {
-            return claimsModel(period).calculateClaims(-scaleFactor, periodScope, eventSeverities);
+        DependancePacket dependancePacket = ClaimUtils.checkForDependance(filterCriteria, dependancePackets);
+        if ( dependancePacket.isDependantGenerator(filterCriteria) ) {
+            throw new SimulationException("Freq severity dependance not implemented");
+//            return claimsModel(period).calculateClaims(-scaleFactor, periodScope, eventSeverities);
         }
         else {
 //            return claimsModel(period).generateClaims(-scaleFactor, severityFactors, 1, periodScope, contractBase);
