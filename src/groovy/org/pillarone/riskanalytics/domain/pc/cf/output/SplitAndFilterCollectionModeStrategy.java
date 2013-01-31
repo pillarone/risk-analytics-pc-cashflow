@@ -23,6 +23,7 @@ import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarke
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IStructureMarker;
 
+import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -71,8 +72,8 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
             Map<PathMapping, Packet> resultMap = allPathMappingsIncludingSplit(packets);
             return createSingleValueResults(resultMap, crashSimulationOnError);
         } else {
-            String notImplemented = ResourceBundle.getBundle(RESOURCE_BUNDLE).getString("SplitAndFilterCollectionModeStrategy.notImplemented");
-            throw new NotImplementedException(notImplemented + "\n(" + packetCollector.getPath() + ")");
+            String incompatibleMessage = ResourceBundle.getBundle(RESOURCE_BUNDLE).getString("SplitAndFilterCollectionModeStrategy.incompatibleCollector");
+            throw new NotImplementedException(MessageFormat.format(incompatibleMessage, getIdentifier(), drillDownModes, fieldFilter, compatibleClasses, packets.get(0).getClass().getSimpleName()));
         }
     }
 
