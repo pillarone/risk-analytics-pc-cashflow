@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.I
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot
 import org.pillarone.riskanalytics.core.simulation.SimulationException
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 
 /**
  *   author simon.parten @ art-allianz . com
@@ -89,11 +90,11 @@ class GRIUtilities {
     }
 
     public static Collection<ClaimCashflowPacket> cashflowsCoveredInModelPeriod(Collection<ClaimCashflowPacket> cashflows, PeriodScope periodScope, ContractCoverBase base, int period) {
-
+        IPeriodCounter counter = periodScope.getPeriodCounter()
         return cashflows.findAll {
             it ->
             DateTime coverDate = base.claimCoverDate(it)
-            return periodScope.getPeriodCounter().belongsToPeriod(coverDate) == period
+            return counter.belongsToPeriod(coverDate) == period
         }
     }
 

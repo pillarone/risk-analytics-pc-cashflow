@@ -92,7 +92,8 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
      * @param base
      * @param periodTo
      * @param termExcess
-     * @param termLimit      @return
+     * @param termLimit
+     * @return
      * */
     public Map<Integer, Double> cededPaidByModelPeriod(PeriodScope periodScope, Collection<ClaimCashflowPacket> claimsToSimPeriod,
                        ScaledPeriodLayerParameters layerParameters, ContractCoverBase base, int periodTo, double termExcess, double termLimit) {

@@ -58,7 +58,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.output.SingleUltimatePaidClaimCo
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.5.15-kti"
+    def version = "0.5.16-kti"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -160,22 +160,22 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         // PMO-2231
 
         def f = [
-                paid_inc: CCP.PAID_INDEXED,
+                paid_inc: CCP.PAID_INDEXED, // 0
                 paid_cum: CCP.PAID_CUMULATIVE_INDEXED,
                 cres_inc: CCP.CHANGES_IN_RESERVES_INDEXED,
                 cres_cum: CCP.RESERVES_INDEXED,
                 IBNR_inc: CCP.CHANGES_IN_IBNR_INDEXED,
-                IBNR_cum: CCP.IBNR_INDEXED,
+                IBNR_cum: CCP.IBNR_INDEXED, // 5
                 outst_inc: CCP.CHANGES_IN_OUTSTANDING_INDEXED,
                 outst_cum: CCP.OUTSTANDING_INDEXED,
                 rep_inc: CCP.REPORTED_INDEXED,
                 rep_cum: CCP.REPORTED_CUMULATIVE_INDEXED,
-                total_uix_inc: CCP.ULTIMATE,
+                total_uix_inc: CCP.ULTIMATE, // 10
                 total_inc: CCP.TOTAL_INCREMENTAL_INDEXED,
                 total_cum: CCP.TOTAL_CUMULATIVE_INDEXED,
                 rb_claim_premium: CCP.PREMIUM_RISK_BASE,
                 rb_claim_reserves: CCP.RESERVE_RISK_BASE,
-                rb_claim_total: CCP.PREMIUM_AND_RESERVE_RISK_BASE,
+                rb_claim_total: CCP.PREMIUM_AND_RESERVE_RISK_BASE, // 15
                 rb_fin_premium: FinancialsPacket.GROSS_PREMIUM_RISK,
                 rb_fin_reserves: FinancialsPacket.GROSS_RESERVE_RISK,
                 rb_fin_total: FinancialsPacket.GROSS_PREMIUM_RESERVE_RISK]
@@ -202,6 +202,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [7, 10, 11, 12, 13, 14, 15].collect { fields[it] }))
 
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [CCP.REPORTED_INDEXED, CCP.PAID_INDEXED]))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [CCP.ULTIMATE, CCP.PAID_INDEXED]))
     }
 
     def onChange = { event ->
