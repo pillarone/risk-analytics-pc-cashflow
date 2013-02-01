@@ -34,8 +34,17 @@ public class FinancialsPacket extends MultiValuePacket {
                             List<ClaimCashflowPacket> netClaims, List<ClaimCashflowPacket> cededClaims,
                             boolean singlePeriod, Boolean occurrenceInCurrentPeriod) {
         if (singlePeriod) {
-            if (!netClaims.isEmpty()) {
+            if (!grossClaims.isEmpty()) {
+                inceptionDate = grossClaims.get(0).getBaseClaim().getExposureStartDate();
+            }
+            else if (!netClaims.isEmpty()) {
                 inceptionDate = netClaims.get(0).getBaseClaim().getExposureStartDate();
+            }
+            else if (!cededClaims.isEmpty()) {
+                inceptionDate = cededClaims.get(0).getBaseClaim().getExposureStartDate();
+            }
+            else if (!grossUwInfos.isEmpty()) {
+                inceptionDate = grossUwInfos.get(0).getExposure().getInceptionDate();
             }
             else if (!cededUwInfos.isEmpty()) {
                 inceptionDate = cededUwInfos.get(0).getExposure().getInceptionDate();
@@ -106,6 +115,7 @@ public class FinancialsPacket extends MultiValuePacket {
             FinancialsPacket packet = new FinancialsPacket(grossUwInfoByPeriod.get(period), netUwInfoByPeriod.get(period),
                     cededUwInfoByPeriod.get(period), grossClaimsByPeriod.get(period), netClaimsByPeriod.get(period),
                     cededClaimsByPeriod.get(period), true, period == periodCounter.currentPeriodIndex());
+            packet.period = period;
             packets.add(packet);
         }
         return packets;
