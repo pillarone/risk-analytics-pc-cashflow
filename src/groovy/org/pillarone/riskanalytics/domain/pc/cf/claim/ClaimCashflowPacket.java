@@ -275,8 +275,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      */
     private void initRiskBased() {
         double riskBased = reportedIncrementalIndexed + changeInIBNRIndexed;
-        premiumRisk = (ultimate != 0) ? riskBased : 0;
-        reserveRisk = (ultimate == 0) ? riskBased : 0;
+        premiumRisk = (ultimate != 0 && !getClaimType().isReserveClaim()) ? riskBased : 0;
+        reserveRisk = (ultimate == 0 || getClaimType().isReserveClaim()) ? riskBased : 0;
     }
 
     /**

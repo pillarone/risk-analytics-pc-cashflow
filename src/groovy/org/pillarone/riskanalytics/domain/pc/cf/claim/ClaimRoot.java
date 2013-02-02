@@ -16,7 +16,6 @@ import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-// todo(sku): clarify index application order and effect on reported
 public class ClaimRoot implements IClaimRoot, Cloneable {
 
     private static Log LOG = LogFactory.getLog(ClaimRoot.class);

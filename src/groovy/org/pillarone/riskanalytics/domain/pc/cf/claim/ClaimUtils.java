@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang.NotImplementedException;
+import org.jfree.util.Log;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
@@ -456,16 +457,80 @@ public class ClaimUtils {
                                                                List<ClaimCashflowPacket> claimsCeded) {
         List<ClaimCashflowPacket> claimsNet = new ArrayList<ClaimCashflowPacket>();
         ListMultimap<IClaimRoot, ClaimCashflowPacket> aggregateCededClaimPerRoot = ArrayListMultimap.create();
+        List<ClaimCashflowPacket> cededClaimsWithMatchingGrossClaim = new ArrayList<ClaimCashflowPacket>();
         for (ClaimCashflowPacket cededClaim : claimsCeded) {
             aggregateCededClaimPerRoot.put(cededClaim.getKeyClaim(), (ClaimCashflowPacket) cededClaim.copy());
         }
         for (ClaimCashflowPacket grossClaim : claimsGross) {
             List<ClaimCashflowPacket> cededClaims = aggregateCededClaimPerRoot.get(grossClaim.getKeyClaim());
+            cededClaimsWithMatchingGrossClaim.addAll(cededClaims);
             ClaimCashflowPacket aggregateCededClaim = sum(cededClaims, true);
             ClaimCashflowPacket netClaim = getNetClaim(grossClaim, aggregateCededClaim, null);
             claimsNet.add(netClaim);
         }
+        if (cededClaimsWithMatchingGrossClaim.size() < claimsCeded.size()) {
+            // this block is used for retroactive contracts providing aggregate reserves without valid reference to gross
+            // claims
+            List<ClaimCashflowPacket> extraCededClaims = new ArrayList<ClaimCashflowPacket>(claimsCeded);
+            extraCededClaims.removeAll(cededClaimsWithMatchingGrossClaim);
+            for (ClaimCashflowPacket reserveClaim : extraCededClaims) {
+                if (!reserveClaim.getClaimType().isReserveClaim()) {
+                    throw new SimulationException("Extra ceded claim found with wrong claim type " + reserveClaim);
+                }
+            }
+            List<ClaimCashflowPacket> aggregateClaimsByBaseClaim = aggregateByBaseClaim(extraCededClaims);
+            ClaimCashflowPacket aggregateCededClaim = sum(aggregateClaimsByBaseClaim, true);
+            ClaimCashflowPacket firstNetClaim = claimsNet.get(0);
+            ClaimCashflowPacket adjustedNetClaim;
+            if (aggregateCededClaim.ultimate() == 0 && firstNetClaim.ultimate() == 0) {
+                List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
+                claims.add(aggregateCededClaim);
+                claims.add(firstNetClaim);
+                adjustedNetClaim = sum(claims, true);
+            }
+            else {
+                adjustedNetClaim = sumClaimWithClaimConvertedToReserve(firstNetClaim, aggregateCededClaim);
+            }
+            claimsNet.set(0, adjustedNetClaim);
+        }
         return claimsNet;
+    }
+
+    /**
+     * Use this method with care: it's difference to normally sum method is that it takes special care for ultimate
+     * calculation in the ctx of reserve claims.
+     * @param developedClaim
+     * @param newReserveClaim
+     * @return
+     */
+    private static ClaimCashflowPacket sumClaimWithClaimConvertedToReserve(ClaimCashflowPacket developedClaim, ClaimCashflowPacket newReserveClaim) {
+        double ultimate = developedClaim.developmentResultCumulative() + newReserveClaim.ultimate();
+        double nominalUltimate = developedClaim.nominalUltimate() + newReserveClaim.nominalUltimate();
+        double paidIncremental = developedClaim.getPaidIncrementalIndexed() + newReserveClaim.getPaidIncrementalIndexed();
+        double paidCumulated = developedClaim.getPaidCumulatedIndexed() + newReserveClaim.getPaidCumulatedIndexed();
+        double reportedIncremental = developedClaim.getReportedIncrementalIndexed() + newReserveClaim.getReportedIncrementalIndexed();
+        double reportedCumulated = developedClaim.getReportedCumulatedIndexed() + newReserveClaim.getReportedCumulatedIndexed();
+        double reserves = developedClaim.reservedIndexed() + newReserveClaim.reservedIndexed();
+        double appliedIndex = developedClaim.getAppliedIndexValue();
+        double changeInReservesIndexed = developedClaim.getChangeInReservesIndexed() + newReserveClaim.getChangeInReservesIndexed();
+        double changeInIBNRIndexed = developedClaim.getChangeInIBNRIndexed() + newReserveClaim.getChangeInIBNRIndexed();
+        double premiumRisk = developedClaim.getPremiumRisk() + newReserveClaim.getPremiumRisk();
+        double reserveRisk = developedClaim.getReserveRisk() + newReserveClaim.getReserveRisk();
+
+        ClaimRoot baseClaim = new ClaimRoot(ultimate, developedClaim.getBaseClaim());
+        DateTime updateDate = developedClaim.getUpdateDate();
+        int updatePeriod = 0;
+        if (developedClaim.getUpdatePeriod() != null) {
+            updatePeriod = developedClaim.getUpdatePeriod();
+        }
+        ClaimCashflowPacket summedClaims = new ClaimCashflowPacket(baseClaim, ultimate, nominalUltimate, paidIncremental,
+                paidCumulated, reportedIncremental, reportedCumulated, reserves, changeInReservesIndexed,
+                changeInIBNRIndexed, null, updateDate, updatePeriod);
+        applyMarkers(developedClaim, summedClaims);
+        summedClaims.setAppliedIndexValue(appliedIndex);
+        summedClaims.setPremiumRisk(premiumRisk);
+        summedClaims.setReserveRisk(reserveRisk);
+        return summedClaims;
     }
 
     public static ClaimCashflowPacket calculateNetClaim(List<ClaimCashflowPacket> claimsGross,

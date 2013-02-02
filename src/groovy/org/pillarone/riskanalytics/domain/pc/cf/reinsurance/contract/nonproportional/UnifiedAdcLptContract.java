@@ -75,8 +75,8 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
             if (aggregateCumulativeCededReserveClaim == null) {
                 DateTime occurrenceDate = grossClaims.get(0).getUpdateDate().withDayOfYear(1);
                 IClaimRoot keyClaim = new ClaimRoot(cumulativeUltimateCeded, ClaimType.AGGREGATED_RESERVES, occurrenceDate, occurrenceDate);
-                double changeInReserves = reserves; // todo(sku): verify
-                double changeInIBNR = cumulativeUltimateCeded - cumulativeReportedCeded; // todo(sku): verify
+                double changeInReserves = reserves;
+                double changeInIBNR = cumulativeUltimateCeded - cumulativeReportedCeded;
                 int updatePeriod = grossClaims.get(0).getUpdatePeriod();
                 aggregateCumulativeCededReserveClaim = new ClaimCashflowPacket(keyClaim, keyClaim, cumulativeUltimateCeded,
                         cumulativePaidCeded, cumulativePaidCeded, cumulativeReportedCeded, cumulativeReportedCeded,
@@ -86,7 +86,7 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
             else {
                 aggregateIncrementalCededReserveClaim = new ClaimCashflowPacket(
                         aggregateCumulativeCededReserveClaim.getKeyClaim(), aggregateCumulativeCededReserveClaim.getKeyClaim(),
-                        cumulativeUltimateCeded - previousCumulativeUltimateCeded, aggregateCumulativeCededReserveClaim.nominalUltimate(),
+                        0, aggregateCumulativeCededReserveClaim.nominalUltimate(),
                         cumulativePaidCeded - previousCumulativePaidCeded, cumulativePaidCeded,
                         cumulativeReportedCeded - previousCumulativeReportedCeded, cumulativeReportedCeded,
                         reserves, aggregateCumulativeCededReserveClaim.reservedIndexed() - reserves,
