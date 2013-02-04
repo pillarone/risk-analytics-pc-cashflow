@@ -1,5 +1,4 @@
 import org.pillarone.riskanalytics.core.output.DrillDownMode
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.output.SplitAndFilterCollectionModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternTableConstraints
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
@@ -19,7 +18,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportiona
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverMap
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixStructureContraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.validation.CoverAttributeValidator
-import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket
+import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket as FP
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
 import org.pillarone.riskanalytics.domain.utils.constraint.DateTimeConstraints
 import org.pillarone.riskanalytics.core.util.ResourceBundleRegistry
@@ -54,7 +53,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.output.SingleUltimatePaidClaimCo
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.5.17-kti"
+    def version = "0.5.15-kti"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -153,52 +152,38 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         CollectingModeFactory.registerStrategy(new AggregateUltimatePaidClaimCollectingModeStrategy())
 
         CollectingModeFactory.registerStrategy(new SingleUltimatePaidClaimCollectingModeStrategy())
-        // PMO-2231
 
-        def f = [
-                paid_inc: CCP.PAID_INDEXED, // 0
-                paid_cum: CCP.PAID_CUMULATIVE_INDEXED,
-                cres_inc: CCP.CHANGES_IN_RESERVES_INDEXED,
-                cres_cum: CCP.RESERVES_INDEXED,
-                IBNR_inc: CCP.CHANGES_IN_IBNR_INDEXED,
-                IBNR_cum: CCP.IBNR_INDEXED, // 5
-                outst_inc: CCP.CHANGES_IN_OUTSTANDING_INDEXED,
-                outst_cum: CCP.OUTSTANDING_INDEXED,
-                rep_inc: CCP.REPORTED_INDEXED,
-                rep_cum: CCP.REPORTED_CUMULATIVE_INDEXED,
-                total_uix_inc: CCP.ULTIMATE, // 10
-                total_inc: CCP.TOTAL_INCREMENTAL_INDEXED,
-                total_cum: CCP.TOTAL_CUMULATIVE_INDEXED,
-                rb_claim_premium: CCP.PREMIUM_RISK_BASE,
-                rb_claim_reserves: CCP.RESERVE_RISK_BASE,
-                rb_claim_total: CCP.PREMIUM_AND_RESERVE_RISK_BASE, // 15
-                rb_fin_premium: FinancialsPacket.GROSS_PREMIUM_RISK,
-                rb_fin_reserves: FinancialsPacket.GROSS_RESERVE_RISK,
-                rb_fin_total: FinancialsPacket.GROSS_PREMIUM_RESERVE_RISK]
-        def fields = [f.paid_inc, f.paid_cum, f.cres_inc, f.cres_cum, f.IBNR_inc, f.IBNR_cum, f.outst_inc, f.outst_cum,
-                f.rep_inc, f.rep_cum, f.total_uix_inc, f.total_inc, f.total_cum, f.rb_claim_premium, f.rb_claim_reserves,
-                f.rb_claim_total, f.rb_fin_premium, f.rb_fin_reserves, f.rb_fin_total]
+        // PMO-2231
+        def claimFields = [CCP.PAID_INDEXED, CCP.PAID_CUMULATIVE_INDEXED, CCP.CHANGES_IN_RESERVES_INDEXED, CCP.RESERVES_INDEXED, CCP.CHANGES_IN_IBNR_INDEXED, CCP.IBNR_INDEXED,
+                CCP.CHANGES_IN_OUTSTANDING_INDEXED, CCP.OUTSTANDING_INDEXED, CCP.REPORTED_INDEXED, CCP.REPORTED_CUMULATIVE_INDEXED, CCP.ULTIMATE, CCP.TOTAL_INCREMENTAL_INDEXED,
+                CCP.TOTAL_CUMULATIVE_INDEXED, CCP.PREMIUM_RISK_BASE, CCP.RESERVE_RISK_BASE, CCP.PREMIUM_AND_RESERVE_RISK_BASE]
 
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], []))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], []))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE], []))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], []))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [0, 3, 5, 7, 8, 10, 11, 12, 13, 14, 15].collect { fields[it] }))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [0, 3, 5, 7, 8, 10, 11, 12].collect { fields[it] }))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [7, 11].collect { fields[it] }))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE], [7, 11].collect { fields[it] }))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [7, 11].collect { fields[it] }))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [16, 17, 18].collect { fields[it] }, [FinancialsPacket]))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [7, 11].collect { fields[it] }))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [16, 17, 18].collect { fields[it] }, [FinancialsPacket]))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [7, 11, 13, 14, 15].collect { fields[it] }))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE], [7, 11, 13, 14, 15].collect { fields[it] }))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [7, 11, 13, 14, 15].collect { fields[it] }))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [7, 11, 13, 14, 15].collect { fields[it] }))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [7, 10, 11, 12, 13, 14, 15].collect { fields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [0, 3, 5, 7, 8, 10, 11, 12, 13, 14, 15].collect { claimFields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [0, 3, 5, 7, 8, 10, 11, 12].collect { claimFields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [7, 11].collect { claimFields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE], [7, 11].collect { claimFields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [7, 11].collect { claimFields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [7, 11].collect { claimFields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [7, 11, 13, 14, 15].collect { claimFields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE], [7, 11, 13, 14, 15].collect { claimFields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [7, 11, 13, 14, 15].collect { claimFields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [7, 11, 13, 14, 15].collect { claimFields[it] }))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [7, 10, 11, 12, 13, 14, 15].collect { claimFields[it] }))
+
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [FP.GROSS_PREMIUM_RISK,FP.GROSS_RESERVE_RISK,FP.GROSS_PREMIUM_RESERVE_RISK], [FP, ContractFinancialsPacket],"FIN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [FP.GROSS_PREMIUM_RISK,FP.GROSS_RESERVE_RISK,FP.GROSS_PREMIUM_RESERVE_RISK], [FP, ContractFinancialsPacket],"FIN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [], [FP, ContractFinancialsPacket],"FIN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [], [FP, ContractFinancialsPacket],"FIN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [], [FP, ContractFinancialsPacket],"FIN"))
+
+
+
 
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [CCP.REPORTED_INDEXED, CCP.PAID_INDEXED]))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [CCP.ULTIMATE, CCP.PAID_INDEXED]))
     }
 
     def onChange = { event ->

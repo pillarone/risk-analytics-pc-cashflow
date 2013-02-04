@@ -44,22 +44,27 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
     private boolean displayUnderwritingYearOnly = true;
     private static final DateTimeFormatter formatter = DateTimeFormat.forPattern(PeriodLabelsUtil.PARAMETER_DISPLAY_FORMAT);
     private final List<Class<Packet>> compatibleClasses;
+    private final String identifier_prefix;
 
-    // required for serialization by gridgain
-    public SplitAndFilterCollectionModeStrategy() {
-        compatibleClasses = new ArrayList<Class<Packet>>();
-        drillDownModes = new ArrayList<DrillDownMode>();
-        fieldFilter = new ArrayList<String>();
-    }
 
-    public SplitAndFilterCollectionModeStrategy(List<DrillDownMode> drillDownModes, List<String> fieldFilter, List<Class<Packet>> compatibleClasses) {
+    public SplitAndFilterCollectionModeStrategy(List<DrillDownMode> drillDownModes, List<String> fieldFilter, List<Class<Packet>> compatibleClasses, String identifier_prefix) {
         this.drillDownModes = drillDownModes;
         this.fieldFilter = fieldFilter;
         this.compatibleClasses = compatibleClasses;
+        this.identifier_prefix = identifier_prefix;
+    }
+
+    public SplitAndFilterCollectionModeStrategy(List<DrillDownMode> drillDownModes, List<String> fieldFilter, List<Class<Packet>> compatibleClasses) {
+        this(drillDownModes, fieldFilter,compatibleClasses,null);
     }
 
     public SplitAndFilterCollectionModeStrategy(List<DrillDownMode> drillDownModes, List<String> fieldFilter) {
         this(drillDownModes, fieldFilter, new ArrayList<Class<Packet>>());
+    }
+
+    // required for serialization by gridgain
+    public SplitAndFilterCollectionModeStrategy() {
+        this(new ArrayList<DrillDownMode>(), new ArrayList<String>(), new ArrayList<Class<Packet>>());
     }
 
     @Override
@@ -303,6 +308,9 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
     @Override
     public String getIdentifier() {
         StringBuilder identifier = new StringBuilder("AGGREGATE_");
+        if (identifier_prefix != null){
+            identifier.append(identifier_prefix).append("_");
+        }
         if (drillDownModes.size() == 0 && fieldFilter.size() == 0) {
             identifier.append("NO-SPLIT_NO-FILTER").append("_");
         }
@@ -345,6 +353,6 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
 
     @Override
     public Object[] getArguments() {
-        return new Object[]{drillDownModes, fieldFilter, compatibleClasses};
+        return new Object[]{drillDownModes, fieldFilter, compatibleClasses, identifier_prefix};
     }
 }

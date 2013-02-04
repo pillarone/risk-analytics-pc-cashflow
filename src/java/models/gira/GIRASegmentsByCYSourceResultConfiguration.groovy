@@ -9,7 +9,7 @@ components {
 			outClaimsGross = "AGGREGATE_BY_SOURCE_BY_PERIOD"
 			outClaimsNet = "AGGREGATE_BY_SOURCE_BY_PERIOD"
 			outDiscountedValues = "AGGREGATED"
-			outFinancials = "AGGREGATE_BY_PERIOD_grossPremiumRisk_grossReserveRisk_grossPremiumReserveRisk"
+			outFinancials = "AGGREGATE_FIN_BY_PERIOD_grossPremiumRisk_grossReserveRisk_grossPremiumReserveRisk"
 			outNetPresentValues = "AGGREGATED"
 			outUnderwritingInfoCeded = "AGGREGATE_BY_SOURCE_BY_PERIOD"
 			outUnderwritingInfoGross = "AGGREGATE_BY_SOURCE_BY_PERIOD"
