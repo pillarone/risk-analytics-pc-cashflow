@@ -55,7 +55,6 @@ public class FinancialsPacket extends MultiValuePacket {
         }
 
         gross = new Financials(grossUwInfos, grossClaims, occurrenceInCurrentPeriod, Boolean.FALSE);
-        net = new Financials(netUwInfos, netClaims, occurrenceInCurrentPeriod, Boolean.FALSE);
         ceded = new Financials();
         if (!cededUwInfos.isEmpty()) {
             CededUnderwritingInfoPacket aggregateCededUwInfoPacket = UnderwritingInfoUtils.aggregateCeded(cededUwInfos);
@@ -63,6 +62,7 @@ public class FinancialsPacket extends MultiValuePacket {
             ceded.premiumPaid = aggregateCededUwInfoPacket.getPremiumPaid();
             commission = aggregateCededUwInfoPacket.getCommission();
         }
+        net = new Financials(netUwInfos, netClaims, occurrenceInCurrentPeriod, Boolean.TRUE);
         ceded.initClaimRelatedFigures(cededClaims, occurrenceInCurrentPeriod, Boolean.TRUE);
     }
 
@@ -513,15 +513,15 @@ public class FinancialsPacket extends MultiValuePacket {
         }
 
         public Financials(List<UnderwritingInfoPacket> uwInfos, List<ClaimCashflowPacket> claims,
-                          Boolean occurrenceInCurrentPeriod, Boolean cededFigures) {
+                          Boolean occurrenceInCurrentPeriod, Boolean cededOrNetFigures) {
             if (!uwInfos.isEmpty()) {
                 premiumWritten = UnderwritingInfoUtils.aggregate(uwInfos).getPremiumWritten();
                 premiumPaid = UnderwritingInfoUtils.aggregate(uwInfos).getPremiumPaid();
             }
-            initClaimRelatedFigures(claims, occurrenceInCurrentPeriod, cededFigures);
+            initClaimRelatedFigures(claims, occurrenceInCurrentPeriod, cededOrNetFigures);
         }
 
-        public void initClaimRelatedFigures(List<ClaimCashflowPacket> claims, Boolean occurrenceInCurrentPeriod, Boolean cededFigures) {
+        public void initClaimRelatedFigures(List<ClaimCashflowPacket> claims, Boolean occurrenceInCurrentPeriod, Boolean cededOrNetFigures) {
             if (!claims.isEmpty()) {
                 ClaimCashflowPacket sum = ClaimUtils.sum(claims, true);
                 claimUltimate = sum.ultimate();
@@ -529,8 +529,11 @@ public class FinancialsPacket extends MultiValuePacket {
                 claimOutstanding = sum.outstandingIndexed();
             }
             cashflow = premiumPaid + claimPaid;
+            if (cededOrNetFigures == Boolean.TRUE) {
+                cashflow += commission;
+            }
             bestEstimate = premiumWritten + claimUltimate;
-            double financialRisk = (cededFigures == Boolean.TRUE) ? cashflow + claimOutstanding + commission : cashflow + claimOutstanding;
+            double financialRisk = cashflow + claimOutstanding;
             if (occurrenceInCurrentPeriod == Boolean.TRUE) {
                 premiumRisk = financialRisk;
             }
