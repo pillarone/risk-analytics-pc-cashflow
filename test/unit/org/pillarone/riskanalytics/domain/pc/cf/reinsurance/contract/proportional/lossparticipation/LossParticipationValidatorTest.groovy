@@ -24,8 +24,8 @@ class LossParticipationValidatorTest extends GrailsUnitTestCase {
         parameters = []
     }
 
-    private void setupLossParticipationValidator(LossParticipationStrategyType lossParticipationType, def lossRatio, def losPartByCedant) {
-        ConstrainedMultiDimensionalParameter participation = new ConstrainedMultiDimensionalParameter([lossRatio, losPartByCedant], [LossParticipationStrategy.LOSS_RATIO, LossParticipationStrategy.LOSS_PART_BY_CEDANT],
+    private void setupLossParticipationValidator(LossParticipationStrategyType lossParticipationType, def lossRatio, def lossPartByCedant) {
+        ConstrainedMultiDimensionalParameter participation = new ConstrainedMultiDimensionalParameter([lossRatio, lossPartByCedant], [LossParticipationStrategy.LOSS_RATIO, LossParticipationStrategy.LOSS_PART_BY_CEDANT],
                 ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER))
         def lossParticipation = LossParticipationStrategyType.getStrategy(lossParticipationType, [participation: participation])
         parameters << new ParameterObjectParameterHolder(
