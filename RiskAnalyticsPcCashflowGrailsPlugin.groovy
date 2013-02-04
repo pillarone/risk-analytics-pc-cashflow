@@ -174,11 +174,11 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [7, 11, 13, 14, 15].collect { claimFields[it] }))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [7, 10, 11, 12, 13, 14, 15].collect { claimFields[it] }))
 
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [FP.GROSS_PREMIUM_RISK,FP.GROSS_RESERVE_RISK,FP.GROSS_PREMIUM_RESERVE_RISK], [FP, ContractFinancialsPacket],"FIN"))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [FP.GROSS_PREMIUM_RISK,FP.GROSS_RESERVE_RISK,FP.GROSS_PREMIUM_RESERVE_RISK], [FP, ContractFinancialsPacket],"FIN"))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [], [FP, ContractFinancialsPacket],"FIN"))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [], [FP, ContractFinancialsPacket],"FIN"))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [], [FP, ContractFinancialsPacket],"FIN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [FP.GROSS_PREMIUM_RISK,FP.GROSS_RESERVE_RISK,FP.GROSS_PREMIUM_RESERVE_RISK], [FP],"FIN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [FP.GROSS_PREMIUM_RISK,FP.GROSS_RESERVE_RISK,FP.GROSS_PREMIUM_RESERVE_RISK], [FP],"FIN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [], [FP],"FIN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [], [FP],"FIN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [], [FP],"FIN"))
 
 
 
