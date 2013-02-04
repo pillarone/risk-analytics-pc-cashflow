@@ -1,6 +1,5 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance
 
-import org.hibernate.type.ListType
 import org.pillarone.riskanalytics.core.components.Component
 import org.pillarone.riskanalytics.core.packets.PacketList
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
@@ -29,10 +28,10 @@ class ClaimMerger extends Component {
         ClaimUtils.correctClaimSign(inClaimsNet,false)
         // TODO (dbe) make more robust, e.g. no gross found.
         if (isReceiverWired(inClaimsGross)) {
-            Map<IClaimRoot, ClaimCashflowPacket> cededClaimsByBase = ClaimUtils.aggregateByBaseClaimGroupByKeyClaim(claimsCeded)
-            Map<IClaimRoot, ClaimCashflowPacket> cededClaimsForNetByBase = ClaimUtils.aggregateByBaseClaimGroupByKeyClaim(inClaimsCededForNet)
-            Map<IClaimRoot, ClaimCashflowPacket> netClaimsByBase = ClaimUtils.aggregateByBaseClaimGroupByKeyClaim(inClaimsNet)
-            Map<IClaimRoot, ClaimCashflowPacket> benefitClaimsByBase = ClaimUtils.aggregateByBaseClaimGroupByKeyClaim(inClaimsBenefit)
+            Map<IClaimRoot, ClaimCashflowPacket> cededClaimsByBase = ClaimUtils.aggregateByKeyClaim(claimsCeded)
+            Map<IClaimRoot, ClaimCashflowPacket> cededClaimsForNetByBase = ClaimUtils.aggregateByKeyClaim(inClaimsCededForNet)
+            Map<IClaimRoot, ClaimCashflowPacket> netClaimsByBase = ClaimUtils.aggregateByKeyClaim(inClaimsNet)
+            Map<IClaimRoot, ClaimCashflowPacket> benefitClaimsByBase = ClaimUtils.aggregateByKeyClaim(inClaimsBenefit)
             //net matrix case
             if (!hasBenefitContracts()) {
                 for (Map.Entry<IClaimRoot, ClaimCashflowPacket> netClaim : netClaimsByBase.entrySet()) {
@@ -110,7 +109,7 @@ class ClaimMerger extends Component {
     }
 
     private ClaimCashflowPacket getNetClaim(Map.Entry<IClaimRoot, ClaimCashflowPacket> netClaim, Map<IClaimRoot, ClaimCashflowPacket> cededClaimsForNetByBase) {
-        ClaimCashflowPacket grossClaim = ClaimUtils.findClaimByBaseClaim(inClaimsGross, netClaim.key)
+        ClaimCashflowPacket grossClaim = ClaimUtils.findClaimByKeyClaim(inClaimsGross, netClaim.key)
         ClaimCashflowPacket cededClaim = cededClaimsForNetByBase.get(netClaim.key);
         return ClaimUtils.getNetClaim(grossClaim, cededClaim, netClaim.value.reinsuranceContract())
     }
