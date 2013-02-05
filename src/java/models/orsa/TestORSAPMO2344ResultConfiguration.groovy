@@ -1,0 +1,24 @@
+package models.orsa
+
+model = models.orsa.ORSAModel
+displayName = "PMO-2344-RT"
+components {
+	segments {
+		outClaimsCeded = "AGGREGATE_outstandingIndexed_ultimate_totalIncrementalIndexed_totalCumulativeIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
+		outClaimsGross = "AGGREGATE_outstandingIndexed_ultimate_totalIncrementalIndexed_totalCumulativeIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
+		outClaimsNet = "AGGREGATE_outstandingIndexed_ultimate_totalIncrementalIndexed_totalCumulativeIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
+		subsubcomponents {
+			outClaimsCeded = "AGGREGATE_outstandingIndexed_ultimate_totalIncrementalIndexed_totalCumulativeIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
+			outClaimsGross = "AGGREGATE_outstandingIndexed_ultimate_totalIncrementalIndexed_totalCumulativeIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
+			outClaimsNet = "AGGREGATE_outstandingIndexed_ultimate_totalIncrementalIndexed_totalCumulativeIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
+			outFinancials = "AGGREGATE_FIN_BY_PERIOD"
+		}
+	}
+	structures {
+		substructure {
+			outClaimsCeded = "AGGREGATE_outstandingIndexed_ultimate_totalIncrementalIndexed_totalCumulativeIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
+			outClaimsGross = "AGGREGATE_outstandingIndexed_ultimate_totalIncrementalIndexed_totalCumulativeIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
+			outClaimsNet = "AGGREGATE_outstandingIndexed_ultimate_totalIncrementalIndexed_totalCumulativeIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
+		}
+	}
+}
