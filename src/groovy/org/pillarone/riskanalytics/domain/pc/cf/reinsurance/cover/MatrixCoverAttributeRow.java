@@ -80,6 +80,10 @@ public class MatrixCoverAttributeRow {
         return cededContract;
     }
 
+    public ISegmentMarker getSegment() {
+        return segment;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -42,6 +42,7 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
     PacketList<UnderwritingInfoPacket> outUnderwritingInfoInward = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<CommissionPacket> outCommission = new PacketList<CommissionPacket>(CommissionPacket)
     List<ClaimMerger> claimMergers = []
+    List<UnderwritingInfoMerger> uwInfoMergers = []
 
     public ReinsuranceContract createDefaultSubComponent() {
         return new ReinsuranceContract(
@@ -87,27 +88,35 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
             if (strategy?.mergerRequired()) {
                 ClaimMerger claimMerger = new ClaimMerger(coverAttributeStrategy: strategy)
+                UnderwritingInfoMerger uwInfoMerger = new UnderwritingInfoMerger(coverAttributeStrategy: strategy)
                 claimMergers << claimMerger
+                uwInfoMergers << uwInfoMerger
                 List<IReinsuranceContractMarker> benefitContracts = strategy.benefitContracts
                 List<IReinsuranceContractMarker> coveredNetOfContracts = strategy.coveredNetOfContracts()
                 List<IReinsuranceContractMarker> coveredCededOfContracts = strategy.coveredCededOfContracts()
                 for (IReinsuranceContractMarker coveredContract : coveredCededOfContracts) {
                     doWire WC, claimMerger, 'inClaimsCeded', coveredContract, 'outClaimsCeded'
+                    doWire WC, uwInfoMerger, 'inUnderwritingInfoCeded', coveredContract, 'outUnderwritingInfoCeded'
                 }
                 if (coveredNetOfContracts.size() > 0 || benefitContracts.size() > 0) {
                     for (IReinsuranceContractMarker coveredContract : coveredNetOfContracts) {
                         doWire WC, claimMerger, 'inClaimsNet', coveredContract, 'outClaimsNet'
                         doWire WC, claimMerger, 'inClaimsCededForNet', coveredContract, 'outClaimsCeded'
+                        doWire WC, uwInfoMerger, 'inUnderwritingInfoNet', coveredContract, 'outUnderwritingInfoGNPI'
                     }
                     for (IReinsuranceContractMarker benefitContract : benefitContracts) {
                         doWire WC, claimMerger, 'inClaimsBenefit', benefitContract, 'outClaimsCeded'
+                        doWire WC, uwInfoMerger, 'inUnderwritingInfoBenefit', benefitContract, 'outUnderwritingInfoCeded'
                     }
                     doWire PRC, claimMerger, 'inClaimsGross', this, 'inClaims'
+                    doWire PRC, uwInfoMerger, 'inUnderwritingInfoGross', this, 'inUnderwritingInfo'
                 }
                 else if (strategy.hasGrossFilters()) {
                     doWire PRC, claimMerger, 'inClaimsGross', this, 'inClaims'
+                    doWire PRC, uwInfoMerger, 'inUnderwritingInfoGross', this, 'inUnderwritingInfo'
                 }
                 doWire WC, contract, 'inClaims', claimMerger, 'outClaims'
+                doWire WC, contract, 'inUnderwritingInfo', uwInfoMerger, 'outUnderwritingInfo'
             }
         }
     }

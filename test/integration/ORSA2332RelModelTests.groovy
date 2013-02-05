@@ -2,9 +2,9 @@ import models.orsa.ORSAModel
 import org.pillarone.riskanalytics.core.simulation.engine.ModelTest
 
 /**
- * @author stefan.kunz (at) intuitive-collaboration (dot) com
+ * @author stefan (dot) kunz (at) intuitive-collaboration (dot) com
  */
-class ORSA2235ModelTests extends ModelTest {
+class ORSA2332RelModelTests extends ModelTest {
 
     Class getModelClass() {
         ORSAModel
@@ -12,20 +12,20 @@ class ORSA2235ModelTests extends ModelTest {
 
     @Override
     String getResultConfigurationFileName() {
-        'TestORSAPMO2235ResultConfiguration'
+        'TestORSAPMO22332ResultConfiguration'
     }
 
     String getResultConfigurationDisplayName() {
-        'Retro by Period'
+        'PMO2233 Test 2'
     }
 
     @Override
     String getParameterFileName() {
-        'TestORSAPMO2235AbsParameters'
+        'TestORSAPMO22332RelParameters'
     }
 
     String getParameterDisplayName() {
-        'PMO-2235'
+        'PMO233 Test 2 - SL Rel Param'
     }
 
     protected boolean shouldCompareResults() {
