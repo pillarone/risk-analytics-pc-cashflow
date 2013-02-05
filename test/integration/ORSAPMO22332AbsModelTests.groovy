@@ -1,8 +1,6 @@
-package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional
-
-import models.gira.GIRAModel
 import models.orsa.ORSAModel
 import org.pillarone.riskanalytics.core.simulation.engine.ModelTest
+
 /**
  * @author stefan (dot) kunz (at) intuitive-collaboration (dot) com
  */
