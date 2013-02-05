@@ -144,8 +144,10 @@ public class UnderwritingInfoUtils {
             if (uwInfos.size() == 1) {
                 aggregateUnderwritingInfo.add(segmentUwInfo.iterator().next());
             }
-            else {
-                aggregateUnderwritingInfo.add(correctMetaProperties(aggregate(uwInfos), uwInfos));
+            else if (uwInfos.size() > 1) {
+                UnderwritingInfoPacket aggregatedUwInfo = aggregate(uwInfos);
+                aggregatedUwInfo.setOriginal(uwInfos.get(0));
+                aggregateUnderwritingInfo.add(correctMetaProperties(aggregatedUwInfo, uwInfos));
             }
         }
         return aggregateUnderwritingInfo;
