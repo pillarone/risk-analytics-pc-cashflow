@@ -467,7 +467,7 @@ public class ClaimUtils {
         ListMultimap<IClaimRoot, ClaimCashflowPacket> aggregateCededClaimPerRoot = ArrayListMultimap.create();
         List<ClaimCashflowPacket> cededClaimsWithMatchingGrossClaim = new ArrayList<ClaimCashflowPacket>();
         for (ClaimCashflowPacket cededClaim : claimsCeded) {
-            aggregateCededClaimPerRoot.put(cededClaim.getKeyClaim(), (ClaimCashflowPacket) cededClaim.copy());
+            aggregateCededClaimPerRoot.put(cededClaim.getKeyClaim(), cededClaim);
         }
         for (ClaimCashflowPacket grossClaim : claimsGross) {
             List<ClaimCashflowPacket> cededClaims = aggregateCededClaimPerRoot.get(grossClaim.getKeyClaim());
