@@ -144,7 +144,7 @@ class RiskToBandAllocatorStrategy extends AbstractParameterObject implements IRi
         List<Double> upperBounds = riskMap.keySet().sort()
         int numOfBands = riskMap.size()
         for (ClaimRoot claim: claims) {
-            int index = Collections.binarySearch(upperBounds, claim.getUltimate())
+            int index = Collections.binarySearch(upperBounds, Math.abs(claim.getUltimate()))
             if (index < 0) index = -index - 1
             double bound = upperBounds.get(Math.min(index, numOfBands - 1))
             if (!lossToRiskMap[bound]) lossToRiskMap[bound] = new ArrayList<ClaimRoot>()
