@@ -1,20 +1,20 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl;
 
 
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AdditionalPremiumPerLayer;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IIncurredCalculation;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ScaledPeriodLayerParameters;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IContractClaimStore;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache;
 
-import org.pillarone.riskanalytics.core.simulation.SimulationException
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
-import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters
-
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AdditionalPremiumPerLayer
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IIncurredCalculation
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ScaledPeriodLayerParameters
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IContractClaimStore
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache
+import java.util.Collection;
 
 /**
  * author simon.parten @ art-allianz . com
@@ -47,14 +47,14 @@ public class AnnualIncurredCalc implements IIncurredCalculation {
             LayerParameters tempLayer = new LayerParameters(layerParameters.getShare(), layerParameters.getClaimExcess(), layerParameters.getClaimLimit());
             tempLayer.addAdditionalPremium(additionalPremiumPerLayer.getPeriodExcess(), additionalPremiumPerLayer.getPeriodLimit(), additionalPremiumPerLayer.getAdditionalPremium(), additionalPremiumPerLayer.getBasis());
             switch (additionalPremiumPerLayer.getBasis()) {
-                case APBasis.PREMIUM:
+                case PREMIUM:
                     double loss = lossAfterAnnualStructure(incurredClaims, tempLayer);
                     tempAdditionalPremium = (loss * layerPremium * layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium()) / tempLayer.getLayerPeriodLimit();
                     break;
-                case APBasis.LOSS:
+                case LOSS:
                     tempAdditionalPremium = layerCededIncurred(incurredClaims, tempLayer) * additionalPremiumPerLayer.getAdditionalPremium();
                     break;
-                case APBasis.NCB:
+                case NCB:
                     if (lossAfterAnnualStructure(incurredClaims, tempLayer) == 0) {
                         tempAdditionalPremium = layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium() * layerPremium;
                     }
