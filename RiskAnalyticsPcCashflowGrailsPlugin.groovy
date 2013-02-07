@@ -176,11 +176,8 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
 
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [FP.GROSS_PREMIUM_RISK,FP.GROSS_RESERVE_RISK,FP.GROSS_PREMIUM_RESERVE_RISK], [FP],"FIN"))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [FP.GROSS_PREMIUM_RISK,FP.GROSS_RESERVE_RISK,FP.GROSS_PREMIUM_RESERVE_RISK], [FP],"FIN"))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [], [FP],"FIN"))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [], [FP],"FIN"))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [], [FP],"FIN"))
-
-
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [], [FP,ContractFinancialsPacket],"FIN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [], [FP,ContractFinancialsPacket],"FIN"))
 
 
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [CCP.REPORTED_INDEXED, CCP.PAID_INDEXED]))
