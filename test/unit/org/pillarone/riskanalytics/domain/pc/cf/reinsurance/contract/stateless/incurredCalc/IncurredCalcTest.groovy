@@ -129,13 +129,13 @@ class IncurredCalcTest extends GroovyTestCase {
         layerParameters.add(0, 1, 1, 0, 0, 0, 0, 0, APBasis.NCB)
         double incurredFirstCalc = calculation.cededIncurredRespectTerm(claimCache, layerParameters, periodScope, 100, 400, periodScope.getPeriodCounter(), ContractCoverBase.LOSSES_OCCURING)
         assertEquals("First period inc term deductible", 350, incurredFirstCalc)
-        Map<Integer, Double> incurredFirstCalcMap = calculation.cededIncurredsByPeriods(claimCache, periodScope, 100, 400, layerParameters, ContractCoverBase.LOSSES_OCCURING)
+        Map<Integer, Double> incurredFirstCalcMap = calculation.cededIncurredsByPeriods(claimCache, periodScope, 100, 400, layerParameters, ContractCoverBase.LOSSES_OCCURING, 0)
         assertEquals(" ", 350, incurredFirstCalcMap.get(0))
 
         periodScope.prepareNextPeriod()
         double incurredSecondCalc = calculation.cededIncurredRespectTerm(claimCache, layerParameters, periodScope, 100, 400, periodScope.getPeriodCounter(), ContractCoverBase.LOSSES_OCCURING)
         assertEquals("second period inc term deductible", 0, incurredSecondCalc)
-        Map<Integer, Double> incurredSecondCalcMap = calculation.cededIncurredsByPeriods(claimCache, periodScope, 100, 400, layerParameters, ContractCoverBase.LOSSES_OCCURING)
+        Map<Integer, Double> incurredSecondCalcMap = calculation.cededIncurredsByPeriods(claimCache, periodScope, 100, 400, layerParameters, ContractCoverBase.LOSSES_OCCURING, 1)
         assertEquals(" ", 350, incurredSecondCalcMap.get(0))
         assertEquals(" ", 0, incurredSecondCalcMap.get(1))
 
@@ -144,7 +144,7 @@ class IncurredCalcTest extends GroovyTestCase {
 
         periodScope.prepareNextPeriod()
         double inThirdCalc = calculation.cededIncurredRespectTerm(claimCache1, layerParameters, periodScope, 100, 400, periodScope.getPeriodCounter(), ContractCoverBase.LOSSES_OCCURING)
-        Map<Integer, Double> incurredThirdCalcMap = calculation.cededIncurredsByPeriods(claimCache1, periodScope, 100, 400, layerParameters, ContractCoverBase.LOSSES_OCCURING)
+        Map<Integer, Double> incurredThirdCalcMap = calculation.cededIncurredsByPeriods(claimCache1, periodScope, 100, 400, layerParameters, ContractCoverBase.LOSSES_OCCURING, 2)
         assertEquals("third period inc term deductible", 50, inThirdCalc)
         assertEquals(" ", 0, incurredThirdCalcMap.get(1))
         assertEquals("", 50, incurredThirdCalcMap.get(2))

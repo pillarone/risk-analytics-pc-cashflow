@@ -216,4 +216,36 @@ public class RIUtilities {
         }
         return claimsOfInterest;
     }
+
+    public static List<ClaimCashflowPacket> uncoveredClaims(ContractCoverBase coverageBase, DateTime coverStart, DateTime coverEnd, List<ClaimCashflowPacket> incomingClaims) {
+        final List<ClaimCashflowPacket> uncoveredClaims = new ArrayList<ClaimCashflowPacket>();
+
+        for (ClaimCashflowPacket incomingClaim : incomingClaims) {
+            DateTime claimCoverDate = coverageBase.claimCoverDate(incomingClaim);
+            boolean inCoverPeriod = (coverStart.isEqual(claimCoverDate) || coverStart.isBefore(claimCoverDate)) && coverEnd.isAfter(claimCoverDate);
+            if(!inCoverPeriod) {
+                uncoveredClaims.add(incomingClaim);
+            }
+        }
+        return uncoveredClaims;
+    }
+
+    public static ICededRoot findCededClaimRelatedToGrossClaim(IClaimRoot grossClaim, List<ICededRoot> incurredCededClaims) {
+        for (ICededRoot incurredCededClaim : incurredCededClaims) {
+            if(grossClaim.equals(incurredCededClaim.getGrossClaim())) {
+                return incurredCededClaim;
+            }
+        }
+        throw new SimulationException("Failed to match a gross claim to the list of ceded claims; " + grossClaim.toString());
+    }
+
+    public static ClaimCashflowPacket findCashflowToGrossClaim(IClaimRoot cededKeyClaim, Collection<ClaimCashflowPacket> allCashflows, IncurredClaimBase base) {
+        for (ClaimCashflowPacket allCashflow : allCashflows) {
+            if (cededKeyClaim.equals(base.parentClaim(allCashflow))) {
+                return allCashflow;
+            }
+        }
+        return new ClaimCashflowPacket();
+    }
+
 }

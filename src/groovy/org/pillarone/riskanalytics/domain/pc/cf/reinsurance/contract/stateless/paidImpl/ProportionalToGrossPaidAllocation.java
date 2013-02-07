@@ -48,7 +48,7 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
             Map<IClaimRoot, Collection<ClaimCashflowPacket>> cashflows = cashflowsByKey.asMap();
 
             for (Map.Entry<IClaimRoot, Collection<ClaimCashflowPacket>> packetEntrys : cashflows.entrySet()) {
-                ICededRoot cededRoot = GRIUtilities.findCededClaimRelatedToGrossClaim(packetEntrys.getKey(), incurredCededClaims);
+                ICededRoot cededRoot = RIUtilities.findCededClaimRelatedToGrossClaim(packetEntrys.getKey(), incurredCededClaims);
                 List<ClaimCashflowPacket> cashflowPackets = new ArrayList<ClaimCashflowPacket>(packetEntrys.getValue());
                 double grossIncurredByClaimRatio;
                 if (Math.abs(grossIncurredInPeriod) == 0) {
@@ -62,7 +62,7 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
 
                 IClaimRoot keyClaim = base.parentClaim(cashflowPackets.get(0));
 
-                ClaimCashflowPacket latestCededCashflow = GRIUtilities.findCashflowToGrossClaim(keyClaim, latestCededCashflowsByIncurredClaim, IncurredClaimBase.KEY);
+                ClaimCashflowPacket latestCededCashflow = RIUtilities.findCashflowToGrossClaim(keyClaim, latestCededCashflowsByIncurredClaim, IncurredClaimBase.KEY);
 
                 boolean setUltimate = false;
                 if (base.parentClaim(latestCededCashflow).getExposureStartDate() == null && latestCededCashflow.ultimate() == 0) {

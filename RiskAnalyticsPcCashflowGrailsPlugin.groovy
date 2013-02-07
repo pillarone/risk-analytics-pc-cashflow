@@ -53,7 +53,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.output.SingleUltimatePaidClaimCo
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.6.1-kti"
+    def version = "0.6.2-kti"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -179,7 +179,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [], [FP,ContractFinancialsPacket],"FIN"))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [], [FP,ContractFinancialsPacket],"FIN"))
 
-
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [CCP.ULTIMATE, CCP.PAID_INDEXED]))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [CCP.REPORTED_INDEXED, CCP.PAID_INDEXED]))
     }
 

@@ -120,15 +120,17 @@ public class TermIncurredCalculation implements IIncurredCalculation {
     /**
      *
      *
+     *
      * @param claimCache
      * @param periodScope
      * @param termExcess
      * @param termLimit
      * @param layerParameters
      * @param coverageBase
+     * @param claimsToSimulationPeriod
      * @return
      */
-    public Map<Integer, Double> cededIncurredsByPeriods(IAllContractClaimCache claimCache, PeriodScope periodScope, double termExcess, double termLimit, ScaledPeriodLayerParameters layerParameters, ContractCoverBase coverageBase) {
+    public Map<Integer, Double> cededIncurredsByPeriods(IAllContractClaimCache claimCache, PeriodScope periodScope, double termExcess, double termLimit, ScaledPeriodLayerParameters layerParameters, ContractCoverBase coverageBase, Integer claimsToSimulationPeriod) {
         Map<Integer, Double> incurredCededAmountByPeriod = new TreeMap<Integer, Double>();
         for (int contractPeriod = 0; contractPeriod <= periodScope.getCurrentPeriod(); contractPeriod++) {
             double incurredInPeriod = cededIncurredToPeriod(claimCache, layerParameters, periodScope, termExcess, termLimit, coverageBase, contractPeriod);

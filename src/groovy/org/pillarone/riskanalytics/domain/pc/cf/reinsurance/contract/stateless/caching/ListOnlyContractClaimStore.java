@@ -37,8 +37,8 @@ public class ListOnlyContractClaimStore implements IAllContractClaimCache {
         throw new SimulationException("Inappropriate caching mechanism used");
     }
 
-    public Collection<ClaimCashflowPacket> allClaimCashflowPacketsInModelPeriod(Collection<ClaimCashflowPacket> allCashflows, PeriodScope periodScope, ContractCoverBase base, Integer anInt) {
-        return GRIUtilities.cashflowsCoveredInModelPeriod(this.allCashflows, periodScope, base, anInt);
+    public Collection<ClaimCashflowPacket> allClaimCashflowPacketsInModelPeriod(Integer uwPeriod, PeriodScope periodScope, ContractCoverBase base) {
+        return GRIUtilities.cashflowsCoveredInModelPeriod(this.allCashflows, periodScope, base, uwPeriod);
     }
 
     public Set<IClaimRoot> allIncurredClaimsInModelPeriod(Integer anInt, PeriodScope periodScope, ContractCoverBase coverBase) {
@@ -56,15 +56,15 @@ public class ListOnlyContractClaimStore implements IAllContractClaimCache {
         return RIUtilities.incurredClaims(cashflowsBeforeSimPeriod, IncurredClaimBase.BASE);
     }
 
-    public Collection<ClaimCashflowPacket> allCashflowClaimsUpToSimulationPeriod(Integer period, PeriodScope periodScope, ContractCoverBase coverBase) {
+    public Collection<ClaimCashflowPacket> allCashflowClaimsUpToSimulationPeriod(Integer simulationPeriod, PeriodScope periodScope, ContractCoverBase coverBase) {
         Collection<ClaimCashflowPacket> claimsBeforeSimPeriod = new ArrayList<ClaimCashflowPacket>();
-        for (int i = 0; i <= period; i++) {
+        for (int i = 0; i <= simulationPeriod; i++) {
             claimsBeforeSimPeriod.addAll(claimsBySimulationPeriod.get(i));
         }
         return claimsBeforeSimPeriod;
     }
 
-    public Collection<ClaimCashflowPacket> allClaimCashflowPacketsInSimulationPeriod(Collection<ClaimCashflowPacket> allCashflows, PeriodScope periodScope, ContractCoverBase base, Integer anInt) {
+    public Collection<ClaimCashflowPacket> allClaimCashflowPacketsInSimulationPeriod(Integer anInt, PeriodScope periodScope, ContractCoverBase base) {
         return claimsBySimulationPeriod.get(anInt);
     }
 
@@ -77,13 +77,19 @@ public class ListOnlyContractClaimStore implements IAllContractClaimCache {
         return allIncurredClaimsInSimulationPeriod(periodScope.getCurrentPeriod(), periodScope, coverBase);
     }
 
-    public void cacheClaims(Collection<ClaimCashflowPacket> claims, Integer simulationPeriod) {
+    public void cacheClaims(Collection<ClaimCashflowPacket> newClaims, Integer simulationPeriod) {
         final Collection<ClaimCashflowPacket> cashflowPackets = new ArrayList<ClaimCashflowPacket>();
-        cashflowPackets.addAll(claims);
-        allCashflows.addAll(claims);
+        cashflowPackets.addAll(newClaims);
+        allCashflows.addAll(newClaims);
         if (claimsBySimulationPeriod.get(simulationPeriod) != null) {
             throw new SimulationException("Attempted to overwrite claimsBySimulationPeriod cache in claim store. Contact development");
         }
         claimsBySimulationPeriod.put(simulationPeriod, cashflowPackets );
+    }
+
+    public Collection<ClaimCashflowPacket> cashflowsByUnderwritingPeriodUpToSimulationPeriod(Integer simulationPeriod, Integer underwritingPeriod, PeriodScope periodScope, ContractCoverBase coverBase) {
+        Collection<ClaimCashflowPacket> claimsToSimPeriod = allCashflowClaimsUpToSimulationPeriod(simulationPeriod, periodScope, coverBase);
+        Collection<ClaimCashflowPacket> cashflowsPaidAgainsThisModelPeriod = GRIUtilities.cashflowsCoveredInModelPeriod(claimsToSimPeriod, periodScope, coverBase, underwritingPeriod);
+        return cashflowsPaidAgainsThisModelPeriod;
     }
 }

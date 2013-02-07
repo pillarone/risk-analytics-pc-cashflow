@@ -24,6 +24,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranc
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.ListOnlyContractClaimStore;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.UberCacheClaimStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.CoverStrategyType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ICoverStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
@@ -159,7 +160,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     private void initIteration(){
         if (periodScope.isFirstPeriod()) {
-            final IAllContractClaimCache claimStore = new ListOnlyContractClaimStore();
+            final IAllContractClaimCache claimStore = new UberCacheClaimStore();
             periodStore.put(GROSS_CLAIMS, claimStore);
         }
     }

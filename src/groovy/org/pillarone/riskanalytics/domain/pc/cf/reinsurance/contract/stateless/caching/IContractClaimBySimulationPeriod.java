@@ -15,14 +15,14 @@ public interface IContractClaimBySimulationPeriod {
 
     Collection<IClaimRoot> allIncurredClaimsUpToSimulationPeriod(Integer period, PeriodScope periodScope, ContractCoverBase coverBase);
 
-    Collection<ClaimCashflowPacket>     allCashflowClaimsUpToSimulationPeriod(Integer period, PeriodScope periodScope, ContractCoverBase coverBase);
+    Collection<ClaimCashflowPacket>     allCashflowClaimsUpToSimulationPeriod(Integer simulationPeriod, PeriodScope periodScope, ContractCoverBase coverBase);
 
-    Collection<ClaimCashflowPacket> allClaimCashflowPacketsInSimulationPeriod(Collection<ClaimCashflowPacket> allCashflows, PeriodScope periodScope, ContractCoverBase base, Integer anInt);
+    Collection<ClaimCashflowPacket> allClaimCashflowPacketsInSimulationPeriod(Integer anInt, PeriodScope periodScope, ContractCoverBase base);
 
     Collection<IClaimRoot> allIncurredClaimsInSimulationPeriod(Integer period, PeriodScope periodScope, ContractCoverBase coverBase);
 
     Collection<IClaimRoot> allIncurredClaimsCurrentSimulationPeriod(PeriodScope periodScope, ContractCoverBase coverBase);
 
-    void cacheClaims(Collection<ClaimCashflowPacket> claims, Integer simulationPeriod);
+    void cacheClaims(Collection<ClaimCashflowPacket> newClaims, Integer simulationPeriod);
 
 }

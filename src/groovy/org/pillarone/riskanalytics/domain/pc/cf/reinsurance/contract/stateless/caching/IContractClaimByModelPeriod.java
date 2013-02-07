@@ -14,9 +14,9 @@ import java.util.Set;
  */
 public interface IContractClaimByModelPeriod {
 
-    Collection<ClaimCashflowPacket> allClaimCashflowPacketsInModelPeriod(Collection<ClaimCashflowPacket> allCashflows, PeriodScope periodScope, ContractCoverBase base, Integer anInt);
+    Collection<ClaimCashflowPacket> allClaimCashflowPacketsInModelPeriod(Integer uwPeriod, PeriodScope periodScope, ContractCoverBase base);
 
-    Set<IClaimRoot> allIncurredClaimsInModelPeriod(Integer period, PeriodScope periodScope, ContractCoverBase coverBase);
+    Set<IClaimRoot> allIncurredClaimsInModelPeriod(Integer uwPeriod, PeriodScope periodScope, ContractCoverBase coverBase);
 
     Set<IClaimRoot> allIncurredClaimsCurrentModelPeriod(PeriodScope periodScope, ContractCoverBase coverBase);
 

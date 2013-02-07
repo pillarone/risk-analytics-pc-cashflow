@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class ContractClaimStoreTestIncurredClaimImpl implements IAllContractClai
         throw new SimulationException("");
     }
 
-    public Collection<ClaimCashflowPacket> allClaimCashflowPacketsInModelPeriod(Collection<ClaimCashflowPacket> allCashflows, PeriodScope periodScope, ContractCoverBase base, Integer anInt) {
+    public Collection<ClaimCashflowPacket> allClaimCashflowPacketsInModelPeriod(Integer uwPeriod, PeriodScope periodScope, ContractCoverBase base) {
         throw new SimulationException("");
     }
 
@@ -67,12 +68,12 @@ public class ContractClaimStoreTestIncurredClaimImpl implements IAllContractClai
     }
 
     @Override
-    public Collection<ClaimCashflowPacket> allCashflowClaimsUpToSimulationPeriod(Integer period, PeriodScope periodScope, ContractCoverBase coverBase) {
+    public Collection<ClaimCashflowPacket> allCashflowClaimsUpToSimulationPeriod(Integer simulationPeriod, PeriodScope periodScope, ContractCoverBase coverBase) {
         throw new SimulationException("");
     }
 
     @Override
-    public Collection<ClaimCashflowPacket> allClaimCashflowPacketsInSimulationPeriod(Collection<ClaimCashflowPacket> allCashflows, PeriodScope periodScope, ContractCoverBase base, Integer anInt) {
+    public Collection<ClaimCashflowPacket> allClaimCashflowPacketsInSimulationPeriod(Integer anInt, PeriodScope periodScope, ContractCoverBase base) {
         throw new SimulationException("");
     }
 
@@ -87,7 +88,13 @@ public class ContractClaimStoreTestIncurredClaimImpl implements IAllContractClai
     }
 
     @Override
-    public void cacheClaims(Collection<ClaimCashflowPacket> claims, Integer simulationPeriod) {
+    public void cacheClaims(Collection<ClaimCashflowPacket> newClaims, Integer simulationPeriod) {
         throw new SimulationException("");
+    }
+
+    public Collection<ClaimCashflowPacket> cashflowsByUnderwritingPeriodUpToSimulationPeriod(Integer simulationPeriod, Integer underwritingPeriod, PeriodScope periodScope, ContractCoverBase coverBase) {
+
+        Collection<ClaimCashflowPacket> cashflowsPaidAgainsThisModelPeriod = GRIUtilities.cashflowsCoveredInModelPeriod(claimCashflowPackets, periodScope, coverBase, underwritingPeriod);
+        return cashflowsPaidAgainsThisModelPeriod;
     }
 }

@@ -68,11 +68,19 @@ class GRIUtilities {
         return 0d
     }
 
+    /**
+     * This method is extremely slow. Convert to java...
+      * @param coverageBase
+     * @param coverStart
+     * @param coverEnd
+     * @param incomingClaims
+     * @return
+     */
     public static List<ClaimCashflowPacket> uncoveredClaims(ContractCoverBase coverageBase, DateTime coverStart, DateTime coverEnd, List<ClaimCashflowPacket> incomingClaims) {
 
         final List<ClaimCashflowPacket> uncoveredClaims = incomingClaims.findAll {ClaimCashflowPacket it ->
             DateTime claimCoverDate = coverageBase.claimCoverDate(it);
-            boolean inCoverPeriod = (coverStart.isEqual(claimCoverDate) || coverStart.isBefore(claimCoverDate)) && coverEnd.isAfter(claimCoverDate)
+            Boolean inCoverPeriod = (coverStart.isEqual(claimCoverDate) || coverStart.isBefore(claimCoverDate)) && coverEnd.isAfter(claimCoverDate)
             return !inCoverPeriod
         }
         return uncoveredClaims;

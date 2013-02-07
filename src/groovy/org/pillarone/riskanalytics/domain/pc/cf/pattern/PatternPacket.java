@@ -268,7 +268,10 @@ public class PatternPacket extends Packet implements Cloneable {
         return cumulativeValues.size();
     }
 
+
+    private List<Double> lazyIncrements; /* Optimisation */
     public List<Double> getIncrementalValues(boolean checkSumOne) {
+        if(lazyIncrements != null && lazyIncrements.size() == cumulativeValues.size()) return lazyIncrements;
         final ArrayList<Double> incrementalValues = new ArrayList<Double>();
         double priorValue = 0;
         for (Double cumulativeValue : cumulativeValues) {
@@ -276,6 +279,7 @@ public class PatternPacket extends Packet implements Cloneable {
             priorValue = cumulativeValue;
         }
         if (checkSumOne) checkIncrementalPatternSumTo1();
+        lazyIncrements = incrementalValues;
         return incrementalValues;
     }
 

@@ -56,13 +56,13 @@ public class ProportionalToCededPaidAllocation implements IPaidAllocation {
             for (Map.Entry<IClaimRoot, Collection<ClaimCashflowPacket>> iClaimRootCollectionEntry : cashflows.entrySet()) {
                 if (GRIUtilities.incrementalCashflowSum(iClaimRootCollectionEntry.getValue()) > 0) {
                     cashflowsWithNonZeroPaidIncrements.put(iClaimRootCollectionEntry.getKey(), iClaimRootCollectionEntry.getValue());
-                    ICededRoot cededRoot = GRIUtilities.findCededClaimRelatedToGrossClaim(iClaimRootCollectionEntry.getKey(), incurredCededClaims);
+                    ICededRoot cededRoot = RIUtilities.findCededClaimRelatedToGrossClaim(iClaimRootCollectionEntry.getKey(), incurredCededClaims);
                     cededClaimsWithNonZeroIncrements.add(cededRoot);
                 } else {
-                    ICededRoot cededRoot = GRIUtilities.findCededClaimRelatedToGrossClaim(iClaimRootCollectionEntry.getKey(), incurredCededClaims);
+                    ICededRoot cededRoot = RIUtilities.findCededClaimRelatedToGrossClaim(iClaimRootCollectionEntry.getKey(), incurredCededClaims);
                     IClaimRoot keyClaim = base.parentClaim(new ArrayList<ClaimCashflowPacket>(iClaimRootCollectionEntry.getValue()).get(0));
                     ClaimCashflowPacket aClaim = new ArrayList<ClaimCashflowPacket>(iClaimRootCollectionEntry.getValue()).get(0);
-                    ClaimCashflowPacket latestCededCashflow = GRIUtilities.findCashflowToGrossClaim(keyClaim, latestCededCashflowsByIncurredClaim, IncurredClaimBase.KEY);
+                    ClaimCashflowPacket latestCededCashflow = RIUtilities.findCashflowToGrossClaim(keyClaim, latestCededCashflowsByIncurredClaim, IncurredClaimBase.KEY);
                     cededIncurredToAllocateAdjustment += keyClaim.getUltimate();
                     if (base.parentClaim(latestCededCashflow).getExposureStartDate() == null && latestCededCashflow.ultimate() == 0) {
 //                    We know we have a dummy claim - this is the first time this incurred claim has ceded something.
@@ -80,7 +80,7 @@ public class ProportionalToCededPaidAllocation implements IPaidAllocation {
 
                 double grossIncurredByClaimRatio;
                 double cededIncurredByClaimRatio;
-                ICededRoot cededRoot = GRIUtilities.findCededClaimRelatedToGrossClaim(packetEntrys.getKey(), incurredCededClaims);
+                ICededRoot cededRoot = RIUtilities.findCededClaimRelatedToGrossClaim(packetEntrys.getKey(), incurredCededClaims);
                 if (Math.abs(grossIncurredFromClaimsWithNonZeroIncrementsInPeriod) == 0 || cededIncurredFromClaimsWithNonZeroIncrements == 0d ) {
                     grossIncurredByClaimRatio = 0d;
                     cededIncurredByClaimRatio = 0d;
@@ -90,7 +90,7 @@ public class ProportionalToCededPaidAllocation implements IPaidAllocation {
                 }
                 double claimPaidInContractYear = cededIncurredByClaimRatio * cededPaidAmountInModelPeriodThisSimPeriod;
                 IClaimRoot keyClaim = base.parentClaim(cashflowPackets.get(0));
-                ClaimCashflowPacket latestCededCashflow = GRIUtilities.findCashflowToGrossClaim(keyClaim, latestCededCashflowsByIncurredClaim, IncurredClaimBase.KEY);
+                ClaimCashflowPacket latestCededCashflow = RIUtilities.findCashflowToGrossClaim(keyClaim, latestCededCashflowsByIncurredClaim, IncurredClaimBase.KEY);
 
                 boolean setUltimate = false;
                 if (base.parentClaim(latestCededCashflow).getExposureStartDate() == null && latestCededCashflow.ultimate() == 0) {
