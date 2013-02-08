@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Maps;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
@@ -161,11 +163,24 @@ public final class GrossClaimRoot implements IClaimRoot {
      * @param useIndexes switches between using the fully indexed development strategy
      * @return
      */
+    private Map<Integer, List<ClaimCashflowPacket>> cachePaidPackets = Maps.newHashMap();
     public List<ClaimCashflowPacket> getClaimCashflowPackets(IPeriodCounter periodCounter, List<Factors> factors, boolean useIndexes) {
         if(!useIndexes) {
-            List<ClaimCashflowPacket> paidPackets = paidPackets(periodCounter);
-            List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>(RIUtilities.cashflowClaimsByOccurenceDate(periodCounter.getCurrentPeriodStart(), periodCounter.getCurrentPeriodEnd(), paidPackets));
-            return filteredClaims;
+            if(cachePaidPackets.get(periodCounter.currentPeriodIndex()) == null) {
+                int allPeriods = ((ILimitedPeriodCounter) periodCounter).periodCount();
+                for (int tempPeriod = 0; tempPeriod <= allPeriods; tempPeriod++) {
+                    cachePaidPackets.put(tempPeriod, new ArrayList<ClaimCashflowPacket>());
+                }
+                List<ClaimCashflowPacket> paidPackets = paidPackets(periodCounter);
+                for (ClaimCashflowPacket paidPacket : paidPackets) {
+                    int period = periodCounter.belongsToPeriod(paidPacket.getDate());
+                    List<ClaimCashflowPacket> tempList;
+                    tempList = cachePaidPackets.get(period);
+                    tempList.add(paidPacket);
+                }
+            }
+//            List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>(RIUtilities.cashflowClaimsByOccurenceDate(periodCounter.getCurrentPeriodStart(), periodCounter.getCurrentPeriodEnd(), paidPackets));
+            return cachePaidPackets.get(periodCounter.currentPeriodIndex());
         }
         return getClaimCashflowPackets(periodCounter, factors);
     }
