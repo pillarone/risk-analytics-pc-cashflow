@@ -50,10 +50,11 @@ import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceRe
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateReportedClaimCollectingModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.RunOffIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.output.SingleUltimatePaidClaimCollectingModeStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.6.2-kti"
+    def version = "0.6.3-kti"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -107,6 +108,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new YieldCurveTableConstraints())
         ConstraintsFactory.registerConstraint(new SegmentPortion())
         ConstraintsFactory.registerConstraint(new ReinsuranceContractContraints())
+        ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
 
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
         ValidatorRegistry.addValidator(new PatternStrategyValidator())

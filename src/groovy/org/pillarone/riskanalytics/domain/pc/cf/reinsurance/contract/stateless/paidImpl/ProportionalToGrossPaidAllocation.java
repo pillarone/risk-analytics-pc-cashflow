@@ -41,7 +41,7 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
         for (Map.Entry<Integer, Double> entry : incrementalPaidByPeriod.entrySet()) {
             List<ClaimCashflowPacket> cashflowClaimsForPeriodCheck = new ArrayList<ClaimCashflowPacket>();
             List<ClaimCashflowPacket> cashflowsRelatedToModelPeriod = RIUtilities.cashflowsClaimsByPeriod(entry.getKey(), periodScope.getPeriodCounter(), grossCashflowsThisPeriod, coverageBase);
-            double grossIncurredInPeriod = GRIUtilities.ultimateSumFromCashflows(cashflowsRelatedToModelPeriod);
+            double grossIncurredInPeriod = RIUtilities.ultimateSumFromCashflows(cashflowsRelatedToModelPeriod);
             double cededPaidAmountInModelPeriodThisSimPeriod = (Double) entry.getValue();
 
             ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByKey = RIUtilities.cashflowsByRoot(cashflowsRelatedToModelPeriod, base);
@@ -58,7 +58,7 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                 }
                 double claimPaidInContractYear = grossIncurredByClaimRatio * cededPaidAmountInModelPeriodThisSimPeriod;
 
-                double sumIncrementsOfThisClaim = GRIUtilities.incrementalCashflowSum(cashflowPackets);
+                double sumIncrementsOfThisClaim = RIUtilities.incrementalCashflowSum(cashflowPackets);
 
                 IClaimRoot keyClaim = base.parentClaim(cashflowPackets.get(0));
 
@@ -96,7 +96,7 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
 
                 }
             }
-            double checkCededPaidInModelPeriod = GRIUtilities.incrementalCashflowSum(cashflowClaimsForPeriodCheck);
+            double checkCededPaidInModelPeriod = RIUtilities.incrementalCashflowSum(cashflowClaimsForPeriodCheck);
             if(!((checkCededPaidInModelPeriod - SimulationConstants.EPSILON < entry.getValue()) && (checkCededPaidInModelPeriod < entry.getValue() + SimulationConstants.EPSILON))) {
 
                 throw new SimulationException("Claims in model period; " + entry.getKey()  + " allocated incremental paid " + df.format(checkCededPaidInModelPeriod) + " do not match "

@@ -7,10 +7,13 @@ import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.IterationStore;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
+import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
+import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.AllPeriodUnderwritingInfoPacket;
@@ -23,8 +26,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPa
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.ListOnlyContractClaimStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.UberCacheClaimStore;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.CoverStrategyType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ICoverStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
@@ -80,6 +83,9 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
      */
     private ContractCoverBase parmCoverageBase = ContractCoverBase.LOSSES_OCCURING;
     private ICoverStrategy parmCover = CoverStrategyType.getDefault();
+//    private ConstrainedMultiDimensionalParameter parmPremiumCover = new ConstrainedMultiDimensionalParameter(GroovyUtils.toList("[]"),
+//            Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER));
+
     private IExposureBaseStrategy parmContractBase = ExposureBaseType.getDefault();
 
     /**
@@ -87,6 +93,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
      */
 
     public static final String GROSS_CLAIMS = "All covered cashflows";
+    public static final String TERM_CALC= "paid term calculation cache";
     public static final String CEDED_CLAIMS = "All ceded cashflows";
     public static final String CEDED_INCURRED_CLAIMS = "All ceded cashflows";
     public static final String UWINFO = "All period UW info";
@@ -98,6 +105,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         doFilter();
         periodStore.put(CEDED_CLAIMS, new ArrayList<ClaimCashflowPacket>()); /* Otherwise null pointer on startup - overwrite this list later in this method */
         IAllContractClaimCache claimStore = (IAllContractClaimCache) periodStore.get(GROSS_CLAIMS, -periodScope.getCurrentPeriod());
+        IPaidCalculation paidCalculation = (IPaidCalculation) periodStore.get(TERM_CALC, -periodScope.getCurrentPeriod());
         claimStore.cacheClaims(inClaims, periodScope.getCurrentPeriod());
         List<ClaimCashflowPacket> cededCashflowsToDate = allClaimsToDate(periodScope, periodStore, CEDED_CLAIMS);
         Set<ICededRoot> allIncurredCeded = RIUtilities.incurredCededClaims(cededCashflowsToDate, IncurredClaimBase.BASE);
@@ -117,7 +125,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
             final List<ICededRoot> cededClaims = new IncurredAllocation().allocateClaims(incurredInPeriod, claimStore, periodScope, parmCoverageBase);
             allIncurredCededClaims.addAll(cededClaims);
 
-            final Map<Integer, Double> paidByModelPeriod = new TermPaidRespectIncurredByClaim().cededIncrementalPaidRespectTerm(claimStore, setupLayerParameters(),
+            final Map<Integer, Double> paidByModelPeriod = paidCalculation.cededIncrementalPaidRespectTerm(claimStore, setupLayerParameters(),
                     periodScope, parmCoverageBase, termLimit, termExcess, globalSanityChecks);
 
             paidClaims =  new ProportionalToGrossPaidAllocation().allocatePaid(paidByModelPeriod, inClaims,
@@ -161,7 +169,9 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
     private void initIteration(){
         if (periodScope.isFirstPeriod()) {
             final IAllContractClaimCache claimStore = new UberCacheClaimStore();
+            final IPaidCalculation termCalc = new TermPaidRespectIncurredByClaim();
             periodStore.put(GROSS_CLAIMS, claimStore);
+            periodStore.put(TERM_CALC, termCalc);
         }
     }
 
@@ -203,7 +213,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         DateTime coverStart = periodScope.getPeriodCounter().startOfFirstPeriod();
         DateTime coverEnd = globalCover.getEndCover();
 
-        List<ClaimCashflowPacket> uncoveredClaims = GRIUtilities.uncoveredClaims(parmCoverageBase, coverStart, coverEnd, inClaims);
+        List<ClaimCashflowPacket> uncoveredClaims = RIUtilities.uncoveredClaims(parmCoverageBase, coverStart, coverEnd, inClaims);
         inClaims.removeAll(uncoveredClaims);
         parmCover.coveredClaims(inClaims);
         outClaimsGross.addAll(inClaims);
@@ -357,4 +367,12 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
     public void setSimulationScope(SimulationScope simulationScope) {
         this.simulationScope = simulationScope;
     }
+
+/*    public ConstrainedMultiDimensionalParameter getParmPremiumCover() {
+        return parmPremiumCover;
+    }
+
+    public void setParmPremiumCover(ConstrainedMultiDimensionalParameter parmPremiumCover) {
+        this.parmPremiumCover = parmPremiumCover;
+    } */
 }

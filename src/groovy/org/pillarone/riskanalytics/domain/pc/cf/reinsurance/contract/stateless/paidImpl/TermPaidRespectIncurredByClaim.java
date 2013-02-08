@@ -1,7 +1,10 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.paidImpl;
 
+import com.google.common.collect.Maps;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
@@ -67,8 +70,9 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
         return paidByPeriod;
     }
 
+
     public Map<Integer, Double> cededCumulativePaidRespectTerm(Integer claimsToSimulationPeriod, ScaledPeriodLayerParameters layerParameters, PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess, IAllContractClaimCache claimCache, ContractCoverBase coverBase) {
-        if(claimsToSimulationPeriod == -1) {
+    if(claimsToSimulationPeriod == -1) {
             final HashMap<Integer, Double> integerDoubleHashMap = new HashMap<Integer, Double>();
             integerDoubleHashMap.put(0, 0d);
             return integerDoubleHashMap;
@@ -86,13 +90,6 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
      * This method calculates the cumulative ceded amounts (by model period). It inspects the total amount ceded across the entire
      * simulation to determine if the term excess is breached, and then begins allocating paid amounts to periods.
      *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
      * @param periodScope
      * @param layerParameters
      * @param base
@@ -104,14 +101,18 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
      * @param coverBase
      * @return
      * */
-    public Map<Integer, Double> cededPaidByUnderwritingPeriod(PeriodScope periodScope,
+     private Map<Integer/*Simulation Period */  , Map<Integer /* Underwriting period */ , Double>> cacheSimPeriodUwPeriodResult = Maps.newHashMap();
+     public Map<Integer, Double> cededPaidByUnderwritingPeriod(PeriodScope periodScope,
                                                               ScaledPeriodLayerParameters layerParameters,
                                                               ContractCoverBase base,
                                                               int toUnderwritingPeriod,
                                                               double termExcess,
                                                               double termLimit,
                                                               IAllContractClaimCache claimCache, Integer claimsToSimulationPeriod, ContractCoverBase coverBase) {
-        Map<Integer, Double> period_paid = new HashMap<Integer, Double>();
+         if(cacheSimPeriodUwPeriodResult.get(claimsToSimulationPeriod) != null) {
+             return cacheSimPeriodUwPeriodResult.get(claimsToSimulationPeriod);
+         }
+         Map<Integer, Double> period_paid = new HashMap<Integer, Double>();
 
         /* As it stands, the spec takes no notice of the term excess when calculating payments.
         For the moment, ignore it here too. Set to falase to enable functionality. Not guaranteed to work.  */
@@ -138,7 +139,8 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
                 period_paid.put(period, 0d);
             } */
         }
-        return period_paid;
+         cacheSimPeriodUwPeriodResult.put(claimsToSimulationPeriod, period_paid);
+        return cacheSimPeriodUwPeriodResult.get(claimsToSimulationPeriod);
     }
 
     /**

@@ -14,6 +14,7 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 /**
  *   author simon.parten @ art-allianz . com
  */
+@Deprecated /* Too slow. Use Java */
 class GRIUtilities {
 
     public static List<ClaimCashflowPacket> cashflowsRelatedToRoots(Set<IClaimRoot> rootClaims, List<ClaimCashflowPacket> cashflows) {
@@ -28,7 +29,7 @@ class GRIUtilities {
         return ultimateSumFromCashflows(aMap.values().flatten())
     }
 
-
+    @Deprecated /* too slow */
     public static Double ultimateSumFromCashflows(Collection<ClaimCashflowPacket> cashflows) {
         Set<IClaimRoot> incurredClaims = RIUtilities.incurredClaims(cashflows, IncurredClaimBase.BASE)
         ArrayList<IClaimRoot> claims = new ArrayList<IClaimRoot>()
@@ -54,6 +55,7 @@ class GRIUtilities {
         return claim
     }
 
+    @Deprecated /* tool slow ! */
     public static Double ultimateSum(Collection<IClaimRoot> incurredClaims) {
         if (incurredClaims.size() > 0) {
             return (Double) incurredClaims*.getUltimate().sum()
@@ -61,6 +63,7 @@ class GRIUtilities {
         return 0d
     }
 
+    @Deprecated /* Too slow */
     public static Double incrementalCashflowSum(Collection<ClaimCashflowPacket> incurredClaims) {
         if (incurredClaims.size() > 0) {
             return (Double) incurredClaims*.getPaidIncrementalIndexed().sum()

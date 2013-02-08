@@ -172,8 +172,34 @@ public class RIUtilities {
     }
 
     public static double ultimateSumFromCashflows(Collection<ClaimCashflowPacket> packets) {
-        return GRIUtilities.ultimateSumFromCashflows(packets);
+        Set<IClaimRoot> incurredClaims = RIUtilities.incurredClaims(packets, IncurredClaimBase.BASE);
+        ArrayList<IClaimRoot> claims = new ArrayList<IClaimRoot>();
+        claims.addAll(incurredClaims);
+        return ultimateSum(incurredClaims);
     }
+
+    public static Double ultimateSum(Collection<IClaimRoot> incurredClaims) {
+        if (incurredClaims.size() > 0) {
+            double sum = 0d;
+            for (IClaimRoot incurredClaim : incurredClaims) {
+                sum += incurredClaim.getUltimate();
+            }
+            return sum;
+        }
+        return 0d;
+    }
+
+    public static Double incrementalCashflowSum(Collection<ClaimCashflowPacket> incurredClaims) {
+        if (incurredClaims.size() > 0) {
+            double sum = 0d;
+            for (ClaimCashflowPacket incurredClaim : incurredClaims) {
+                sum += incurredClaim.getPaidIncrementalIndexed();
+            }
+            return sum;
+        }
+        return 0d;
+    }
+
 
     public static ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByRoot(Collection<ClaimCashflowPacket> cashflows, IncurredClaimBase base) {
         ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByKey = ArrayListMultimap.create();
