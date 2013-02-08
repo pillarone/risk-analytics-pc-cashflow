@@ -384,9 +384,9 @@ class StopLossContractTests extends GroovyTestCase {
         assertEquals 'P2 ceded reported cumulated', [364, 84, 112], stopLoss.outClaimsCeded*.reportedCumulatedIndexed
         assertEquals 'P2 ceded paid incremental', [0] * 3, stopLoss.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P2 ceded paid cumulated', [0] * 3, stopLoss.outClaimsCeded*.paidCumulatedIndexed
-        assertEquals 'P2 ceded reservedIndexed', [364, 84, 112], stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P2 ceded reservedIndexed', [103.99999999999983, 23.999999999999957, 31.999999999999943], stopLoss.outClaimsCeded*.reservedIndexed()
         assertEquals 'P2 ceded outstandingIndexed', [364, 84, 112], stopLoss.outClaimsCeded*.outstandingIndexed()
-        assertEquals 'P2 ceded ibnrIndexed', [0] * 3, stopLoss.outClaimsCeded*.ibnrIndexed()
+        assertEquals 'P2 ceded ibnrIndexed', [-260.00000000000017, -60.00000000000004, -80.00000000000006], stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P2 ceded premium written', 0, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P2 ceded premium paid', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P2 ceded premium fixed', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -405,9 +405,9 @@ class StopLossContractTests extends GroovyTestCase {
         assertEquals 'P3 ceded reported cumulated', [286, 66, 88], stopLoss.outClaimsCeded*.reportedCumulatedIndexed
         assertEquals 'P3 ceded paid incremental', [13.0, 3.0, 4.0], stopLoss.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P3 ceded paid cumulated', [13.0, 3.0, 4.0], stopLoss.outClaimsCeded*.paidCumulatedIndexed
-        assertEquals 'P3 ceded reservedIndexed', [273.0, 63.0, 84.0], stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P3 ceded reservedIndexed', [13.000000000000512, 3.0000000000001137, 4.000000000000142], stopLoss.outClaimsCeded*.reservedIndexed()
         assertEquals 'P3 ceded outstandingIndexed', [273.0, 63.0, 84.0], stopLoss.outClaimsCeded*.outstandingIndexed()
-        assertEquals 'P3 ceded ibnrIndexed', [0] * 3, stopLoss.outClaimsCeded*.ibnrIndexed()
+        assertEquals 'P3 ceded ibnrIndexed', [-259.9999999999995, -59.999999999999886, -79.99999999999986], stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P3 ceded premium written', 0, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P3 ceded premium paid', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P3 ceded premium fixed', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed
@@ -426,9 +426,9 @@ class StopLossContractTests extends GroovyTestCase {
         assertEquals 'P4 ceded reported cumulated', [422.5, 97.5, 130.0], stopLoss.outClaimsCeded*.reportedCumulatedIndexed
         assertEquals 'P4 ceded paid incremental', [409.49999999999994, 94.5, 125.99999999999999], stopLoss.outClaimsCeded*.paidIncrementalIndexed
         assertEquals 'P4 ceded paid cumulated', [422.49999999999994, 97.5, 130.0], stopLoss.outClaimsCeded*.paidCumulatedIndexed
-        assertEquals 'P4 ceded reservedIndexed', [5.6843418860808015E-14, 0.0, 0.0], stopLoss.outClaimsCeded*.reservedIndexed()
+        assertEquals 'P4 ceded reservedIndexed', [-259.9999999999998, -59.99999999999996, -79.99999999999994], stopLoss.outClaimsCeded*.reservedIndexed()
         assertEquals 'P4 ceded outstandingIndexed', [5.6843418860808015E-14, 0.0, 0.0], stopLoss.outClaimsCeded*.outstandingIndexed()
-        assertEquals 'P4 ceded ibnrIndexed', [0.0] * 3, stopLoss.outClaimsCeded*.ibnrIndexed()
+        assertEquals 'P4 ceded ibnrIndexed', [-259.99999999999983, -59.99999999999996, -79.99999999999994], stopLoss.outClaimsCeded*.ibnrIndexed()
         assertEquals 'P4 ceded premium written', 0, stopLoss.outUnderwritingInfoCeded[0].premiumWritten
         assertEquals 'P4 ceded premium paid', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaid
         assertEquals 'P4 ceded premium fixed', 0, stopLoss.outUnderwritingInfoCeded[0].premiumPaidFixed

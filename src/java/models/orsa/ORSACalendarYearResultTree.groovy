@@ -456,6 +456,7 @@ mappings = {
                     }
                     "premiumAndReserveRiskBase" "ORSA:segments:[%segment%]:outClaimsNet:premiumAndReserveRiskBase"
                     "claimsGross" {
+                        "ultimate" "ORSA:segments:[%segment%]:outClaimsGross:ultimate"
                         "totalCumulative" "ORSA:segments:[%segment%]:outClaimsGross:totalCumulativeIndexed", {
                             "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsGross:totalCumulativeIndexed"
                         }
@@ -499,6 +500,7 @@ mappings = {
                         "premiumAndReserveRiskBase" "ORSA:segments:[%segment%]:outClaimsGross:premiumAndReserveRiskBase"
                     }
                     "claimsCeded" {
+                        "ultimate" "ORSA:segments:[%segment%]:outClaimsCeded:ultimate"
                         "totalCumulative" "ORSA:segments:[%segment%]:outClaimsCeded:totalCumulativeIndexed", {
                             "[%period%]" "ORSA:segments:[%segment%]:period:[%period%]:outClaimsCeded:totalCumulativeIndexed"
                         }

@@ -82,7 +82,6 @@ class RetrospectiveReinsuranceContracts extends DynamicComposedComponent {
      */
     public static void doWire(category, receiver, inChannelName, sender, outChannelName) {
         LOG.debug "$receiver.$inChannelName <- $sender.$outChannelName ($category)"
-        println "$receiver.$inChannelName <- $sender.$outChannelName ($category)"
         category.doSetProperty(receiver, inChannelName, category.doGetProperty(sender, outChannelName))
     }
 }

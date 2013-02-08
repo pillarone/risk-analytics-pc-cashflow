@@ -4,6 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
+import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
@@ -115,7 +116,6 @@ public class FinancialsPacket extends MultiValuePacket {
             FinancialsPacket packet = new FinancialsPacket(grossUwInfoByPeriod.get(period), netUwInfoByPeriod.get(period),
                     cededUwInfoByPeriod.get(period), grossClaimsByPeriod.get(period), netClaimsByPeriod.get(period),
                     cededClaimsByPeriod.get(period), true, period == periodCounter.currentPeriodIndex());
-            packet.period = period;
             packets.add(packet);
         }
         return packets;
@@ -128,6 +128,16 @@ public class FinancialsPacket extends MultiValuePacket {
         net = net.plus(other.net);
         ceded = ceded.plus(other.ceded);
         return this;
+    }
+
+    @Override
+    public Packet copy() {
+        FinancialsPacket copy = (FinancialsPacket) super.copy();
+        copy.gross = gross.copy();
+        copy.net = net.copy();
+        copy.ceded = ceded.copy();
+        copy.inceptionDate = new DateTime(inceptionDate);
+        return copy;
     }
 
     public final static String COMMISSION = "commission";
@@ -206,7 +216,7 @@ public class FinancialsPacket extends MultiValuePacket {
         valuesToSave.put(CEDED_BEST_ESTIMATE, ceded.bestEstimate);
         valuesToSave.put(CEDED_PREMIUM_RISK, ceded.premiumRisk);
         valuesToSave.put(CEDED_RESERVE_RISK, ceded.reserveRisk);
-        valuesToSave.put(CEDED_PREMIUM_RESERVE_RISK, ceded.reserveRisk);
+        valuesToSave.put(CEDED_PREMIUM_RESERVE_RISK, ceded.premiumReserveRisk);
         valuesToSave.put(CEDED_LOSS_RATIO_WRITTEN_ULTIMATE, ceded.lossRatioWrittenUltimate);
         valuesToSave.put(CEDED_LOSS_RATIO_PAID_PAID, ceded.lossRatioPaidPaid);
 
@@ -559,6 +569,22 @@ public class FinancialsPacket extends MultiValuePacket {
             lossRatioPaidPaid = premiumPaid == 0 ? 0 : -claimPaid / premiumPaid;
             bestEstimate = premiumWritten + claimUltimate;
             return this;
+        }
+
+        public Financials copy() {
+            Financials copy = new Financials();
+            copy.claimPaid = claimPaid;
+            copy.claimUltimate = claimUltimate;
+            copy.premiumPaid = premiumPaid;
+            copy.premiumWritten = premiumWritten;
+            copy.cashflow = cashflow;
+            copy.premiumRisk = premiumRisk;
+            copy.reserveRisk = reserveRisk;
+            copy.premiumReserveRisk = premiumReserveRisk;
+            copy.lossRatioWrittenUltimate = lossRatioWrittenUltimate;
+            copy.lossRatioPaidPaid = lossRatioPaidPaid;
+            copy.bestEstimate = bestEstimate;
+            return copy;
         }
     }
 }

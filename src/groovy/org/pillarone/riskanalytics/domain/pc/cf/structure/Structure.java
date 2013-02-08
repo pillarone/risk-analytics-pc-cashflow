@@ -12,6 +12,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.IStructureMarker;
 
+import java.util.List;
+
 
 /**
  * @author jessika.walter (at) intuitive-collaboration (dot) com
@@ -40,19 +42,15 @@ public class Structure extends Component implements IStructureMarker {
     protected void doCalculation() {
         outClaimsGross.addAll(parmBasisOfStructures.filterClaims(inClaimsGross));
         outClaimsCeded.addAll(parmBasisOfStructures.filterClaims(inClaimsCeded));
-        ClaimCashflowPacket netClaim = ClaimUtils.calculateNetClaim(outClaimsGross, outClaimsCeded);
-        if (netClaim != null) {
-            netClaim.removeMarkers();
-            outClaimsNet.add(netClaim);
-        }
+        outClaimsNet.addAll(ClaimUtils.calculateNetClaims(outClaimsGross, outClaimsCeded));
 
         outUnderwritingInfoGross.addAll(parmBasisOfStructures.filterUnderwritingInfos(inUnderwritingInfoGross));
         outUnderwritingInfoCeded.addAll(parmBasisOfStructures.filterUnderwritingInfosCeded(inUnderwritingInfoCeded));
         outUnderwritingInfoNet.addAll(UnderwritingInfoUtils.calculateNetUnderwritingInfo(outUnderwritingInfoGross, outUnderwritingInfoCeded));
-        fillContractFinancials(periodScope.getPeriodCounter());
+        fillFinancials(periodScope.getPeriodCounter());
     }
 
-    private void fillContractFinancials(IPeriodCounter periodCounter) {
+    private void fillFinancials(IPeriodCounter periodCounter) {
         if (isSenderWired(outFinancials)) {
             outFinancials.addAll(FinancialsPacket.getFinancialsPacketsByInceptionPeriod(outUnderwritingInfoGross,
                     outUnderwritingInfoNet, outUnderwritingInfoCeded, outClaimsGross, outClaimsNet, outClaimsCeded, periodCounter));
