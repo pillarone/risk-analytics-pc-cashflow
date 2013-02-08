@@ -183,7 +183,7 @@ public class PatternUtils {
     private static TreeMap<DateTime, Double> filterMap(TreeMap<DateTime, Double> aMap, DateTime filterDate) {
         final TreeMap<DateTime, Double> dateTimeDoubleTreeMap = new TreeMap<DateTime, Double>();
         for (Map.Entry<DateTime, Double> entry : aMap.entrySet()) {
-            if(entry.getKey().minusDays(1).isAfter(filterDate)) {
+            if(entry.getKey().minusDays(1).isAfter(filterDate) || entry.getKey().minusDays(1).isEqual(filterDate)) {
                 dateTimeDoubleTreeMap.put(entry.getKey(), entry.getValue());
             }
         }
