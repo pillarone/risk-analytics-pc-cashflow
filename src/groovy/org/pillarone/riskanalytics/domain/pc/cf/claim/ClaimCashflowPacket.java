@@ -327,6 +327,10 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return reservedIndexed() + paidCumulatedIndexed;
     }
 
+    public double totalIncrementalIndexed() {
+        return changeInReservesIndexed + paidIncrementalIndexed;
+    }
+
     /**
      * @return 0 except for the occurrence period, nominal ultimate without any index applied
      */
@@ -480,7 +484,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         // total incremental unindexed
         valuesToSave.put(ULTIMATE, ultimate);    // this and missing default c'tor (final!) leads to failure during result tree building
         // total incremental
-        valuesToSave.put(TOTAL_INCREMENTAL_INDEXED, (ultimate == 0) ? developedUltimate() - nominalUltimate() : ultimate);
+        valuesToSave.put(TOTAL_INCREMENTAL_INDEXED, totalIncrementalIndexed());
         // total cumulative
         valuesToSave.put(TOTAL_CUMULATIVE_INDEXED, developedUltimate());
         // paid incremental indexed

@@ -40,8 +40,10 @@ public class AggregateEventClaimsStorage {
      * @param claim
      */
     public void add(ClaimCashflowPacket claim) {
-        incrementalUltimate = claim.ultimate();
-        cumulatedUltimate += claim.ultimate();
+//        incrementalUltimate = claim.ultimate();
+//        cumulatedUltimate += claim.ultimate();
+        incrementalUltimate = claim.totalIncrementalIndexed();
+        cumulatedUltimate += claim.totalIncrementalIndexed();
         cumulatedReported += claim.getReportedIncrementalIndexed();
         incrementalReported += claim.getReportedIncrementalIndexed();
         incrementalReportedLast = claim.getReportedIncrementalIndexed();
