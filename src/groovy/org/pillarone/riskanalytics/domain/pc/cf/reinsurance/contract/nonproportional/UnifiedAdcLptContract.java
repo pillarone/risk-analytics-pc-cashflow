@@ -36,6 +36,7 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
     private double previousCumulativeUltimateCeded;
     private double previousCumulativeReportedCeded;
     private double previousCumulativePaidCeded;
+    private double previousReservesCeded;
     private double previousIBNRCeded;
 
     /**
@@ -89,7 +90,7 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
                         0, aggregateCumulativeCededReserveClaim.nominalUltimate(),
                         cumulativePaidCeded - previousCumulativePaidCeded, cumulativePaidCeded,
                         cumulativeReportedCeded - previousCumulativeReportedCeded, cumulativeReportedCeded,
-                        reserves, aggregateCumulativeCededReserveClaim.reservedIndexed() - reserves,
+                        reserves, reserves - previousReservesCeded,
                         ibnr - previousIBNRCeded, null,
                         aggregateCumulativeCededReserveClaim.getOccurrenceDate(), aggregateCumulativeCededReserveClaim.getUpdatePeriod()
                 );
@@ -97,6 +98,7 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
             previousCumulativeUltimateCeded = cumulativeUltimateCeded;
             previousCumulativeReportedCeded = cumulativeReportedCeded;
             previousCumulativePaidCeded = cumulativePaidCeded;
+            previousReservesCeded = reserves;
             previousIBNRCeded = ibnr;
         }
     }
