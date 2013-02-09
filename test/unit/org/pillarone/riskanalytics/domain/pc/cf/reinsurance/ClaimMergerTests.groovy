@@ -35,7 +35,7 @@ class ClaimMergerTests extends GrailsUnitTestCase {
         ConstraintsFactory.registerConstraint(new CoverMap())
         merger = new ClaimMerger()
         merger.coverAttributeStrategy = setupStrategy()
-        marker = new ClaimsGenerator()
+        marker = new ClaimsGenerator(name: 'attritional')
         contract1 = new TermReinsuranceContract(name: 'contract1')
         contract2 = new TermReinsuranceContract(name: 'contract2')
         baseClaim = new ClaimRoot(-100, ClaimType.EVENT, new DateTime(), new DateTime())
@@ -93,12 +93,13 @@ class ClaimMergerTests extends GrailsUnitTestCase {
 
     void testCededClaims() {
         ClaimCashflowPacket cededClaim = getClaimCashflowPacket(baseClaim, 20)
+        cededClaim.setMarker(contract1)
+        merger.coverAttributeStrategy = setupStrategy([[''], ['contract1'], [''], [''], [''], ['ANY']])
         merger.inClaimsCeded.add(cededClaim)
         new TestPretendInChannelWired(merger, 'inClaimsCeded')
         merger.doCalculation()
         assert 1 == merger.outClaims.size()
-        assert cededClaim == merger.outClaims[0]
-        checkUltimate(merger.outClaims[0], 20)
+        checkUltimate(merger.outClaims[0], -20)
     }
 
     void testMissingGrossClaim() {

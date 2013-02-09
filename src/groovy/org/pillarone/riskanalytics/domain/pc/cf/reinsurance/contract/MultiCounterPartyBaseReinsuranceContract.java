@@ -113,8 +113,8 @@ public abstract class MultiCounterPartyBaseReinsuranceContract extends BaseReins
     protected void coverFilter() {
         if (!(parmCover instanceof MatrixCoverAttributeStrategy && ((MatrixCoverAttributeStrategy) parmCover).mergerRequired())) {
             parmCover.coveredClaims(inClaims);
+            parmCover.coveredUnderwritingInfo(inUnderwritingInfo, inClaims);
         }
-        parmCover.coveredUnderwritingInfo(inUnderwritingInfo, inClaims);
     }
 
     @Override

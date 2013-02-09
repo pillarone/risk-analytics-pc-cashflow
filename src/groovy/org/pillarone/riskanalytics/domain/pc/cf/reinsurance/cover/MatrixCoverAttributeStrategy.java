@@ -45,7 +45,18 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
         initRowFilters();
         List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
         for (MatrixCoverAttributeRow rowFilter : getRowFilters()) {
-            filteredClaims.addAll(rowFilter.filter(source));
+            filteredClaims.addAll(rowFilter.filter(source, true));
+        }
+        source.clear();
+        source.addAll(filteredClaims);
+        return filteredClaims;
+    }
+
+    public List<ClaimCashflowPacket> coveredClaims(List<ClaimCashflowPacket> source, boolean checkedSign) {
+        initRowFilters();
+        List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
+        for (MatrixCoverAttributeRow rowFilter : getRowFilters()) {
+            filteredClaims.addAll(rowFilter.filter(source, checkedSign));
         }
         source.clear();
         source.addAll(filteredClaims);
@@ -100,22 +111,14 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
     }
 
     public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
-        // todo: avoid code copy from LE Strategy
-        List<UnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
-        Set<ISegmentMarker> coveredSegments = new HashSet<ISegmentMarker>();
-        for (ClaimCashflowPacket claim : coveredGrossClaims) {
-            coveredSegments.add(claim.segment());
-        }
-        for (UnderwritingInfoPacket underwritingInfo : source) {
-            if (coveredSegments.contains(underwritingInfo.segment())) {
-                filteredUnderwritingInfo.add(underwritingInfo);
-            }
+        initRowFilters();
+        List<UnderwritingInfoPacket> filteredUwInfo = new ArrayList<UnderwritingInfoPacket>();
+        for (MatrixCoverAttributeRow rowFilter : getRowFilters()) {
+            filteredUwInfo.addAll(rowFilter.filterUnderwritingInfos(source));
         }
         source.clear();
-        if (!filteredUnderwritingInfo.isEmpty()) {
-            source.addAll(filteredUnderwritingInfo);
-        }
-        return filteredUnderwritingInfo;
+        source.addAll(filteredUwInfo);
+        return filteredUwInfo;
     }
 
     public List<IReinsuranceContractMarker> getCoveredReinsuranceContracts() {

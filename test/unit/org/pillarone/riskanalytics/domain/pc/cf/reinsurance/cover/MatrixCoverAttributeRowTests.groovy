@@ -66,7 +66,7 @@ class MatrixCoverAttributeRowTests extends GrailsUnitTestCase {
         def source = new PacketList<ClaimCashflowPacket>()
         source.add(new ClaimCashflowPacket(marker: contract1))
         source.add(new ClaimCashflowPacket(marker: contract2))
-        assert 1 == filter.filter(source).size()
+        assert 1 == filter.filter(source, false).size()
 
     }
 
@@ -76,7 +76,7 @@ class MatrixCoverAttributeRowTests extends GrailsUnitTestCase {
         def source = new PacketList<ClaimCashflowPacket>()
         source.add(new ClaimCashflowPacket(marker: segment1))
         source.add(new ClaimCashflowPacket(marker: segment2))
-        assert 1 == filter.filter(source).size()
+        assert 1 == filter.filter(source, false).size()
     }
 
     void testRowFilter_by_peril() {
@@ -85,7 +85,7 @@ class MatrixCoverAttributeRowTests extends GrailsUnitTestCase {
         def source = new PacketList<ClaimCashflowPacket>()
         source.add(new ClaimCashflowPacket(marker: peril1))
         source.add(new ClaimCashflowPacket(marker: peril2))
-        assert 1 == filter.filter(source).size()
+        assert 1 == filter.filter(source, false).size()
     }
 
     void testRowFilter_by_legalEntity() {
@@ -94,7 +94,7 @@ class MatrixCoverAttributeRowTests extends GrailsUnitTestCase {
         def source = new PacketList<ClaimCashflowPacket>()
         source.add(new ClaimCashflowPacket(marker: legalEntity1))
         source.add(new ClaimCashflowPacket(marker: legalEntity2))
-        assert 1 == filter.filter(source).size()
+        assert 1 == filter.filter(source, false).size()
     }
 
     void testRowFilter_by_net_contract() {
@@ -103,7 +103,7 @@ class MatrixCoverAttributeRowTests extends GrailsUnitTestCase {
         def source = new PacketList<ClaimCashflowPacket>()
         source.add(new ClaimCashflowPacket(marker: contract1))
         source.add(new ClaimCashflowPacket(marker: contract2))
-        assert 1 == filter.filter(source).size()
+        assert 1 == filter.filter(source, false).size()
     }
 
     void testRowFilter_by_claim_type() {
@@ -116,7 +116,7 @@ class MatrixCoverAttributeRowTests extends GrailsUnitTestCase {
         source.add(expectedPacket2)
         source.add(new ClaimCashflowPacket())
         source.add(new ClaimCashflowPacket())
-        def filteredPackets = filter.filter(source)
+        def filteredPackets = filter.filter(source, false)
         assert 2 == filteredPackets.size()
         assert filteredPackets.contains(expectedPacket1)
         assert filteredPackets.contains(expectedPacket2)
