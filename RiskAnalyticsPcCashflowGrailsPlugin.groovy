@@ -40,6 +40,7 @@ import org.pillarone.riskanalytics.core.output.CollectingModeFactory
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.XLStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacketAggregator
+import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
 import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractContraints
 import org.pillarone.riskanalytics.domain.utils.constraint.SegmentPortion
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateClaimCollectingModeStrategy
@@ -109,6 +110,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new SegmentPortion())
         ConstraintsFactory.registerConstraint(new ReinsuranceContractContraints())
         ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
+        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
 
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
         ValidatorRegistry.addValidator(new PatternStrategyValidator())
