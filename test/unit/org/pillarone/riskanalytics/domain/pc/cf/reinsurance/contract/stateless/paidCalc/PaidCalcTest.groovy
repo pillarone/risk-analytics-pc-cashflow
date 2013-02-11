@@ -13,7 +13,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.I
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.paidImpl.TermPaidRespectIncurredByClaim
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis
 
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.TestClaimUtils

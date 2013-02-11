@@ -1,6 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints
 
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.utils.constraints.MDPConstraintsHelper
 
 /**

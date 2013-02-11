@@ -1,9 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless;
 
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis;
 
 /**
  * Parameter helper class for additional premium.

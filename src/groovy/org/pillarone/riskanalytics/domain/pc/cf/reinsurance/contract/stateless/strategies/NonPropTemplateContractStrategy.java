@@ -18,7 +18,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproporti
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ProRataTermXLContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationStrategyType;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.PeriodLayerParameters;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ScaledPeriodLayerParameters;
