@@ -25,7 +25,7 @@ public class MatrixCoverAttributeRow {
     IReinsuranceContractMarker cededContract;
     ILegalEntityMarker legalEntity;
     ISegmentMarker segment;
-    Set<ISegmentMarker> implicitSegments;
+    Set<ISegmentMarker> implicitSegments = new HashSet<ISegmentMarker>();
     IPerilMarker peril;
     ClaimTypeSelector claimTypeSelector;
     boolean isStructure;
@@ -47,7 +47,6 @@ public class MatrixCoverAttributeRow {
     public List<ClaimCashflowPacket> filter(List<ClaimCashflowPacket> source, boolean checkedSign) {
         if (claimValidator == null) { claimValidator = new ClaimValidator(); }
         List<ClaimCashflowPacket> result = new ArrayList<ClaimCashflowPacket>();
-        implicitSegments = new HashSet<ISegmentMarker>();
         for (ClaimCashflowPacket claim : source) {
             if (!isStructure && netContract == null && cededContract == null && claim.reinsuranceContract() != null) {
                 // covers gross claims only.
