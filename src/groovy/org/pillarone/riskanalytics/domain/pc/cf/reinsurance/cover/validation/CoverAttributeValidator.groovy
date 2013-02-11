@@ -102,7 +102,7 @@ class CoverAttributeValidator extends AbstractParameterizationValidator {
     }
 
     private List checkContracts(ConstrainedMultiDimensionalParameter parameter, String currentContractPath) {
-        if (parameter.getValues().size() < 6) return
+        if (parameter.getValues().size() < parameter.getColumnCount()) return
         List<String> netContracts = parameter.getColumn(CoverMap.CONTRACT_NET_OF_COLUMN_INDEX)
         List<String> cededContracts = parameter.getColumn(CoverMap.CONTRACT_CEDED_OF_COLUMN_INDEX)
         String conflictingContractName = null
