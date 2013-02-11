@@ -428,6 +428,20 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
                     outUnderwritingInfoGNPI.add(baseUwInfo.getNet(cededUwOriginal.get(baseUwInfo.getOriginal()), true));
                 }
             }
+            else if (baseUnderwritingInfos.size() < outUnderwritingInfoCeded.size()) {
+                int extraPacketsForCommissionOfPreviousYears = 0;
+                for (CededUnderwritingInfoPacket packet : outUnderwritingInfoCeded) {
+                    if (packet.getPremiumPaid() == 0 && packet.getPremiumWritten() == 0 && packet.getCommission() != 0) {
+                        extraPacketsForCommissionOfPreviousYears++;
+                    }
+                }
+                if (baseUnderwritingInfos.size() + extraPacketsForCommissionOfPreviousYears != outUnderwritingInfoCeded.size()) {
+                    throw new RuntimeException(getName() + ": different number of incoming GNPI and ceded uw info.");
+                }
+                else {
+                    // its safe to ignore these extra packets as their premium is 0 and does not effect GNPI
+                }
+            }
             else {
                 throw new RuntimeException(getName() + ": different number of incoming GNPI and ceded uw info.");
             }

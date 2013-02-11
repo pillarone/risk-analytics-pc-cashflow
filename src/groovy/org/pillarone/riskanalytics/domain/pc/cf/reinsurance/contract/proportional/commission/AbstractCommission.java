@@ -75,6 +75,7 @@ abstract public class AbstractCommission implements ICommission {
                                                                    DateTime inceptionDate, Integer inceptionPeriod) {
         CededUnderwritingInfoPacket underwritingInfo = new CededUnderwritingInfoPacket();
         underwritingInfo.setExposure(new ExposureInfo(inceptionDate, inceptionPeriod));
+        underwritingInfo.setDate(inceptionDate);
         underwritingInfo.setCommission(fixedCommission + variableCommission);
         underwritingInfo.setCommissionFixed(fixedCommission);
         underwritingInfo.setCommissionVariable(variableCommission);
