@@ -147,6 +147,7 @@ public class UnderwritingInfoUtils {
             else if (uwInfos.size() > 1) {
                 UnderwritingInfoPacket aggregatedUwInfo = aggregate(uwInfos);
                 aggregatedUwInfo.setOriginal(uwInfos.get(0));
+                aggregatedUwInfo.setDate(uwInfos.get(0).getDate());
                 aggregateUnderwritingInfo.add(correctMetaProperties(aggregatedUwInfo, uwInfos));
             }
         }

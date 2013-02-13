@@ -12,10 +12,7 @@ import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountedValuesPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.NetPresentValuesPacket;
@@ -294,9 +291,9 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
      */
     private void calculateCededClaims(IPeriodCounter periodCounter) {
         List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
-        Map<IClaimRoot, IClaimRoot> netBaseClaimPerGrossClaim = (Map<IClaimRoot, IClaimRoot>) periodStore.get(NET_BASE_CLAIMS);
+        Map<ClaimKey, IClaimRoot> netBaseClaimPerGrossClaim = (Map<ClaimKey, IClaimRoot>) periodStore.get(NET_BASE_CLAIMS);
         if (netBaseClaimPerGrossClaim == null) {
-            netBaseClaimPerGrossClaim = new HashMap<IClaimRoot, IClaimRoot>();
+            netBaseClaimPerGrossClaim = new HashMap<ClaimKey, IClaimRoot>();
             periodStore.put(NET_BASE_CLAIMS, netBaseClaimPerGrossClaim);
         }
         for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
@@ -327,14 +324,15 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             }
             if (isSenderWired(outClaimsNet) || isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues)) {
                 // fill outClaimsNet temporarily if discounting or net present values are calculated as they are relaying on it
-                IClaimRoot netBaseClaim = netBaseClaimPerGrossClaim.get(grossClaim.getGrossClaim().getKeyClaim());
+                ClaimKey key = new ClaimKey(grossClaim.getGrossClaim());
+                IClaimRoot netBaseClaim = netBaseClaimPerGrossClaim.get(key);
                 ClaimCashflowPacket netClaim;
                 if (netBaseClaim != null) {
                     netClaim = ClaimUtils.getNetClaim(grossClaim.getGrossClaim(), cededClaim, netBaseClaim, this);
                 }
                 else {
                     netClaim = ClaimUtils.getNetClaim(grossClaim.getGrossClaim(), cededClaim, this);
-                    netBaseClaimPerGrossClaim.put(grossClaim.getGrossClaim().getKeyClaim(), netClaim.getBaseClaim());
+                    netBaseClaimPerGrossClaim.put(key, netClaim.getBaseClaim());
                 }
                 outClaimsNet.add(netClaim);
             }
@@ -428,6 +426,20 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
                 }
                 for (UnderwritingInfoPacket baseUwInfo : baseUnderwritingInfos) {
                     outUnderwritingInfoGNPI.add(baseUwInfo.getNet(cededUwOriginal.get(baseUwInfo.getOriginal()), true));
+                }
+            }
+            else if (baseUnderwritingInfos.size() < outUnderwritingInfoCeded.size()) {
+                int extraPacketsForCommissionOfPreviousYears = 0;
+                for (CededUnderwritingInfoPacket packet : outUnderwritingInfoCeded) {
+                    if (packet.getPremiumPaid() == 0 && packet.getPremiumWritten() == 0 && packet.getCommission() != 0) {
+                        extraPacketsForCommissionOfPreviousYears++;
+                    }
+                }
+                if (baseUnderwritingInfos.size() + extraPacketsForCommissionOfPreviousYears != outUnderwritingInfoCeded.size()) {
+                    throw new RuntimeException(getName() + ": different number of incoming GNPI and ceded uw info.");
+                }
+                else {
+                    // its safe to ignore these extra packets as their premium is 0 and does not effect GNPI
                 }
             }
             else {

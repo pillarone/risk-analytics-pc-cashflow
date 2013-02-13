@@ -101,46 +101,46 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
     }
 
 // PMO-2233 / Test1
-    void testCoverNetAndCededOfPrecedingContract() {
-        firstTreaty.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.MATRIX, setupParameters([[''], [''], [''], [''], [''], ['ANY']]))
-        secondTreaty.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.MATRIX,
-                setupParameters([['', 'contract1'], ['contract1', ''], ['', ''], ['', ''], ['', ''], ['ANY', 'ANY']]))
-
-        MatrixReinsuranceContracts contracts = new MatrixReinsuranceContracts()
-        contracts.addSubComponent(firstTreaty)
-        contracts.addSubComponent(secondTreaty)
-        contracts.internalWiring()
-        IPeriodCounter periodCounter = firstTreaty.iterationScope.periodScope.periodCounter
-        contracts.inClaims.addAll(getClaims(periodCounter, [], 700d, ClaimType.SINGLE))
-        contracts.inClaims.addAll(getClaims(periodCounter, [], 500d, ClaimType.SINGLE))
-
-        List outClaimsCededFirstTreaty = new TestProbe(firstTreaty, 'outClaimsCeded').result
-        List outClaimsNetFirstTreaty = new TestProbe(firstTreaty, 'outClaimsNet').result
-        List outClaimsCededSecondTreaty = new TestProbe(secondTreaty, 'outClaimsCeded').result
-        List outClaimsNetSecondTreaty = new TestProbe(secondTreaty, 'outClaimsNet').result
-
-        contracts.start()
-        assert 2 == outClaimsCededSecondTreaty.size()
-        def expectedCededUltimatesFirstTreaty = [700 * 0.2d, 500 * 0.2d]
-        def expectedCededUltimatesSecondTreaty = [700 * 0.3d, 500 * 0.3d]
-        def expectedNetUltimatesFirstTreaty = [-700 + (700 * 0.2d), -500 + (500 * 0.2d)]
-        def expectedNetUltimatesSecondTreaty = [-700 + (700 * 0.3d), -500 + (500 * 0.3d)]
-
-        outClaimsNetFirstTreaty.each { ClaimCashflowPacket claim ->
-            assert claim.ultimate() in expectedNetUltimatesFirstTreaty
-        }
-
-        outClaimsCededFirstTreaty.each { ClaimCashflowPacket claim ->
-            assert claim.ultimate() in expectedCededUltimatesFirstTreaty
-        }
-        outClaimsNetSecondTreaty.each { ClaimCashflowPacket claim ->
-            assert claim.ultimate() in expectedNetUltimatesSecondTreaty
-        }
-
-        outClaimsCededSecondTreaty.each { ClaimCashflowPacket claim ->
-            assert claim.ultimate() in expectedCededUltimatesSecondTreaty
-        }
-    }
+//    void testCoverNetAndCededOfPrecedingContract() {
+//        firstTreaty.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.MATRIX, setupParameters([[''], [''], [''], [''], [''], ['ANY']]))
+//        secondTreaty.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.MATRIX,
+//                setupParameters([['', 'contract1'], ['contract1', ''], ['', ''], ['', ''], ['', ''], ['ANY', 'ANY']]))
+//
+//        MatrixReinsuranceContracts contracts = new MatrixReinsuranceContracts()
+//        contracts.addSubComponent(firstTreaty)
+//        contracts.addSubComponent(secondTreaty)
+//        contracts.internalWiring()
+//        IPeriodCounter periodCounter = firstTreaty.iterationScope.periodScope.periodCounter
+//        contracts.inClaims.addAll(getClaims(periodCounter, [], 700d, ClaimType.SINGLE))
+//        contracts.inClaims.addAll(getClaims(periodCounter, [], 500d, ClaimType.SINGLE))
+//
+//        List outClaimsCededFirstTreaty = new TestProbe(firstTreaty, 'outClaimsCeded').result
+//        List outClaimsNetFirstTreaty = new TestProbe(firstTreaty, 'outClaimsNet').result
+//        List outClaimsCededSecondTreaty = new TestProbe(secondTreaty, 'outClaimsCeded').result
+//        List outClaimsNetSecondTreaty = new TestProbe(secondTreaty, 'outClaimsNet').result
+//
+//        contracts.start()
+//        assert 2 == outClaimsCededSecondTreaty.size()
+//        def expectedCededUltimatesFirstTreaty = [700 * 0.2d, 500 * 0.2d]
+//        def expectedCededUltimatesSecondTreaty = [700 * 0.3d, 500 * 0.3d]
+//        def expectedNetUltimatesFirstTreaty = [-700 + (700 * 0.2d), -500 + (500 * 0.2d)]
+//        def expectedNetUltimatesSecondTreaty = [-700 + (700 * 0.3d), -500 + (500 * 0.3d)]
+//
+//        outClaimsNetFirstTreaty.each { ClaimCashflowPacket claim ->
+//            assert claim.ultimate() in expectedNetUltimatesFirstTreaty
+//        }
+//
+//        outClaimsCededFirstTreaty.each { ClaimCashflowPacket claim ->
+//            assert claim.ultimate() in expectedCededUltimatesFirstTreaty
+//        }
+//        outClaimsNetSecondTreaty.each { ClaimCashflowPacket claim ->
+//            assert claim.ultimate() in expectedNetUltimatesSecondTreaty
+//        }
+//
+//        outClaimsCededSecondTreaty.each { ClaimCashflowPacket claim ->
+//            assert claim.ultimate() in expectedCededUltimatesSecondTreaty
+//        }
+//    }
 
     // PMO-2233 Test 3b
     void testGrossClaims() {

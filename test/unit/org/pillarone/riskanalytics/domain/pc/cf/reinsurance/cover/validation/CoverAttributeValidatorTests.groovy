@@ -24,10 +24,10 @@ class CoverAttributeValidatorTests extends GrailsUnitTestCase {
         setupParamCover()
     }
 
-    private void setupParamCover(List selection = [[''], [''], [''], [''], [''], ['ANY']]) {
-        def flexibleCover = new ConstrainedMultiDimensionalParameter(selection, ['', '', '', '', '', ''], ConstraintsFactory.getConstraints(CoverMap.IDENTIFIER))
+    private void setupParamCover(List parmCover = [[''], [''], [''], [''], [''], ['ANY']], List parmBenefitContracts = []) {
+        def flexibleCover = new ConstrainedMultiDimensionalParameter(parmCover, ['', '', '', '', '', ''], ConstraintsFactory.getConstraints(CoverMap.IDENTIFIER))
         parameters = new ArrayList<ParameterHolder>()
-        def benefitContracts = new ConstrainedMultiDimensionalParameter([[]], [''], ConstraintsFactory.getConstraints(ReinsuranceContractBasedOn.BASED_ON))
+        def benefitContracts = new ConstrainedMultiDimensionalParameter([parmBenefitContracts], [''], ConstraintsFactory.getConstraints(ReinsuranceContractBasedOn.BASED_ON))
         ParameterObjectParameterHolder holder = new ParameterObjectParameterHolder("subContract2:parmCover", 1, new MatrixCoverAttributeStrategy(flexibleCover: flexibleCover, benefitContracts: benefitContracts))
         parameters << holder
 
@@ -120,5 +120,14 @@ class CoverAttributeValidatorTests extends GrailsUnitTestCase {
         ParameterValidation validationError = result[0]
         assert ValidationType.ERROR == validationError.getValidationType()
         assert CoverAttributeValidator.IDENTICAL_FILTER == validationError.msg
+    }
+
+    void testSameBenefitContract() {
+        setupParamCover([[''], [''], [''], [''], [''], ['ANY']],['subContract2'])
+        List result = new CoverAttributeValidator().validate(parameters)
+        assert 1== result.size()
+        ParameterValidation validationError = result[0]
+        assert ValidationType.WARNING == validationError.getValidationType()
+        assert CoverAttributeValidator.CONTRACT_BENEFITS_ITSELF == validationError.msg
     }
 }

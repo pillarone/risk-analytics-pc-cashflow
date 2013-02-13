@@ -4,14 +4,20 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimTypeSelector;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimValidator;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.utils.constant.ReinsuranceContractBase;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MatrixCoverAttributeRow {
 
@@ -19,9 +25,12 @@ public class MatrixCoverAttributeRow {
     IReinsuranceContractMarker cededContract;
     ILegalEntityMarker legalEntity;
     ISegmentMarker segment;
+    Set<ISegmentMarker> implicitSegments = new HashSet<ISegmentMarker>();
     IPerilMarker peril;
     ClaimTypeSelector claimTypeSelector;
     boolean isStructure;
+
+    private ClaimValidator claimValidator;
 
     public MatrixCoverAttributeRow(int rowIndex, boolean isStructure, ConstrainedMultiDimensionalParameter flexibleCover) {
         this.isStructure = isStructure;
@@ -35,18 +44,33 @@ public class MatrixCoverAttributeRow {
         claimTypeSelector = ClaimTypeSelector.valueOf((String) flexibleCover.getValueAtAsObject(rowIndex, isStructure ? MatrixStructureContraints.LOSS_KIND_OF_OF_COLUMN_INDEX : CoverMap.LOSS_KIND_OF_OF_COLUMN_INDEX));
     }
 
-    public List<ClaimCashflowPacket> filter(List<ClaimCashflowPacket> source) {
+    public List<ClaimCashflowPacket> filter(List<ClaimCashflowPacket> source, boolean checkedSign) {
+        if (claimValidator == null) { claimValidator = new ClaimValidator(); }
         List<ClaimCashflowPacket> result = new ArrayList<ClaimCashflowPacket>();
         for (ClaimCashflowPacket claim : source) {
             if (!isStructure && netContract == null && cededContract == null && claim.reinsuranceContract() != null) {
                 // covers gross claims only.
-            } else if ((netContract == null || netContract == claim.reinsuranceContract()) &&
+            }
+            else if ((netContract == null || netContract == claim.reinsuranceContract()) &&
                     (cededContract == null || cededContract == claim.reinsuranceContract()) &&
                     (legalEntity == null || legalEntity == claim.legalEntity()) &&
                     (segment == null || segment == claim.segment()) &&
                     (peril == null || peril == claim.peril()) &&
                     claimTypeMatches(claimTypeSelector, claim)) {
-                result.add(claim);
+                if (checkedSign && !isStructure) {
+                    if (cededContract == null) {
+                        result.add(ClaimValidator.positiveNominalUltimate(claim));
+                    }
+                    else {
+                        result.add(claimValidator.invertClaimSign(claim));
+                    }
+                }
+                else {
+                    result.add(claim);
+                }
+            }
+            if (claim.segment() != null) {
+                implicitSegments.add(claim.segment());
             }
         }
         source.removeAll(result);
@@ -56,9 +80,15 @@ public class MatrixCoverAttributeRow {
     public List filterUnderwritingInfos(List source) {
         List result = new ArrayList();
         for (Object underwritingInfo : source) {
+            ISegmentMarker uwSegment = ((UnderwritingInfoPacket) underwritingInfo).segment();
             if ((legalEntity == null || legalEntity == ((UnderwritingInfoPacket) underwritingInfo).legalEntity()) &&
-                    (segment == null || segment == ((UnderwritingInfoPacket) underwritingInfo).segment())) {
-                result.add(underwritingInfo);
+                    ((segment == null || segment == uwSegment) || (implicitSegments.contains(uwSegment)))) {
+                if (cededContract == null || !(underwritingInfo instanceof CededUnderwritingInfoPacket)) {
+                    result.add(underwritingInfo);
+                }
+                else {
+                    result.add(new UnderwritingInfoPacket((CededUnderwritingInfoPacket) underwritingInfo, -1d));
+                }
             }
         }
         return result;

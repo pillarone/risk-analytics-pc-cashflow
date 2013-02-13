@@ -87,8 +87,8 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
         for (ReinsuranceContract contract : componentList) {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
             if (strategy?.mergerRequired()) {
-                ClaimMerger claimMerger = new ClaimMerger(coverAttributeStrategy: strategy)
-                UnderwritingInfoMerger uwInfoMerger = new UnderwritingInfoMerger(coverAttributeStrategy: strategy)
+                ClaimMerger claimMerger = new ClaimMerger(coverAttributeStrategy: strategy, name: "preceeding ${contract.name}")
+                UnderwritingInfoMerger uwInfoMerger = new UnderwritingInfoMerger(coverAttributeStrategy: strategy, name: "preceeding ${contract.name}")
                 claimMergers << claimMerger
                 uwInfoMergers << uwInfoMerger
                 List<IReinsuranceContractMarker> benefitContracts = strategy.benefitContracts

@@ -23,12 +23,9 @@ class ClaimMerger extends Component {
     @Override
     protected void doCalculation() {
         filterNetAndCededClaims()
-        List<ClaimCashflowPacket> claimsCeded = ClaimUtils.correctClaimSign(inClaimsCeded, true)
-        ClaimUtils.correctClaimSign(inClaimsGross,false)
-        ClaimUtils.correctClaimSign(inClaimsNet,false)
         // TODO (dbe) make more robust, e.g. no gross found.
         if (isReceiverWired(inClaimsGross)) {
-            Map<IClaimRoot, ClaimCashflowPacket> cededClaimsByBase = ClaimUtils.aggregateByKeyClaim(claimsCeded)
+            Map<IClaimRoot, ClaimCashflowPacket> cededClaimsByBase = ClaimUtils.aggregateByKeyClaim(inClaimsCeded)
             Map<IClaimRoot, ClaimCashflowPacket> cededClaimsForNetByBase = ClaimUtils.aggregateByKeyClaim(inClaimsCededForNet)
             Map<IClaimRoot, ClaimCashflowPacket> netClaimsByBase = ClaimUtils.aggregateByKeyClaim(inClaimsNet)
             Map<IClaimRoot, ClaimCashflowPacket> benefitClaimsByBase = ClaimUtils.aggregateByKeyClaim(inClaimsBenefit)
@@ -40,7 +37,7 @@ class ClaimMerger extends Component {
                     }
                     else if (severalCededContractsCovered()) {
                         // todo: think: this won't be used as netClaimsByBase is empty
-                        outClaims.addAll(ClaimUtils.aggregateByBaseClaim(claimsCeded))
+                        outClaims.addAll(ClaimUtils.aggregateByBaseClaim(inClaimsCeded))
                     }
                     else if (netAndCededContractsCovered()) {
                         ClaimCashflowPacket netClaimPacket = netClaim.value
@@ -56,7 +53,7 @@ class ClaimMerger extends Component {
                     }
                 }
                 if (netClaimsByBase.isEmpty() && severalCededContractsCovered()) {
-                    outClaims.addAll(ClaimUtils.aggregateByBaseClaim(claimsCeded))
+                    outClaims.addAll(ClaimUtils.aggregateByBaseClaim(inClaimsCeded))
                 }
             }
             else {
@@ -131,8 +128,8 @@ class ClaimMerger extends Component {
     }
 
     private filterNetAndCededClaims() {
-        coverAttributeStrategy.coveredClaims(inClaimsNet)
-        coverAttributeStrategy.coveredClaims(inClaimsCededForNet)
+        coverAttributeStrategy.coveredClaims(inClaimsNet, false)
+        coverAttributeStrategy.coveredClaims(inClaimsCededForNet, false)
         coverAttributeStrategy.coveredClaims(inClaimsCeded)
     }
 }

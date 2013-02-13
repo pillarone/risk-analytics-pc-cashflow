@@ -40,6 +40,7 @@ import org.pillarone.riskanalytics.core.output.CollectingModeFactory
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.XLStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacketAggregator
+import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
 import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractContraints
 import org.pillarone.riskanalytics.domain.utils.constraint.SegmentPortion
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateClaimCollectingModeStrategy
@@ -54,7 +55,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.c
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.6.5-kti"
+    def version = "0.6.6-kti"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -109,6 +110,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new SegmentPortion())
         ConstraintsFactory.registerConstraint(new ReinsuranceContractContraints())
         ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
+        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
 
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
         ValidatorRegistry.addValidator(new PatternStrategyValidator())
@@ -180,6 +182,17 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [FP.GROSS_PREMIUM_RISK,FP.GROSS_RESERVE_RISK,FP.GROSS_PREMIUM_RESERVE_RISK], [FP],"FIN"))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [], [FP,ContractFinancialsPacket],"FIN"))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [], [FP,ContractFinancialsPacket],"FIN"))
+
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [FP.GROSS_RESERVE_RISK, FP.GROSS_PREMIUM_RISK, FP.GROSS_PREMIUM_RESERVE_RISK, FP.NET_RESERVE_RISK, FP.NET_PREMIUM_RISK, FP.NET_PREMIUM_RESERVE_RISK, FP.CEDED_RESERVE_RISK, FP.CEDED_PREMIUM_RISK, FP.CEDED_PREMIUM_RESERVE_RISK], [FP],"GNC"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [FP.GROSS_RESERVE_RISK, FP.GROSS_PREMIUM_RISK, FP.GROSS_PREMIUM_RESERVE_RISK, FP.NET_RESERVE_RISK, FP.NET_PREMIUM_RISK, FP.NET_PREMIUM_RESERVE_RISK], [FP],"GN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [FP.GROSS_RESERVE_RISK, FP.GROSS_PREMIUM_RISK, FP.GROSS_PREMIUM_RESERVE_RISK, FP.NET_RESERVE_RISK, FP.NET_PREMIUM_RISK, FP.NET_PREMIUM_RESERVE_RISK], [FP],"GN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [FP.GROSS_RESERVE_RISK, FP.GROSS_PREMIUM_RISK, FP.GROSS_PREMIUM_RESERVE_RISK, FP.NET_RESERVE_RISK, FP.NET_PREMIUM_RISK, FP.NET_PREMIUM_RESERVE_RISK, FP.CEDED_RESERVE_RISK, FP.CEDED_PREMIUM_RISK, FP.CEDED_PREMIUM_RESERVE_RISK], [FP],"GNC"))
+
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [FP.GROSS_RESERVE_RISK, FP.GROSS_PREMIUM_RISK, FP.GROSS_PREMIUM_RESERVE_RISK, FP.NET_RESERVE_RISK, FP.NET_PREMIUM_RISK, FP.NET_PREMIUM_RESERVE_RISK, FP.CEDED_RESERVE_RISK, FP.CEDED_PREMIUM_RISK, FP.CEDED_PREMIUM_RESERVE_RISK, FP.GROSS_PREMIUM_WRITTEN, FP.NET_PREMIUM_WRITTEN, FP.CEDED_PREMIUM_WRITTEN], [FP],"GNC"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [FP.GROSS_RESERVE_RISK, FP.GROSS_PREMIUM_RISK, FP.GROSS_PREMIUM_RESERVE_RISK, FP.NET_RESERVE_RISK, FP.NET_PREMIUM_RISK, FP.NET_PREMIUM_RESERVE_RISK, FP.GROSS_PREMIUM_WRITTEN, FP.NET_PREMIUM_WRITTEN], [FP],"GN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [FP.GROSS_RESERVE_RISK, FP.GROSS_PREMIUM_RISK, FP.GROSS_PREMIUM_RESERVE_RISK, FP.NET_RESERVE_RISK, FP.NET_PREMIUM_RISK, FP.NET_PREMIUM_RESERVE_RISK, FP.GROSS_PREMIUM_WRITTEN, FP.NET_PREMIUM_WRITTEN], [FP],"GN"))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [FP.GROSS_RESERVE_RISK, FP.GROSS_PREMIUM_RISK, FP.GROSS_PREMIUM_RESERVE_RISK, FP.NET_RESERVE_RISK, FP.NET_PREMIUM_RISK, FP.NET_PREMIUM_RESERVE_RISK, FP.CEDED_RESERVE_RISK, FP.CEDED_PREMIUM_RISK, FP.CEDED_PREMIUM_RESERVE_RISK, FP.GROSS_PREMIUM_WRITTEN, FP.NET_PREMIUM_WRITTEN, FP.CEDED_PREMIUM_WRITTEN], [FP],"GNC"))
+
 
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE, DrillDownMode.BY_PERIOD], [CCP.REPORTED_INDEXED, CCP.PAID_INDEXED]))
 
