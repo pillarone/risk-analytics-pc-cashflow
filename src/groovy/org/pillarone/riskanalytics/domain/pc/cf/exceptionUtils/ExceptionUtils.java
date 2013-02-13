@@ -66,6 +66,9 @@ public class ExceptionUtils {
      * @return
      */
     public static double getCheckValue(double value) {
+        if(value == 0d) {
+            return SimulationConstants.EPSILON;
+        }
         double positiveValue = Math.abs(value);
         double log10Cashflow = Math.log10(positiveValue);
         return ((log10Cashflow * log10Cashflow) / 1000d) + SimulationConstants.EPSILON;
