@@ -7,8 +7,10 @@ import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.IterationStore;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.packets.SingleValuePacket;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
@@ -25,12 +27,14 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.IExposureBaseStr
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.*;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APSingleValuePacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.LossAndAP;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.UberCacheClaimStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.CoverStrategyType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ICoverStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl.IncurredAllocation;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl.TermIncurredCalculation;
@@ -65,6 +69,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
      */
     private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    private PacketList<UnderwritingInfoPacket> inPremiumPerPeriod = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<AllPeriodUnderwritingInfoPacket> inAllPeriodUnderwritingInfo = new PacketList<AllPeriodUnderwritingInfoPacket>(AllPeriodUnderwritingInfoPacket.class);
 //    Need to wire up some premiums. Hell on earth.
 
@@ -75,6 +80,10 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
     private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
+    private PacketList<APSingleValuePacket> outAPncb = new PacketList<APSingleValuePacket>(APSingleValuePacket.class);
+    private PacketList<APSingleValuePacket> outAPLoss = new PacketList<APSingleValuePacket>(APSingleValuePacket.class);
+    private PacketList<APSingleValuePacket> outAPPrem = new PacketList<APSingleValuePacket>(APSingleValuePacket.class);
+    private PacketList<APSingleValuePacket> outAPAll = new PacketList<APSingleValuePacket>(APSingleValuePacket.class);
 
     private IReinsuranceContractStrategy parmContractStructure = TemplateContractType.getDefault();
 
@@ -83,8 +92,8 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
      */
     private ContractCoverBase parmCoverageBase = ContractCoverBase.LOSSES_OCCURING;
     private ICoverStrategy parmCover = CoverStrategyType.getDefault();
-//    private ConstrainedMultiDimensionalParameter parmPremiumCover = new ConstrainedMultiDimensionalParameter(GroovyUtils.toList("[]"),
-//            Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER));
+    private ConstrainedMultiDimensionalParameter parmPremiumCover = new ConstrainedMultiDimensionalParameter(GroovyUtils.toList("[]"),
+            Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER));
 
     private IExposureBaseStrategy parmContractBase = ExposureBaseType.getDefault();
 
@@ -112,17 +121,25 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         List<ICededRoot> allIncurredCededClaims = new ArrayList<ICededRoot>();
         allIncurredCededClaims.addAll(new ArrayList<ICededRoot>(allIncurredCeded));
 
+        double subjectPremium = 0d;
+        for (UnderwritingInfoPacket underwritingInfoPacket : inPremiumPerPeriod) {
+            subjectPremium += underwritingInfoPacket.getPremiumWritten();
+        }
+
+
         Double termLimit = parmContractStructure.getTermLimit();
         Double termExcess = parmContractStructure.getTermDeductible();
 
-        double incurredInPeriod = new TermIncurredCalculation().cededIncurredRespectTerm(claimStore, setupLayerParameters(), periodScope, termExcess, termLimit, periodScope.getPeriodCounter(), parmCoverageBase);
+        LossAndAP incurredInPeriod = new TermIncurredCalculation().cededIncurredRespectTerm(claimStore, setupLayerParameters(),
+                periodScope, termExcess, termLimit, periodScope.getPeriodCounter(), parmCoverageBase, subjectPremium);
+        fillAPChannels(incurredInPeriod);
 
         final List<ClaimCashflowPacket> paidClaims;
         final List<ContractFinancialsPacket> contractFinancialsPacket;
         try {
 //            Leave this code here for the moment as evaulating the right hand side in the debugger can be useful, but it incurrs a performance penalty when uncommented.
 //            final Map<Integer, Double> cededIncurredByPeriod = new TermIncurredCalculation().cededIncurredsByPeriods(incurredClaims.keys(), periodScope, termExcess, termLimit, setupLayerParameters() , parmCoverageBase);
-            final List<ICededRoot> cededClaims = new IncurredAllocation().allocateClaims(incurredInPeriod, claimStore, periodScope, parmCoverageBase);
+            final List<ICededRoot> cededClaims = new IncurredAllocation().allocateClaims(incurredInPeriod.getLoss(), claimStore, periodScope, parmCoverageBase);
             allIncurredCededClaims.addAll(cededClaims);
 
             final Map<Integer, Double> paidByModelPeriod = paidCalculation.cededIncrementalPaidRespectTerm(claimStore, setupLayerParameters(),
@@ -142,6 +159,19 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         outContractFinancials.addAll(contractFinancialsPacket);
         periodStore.put(CEDED_CLAIMS, paidClaims);
 
+    }
+
+    private void fillAPChannels(LossAndAP lossAndAP) {
+        IPeriodCounter periodCounter = periodScope.getPeriodCounter();
+        Collection<APSingleValuePacket> apNCBSingleValuePackets = lossAndAP.getPackets(APBasis.NCB, periodCounter);
+        Collection<APSingleValuePacket> apLossSingleValuePackets = lossAndAP.getPackets(APBasis.LOSS, periodCounter);
+        Collection<APSingleValuePacket> apPremSingleValuePackets = lossAndAP.getPackets(APBasis.PREMIUM, periodCounter);
+        outAPLoss.addAll(apLossSingleValuePackets);
+        outAPPrem.addAll(apPremSingleValuePackets);
+        outAPncb.addAll(apNCBSingleValuePackets);
+        outAPAll.addAll(outAPLoss);
+        outAPAll.addAll(outAPncb);
+        outAPAll.addAll(outAPPrem);
     }
 
     private ScaledPeriodLayerParameters setupLayerParameters() {
@@ -214,10 +244,12 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         DateTime coverEnd = globalCover.getEndCover();
 
         List<ClaimCashflowPacket> uncoveredClaims = RIUtilities.uncoveredClaims(parmCoverageBase, coverStart, coverEnd, inClaims);
+
         inClaims.removeAll(uncoveredClaims);
         parmCover.coveredClaims(inClaims);
         outClaimsGross.addAll(inClaims);
         parmContractBase.coveredUnderwritingInfo(inUnderwritingInfo);
+
     }
 
     public boolean isProportionalContract() {
@@ -368,11 +400,51 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         this.simulationScope = simulationScope;
     }
 
-/*    public ConstrainedMultiDimensionalParameter getParmPremiumCover() {
+    public ConstrainedMultiDimensionalParameter getParmPremiumCover() {
         return parmPremiumCover;
     }
 
     public void setParmPremiumCover(ConstrainedMultiDimensionalParameter parmPremiumCover) {
         this.parmPremiumCover = parmPremiumCover;
-    } */
+    }
+
+    public PacketList<UnderwritingInfoPacket> getInPremiumPerPeriod() {
+        return inPremiumPerPeriod;
+    }
+
+    public void setInPremiumPerPeriod(PacketList<UnderwritingInfoPacket> inPremiumPerPeriod) {
+        this.inPremiumPerPeriod = inPremiumPerPeriod;
+    }
+
+    public PacketList<APSingleValuePacket> getOutAPncb() {
+        return outAPncb;
+    }
+
+    public void setOutAPncb(PacketList<APSingleValuePacket> outAPncb) {
+        this.outAPncb = outAPncb;
+    }
+
+    public PacketList<APSingleValuePacket> getOutAPLoss() {
+        return outAPLoss;
+    }
+
+    public void setOutAPLoss(PacketList<APSingleValuePacket> outAPLoss) {
+        this.outAPLoss = outAPLoss;
+    }
+
+    public PacketList<APSingleValuePacket> getOutAPPrem() {
+        return outAPPrem;
+    }
+
+    public void setOutAPPrem(PacketList<APSingleValuePacket> outAPPrem) {
+        this.outAPPrem = outAPPrem;
+    }
+
+    public PacketList<APSingleValuePacket> getOutAPAll() {
+        return outAPAll;
+    }
+
+    public void setOutAPAll(PacketList<APSingleValuePacket> outAPAll) {
+        this.outAPAll = outAPAll;
+    }
 }

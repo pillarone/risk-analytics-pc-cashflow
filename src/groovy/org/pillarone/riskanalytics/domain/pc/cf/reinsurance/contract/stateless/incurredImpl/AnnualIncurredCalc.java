@@ -9,11 +9,14 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.L
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AdditionalPremiumPerLayer;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IIncurredCalculation;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ScaledPeriodLayerParameters;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IContractClaimStore;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AdditionalPremium;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.LayerAndAP;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.LossAndAP;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -39,44 +42,49 @@ public class AnnualIncurredCalc implements IIncurredCalculation {
         return Math.min(Math.max(lossAfterClaimStructure - layerParameters.getLayerPeriodExcess(), 0), layerParameters.getLayerPeriodLimit());
     }
 
-    public double additionalPremiumByLayer( Collection<IClaimRoot> incurredClaims, LayerParameters layerParameters, double layerPremium) {
-        double additionalPremium = 0;
+    public Collection<AdditionalPremium> additionalPremiumByLayer(Collection<IClaimRoot> incurredClaims, LayerParameters layerParameters, double layerPremium) {
+        Collection<AdditionalPremium> additionalPremiums = new ArrayList<AdditionalPremium>();
 
         for (AdditionalPremiumPerLayer additionalPremiumPerLayer : layerParameters.getAdditionalPremiums()) {
-            double tempAdditionalPremium = 0;
             LayerParameters tempLayer = new LayerParameters(layerParameters.getShare(), layerParameters.getClaimExcess(), layerParameters.getClaimLimit());
             tempLayer.addAdditionalPremium(additionalPremiumPerLayer.getPeriodExcess(), additionalPremiumPerLayer.getPeriodLimit(), additionalPremiumPerLayer.getAdditionalPremium(), additionalPremiumPerLayer.getBasis());
             switch (additionalPremiumPerLayer.getBasis()) {
                 case PREMIUM:
                     double loss = lossAfterAnnualStructure(incurredClaims, tempLayer);
-                    tempAdditionalPremium = (loss * layerPremium * layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium()) / tempLayer.getLayerPeriodLimit();
+                    double premAP = (loss * layerPremium * layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium()) / tempLayer.getLayerPeriodLimit();
+                    AdditionalPremium lossAPo = new AdditionalPremium(premAP, APBasis.PREMIUM);
+                    additionalPremiums.add(lossAPo);
                     break;
                 case LOSS:
-                    tempAdditionalPremium = layerCededIncurred(incurredClaims, tempLayer) * additionalPremiumPerLayer.getAdditionalPremium();
+                    double lossAP = layerCededIncurred(incurredClaims, tempLayer) * additionalPremiumPerLayer.getAdditionalPremium();
+                    AdditionalPremium additionalPremium = new AdditionalPremium(lossAP, APBasis.LOSS);
+                    additionalPremiums.add(additionalPremium);
                     break;
                 case NCB:
-                    if (lossAfterAnnualStructure(incurredClaims, tempLayer) == 0) {
-                        tempAdditionalPremium = layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium() * layerPremium;
+                    double ncbAP = 0d;
+                    if (layerCededIncurred(incurredClaims, tempLayer) == 0) {
+                        ncbAP = layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium() * layerPremium;
                     }
+                    additionalPremiums.add(new AdditionalPremium(ncbAP, APBasis.NCB));
                     break;
                 default:
                     throw new SimulationException("Unknown additional premium basis :" + additionalPremiumPerLayer.getBasis());
             }
-            additionalPremium += tempAdditionalPremium;
         }
 
-        return additionalPremium;
+        return additionalPremiums;
     }
 
-    public double additionalPremiumAllLayers(Collection<IClaimRoot> incurredClaims, Collection<LayerParameters> layerParameters, double layerPremium) {
-        double additionalPremiumAllLayers = 0;
+    public Collection<LayerAndAP> additionalPremiumAllLayers(Collection<IClaimRoot> incurredClaims, Collection<LayerParameters> layerParameters, double layerPremium) {
+        Collection<LayerAndAP> additionalPremiumAllLayers = new ArrayList<LayerAndAP>();
         for (LayerParameters layerParameter : layerParameters) {
-            additionalPremiumAllLayers += additionalPremiumByLayer(incurredClaims, layerParameter, layerPremium);
+            LayerAndAP layerAndAP = new LayerAndAP(layerParameter, additionalPremiumByLayer(incurredClaims, layerParameter, layerPremium));
+            additionalPremiumAllLayers.add(layerAndAP);
         }
         return additionalPremiumAllLayers;
     }
 
-    public double cededIncurredRespectTerm(IAllContractClaimCache claimStore, ScaledPeriodLayerParameters scaledLayerParameters, PeriodScope periodScope, double termExcess, double termLimit, IPeriodCounter counter, ContractCoverBase coverageBase) {
+    public LossAndAP cededIncurredRespectTerm(IAllContractClaimCache claimStore, ScaledPeriodLayerParameters scaledLayerParameters, PeriodScope periodScope, double termExcess, double termLimit, IPeriodCounter counter, ContractCoverBase coverageBase, double contractPeriodPremium) {
         throw new SimulationException("Annual calculation was asked for a term calculation. It has no knowledge of this");
     }
 }

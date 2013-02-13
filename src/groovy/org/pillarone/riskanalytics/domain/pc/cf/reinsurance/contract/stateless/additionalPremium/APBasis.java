@@ -1,37 +1,29 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium;
 
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AdditionalPremiumPerLayer;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters;
+import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public enum APBasis {
+public enum APBasis implements IGetAPDates {
 
     PREMIUM {
-        @Override
-        public AdditionalPremium calculateAP(double lossAfterAnnualStructure, double lossAfterStructureShareApplied, LayerParameters layerParameters, double layerPremium, AdditionalPremiumPerLayer additionalPremiumPerLayer) {
-            double premAP = (lossAfterAnnualStructure * layerPremium * layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium()) / layerParameters.getLayerPeriodLimit();
-            return new AdditionalPremium(premAP, APBasis.PREMIUM);
+        public DateTime getAPDate(IPeriodCounter periodCounter) {
+            return periodCounter.endOfPeriod(periodCounter.currentPeriodIndex());
         }
-    }, LOSS {
-        @Override
-        public AdditionalPremium calculateAP(double lossAfterAnnualStructure, double lossAfterStructureShareApplied, LayerParameters layerParameters, double layerPremium, AdditionalPremiumPerLayer additionalPremiumPerLayer) {
-            double lossAP = lossAfterStructureShareApplied * additionalPremiumPerLayer.getAdditionalPremium();
-            return new AdditionalPremium(lossAP, APBasis.LOSS);
+    },
+    LOSS {
+        public DateTime getAPDate(IPeriodCounter periodCounter) {
+            return periodCounter.endOfPeriod(periodCounter.currentPeriodIndex());
         }
-    }, NCB {
-        @Override
-        public AdditionalPremium calculateAP(double lossAfterAnnualStructure, double lossAfterStructureShareApplied, LayerParameters layerParameters, double layerPremium, AdditionalPremiumPerLayer additionalPremiumPerLayer) {
-            double ncbAP = 0d;
-            if (lossAfterAnnualStructure == 0d) {
-                ncbAP = layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium() * layerPremium;
-            }
-            return new AdditionalPremium(ncbAP, APBasis.NCB);
+    },
+    NCB {
+        public DateTime getAPDate(IPeriodCounter periodCounter) {
+            return periodCounter.endOfPeriod(periodCounter.currentPeriodIndex());
         }
     };
 
-    public abstract AdditionalPremium calculateAP(double lossAfterAnnualStructure, double lossAfterStructureShareApplied, LayerParameters layerParameters, double layerPremium, AdditionalPremiumPerLayer additionalPremiumPerLayer);
 
     public static APBasis getStringValue(String value) {
         APBasis[] values = APBasis.values();

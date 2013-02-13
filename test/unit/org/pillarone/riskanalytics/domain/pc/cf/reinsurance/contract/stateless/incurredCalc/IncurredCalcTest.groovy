@@ -5,7 +5,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis
 
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl.TermIncurredCalculation
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters
@@ -21,6 +20,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.c
 
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.ContractClaimStoreTestIncurredClaimImpl
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.LossAndAP
 
 /**
  * Created with IntelliJ IDEA.
@@ -91,17 +92,17 @@ class IncurredCalcTest extends GroovyTestCase {
 
         LayerParameters testPremiumAP = new LayerParameters(1, 0, 0)
         testPremiumAP.addAdditionalPremium(0, 400, 0.5, APBasis.LOSS)
-        double lossAP = calc.additionalPremiumByLayer(grossClaims, testPremiumAP, 20)
+        double lossAP = calc.additionalPremiumByLayer(grossClaims, testPremiumAP, 20).getAt(0).additionalPremium
         assert lossAP == 400 * 0.5
 
         LayerParameters testLossAP = new LayerParameters(0.8, 0, 0)
         testLossAP.addAdditionalPremium(0, 600, 0.5, APBasis.PREMIUM)
-        double premiumAP = calc.additionalPremiumByLayer(grossClaims, testLossAP, 20)
+        double premiumAP = calc.additionalPremiumByLayer(grossClaims, testLossAP, 20).getAt(0).additionalPremium
         assert premiumAP == (450 * 0.5 * 0.8 * 20) / 600
 
         LayerParameters ncbPremium = new LayerParameters(1, 0, 0)
         ncbPremium.addAdditionalPremium(0, 0, 0.5, APBasis.NCB)
-        double ncbPrem = calc.additionalPremiumByLayer(new ArrayList<IClaimRoot>(), ncbPremium, 20)
+        double ncbPrem = calc.additionalPremiumByLayer(new ArrayList<IClaimRoot>(), ncbPremium, 20).getAt(0).additionalPremium
         assert ncbPrem == 20 * 0.5
 
 //        Mix AP's.
@@ -111,7 +112,7 @@ class IncurredCalcTest extends GroovyTestCase {
         lotsOfAP.addAdditionalPremium(150, 200, 0.5, APBasis.PREMIUM)
         lotsOfAP.addAdditionalPremium(350, 50, 0.1, APBasis.LOSS)
 
-        double allAPs = calc.additionalPremiumByLayer(grossClaims, lotsOfAP, 20)
+        double allAPs = calc.additionalPremiumByLayer(grossClaims, lotsOfAP, 20).additionalPremium.sum()
         assert allAPs == 0.5 * 100 + (200 * 1 * 20 * 0.5) / 200 + 50 * 0.1
     }
 
@@ -127,14 +128,14 @@ class IncurredCalcTest extends GroovyTestCase {
         layerParameters.setCounter(periodScope.getPeriodCounter())
         layerParameters.setUwInfo(new AllPeriodUnderwritingInfoPacket())
         layerParameters.add(0, 1, 1, 0, 0, 0, 0, 0, APBasis.NCB)
-        double incurredFirstCalc = calculation.cededIncurredRespectTerm(claimCache, layerParameters, periodScope, 100, 400, periodScope.getPeriodCounter(), ContractCoverBase.LOSSES_OCCURING)
-        assertEquals("First period inc term deductible", 350, incurredFirstCalc)
+        LossAndAP incurredFirstCalc = calculation.cededIncurredRespectTerm(claimCache, layerParameters, periodScope, 100, 400, periodScope.getPeriodCounter(), ContractCoverBase.LOSSES_OCCURING, 0d)
+        assertEquals("First period inc term deductible", 350, incurredFirstCalc.getLoss())
         Map<Integer, Double> incurredFirstCalcMap = calculation.cededIncurredsByPeriods(claimCache, periodScope, 100, 400, layerParameters, ContractCoverBase.LOSSES_OCCURING, 0)
         assertEquals(" ", 350, incurredFirstCalcMap.get(0))
 
         periodScope.prepareNextPeriod()
-        double incurredSecondCalc = calculation.cededIncurredRespectTerm(claimCache, layerParameters, periodScope, 100, 400, periodScope.getPeriodCounter(), ContractCoverBase.LOSSES_OCCURING)
-        assertEquals("second period inc term deductible", 0, incurredSecondCalc)
+        LossAndAP incurredSecondCalc = calculation.cededIncurredRespectTerm(claimCache, layerParameters, periodScope, 100, 400, periodScope.getPeriodCounter(), ContractCoverBase.LOSSES_OCCURING, 0d)
+        assertEquals("second period inc term deductible", 0, incurredSecondCalc.getLoss())
         Map<Integer, Double> incurredSecondCalcMap = calculation.cededIncurredsByPeriods(claimCache, periodScope, 100, 400, layerParameters, ContractCoverBase.LOSSES_OCCURING, 1)
         assertEquals(" ", 350, incurredSecondCalcMap.get(0))
         assertEquals(" ", 0, incurredSecondCalcMap.get(1))
@@ -143,9 +144,9 @@ class IncurredCalcTest extends GroovyTestCase {
         IContractClaimStore claimCache1 = new ContractClaimStoreTestIncurredClaimImpl(grossClaims)
 
         periodScope.prepareNextPeriod()
-        double inThirdCalc = calculation.cededIncurredRespectTerm(claimCache1, layerParameters, periodScope, 100, 400, periodScope.getPeriodCounter(), ContractCoverBase.LOSSES_OCCURING)
+        LossAndAP inThirdCalc = calculation.cededIncurredRespectTerm(claimCache1, layerParameters, periodScope, 100, 400, periodScope.getPeriodCounter(), ContractCoverBase.LOSSES_OCCURING, 0d)
         Map<Integer, Double> incurredThirdCalcMap = calculation.cededIncurredsByPeriods(claimCache1, periodScope, 100, 400, layerParameters, ContractCoverBase.LOSSES_OCCURING, 2)
-        assertEquals("third period inc term deductible", 50, inThirdCalc)
+        assertEquals("third period inc term deductible", 50, inThirdCalc.getLoss())
         assertEquals(" ", 0, incurredThirdCalcMap.get(1))
         assertEquals("", 50, incurredThirdCalcMap.get(2))
     }

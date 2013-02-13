@@ -54,7 +54,7 @@ public class ProportionalToCededPaidAllocation implements IPaidAllocation {
             from the allocation in this period. Ensure that claims have an ultimate amount transmitted.
              */
             for (Map.Entry<IClaimRoot, Collection<ClaimCashflowPacket>> iClaimRootCollectionEntry : cashflows.entrySet()) {
-                if (GRIUtilities.incrementalCashflowSum(iClaimRootCollectionEntry.getValue()) > 0) {
+                if (RIUtilities.incrementalCashflowSum(iClaimRootCollectionEntry.getValue()) > 0) {
                     cashflowsWithNonZeroPaidIncrements.put(iClaimRootCollectionEntry.getKey(), iClaimRootCollectionEntry.getValue());
                     ICededRoot cededRoot = RIUtilities.findCededClaimRelatedToGrossClaim(iClaimRootCollectionEntry.getKey(), incurredCededClaims);
                     cededClaimsWithNonZeroIncrements.add(cededRoot);
@@ -76,7 +76,7 @@ public class ProportionalToCededPaidAllocation implements IPaidAllocation {
             double cededIncurredFromClaimsWithNonZeroIncrements = GRIUtilities.ultimateSum(cededClaimsWithNonZeroIncrements);
             for (Map.Entry<IClaimRoot, Collection<ClaimCashflowPacket>> packetEntrys : cashflowsWithNonZeroPaidIncrements.entrySet()) {
                 List<ClaimCashflowPacket> cashflowPackets = new ArrayList<ClaimCashflowPacket>(packetEntrys.getValue());
-                double sumIncrementsOfThisClaim = GRIUtilities.incrementalCashflowSum(cashflowPackets);
+                double sumIncrementsOfThisClaim = RIUtilities.incrementalCashflowSum(cashflowPackets);
 
                 double grossIncurredByClaimRatio;
                 double cededIncurredByClaimRatio;
