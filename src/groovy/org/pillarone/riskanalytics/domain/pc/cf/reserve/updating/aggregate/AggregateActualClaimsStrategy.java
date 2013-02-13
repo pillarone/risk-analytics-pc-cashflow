@@ -137,7 +137,7 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
         }
 //        If there are no claim updates, we rescale the pattern to avoid stochastic payments before update date.
 
-        PatternPacket patternPacket = base.patternAccordingToPayoutBase(payoutPattern, startDateForPatterns, updateDate);
+        PatternPacket patternPacket = base.patternAccordingToPayoutBaseNoUpdates(payoutPattern, startDateForPatterns, updateDate);
 
 
         patternPacket.consistencyCheck(sanityChecks, sanityChecks, sanityChecks, sanityChecks);

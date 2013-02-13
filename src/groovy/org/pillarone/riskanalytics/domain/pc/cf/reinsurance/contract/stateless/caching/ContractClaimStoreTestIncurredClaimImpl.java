@@ -84,7 +84,7 @@ public class ContractClaimStoreTestIncurredClaimImpl implements IAllContractClai
 
     @Override
     public Collection<IClaimRoot> allIncurredClaimsCurrentSimulationPeriod(PeriodScope periodScope, ContractCoverBase coverBase) {
-        throw new SimulationException("");
+        return new ArrayList<IClaimRoot>();
     }
 
     @Override

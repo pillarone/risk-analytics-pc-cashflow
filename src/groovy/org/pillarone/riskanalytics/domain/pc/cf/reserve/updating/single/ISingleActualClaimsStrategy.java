@@ -19,7 +19,7 @@ public interface ISingleActualClaimsStrategy extends IParameterObject {
     void lazyInitHistoricClaimsPerContractPeriod(IPeriodCounter periodCounter, DateTime updateDate, PayoutPatternBase payoutPatternBase);
 
     List<GrossClaimRoot> claimWithAdjustedPattern(PatternPacket originalPayoutPattern, PayoutPatternBase base, DateTime updateDate,
-                                            DateTimeUtilities.Days360 days360, int currentPeriod);
+                                                  DateTimeUtilities.Days360 days360, int currentPeriod, boolean sanityChecks);
 
 //    void checkClaimRootOccurrenceAgainstFirstActualPaid(List<ClaimRoot> baseClaims, int contractPeriod, IPeriodCounter periodCounter,
 //                                                       DateTime updateDate, PayoutPatternBase base);

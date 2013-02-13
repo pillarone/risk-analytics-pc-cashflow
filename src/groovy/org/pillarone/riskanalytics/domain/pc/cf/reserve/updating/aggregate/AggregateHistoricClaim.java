@@ -1,14 +1,12 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate;
 
 import org.joda.time.DateTime;
-import org.openxmlformats.schemas.drawingml.x2006.main.CTGeomRect;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exceptionUtils.ExceptionUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PeriodsNotIncreasingException;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
@@ -69,8 +67,9 @@ public class AggregateHistoricClaim {
         }
         PatternPacket patternPacket = null;
         try {
-            patternPacket = PatternUtils.adjustedPattern(payoutPattern, claimPaidUpdates, claimRoot.getUltimate(), startDateForPatterns,
-                    claimRoot.getOccurrenceDate(), updateDate, lastReportedDate(updateDate), days360);
+            DateTime lastReportedDateOrNull = lastReportedDate(updateDate);
+            patternPacket = base.patternAccordingToPayoutBaseWithUpdates(payoutPattern, claimRoot, claimPaidUpdates,
+                    updateDate, days360, sanityChecks, contractPeriodStartDate, firstActualPaidDateOrNull(), lastReportedDateOrNull);
         } catch (PeriodsNotIncreasingException e) {
             throw new SimulationException("Aggregate historic claims caught an exception claiming pattern period values are incorrect. " +
                     "A potential cause of this" +

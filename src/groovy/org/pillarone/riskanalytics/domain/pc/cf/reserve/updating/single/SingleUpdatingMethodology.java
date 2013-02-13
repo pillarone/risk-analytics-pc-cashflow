@@ -67,7 +67,7 @@ public class SingleUpdatingMethodology extends AbstractParameterObject implement
             modifiedGeneratedAndActualClaims.add(new GrossClaimRoot(ibnrClaim, adjustedPattern, startDateForPatterns));
         }
         int currentPeriod = periodCounter.belongsToPeriod(periodCounter.getCurrentPeriodStart());
-        modifiedGeneratedAndActualClaims.addAll(actualClaims.claimWithAdjustedPattern(payoutPattern, base, updateDate, days360, currentPeriod));
+        modifiedGeneratedAndActualClaims.addAll(actualClaims.claimWithAdjustedPattern(payoutPattern, base, updateDate, days360, currentPeriod, sanityChecks));
         return new GrossClaimAndRandomDraws(modifiedGeneratedAndActualClaims, updatingResult);
     }
 

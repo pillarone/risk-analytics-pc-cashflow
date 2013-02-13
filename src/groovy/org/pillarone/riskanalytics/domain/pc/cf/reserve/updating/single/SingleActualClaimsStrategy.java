@@ -92,12 +92,12 @@ public class SingleActualClaimsStrategy extends AbstractParameterObject implemen
     }
 
     public List<GrossClaimRoot> claimWithAdjustedPattern(PatternPacket originalPayoutPattern, PayoutPatternBase base,
-                                                         DateTime updateDate, DateTimeUtilities.Days360 days360, int currentPeriod) {
+                                                         DateTime updateDate, DateTimeUtilities.Days360 days360, int currentPeriod, boolean sanityChecks) {
         List<SingleHistoricClaim> historicClaimsOfCurrentPeriod = historicClaimsPerContractPeriod.get(currentPeriod);
         List<GrossClaimRoot> historicClaimsWithAdjustedPattern = new ArrayList<GrossClaimRoot>();
         if (historicClaimsOfCurrentPeriod != null) {
             for (SingleHistoricClaim historicClaim : historicClaimsOfCurrentPeriod) {
-                historicClaimsWithAdjustedPattern.add(historicClaim.claimWithAdjustedPattern(originalPayoutPattern, base, updateDate, days360));
+                historicClaimsWithAdjustedPattern.add(historicClaim.claimWithAdjustedPattern(originalPayoutPattern, base, updateDate, days360, sanityChecks));
             }
         }
         return historicClaimsWithAdjustedPattern;

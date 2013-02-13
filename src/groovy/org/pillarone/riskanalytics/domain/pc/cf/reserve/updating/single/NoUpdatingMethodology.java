@@ -9,7 +9,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.single.SingleUpdatingMethod.ClaimAndRandomDraws;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +48,7 @@ public class NoUpdatingMethodology extends AbstractParameterObject implements IS
         for (ClaimRoot baseClaim : baseClaims) {
 //            This pushes the pattern calculation through the updating code. It should result in a single source of pattern problems, maybe a small performance impact.
             DateTime startDateforPatterns = base.startDateForPayouts(baseClaim, periodCounter.getCurrentPeriodStart(), null);
-            PatternPacket packet = base.patternAccordingToPayoutBase(payoutPattern, startDateforPatterns, updateDate);
+            PatternPacket packet = base.patternAccordingToPayoutBaseNoUpdates(payoutPattern, startDateforPatterns, updateDate);
             claims.add(new GrossClaimRoot(baseClaim, packet,
                     new PatternPacket.TrivialPattern(IReportingPatternMarker.class),
                     startDateforPatterns));

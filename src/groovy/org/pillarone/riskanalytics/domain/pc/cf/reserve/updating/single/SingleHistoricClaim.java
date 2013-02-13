@@ -118,14 +118,15 @@ public class SingleHistoricClaim {
         return claimCumulativePaidUpdates.isEmpty() && claimCumulativeReportedUpdates.isEmpty();
     }
 
-    public GrossClaimRoot claimWithAdjustedPattern(PatternPacket originalPayoutPattern, PayoutPatternBase base, DateTime updateDate, DateTimeUtilities.Days360 days360) {
+    public GrossClaimRoot claimWithAdjustedPattern(PatternPacket originalPayoutPattern,
+                                                   PayoutPatternBase base, DateTime updateDate, DateTimeUtilities.Days360 days360, boolean sanityChecks) {
         double ultimate = lastReported;
 //        applyVolatility(ultimate);
         DateTime exposureStartDate = contractPeriodStartDate;
         ClaimRoot claimRoot = new ClaimRoot(ultimate, ClaimType.SINGLE, exposureStartDate, occurrenceDate);
         DateTime baseDate = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
-        PatternPacket adjustedPayoutPattern = PatternUtils.adjustedPattern(originalPayoutPattern, claimCumulativePaidUpdates, ultimate,
-                baseDate, occurrenceDate, updateDate, lastUpdateDate, days360);
+        PatternPacket adjustedPayoutPattern = base.patternAccordingToPayoutBaseWithUpdates(originalPayoutPattern, claimRoot, claimCumulativePaidUpdates, updateDate,
+                days360, sanityChecks, contractPeriodStartDate,  firstActualPaidDateOrNull(), lastUpdateDate);
         return new GrossClaimRoot(ultimate, ClaimType.SINGLE, exposureStartDate, occurrenceDate, adjustedPayoutPattern, null, baseDate);
     }
 

@@ -6,7 +6,6 @@ import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.runOff.RunOffPatternUtils;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.*;
@@ -27,7 +26,7 @@ public enum PayoutPatternBase {
          * @return
          */
         @Override
-        public PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
+        public PatternPacket patternAccordingToPayoutBaseNoUpdates(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
             final NavigableMap<DateTime, Double> theMap = originalPattern.absolutePattern(startDateForPayouts, true);
             final SortedMap<DateTime, Double> theMapAfterUpdate = theMap.tailMap(updateDate);
             double normalisingFactor = DateTimeUtilities.sumDateTimeDoubleMapByDateRange(theMapAfterUpdate, updateDate.minusDays(1), theMap.lastKey().plusDays(1));
@@ -57,6 +56,11 @@ public enum PayoutPatternBase {
         }
 
         @Override
+        public PatternPacket patternAccordingToPayoutBaseWithUpdates(PatternPacket payoutPattern, ClaimRoot claimRoot, TreeMap<DateTime, Double> claimPaidUpdates, DateTime updateDate, DateTimeUtilities.Days360 days360, boolean sanityChecks, DateTime contractPeriodStartDate, DateTime firstActualPaidDateOrNull, DateTime lastReportedDateOrNull) {
+            throw new SimulationException("Reserve pattern cannot have claim updates");
+        }
+
+        @Override
         public DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate) {
             if (firstActualPaidDate != null) {
                 throw new SimulationException(" The reserve pattern has been provided with an actual payment date. This is not allowed.");
@@ -67,8 +71,19 @@ public enum PayoutPatternBase {
 
     CLAIM_OCCURANCE_DATE {
         @Override
-        public PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
+        public PatternPacket patternAccordingToPayoutBaseNoUpdates(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
             return PatternUtils.adjustForNoClaimUpdates(originalPattern, startDateForPayouts, updateDate);
+        }
+
+        @Override
+        public PatternPacket patternAccordingToPayoutBaseWithUpdates(PatternPacket payoutPattern, ClaimRoot claimRoot,
+                                                                     TreeMap<DateTime, Double> claimPaidUpdates, DateTime updateDate,
+                                                                     DateTimeUtilities.Days360 days360, boolean sanityChecks,
+                                                                     DateTime contractPeriodStartDate, DateTime firstActualPaidDateOrNull,
+                                                                     DateTime lastReportedDateOrNull) {
+            DateTime startDateForPatterns = startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull);
+            return PatternUtils.adjustedPattern(payoutPattern, claimPaidUpdates, claimRoot.getUltimate(), startDateForPatterns,
+                    claimRoot.getOccurrenceDate(), updateDate, lastReportedDateOrNull, days360);
         }
 
         @Override
@@ -87,8 +102,19 @@ public enum PayoutPatternBase {
 
     PERIOD_START_DATE {
         @Override
-        public PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
+        public PatternPacket patternAccordingToPayoutBaseNoUpdates(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
             return PatternUtils.adjustForNoClaimUpdates(originalPattern, startDateForPayouts, updateDate);
+        }
+
+        @Override
+        public PatternPacket patternAccordingToPayoutBaseWithUpdates(PatternPacket payoutPattern, ClaimRoot claimRoot,
+                                                                     TreeMap<DateTime, Double> claimPaidUpdates, DateTime updateDate,
+                                                                     DateTimeUtilities.Days360 days360, boolean sanityChecks,
+                                                                     DateTime contractPeriodStartDate, DateTime firstActualPaidDateOrNull,
+                                                                     DateTime lastReportedDateOrNull) {
+            DateTime startDateForPatterns = startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull);
+            return PatternUtils.adjustedPattern(payoutPattern, claimPaidUpdates, claimRoot.getUltimate(), startDateForPatterns,
+                    claimRoot.getOccurrenceDate(), updateDate, lastReportedDateOrNull, days360);
         }
 
         @Override
@@ -98,7 +124,10 @@ public enum PayoutPatternBase {
     };
 
     //
-    public abstract PatternPacket patternAccordingToPayoutBase(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate);
+    public abstract PatternPacket patternAccordingToPayoutBaseNoUpdates(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate);
+
+    public abstract PatternPacket patternAccordingToPayoutBaseWithUpdates(PatternPacket payoutPattern, ClaimRoot claimRoot, TreeMap<DateTime, Double> claimPaidUpdates, DateTime updateDate,
+                                                                          DateTimeUtilities.Days360 days360, boolean sanityChecks, DateTime contractPeriodStartDate, DateTime firstActualPaidDateOrNull, DateTime lastReportedDateOrNull);
 
     public abstract DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate);
 
