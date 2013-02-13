@@ -8,7 +8,7 @@ import org.joda.time.DateTimeZone;
  */
 public class SimulationConstants {
 
-    public static Double EPSILON = 0.001d;
+    public static Double EPSILON = 0.0001d;
 
     public static DateTime start2010 = new DateTime(2010, 1, 1, 1, 0, 0, 0, DateTimeZone.UTC);
     public static DateTime start2011 = new DateTime(2011, 1, 1, 1, 0, 0, 0, DateTimeZone.UTC);

@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.exceptionUtils.ExceptionUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.global.SimulationConstants;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IPaidAllocation;
@@ -97,8 +98,10 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                 }
             }
             double checkCededPaidInModelPeriod = RIUtilities.incrementalCashflowSum(cashflowClaimsForPeriodCheck);
-            if(!((checkCededPaidInModelPeriod - SimulationConstants.EPSILON < entry.getValue()) && (checkCededPaidInModelPeriod < entry.getValue() + SimulationConstants.EPSILON))) {
-
+            double checkValue = ExceptionUtils.getCheckValue(checkCededPaidInModelPeriod);
+            if(!(
+                    (checkCededPaidInModelPeriod - entry.getValue() > - checkValue) && (checkCededPaidInModelPeriod - entry.getValue() < checkValue ))
+                ) {
                 throw new SimulationException("Claims in model period; " + entry.getKey()  + " allocated incremental paid " + df.format(checkCededPaidInModelPeriod) + " do not match "
                         + "the calculated paid amount in the period = " + df.format(entry.getValue()) + ". In simulation period periodScope " + periodScope.getCurrentPeriod() +
                         " There must be an error in the claim allocation routine. Please forward to development"

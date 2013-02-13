@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.exceptionUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.Period;
+import org.pillarone.riskanalytics.domain.pc.cf.global.SimulationConstants;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.text.DecimalFormat;
@@ -54,6 +55,20 @@ public class ExceptionUtils {
 
         return stringBuilder;
 
+    }
+
+    /**
+     * This function ( Log10(value) ) ^ 2 / 1000 + EPSILON
+     *
+     * increases as values get larger, but remains below the materiality threshold for error checking. Use it when we want
+     * to throw an excpetion where inconsistent numbers are detected.
+     *
+     * @return
+     */
+    public static double getCheckValue(double value) {
+        double positiveValue = Math.abs(value);
+        double log10Cashflow = Math.log10(positiveValue);
+        return ((log10Cashflow * log10Cashflow) / 1000d) + SimulationConstants.EPSILON;
     }
 
 
