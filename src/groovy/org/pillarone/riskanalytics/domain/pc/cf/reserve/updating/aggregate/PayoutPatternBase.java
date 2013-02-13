@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
@@ -15,6 +17,51 @@ import java.util.*;
  */
 public enum PayoutPatternBase {
 
+    ARTISAN_1_PROXY {
+        @Override
+        public PatternPacket patternAccordingToPayoutBaseNoUpdates(PatternPacket originalPattern, DateTime startDateForPayouts, DateTime updateDate) {
+            return RESERVE_DEVELOPMENT.patternAccordingToPayoutBaseNoUpdates(originalPattern, startDateForPayouts,updateDate);
+        }
+
+        @Override
+        public PatternPacket patternAccordingToPayoutBaseWithUpdates(PatternPacket payoutPattern, ClaimRoot claimRoot,
+                                                                     TreeMap<DateTime, Double> claimPaidUpdates,
+                                                                     DateTime updateDate, DateTimeUtilities.Days360 days360,
+                                                                     boolean sanityChecks, DateTime contractPeriodStartDate,
+                                                                     DateTime firstActualPaidDateOrNull, DateTime lastReportedDateOrNull) {
+
+            DateTime startDateForPatterns = startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull);
+            PatternPacket futurePattern = patternAccordingToPayoutBaseNoUpdates(payoutPattern, startDateForPatterns, updateDate);
+            double ultimate = claimRoot.getUltimate();
+            NavigableMap<DateTime, Double> newPattern = Maps.newTreeMap();
+            List<Period> periods = Lists.newArrayList();
+            List<Double> payments = Lists.newArrayList();
+            for (Map.Entry<DateTime, Double> entry : claimPaidUpdates.entrySet()) {
+                double payment = entry.getValue() / ultimate;
+                newPattern.put(entry.getKey(), payment);
+                periods.add(new Period(startDateForPatterns, entry.getKey()));
+                payments.add(payment);
+            }
+            double usedPattern = newPattern.floorEntry(updateDate).getValue();
+            double futureMultiplier = 1 - usedPattern;
+            Map<DateTime, Double> mapFuturePattern  = futurePattern.absolutePattern(startDateForPatterns, true);
+
+            for (Map.Entry<DateTime, Double> entry : mapFuturePattern.entrySet()) {
+                if(entry.getValue() == 0) continue;
+                usedPattern += entry.getValue() * futureMultiplier;
+                newPattern.put(entry.getKey(), usedPattern);
+                periods.add(new Period(startDateForPatterns, entry.getKey().minusDays(1)));
+                payments.add(usedPattern);
+
+            }
+            return new PatternPacket(payoutPattern, payments, periods);
+        }
+
+        @Override
+        public DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate) {
+            return PERIOD_START_DATE.startDateForPayouts(claimRoot, contractPeriodStart, firstActualPaidDate);
+        }
+    },
 
     RESERVE_DEVELOPMENT {
         /**
