@@ -44,6 +44,6 @@ class PayoutPatternBaseTest extends GroovyTestCase {
         )
 //        If it hasn't thrown an exception we have a good chance.
         assert afterPacket.cumulativeValues[-1] == 1
-        assertEquals("", afterPacket.cumulativeValues[3], 0.6, 0.0001)
+        assertEquals("", afterPacket.cumulativeValues[2], 0.6, 0.0001)
     }
 }
