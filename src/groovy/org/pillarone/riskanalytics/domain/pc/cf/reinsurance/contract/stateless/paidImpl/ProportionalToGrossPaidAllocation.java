@@ -110,8 +110,6 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
         }
 
         return claimsOfInterest;
-
-
     }
 
     private double checkPaidAgainstThisClaim(ICededRoot cededRoot, double cumulatedCededForThisClaim, double paidAgainstThisPacket) {
