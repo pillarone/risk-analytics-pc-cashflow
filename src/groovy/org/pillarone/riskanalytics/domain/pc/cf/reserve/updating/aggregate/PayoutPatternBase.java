@@ -31,7 +31,7 @@ public enum PayoutPatternBase {
                                                                      DateTime firstActualPaidDateOrNull, DateTime lastReportedDateOrNull) {
 
             DateTime startDateForPatterns = startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull);
-            PatternPacket futurePattern = patternAccordingToPayoutBaseNoUpdates(payoutPattern, startDateForPatterns, updateDate);
+            PatternPacket futurePattern = patternAccordingToPayoutBaseNoUpdates(payoutPattern, startDateForPatterns, updateDate.plusYears(1));
             double ultimate = claimRoot.getUltimate();
             NavigableMap<DateTime, Double> newPattern = Maps.newTreeMap();
             List<Period> periods = Lists.newArrayList();

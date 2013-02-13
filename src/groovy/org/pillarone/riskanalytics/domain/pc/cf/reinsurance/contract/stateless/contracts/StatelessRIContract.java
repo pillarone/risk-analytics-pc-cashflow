@@ -92,8 +92,8 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
      */
     private ContractCoverBase parmCoverageBase = ContractCoverBase.LOSSES_OCCURING;
     private ICoverStrategy parmCover = CoverStrategyType.getDefault();
-    private ConstrainedMultiDimensionalParameter parmPremiumCover = new ConstrainedMultiDimensionalParameter(GroovyUtils.toList("[]"),
-            Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER));
+//    private ConstrainedMultiDimensionalParameter parmPremiumCover = new ConstrainedMultiDimensionalParameter(GroovyUtils.toList("[]"),
+//            Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER));
 
     private IExposureBaseStrategy parmContractBase = ExposureBaseType.getDefault();
 
@@ -400,13 +400,13 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         this.simulationScope = simulationScope;
     }
 
-    public ConstrainedMultiDimensionalParameter getParmPremiumCover() {
+ /*   public ConstrainedMultiDimensionalParameter getParmPremiumCover() {
         return parmPremiumCover;
     }
 
     public void setParmPremiumCover(ConstrainedMultiDimensionalParameter parmPremiumCover) {
         this.parmPremiumCover = parmPremiumCover;
-    }
+    } */
 
     public PacketList<UnderwritingInfoPacket> getInPremiumPerPeriod() {
         return inPremiumPerPeriod;
