@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
@@ -42,6 +43,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.p
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.paidImpl.TermPaidRespectIncurredByClaim;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.NonPropTemplateContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.IPeriodStrategy;
+import org.pillarone.riskanalytics.domain.utils.marker.IPremiumInfoMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
 import java.util.*;
@@ -71,7 +73,6 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
     private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> inPremiumPerPeriod = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<AllPeriodUnderwritingInfoPacket> inAllPeriodUnderwritingInfo = new PacketList<AllPeriodUnderwritingInfoPacket>(AllPeriodUnderwritingInfoPacket.class);
-//    Need to wire up some premiums. Hell on earth.
 
     /**
      * Out information to be filled
@@ -92,8 +93,8 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
      */
     private ContractCoverBase parmCoverageBase = ContractCoverBase.LOSSES_OCCURING;
     private ICoverStrategy parmCover = CoverStrategyType.getDefault();
-//    private ConstrainedMultiDimensionalParameter parmPremiumCover = new ConstrainedMultiDimensionalParameter(GroovyUtils.toList("[]"),
-//            Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER));
+    private ConstrainedMultiDimensionalParameter parmPremiumCover = new ConstrainedMultiDimensionalParameter(GroovyUtils.toList("[]"),
+            Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER));
 
     private IExposureBaseStrategy parmContractBase = ExposureBaseType.getDefault();
 
@@ -249,7 +250,20 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         parmCover.coveredClaims(inClaims);
         outClaimsGross.addAll(inClaims);
         parmContractBase.coveredUnderwritingInfo(inUnderwritingInfo);
+        filterPremium();
+    }
 
+    private void filterPremium() {
+        List<IPremiumInfoMarker> coveredPremiums = (List<IPremiumInfoMarker>) parmPremiumCover.getValuesAsObjects(PremiumSelectionConstraints.PREMIUM_INDEX);
+        List<UnderwritingInfoPacket> uncoveredPremium = Lists.newArrayList();
+        for (UnderwritingInfoPacket underwritingInfoPacket : inPremiumPerPeriod) {
+            for (IPremiumInfoMarker coveredPremium : coveredPremiums) {
+                if(!underwritingInfoPacket.getOrigin().getName().equals(coveredPremium.getName())) {
+                    uncoveredPremium.add(underwritingInfoPacket);
+                }
+            }
+        }
+        inPremiumPerPeriod.removeAll(uncoveredPremium);
     }
 
     public boolean isProportionalContract() {
@@ -400,13 +414,13 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         this.simulationScope = simulationScope;
     }
 
- /*   public ConstrainedMultiDimensionalParameter getParmPremiumCover() {
+   public ConstrainedMultiDimensionalParameter getParmPremiumCover() {
         return parmPremiumCover;
     }
 
     public void setParmPremiumCover(ConstrainedMultiDimensionalParameter parmPremiumCover) {
         this.parmPremiumCover = parmPremiumCover;
-    } */
+    }
 
     public PacketList<UnderwritingInfoPacket> getInPremiumPerPeriod() {
         return inPremiumPerPeriod;
