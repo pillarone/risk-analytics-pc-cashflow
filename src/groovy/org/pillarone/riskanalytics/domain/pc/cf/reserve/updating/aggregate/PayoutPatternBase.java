@@ -59,7 +59,7 @@ public enum PayoutPatternBase {
 
         @Override
         public DateTime startDateForPayouts(ClaimRoot claimRoot, DateTime contractPeriodStart, DateTime firstActualPaidDate) {
-            return PERIOD_START_DATE.startDateForPayouts(claimRoot, contractPeriodStart, firstActualPaidDate);
+            return CLAIM_OCCURANCE_DATE.startDateForPayouts(claimRoot, contractPeriodStart, firstActualPaidDate);
         }
     },
 
