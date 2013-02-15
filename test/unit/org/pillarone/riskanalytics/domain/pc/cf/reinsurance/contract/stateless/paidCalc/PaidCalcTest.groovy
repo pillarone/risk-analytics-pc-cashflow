@@ -27,6 +27,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.c
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AllLayersPaidLoss
 
 /**
  *   author simon.parten @ art-allianz . com
@@ -83,6 +84,7 @@ class PaidCalcTest extends GroovyTestCase {
     void testCumulativePaidRespectTerm() {
         IPaidCalculation calculation = new TermPaidRespectIncurredByClaim()
         PeriodScope periodScope = TestPeriodScopeUtilities.getPeriodScope(start2010, 3)
+        Map<Integer, Double> premiumPerPeriod =  TestClaimUtils.blankPremMap()
         List<ClaimCashflowPacket> period1Claims = RIUtilities.cashflowsByIncurredDate(start2010, start2011.minusMillis(1), grossClaims, ContractCoverBase.LOSSES_OCCURING)
         Collection<ClaimCashflowPacket> period1Claims2010 = period1Claims.findAll {it -> it.getDate().isBefore(start2011) }
         AllContractPaidTestImpl claimCache = new AllContractPaidTestImpl(period1Claims2010)
@@ -94,7 +96,7 @@ class PaidCalcTest extends GroovyTestCase {
         allLayers.setUwInfo(new AllPeriodUnderwritingInfoPacket())
         allLayers.add(0, 1, 1, 60, 90, 0, 0, 0, APBasis.LOSS)
         Map<Integer, Double> period1Calc = calculation.cededCumulativePaidRespectTerm(periodScope.getCurrentPeriod(),
-                allLayers, periodScope, ContractCoverBase.LOSSES_OCCURING, 240, 10, claimCache, ContractCoverBase.LOSSES_OCCURING)
+                allLayers, periodScope, ContractCoverBase.LOSSES_OCCURING, 240, 10, claimCache, ContractCoverBase.LOSSES_OCCURING, premiumPerPeriod).termLosses
 //        40 ceded out of claim limit, minus 10 term ded
         assertEquals("p1", 40, period1Calc.get(0))
 
@@ -107,13 +109,13 @@ class PaidCalcTest extends GroovyTestCase {
         AllContractPaidTestImpl claimCache1 = new AllContractPaidTestImpl(period1and2ClaimsBefore2012)
         claimCache1.updateSimPeriodUWPeriodCashflowMap(1, 0, cashflows1)
         claimCache1.updateSimPeriodUWPeriodCashflowMap(1, 1, cashflows2)
-        Map<Integer, Double> period2Calc = calculation.cededCumulativePaidRespectTerm(periodScope.getCurrentPeriod(), allLayers, periodScope, ContractCoverBase.LOSSES_OCCURING, 240, 10, claimCache1, ContractCoverBase.LOSSES_OCCURING)
+        Map<Integer, Double> period2Calc = calculation.cededCumulativePaidRespectTerm(periodScope.getCurrentPeriod(), allLayers, periodScope, ContractCoverBase.LOSSES_OCCURING, 240, 10, claimCache1, ContractCoverBase.LOSSES_OCCURING, premiumPerPeriod).termLosses
         assertEquals("p1", 120 , period2Calc.get(0) )
         assertEquals("p2", 90 , period2Calc.get(1) )
 
         periodScope.prepareNextPeriod()
         ContractClaimStoreTestIncurredClaimImpl claimCache2 = new ContractClaimStoreTestIncurredClaimImpl( rooClaims, grossClaims)
-        Map<Integer, Double> p3Calc = calculation.cededCumulativePaidRespectTerm(periodScope.getCurrentPeriod(), allLayers, periodScope, ContractCoverBase.LOSSES_OCCURING, 240, 10, claimCache2, ContractCoverBase.LOSSES_OCCURING)
+        Map<Integer, Double> p3Calc = calculation.cededCumulativePaidRespectTerm(periodScope.getCurrentPeriod(), allLayers, periodScope, ContractCoverBase.LOSSES_OCCURING, 240, 10, claimCache2, ContractCoverBase.LOSSES_OCCURING, premiumPerPeriod).termLosses
         assertEquals("p1", 120 , p3Calc.get(0) )
         assertEquals("p2", 120 , p3Calc.get(1) )
 
@@ -121,7 +123,7 @@ class PaidCalcTest extends GroovyTestCase {
         periodScope.prepareNextPeriod()
         grossClaims.addAll( shouldCede0.getClaimCashflowPackets(periodScope.getPeriodCounter()) )
         ContractClaimStoreTestIncurredClaimImpl claimCache3 = new ContractClaimStoreTestIncurredClaimImpl( rooClaims, grossClaims)
-        Map<Integer, Double> p4Calc = calculation.cededCumulativePaidRespectTerm(periodScope.getCurrentPeriod(), allLayers, periodScope, ContractCoverBase.LOSSES_OCCURING, 240, 10, claimCache3, ContractCoverBase.LOSSES_OCCURING)
+        Map<Integer, Double> p4Calc = calculation.cededCumulativePaidRespectTerm(periodScope.getCurrentPeriod(), allLayers, periodScope, ContractCoverBase.LOSSES_OCCURING, 240, 10, claimCache3, ContractCoverBase.LOSSES_OCCURING, premiumPerPeriod).termLosses
         assertEquals("p1", 120 , p4Calc.get(0) )
         assertEquals("p2", 120 , p4Calc.get(1) )
         assertEquals("p3", 0 , p4Calc.get(2) )
@@ -141,8 +143,8 @@ class PaidCalcTest extends GroovyTestCase {
 
         List<LayerParameters> allLayers = [claimLimits, moreClaimLimits]
 
-
-        double cededPaid = calculation.paidLossAllLayers(latestCashflows, allLayers)
+        AllLayersPaidLoss allLayersPaidLoss = calculation.paidLossAllLayers(latestCashflows, allLayers)
+        double cededPaid = allLayersPaidLoss.paidLossAllLayers()
         assert cededPaid == 40 + 90 + 40 * 0.5
 
     }

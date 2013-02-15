@@ -1,19 +1,22 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium;
 
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * author simon.parten @ art-allianz . com
  */
-public class LossAndAP {
+public class IncurredLossAndAP {
 
-    private final double loss;
+    private final Collection<IncurredLossAndLayer> loss;
     private final Collection<LayerAndAP> aps;
 
-    public LossAndAP(double loss, Collection<LayerAndAP> aps) {
+    public IncurredLossAndAP(Collection<IncurredLossAndLayer> loss, Collection<LayerAndAP> aps) {
         this.loss = loss;
         this.aps = aps;
     }
@@ -41,17 +44,31 @@ public class LossAndAP {
     }
 
     public double getLoss() {
-        return loss;
+        double totalLoss = 0d;
+        for (IncurredLossAndLayer los : loss) {
+            totalLoss += los.getLoss();
+        }
+        return totalLoss;
     }
 
     public Collection<LayerAndAP> getAps() {
-        return aps;
+        return Collections.unmodifiableCollection( aps );
+    }
+
+    public IncurredLossAndLayer getLayerAndIncurredLoss(LayerParameters.LayerIdentifier layerIdentifier) {
+        for (IncurredLossAndLayer los : loss) {
+            if(los.getLayerParameters().getLayerIdentifier().equals(layerIdentifier) ) {
+                return los;
+            }
+        }
+        throw new SimulationException("Didn't find incurred layer for " + layerIdentifier.toString());
+
     }
 
     @Override
     public String toString() {
-        return "LossAndAP{" +
-                "loss=" + loss +
+        return "IncurredLossAndAP{" +
+                "loss=" + getLoss() +
                 ", aps=" + getAdditionalPremium() +
                 '}';
     }
