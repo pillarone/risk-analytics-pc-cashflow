@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.Collections;
@@ -39,7 +40,8 @@ public class NoAggregateActualClaimsStrategy extends AbstractParameterObject imp
             throw new SimulationException("Non-inception model must have an actual claims strategy");
         }
         DateTime startDateForPatterns = payoutPatternBase.startDateForPayouts(claimRoot, periodScope.getCurrentPeriodStartDate(), null);
-        return new GrossClaimRoot(claimRoot, payoutPattern, startDateForPatterns);
+        PatternPacket newPattern = PatternUtils.adjustForNoClaimUpdates(payoutPattern, startDateForPatterns, updateDate);
+        return new GrossClaimRoot(claimRoot, newPattern, startDateForPatterns);
     }
 
     public AggregateHistoricClaim historicClaims(int period, IPeriodCounter periodCounter, DateTime updateDate,

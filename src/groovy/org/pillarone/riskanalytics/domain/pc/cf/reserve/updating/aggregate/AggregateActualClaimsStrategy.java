@@ -7,9 +7,11 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.util.PacketUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
@@ -124,7 +126,8 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
 //        If the update date is the start of the first period this is an inception model, simply proceed without updating effects.
         final DateTime startDateForPatterns = base.startDateForPayouts(claimRoot, periodScope.getCurrentPeriodStartDate(), null);
         if (updateDate.equals(periodScope.getPeriodCounter().startOfFirstPeriod())) {
-            return new GrossClaimRoot(claimRoot, payoutPattern, startDateForPatterns);
+            PatternPacket patternPacket = PatternUtils.adjustForNoClaimUpdates(payoutPattern, startDateForPatterns, updateDate);
+            return new GrossClaimRoot(claimRoot, patternPacket, startDateForPatterns);
         }
         lazyInitHistoricClaimsPerContractPeriod(periodScope.getPeriodCounter(), updateDate, base, sanityChecks);
         AggregateHistoricClaim historicClaim = historicClaimsPerContractPeriod.get(contractPeriod);

@@ -19,6 +19,8 @@ import org.pillarone.riskanalytics.domain.test.SpreadsheetUnitTest
 import org.pillarone.riskanalytics.domain.pc.cf.global.AnnualPeriodStrategy
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope
 import org.pillarone.riskanalytics.core.components.IterationStore
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints
+import org.pillarone.riskanalytics.core.util.GroovyUtils
 
 /**
  * This spreadsheet test does not check any reinstatements and AP calculations as they are not implemented so far
@@ -36,6 +38,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                                                       List<Double> periodExcess, List<Double> periodLimit,
                                                       List<Double> claimExcess, List<Double> claimLimit, DateTime beginOfCover) {
         IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
+        ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
         int numberOfLayers = layers.size()
         return new StatelessRIContract(
                 parmContractStructure: TemplateContractType.getStrategy(
@@ -53,7 +56,10 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                 iterationStore: new IterationStore(iterationScope),
                 periodScope: iterationScope.getPeriodScope(),
                 globalCover: new AnnualPeriodStrategy(startCover: beginOfCover),
-                periodStore: iterationScope.periodStores[0])
+                periodStore: iterationScope.periodStores[0],
+                parmPremiumCover: new ConstrainedMultiDimensionalParameter(GroovyUtils.toList("[]"),
+                        Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER))
+        )
 
     }
 
@@ -63,6 +69,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                                                 List<Double> claimExcess, List<Double> claimLimit, DateTime beginOfCover) {
 
         IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
+        ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
         int numberOfLayers = layers.size()
         return new StatelessRIContract(
                 parmContractStructure: TemplateContractType.getStrategy(
@@ -75,13 +82,16 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                                 'structure': new ConstrainedMultiDimensionalParameter(
                                         [periods, layers, shares, periodLimit, periodExcess, claimLimit, claimExcess,
                                                 [0d] * numberOfLayers, ['PREMIUM'] * numberOfLayers],
-                                        LayerConstraints.columnHeaders, ConstraintsFactory.getConstraints(LayerConstraints.IDENTIFIER))]),
+                                        LayerConstraints.columnHeaders, ConstraintsFactory.getConstraints(LayerConstraints.IDENTIFIER))
+                        ]),
                 iterationScope: iterationScope,
                 iterationStore: new IterationStore(iterationScope),
                 periodScope: iterationScope.getPeriodScope(),
                 globalCover: new AnnualPeriodStrategy(startCover: beginOfCover),
-                periodStore: iterationScope.periodStores[0])
-
+                periodStore: iterationScope.periodStores[0],
+                parmPremiumCover: new ConstrainedMultiDimensionalParameter(GroovyUtils.toList("[]"),
+                        Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER))
+        )
     }
 
     static StatelessRIContract getARTLayerContract(Double termExcess, Double termLimit, TermContractTestUtils.TestLayers layers, DateTime beginOfCover) {
