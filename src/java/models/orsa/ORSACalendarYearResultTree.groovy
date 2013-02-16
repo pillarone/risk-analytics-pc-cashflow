@@ -377,11 +377,13 @@ mappings = {
                         "premiumWritten" "ORSA:segments:[%segment%]:outFinancials:netPremiumWritten"
                         "claimInitial" "ORSA:segments:[%segment%]:outFinancials:netClaimUltimate"
                         "lossRatioWrittenUltimate" "ORSA:segments:[%segment%]:outFinancials:netLossRatioWrittenUltimate"
+                        "commission" "ORSA:segments:[%segment%]:outFinancials:commission"
                         "[%period%]" {
                             "netCashflow" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netBestEstimate", {
                                 "premiumWritten" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netPremiumWritten"
                                 "claimInitial" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netClaimUltimate"
                                 "lossRatioWrittenUltimate" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netLossRatioWrittenUltimate"
+                                "commission" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
                             }
                         }
                     }
@@ -902,11 +904,13 @@ mappings = {
                         "premiumWritten" "ORSA:structures:[%structure%]:outFinancials:netPremiumWritten"
                         "claimInitial" "ORSA:structures:[%structure%]:outFinancials:netClaimUltimate"
                         "lossRatioWrittenUltimate" "ORSA:structures:[%structure%]:outFinancials:netLossRatioWrittenUltimate"
+                        "commission" "ORSA:structures:[%structure%]:outFinancials:commission"
                         "[%period%]" {
                             "netCashflow" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netBestEstimate", {
                                 "premiumWritten" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netPremiumWritten"
                                 "claimInitial" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netClaimUltimate"
                                 "lossRatioWrittenUltimate" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netLossRatioWrittenUltimate"
+                                "commission" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:commission"
                             }
                         }
                     }
