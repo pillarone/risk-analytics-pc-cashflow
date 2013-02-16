@@ -378,10 +378,10 @@ mappings = {
                         "claimInitial" "GIRA:segments:[%segment%]:outFinancials:netClaimUltimate"
                         "lossRatioWrittenUltimate" "GIRA:segments:[%segment%]:outFinancials:netLossRatioWrittenUltimate"
                         "[%period%]" {
-                            "netCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netCashflow", {
-                                "premiumPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netPremiumPaid"
-                                "claimPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netClaimPaid"
-                                "lossRatioPaidPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netLossRatioPaidPaid"
+                            "netCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netBestEstimate", {
+                                "premiumWritten" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netPremiumWritten"
+                                "claimInitial" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netClaimUltimate"
+                                "lossRatioWrittenUltimate" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:netLossRatioWrittenUltimate"
                             }
                         }
                     }
@@ -390,10 +390,10 @@ mappings = {
                         "claimInitial" "GIRA:segments:[%segment%]:outFinancials:grossClaimUltimate"
                         "lossRatioWrittenUltimate" "GIRA:segments:[%segment%]:outFinancials:grossLossRatioWrittenUltimate"
                         "[%period%]" {
-                            "grossCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossCashflow", {
-                                "premiumPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossPremiumPaid"
-                                "claimPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossClaimPaid"
-                                "lossRatioPaidPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossLossRatioPaidPaid"
+                            "grossCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossBestEstimate", {
+                                "premiumWritten" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossPremiumWritten"
+                                "claimInitial" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossClaimUltimate"
+                                "lossRatioWrittenUltimate" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:grossLossRatioWrittenUltimate"
                             }
                         }
                     }
@@ -403,10 +403,10 @@ mappings = {
                         "lossRatioWrittenUltimate" "GIRA:segments:[%segment%]:outFinancials:cededLossRatioWrittenUltimate"
                         "commission" "GIRA:segments:[%segment%]:outFinancials:commission"
                         "[%period%]" {
-                            "cededCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededCashflow", {
-                                "premiumPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededPremiumPaid"
-                                "claimPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededClaimPaid"
-                                "lossRatioPaidPaid" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededLossRatioPaidPaid"
+                            "cededCashflow" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededBestEstimate", {
+                                "premiumWritten" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededPremiumWritten"
+                                "claimInitial" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededClaimUltimate"
+                                "lossRatioWrittenUltimate" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:cededLossRatioWrittenUltimate"
                                 "commission" "GIRA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
                             }
                         }
@@ -456,6 +456,7 @@ mappings = {
                     }
                     "premiumAndReserveRiskBase" "GIRA:segments:[%segment%]:outClaimsNet:premiumAndReserveRiskBase"
                     "claimsGross" {
+                        "ultimate" "GIRA:segments:[%segment%]:outClaimsGross:ultimate"
                         "totalCumulative" "GIRA:segments:[%segment%]:outClaimsGross:totalCumulativeIndexed", {
                             "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsGross:totalCumulativeIndexed"
                         }
@@ -499,6 +500,7 @@ mappings = {
                         "premiumAndReserveRiskBase" "GIRA:segments:[%segment%]:outClaimsGross:premiumAndReserveRiskBase"
                     }
                     "claimsCeded" {
+                        "ultimate" "GIRA:segments:[%segment%]:outClaimsCeded:ultimate"
                         "totalCumulative" "GIRA:segments:[%segment%]:outClaimsCeded:totalCumulativeIndexed", {
                             "[%period%]" "GIRA:segments:[%segment%]:period:[%period%]:outClaimsCeded:totalCumulativeIndexed"
                         }
@@ -901,10 +903,10 @@ mappings = {
                         "claimInitial" "GIRA:structures:[%structure%]:outFinancials:netClaimUltimate"
                         "lossRatioWrittenUltimate" "GIRA:structures:[%structure%]:outFinancials:netLossRatioWrittenUltimate"
                         "[%period%]" {
-                            "netCashflow" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:netCashflow", {
-                                "premiumPaid" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:netPremiumPaid"
-                                "claimPaid" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:netClaimPaid"
-                                "lossRatioPaidPaid" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:netLossRatioPaidPaid"
+                            "netCashflow" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:netBestEstimate", {
+                                "premiumWritten" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:netPremiumWritten"
+                                "claimInitial" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:netClaimUltimate"
+                                "lossRatioWrittenUltimate" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:netLossRatioWrittenUltimate"
                             }
                         }
                     }
@@ -913,10 +915,10 @@ mappings = {
                         "claimInitial" "GIRA:structures:[%structure%]:outFinancials:grossClaimUltimate"
                         "lossRatioWrittenUltimate" "GIRA:structures:[%structure%]:outFinancials:grossLossRatioWrittenUltimate"
                         "[%period%]" {
-                            "grossCashflow" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:grossCashflow", {
-                                "premiumPaid" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:grossPremiumPaid"
-                                "claimPaid" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:grossClaimPaid"
-                                "lossRatioPaidPaid" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:grossLossRatioPaidPaid"
+                            "grossCashflow" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:grossBestEstimate", {
+                                "premiumWritten" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:grossPremiumWritten"
+                                "claimInitial" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:grossClaimUltimate"
+                                "lossRatioWrittenUltimate" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:grossLossRatioWrittenUltimate"
                             }
                         }
                     }
@@ -926,10 +928,10 @@ mappings = {
                         "lossRatioWrittenUltimate" "GIRA:structures:[%structure%]:outFinancials:cededLossRatioWrittenUltimate"
                         "commission" "GIRA:structures:[%structure%]:outFinancials:commission"
                         "[%period%]" {
-                            "cededCashflow" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:cededCashflow", {
-                                "premiumPaid" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:cededPremiumPaid"
-                                "claimPaid" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:cededClaimPaid"
-                                "lossRatioPaidPaid" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:cededLossRatioPaidPaid"
+                            "cededCashflow" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:cededBestEstimate", {
+                                "premiumWritten" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:cededPremiumWritten"
+                                "claimInitial" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:cededClaimUltimate"
+                                "lossRatioWrittenUltimate" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:cededLossRatioWrittenUltimate"
                                 "commission" "GIRA:structures:[%structure%]:period:[%period%]:outFinancials:commission"
                             }
                         }

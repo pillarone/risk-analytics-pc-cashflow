@@ -378,10 +378,10 @@ mappings = {
                         "claimInitial" "ORSA:segments:[%segment%]:outFinancials:netClaimUltimate"
                         "lossRatioWrittenUltimate" "ORSA:segments:[%segment%]:outFinancials:netLossRatioWrittenUltimate"
                         "[%period%]" {
-                            "netCashflow" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netCashflow", {
-                                "premiumPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netPremiumPaid"
-                                "claimPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netClaimPaid"
-                                "lossRatioPaidPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netLossRatioPaidPaid"
+                            "netCashflow" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netBestEstimate", {
+                                "premiumWritten" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netPremiumWritten"
+                                "claimInitial" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netClaimUltimate"
+                                "lossRatioWrittenUltimate" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:netLossRatioWrittenUltimate"
                             }
                         }
                     }
@@ -390,10 +390,10 @@ mappings = {
                         "claimInitial" "ORSA:segments:[%segment%]:outFinancials:grossClaimUltimate"
                         "lossRatioWrittenUltimate" "ORSA:segments:[%segment%]:outFinancials:grossLossRatioWrittenUltimate"
                         "[%period%]" {
-                            "grossCashflow" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossCashflow", {
-                                "premiumPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossPremiumPaid"
-                                "claimPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossClaimPaid"
-                                "lossRatioPaidPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossLossRatioPaidPaid"
+                            "grossCashflow" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossBestEstimate", {
+                                "premiumWritten" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossPremiumWritten"
+                                "claimInitial" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossClaimUltimate"
+                                "lossRatioWrittenUltimate" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:grossLossRatioWrittenUltimate"
                             }
                         }
                     }
@@ -403,10 +403,10 @@ mappings = {
                         "lossRatioWrittenUltimate" "ORSA:segments:[%segment%]:outFinancials:cededLossRatioWrittenUltimate"
                         "commission" "ORSA:segments:[%segment%]:outFinancials:commission"
                         "[%period%]" {
-                            "cededCashflow" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededCashflow", {
-                                "premiumPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededPremiumPaid"
-                                "claimPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededClaimPaid"
-                                "lossRatioPaidPaid" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededLossRatioPaidPaid"
+                            "cededCashflow" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededBestEstimate", {
+                                "premiumWritten" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededPremiumWritten"
+                                "claimInitial" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededClaimUltimate"
+                                "lossRatioWrittenUltimate" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:cededLossRatioWrittenUltimate"
                                 "commission" "ORSA:segments:[%segment%]:period:[%period%]:outFinancials:commission"
                             }
                         }
@@ -903,10 +903,10 @@ mappings = {
                         "claimInitial" "ORSA:structures:[%structure%]:outFinancials:netClaimUltimate"
                         "lossRatioWrittenUltimate" "ORSA:structures:[%structure%]:outFinancials:netLossRatioWrittenUltimate"
                         "[%period%]" {
-                            "netCashflow" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netCashflow", {
-                                "premiumPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netPremiumPaid"
-                                "claimPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netClaimPaid"
-                                "lossRatioPaidPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netLossRatioPaidPaid"
+                            "netCashflow" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netBestEstimate", {
+                                "premiumWritten" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netPremiumWritten"
+                                "claimInitial" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netClaimUltimate"
+                                "lossRatioWrittenUltimate" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:netLossRatioWrittenUltimate"
                             }
                         }
                     }
@@ -915,10 +915,10 @@ mappings = {
                         "claimInitial" "ORSA:structures:[%structure%]:outFinancials:grossClaimUltimate"
                         "lossRatioWrittenUltimate" "ORSA:structures:[%structure%]:outFinancials:grossLossRatioWrittenUltimate"
                         "[%period%]" {
-                            "grossCashflow" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossCashflow", {
-                                "premiumPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossPremiumPaid"
-                                "claimPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossClaimPaid"
-                                "lossRatioPaidPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossLossRatioPaidPaid"
+                            "grossCashflow" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossBestEstimate", {
+                                "premiumWritten" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossPremiumWritten"
+                                "claimInitial" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossClaimUltimate"
+                                "lossRatioWrittenUltimate" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:grossLossRatioWrittenUltimate"
                             }
                         }
                     }
@@ -928,10 +928,10 @@ mappings = {
                         "lossRatioWrittenUltimate" "ORSA:structures:[%structure%]:outFinancials:cededLossRatioWrittenUltimate"
                         "commission" "ORSA:structures:[%structure%]:outFinancials:commission"
                         "[%period%]" {
-                            "cededCashflow" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededCashflow", {
-                                "premiumPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededPremiumPaid"
-                                "claimPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededClaimPaid"
-                                "lossRatioPaidPaid" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededLossRatioPaidPaid"
+                            "cededCashflow" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededBestEstimate", {
+                                "premiumWritten" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededPremiumWritten"
+                                "claimInitial" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededClaimUltimate"
+                                "lossRatioWrittenUltimate" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:cededLossRatioWrittenUltimate"
                                 "commission" "ORSA:structures:[%structure%]:period:[%period%]:outFinancials:commission"
                             }
                         }
