@@ -127,7 +127,7 @@ class CoverAttributeValidatorTests extends GrailsUnitTestCase {
         List result = new CoverAttributeValidator().validate(parameters)
         assert 1== result.size()
         ParameterValidation validationError = result[0]
-        assert ValidationType.WARNING == validationError.getValidationType()
+        assert ValidationType.ERROR == validationError.getValidationType()
         assert CoverAttributeValidator.CONTRACT_BENEFITS_ITSELF == validationError.msg
     }
 }
