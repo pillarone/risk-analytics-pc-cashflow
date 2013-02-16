@@ -74,6 +74,7 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
          'PMO-2198_f___SSC_no_increments_4.xlsx',
          'PMO-2198_g___SSC_decreasing_losses_LP100_AADAAL_7.xlsx',
          'PMO-2198_h___SSC_decreasing_losses_LP100_AADAAL_100PercentQ_7.xlsx',
+         'PMO-2379___SSC_LP_in_the_run_off.xlsx'
         ]
     }
 
@@ -217,8 +218,8 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
         else if (commissionParams.commissionType == 'profit') {
             return CommissionStrategyType.getStrategy(CommissionStrategyType.PROFITCOMMISSION,
                     ['profitCommissionRatio': commissionParams.profitCommissionRatio,
-                     'commissionRatio': commissionParams.commissionRatioFixed,
-                     'costRatio': commissionParams.costRatioOfPrimaryInsurer,
+                     'commissionRatio': commissionParams.commissionRatioFixed ?: 0d,
+                     'costRatio': commissionParams.costRatioOfPrimaryInsurer ?: 0d,
                      'lossCarriedForwardEnabled': commissionParams.useLossCarryForward == 'yes',
                      'initialLossCarriedForward': commissionParams.initialLossCarryForward,
                      'useClaims': BasedOnClaimProperty.PAID])
