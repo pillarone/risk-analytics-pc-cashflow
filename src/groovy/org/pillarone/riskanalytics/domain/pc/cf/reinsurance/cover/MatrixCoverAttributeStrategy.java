@@ -64,9 +64,11 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
     }
 
     public void initRowFilters() {
-        rowFilters = new ArrayList<MatrixCoverAttributeRow>();
-        for (int row = flexibleCover.getTitleRowCount(); row < flexibleCover.getRowCount(); row++) {
-            rowFilters.add(new MatrixCoverAttributeRow(row, alternativeAggregation, flexibleCover));
+        if (rowFilters == null) {
+            rowFilters = new ArrayList<MatrixCoverAttributeRow>();
+            for (int row = flexibleCover.getTitleRowCount(); row < flexibleCover.getRowCount(); row++) {
+                rowFilters.add(new MatrixCoverAttributeRow(row, alternativeAggregation, flexibleCover));
+            }
         }
     }
 
@@ -112,13 +114,13 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
 
     public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
         initRowFilters();
-        List<UnderwritingInfoPacket> filteredUwInfo = new ArrayList<UnderwritingInfoPacket>();
+        Set<UnderwritingInfoPacket> filteredUwInfo = new HashSet<UnderwritingInfoPacket>();
         for (MatrixCoverAttributeRow rowFilter : getRowFilters()) {
             filteredUwInfo.addAll(rowFilter.filterUnderwritingInfos(source));
         }
         source.clear();
         source.addAll(filteredUwInfo);
-        return filteredUwInfo;
+        return new ArrayList<UnderwritingInfoPacket>(filteredUwInfo);
     }
 
     public List<IReinsuranceContractMarker> getCoveredReinsuranceContracts() {
@@ -151,20 +153,20 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
 
     public List<UnderwritingInfoPacket> filterUnderwritingInfos(List<UnderwritingInfoPacket> underwritingInfos) {
         initRowFilters();
-        List<UnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
+        Set<UnderwritingInfoPacket> filteredUnderwritingInfo = new HashSet<UnderwritingInfoPacket>();
         for (MatrixCoverAttributeRow rowFilter : getRowFilters()) {
             filteredUnderwritingInfo.addAll(rowFilter.filterUnderwritingInfos(underwritingInfos));
         }
-        return filteredUnderwritingInfo;
+        return new ArrayList<UnderwritingInfoPacket>(filteredUnderwritingInfo);
     }
 
     public List<CededUnderwritingInfoPacket> filterUnderwritingInfosCeded(List<CededUnderwritingInfoPacket> underwritingInfos) {
         initRowFilters();
-        List<CededUnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<CededUnderwritingInfoPacket>();
+        Set<CededUnderwritingInfoPacket> filteredUnderwritingInfo = new HashSet<CededUnderwritingInfoPacket>();
         for (MatrixCoverAttributeRow rowFilter : getRowFilters()) {
             filteredUnderwritingInfo.addAll(rowFilter.filterUnderwritingInfos(underwritingInfos));
         }
-        return filteredUnderwritingInfo;
+        return new ArrayList<CededUnderwritingInfoPacket>(filteredUnderwritingInfo);
     }
 
 }
