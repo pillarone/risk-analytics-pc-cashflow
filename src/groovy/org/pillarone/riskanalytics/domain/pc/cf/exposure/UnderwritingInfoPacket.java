@@ -70,6 +70,7 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
         segment = packet.segment();
         reinsuranceContract = packet.reinsuranceContract();
         legalEntity = packet.legalEntity();
+        original = packet.getOriginal();
         setDate(packet.getDate());
     }
 
