@@ -39,7 +39,7 @@ public class AdditionalPremium extends MultiValuePacket {
     }
 
     public String typeDrillDownName() {
-        return premiumType.toString().toLowerCase();
+        return "split:" + premiumType.toString().toLowerCase();
     }
 
     public AdditionalPremium plusForAggregateCollection(AdditionalPremium aPacket) {
