@@ -45,7 +45,7 @@ class CoverAttributeValidator extends AbstractParameterizationValidator {
     private List checkBenefitContracts(Map parameters) {
         for (int row = parameters?.benefitContracts?.getTitleRowCount(); row < parameters?.benefitContracts?.getRowCount(); row++) {
             if (parameters.currentContractPath.endsWith(parameters.benefitContracts.getValueAt(row,0))) {
-                return [ValidationType.WARNING, CONTRACT_BENEFITS_ITSELF]
+                return [ValidationType.ERROR, CONTRACT_BENEFITS_ITSELF]
             }
         }
     }
