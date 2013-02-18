@@ -47,6 +47,4 @@ public enum APBasis implements IGetAPDates {
         }
         throw new IllegalArgumentException("Enum not found for " + value);
     }
-
-    public abstract DateTime getAPDate(IPeriodCounter periodCounter);
 }
