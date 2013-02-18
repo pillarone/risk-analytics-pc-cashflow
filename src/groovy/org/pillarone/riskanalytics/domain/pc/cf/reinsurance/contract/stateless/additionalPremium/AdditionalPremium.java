@@ -1,16 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium;
 
-import com.google.common.collect.Maps;
 import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
-import org.pillarone.riskanalytics.core.packets.Packet;
-import org.pillarone.riskanalytics.core.packets.SingleValuePacket;
-import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
-import org.pillarone.riskanalytics.domain.pc.cf.output.ITypeDrillDown;
-import org.pillarone.riskanalytics.domain.pc.cf.output.TypeDrillDownPacket;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * author simon.parten @ art-allianz . com
