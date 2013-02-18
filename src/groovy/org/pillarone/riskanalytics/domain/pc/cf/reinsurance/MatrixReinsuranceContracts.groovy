@@ -182,12 +182,4 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
         LOG.debug("removed contracts: ${contractsWithNoCover.collectAll { it.normalizedName }}");
         componentList.size() > contractsWithNoCover.size()
     }
-
-    /**
-     * Helper method for wiring when sender or receiver are determined dynamically
-     */
-    public static void doWire(category, receiver, inChannelName, sender, outChannelName) {
-        LOG.debug "$receiver.$inChannelName <- $sender.$outChannelName ($category)"
-        category.doSetProperty(receiver, inChannelName, category.doGetProperty(sender, outChannelName))
-    }
 }
