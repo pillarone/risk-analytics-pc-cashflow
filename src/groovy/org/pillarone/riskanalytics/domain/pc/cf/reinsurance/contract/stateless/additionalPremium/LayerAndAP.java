@@ -20,15 +20,6 @@ public class LayerAndAP {
         this.additionalPremiums = additionalPremiums;
     }
 
-    public Collection<APSingleValuePacket> getPackets(IPeriodCounter counter) {
-        Collection<APSingleValuePacket> apPackets = new ArrayList<APSingleValuePacket>();
-        for (AdditionalPremium ap : additionalPremiums) {
-            apPackets.add(ap.getPacket(counter));
-        }
-        return apPackets;
-    }
-
-
     public LayerParameters getLayerParameters() {
         return layerParameters;
     }

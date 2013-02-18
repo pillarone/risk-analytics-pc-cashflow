@@ -33,19 +33,6 @@ public class IncurredLossAndAP {
         return ap;
     }
 
-    public Collection<APSingleValuePacket> getPackets(APBasis apBasis, IPeriodCounter counter, IReinsuranceContractMarker contractMarker) {
-        Collection<APSingleValuePacket> apSingleValuePackets = new ArrayList<APSingleValuePacket>();
-        for (LayerAndAP apLayer : aps) {
-            for (APSingleValuePacket aPremium : apLayer.getPackets(counter)) {
-                if(aPremium.getAdditionalPremium().getPremiumType().equals(apBasis) && aPremium.getAdditionalPremium().getAdditionalPremium() > 0) {
-                    aPremium.addMarker(IReinsuranceContractMarker.class, contractMarker );
-                    apSingleValuePackets.add(aPremium);
-                }
-            }
-        }
-        return apSingleValuePackets;
-    }
-
     public Collection<AdditionalPremium> getAddtionalPremiums(IPeriodCounter counter, IReinsuranceContractMarker contractMarker) {
         Collection<AdditionalPremium> apSingleValuePackets = Lists.newArrayList();
         for (LayerAndAP apLayer : aps) {

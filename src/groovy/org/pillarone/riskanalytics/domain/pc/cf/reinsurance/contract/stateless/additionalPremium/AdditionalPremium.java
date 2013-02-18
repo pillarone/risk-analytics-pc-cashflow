@@ -29,10 +29,6 @@ public class AdditionalPremium extends TypeDrillDownPacket {
         this.premiumType = premiumType;
     }
 
-    public APSingleValuePacket getPacket(IPeriodCounter iPeriodCounter) {
-        return new APSingleValuePacket(additionalPremium, this, premiumType.getAPDate(iPeriodCounter));
-    }
-
     public double getAdditionalPremium() {
         return additionalPremium;
     }
