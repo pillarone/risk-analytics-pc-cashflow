@@ -35,6 +35,8 @@ public enum APBasis implements IGetAPDates {
 
     };
 
+    abstract public DateTime getAPDate(IPeriodCounter periodCounter);
+
 
     public static APBasis getStringValue(String value) {
         APBasis[] values = APBasis.values();

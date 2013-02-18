@@ -31,6 +31,8 @@ import java.util.*;
 /**
  * Generic way of collection information.
  *
+ * Note that packets must extend from either single value packet or multi value packet in order to be collectable.
+ *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectingModeStrategy {
@@ -103,16 +105,15 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
             resultMap.putAll(splitByInceptionPeriodPaths(packets));
         }
         if (drillDownModes.contains(DrillDownMode.BY_TYPE)) {
-            Map<PathMapping, TypeDrillDownPacket> tempMap = Maps.newHashMap();
-            for (Packet packet : packets) {
-                TypeDrillDownPacket aPacket = (TypeDrillDownPacket) packet;
-                String aPath = getExtendedPath(packet, aPacket.typeDrillDownName());
+            Map<PathMapping, Packet> tempMap = Maps.newHashMap();
+            for (Packet aPacket : packets) {
+                String aPath = getExtendedPath(aPacket, ((AdditionalPremium) aPacket).typeDrillDownName());
                 PathMapping pathMapping = mappingCache.lookupPath(aPath);
                 if (resultMap.get(pathMapping) == null) {
                     tempMap.put(pathMapping, aPacket);
                 } else {
-                    TypeDrillDownPacket aggregateMe = tempMap.get(pathMapping);
-                    tempMap.put(pathMapping, aggregateMe.plusForAggregateCollection(aPacket));
+                    AdditionalPremium aggregateMe = ((AdditionalPremium) tempMap.get(pathMapping));
+                    tempMap.put(pathMapping, aggregateMe.plusForAggregateCollection(((AdditionalPremium) aPacket)));
                 }
             }
             resultMap.putAll(tempMap);
@@ -259,7 +260,7 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         if (resultMap.get(path) == null) {
             resultMap.put(path, additionalPremium);
         } else {
-            TypeDrillDownPacket aggregateMe = (TypeDrillDownPacket) resultMap.get(path);
+            AdditionalPremium aggregateMe = (AdditionalPremium) resultMap.get(path);
             resultMap.put(path, aggregateMe.plusForAggregateCollection(additionalPremium));
         }
     }

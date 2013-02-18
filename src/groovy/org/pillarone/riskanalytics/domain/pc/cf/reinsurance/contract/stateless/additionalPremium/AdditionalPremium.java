@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.core.packets.SingleValuePacket;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
+import org.pillarone.riskanalytics.domain.pc.cf.output.ITypeDrillDown;
 import org.pillarone.riskanalytics.domain.pc.cf.output.TypeDrillDownPacket;
 
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import java.util.Map;
 /**
  * author simon.parten @ art-allianz . com
  */
-public class AdditionalPremium extends TypeDrillDownPacket {
+public class AdditionalPremium extends MultiValuePacket {
 
     private double additionalPremium;
     private APBasis premiumType;
@@ -41,8 +42,7 @@ public class AdditionalPremium extends TypeDrillDownPacket {
         return premiumType.toString().toLowerCase();
     }
 
-    @Override
-    public TypeDrillDownPacket plusForAggregateCollection(TypeDrillDownPacket aPacket) {
+    public AdditionalPremium plusForAggregateCollection(AdditionalPremium aPacket) {
         if(!(aPacket instanceof AdditionalPremium)) {
             throw new SimulationException("Recieved incompatible packet type " + aPacket.toString());
         }
