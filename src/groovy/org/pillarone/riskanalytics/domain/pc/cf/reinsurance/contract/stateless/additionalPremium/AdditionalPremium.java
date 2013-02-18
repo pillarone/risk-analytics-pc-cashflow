@@ -38,7 +38,7 @@ public class AdditionalPremium extends TypeDrillDownPacket {
     }
 
     public String typeDrillDownName() {
-        return premiumType.toString().toLowerCase();
+        return "split:" + premiumType.toString().toLowerCase();
     }
 
     @Override

@@ -30,6 +30,9 @@ import java.util.*;
 
 /**
  * Generic way of collection information.
+ * Make sure equals and hashCode implementation are base on arguments.
+ * Whenever extending drill down functionality, make sure to check if SimulationConfiguration and ModelHelper in the
+ * core plugin need to be extended.
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
@@ -48,7 +51,12 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
     private final List<Class<Packet>> compatibleClasses;
     private final String identifier_prefix;
 
-
+    /**
+     * @param drillDownModes might be void
+     * @param fieldFilter might be void
+     * @param compatibleClasses overwrites compatible classes defined in super class
+     * @param identifier_prefix can be null, normally used to distinguish between packet types
+     */
     public SplitAndFilterCollectionModeStrategy(List<DrillDownMode> drillDownModes, List<String> fieldFilter, List<Class<Packet>> compatibleClasses, String identifier_prefix) {
         this.drillDownModes = drillDownModes;
         this.fieldFilter = fieldFilter;
@@ -93,8 +101,10 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         }
 
         if (drillDownModes.contains(DrillDownMode.BY_SOURCE)) {
+//            if (packets.getType().equals(ClaimCashflowPacket.class)) {
             if (packets.get(0) instanceof ClaimCashflowPacket) {
                 resultMap.putAll(splitBySourePathsForClaims(packets));
+//            } else if (packets.getType().equals(UnderwritingInfoPacket.class)) {
             } else if (packets.get(0) instanceof UnderwritingInfoPacket) {
                 resultMap.putAll(splitBySourePathsForUwInfos(packets));
             }
@@ -232,7 +242,7 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         }
 
         for (Packet packet : packets) {
-            PathMapping periodPath = getPathMapping(packet);
+            PathMapping periodPath = getPathMappingForInceptionPeriod(packet);
             addToMap(packet, periodPath, resultMap);
         }
         return resultMap;
@@ -288,9 +298,9 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
 
     /**
      * @param packet
-     * @return path extended by period:inceptionPeriod
+     * @return path extended by period:inceptionPeriod, the later being built using inceptionPeriod(packet)
      */
-    private PathMapping getPathMapping(Packet packet) {
+    private PathMapping getPathMappingForInceptionPeriod(Packet packet) {
         String periodLabel = inceptionPeriod(packet);
         String pathExtension = "period" + PATH_SEPARATOR + periodLabel;
         String pathExtended = getExtendedPath(packet, pathExtension);
@@ -321,6 +331,9 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         return packetCollector.getSimulationScope().getIterationScope().getPeriodScope().getPeriodCounter().startOfPeriod(date);
     }
 
+    /**
+     * Initializes displayUnderwritingYearOnly
+     */
     @Override
     protected void initSimulation() {
         super.initSimulation();
@@ -335,6 +348,9 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         return fieldFilter;
     }
 
+    /**
+     * @return composition of AGGREGATE, prefix, drill down modes and filtered fields
+     */
     @Override
     public String getIdentifier() {
         StringBuilder identifier = new StringBuilder("AGGREGATE_");
@@ -374,6 +390,7 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         }
     }
 
+    // todo(dbr): isn't this legacy code? can't we simply return the member variable as in filter()?
     public List<DrillDownMode> getDrillDownModes() {
         List<DrillDownMode> result = new ArrayList<DrillDownMode>();
         for (DrillDownMode mode : drillDownModes) {
@@ -382,6 +399,9 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         return result;
     }
 
+    /**
+     * @return arguments used in c'tor
+     */
     @Override
     public Object[] getArguments() {
         return new Object[]{drillDownModes, fieldFilter, compatibleClasses, identifier_prefix};
