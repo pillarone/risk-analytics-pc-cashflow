@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.output;
 
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -17,6 +18,7 @@ import org.pillarone.riskanalytics.core.util.PeriodLabelsUtil;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AdditionalPremium;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
@@ -55,7 +57,7 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
     }
 
     public SplitAndFilterCollectionModeStrategy(List<DrillDownMode> drillDownModes, List<String> fieldFilter, List<Class<Packet>> compatibleClasses) {
-        this(drillDownModes, fieldFilter,compatibleClasses,null);
+        this(drillDownModes, fieldFilter, compatibleClasses, null);
     }
 
     public SplitAndFilterCollectionModeStrategy(List<DrillDownMode> drillDownModes, List<String> fieldFilter) {
@@ -100,6 +102,22 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         if (drillDownModes.contains(DrillDownMode.BY_PERIOD)) {
             resultMap.putAll(splitByInceptionPeriodPaths(packets));
         }
+        if (drillDownModes.contains(DrillDownMode.BY_TYPE)) {
+            Map<PathMapping, TypeDrillDownPacket> tempMap = Maps.newHashMap();
+            for (Packet packet : packets) {
+                TypeDrillDownPacket aPacket = (TypeDrillDownPacket) packet;
+                String aPath = getExtendedPath(packet, aPacket.typeDrillDownName());
+                PathMapping pathMapping = mappingCache.lookupPath(aPath);
+                if (resultMap.get(pathMapping) == null) {
+                    tempMap.put(pathMapping, aPacket);
+                } else {
+                    TypeDrillDownPacket aggregateMe = tempMap.get(pathMapping);
+                    tempMap.put(pathMapping, aggregateMe.plusForAggregateCollection(aPacket));
+                }
+            }
+            resultMap.putAll(tempMap);
+        }
+
         return resultMap;
     }
 
@@ -229,8 +247,20 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
             addToMap((ContractFinancialsPacket) packet, path, resultMap);
         } else if (packet instanceof FinancialsPacket) {
             addToMap((FinancialsPacket) packet, path, resultMap);
+        } else if (packet instanceof AdditionalPremium) {
+            addToMap((AdditionalPremium) packet, path, resultMap);
         } else {
             throw new IllegalArgumentException("Packet type " + packet.getClass() + " is not supported.");
+        }
+    }
+
+    protected void addToMap(AdditionalPremium additionalPremium, PathMapping path, Map<PathMapping, Packet> resultMap) {
+        if (path == null) return;
+        if (resultMap.get(path) == null) {
+            resultMap.put(path, additionalPremium);
+        } else {
+            TypeDrillDownPacket aggregateMe = (TypeDrillDownPacket) resultMap.get(path);
+            resultMap.put(path, aggregateMe.plusForAggregateCollection(additionalPremium));
         }
     }
 
@@ -308,7 +338,7 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
     @Override
     public String getIdentifier() {
         StringBuilder identifier = new StringBuilder("AGGREGATE_");
-        if (identifier_prefix != null){
+        if (identifier_prefix != null) {
             identifier.append(identifier_prefix).append("_");
         }
         if (drillDownModes.size() == 0 && fieldFilter.size() == 0) {
@@ -327,6 +357,7 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
      * Checks if the packet class is compatible with the configured compatible classes.
      * If any compatible class is provided the check is done exclusively on the provided list.
      * Otherwise the compatible list of the super class is taken into account.
+     *
      * @param packetClass The packet class.
      * @return true if compatible, false otherwise.
      */
@@ -355,4 +386,44 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
     public Object[] getArguments() {
         return new Object[]{drillDownModes, fieldFilter, compatibleClasses, identifier_prefix};
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SplitAndFilterCollectionModeStrategy))
+            return false;
+
+        SplitAndFilterCollectionModeStrategy that =
+                (SplitAndFilterCollectionModeStrategy) o;
+
+        if (compatibleClasses != null ?
+                !compatibleClasses.equals(that.compatibleClasses) :
+                that.compatibleClasses != null)
+            return false;
+        if (drillDownModes != null ?
+                !drillDownModes.equals(that.drillDownModes) : that.drillDownModes != null)
+            return false;
+        if (fieldFilter != null ? !fieldFilter.equals(that.fieldFilter)
+                : that.fieldFilter != null) return false;
+        if (identifier_prefix != null ?
+                !identifier_prefix.equals(that.identifier_prefix) :
+                that.identifier_prefix != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = drillDownModes != null ? drillDownModes.hashCode()
+                : 0;
+        result = 31 * result + (fieldFilter != null ?
+                fieldFilter.hashCode() : 0);
+        result = 31 * result + (compatibleClasses != null ?
+                compatibleClasses.hashCode() : 0);
+        result = 31 * result + (identifier_prefix != null ?
+                identifier_prefix.hashCode() : 0);
+        return result;
+    }
+
 }

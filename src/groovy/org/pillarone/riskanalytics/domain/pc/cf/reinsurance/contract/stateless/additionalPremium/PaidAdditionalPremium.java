@@ -11,6 +11,11 @@ public class PaidAdditionalPremium extends Packet {
     private final double paidAmount;
     private final AdditionalPremium incurredPremium;
 
+    public PaidAdditionalPremium() {
+        this.paidAmount = 0;
+        this.incurredPremium = new AdditionalPremium();
+    }
+
     public PaidAdditionalPremium(double paidAmount, AdditionalPremium incurredPremium) {
         this.paidAmount = paidAmount;
         this.incurredPremium = incurredPremium;

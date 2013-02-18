@@ -1,7 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
@@ -79,10 +78,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
     private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
-    private PacketList<APSingleValuePacket> outAPncb = new PacketList<APSingleValuePacket>(APSingleValuePacket.class);
-    private PacketList<APSingleValuePacket> outAPLoss = new PacketList<APSingleValuePacket>(APSingleValuePacket.class);
-    private PacketList<APSingleValuePacket> outAPPrem = new PacketList<APSingleValuePacket>(APSingleValuePacket.class);
-    private PacketList<APSingleValuePacket> outAPAll = new PacketList<APSingleValuePacket>(APSingleValuePacket.class);
+    private PacketList<AdditionalPremium> outApAll = new PacketList<AdditionalPremium>(AdditionalPremium.class);
 
     private IReinsuranceContractStrategy parmContractStructure = TemplateContractType.getDefault();
 
@@ -169,15 +165,8 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     private void fillAPChannels(IncurredLossAndAP lossAndAP) {
         IPeriodCounter periodCounter = periodScope.getPeriodCounter();
-        Collection<APSingleValuePacket> apNCBSingleValuePackets = lossAndAP.getPackets(APBasis.NCB, periodCounter);
-        Collection<APSingleValuePacket> apLossSingleValuePackets = lossAndAP.getPackets(APBasis.LOSS, periodCounter);
-        Collection<APSingleValuePacket> apPremSingleValuePackets = lossAndAP.getPackets(APBasis.PREMIUM, periodCounter);
-        outAPLoss.addAll(apLossSingleValuePackets);
-        outAPPrem.addAll(apPremSingleValuePackets);
-        outAPncb.addAll(apNCBSingleValuePackets);
-        outAPAll.addAll(outAPLoss);
-        outAPAll.addAll(outAPncb);
-        outAPAll.addAll(outAPPrem);
+
+        outApAll.addAll(lossAndAP.getAddtionalPremiums(periodScope.getPeriodCounter(), this));
     }
 
     private ScaledPeriodLayerParameters setupLayerParameters() {
@@ -436,35 +425,11 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         this.inPremiumPerPeriod = inPremiumPerPeriod;
     }
 
-    public PacketList<APSingleValuePacket> getOutAPncb() {
-        return outAPncb;
+    public PacketList<AdditionalPremium> getOutApAll() {
+        return outApAll;
     }
 
-    public void setOutAPncb(PacketList<APSingleValuePacket> outAPncb) {
-        this.outAPncb = outAPncb;
-    }
-
-    public PacketList<APSingleValuePacket> getOutAPLoss() {
-        return outAPLoss;
-    }
-
-    public void setOutAPLoss(PacketList<APSingleValuePacket> outAPLoss) {
-        this.outAPLoss = outAPLoss;
-    }
-
-    public PacketList<APSingleValuePacket> getOutAPPrem() {
-        return outAPPrem;
-    }
-
-    public void setOutAPPrem(PacketList<APSingleValuePacket> outAPPrem) {
-        this.outAPPrem = outAPPrem;
-    }
-
-    public PacketList<APSingleValuePacket> getOutAPAll() {
-        return outAPAll;
-    }
-
-    public void setOutAPAll(PacketList<APSingleValuePacket> outAPAll) {
-        this.outAPAll = outAPAll;
+    public void setOutApAll(PacketList<AdditionalPremium> outApAll) {
+        this.outApAll = outApAll;
     }
 }

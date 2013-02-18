@@ -8,6 +8,16 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
  */
 public enum APBasis implements IGetAPDates {
 
+    AGGREGATED {
+        public DateTime getAPDate(IPeriodCounter periodCounter) {
+            return periodCounter.endOfPeriod(periodCounter.currentPeriodIndex());
+        }
+    },
+    NONE {
+        public DateTime getAPDate(IPeriodCounter periodCounter) {
+            return periodCounter.endOfPeriod(periodCounter.currentPeriodIndex());
+        }
+    },
     PREMIUM {
         public DateTime getAPDate(IPeriodCounter periodCounter) {
             return periodCounter.endOfPeriod(periodCounter.currentPeriodIndex());
@@ -22,6 +32,7 @@ public enum APBasis implements IGetAPDates {
         public DateTime getAPDate(IPeriodCounter periodCounter) {
             return periodCounter.endOfPeriod(periodCounter.currentPeriodIndex());
         }
+
     };
 
 

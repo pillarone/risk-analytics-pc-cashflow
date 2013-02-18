@@ -5,7 +5,6 @@ import models.gira.GIRAModel
 import org.joda.time.DateTime
 import org.joda.time.Period
 import org.pillarone.riskanalytics.core.output.CollectorMapping
-import org.pillarone.riskanalytics.core.output.DrillDownMode
 import org.pillarone.riskanalytics.core.output.FieldMapping
 import org.pillarone.riskanalytics.core.output.PacketCollector
 import org.pillarone.riskanalytics.core.output.PathMapping
@@ -20,6 +19,12 @@ import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.segment.Segment
+import org.pillarone.riskanalytics.core.output.DrillDownMode
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AdditionalPremium
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts.StatelessRIContract
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
+import org.pillarone.riskanalytics.core.packets.Packet
 
 /**
  * @author detlef.brendle (at) canoo (dot) com
@@ -27,11 +32,15 @@ import org.pillarone.riskanalytics.domain.pc.cf.segment.Segment
 class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
     SplitAndFilterCollectionModeStrategy strategy
 
-    private void setupStrategy(def splitModes = [], def fieldFilter = [], def simulationStart = new DateTime(System.currentTimeMillis())) {
+    private void setupStrategy(List<DrillDownMode> splitModes = [], List<String> fieldFilter = [], def simulationStart = new DateTime(System.currentTimeMillis())) {
+        setupStrategy(splitModes, fieldFilter, simulationStart, [])
+    }
+
+    private void setupStrategy(List<DrillDownMode> splitModes = [], List<String> fieldFilter = [], DateTime simulationStart, List<Class<Packet>> compatibleClasses) {
         mockDomain(PathMapping)
         mockDomain(CollectorMapping)
         mockDomain(FieldMapping)
-        strategy = new SplitAndFilterCollectionModeStrategy(splitModes, fieldFilter)
+        strategy = new SplitAndFilterCollectionModeStrategy(splitModes, fieldFilter, compatibleClasses)
         PacketCollector packetCollector = new PacketCollector(strategy)
         packetCollector.setPath("Path:to:collect")
         SimulationScope simulationScope = new SimulationScope()
@@ -59,7 +68,7 @@ class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
         PacketList packets = new PacketList()
         def packet = new ClaimCashflowPacket()
         packets.add(packet)
-        setupStrategy([], [ClaimCashflowPacket.ULTIMATE, ClaimCashflowPacket.CHANGES_IN_IBNR_INDEXED])
+        setupStrategy([], [ClaimCashflowPacket.ULTIMATE, ClaimCashflowPacket.CHANGES_IN_IBNR_INDEXED], new DateTime(System.currentTimeMillis()))
         List<SingleValueResultPOJO> result = strategy.collect(packets, false)
         assert 2 == result.size(), 'only the ultimate and changes in IBNR fields expected'
     }
@@ -87,6 +96,8 @@ class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
         List<SingleValueResultPOJO> result = strategy.collect(packets, false)
         assert 2 * packet.valuesToSave.size() == result.size()
     }
+
+
 
     void testCollectChanges_no_filter_split_by_source_and_by_period() {
         def simulationStart = new DateTime(System.currentTimeMillis())
@@ -116,6 +127,17 @@ class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
         assert 3 == result.size()
     }
 
+    void testCollectType(){
+        def simulationStart = new DateTime(System.currentTimeMillis())
+        final StatelessRIContract contract = new StatelessRIContract(name: "testRIContract")
+        PacketList packets = new PacketList()
+        packets.add(makeAPPacket(simulationStart, contract))
+        packets.add(makeAPPacket(simulationStart, contract))
+        setupStrategy([DrillDownMode.BY_TYPE], [], simulationStart , [AdditionalPremium.class])
+        List<SingleValueResultPOJO> result = strategy.collect(packets, false)
+        assert 2 == result.size()
+    }
+
     void testIdentifier(){
         strategy = new SplitAndFilterCollectionModeStrategy()
         assert 'AGGREGATE_NO-SPLIT_NO-FILTER' == strategy.identifier
@@ -127,6 +149,8 @@ class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
         assert 'AGGREGATE_BY_SOURCE_BY_PERIOD' == strategy.identifier
         setupStrategy([DrillDownMode.BY_PERIOD],['field1'])
         assert 'AGGREGATE_BY_PERIOD_field1' == strategy.identifier
+        setupStrategy([DrillDownMode.BY_TYPE])
+        assert 'AGGREGATE_BY_TYPE' == strategy.identifier
     }
 
     void testNewInstance() {
@@ -135,5 +159,12 @@ class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
         strategy.class.newInstance(new Object[0])
         // calls the constructor matching the given arguments
         strategy.class.newInstance(strategy.arguments)
+    }
+
+    AdditionalPremium makeAPPacket(DateTime simStart, StatelessRIContract contract){
+        def packet = new AdditionalPremium(10, APBasis.NCB)
+        packet.senderChannelName = 'senderChannelName'
+        packet.addMarker(IReinsuranceContractMarker, contract )
+        return packet
     }
 }

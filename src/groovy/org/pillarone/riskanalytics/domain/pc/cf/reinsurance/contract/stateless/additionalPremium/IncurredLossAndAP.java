@@ -1,8 +1,10 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium;
 
+import com.google.common.collect.Lists;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters;
+import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,16 +33,26 @@ public class IncurredLossAndAP {
         return ap;
     }
 
-    public Collection<APSingleValuePacket> getPackets(APBasis apBasis, IPeriodCounter counter) {
+    public Collection<APSingleValuePacket> getPackets(APBasis apBasis, IPeriodCounter counter, IReinsuranceContractMarker contractMarker) {
         Collection<APSingleValuePacket> apSingleValuePackets = new ArrayList<APSingleValuePacket>();
         for (LayerAndAP apLayer : aps) {
             for (APSingleValuePacket aPremium : apLayer.getPackets(counter)) {
                 if(aPremium.getAdditionalPremium().getPremiumType().equals(apBasis) && aPremium.getAdditionalPremium().getAdditionalPremium() > 0) {
+                    aPremium.addMarker(IReinsuranceContractMarker.class, contractMarker );
                     apSingleValuePackets.add(aPremium);
                 }
             }
         }
         return apSingleValuePackets;
+    }
+
+    public Collection<AdditionalPremium> getAddtionalPremiums(IPeriodCounter counter, IReinsuranceContractMarker contractMarker) {
+        Collection<AdditionalPremium> apSingleValuePackets = Lists.newArrayList();
+        for (LayerAndAP apLayer : aps) {
+            apSingleValuePackets.addAll(apLayer.getAdditionalPremiums());
+        }
+        return apSingleValuePackets;
+
     }
 
     public double getLoss() {
