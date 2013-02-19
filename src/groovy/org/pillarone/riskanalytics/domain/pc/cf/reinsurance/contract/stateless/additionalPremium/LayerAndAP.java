@@ -27,4 +27,12 @@ public class LayerAndAP {
     public Collection<AdditionalPremium> getAdditionalPremiums() {
         return additionalPremiums;
     }
+
+    @Override
+    public String toString() {
+        return "LayerAndAP{" +
+                "layerParameters=" + layerParameters.toString() +
+                ", additionalPremiums=" + additionalPremiums +
+                '}';
+    }
 }
