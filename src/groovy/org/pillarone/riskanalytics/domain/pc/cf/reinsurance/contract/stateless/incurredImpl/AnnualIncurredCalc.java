@@ -49,7 +49,7 @@ public class AnnualIncurredCalc implements IIncurredCalculation {
             switch (additionalPremiumPerLayer.getBasis()) {
                 case PREMIUM:
                     double loss = lossAfterAnnualStructure(incurredClaims, tempLayer);
-                    double premAP = (loss * layerPremium * layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium()) / tempLayer.getLayerPeriodLimit();
+                    double premAP = (loss * layerPremium * layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium()) / tempLayer.getClaimLimit();
                     AdditionalPremium lossAPo = new AdditionalPremium(premAP, APBasis.PREMIUM);
                     additionalPremiums.add(lossAPo);
                     break;
