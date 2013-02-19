@@ -79,6 +79,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
     private PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket.class);
     private PacketList<AdditionalPremium> outApAll = new PacketList<AdditionalPremium>(AdditionalPremium.class);
+    private PacketList<PaidAdditionalPremium> outApAllPaid = new PacketList<PaidAdditionalPremium>(PaidAdditionalPremium.class);
 
     private IReinsuranceContractStrategy parmContractStructure = TemplateContractType.getDefault();
 
@@ -125,7 +126,6 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         LossAfterTermStructure incurredInPeriod = new TermIncurredCalculation().cededIncurredRespectTerm(claimStore, setupLayerParameters(),
                 periodScope, termExcess, termLimit, parmCoverageBase, premiumPerPeriod);
         IncurredLossAndAP incurredLossAndAP = incurredInPeriod.getLossesByPeriod().get(periodScope.getCurrentPeriod());
-        fillAPChannels(incurredLossAndAP);
 
         final List<ClaimCashflowPacket> paidClaims;
         final List<ContractFinancialsPacket> contractFinancialsPacket;
@@ -137,7 +137,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
             final TermLossAndPaidAps paidStuff = paidCalculation.cededIncrementalPaidRespectTerm(claimStore, setupLayerParameters(),
                     periodScope, parmCoverageBase, termLimit, termExcess, globalSanityChecks, incurredInPeriod.getLossesByPeriod(), premiumPerPeriod);
-
+            fillAPChannels(incurredLossAndAP, paidStuff);
             paidClaims =  new ProportionalToGrossPaidAllocation().allocatePaid(paidStuff.getTermLosses(), inClaims,
                     cededCashflowsToDate, periodScope, parmCoverageBase, allIncurredCededClaims, globalSanityChecks);
             contractFinancialsPacket = ContractFinancialsPacket.getContractFinancialsPacketsByInceptionPeriod(
@@ -163,10 +163,9 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         premiumPerPeriod.put(periodScope.getCurrentPeriod(), subjectPremium);
     }
 
-    private void fillAPChannels(IncurredLossAndAP lossAndAP) {
-        IPeriodCounter periodCounter = periodScope.getPeriodCounter();
-
-        outApAll.addAll(lossAndAP.getAddtionalPremiums(periodScope.getPeriodCounter(), this));
+    private void fillAPChannels(IncurredLossAndAP lossAndAP, TermLossAndPaidAps paidStuff) {
+        outApAll.addAll(lossAndAP.getAddtionalPremiums());
+        outApAllPaid.addAll(paidStuff.getPaidAPs());
     }
 
     private ScaledPeriodLayerParameters setupLayerParameters() {
@@ -248,7 +247,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         filterPremium();
     }
 
-    private void filterPremium() {
+    public void filterPremium() {
         List<IPremiumInfoMarker> coveredPremiums = (List<IPremiumInfoMarker>) parmPremiumCover.getValuesAsObjects(PremiumSelectionConstraints.PREMIUM_INDEX);
         List<UnderwritingInfoPacket> uncoveredPremium = Lists.newArrayList();
         for (UnderwritingInfoPacket underwritingInfoPacket : inPremiumPerPeriod) {
@@ -431,5 +430,13 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     public void setOutApAll(PacketList<AdditionalPremium> outApAll) {
         this.outApAll = outApAll;
+    }
+
+    public PacketList<PaidAdditionalPremium> getOutApAllPaid() {
+        return outApAllPaid;
+    }
+
+    public void setOutApAllPaid(PacketList<PaidAdditionalPremium> outApAllPaid) {
+        this.outApAllPaid = outApAllPaid;
     }
 }

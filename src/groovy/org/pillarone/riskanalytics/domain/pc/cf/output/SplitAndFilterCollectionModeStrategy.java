@@ -19,6 +19,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AdditionalPremium;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.PaidAdditionalPremium;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
@@ -115,21 +116,45 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
             resultMap.putAll(splitByInceptionPeriodPaths(packets));
         }
         if (drillDownModes.contains(DrillDownMode.BY_TYPE)) {
-            Map<PathMapping, Packet> tempMap = Maps.newHashMap();
-            for (Packet aPacket : packets) {
-                String aPath = getExtendedPath(aPacket, ((AdditionalPremium) aPacket).typeDrillDownName());
-                PathMapping pathMapping = mappingCache.lookupPath(aPath);
-                if (resultMap.get(pathMapping) == null) {
-                    tempMap.put(pathMapping, aPacket);
-                } else {
-                    AdditionalPremium aggregateMe = ((AdditionalPremium) tempMap.get(pathMapping));
-                    tempMap.put(pathMapping, aggregateMe.plusForAggregateCollection(((AdditionalPremium) aPacket)));
-                }
+            if(packets.get(0) instanceof AdditionalPremium) {
+                resultMap.putAll(splitByAdditionalPremium(packets));
             }
-            resultMap.putAll(tempMap);
+            if(packets.get(0) instanceof PaidAdditionalPremium) {
+                resultMap.putAll(splitByPaidAdditionalPremium(packets));
+            }
         }
 
         return resultMap;
+    }
+
+    private Map<PathMapping, Packet> splitByAdditionalPremium(PacketList<Packet> packets) {
+        Map<PathMapping, Packet> tempMap = Maps.newLinkedHashMap();
+        for (Packet aPacket : packets) {
+            String aPath = getExtendedPath(aPacket, ((AdditionalPremium) aPacket).typeDrillDownName());
+            PathMapping pathMapping = mappingCache.lookupPath(aPath);
+            if (tempMap.get(pathMapping) == null) {
+                tempMap.put(pathMapping, aPacket);
+            } else {
+                AdditionalPremium aggregateMe = ((AdditionalPremium) tempMap.get(pathMapping));
+                tempMap.put(pathMapping, aggregateMe.plusForAggregateCollection(((AdditionalPremium) aPacket)));
+            }
+        }
+        return tempMap;
+    }
+
+    private Map<PathMapping, Packet> splitByPaidAdditionalPremium(PacketList<Packet> packets) {
+        Map<PathMapping, Packet> tempMap = Maps.newLinkedHashMap();
+        for (Packet aPacket : packets) {
+            String aPath = getExtendedPath(aPacket, ((PaidAdditionalPremium) aPacket).typeDrillDownName());
+            PathMapping pathMapping = mappingCache.lookupPath(aPath);
+            if (tempMap.get(pathMapping) == null) {
+                tempMap.put(pathMapping, aPacket);
+            } else {
+                PaidAdditionalPremium aggregateMe = ((PaidAdditionalPremium) tempMap.get(pathMapping));
+                tempMap.put(pathMapping, aggregateMe.plusForAggregateCollection(((PaidAdditionalPremium) aPacket)));
+            }
+        }
+        return tempMap;
     }
 
     /**
@@ -260,6 +285,8 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
             addToMap((FinancialsPacket) packet, path, resultMap);
         } else if (packet instanceof AdditionalPremium) {
             addToMap((AdditionalPremium) packet, path, resultMap);
+        } else if (packet instanceof PaidAdditionalPremium) {
+            addToMap((PaidAdditionalPremium) packet, path, resultMap);
         } else {
             throw new IllegalArgumentException("Packet type " + packet.getClass() + " is not supported.");
         }
@@ -271,6 +298,15 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
             resultMap.put(path, additionalPremium);
         } else {
             AdditionalPremium aggregateMe = (AdditionalPremium) resultMap.get(path);
+            resultMap.put(path, aggregateMe.plusForAggregateCollection(additionalPremium));
+        }
+    }
+    protected void addToMap(PaidAdditionalPremium additionalPremium, PathMapping path, Map<PathMapping, Packet> resultMap) {
+        if (path == null) return;
+        if (resultMap.get(path) == null) {
+            resultMap.put(path, additionalPremium);
+        } else {
+            PaidAdditionalPremium aggregateMe = (PaidAdditionalPremium) resultMap.get(path);
             resultMap.put(path, aggregateMe.plusForAggregateCollection(additionalPremium));
         }
     }

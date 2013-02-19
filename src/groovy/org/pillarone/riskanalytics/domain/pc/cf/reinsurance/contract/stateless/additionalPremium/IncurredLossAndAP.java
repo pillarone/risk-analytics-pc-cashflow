@@ -33,7 +33,7 @@ public class IncurredLossAndAP {
         return ap;
     }
 
-    public Collection<AdditionalPremium> getAddtionalPremiums(IPeriodCounter counter, IReinsuranceContractMarker contractMarker) {
+    public Collection<AdditionalPremium> getAddtionalPremiums() {
         Collection<AdditionalPremium> apSingleValuePackets = Lists.newArrayList();
         for (LayerAndAP apLayer : aps) {
             apSingleValuePackets.addAll(apLayer.getAdditionalPremiums());
@@ -61,7 +61,14 @@ public class IncurredLossAndAP {
             }
         }
         throw new SimulationException("Didn't find incurred layer for " + layerIdentifier.toString());
+    }
 
+    public void setAPDates(IPeriodCounter iPeriodCounter){
+        for (LayerAndAP ap : aps) {
+            for (AdditionalPremium additionalPremium : ap.getAdditionalPremiums()) {
+                additionalPremium.setDate(additionalPremium.getPremiumType().getAPDate(iPeriodCounter));
+            }
+        }
     }
 
     @Override

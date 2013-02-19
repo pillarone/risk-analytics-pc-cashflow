@@ -140,7 +140,9 @@ public class TermIncurredCalculation implements IIncurredCalculation {
         Collection<LayerAndAP> additionalPremiums = Lists.newArrayList();
         additionalPremiums = additionalPremiumAllLayers(claimsInPeriod, layers, periodPremium);
 
-        return new IncurredLossAndAP(lossesByLayer, additionalPremiums);
+        final IncurredLossAndAP incurredLossAndAP = new IncurredLossAndAP(lossesByLayer, additionalPremiums);
+        incurredLossAndAP.setAPDates(periodScope.getPeriodCounter());
+        return incurredLossAndAP;
     }
 
     /**

@@ -17,10 +17,13 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.c
 import org.pillarone.riskanalytics.domain.test.SpreadsheetImporter
 import org.pillarone.riskanalytics.domain.test.SpreadsheetUnitTest
 import org.pillarone.riskanalytics.domain.pc.cf.global.AnnualPeriodStrategy
-import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope
+
 import org.pillarone.riskanalytics.core.components.IterationStore
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints
 import org.pillarone.riskanalytics.core.util.GroovyUtils
+
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 
 /**
  * This spreadsheet test does not check any reinstatements and AP calculations as they are not implemented so far
@@ -31,12 +34,9 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
 
     static final double EPSILON = 1E-8
 
-    static DateTime beginOfCover = new DateTime(2012,1,1,0,0,0,0)
+    static DateTime beginOfCover = new DateTime(2012, 1, 1, 0, 0, 0, 0)
 
-    static StatelessRIContract getArtLayerContract(Double termExcess, Double termLimit, List<Integer> periods,
-                                                      List<Integer> layers, List<Double> shares,
-                                                      List<Double> periodExcess, List<Double> periodLimit,
-                                                      List<Double> claimExcess, List<Double> claimLimit, DateTime beginOfCover) {
+    static StatelessRIContract getArtLayerContract(Double termExcess, Double termLimit, List<Integer> periods, List<Integer> layers, List<Double> shares, List<Double> periodExcess, List<Double> periodLimit, List<Double> claimExcess, List<Double> claimLimit, DateTime beginOfCover, List<Double> apPercentages, List<String> apTypes) {
         IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
         ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
         int numberOfLayers = layers.size()
@@ -46,11 +46,12 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                         ['termLimit': termLimit,
                                 'termExcess': termExcess,
                                 'termAP': new ConstrainedMultiDimensionalParameter(
-                                        [[0d],[0d],[0d]], AdditionalPremiumConstraints.columnHeaders,
+                                        [[0d], [0d], [0d]], AdditionalPremiumConstraints.columnHeaders,
                                         ConstraintsFactory.getConstraints(AdditionalPremiumConstraints.IDENTIFIER)),
                                 'structure': new ConstrainedMultiDimensionalParameter(
-                                        [periods, layers, shares, periodLimit, periodExcess, claimLimit, claimExcess,
-                                                [0d] * numberOfLayers, ['PREMIUM'] * numberOfLayers],
+                                        [
+                                         periods, layers, shares, periodLimit, periodExcess, claimLimit, claimExcess, apPercentages, apTypes
+                                        ],
                                         LayerConstraints.columnHeaders, ConstraintsFactory.getConstraints(LayerConstraints.IDENTIFIER))]),
                 iterationScope: iterationScope,
                 iterationStore: new IterationStore(iterationScope),
@@ -60,7 +61,6 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                 parmPremiumCover: new ConstrainedMultiDimensionalParameter(GroovyUtils.toList("[]"),
                         Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER))
         )
-
     }
 
     static StatelessRIContract getLayerContract(Double termExcess, Double termLimit, List<Integer> periods,
@@ -77,7 +77,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                         ['termLimit': termLimit,
                                 'termExcess': termExcess,
                                 'termAP': new ConstrainedMultiDimensionalParameter(
-                                        [[0d],[0d],[0d]], AdditionalPremiumConstraints.columnHeaders,
+                                        [[0d], [0d], [0d]], AdditionalPremiumConstraints.columnHeaders,
                                         ConstraintsFactory.getConstraints(AdditionalPremiumConstraints.IDENTIFIER)),
                                 'structure': new ConstrainedMultiDimensionalParameter(
                                         [periods, layers, shares, periodLimit, periodExcess, claimLimit, claimExcess,
@@ -96,12 +96,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
 
     static StatelessRIContract getARTLayerContract(Double termExcess, Double termLimit, TermContractTestUtils.TestLayers layers, DateTime beginOfCover) {
         return getArtLayerContract(termExcess, termLimit, layers.periods, layers.layers, layers.shares, layers.periodExcess,
-                layers.periodLimit, layers.claimExcess, layers.claimLimits, beginOfCover)
-    }
-
-    static StatelessRIContract getLayerContract(Double termExcess, Double termLimit, TermContractTestUtils.TestLayers layers, DateTime beginOfCover) {
-        return getLayerContract(termExcess, termLimit, layers.periods, layers.layers, layers.shares, layers.periodExcess,
-                layers.periodLimit, layers.claimExcess, layers.claimLimits, beginOfCover)
+                layers.periodLimit, layers.claimExcess, layers.claimLimits, beginOfCover, layers.apPercentages, layers.apTypes)
     }
 
     void doSetUp() {
@@ -115,6 +110,59 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
         [
                 'ART-686-NonPropStructure.xlsx',
         ]
+    }
+
+    void testAPs() {
+        setCheckedForValidationErrors(true)
+        List<String> sheets = [
+                'Module',
+                'Test1',
+                'Test4',
+                'Test5',
+                'Test6',
+        ]
+        for (String sheet in sheets) {
+            println sheet
+            SpreadsheetImporter importer = importers[0]
+            ListMultimap<Integer, Double> ultimatesPerPeriod = TermContractTestUtils.getUltimatesByPeriod(importer, sheet)
+            PatternPacket payoutPattern = getPayoutPattern(importer, sheet)
+            TermContractTestUtils.TestLayers layerPeriodParams = getLayers(importer, sheet)
+            Map<Integer, Double> premiumPerPeriod = TermContractTestUtils.getContractPremiumByPeriod(importer, sheet)
+            Map<Integer, Double> incurredAPByPeriod = TermContractTestUtils.getAPByPeriod(importer, sheet)
+
+            int lastPeriodWithNewClaims = ultimatesPerPeriod.keys().max()
+
+            StatelessRIContract contract = getARTLayerContract(
+                    termExcess(importer, sheet),
+                    termLimit(importer, sheet),
+                    layerPeriodParams, beginOfCover
+            )
+            IPeriodCounter periodCounter = contract.iterationScope.periodScope.periodCounter
+            List<GrossClaimRoot> claimRoots = []
+            int projectionPeriods = Math.min(lastPeriodWithNewClaims, layerPeriodParams.maxPeriod) + payoutPattern.lastCumulativePeriod.months / 12d
+
+            for (int period = 0; period <= projectionPeriods; period++) {
+                DateTime occurrenceDate = beginOfCover.plusMonths(period * 12)
+                claimRoots.addAll TermContractTestUtils.getClaimRoots(ultimatesPerPeriod.get(period), occurrenceDate, payoutPattern)
+                List<ClaimCashflowPacket> claims = []
+                for (GrossClaimRoot claimRoot : claimRoots) {
+                    claims.addAll claimRoot.getClaimCashflowPackets(periodCounter)
+                }
+                final UnderwritingInfoPacket premium = new UnderwritingInfoPacket()
+                if (premiumPerPeriod.get(period) != null){
+                    premium.setPremiumWritten( premiumPerPeriod.get(period) )
+                }
+                contract.inClaims.addAll claims
+                contract.inPremiumPerPeriod << premium
+                contract.doCalculation()
+                double expectedIncurredAP = incurredAPByPeriod.get(period) != null ? incurredAPByPeriod.get(period) : 0d
+                double contractAP = contract.outApAll.size() > 0 ? contract.outApAll.additionalPremium.sum() : 0
+                assertEquals contractAP, expectedIncurredAP, EPSILON
+                contract.reset()
+                contract.iterationScope.periodScope.prepareNextPeriod()
+            }
+            manageValidationErrors(importer)
+        }
     }
 
     void testUsage() {
@@ -202,7 +250,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
 
     private PatternPacket getPayoutPattern(SpreadsheetImporter importer, String sheet) {
         List<Double> cumulativePayouts = []
-        Map payouts = importer.cells([sheet: sheet, cellMap:  ['C17': 'dev0', 'D17': 'dev1', 'E17': 'dev2', 'F17': 'dev3', 'G17': 'dev4', 'H17': 'dev5']])
+        Map payouts = importer.cells([sheet: sheet, cellMap: ['C17': 'dev0', 'D17': 'dev1', 'E17': 'dev2', 'F17': 'dev3', 'G17': 'dev4', 'H17': 'dev5']])
         double cumulativePayout = 0
         for (int i = 0; i < 6; i++) {
             Double payout = (Double) payouts["dev$i"]
@@ -220,7 +268,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
     }
 
     Double termLimit(SpreadsheetImporter importer, String sheet) {
-        Double termLimit = (Double) importer.cells([sheet: sheet, cellMap:  ['C58': 'termLimit']])['termLimit']
+        Double termLimit = (Double) importer.cells([sheet: sheet, cellMap: ['C58': 'termLimit']])['termLimit']
         if (termLimit == null) {
             termLimit = Double.MAX_VALUE
         }
@@ -228,7 +276,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
     }
 
     Double termExcess(SpreadsheetImporter importer, String sheet) {
-        Double termExcess = (Double) importer.cells([sheet: sheet, cellMap:  ['C59': 'termExcess']])['termExcess']
+        Double termExcess = (Double) importer.cells([sheet: sheet, cellMap: ['C59': 'termExcess']])['termExcess']
         if (termExcess == null) {
             termExcess = 0
         }
@@ -241,12 +289,29 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
         int column = 0
         for (int layer = 0; layer < 2; layer++) {
             for (int period = 1; period < 4; period++) {
-                layers.add(new TermContractTestUtils.TestLayerPeriodContractParams(layer, period, importer.cells([
-                        sheet: sheet, cellMap: [
-                        "${columns[column]}66": 'share',
-                        "${columns[column]}67": 'claimLimit', "${columns[column]}68": 'claimExcess',
-                        "${columns[column]}69": 'periodLimit', "${columns[column]}70": 'periodExcess'
-                ]])))
+                Map paramMap =  importer.cells(
+                        [
+                                sheet: sheet, cellMap: [
+                                "${columns[column]}66": 'share',
+                                "${columns[column]}67": 'claimLimit',
+                                "${columns[column]}68": 'claimExcess',
+                                "${columns[column]}69": 'periodLimit',
+                                "${columns[column]}70": 'periodExcess',
+                                "${columns[column]}71": 'apPercentage',
+                        ]
+                        ]
+                )
+                Map apType = importer.cells(sheet: sheet,cellMap: ["${columns[column]}72": 'apType'])
+                String stringAPType = apType.get("apType")
+                APBasis apBasis
+                switch (stringAPType.toLowerCase()) {
+                    case "prem": apBasis = APBasis.PREMIUM; break
+                    case "ncb": apBasis = APBasis.NCB ; break
+                    case "loss": apBasis = APBasis.LOSS; break
+                    default: throw new IllegalArgumentException("unknown apbasis")
+                }
+
+                layers.add(new TermContractTestUtils.TestLayerPeriodContractParams(layer, period, paramMap, apBasis))
                 column++
             }
         }
