@@ -56,18 +56,21 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
 //        For each simulation period
         for (Map.Entry<Integer, IncurredLossAndAP> period : incurredAPs.entrySet()) {
             Collection<LayerAndAP> layers = period.getValue().getAps();
-            AllLayersPaidLoss lastSimPeriodCumPaid = paidByPeriodUpToFilterFromDate.getPaidLossesByLayer().get(period.getKey() - 1);
+            AllLayersPaidLoss lastSimPeriodCumPaid = paidByPeriodUpToFilterFromDate.getPaidLossesByLayer().get(period.getKey());
             AllLayersPaidLoss thisSimPeriodCumPaid = cumulativePaidToDate.getPaidLossesByLayer().get(period.getKey());
 //            And each layer in this contract
             for (LayerAndAP layer : layers) {
 //                Then for each incurred additional premium
                 for (AdditionalPremium additionalPremium : layer.getAdditionalPremiums()) {
+                    if(additionalPremium.getAdditionalPremium() == 0d) {
+                        continue;
+                    }
                     if (additionalPremium.getPremiumType().equals(APBasis.NCB)) {
                         if (period.getKey().equals(currentPeriod)) {
                             PaidAdditionalPremium ncbAP = new PaidAdditionalPremium(additionalPremium.getAdditionalPremium(), additionalPremium);
                             apsPaidThisPeriod.add(ncbAP);
-                            continue;
                         }
+                        continue;
                     }
                     LayerParameters.LayerIdentifier identifier = layer.getLayerParameters().getLayerIdentifier();
                     IncurredLossAndLayer lossAndLayer = period.getValue().getLayerAndIncurredLoss(identifier);

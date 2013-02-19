@@ -99,10 +99,10 @@ class IncurredCalcTest extends GroovyTestCase {
         double lossAP = calc.additionalPremiumByLayer(grossClaims, testPremiumAP, 20).getAt(0).additionalPremium
         assert lossAP == 400 * 0.5
 
-        LayerParameters testLossAP = new LayerParameters(0.8, 0, 0)
+        LayerParameters testLossAP = new LayerParameters(0.8, 0, 460)
         testLossAP.addAdditionalPremium(0, 600, 0.5, APBasis.PREMIUM)
         double premiumAP = calc.additionalPremiumByLayer(grossClaims, testLossAP, 20).getAt(0).additionalPremium
-        assert premiumAP == (450 * 0.5 * 0.8 * 20) / 600
+        assertEquals( premiumAP , (450 * 0.5 * 0.8 * 20) / 460, 0.01d)
 
         LayerParameters ncbPremium = new LayerParameters(1, 0, 0)
         ncbPremium.addAdditionalPremium(0, 0, 0.5, APBasis.NCB)
@@ -111,13 +111,13 @@ class IncurredCalcTest extends GroovyTestCase {
 
 //        Mix AP's.
 
-        LayerParameters lotsOfAP = new LayerParameters(1, 0, 0)
+        LayerParameters lotsOfAP = new LayerParameters(1, 0, 250)
         lotsOfAP.addAdditionalPremium(50, 100, 0.5, APBasis.LOSS)
         lotsOfAP.addAdditionalPremium(150, 200, 0.5, APBasis.PREMIUM)
         lotsOfAP.addAdditionalPremium(350, 50, 0.1, APBasis.LOSS)
 
         double allAPs = calc.additionalPremiumByLayer(grossClaims, lotsOfAP, 20).additionalPremium.sum()
-        assert allAPs == 0.5 * 100 + (200 * 1 * 20 * 0.5) / 200 + 50 * 0.1
+        assertEquals(allAPs,  0.5 * 100 + (200 * 1 * 20 * 0.5) / 250 + 50 * 0.1, 0.01)
     }
 
     void testCededIncurredRespectTerm() {

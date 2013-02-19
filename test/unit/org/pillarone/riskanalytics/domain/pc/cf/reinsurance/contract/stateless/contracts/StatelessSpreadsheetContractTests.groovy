@@ -129,6 +129,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
             TermContractTestUtils.TestLayers layerPeriodParams = getLayers(importer, sheet)
             Map<Integer, Double> premiumPerPeriod = TermContractTestUtils.getContractPremiumByPeriod(importer, sheet)
             Map<Integer, Double> incurredAPByPeriod = TermContractTestUtils.getAPByPeriod(importer, sheet)
+            Map<Integer, Double> paidApByPeriod = TermContractTestUtils.paidAPByPeriod(importer, sheet)
 
             int lastPeriodWithNewClaims = ultimatesPerPeriod.keys().max()
 
@@ -155,9 +156,12 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                 contract.inClaims.addAll claims
                 contract.inPremiumPerPeriod << premium
                 contract.doCalculation()
-                double expectedIncurredAP = incurredAPByPeriod.get(period) != null ? incurredAPByPeriod.get(period) : 0d
-                double contractAP = contract.outApAll.size() > 0 ? contract.outApAll.additionalPremium.sum() : 0
+                Double expectedIncurredAP = incurredAPByPeriod.get(period) != null ? incurredAPByPeriod.get(period) : 0d
+                Double contractAP = contract.outApAll.size() > 0 ? contract.outApAll.additionalPremium.sum() : 0
                 assertEquals contractAP, expectedIncurredAP, EPSILON
+                Double totalPaidAP = paidApByPeriod.get(period) != null ? paidApByPeriod.get(period) : 0d
+                Double contractPaidAP = contract.outApAllPaid.size() > 0 ? contract.outApAllPaid.paidAmount.sum() : 0
+                assertEquals totalPaidAP, contractPaidAP, EPSILON
                 contract.reset()
                 contract.iterationScope.periodScope.prepareNextPeriod()
             }

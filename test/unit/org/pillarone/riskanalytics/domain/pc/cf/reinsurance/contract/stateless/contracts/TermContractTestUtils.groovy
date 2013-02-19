@@ -136,6 +136,22 @@ public class TermContractTestUtils {
         premiumsByPeriod
     }
 
+    public static Map<Integer, Double> paidAPByPeriod(SpreadsheetImporter importer, String sheet) {
+        Map<Integer, Double> premiumsByPeriod = Maps.newHashMap()
+            Map prem = importer.cells([
+                    sheet: sheet, //startRow: row, // startRow counting starts at 0, first line with content
+                    cellMap: [ "C97": 'premP0', "D97": 'premP1', "E97": 'premP2',"F97": 'premP3',"G97": 'premP4',"H97": 'premP5',"I97": 'premP6',"J97": 'premP7', ]
+            ])
+            for (int period = 0; period < 7; period++) {
+                Double ultimate = (Double) prem["premP$period"]
+                if (ultimate != null) {
+                    // invert ultimate sign as claim have a negative sign in pc-cashflow plugin
+                    premiumsByPeriod.put(period, ultimate)
+                }
+        }
+        premiumsByPeriod
+    }
+
     public static class TestLayerPeriodContractParams {
         int layer
         int period

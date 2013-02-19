@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl;
 
 
+import org.gridgain.grid.typedef.internal.A;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
@@ -50,20 +51,26 @@ public class AnnualIncurredCalc implements IIncurredCalculation {
                 case PREMIUM:
                     double loss = lossAfterAnnualStructure(incurredClaims, tempLayer);
                     double premAP = (loss * layerPremium * layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium()) / tempLayer.getClaimLimit();
-                    AdditionalPremium lossAPo = new AdditionalPremium(premAP, APBasis.PREMIUM);
-                    additionalPremiums.add(lossAPo);
+                    if(premAP != 0 ){
+                        AdditionalPremium lossAPo = new AdditionalPremium(premAP, APBasis.PREMIUM);
+                        additionalPremiums.add(lossAPo);
+                    }
                     break;
                 case LOSS:
                     double lossAP = layerCededIncurred(incurredClaims, tempLayer) * additionalPremiumPerLayer.getAdditionalPremium();
-                    AdditionalPremium additionalPremium = new AdditionalPremium(lossAP, APBasis.LOSS);
-                    additionalPremiums.add(additionalPremium);
+                    if(lossAP != 0 ) {
+                        AdditionalPremium additionalPremium = new AdditionalPremium(lossAP, APBasis.LOSS);
+                        additionalPremiums.add(additionalPremium);
+                    }
                     break;
                 case NCB:
                     double ncbAP = 0d;
                     if (layerCededIncurred(incurredClaims, tempLayer) == 0) {
                         ncbAP = layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium() * layerPremium;
                     }
-                    additionalPremiums.add(new AdditionalPremium(ncbAP, APBasis.NCB));
+                    if(ncbAP != 0) {
+                        additionalPremiums.add(new AdditionalPremium(ncbAP, APBasis.NCB));
+                    }
                     break;
                 default:
                     throw new SimulationException("Unknown additional premium basis :" + additionalPremiumPerLayer.getBasis());

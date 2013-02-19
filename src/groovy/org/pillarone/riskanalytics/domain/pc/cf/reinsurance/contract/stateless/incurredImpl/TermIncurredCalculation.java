@@ -3,7 +3,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.*;
@@ -38,7 +37,7 @@ public class TermIncurredCalculation implements IIncurredCalculation {
      * This method calculates the ceded incurred amount to a given period. It is left as a layer as abstraction in case
      * the incurred amount could (in the future) potentially change in a prior period.
      *
-     * This implmentation basically delegates to {@link TermIncurredCalculation#cededIncurredToPeriod(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache, org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ScaledPeriodLayerParameters, org.pillarone.riskanalytics.core.simulation.engine.PeriodScope, double, double, org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase, int, double) }
+     * This implmentation basically delegates to {@link TermIncurredCalculation#cededIncurredToPeriod(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache, org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ScaledPeriodLayerParameters, org.pillarone.riskanalytics.core.simulation.engine.PeriodScope, double, double, org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase, int, java.util.Map }
      *
      *
      *
@@ -60,7 +59,7 @@ public class TermIncurredCalculation implements IIncurredCalculation {
                                                            ContractCoverBase coverageBase, Map<Integer, Double> premiumPerPeriod) {
         Collection<IClaimRoot> incClaimsCurrentPeriod = claimStore.allIncurredClaimsInModelPeriod(periodScope.getCurrentPeriod(), periodScope, coverageBase);
 
-        return cededIncurredToPeriod(claimStore, scaledLayerParameters, periodScope, termExcess, termLimit, coverageBase, periodScope.getCurrentPeriod(), premiumPerPeriod.get(periodScope.getCurrentPeriod()));
+        return cededIncurredToPeriod(claimStore, scaledLayerParameters, periodScope, termExcess, termLimit, coverageBase, periodScope.getCurrentPeriod(), premiumPerPeriod);
     }
 
     public Collection<LayerAndAP> additionalPremiumAllLayers(Collection<IClaimRoot> incurredClaims, Collection<LayerParameters> layerParameters, double layerPremium) {
@@ -81,6 +80,7 @@ public class TermIncurredCalculation implements IIncurredCalculation {
      *
      *
      *
+     *
      * @param claimCache
      * @param layerParameters parameters (scaled if relative) for the contract in question
      * @param periodScope {@link org.pillarone.riskanalytics.core.simulation.engine.PeriodScope}
@@ -91,19 +91,19 @@ public class TermIncurredCalculation implements IIncurredCalculation {
      * @param periodPremium
      * @return the double vaule, given all the incurred claims in any period, which is ceded by the contract in the current simulation period.
      */
-    public LossAfterTermStructure cededIncurredToPeriod(IAllContractClaimCache claimCache, ScaledPeriodLayerParameters layerParameters, PeriodScope periodScope, double termExcess, double termLimit, ContractCoverBase coverageBase, int periodTo, double periodPremium) {
+    public LossAfterTermStructure cededIncurredToPeriod(IAllContractClaimCache claimCache, ScaledPeriodLayerParameters layerParameters, PeriodScope periodScope, double termExcess, double termLimit, ContractCoverBase coverageBase, int periodTo, Map<Integer, Double> periodPremium) {
 
         AnnualIncurredCalc annualIncurredCalc = new AnnualIncurredCalc();
 
         double termIncurredInPriorPeriods = 0;
         Map<Integer, IncurredLossAndAP> lossesByPeriod = Maps.newHashMap();
         for (int period = 0; period < periodTo; period++) {
-            IncurredLossAndAP temp = incurredLossAndAP(claimCache, layerParameters, period, annualIncurredCalc, coverageBase, periodScope, periodPremium);
+            IncurredLossAndAP temp = incurredLossAndAP(claimCache, layerParameters, period, annualIncurredCalc, coverageBase, periodScope, periodPremium.get(period));
             termIncurredInPriorPeriods += temp.getLoss();
             lossesByPeriod.put(period, temp);
         }
 
-        IncurredLossAndAP annualIncurredThisPeriod = incurredLossAndAP(claimCache, layerParameters, periodTo, annualIncurredCalc, coverageBase, periodScope, periodPremium);
+        IncurredLossAndAP annualIncurredThisPeriod = incurredLossAndAP(claimCache, layerParameters, periodTo, annualIncurredCalc, coverageBase, periodScope, periodPremium.get(periodScope.getCurrentPeriod()));
         lossesByPeriod.put(periodTo, annualIncurredThisPeriod);
 
         double lossAfterTermStructure = Math.min(Math.max(termIncurredInPriorPeriods + annualIncurredThisPeriod.getLoss() - termExcess, 0), termLimit);
@@ -164,7 +164,7 @@ public class TermIncurredCalculation implements IIncurredCalculation {
         Map<Integer, Double> incurredCededAmountByPeriod = new TreeMap<Integer, Double>();
         for (int contractPeriod = 0; contractPeriod <= periodScope.getCurrentPeriod(); contractPeriod++) {
             double incurredInPeriod = cededIncurredToPeriod(claimCache, layerParameters, periodScope, termExcess, termLimit,
-                    coverageBase, contractPeriod, premiumByPeriod.get(contractPeriod)).getLossAfterTermStructure();
+                    coverageBase, contractPeriod, premiumByPeriod).getLossAfterTermStructure();
             incurredCededAmountByPeriod.put(contractPeriod, incurredInPeriod);
         }
         return incurredCededAmountByPeriod;
