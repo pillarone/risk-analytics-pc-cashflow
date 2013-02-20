@@ -46,6 +46,9 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
         TermLossAndLossByLayer cumulativePaidToDate = cededCumulativePaidRespectTerm(periodScope.getCurrentPeriod(), layerParameters, periodScope, coverageBase, termLimit, termExcess, claimCache, coverageBase, premiumPerPeriod);
         Map<Integer, Double> paidByPeriod = incrementalTermLossByPeriod(sanityChecks, paidByPeriodUpToFilterFromDate, cumulativePaidToDate);
         Collection<PaidAdditionalPremium> paidAps = calculateIncrementalPaidAPs(incurredAPs, paidByPeriodUpToFilterFromDate, cumulativePaidToDate, periodScope.getCurrentPeriod(), periodScope.getPeriodCounter());
+        for (PaidAdditionalPremium paidAp : paidAps) {
+            paidAp.setDate(periodScope.getPeriodCounter().getCurrentPeriodEnd().minusDays(1));
+        }
 
         return new TermLossAndPaidAps(paidByPeriod, paidAps);
     }
