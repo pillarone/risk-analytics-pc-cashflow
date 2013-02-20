@@ -31,6 +31,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.global.SimulationConstants
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.AggregateActualClaimsStrategy
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -46,11 +47,11 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
                         [DistributionParams.PERIOD.toString(), DistributionParams.CONSTANT.toString()],
                         ConstraintsFactory.getConstraints(PeriodDistributionsConstraints.IDENTIFIER))]))
         AttritionalClaimsGenerator generator = new AttritionalClaimsGenerator(subClaimsModel: model)
-        generator.parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(ReinsuranceContractBaseType.LOSSESOCCURRING, [:])
-        generator.periodScope = TestPeriodScopeUtilities.getPeriodScope(new DateTime(2012, 1, 1, 0, 0, 0, 0), 4)
+        generator.parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(ReinsuranceContractBaseType.LOSSESOCCURRING_NO_SPLIT, [:])
+        generator.periodScope = TestPeriodScopeUtilities.getPeriodScope(new DateTime(2012, 1, 1, 0, 0, 0, 0), 1)
         generator.periodStore = new PeriodStore(generator.periodScope)
         generator.iterationScope = new IterationScope()
-        generator.globalLastCoveredPeriod= 4
+        generator.globalLastCoveredPeriod= 1
         generator.globalUpdateDate = new DateTime(2012, 1, 1, 0, 0, 0, 0)
         generator.globalSanityChecks = true
         generator.globalTrivialIndices = true
@@ -58,20 +59,34 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
     }
 
     /** different distribution parameters for different periods */
-    void testUsage() {
-/*        AttritionalClaimsGenerator generator = createGenerator()
-        doClaimsCalcWithNoCommutation(generator, true)
+    void testInceptionClaimHasOneDayRemovedFromPattern() {
+        AttritionalClaimsGenerator generator = createGenerator()
+        PatternPacket trivialReportingPattern = new PatternPacket(IPayoutPatternMarker.class, [1d], [new Period().plusMonths(12)], false)
+        trivialReportingPattern.origin = new PayoutPattern(name: 'nothing')
+        generator.parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker, trivialReportingPattern.origin.name)
+        generator.parmPayoutPattern.selectedComponent = trivialReportingPattern.origin
+        generator.inPatterns << trivialReportingPattern
+
+        doClaimsCalcWithNoCommutation(generator, false)
         assertEquals "P0 ultimate value", 1000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "Check one day removed from inception pattern", generator.outClaims[-1].getDate(), new DateTime(2013, 1, 1 ,0, 0,0,0).minusDays(1)
 
-        generator.periodScope.prepareNextPeriod()
-        generator.reset()
-        doClaimsCalcWithNoCommutation(generator, true)
-        assertEquals "P1 ultimate value", 1000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+    }
 
-        generator.periodScope.prepareNextPeriod()
-        generator.reset()
-        doClaimsCalcWithNoCommutation(generator, true)
-        assertEquals "P2 ultimate value", 2000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON */
+    void testInceptionClaimHasOneDayRemovedFromPatternWithAggUpdateStrategy() {
+        AttritionalClaimsGenerator generator = createGenerator()
+        PatternPacket trivialReportingPattern = new PatternPacket(IPayoutPatternMarker.class, [1d], [new Period().plusMonths(12)], false)
+        trivialReportingPattern.origin = new PayoutPattern(name: 'nothing')
+        generator.parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker, trivialReportingPattern.origin.name)
+        generator.parmPayoutPattern.selectedComponent = trivialReportingPattern.origin
+        generator.inPatterns << trivialReportingPattern
+
+        generator.parmActualClaims = new AggregateActualClaimsStrategy()
+
+        doClaimsCalcWithNoCommutation(generator, false)
+        assertEquals "P0 ultimate value", 1000d, (Double) generator.outClaims*.ultimate().sum(), SimulationConstants.EPSILON
+        assertEquals "Check one day removed from inception pattern", generator.outClaims[-1].getDate(), new DateTime(2013, 1, 1 ,0, 0,0,0).minusDays(1)
+
     }
 
    /* void testRelativeCalibrationPremium() {
