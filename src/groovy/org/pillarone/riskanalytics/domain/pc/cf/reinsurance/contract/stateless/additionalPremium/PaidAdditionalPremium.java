@@ -10,8 +10,8 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
  */
 public class PaidAdditionalPremium extends MultiValuePacket {
 
-    private final double paidAmount;
-    private final AdditionalPremium incurredPremium;
+    private double paidAmount;
+    private AdditionalPremium incurredPremium;
 
     public PaidAdditionalPremium() {
         this.paidAmount = 0;
