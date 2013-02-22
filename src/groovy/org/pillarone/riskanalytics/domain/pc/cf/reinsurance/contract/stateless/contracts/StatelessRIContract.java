@@ -10,7 +10,6 @@ import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
-import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
@@ -38,6 +37,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.i
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl.TermIncurredCalculation;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.paidImpl.ProportionalToGrossPaidAllocation;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.paidImpl.TermPaidRespectIncurredByClaim;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.AllTermAPLayers;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.NonPropTemplateContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.IPeriodStrategy;
 import org.pillarone.riskanalytics.domain.utils.marker.IPremiumInfoMarker;
@@ -125,19 +125,21 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
         LossAfterTermStructure incurredInPeriod = new TermIncurredCalculation().cededIncurredRespectTerm(claimStore, setupLayerParameters(),
                 periodScope, termExcess, termLimit, parmCoverageBase, premiumPerPeriod);
-        IncurredLossAndAP incurredLossAndAP = incurredInPeriod.getLossesByPeriod().get(periodScope.getCurrentPeriod());
+        IncurredLossAndAP incurredLossAndAP = incurredInPeriod.getLayerLossesByPeriod().get(periodScope.getCurrentPeriod());
 
         final List<ClaimCashflowPacket> paidClaims;
         final List<ContractFinancialsPacket> contractFinancialsPacket;
         try {
 //            Leave this code here for the moment as evaulating the right hand side in the debugger can be useful, but it incurrs a performance penalty when uncommented.
 //            final Map<Integer, Double> cededIncurredByPeriod = new TermIncurredCalculation().cededIncurredsByPeriods(incurredClaims.keys(), periodScope, termExcess, termLimit, setupLayerParameters() , parmCoverageBase);
-            final List<ICededRoot> cededClaims = new IncurredAllocation().allocateClaims(incurredInPeriod.getLossAfterTermStructure(), claimStore, periodScope, parmCoverageBase);
+            final List<ICededRoot> cededClaims = new IncurredAllocation().allocateClaims(incurredInPeriod.getIncLossAfterTermStructureCurrentSimPeriod(), claimStore, periodScope, parmCoverageBase);
             allIncurredCededClaims.addAll(cededClaims);
 
             final TermLossAndPaidAps paidStuff = paidCalculation.cededIncrementalPaidRespectTerm(claimStore, setupLayerParameters(),
-                    periodScope, parmCoverageBase, termLimit, termExcess, globalSanityChecks, incurredInPeriod.getLossesByPeriod(), premiumPerPeriod);
-            fillAPChannels(incurredLossAndAP, paidStuff);
+                    periodScope, parmCoverageBase, termLimit, termExcess, globalSanityChecks, incurredInPeriod.getLayerLossesByPeriod(), premiumPerPeriod);
+            AllTermAPLayers allTermLayers = ((NonPropTemplateContractStrategy) parmContractStructure).getTermLayers();
+            AdditionalPremiumAndPaidTuple termAPs = allTermLayers.incrementalTermLoss(incurredInPeriod.getPeriodLosses(), termLimit, termExcess, periodScope);
+            fillAPChannels(incurredLossAndAP, paidStuff, termAPs);
             paidClaims =  new ProportionalToGrossPaidAllocation().allocatePaid(paidStuff.getTermLosses(), inClaims,
                     cededCashflowsToDate, periodScope, parmCoverageBase, allIncurredCededClaims, globalSanityChecks);
             contractFinancialsPacket = ContractFinancialsPacket.getContractFinancialsPacketsByInceptionPeriod(
@@ -163,9 +165,13 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         premiumPerPeriod.put(periodScope.getCurrentPeriod(), subjectPremium);
     }
 
-    private void fillAPChannels(IncurredLossAndAP lossAndAP, TermLossAndPaidAps paidStuff) {
+    private void fillAPChannels(IncurredLossAndAP lossAndAP, TermLossAndPaidAps paidStuff, AdditionalPremiumAndPaidTuple termAP) {
         outApAll.addAll(lossAndAP.getAddtionalPremiums());
         outApAllPaid.addAll(paidStuff.getPaidAPs());
+        if(termAP.getAdditionalPremium().getAdditionalPremium() != 0 ){
+            outApAll.add(termAP.getAdditionalPremium());
+            outApAllPaid.add(termAP.getPaidAdditionalPremium());
+        }
     }
 
     private ScaledPeriodLayerParameters setupLayerParameters() {

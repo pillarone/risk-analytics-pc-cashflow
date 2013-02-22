@@ -1,9 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium;
 
-import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import com.google.common.collect.Maps;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
@@ -13,21 +11,29 @@ import java.util.Map;
 public class LossAfterTermStructure {
 
     final Map<Integer, IncurredLossAndAP> lossesByPeriod;
-    final double lossAfterTermStructure;
+    final double incLossAfterTermStructureCurrentSimPeriod;
     final Integer period;
 
     public LossAfterTermStructure(Map<Integer, IncurredLossAndAP> lossesByPeriod, double loss, Integer period) {
         this.lossesByPeriod = lossesByPeriod;
-        this.lossAfterTermStructure = loss;
+        this.incLossAfterTermStructureCurrentSimPeriod = loss;
         this.period = period;
     }
 
-    public Map<Integer, IncurredLossAndAP> getLossesByPeriod() {
+    public Map<Integer, IncurredLossAndAP> getLayerLossesByPeriod() {
         return Collections.unmodifiableMap( lossesByPeriod );
     }
 
-    public double getLossAfterTermStructure() {
-        return lossAfterTermStructure;
+    public Map<Integer, Double> getPeriodLosses() {
+        Map<Integer, Double> aMap = Maps.newHashMap();
+        for (Map.Entry<Integer, IncurredLossAndAP> integerIncurredLossAndAPEntry : lossesByPeriod.entrySet()) {
+            aMap.put(integerIncurredLossAndAPEntry.getKey(), integerIncurredLossAndAPEntry.getValue().getLoss());
+        }
+        return Collections.unmodifiableMap(aMap);
+    }
+
+    public double getIncLossAfterTermStructureCurrentSimPeriod() {
+        return incLossAfterTermStructureCurrentSimPeriod;
     }
 
     public Integer getPeriod() {
@@ -38,7 +44,7 @@ public class LossAfterTermStructure {
     public String toString() {
         return "LossAfterTermStructure{" +
                 ", period=" + period +
-                ", loss=" + lossAfterTermStructure +
+                ", loss=" + incLossAfterTermStructureCurrentSimPeriod +
                 "lossesByPeriod=" + lossesByPeriod +
                 '}';
     }

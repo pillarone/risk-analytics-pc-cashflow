@@ -1,6 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies;
 
-import org.pillarone.riskanalytics.core.packets.PacketList;
+import com.google.common.collect.Lists;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
@@ -129,6 +129,23 @@ public class NonPropTemplateContractStrategy extends AbstractParameterObject imp
 
     public double getTermDeductible() {
         return termExcess;
+    }
+
+    public AllTermAPLayers getTermLayers() {
+         List<Double> excesses = (List<Double>) termAP.getValuesAsObjects(AdditionalPremiumConstraints.EXCESS_COLUMN_INDEX);
+         List<Double> limits = (List<Double>) termAP.getValuesAsObjects(AdditionalPremiumConstraints.LIMIT_COLUMN_INDEX);
+         List<Double> rates = (List<Double>) termAP.getValuesAsObjects(AdditionalPremiumConstraints.RATE_COLUMN_INDEX);
+
+        Collection<TermLayer> termLayerses = Lists.newArrayList();
+        for (int i = 0; i < excesses.size(); i++) {
+            double excess = excesses.get(i);
+            double limit = limits.get(i);
+            double rate = rates.get(i);
+
+            final TermLayer termLayer = new TermLayer(limit, excess, rate);
+            termLayerses.add(termLayer);
+        }
+        return new AllTermAPLayers(termLayerses);
     }
 
     /**

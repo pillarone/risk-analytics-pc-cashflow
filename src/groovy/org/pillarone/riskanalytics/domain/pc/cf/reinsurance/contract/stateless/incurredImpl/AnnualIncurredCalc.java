@@ -72,6 +72,8 @@ public class AnnualIncurredCalc implements IIncurredCalculation {
                         additionalPremiums.add(new AdditionalPremium(ncbAP, APBasis.NCB));
                     }
                     break;
+                case NONE:
+                    break;
                 default:
                     throw new SimulationException("Unknown additional premium basis :" + additionalPremiumPerLayer.getBasis());
             }

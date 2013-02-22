@@ -164,7 +164,7 @@ public class TermIncurredCalculation implements IIncurredCalculation {
         Map<Integer, Double> incurredCededAmountByPeriod = new TreeMap<Integer, Double>();
         for (int contractPeriod = 0; contractPeriod <= periodScope.getCurrentPeriod(); contractPeriod++) {
             double incurredInPeriod = cededIncurredToPeriod(claimCache, layerParameters, periodScope, termExcess, termLimit,
-                    coverageBase, contractPeriod, premiumByPeriod).getLossAfterTermStructure();
+                    coverageBase, contractPeriod, premiumByPeriod).getIncLossAfterTermStructureCurrentSimPeriod();
             incurredCededAmountByPeriod.put(contractPeriod, incurredInPeriod);
         }
         return incurredCededAmountByPeriod;

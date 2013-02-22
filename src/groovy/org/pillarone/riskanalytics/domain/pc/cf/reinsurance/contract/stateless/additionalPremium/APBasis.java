@@ -8,13 +8,15 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
  */
 public enum APBasis implements IGetAPDates {
 
-    AGGREGATED{
-    },
     NONE {
+    },
+    AGGREGATED{
     },
     PREMIUM{
     },
     LOSS{
+    },
+    TERM{
     },
     NCB{
     };
