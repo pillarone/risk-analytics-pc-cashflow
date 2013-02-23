@@ -196,7 +196,6 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public ClaimCashflowPacket(ClaimCashflowPacket grossClaim, ClaimStorage claimStorage, ExposureInfo exposureInfo) {
         this(claimStorage.getReferenceCeded(), grossClaim.getKeyClaim());
         ultimate = claimStorage.getCumulatedCeded(BasedOnClaimProperty.ULTIMATE_UNINDEXED);
-        // todo(sku): investigate!
         nominalUltimate = claimStorage.getReferenceCeded().getUltimate();
         paidIncrementalIndexed = claimStorage.getIncrementalPaidCeded();
         paidCumulatedIndexed = claimStorage.getCumulatedCeded(BasedOnClaimProperty.PAID);
