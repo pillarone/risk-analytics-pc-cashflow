@@ -506,6 +506,7 @@ public class FinancialsPacket extends MultiValuePacket {
     private class Financials {
         double cashflow;
         double premiumPaid;
+        double claimTotal;
         double claimPaid;
         double claimOutstanding;
         double lossRatioPaidPaid;
@@ -535,15 +536,18 @@ public class FinancialsPacket extends MultiValuePacket {
             if (!claims.isEmpty()) {
                 ClaimCashflowPacket sum = ClaimUtils.sum(claims, true);
                 claimUltimate = sum.ultimate();
+                claimTotal = sum.totalIncrementalIndexed();
                 claimPaid = sum.getPaidIncrementalIndexed();
                 claimOutstanding = sum.outstandingIndexed();
             }
             cashflow = premiumPaid + claimPaid;
+
+            bestEstimate = premiumWritten + claimUltimate;
+            double financialRisk = premiumWritten + claimTotal;
             if (cededOrNetFigures == Boolean.TRUE) {
                 cashflow += commission;
+                financialRisk += commission;
             }
-            bestEstimate = premiumWritten + claimUltimate;
-            double financialRisk = cashflow + claimOutstanding;
             if (occurrenceInCurrentPeriod == Boolean.TRUE) {
                 premiumRisk = financialRisk;
             }
