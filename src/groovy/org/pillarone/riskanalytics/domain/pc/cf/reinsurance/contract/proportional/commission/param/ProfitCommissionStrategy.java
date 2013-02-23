@@ -35,7 +35,7 @@ public class ProfitCommissionStrategy extends AbstractCommissionStrategy {
 
     public ICommission getCalculator(DoubleValuePerPeriod lossCarriedForward) {
         return new ProfitCommission(profitCommissionRatio, commissionRatio, costRatio, lossCarriedForwardEnabled,
-                                    lossCarriedForward, useClaims);
+                                    lossCarriedForward, useClaims.convert());
     }
 
     public DoubleValuePerPeriod getInitialLossCarriedForward() {

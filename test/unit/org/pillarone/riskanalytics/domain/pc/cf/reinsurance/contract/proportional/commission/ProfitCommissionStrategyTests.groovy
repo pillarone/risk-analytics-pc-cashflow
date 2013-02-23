@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission
 
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
@@ -26,7 +27,7 @@ class ProfitCommissionStrategyTests extends GroovyTestCase {
                 lossCarriedForwardEnabled: lossCarriedForwardEnabled,
                 initialLossCarriedForward: initialLossCarriedForward,
                 commissionRatio: commissionRatio,
-                useClaims: BasedOnClaimProperty.PAID
+                useClaims: CommissionBase.PAID
         ])
     }
 

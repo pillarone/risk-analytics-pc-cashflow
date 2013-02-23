@@ -17,6 +17,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionCo
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.InterpolatedSlidingCommissionStrategy
@@ -222,7 +223,7 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
                      'costRatio': commissionParams.costRatioOfPrimaryInsurer ?: 0d,
                      'lossCarriedForwardEnabled': commissionParams.useLossCarryForward == 'yes',
                      'initialLossCarriedForward': commissionParams.initialLossCarryForward,
-                     'useClaims': BasedOnClaimProperty.PAID])
+                     'useClaims': CommissionBase.PAID])
         }
         else if (commissionParams.commissionType == 'sliding') {
             List<Double> fromLR = getColumnValues(importer, sheet, 'D', 100, 4)
@@ -233,7 +234,7 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
                     [fromLR.subList(0, listLength), commission.subList(0, listLength)],
                     [InterpolatedSlidingCommissionStrategy.LOSS_RATIO, InterpolatedSlidingCommissionStrategy.COMMISSION],
                     ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
-                    'useClaims': BasedOnClaimProperty.PAID])
+                    'useClaims': CommissionBase.PAID])
         }
         throw new NotImplementedException()
     }

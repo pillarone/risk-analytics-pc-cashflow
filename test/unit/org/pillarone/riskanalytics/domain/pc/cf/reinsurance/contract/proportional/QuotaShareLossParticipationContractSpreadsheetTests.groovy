@@ -15,6 +15,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
 
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionBase
 import org.pillarone.riskanalytics.domain.test.SpreadsheetImporter
 import org.pillarone.riskanalytics.domain.test.SpreadsheetUnitTest
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.*
@@ -117,7 +118,7 @@ class QuotaShareLossParticipationContractSpreadsheetTests extends SpreadsheetUni
                      'costRatio': commissionParams.costRatioOfPrimaryInsurer,
                      'lossCarriedForwardEnabled': commissionParams.useLossCarryForward == 'yes',
                      'initialLossCarriedForward': commissionParams.initialLossCarryForward,
-                     'useClaims': BasedOnClaimProperty.PAID])
+                     'useClaims': CommissionBase.PAID])
         }
         else if (commissionParams.commissionType == 'sliding') {
             throw new NotImplementedException()

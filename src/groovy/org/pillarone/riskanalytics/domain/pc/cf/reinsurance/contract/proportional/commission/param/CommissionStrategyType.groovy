@@ -22,11 +22,11 @@ class CommissionStrategyType extends AbstractParameterObjectClassifier {
                         [[0d], [0d]],
                         [InterpolatedSlidingCommissionStrategy.LOSS_RATIO, InterpolatedSlidingCommissionStrategy.COMMISSION],
                         ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
-            'useClaims': BasedOnClaimProperty.PAID])
+            'useClaims': CommissionBase.PAID])
     public static final CommissionStrategyType PROFITCOMMISSION = new CommissionStrategyType("profit commission", "PROFITCOMMISSION",
             ['profitCommissionRatio':0d, 'commissionRatio':0d, 'costRatio':0d, 'lossCarriedForwardEnabled':true,
                     'initialLossCarriedForward':0d,
-            'useClaims': BasedOnClaimProperty.PAID])
+            'useClaims': CommissionBase.PAID])
 
     public static final all = [NOCOMMISSION, FIXEDCOMMISSION, INTERPOLATEDSLIDINGCOMMISSION, PROFITCOMMISSION]
 
@@ -75,12 +75,12 @@ class CommissionStrategyType extends AbstractParameterObjectClassifier {
                         costRatio : (Double) parameters['costRatio'],
                         lossCarriedForwardEnabled : (Boolean) parameters['lossCarriedForwardEnabled'],
                         initialLossCarriedForward : (Double) parameters['initialLossCarriedForward'],
-                        useClaims : (BasedOnClaimProperty) parameters['useClaims'])
+                        useClaims : (CommissionBase) parameters['useClaims'])
                 break;
             case CommissionStrategyType.INTERPOLATEDSLIDINGCOMMISSION:
                 commissionStrategy = new InterpolatedSlidingCommissionStrategy(
                         commissionBands: (ConstrainedMultiDimensionalParameter) parameters['commissionBands'],
-                        useClaims : (BasedOnClaimProperty) parameters['useClaims'])
+                        useClaims : (CommissionBase) parameters['useClaims'])
                 break;
             default:
                 throw new NotImplementedException("$type is not implemented");

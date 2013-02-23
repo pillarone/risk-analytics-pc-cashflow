@@ -53,7 +53,7 @@ public class InterpolatedSlidingCommissionStrategy extends AbstractCommissionStr
             Collections.sort(listOfCommissionRates);
             commissionRatesPerLossRatio.put(lossRatio, listOfCommissionRates);
         }
-        return new InterpolatedSlidingCommission(commissionRatesPerLossRatio, useClaims);
+        return new InterpolatedSlidingCommission(commissionRatesPerLossRatio, useClaims.convert());
     }
 
 

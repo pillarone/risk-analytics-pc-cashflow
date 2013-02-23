@@ -19,7 +19,7 @@ abstract public class AbstractCommissionStrategy extends AbstractParameterObject
 
     private static final String USE_CLAIMS = "useClaims";
 
-    protected BasedOnClaimProperty useClaims = BasedOnClaimProperty.REPORTED;
+    protected CommissionBase useClaims = CommissionBase.PAID;
 
     public Map getParameters() {
         Map<String, Object> map = new HashMap<String, Object>(1);
@@ -37,23 +37,23 @@ abstract public class AbstractCommissionStrategy extends AbstractParameterObject
 
     protected double sumClaims(List<ClaimCashflowPacket> claims) {
         double totalClaims = 0;
-        if (useClaims.equals(BasedOnClaimProperty.ULTIMATE_UNINDEXED)) {
+        if (useClaims.convert().equals(BasedOnClaimProperty.ULTIMATE_UNINDEXED)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.ultimate();
             }
         }
-        else if (useClaims.equals(BasedOnClaimProperty.PAID)) {
+        else if (useClaims.convert().equals(BasedOnClaimProperty.PAID)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.getPaidIncrementalIndexed();
             }
         }
-        else if (useClaims.equals(BasedOnClaimProperty.REPORTED)) {
+        else if (useClaims.convert().equals(BasedOnClaimProperty.REPORTED)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.getReportedIncrementalIndexed();
             }
         }
         else {
-            throw new NotImplementedException("BasedOnClaimProperty " + useClaims.toString() + " not implemented.");
+            throw new NotImplementedException("CommissionBase " + useClaims.toString() + " not implemented.");
         }
         return totalClaims;
     }

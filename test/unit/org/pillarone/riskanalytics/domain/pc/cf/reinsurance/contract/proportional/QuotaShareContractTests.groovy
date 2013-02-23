@@ -12,6 +12,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.LimitStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
@@ -57,7 +58,7 @@ class QuotaShareContractTests extends GroovyTestCase {
                         'commission': CommissionStrategyType.getStrategy(CommissionStrategyType.PROFITCOMMISSION, [
                                     'profitCommissionRatio' : 0.2d, 'commissionRatio' : 0.1d, 'costRatio' : 0.1d,
                                     'lossCarriedForwardEnabled' : false, 'initialLossCarriedForward' : 0d,
-                                    'useClaims': BasedOnClaimProperty.REPORTED])]),
+                                    'useClaims': CommissionBase.REPORTED])]),
                 parmCover : CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS, [filter: FilterStrategyType.getDefault()]),
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0])
@@ -72,7 +73,7 @@ class QuotaShareContractTests extends GroovyTestCase {
                         'commission': CommissionStrategyType.getStrategy(CommissionStrategyType.PROFITCOMMISSION, [
                                 'profitCommissionRatio' : 0.2d, 'commissionRatio' : 0.1d, 'costRatio' : 0.1d,
                                 'lossCarriedForwardEnabled' : false, 'initialLossCarriedForward' : 0d,
-                                'useClaims': BasedOnClaimProperty.REPORTED])]),
+                                'useClaims': CommissionBase.REPORTED])]),
                 parmCover : CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.ORIGINALCLAIMS, [filter: FilterStrategyType.getDefault()]),
                 iterationScope: iterationScope,
                 periodStore: iterationScope.periodStores[0],
