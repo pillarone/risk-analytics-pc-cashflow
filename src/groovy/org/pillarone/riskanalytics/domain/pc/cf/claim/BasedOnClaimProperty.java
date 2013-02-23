@@ -10,7 +10,7 @@ import java.util.Map;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public enum BasedOnClaimProperty {
-    ULTIMATE {
+    ULTIMATE_UNINDEXED {
         @Override
         public double premium(UnderwritingInfoPacket underwritingInfo) {
             return underwritingInfo.getPremiumWritten();
@@ -24,6 +24,22 @@ public enum BasedOnClaimProperty {
         @Override
         public double cumulatedIndexed(ClaimCashflowPacket claim) {
             return claim.developedUltimate();
+        }
+    },
+    ULTIMATE_INDEXED {
+        @Override
+        public double incrementalIndexed(ClaimCashflowPacket claim) {
+            return claim.totalIncrementalIndexed();
+        }
+
+        @Override
+        public double cumulatedIndexed(ClaimCashflowPacket claim) {
+            return claim.totalCumulatedIndexed();
+        }
+
+        @Override
+        public double premium(UnderwritingInfoPacket underwritingInfo) {
+            return underwritingInfo.getPremiumWritten();
         }
     },
     REPORTED {

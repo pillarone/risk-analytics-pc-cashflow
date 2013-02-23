@@ -51,15 +51,16 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
             double quotaShareUltimate = 0;
             if (!storage.hasReferenceCeded()) {
                 quotaShareUltimate = adjustedQuote(grossClaim.developedUltimate(), grossClaim.nominalUltimate(),
-                        BasedOnClaimProperty.ULTIMATE, storage);
+                        BasedOnClaimProperty.ULTIMATE_UNINDEXED, storage);
                 storage.lazyInitCededClaimRoot(quotaShareUltimate);
             }
-
+            double quotaShareUltimateIndexed = adjustedQuote(grossClaim.totalCumulatedIndexed(),
+                    grossClaim.totalIncrementalIndexed(), BasedOnClaimProperty.ULTIMATE_INDEXED, storage);
             double quotaShareReported = adjustedQuote(grossClaim.getReportedCumulatedIndexed(),
                     grossClaim.getReportedIncrementalIndexed(), BasedOnClaimProperty.REPORTED, storage);
             double quotaSharePaid = adjustedQuote(grossClaim.getPaidCumulatedIndexed(),
                     grossClaim.getPaidIncrementalIndexed(), BasedOnClaimProperty.PAID, storage);
-            cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate,
+            cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate, quotaShareUltimateIndexed,
                     quotaShareReported, quotaSharePaid, true);
         }
         else {
@@ -90,13 +91,13 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
         StringBuilder builder = new StringBuilder();
         builder.append(super.toString());
         builder.append(", AAL ultimate: ");
-        builder.append(periodLimit.get(BasedOnClaimProperty.ULTIMATE));
+        builder.append(periodLimit.get(BasedOnClaimProperty.ULTIMATE_UNINDEXED));
         builder.append(", AAL reported: ");
         builder.append(periodLimit.get(BasedOnClaimProperty.REPORTED));
         builder.append(", AAL paid: ");
         builder.append(periodLimit.get(BasedOnClaimProperty.PAID));
         builder.append(", AAD ultimate: ");
-        builder.append(periodDeductible.get(BasedOnClaimProperty.ULTIMATE));
+        builder.append(periodDeductible.get(BasedOnClaimProperty.ULTIMATE_UNINDEXED));
         builder.append(", AAD reported: ");
         builder.append(periodDeductible.get(BasedOnClaimProperty.REPORTED));
         builder.append(", AAD paid: ");
@@ -105,6 +106,8 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
     }
 
     private class AADReduction {
+        /** indexed */
+        private Map<IClaimRoot, Double> ultimate;
         private Map<IClaimRoot, Double> reported;
         private Map<IClaimRoot, Double> paid;
 
@@ -113,13 +116,19 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
         }
 
         public void init() {
+            ultimate = new HashMap<IClaimRoot, Double>();
             reported = new HashMap<IClaimRoot, Double>();
             paid = new HashMap<IClaimRoot, Double>();
         }
 
         public void increaseAADReduction(IClaimRoot keyClaim, BasedOnClaimProperty base, double incrementalReduction) {
             switch (base) {
-                case ULTIMATE: {
+                case ULTIMATE_UNINDEXED: {
+                    break;
+                }
+                case ULTIMATE_INDEXED: {
+                    Double previousReduction = ultimate.get(keyClaim);
+                    ultimate.put(keyClaim, incrementalReduction + ((previousReduction != null) ? previousReduction : 0));
                     break;
                 }
                 case REPORTED: {
@@ -141,20 +150,19 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
         public double previousAADReduction(IClaimRoot keyClaim, BasedOnClaimProperty base) {
             Double previousReduction = null;
             switch (base) {
-                case ULTIMATE: {
+                case ULTIMATE_UNINDEXED:
                     break;
-                }
-                case REPORTED: {
+                case ULTIMATE_INDEXED:
+                    previousReduction = ultimate.get(keyClaim);
+                    break;
+                case REPORTED:
                     previousReduction = reported.get(keyClaim);
                     break;
-                }
-                case PAID: {
+                case PAID:
                     previousReduction = paid.get(keyClaim);
                     break;
-                }
-                default: {
+                default:
                     throw new NotImplementedException(base.toString());
-                }
             }
             return ((previousReduction == null) ? 0d : previousReduction);
         }

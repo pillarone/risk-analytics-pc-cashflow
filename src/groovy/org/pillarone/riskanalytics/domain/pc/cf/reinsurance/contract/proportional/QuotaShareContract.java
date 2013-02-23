@@ -40,7 +40,7 @@ public class QuotaShareContract extends AbstractProportionalReinsuranceContract 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
         ClaimCashflowPacket cededClaim;
         if (lossParticipation.noLossParticipation()) {
-            cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, -quotaShare, -quotaShare, -quotaShare, true);
+            cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, -quotaShare, -quotaShare, -quotaShare, -quotaShare, true);
         }
         else {
             cededClaim = lossParticipation.cededClaim(quotaShare, grossClaim, storage, true);

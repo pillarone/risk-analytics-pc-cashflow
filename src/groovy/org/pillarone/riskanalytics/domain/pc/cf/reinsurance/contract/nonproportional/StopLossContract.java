@@ -7,7 +7,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AbstractReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimsStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
@@ -60,7 +59,8 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
         }
         aggregateClaimStorage.add(ClaimUtils.sum(grossClaims, true));
 
-        cededFactor(BasedOnClaimProperty.ULTIMATE, aggregateClaimStorage);
+        cededFactor(BasedOnClaimProperty.ULTIMATE_UNINDEXED, aggregateClaimStorage);
+        cededFactor(BasedOnClaimProperty.ULTIMATE_INDEXED, aggregateClaimStorage);
         cededFactor(BasedOnClaimProperty.REPORTED, aggregateClaimStorage);
         cededFactor(BasedOnClaimProperty.PAID, aggregateClaimStorage);
     }
@@ -71,15 +71,11 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
-//        IClaimRoot cededBaseClaim = storage.getCededClaimRoot();
-//        if (cededBaseClaim == null) {
-//            // first time this gross claim is treated by this contract
-//            cededBaseClaim = storage.lazyInitCededClaimRoot(aggregateClaimStorage.getCededFactorUltimate());
-//        }
         ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage,
-                aggregateClaimStorage.getCededFactorUltimate(),
-                aggregateClaimStorage.getCededFactorReported(),
-                aggregateClaimStorage.getCededFactorPaid(), false);
+                aggregateClaimStorage.getCededFactor(BasedOnClaimProperty.ULTIMATE_UNINDEXED),
+                aggregateClaimStorage.getCededFactor(BasedOnClaimProperty.ULTIMATE_INDEXED),
+                aggregateClaimStorage.getCededFactor(BasedOnClaimProperty.REPORTED),
+                aggregateClaimStorage.getCededFactor(BasedOnClaimProperty.PAID), false);
         add(grossClaim, cededClaim);
         return cededClaim;
     }

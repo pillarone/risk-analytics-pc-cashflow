@@ -280,7 +280,7 @@ class SegmentTests extends GroovyTestCase {
     private ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, double quotaShare) {
         ClaimStorage storage = new ClaimStorage(grossClaim)
         storage.lazyInitCededClaimRoot(-quotaShare)
-        return ClaimUtils.getCededClaim(grossClaim, storage, -quotaShare, -quotaShare, -quotaShare, false);
+        return ClaimUtils.getCededClaim(grossClaim, storage, -quotaShare, -quotaShare, -quotaShare, -quotaShare, false);
     }
 
     static ClaimCashflowPacket getClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double incrementalPaid,

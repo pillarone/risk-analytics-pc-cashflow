@@ -21,6 +21,7 @@ public class EqualUsagePerPeriodThresholdStore implements IPeriodDependingThresh
     /** Contains the remaining ultimate threshold by contract period. The remaining ultimate threshold is zero for
      *  past period, as it is moved forward to the next period. */
     private List<Double> usedThresholdPerPeriodUltimate = new ArrayList<Double>();
+    private List<Double> usedThresholdPerPeriodUltimateIndexed = new ArrayList<Double>();
     /** Contains the remaining reported threshold by contract period */
     private List<Double> usedThresholdPerPeriodReported = new ArrayList<Double>();
     /** Contains the remaining paid threshold by contract period */
@@ -38,7 +39,8 @@ public class EqualUsagePerPeriodThresholdStore implements IPeriodDependingThresh
      */
     public void initPeriod(int period) {
         if (usedThresholdPerPeriodReported.size() <= period) {
-            initPeriod(BasedOnClaimProperty.ULTIMATE, period);
+            initPeriod(BasedOnClaimProperty.ULTIMATE_UNINDEXED, period);
+            initPeriod(BasedOnClaimProperty.ULTIMATE_INDEXED, period);
             initPeriod(BasedOnClaimProperty.REPORTED, period);
             initPeriod(BasedOnClaimProperty.PAID, period);
             if (period > 0) {
@@ -70,8 +72,11 @@ public class EqualUsagePerPeriodThresholdStore implements IPeriodDependingThresh
         }
         else {
             switch (claimProperty) {
-                case ULTIMATE:
+                case ULTIMATE_UNINDEXED:
                     usedThresholdPerPeriodUltimate.add(get(claimProperty, period - 1));
+                    break;
+                case ULTIMATE_INDEXED:
+                    usedThresholdPerPeriodUltimateIndexed.add(get(claimProperty, period - 1));
                     break;
                 case REPORTED:
                 case PAID:
@@ -97,8 +102,10 @@ public class EqualUsagePerPeriodThresholdStore implements IPeriodDependingThresh
     
     private List<Double> getUsedThreshold(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
+            case ULTIMATE_UNINDEXED:
                 return usedThresholdPerPeriodUltimate;
+            case ULTIMATE_INDEXED:
+                return usedThresholdPerPeriodUltimateIndexed;
             case REPORTED:
                 return usedThresholdPerPeriodReported;
             case PAID:
@@ -118,7 +125,7 @@ public class EqualUsagePerPeriodThresholdStore implements IPeriodDependingThresh
 
     @Override
     public void set(double threshold, BasedOnClaimProperty claimProperty, int occurrencePeriod) {
-        if (claimProperty.equals(BasedOnClaimProperty.ULTIMATE)) {
+        if (claimProperty.equals(BasedOnClaimProperty.ULTIMATE_UNINDEXED)) {
             // sanity check
             int last = usedThresholdPerPeriodReported.size() - 1;
             if (occurrencePeriod != last) {
@@ -129,7 +136,7 @@ public class EqualUsagePerPeriodThresholdStore implements IPeriodDependingThresh
     }
 
     public void plus(double summand, BasedOnClaimProperty claimProperty, int occurrencePeriod) {
-        if (claimProperty.equals(BasedOnClaimProperty.ULTIMATE)) {
+        if (claimProperty.equals(BasedOnClaimProperty.ULTIMATE_UNINDEXED)) {
             // sanity check
             int last = usedThresholdPerPeriodReported.size() - 1;
             if (occurrencePeriod != last) {

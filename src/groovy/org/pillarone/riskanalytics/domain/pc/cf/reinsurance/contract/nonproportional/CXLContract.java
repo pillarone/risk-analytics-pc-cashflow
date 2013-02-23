@@ -90,19 +90,20 @@ public class CXLContract extends XLContract {
 
                 if (cededBaseClaim == null) {
                     // first time this gross claim is treated by this contract
-                    cededFactorUltimate = eventStorage.getCededFactorUltimate();
+                    cededFactorUltimate = eventStorage.getCededFactor(BasedOnClaimProperty.ULTIMATE_UNINDEXED);
                     cededBaseClaim = storage.lazyInitCededClaimRoot(cededFactorUltimate);
                 }
-                double cededFactorReported = eventStorage.getCededFactorReported();
-                double cededFactorPaid = eventStorage.getCededFactorPaid();
+                double cededFactorUltimateIndexed = eventStorage.getCededFactor(BasedOnClaimProperty.ULTIMATE_INDEXED);
+                double cededFactorReported = eventStorage.getCededFactor(BasedOnClaimProperty.REPORTED);
+                double cededFactorPaid = eventStorage.getCededFactor(BasedOnClaimProperty.PAID);
 
                 ClaimCashflowPacket cededClaim = cededClaimWithAdjustedReported(grossClaim, storage, cededFactorUltimate,
-                        stabilizationFactor, cededFactorReported, cededFactorPaid);
+                        cededFactorUltimateIndexed, stabilizationFactor, cededFactorReported, cededFactorPaid);
                 add(grossClaim, cededClaim);
                 return cededClaim;
             }
         }
-        return ClaimUtils.getCededClaim(grossClaim, storage, 0, 0, 0, false);
+        return ClaimUtils.getCededClaim(grossClaim, storage, 0, 0, 0, 0, false);
     }
 
     private AggregateEventClaimsStorage updateCededFactor(ClaimCashflowPacket grossClaim, double stabilizationFactor) {
@@ -117,10 +118,10 @@ public class CXLContract extends XLContract {
                 }
             }
             storage.add(grossClaim);
-            cededFactor(BasedOnClaimProperty.ULTIMATE, storage, stabilizationFactor);
+            cededFactor(BasedOnClaimProperty.ULTIMATE_UNINDEXED, storage, stabilizationFactor);
+            cededFactor(BasedOnClaimProperty.ULTIMATE_INDEXED, storage, stabilizationFactor);
             cededFactor(BasedOnClaimProperty.REPORTED, storage, stabilizationFactor);
             cededFactor(BasedOnClaimProperty.PAID, storage, stabilizationFactor);
-//            storage.printFactors();
             return storage;
     }
 

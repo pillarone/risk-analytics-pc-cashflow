@@ -9,10 +9,15 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
  */
 public class AggregateEventClaimsStorage {
 
-    private double incrementalUltimate;
-    private double cumulatedUltimate;
-    private double incrementalUltimateCeded;
-    private double cumulatedUltimateCeded;
+    private double incrementalUltimateUnindexed;
+    private double incrementalUltimateIndexed;
+    private double cumulatedUltimateUnindexed;
+    private double cumulatedUltimateIndexed;
+    private double incrementalUltimateCededUnindexed;
+    private double cumulatedUltimateCededUnindexed;
+    private double incrementalUltimateCededIndexed;
+    private double cumulatedUltimateCededIndexed;
+    private double incrementalUltimateIndexedLast;
     private double cumulatedReported;
     private double cumulatedReportedCeded;
     private double incrementalReported;
@@ -25,10 +30,12 @@ public class AggregateEventClaimsStorage {
     private double incrementalPaidCeded;
 
     private double cededFactorUltimate;
+    private double cededFactorUltimateIndexed;
     private double cededFactorReported;
     private double cededFactorPaid;
 
-    private double aadReductionInPeriodUltimate;
+    private double aadReductionInPeriodUltimateUnindexed;
+    private double aadReductionInPeriodUltimateIndexed;
     private double aadReductionInPeriodReported;
     private double aadReductionInPeriodPaid;
 
@@ -40,10 +47,11 @@ public class AggregateEventClaimsStorage {
      * @param claim
      */
     public void add(ClaimCashflowPacket claim) {
-//        incrementalUltimate = claim.ultimate();
-//        cumulatedUltimate += claim.ultimate();
-        incrementalUltimate = claim.totalIncrementalIndexed();
-        cumulatedUltimate += claim.totalIncrementalIndexed();
+        incrementalUltimateUnindexed = claim.ultimate();
+        cumulatedUltimateUnindexed += claim.ultimate();
+        incrementalUltimateIndexed = claim.totalIncrementalIndexed();
+        incrementalUltimateIndexedLast = claim.totalIncrementalIndexed();
+        cumulatedUltimateIndexed += claim.totalIncrementalIndexed();
         cumulatedReported += claim.getReportedIncrementalIndexed();
         incrementalReported += claim.getReportedIncrementalIndexed();
         incrementalReportedLast = claim.getReportedIncrementalIndexed();
@@ -56,7 +64,9 @@ public class AggregateEventClaimsStorage {
      * resets all properties to 0
      */
     public void resetIncrementsAndFactors() {
-        incrementalUltimate = 0;
+        incrementalUltimateUnindexed = 0;
+        incrementalUltimateIndexed = 0;
+        incrementalUltimateIndexedLast = 0;
         incrementalReported = 0;
         incrementalReportedLast = 0;
         incrementalPaid = 0;
@@ -64,51 +74,63 @@ public class AggregateEventClaimsStorage {
         cededFactorPaid = 0;
         cededFactorReported = 0;
         cededFactorUltimate = 0;
-        aadReductionInPeriodUltimate = 0;
+        aadReductionInPeriodUltimateUnindexed = 0;
         aadReductionInPeriodReported = 0;
         aadReductionInPeriodPaid = 0;
     }
 
     public double getCumulatedCeded(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
-                return cumulatedUltimateCeded;
+            case ULTIMATE_UNINDEXED:
+                return cumulatedUltimateCededUnindexed;
+            case ULTIMATE_INDEXED:
+                return cumulatedUltimateCededIndexed;
             case REPORTED:
                 return cumulatedReportedCeded;
             case PAID:
                 return cumulatedPaidCeded;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
-        throw new NotImplementedException(claimProperty.toString());
     }
 
     public double getIncrementalCeded(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
-                return incrementalUltimateCeded;
+            case ULTIMATE_UNINDEXED:
+                return incrementalUltimateCededUnindexed;
+            case ULTIMATE_INDEXED:
+                return incrementalUltimateCededIndexed;
             case REPORTED:
                 return incrementalReportedCeded;
             case PAID:
                 return incrementalPaidCeded;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
-        throw new NotImplementedException(claimProperty.toString());
     }
 
     public double getAadReductionInPeriod(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
-                return aadReductionInPeriodUltimate;
+            case ULTIMATE_UNINDEXED:
+                return aadReductionInPeriodUltimateUnindexed;
+            case ULTIMATE_INDEXED:
+                return aadReductionInPeriodUltimateIndexed;
             case REPORTED:
                 return aadReductionInPeriodReported;
             case PAID:
                 return aadReductionInPeriodPaid;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
-        throw new NotImplementedException(claimProperty.toString());
     }
 
     public void addAadReductionInPeriod(BasedOnClaimProperty claimProperty, double aadIncrement) {
         switch (claimProperty) {
-            case ULTIMATE:
-                aadReductionInPeriodUltimate += aadIncrement;
+            case ULTIMATE_UNINDEXED:
+                aadReductionInPeriodUltimateUnindexed += aadIncrement;
+                break;
+            case ULTIMATE_INDEXED:
+                aadReductionInPeriodUltimateIndexed += aadIncrement;
                 break;
             case REPORTED:
                 aadReductionInPeriodReported += aadIncrement;
@@ -121,23 +143,15 @@ public class AggregateEventClaimsStorage {
         }
     }
 
-    public double getCededFactorUltimate() {
-        return cededFactorUltimate;
-    }
-
-    public double getCededFactorReported() {
-        return cededFactorReported;
-    }
-
-    public double getCededFactorPaid() {
-        return cededFactorPaid;
-    }
-
     public void update(BasedOnClaimProperty claimProperty, double incrementCeded) {
         switch (claimProperty) {
-            case ULTIMATE:
-                incrementalUltimateCeded = incrementCeded;
-                cumulatedUltimateCeded += incrementCeded;
+            case ULTIMATE_UNINDEXED:
+                incrementalUltimateCededUnindexed = incrementCeded;
+                cumulatedUltimateCededUnindexed += incrementCeded;
+                break;
+            case ULTIMATE_INDEXED:
+                incrementalUltimateCededIndexed = incrementCeded;
+                cumulatedUltimateCededIndexed += incrementCeded;
                 break;
             case PAID:
                 incrementalPaidCeded = incrementCeded;
@@ -147,13 +161,33 @@ public class AggregateEventClaimsStorage {
                 incrementalReportedCeded = incrementCeded;
                 cumulatedReportedCeded += incrementCeded;
                 break;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
+        }
+    }
+
+    public double getCededFactor(BasedOnClaimProperty claimProperty) {
+        switch (claimProperty) {
+            case ULTIMATE_UNINDEXED:
+                return cededFactorUltimate;
+            case ULTIMATE_INDEXED:
+                return cededFactorUltimateIndexed;
+            case PAID:
+                return cededFactorPaid;
+            case REPORTED:
+                return cededFactorReported;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
     }
 
     public void setCededFactor(BasedOnClaimProperty claimProperty, double factor) {
         switch (claimProperty) {
-            case ULTIMATE:
+            case ULTIMATE_UNINDEXED:
                 cededFactorUltimate = factor;
+                break;
+            case ULTIMATE_INDEXED:
+                cededFactorUltimateIndexed = factor;
                 break;
             case PAID:
                 cededFactorPaid = factor;
@@ -161,43 +195,54 @@ public class AggregateEventClaimsStorage {
             case REPORTED:
                 cededFactorReported = factor;
                 break;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
     }
 
     public double getIncremental(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
-                return incrementalUltimate;
+            case ULTIMATE_UNINDEXED:
+                return incrementalUltimateUnindexed;
+            case ULTIMATE_INDEXED:
+                return incrementalUltimateIndexed;
             case PAID:
                 return incrementalPaid;
             case REPORTED:
                 return incrementalReported;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
-        return 0;
     }
 
     public double getIncrementalLast(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
-                return incrementalUltimate;
+            case ULTIMATE_UNINDEXED:
+                return incrementalUltimateUnindexed;
+            case ULTIMATE_INDEXED:
+                return incrementalUltimateIndexedLast;
             case PAID:
                 return incrementalPaidLast;
             case REPORTED:
                 return incrementalReportedLast;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
-        return 0;
     }
 
     public double getCumulated(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
-                return cumulatedUltimate;
+            case ULTIMATE_UNINDEXED:
+                return cumulatedUltimateUnindexed;
+            case ULTIMATE_INDEXED:
+                return cumulatedUltimateIndexed;
             case PAID:
                 return cumulatedPaid;
             case REPORTED:
                 return cumulatedReported;
+            default:
+                throw new NotImplementedException(claimProperty.toString());
         }
-        return 0;
     }
 
     public void printFactors() {

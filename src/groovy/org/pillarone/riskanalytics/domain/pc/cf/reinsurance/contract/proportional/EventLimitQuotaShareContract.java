@@ -49,12 +49,13 @@ public class EventLimitQuotaShareContract extends QuotaShareContract {
             double quotaShareUltimate = 0;
             ClaimCashflowPacket cumulatedCededClaim = cumulatedCededClaims.get(grossClaim.getKeyClaim());
             if (!storage.hasReferenceCeded()) {
-                quotaShareUltimate = adjustedQuote(grossClaim, BasedOnClaimProperty.ULTIMATE, cumulatedCededClaim);
+                quotaShareUltimate = adjustedQuote(grossClaim, BasedOnClaimProperty.ULTIMATE_UNINDEXED, cumulatedCededClaim);
             }
 
+            double quotaShareUltimateIndexed = adjustedQuote(grossClaim, BasedOnClaimProperty.ULTIMATE_INDEXED, cumulatedCededClaim);
             double quotaShareReported = adjustedQuote(grossClaim, BasedOnClaimProperty.REPORTED, cumulatedCededClaim);
             double quotaSharePaid = adjustedQuote(grossClaim, BasedOnClaimProperty.PAID, cumulatedCededClaim);
-            cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate,
+            cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate, quotaShareUltimateIndexed,
                     quotaShareReported, quotaSharePaid, true);
             cumulatedCededClaims.put(grossClaim.getKeyClaim(), cededClaim);
         } else {
@@ -93,11 +94,13 @@ public class EventLimitQuotaShareContract extends QuotaShareContract {
     private class EventLimitTracking {
 
         DoubleValue remainingUltimateEventLimit;
+        DoubleValue remainingUltimateIndexedEventLimit;
         DoubleValue remainingReportedEventLimit;
         DoubleValue remainingPaidEventLimit;
 
         private EventLimitTracking(double eventLimit) {
             remainingUltimateEventLimit = new DoubleValue(eventLimit);
+            remainingUltimateIndexedEventLimit = new DoubleValue(eventLimit);
             remainingReportedEventLimit = new DoubleValue(eventLimit);
             remainingPaidEventLimit = new DoubleValue(eventLimit);
         }
@@ -123,8 +126,10 @@ public class EventLimitQuotaShareContract extends QuotaShareContract {
 
         private DoubleValue remainingEventLimit(BasedOnClaimProperty claimProperty) {
             switch (claimProperty) {
-                case ULTIMATE:
+                case ULTIMATE_UNINDEXED:
                     return remainingUltimateEventLimit;
+                case ULTIMATE_INDEXED:
+                    return remainingUltimateIndexedEventLimit;
                 case REPORTED:
                     return remainingReportedEventLimit;
                 case PAID:

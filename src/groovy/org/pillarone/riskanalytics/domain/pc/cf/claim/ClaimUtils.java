@@ -3,7 +3,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang.NotImplementedException;
-import org.jfree.util.Log;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
@@ -291,13 +290,14 @@ public class ClaimUtils {
      *
      * @param grossClaim
      * @param storage
-     * @param scaleFactorUltimate
+     * @param scaleFactorUltimateUnindexed
      * @param scaleFactorReported
      * @param scaleFactorPaid
      * @param adjustExposureInfo
      * @return
      */
-    public static ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, ClaimStorage storage, double scaleFactorUltimate,
+    public static ClaimCashflowPacket getCededClaim(ClaimCashflowPacket grossClaim, ClaimStorage storage,
+                                                    double scaleFactorUltimateUnindexed, double scaleFactorUltimateIndexed,
                                                     double scaleFactorReported, double scaleFactorPaid, boolean adjustExposureInfo) {
         if (scaleFactorReported == -0) {
             scaleFactorReported = 0;
@@ -305,26 +305,27 @@ public class ClaimUtils {
         if (scaleFactorPaid == -0) {
             scaleFactorPaid = 0;
         }
-        storage.lazyInitCededClaimRoot(scaleFactorUltimate);
+        storage.lazyInitCededClaimRoot(scaleFactorUltimateUnindexed);
         double cededPaidIncremental = grossClaim.getPaidIncrementalIndexed() * scaleFactorPaid;
         double cededReportedIncremental = grossClaim.getReportedIncrementalIndexed() * scaleFactorReported;
-        storage.update(grossClaim.ultimate() * scaleFactorUltimate, BasedOnClaimProperty.ULTIMATE);
-        adjustCumulatedUltimateDevelopedCeded(grossClaim, storage, scaleFactorUltimate, cededReportedIncremental);
+        storage.update(grossClaim.ultimate() * scaleFactorUltimateUnindexed, BasedOnClaimProperty.ULTIMATE_UNINDEXED);
+        storage.update(grossClaim.totalIncrementalIndexed() * scaleFactorUltimateIndexed, BasedOnClaimProperty.ULTIMATE_INDEXED);
         storage.update(cededPaidIncremental, BasedOnClaimProperty.PAID);
         storage.update(cededReportedIncremental, BasedOnClaimProperty.REPORTED);
         ExposureInfo cededExposureInfo = adjustExposureInfo && grossClaim.getExposureInfo() != null
-                ? grossClaim.getExposureInfo().withScale(scaleFactorUltimate) : grossClaim.getExposureInfo();
+                ? grossClaim.getExposureInfo().withScale(scaleFactorUltimateUnindexed) : grossClaim.getExposureInfo();
         ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(grossClaim, storage, cededExposureInfo);
         applyMarkers(grossClaim, cededClaim);
         return cededClaim;
     }
 
-    public static ClaimCashflowPacket cededClaim(ClaimCashflowPacket grossClaim, ClaimStorage storage, double cededUltimate,
-                                                 double cededReportedCummulated, double cededPaidCummulated, boolean adjustExposureInfo) {
-        double scaleFactorUltimate = cededUltimate / grossClaim.developedUltimate();
+    public static ClaimCashflowPacket cededClaim(ClaimCashflowPacket grossClaim, ClaimStorage storage, double cededUltimateUnIndexed,
+                                                 double cededUltimateCummulated, double cededReportedCummulated,
+                                                 double cededPaidCummulated, boolean adjustExposureInfo) {
+        double scaleFactorUltimate = cededUltimateUnIndexed / grossClaim.developedUltimate();
         storage.lazyInitCededClaimRoot(scaleFactorUltimate);
-        storage.set(cededUltimate, BasedOnClaimProperty.ULTIMATE);
-        adjustCumulatedUltimateDevelopedCeded(grossClaim, storage, scaleFactorUltimate, cededReportedCummulated);
+        storage.set(cededUltimateUnIndexed, BasedOnClaimProperty.ULTIMATE_UNINDEXED);
+        storage.set(cededUltimateCummulated, BasedOnClaimProperty.ULTIMATE_INDEXED);
         storage.set(cededPaidCummulated, BasedOnClaimProperty.PAID);
         storage.set(cededReportedCummulated, BasedOnClaimProperty.REPORTED);
         ExposureInfo cededExposureInfo = adjustExposureInfo && grossClaim.getExposureInfo() != null
@@ -334,41 +335,31 @@ public class ClaimUtils {
         return cededClaim;
     }
 
-    private static void adjustCumulatedUltimateDevelopedCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, double scaleFactorUltimate, double cededReportedIncremental) {
-        // the following line has only an effect in the occurrence period of the claim as scaleFactorUltimate == 0 in all other periods
-        storage.setCumulatedUltimateDevelopedCeded(avoidNegativeZero(grossClaim.developmentResultCumulative() * scaleFactorUltimate));
-        if (scaleFactorUltimate == 0 && grossClaim.developmentResultCumulative() != 0) {
-            double cumulatedUltimateDevelopedCeded = storage.getCumulatedCeded(BasedOnClaimProperty.REPORTED) + cededReportedIncremental - storage.getNominalUltimate();
-            if (storage.getCumulatedCeded(BasedOnClaimProperty.REPORTED) + cededReportedIncremental == 0) {
-                cumulatedUltimateDevelopedCeded = grossClaim.developmentResultCumulative() * storage.getNominalUltimate() / grossClaim.getNominalUltimate();
-            }
-            storage.setCumulatedUltimateDevelopedCeded(avoidNegativeZero(cumulatedUltimateDevelopedCeded));
-        }
-    }
-
     /**
+     *
      *
      * @param grossClaim
      * @param storage
-     * @param scaleFactorUltimate
+     * @param scaleFactorUltimateUnIndexed
      * @param cededValueReported
      * @param scaleFactorPaid
      * @param adjustExposureInfo
+     * @param scaleFactorUltimateIndexed
      * @return
      */
-    public static ClaimCashflowPacket getCededClaimReportedAbsolute(ClaimCashflowPacket grossClaim, ClaimStorage storage, double scaleFactorUltimate,
-                                                                    double cededValueReported, double scaleFactorPaid, boolean adjustExposureInfo) {
+    public static ClaimCashflowPacket getCededClaimReportedAbsolute(ClaimCashflowPacket grossClaim, ClaimStorage storage, double scaleFactorUltimateUnIndexed,
+                                                                    double cededValueReported, double scaleFactorPaid, boolean adjustExposureInfo, double scaleFactorUltimateIndexed) {
         if (scaleFactorPaid == -0) {
             scaleFactorPaid = 0;
         }
-        storage.lazyInitCededClaimRoot(scaleFactorUltimate);
+        storage.lazyInitCededClaimRoot(scaleFactorUltimateUnIndexed);
         double cededPaidIncremental = grossClaim.getPaidIncrementalIndexed() * scaleFactorPaid;
-        storage.update(grossClaim.ultimate() * scaleFactorUltimate, BasedOnClaimProperty.ULTIMATE);
-        adjustCumulatedUltimateDevelopedCeded(grossClaim, storage, scaleFactorUltimate, cededValueReported);
+        storage.update(grossClaim.ultimate() * scaleFactorUltimateUnIndexed, BasedOnClaimProperty.ULTIMATE_UNINDEXED);
+        storage.update(grossClaim.totalIncrementalIndexed() * scaleFactorUltimateIndexed, BasedOnClaimProperty.ULTIMATE_UNINDEXED);
         storage.update(cededPaidIncremental, BasedOnClaimProperty.PAID);
         storage.update(cededValueReported, BasedOnClaimProperty.REPORTED);
         ExposureInfo cededExposureInfo = adjustExposureInfo && grossClaim.getExposureInfo() != null
-                ? grossClaim.getExposureInfo().withScale(scaleFactorUltimate) : grossClaim.getExposureInfo();
+                ? grossClaim.getExposureInfo().withScale(scaleFactorUltimateUnIndexed) : grossClaim.getExposureInfo();
         ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(grossClaim, storage, cededExposureInfo);
         applyMarkers(grossClaim, cededClaim);
         return cededClaim;

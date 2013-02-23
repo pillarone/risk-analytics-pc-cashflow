@@ -41,7 +41,7 @@ public class SurplusContract extends AbstractProportionalReinsuranceContract {
                 cessionRate = getFractionCeded(grossClaim.getExposureInfo().getSumInsured());
             }
         }
-        return ClaimUtils.getCededClaim(grossClaim, storage, -cessionRate, -cessionRate, -cessionRate, true);
+        return ClaimUtils.getCededClaim(grossClaim, storage, -cessionRate, -cessionRate, -cessionRate, -cessionRate, true);
     }
 
     private double getFractionCeded(double sumInsured) {

@@ -11,6 +11,10 @@ public class AggregateClaimsStorage {
 
     private double ultimate;
     private double ultimateCeded;
+    private double totalCumulated;
+    private double totalIncremental;
+    private double cumulatedTotalCeded;
+    private double incrementalTotalCeded;
     private double cumulatedReported;
     private double cumulatedReportedCeded;
     private double incrementalReported;
@@ -21,6 +25,7 @@ public class AggregateClaimsStorage {
     private double incrementalPaidCeded;
 
     private double cededFactorUltimate;
+    private double cededFactorTotal;
     private double cededFactorReported;
     private double cededFactorPaid;
 
@@ -33,6 +38,8 @@ public class AggregateClaimsStorage {
      */
     public void add(ClaimCashflowPacket claim) {
         ultimate += claim.ultimate();
+        totalIncremental += claim.totalIncrementalIndexed();
+        totalCumulated += claim.totalCumulatedIndexed();
         cumulatedReported += claim.getReportedIncrementalIndexed();
         incrementalReported += claim.getReportedIncrementalIndexed();
         cumulatedPaid += claim.getPaidIncrementalIndexed();
@@ -40,6 +47,7 @@ public class AggregateClaimsStorage {
     }
 
     public void resetIncrementsAndFactors() {
+        totalIncremental = 0;
         incrementalReported = 0;
         incrementalPaid = 0;
         cededFactorPaid = 0;
@@ -49,8 +57,10 @@ public class AggregateClaimsStorage {
 
     public double getCumulatedCeded(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
+            case ULTIMATE_UNINDEXED:
                 return 0;
+            case ULTIMATE_INDEXED:
+                return cumulatedTotalCeded;
             case REPORTED:
                 return cumulatedReportedCeded;
             case PAID:
@@ -61,8 +71,10 @@ public class AggregateClaimsStorage {
 
     public double getIncrementalCeded(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
+            case ULTIMATE_UNINDEXED:
                 return 0;
+            case ULTIMATE_INDEXED:
+                return incrementalTotalCeded;
             case REPORTED:
                 return incrementalReportedCeded;
             case PAID:
@@ -85,9 +97,12 @@ public class AggregateClaimsStorage {
 
     public void update(BasedOnClaimProperty claimProperty, double incrementCeded) {
         switch (claimProperty) {
-            case ULTIMATE:
+            case ULTIMATE_UNINDEXED:
                 ultimateCeded += incrementCeded;
                 break;
+            case ULTIMATE_INDEXED:
+                cumulatedTotalCeded += incrementCeded;
+                incrementalTotalCeded = incrementCeded;
             case PAID:
                 incrementalPaidCeded = incrementCeded;
                 cumulatedPaidCeded += incrementCeded;
@@ -101,9 +116,11 @@ public class AggregateClaimsStorage {
 
     public void setCededFactor(BasedOnClaimProperty claimProperty, double factor) {
         switch (claimProperty) {
-            case ULTIMATE:
+            case ULTIMATE_UNINDEXED:
                 cededFactorUltimate = factor;
                 break;
+            case ULTIMATE_INDEXED:
+                cededFactorTotal = factor;
             case PAID:
                 cededFactorPaid = factor;
                 break;
@@ -115,8 +132,10 @@ public class AggregateClaimsStorage {
 
     public double getIncremental(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
+            case ULTIMATE_UNINDEXED:
                 return ultimate;
+            case ULTIMATE_INDEXED:
+                return totalIncremental;
             case PAID:
                 return incrementalPaid;
             case REPORTED:
@@ -127,8 +146,10 @@ public class AggregateClaimsStorage {
 
     public double getCumulated(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
+            case ULTIMATE_UNINDEXED:
                 return ultimate;
+            case ULTIMATE_INDEXED:
+                return totalCumulated;
             case PAID:
                 return cumulatedPaid;
             case REPORTED:

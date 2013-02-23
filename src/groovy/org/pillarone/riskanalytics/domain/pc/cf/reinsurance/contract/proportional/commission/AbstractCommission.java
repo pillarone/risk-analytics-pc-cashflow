@@ -26,7 +26,7 @@ abstract public class AbstractCommission implements ICommission {
 
     protected double sumPremium(List<? extends UnderwritingInfoPacket> underwritingInfos) {
         double totalPremium = 0;
-        if (useClaims.equals(BasedOnClaimProperty.ULTIMATE) || useClaims.equals(BasedOnClaimProperty.REPORTED)) {
+        if (useClaims.equals(BasedOnClaimProperty.ULTIMATE_UNINDEXED) || useClaims.equals(BasedOnClaimProperty.REPORTED)) {
             for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
                 totalPremium += underwritingInfo.getPremiumWritten();
             }
@@ -50,7 +50,7 @@ abstract public class AbstractCommission implements ICommission {
      */
     protected double sumCumulatedClaims(List<ClaimCashflowPacket> claims) {
         double totalClaims = 0;
-        if (useClaims.equals(BasedOnClaimProperty.ULTIMATE)) {
+        if (useClaims.equals(BasedOnClaimProperty.ULTIMATE_UNINDEXED)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.ultimate() + claim.developmentResultCumulative();
             }

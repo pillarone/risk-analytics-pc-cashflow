@@ -195,7 +195,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      */
     public ClaimCashflowPacket(ClaimCashflowPacket grossClaim, ClaimStorage claimStorage, ExposureInfo exposureInfo) {
         this(claimStorage.getReferenceCeded(), grossClaim.getKeyClaim());
-        ultimate = claimStorage.getCumulatedCeded(BasedOnClaimProperty.ULTIMATE);
+        ultimate = claimStorage.getCumulatedCeded(BasedOnClaimProperty.ULTIMATE_UNINDEXED);
         // todo(sku): investigate!
         nominalUltimate = claimStorage.getReferenceCeded().getUltimate();
         paidIncrementalIndexed = claimStorage.getIncrementalPaidCeded();
@@ -639,18 +639,10 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public double getChangeInReservesIndexed() {
         return changeInReservesIndexed;
     }
-//
-//    public void setChangeInReservesIndexed(double changeInReservesIndexed) {
-//        this.changeInReservesIndexed = changeInReservesIndexed;
-//    }
 
     public double getChangeInIBNRIndexed() {
         return changeInIBNRIndexed;
     }
-//
-//    public void setChangeInIBNRIndexed(double changeInIBNRIndexed) {
-//        this.changeInIBNRIndexed = changeInIBNRIndexed;
-//    }
 
     public double getPremiumRisk() {
         return premiumRisk;
@@ -666,5 +658,9 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     public void setReserveRisk(double reserveRisk) {
         this.reserveRisk = reserveRisk;
+    }
+
+    public double totalCumulatedIndexed() {
+        return developedUltimate();
     }
 }

@@ -1,7 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation;
 
 
-import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -10,7 +9,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorag
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.ILimitStrategy;
 
 import java.util.List;
-import java.util.Set;
 import java.util.SortedMap;
 
 /**
@@ -106,7 +104,7 @@ public class LossParticipation implements ILossParticipation {
         double cededUltimate = cumulatedGross.ultimate == 0 ? 0 : grossClaim.developedUltimate() / cumulatedGross.ultimate * cumulatedCeded.ultimate;
         double cededReported = cumulatedGross.reported == 0 ? 0 : grossClaim.getReportedCumulatedIndexed() / cumulatedGross.reported * cumulatedCeded.reported;
         double cededPaid = cumulatedGross.paid == 0 ? 0 : grossClaim.getPaidCumulatedIndexed() / cumulatedGross.paid * cumulatedCeded.paid;
-        ClaimCashflowPacket packet = ClaimUtils.cededClaim(grossClaim, storage, cededUltimate, cededReported, cededPaid, adjustExposureInfo);
+        ClaimCashflowPacket packet = ClaimUtils.cededClaim(grossClaim, storage, cededUltimate, cededUltimate, cededReported, cededPaid, adjustExposureInfo);
         return packet;
     }
 

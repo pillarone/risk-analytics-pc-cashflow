@@ -6,7 +6,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod;
 
 import java.util.HashMap;
@@ -38,7 +37,7 @@ abstract public class AbstractCommissionStrategy extends AbstractParameterObject
 
     protected double sumClaims(List<ClaimCashflowPacket> claims) {
         double totalClaims = 0;
-        if (useClaims.equals(BasedOnClaimProperty.ULTIMATE)) {
+        if (useClaims.equals(BasedOnClaimProperty.ULTIMATE_UNINDEXED)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.ultimate();
             }
