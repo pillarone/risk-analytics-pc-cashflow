@@ -151,10 +151,11 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
         if (isStartCoverPeriod) {
             initCededPremiumAllocation(cededClaims, grossUwInfos);
         }
+        double reinstatementPremiumFactor = reinstatements.calculateReinstatementPremiumFactor();
         for (UnderwritingInfoPacket grossUnderwritingInfo : grossUwInfos) {
             double cededPremiumFixedShare = cededPremiumFixed * riPremiumSplit.getShare(grossUnderwritingInfo);
             cededPremiumFixedShare *= coveredByReinsurers;
-            double cededPremiumVariable = cededPremiumFixedShare * reinstatements.calculateReinstatementPremiumFactor();
+            double cededPremiumVariable = cededPremiumFixedShare * reinstatementPremiumFactor;
             cededPremiumVariable *= coveredByReinsurers;
             double cededPremium = isStartCoverPeriod ? cededPremiumFixedShare + cededPremiumVariable : cededPremiumVariable;
 
