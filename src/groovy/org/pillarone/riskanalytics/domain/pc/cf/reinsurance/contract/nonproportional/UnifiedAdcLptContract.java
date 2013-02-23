@@ -56,15 +56,15 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
     @Override
     public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaims, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
         if (grossClaims.size() > 0) {
-            firstClaimKey = grossClaims.get(0).getKeyClaim();
+            firstClaimKey = grossClaims.get(0).getKeyClaim();   // used to make sure that only for the first claim calculateClaimCeded() will return a reserve claim
             ClaimCashflowPacket aggregateGrossClaim = new ClaimPacketAggregator().aggregate(grossClaims);
             if (aggregateCumulativeCededReserveClaim == null) {
-                cumulativeUltimate = aggregateGrossClaim.developedUltimate();
+                cumulativeUltimate = aggregateGrossClaim.totalCumulatedIndexed();
                 cumulativeReported = aggregateGrossClaim.getReportedCumulatedIndexed();
                 cumulativePaid = aggregateGrossClaim.getPaidCumulatedIndexed();
             }
             else {
-                cumulativeUltimate += aggregateGrossClaim.developedUltimate() - aggregateGrossClaim.nominalUltimate();
+                cumulativeUltimate += aggregateGrossClaim.totalIncrementalIndexed();
                 cumulativeReported += aggregateGrossClaim.getReportedIncrementalIndexed();
                 cumulativePaid += aggregateGrossClaim.getPaidIncrementalIndexed();
             }
