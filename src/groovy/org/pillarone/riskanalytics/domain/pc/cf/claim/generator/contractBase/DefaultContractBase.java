@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 
@@ -36,11 +37,15 @@ public class DefaultContractBase extends AbstractContractBase implements IReinsu
         throw new SimulationException(errorMessage);
     }
 
+    public DateTime generateInceptionDate(IClaimRoot aClaim, PeriodScope periodScope) {
+        throw new SimulationException(errorMessage);
+    }
+
     public List<GrossClaimRoot> splitClaims(List<GrossClaimRoot> claimsAfterUpdate, PeriodScope periodScope) {
         throw new SimulationException(errorMessage);
     }
 
     public int getContractLength() {
-        throw new SimulationException("Don't use default settings in contract base.");
+        throw new SimulationException(errorMessage);
     }
 }

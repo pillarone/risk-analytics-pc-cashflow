@@ -12,6 +12,8 @@ import org.pillarone.riskanalytics.core.components.MultiPhaseComposedComponent;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.ReinsuranceContractBaseType;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
@@ -543,4 +545,21 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
         this.metaClass = metaClass;
     }
     // ----------------------------- end of ART-983 work-around ----------------------------------------
+
+    protected void doCheckForLossesOccuringAndDependance(boolean globalSanityChecks, IReinsuranceContractBaseStrategy contractBaseStrategy, List<DependancePacket> inProbabilities) {
+        if (!(contractBaseStrategy.getType() == ReinsuranceContractBaseType.LOSSESOCCURRING || contractBaseStrategy.getType() == ReinsuranceContractBaseType.LOSSESOCCURRING_NO_SPLIT)) {
+            throw new SimulationException("Only losses occuring contract base implemented for RMS claims");
+        }
+        checkDependance(globalSanityChecks, inProbabilities);
+    }
+
+    protected void checkDependance(boolean globalSanityChecks, List<DependancePacket> inProbabilities) {
+        if(inProbabilities.size() > 0 && globalSanityChecks){
+            DependancePacket dependancePacket = ClaimUtils.checkForDependance(this, inProbabilities);
+            if(dependancePacket.isDependantGenerator(this)) {
+                throw new SimulationException("Dependancy structure for RMS claims detected; this isn't right. Please check" +
+                        "dependancy structure for generator " + this.getName());
+            }
+        }
+    }
 }

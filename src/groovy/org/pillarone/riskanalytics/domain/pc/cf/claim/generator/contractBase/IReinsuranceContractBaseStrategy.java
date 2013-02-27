@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
@@ -29,7 +30,7 @@ public interface IReinsuranceContractBaseStrategy {
 
     /**
      * @param underwritingInfo
-     * @return underwritingInfo.getExposure().getInceptionDate()
+     * @return underwritingInfo.getExposure().generateInceptionDate()
      */
     DateTime inceptionDate(UnderwritingInfoPacket underwritingInfo);
 
@@ -39,6 +40,8 @@ public interface IReinsuranceContractBaseStrategy {
      * @return a generated date
      */
     DateTime exposureStartDate(PeriodScope periodScope, IRandomNumberGenerator dateGenerator);
+
+    DateTime generateInceptionDate(IClaimRoot aClaim, PeriodScope periodScope);
 
     int splittedClaimsNumber();
 

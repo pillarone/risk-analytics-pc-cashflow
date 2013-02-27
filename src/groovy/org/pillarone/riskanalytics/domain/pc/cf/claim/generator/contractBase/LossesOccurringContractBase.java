@@ -5,6 +5,7 @@ import org.joda.time.Months;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
@@ -57,7 +58,9 @@ public class LossesOccurringContractBase extends AbstractContractBase implements
         return periodScope.getCurrentPeriodStartDate();
     }
 
-
+    public DateTime generateInceptionDate(IClaimRoot aClaim, PeriodScope periodScope) {
+        return periodScope.getCurrentPeriodStartDate();
+    }
 
 
     /**
