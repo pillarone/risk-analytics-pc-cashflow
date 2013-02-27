@@ -32,7 +32,7 @@ class UnderwritingInfoMerger extends Component {
         uwInfosWithCorrectedSign.addAll(UnderwritingInfoUtils.correctSign(inUnderwritingInfoCeded, true))
         uwInfosWithCorrectedSign.addAll(UnderwritingInfoUtils.correctSign(inUnderwritingInfoBenefit, false))
 
-        outUnderwritingInfo.addAll(UnderwritingInfoUtils.aggregateBySegment(uwInfosWithCorrectedSign))
+        outUnderwritingInfo.addAll(UnderwritingInfoUtils.aggregateBySegmentAndInceptionPeriod(uwInfosWithCorrectedSign))
     }
 
     private List<UnderwritingInfoPacket> filterGrossOfMentionedSegments() {

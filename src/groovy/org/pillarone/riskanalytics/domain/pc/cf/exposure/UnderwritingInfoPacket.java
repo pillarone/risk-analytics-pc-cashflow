@@ -240,6 +240,8 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
         result.append(premiumPaid);
         result.append(separator);
         result.append(numberOfPolicies);
+        result.append(separator);
+        result.append(segment());
         return result.toString();
     }
 

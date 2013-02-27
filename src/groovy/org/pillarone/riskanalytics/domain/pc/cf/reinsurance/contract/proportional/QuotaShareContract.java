@@ -60,7 +60,7 @@ public class QuotaShareContract extends AbstractProportionalReinsuranceContract 
     }
 
 
-     @Override
+    @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append(quotaShare);

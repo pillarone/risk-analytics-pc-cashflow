@@ -3,6 +3,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.exposure;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.XLPremiumBase;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
@@ -16,6 +18,8 @@ import java.util.List;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class UnderwritingInfoUtils {
+
+    private static Log LOG = LogFactory.getLog(UnderwritingInfoUtils.class);
 
     /**
      * @param underwritingInfos underwriting info packets to be filtered
@@ -138,6 +142,27 @@ public class UnderwritingInfoUtils {
         List<UnderwritingInfoPacket> aggregateUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
         for (UnderwritingInfoPacket uwInfo : underwritingInfos) {
             underwritingInfoBySegment.put(uwInfo.segment(), uwInfo);
+        }
+        for (Collection<UnderwritingInfoPacket> segmentUwInfo : underwritingInfoBySegment.asMap().values()) {
+            List<UnderwritingInfoPacket> uwInfos = new ArrayList<UnderwritingInfoPacket>(segmentUwInfo);
+            if (uwInfos.size() == 1) {
+                aggregateUnderwritingInfo.add(segmentUwInfo.iterator().next());
+            }
+            else if (uwInfos.size() > 1) {
+                UnderwritingInfoPacket aggregatedUwInfo = aggregate(uwInfos);
+                aggregatedUwInfo.setOriginal(uwInfos.get(0));
+                aggregatedUwInfo.setDate(uwInfos.get(0).getDate());
+                aggregateUnderwritingInfo.add(correctMetaProperties(aggregatedUwInfo, uwInfos));
+            }
+        }
+        return aggregateUnderwritingInfo;
+    }
+
+    static public List<UnderwritingInfoPacket> aggregateBySegmentAndInceptionPeriod(List<UnderwritingInfoPacket> underwritingInfos) {
+        ListMultimap<SegmentInceptionPeriodKey, UnderwritingInfoPacket> underwritingInfoBySegment = ArrayListMultimap.create();
+        List<UnderwritingInfoPacket> aggregateUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
+        for (UnderwritingInfoPacket uwInfo : underwritingInfos) {
+            underwritingInfoBySegment.put(new SegmentInceptionPeriodKey(uwInfo.segment(), uwInfo.exposure.getInceptionPeriod()), uwInfo);
         }
         for (Collection<UnderwritingInfoPacket> segmentUwInfo : underwritingInfoBySegment.asMap().values()) {
             List<UnderwritingInfoPacket> uwInfos = new ArrayList<UnderwritingInfoPacket>(segmentUwInfo);
@@ -301,7 +326,7 @@ public class UnderwritingInfoUtils {
                 correctSign = uwInfo.premiumWritten >= 0;
             }
             if (!correctSign) {
-                throw new SimulationException("wrong sign");
+                LOG.error("wrong sign for " + uwInfo.toString());
             }
             if (invertSign) {
                 result.add(new UnderwritingInfoPacket(uwInfo, -1));
