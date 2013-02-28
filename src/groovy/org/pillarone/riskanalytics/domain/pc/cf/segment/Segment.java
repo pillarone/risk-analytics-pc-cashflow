@@ -113,12 +113,12 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                     DiscountUtils.getDiscountedNetValuesAndFillOutChannels(outClaimsCeded, outClaimsNet, outDiscountedValues,
                             outNetPresentValues, periodStore, iterationScope);
                 }
-                fillContractFinancials(iterationScope.getPeriodScope().getPeriodCounter());
+                fillFinancials(iterationScope.getPeriodScope().getPeriodCounter());
             }
         }
     }
 
-    private void fillContractFinancials(IPeriodCounter periodCounter) {
+    private void fillFinancials(IPeriodCounter periodCounter) {
         if (isSenderWired(outFinancials)) {
             outFinancials.addAll(FinancialsPacket.getFinancialsPacketsByInceptionPeriod(outUnderwritingInfoGross,
                     outUnderwritingInfoNet, outUnderwritingInfoCeded, outClaimsGross, outClaimsNet, outClaimsCeded, periodCounter));

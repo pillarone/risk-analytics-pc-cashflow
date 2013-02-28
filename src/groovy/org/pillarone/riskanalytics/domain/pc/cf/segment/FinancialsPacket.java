@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ReserveRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
@@ -79,22 +80,19 @@ public class FinancialsPacket extends MultiValuePacket {
         ListMultimap<Integer, UnderwritingInfoPacket> netUwInfoByPeriod = ArrayListMultimap.create();
         Set<Integer> periods = new HashSet<Integer>();
         for (ClaimCashflowPacket claim : grossClaims) {
-            // todo(sku): improve
-            if (claim.getClaimType().equals(ClaimType.AGGREGATED_RESERVES)) continue;
+            if (claim.getClaimType().equals(ClaimType.AGGREGATED_RESERVES) && claim.getKeyClaim() instanceof ReserveRoot) continue;
             int period = claim.getBaseClaim().getInceptionPeriod(periodCounter);
             periods.add(period);
             grossClaimsByPeriod.put(period, claim);
         }
         for (ClaimCashflowPacket claim : netClaims) {
-            // todo(sku): improve
-            if (claim.getClaimType().equals(ClaimType.AGGREGATED_RESERVES)) continue;
+            if (claim.getClaimType().equals(ClaimType.AGGREGATED_RESERVES) && claim.getKeyClaim() instanceof ReserveRoot) continue;
             int period = claim.getBaseClaim().getInceptionPeriod(periodCounter);
             periods.add(period);
             netClaimsByPeriod.put(period, claim);
         }
         for (ClaimCashflowPacket claim : cededClaims) {
-            // todo(sku): improve
-            if (claim.getClaimType().equals(ClaimType.AGGREGATED_RESERVES)) continue;
+            if (claim.getClaimType().equals(ClaimType.AGGREGATED_RESERVES) && claim.getKeyClaim() instanceof ReserveRoot) continue;
             int period = claim.getBaseClaim().getInceptionPeriod(periodCounter);
             periods.add(period);
             cededClaimsByPeriod.put(period, claim);

@@ -479,18 +479,19 @@ public class ClaimUtils {
             }
             List<ClaimCashflowPacket> aggregateClaimsByBaseClaim = aggregateByBaseClaim(extraCededClaims);
             ClaimCashflowPacket aggregateCededClaim = sum(aggregateClaimsByBaseClaim, true);
-            ClaimCashflowPacket firstNetClaim = claimsNet.get(0);
-            ClaimCashflowPacket adjustedNetClaim;
-            if (aggregateCededClaim.ultimate() == 0 && firstNetClaim.ultimate() == 0) {
-                List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
-                claims.add(aggregateCededClaim);
-                claims.add(firstNetClaim);
-                adjustedNetClaim = sum(claims, true);
-            }
-            else {
-                adjustedNetClaim = sumClaimWithClaimConvertedToReserve(firstNetClaim, aggregateCededClaim);
-            }
-            claimsNet.set(0, adjustedNetClaim);
+            claimsNet.add(ClaimUtils.scale(aggregateCededClaim, -1));
+//            ClaimCashflowPacket firstNetClaim = claimsNet.get(0);
+//            ClaimCashflowPacket adjustedNetClaim;
+//            if (aggregateCededClaim.ultimate() == 0 && firstNetClaim.ultimate() == 0) {
+//                List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
+//                claims.add(aggregateCededClaim);
+//                claims.add(firstNetClaim);
+//                adjustedNetClaim = sum(claims, true);
+//            }
+//            else {
+//                adjustedNetClaim = sumClaimWithClaimConvertedToReserve(firstNetClaim, aggregateCededClaim);
+//            }
+//            claimsNet.set(0, adjustedNetClaim);
         }
         return claimsNet;
     }
