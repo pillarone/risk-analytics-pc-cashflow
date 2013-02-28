@@ -97,7 +97,7 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
             ["stopLossContractBase": StopLossBase.ABSOLUTE, "attachmentPoint": 0d, "limit": 0d, "premium": 0d,
                     "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:])])
     public static final ReinsuranceContractType UNIFIEDADCLPT = new ReinsuranceContractType("unified ADC and LPT", "UNIFIEDADCLPT",
-            ["cededShare": 0d, "contractBase": UnifiedADCLPTBase.ABSOLUTE, "attachmentPoint": 0d, "limit": 0d])
+            ["cededShare": 0d, "contractBase": UnifiedADCLPTBase.ABSOLUTE, "attachmentPoint": 0d, "limit": 0d, "premium": 0d])
     public static final ReinsuranceContractType TRIVIAL = new ReinsuranceContractType("trivial", "TRIVIAL", [:])
     public static final ReinsuranceContractType AGGREGATEXL = new ReinsuranceContractType("aggregate xl", "AggregateXL",
             ["attachmentPoint": 0d, "limit": 0d, "contractBase": XLPremiumBase.ABSOLUTE,
@@ -231,7 +231,8 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
                         cededShare: parameters[UnifiedAdcLptContractStrategy.CEDED_SHARE],
                         contractBase: parameters[UnifiedAdcLptContractStrategy.CONTRACT_BASE],
                         attachmentPoint: parameters[UnifiedAdcLptContractStrategy.ATTACHMENT_POINT],
-                        limit: parameters[UnifiedAdcLptContractStrategy.LIMIT])
+                        limit: parameters[UnifiedAdcLptContractStrategy.LIMIT],
+                        premium: parameters[UnifiedAdcLptContractStrategy.PREMIUM])
             case ReinsuranceContractType.SURPLUS:
                 return new SurplusContractStrategy(
                         retention: (double) parameters[SurplusContractStrategy.RETENTION],

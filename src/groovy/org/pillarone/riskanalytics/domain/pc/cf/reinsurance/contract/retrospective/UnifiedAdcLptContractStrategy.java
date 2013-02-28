@@ -31,13 +31,15 @@ public class UnifiedAdcLptContractStrategy extends AbstractParameterObject imple
 
     private double attachmentPoint;
     private double limit;
+    private double premium;
 
     public Map getParameters() {
-        Map params = new HashMap(4);
+        Map params = new HashMap(5);
         params.put(CEDED_SHARE, cededShare);
         params.put(CONTRACT_BASE, contractBase);
         params.put(ATTACHMENT_POINT, attachmentPoint);
         params.put(LIMIT, limit);
+        params.put(PREMIUM, premium);
         return params;
     }
 
@@ -62,6 +64,7 @@ public class UnifiedAdcLptContractStrategy extends AbstractParameterObject imple
                                                    IPeriodDependingThresholdStore termLimit, List<ClaimCashflowPacket> claims) {
         double scaledAttachmentPoint = attachmentPoint;
         double scaledLimit = limit;
+        double scaledPremium = premium;
         ClaimCashflowPacket aggregateClaim = new ClaimPacketAggregator().aggregate(claims);
         double paidCumulative = (aggregateClaim != null) ? -aggregateClaim.getPaidCumulatedIndexed() : 0;
         switch (contractBase) {
@@ -72,6 +75,7 @@ public class UnifiedAdcLptContractStrategy extends AbstractParameterObject imple
                     double totalOutstanding = -aggregateClaim.outstandingIndexed();
                     scaledAttachmentPoint *= totalOutstanding;
                     scaledLimit *= totalOutstanding;
+                    scaledPremium *= totalOutstanding;
                 }
                 else {
                     throw new SimulationException("Contract base set to outstanding percentage does not work as there " +
@@ -83,7 +87,7 @@ public class UnifiedAdcLptContractStrategy extends AbstractParameterObject imple
         }
         scaledAttachmentPoint += paidCumulative;
         return new ArrayList<IReinsuranceContract>(Arrays.asList(
-                new UnifiedAdcLptContract(cededShare, scaledAttachmentPoint, scaledLimit)));
+                new UnifiedAdcLptContract(cededShare, scaledAttachmentPoint, scaledLimit, scaledPremium)));
     }
 
     public double getTermDeductible() {
@@ -97,6 +101,7 @@ public class UnifiedAdcLptContractStrategy extends AbstractParameterObject imple
     public static final String CONTRACT_BASE = "contractBase";
     public static final String ATTACHMENT_POINT = "attachmentPoint";
     public static final String LIMIT = "limit";
+    public static final String PREMIUM = "premium";
     public static final String CEDED_SHARE= "cededShare";
 
 }

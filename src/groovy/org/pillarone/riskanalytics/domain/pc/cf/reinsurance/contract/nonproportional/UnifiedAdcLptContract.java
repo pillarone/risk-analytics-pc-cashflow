@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AbstractReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 
@@ -18,6 +19,9 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
     private double cededShare;
     private double attachmentPoint;
     private double limit;
+    private double premium;
+
+    private boolean isStartCoverPeriod = true;
 
     /**
      * used to trigger return of a single ceded claim packet
@@ -46,10 +50,11 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
      * @param attachmentPoint
      * @param limit
      */
-    public UnifiedAdcLptContract(double cededShare, double attachmentPoint, double limit) {
+    public UnifiedAdcLptContract(double cededShare, double attachmentPoint, double limit, double premium) {
         this.cededShare = cededShare;
         this.attachmentPoint = attachmentPoint;
         this.limit = limit;
+        this.premium = premium;
     }
 
 
@@ -123,11 +128,24 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
      * @param cededUnderwritingInfos
      * @param netUnderwritingInfos
      * @param coveredByReinsurers
-     * @param fillNet                if true the second list is filled too
+     * @param fillNet                if true the net list is filled too
      */
     public void calculateUnderwritingInfo(List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
                                           List<UnderwritingInfoPacket> netUnderwritingInfos,
                                           double coveredByReinsurers, boolean fillNet) {
+        if (isStartCoverPeriod) {
+            for (UnderwritingInfoPacket grossUnderwritingInfo : grossUwInfos) {
+                CededUnderwritingInfoPacket cededUnderwritingInfo = CededUnderwritingInfoPacket.deriveCededPacketForNonPropContract(
+                        grossUnderwritingInfo, contractMarker, -premium, -premium, 0);
+                UnderwritingInfoUtils.applyMarkers(grossUnderwritingInfo, cededUnderwritingInfo);
+                cededUwInfos.add(cededUnderwritingInfo);
+                cededUnderwritingInfos.add(cededUnderwritingInfo);
+                if (fillNet && isStartCoverPeriod) {
+                    netUnderwritingInfos.add(grossUnderwritingInfo.getNet(cededUnderwritingInfo, false));
+                }
+            }
+        }
+        isStartCoverPeriod = false;
     }
 
     @Override

@@ -48,7 +48,7 @@ class RetroactiveReinsuranceContractTests extends SpreadsheetUnitTest {
 
     void doTest(SpreadsheetImporter spreadsheet) {
         Map contractValues = spreadsheet.cells([sheet: 'Retroactive', cellMap: [F3: 'cededShare', F6: 'absolute',
-                F8: 'attachmentPoint', F9: 'limit', F12: 'coveredFrom', F13: 'coveredTo', F14: 'coveredDevelopmentPeriod']])
+                F8: 'attachmentPoint', F9: 'limit', F10: 'premium', F12: 'coveredFrom', F13: 'coveredTo', F14: 'coveredDevelopmentPeriod']])
         contractValues.contractBase = contractValues.absolute.asBoolean() ? UnifiedADCLPTBase.ABSOLUTE : UnifiedADCLPTBase.OUTSTANDING_PERCENTAGE
 
         def midnight = new LocalTime(0, 0, 0)
