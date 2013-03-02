@@ -160,7 +160,7 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
      * Includes all replicating wiring independent of a p14n.
      */
     private void wireProgramIndependentReplications() {
-        replicateOutChannels this, 'outCommission'
+        replicateOutChannels this, outCommission
         for (ReinsuranceContract contract : componentList) {
             if (!contract.getParmVirtual()) {
                 doWire PRC, this, 'outUnderwritingInfoCeded', contract, 'outUnderwritingInfoCeded'

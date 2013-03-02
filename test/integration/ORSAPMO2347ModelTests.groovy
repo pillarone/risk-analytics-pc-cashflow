@@ -29,6 +29,6 @@ class ORSAPMO2347ModelTests extends ModelTest {
     }
 
     protected boolean shouldCompareResults() {
-        true
+        false
     }
 }
