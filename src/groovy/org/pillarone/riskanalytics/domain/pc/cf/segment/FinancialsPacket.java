@@ -80,19 +80,19 @@ public class FinancialsPacket extends MultiValuePacket {
         ListMultimap<Integer, UnderwritingInfoPacket> netUwInfoByPeriod = ArrayListMultimap.create();
         Set<Integer> periods = new HashSet<Integer>();
         for (ClaimCashflowPacket claim : grossClaims) {
-            if (claim.getClaimType().equals(ClaimType.AGGREGATED_RESERVES) && claim.getKeyClaim() instanceof ReserveRoot) continue;
+            if (hasReserveGeneratorOrigin(claim, periodCounter)) continue;
             int period = claim.getBaseClaim().getInceptionPeriod(periodCounter);
             periods.add(period);
             grossClaimsByPeriod.put(period, claim);
         }
         for (ClaimCashflowPacket claim : netClaims) {
-            if (claim.getClaimType().equals(ClaimType.AGGREGATED_RESERVES) && claim.getKeyClaim() instanceof ReserveRoot) continue;
+            if (hasReserveGeneratorOrigin(claim, periodCounter)) continue;
             int period = claim.getBaseClaim().getInceptionPeriod(periodCounter);
             periods.add(period);
             netClaimsByPeriod.put(period, claim);
         }
         for (ClaimCashflowPacket claim : cededClaims) {
-            if (claim.getClaimType().equals(ClaimType.AGGREGATED_RESERVES) && claim.getKeyClaim() instanceof ReserveRoot) continue;
+            if (hasReserveGeneratorOrigin(claim, periodCounter)) continue;
             int period = claim.getBaseClaim().getInceptionPeriod(periodCounter);
             periods.add(period);
             cededClaimsByPeriod.put(period, claim);
@@ -117,6 +117,11 @@ public class FinancialsPacket extends MultiValuePacket {
             packets.add(packet);
         }
         return packets;
+    }
+
+    private static boolean hasReserveGeneratorOrigin(ClaimCashflowPacket claim, IPeriodCounter periodCounter) {
+        if (!claim.getClaimType().equals(ClaimType.AGGREGATED_RESERVES)) return false;
+        return periodCounter.startOfFirstPeriod().isAfter(claim.getKeyClaim().getOccurrenceDate());
     }
 
     public FinancialsPacket plus(FinancialsPacket other) {
