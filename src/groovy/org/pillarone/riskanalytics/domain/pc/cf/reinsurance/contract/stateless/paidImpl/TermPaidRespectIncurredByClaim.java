@@ -68,7 +68,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
                     if(additionalPremium.getAdditionalPremium() == 0d) {
                         continue;
                     }
-                    if (additionalPremium.getPremiumType().equals(APBasis.NCB)) {
+                    if (additionalPremium.getPremiumType().equals(CalcAPBasis.NCB)) {
                         if (period.getKey().equals(currentPeriod)) {
                             PaidAdditionalPremium ncbAP = new PaidAdditionalPremium(additionalPremium.getAdditionalPremium(), additionalPremium);
                             apsPaidThisPeriod.add(ncbAP);
@@ -125,7 +125,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
     public Collection<PaidAdditionalPremium> paidAdditionalPremium(Collection<ClaimCashflowPacket> layerCashflows, LayerAndAP layerAps, IIncurredCalculation annualCalc) {
         Collection<PaidAdditionalPremium> paidAps = Lists.newArrayList();
         for (AdditionalPremium additionalPremium : layerAps.getAdditionalPremiums()) {
-            if (additionalPremium.getPremiumType().equals(APBasis.NCB)) {
+            if (additionalPremium.getPremiumType().equals(CalcAPBasis.NCB)) {
                 paidAps.add(new PaidAdditionalPremium(additionalPremium.getAdditionalPremium(), additionalPremium));
             }
             double layerPaid = layerCededPaid(layerCashflows, layerAps.getLayerParameters());

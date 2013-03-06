@@ -73,7 +73,7 @@ public class ScaledPeriodLayerParameters extends PeriodLayerParameters {
                         premium.getPeriodExcess() * scaleFactor,
                         premium.getPeriodLimit() * scaleFactor,
                         premium.getAdditionalPremium(),
-                        premium.getBasis()
+                        premium.getBasis().uiAPBasis()
                 );
             }
             scaledParams.add(tempParam);

@@ -2,10 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AdditionalPremium;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AdditionalPremiumAndPaidTuple;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.PaidAdditionalPremium;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.*;
 
 import java.util.Collection;
 import java.util.Map;
@@ -36,7 +33,7 @@ public class AllTermAPLayers {
         double lossAfterTermStructureCurrent = Math.min(Math.max(termLossNoStructureThisPeriod - termExess, 0), termLimit);
 
         double incrementalTermAP = termLossAllLayers(lossAfterTermStructureCurrent) - termLossAllLayers(lossAfterTermStructurePrior);
-        AdditionalPremium additionalPremium = new AdditionalPremium(incrementalTermAP, APBasis.TERM);
+        AdditionalPremium additionalPremium = new AdditionalPremium(incrementalTermAP, CalcAPBasis.TERM);
         DateTime dateTime = additionalPremium.getPremiumType().getAPDate(periodScope.getPeriodCounter());
         additionalPremium.setDate(dateTime);
         PaidAdditionalPremium paidAdditionalPremium = new PaidAdditionalPremium(incrementalTermAP, additionalPremium);

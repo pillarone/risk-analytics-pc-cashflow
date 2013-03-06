@@ -25,6 +25,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.a
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts.StatelessRIContract
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
 import org.pillarone.riskanalytics.core.packets.Packet
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.CalcAPBasis
 
 /**
  * @author detlef.brendle (at) canoo (dot) com
@@ -162,7 +163,7 @@ class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
     }
 
     AdditionalPremium makeAPPacket(DateTime simStart, StatelessRIContract contract){
-        def packet = new AdditionalPremium(10, APBasis.NCB)
+        def packet = new AdditionalPremium(10, CalcAPBasis.NCB)
         packet.senderChannelName = 'senderChannelName'
         packet.addMarker(IReinsuranceContractMarker, contract )
         return packet

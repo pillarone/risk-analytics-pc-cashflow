@@ -46,20 +46,20 @@ public class AnnualIncurredCalc implements IIncurredCalculation {
 
         for (AdditionalPremiumPerLayer additionalPremiumPerLayer : layerParameters.getAdditionalPremiums()) {
             LayerParameters tempLayer = new LayerParameters(layerParameters.getShare(), layerParameters.getClaimExcess(), layerParameters.getClaimLimit());
-            tempLayer.addAdditionalPremium(additionalPremiumPerLayer.getPeriodExcess(), additionalPremiumPerLayer.getPeriodLimit(), additionalPremiumPerLayer.getAdditionalPremium(), additionalPremiumPerLayer.getBasis());
+            tempLayer.addAdditionalPremium(additionalPremiumPerLayer.getPeriodExcess(), additionalPremiumPerLayer.getPeriodLimit(), additionalPremiumPerLayer.getAdditionalPremium(), additionalPremiumPerLayer.getBasis().uiAPBasis());
             switch (additionalPremiumPerLayer.getBasis()) {
                 case PREMIUM:
                     double loss = lossAfterAnnualStructure(incurredClaims, tempLayer);
                     double premAP = (loss * layerPremium * layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium()) / tempLayer.getClaimLimit();
                     if(premAP != 0 ){
-                        AdditionalPremium lossAPo = new AdditionalPremium(premAP, APBasis.PREMIUM);
+                        AdditionalPremium lossAPo = new AdditionalPremium(premAP, CalcAPBasis.PREMIUM);
                         additionalPremiums.add(lossAPo);
                     }
                     break;
                 case LOSS:
                     double lossAP = layerCededIncurred(incurredClaims, tempLayer) * additionalPremiumPerLayer.getAdditionalPremium();
                     if(lossAP != 0 ) {
-                        AdditionalPremium additionalPremium = new AdditionalPremium(lossAP, APBasis.LOSS);
+                        AdditionalPremium additionalPremium = new AdditionalPremium(lossAP, CalcAPBasis.LOSS);
                         additionalPremiums.add(additionalPremium);
                     }
                     break;
@@ -69,7 +69,7 @@ public class AnnualIncurredCalc implements IIncurredCalculation {
                         ncbAP = layerParameters.getShare() * additionalPremiumPerLayer.getAdditionalPremium() * layerPremium;
                     }
                     if(ncbAP != 0) {
-                        additionalPremiums.add(new AdditionalPremium(ncbAP, APBasis.NCB));
+                        additionalPremiums.add(new AdditionalPremium(ncbAP, CalcAPBasis.NCB));
                     }
                     break;
                 case NONE:

@@ -23,7 +23,7 @@ public class PaidAdditionalPremium extends MultiValuePacket {
         this.incurredPremium = incurredPremium;
     }
 
-    public APBasis premiumType() {
+    public CalcAPBasis premiumType() {
         return incurredPremium.getPremiumType();
     }
 

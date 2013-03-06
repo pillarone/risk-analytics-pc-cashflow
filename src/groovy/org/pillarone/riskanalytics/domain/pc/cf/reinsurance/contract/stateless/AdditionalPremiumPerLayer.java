@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless;
 
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.CalcAPBasis;
 
 /**
  * Parameter helper class for additional premium.
@@ -12,7 +13,7 @@ public class AdditionalPremiumPerLayer {
     final double periodLimit;
     final double periodExcess;
     final double additionalPremium;
-    final APBasis basis;
+    final CalcAPBasis basis;
 
     public AdditionalPremiumPerLayer(double periodExcess, double periodLimit, double additionalPremium, APBasis basis) {
         if(periodLimit == 0) {
@@ -22,7 +23,7 @@ public class AdditionalPremiumPerLayer {
         }
         this.periodExcess = periodExcess;
         this.additionalPremium = additionalPremium;
-        this.basis = basis;
+        this.basis = basis.calcAPBasis();
     }
 
     public double getPeriodLimit() {
@@ -37,7 +38,7 @@ public class AdditionalPremiumPerLayer {
         return additionalPremium;
     }
 
-    public APBasis getBasis() {
+    public CalcAPBasis getBasis() {
         return basis;
     }
 }

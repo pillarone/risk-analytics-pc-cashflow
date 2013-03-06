@@ -6,24 +6,34 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public enum APBasis implements IGetAPDates {
+public enum APBasis{
 
     NONE {
-    },
-    AGGREGATED{
+        @Override
+        public CalcAPBasis calcAPBasis() {
+            return CalcAPBasis.NONE;
+        }
     },
     PREMIUM{
+        @Override
+        public CalcAPBasis calcAPBasis() {
+            return CalcAPBasis.PREMIUM;
+        }
     },
     LOSS{
-    },
-    TERM{
+        @Override
+        public CalcAPBasis calcAPBasis() {
+            return CalcAPBasis.LOSS;
+        }
     },
     NCB{
+        @Override
+        public CalcAPBasis calcAPBasis() {
+            return CalcAPBasis.NCB;
+        }
     };
 
-    public DateTime getAPDate(IPeriodCounter periodCounter) {
-        return periodCounter.getCurrentPeriodEnd().minusDays(1);
-    }
+    public abstract CalcAPBasis calcAPBasis();
 
 
     public static APBasis getStringValue(String value) {

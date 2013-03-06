@@ -9,14 +9,14 @@ import org.pillarone.riskanalytics.core.simulation.SimulationException;
 public class AdditionalPremium extends MultiValuePacket {
 
     private double additionalPremium;
-    private APBasis premiumType;
+    private CalcAPBasis premiumType;
 
     public AdditionalPremium() {
         this.additionalPremium = 0;
-        premiumType = APBasis.NONE;
+        premiumType = CalcAPBasis.NONE;
     }
 
-    public AdditionalPremium(double additionalPremium, APBasis premiumType) {
+    public AdditionalPremium(double additionalPremium, CalcAPBasis premiumType) {
         this.additionalPremium = additionalPremium;
         this.premiumType = premiumType;
     }
@@ -25,7 +25,7 @@ public class AdditionalPremium extends MultiValuePacket {
         return additionalPremium;
     }
 
-    public APBasis getPremiumType() {
+    public CalcAPBasis getPremiumType() {
         return premiumType;
     }
 
@@ -37,6 +37,6 @@ public class AdditionalPremium extends MultiValuePacket {
         if(!(aPacket instanceof AdditionalPremium)) {
             throw new SimulationException("Recieved incompatible packet type " + aPacket.toString());
         }
-        return new AdditionalPremium(((AdditionalPremium) aPacket).getAdditionalPremium() + additionalPremium, APBasis.AGGREGATED);
+        return new AdditionalPremium(((AdditionalPremium) aPacket).getAdditionalPremium() + additionalPremium, CalcAPBasis.AGGREGATED);
     }
 }
