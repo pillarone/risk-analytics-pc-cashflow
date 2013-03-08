@@ -236,8 +236,11 @@ public final class GrossClaimRoot implements IClaimRoot {
         Collection<DateTime> zeroPacketDates = GRIUtilities.filterDates(getExposureStartDate(), periodCounter.endOfLastPeriod().minusDays(1), periodStartDates);
         for (DateTime zeroPacketDate : zeroPacketDates) {
             int period = periodCounter.belongsToPeriod(zeroPacketDate);
-            ClaimCashflowPacket latestCashflowFromPattern = latestClaimByPeriod.floorEntry(period).getValue();
-            final ClaimCashflowPacket zeroClaim = new ClaimCashflowPacket(this, claimRoot, 0, 0, 0, latestCashflowFromPattern.getPaidCumulatedIndexed(), 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), zeroPacketDate, period);
+            double cumulatedCashflow = 0;
+            if(latestClaimByPeriod.floorEntry(period) != null) {
+                cumulatedCashflow = latestClaimByPeriod.floorEntry(period).getValue().getPaidCumulatedIndexed();
+            }
+            final ClaimCashflowPacket zeroClaim = new ClaimCashflowPacket(this, claimRoot, 0, 0, 0, cumulatedCashflow, 0, 0, 0, 0, 0, claimRoot.getExposureInfo(), zeroPacketDate, period);
             paidPackets.add(zeroClaim);
         }
 
