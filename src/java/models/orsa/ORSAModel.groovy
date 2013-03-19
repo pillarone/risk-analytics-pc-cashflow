@@ -33,6 +33,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerators
 import org.pillarone.riskanalytics.domain.pc.cf.segment.Segments
 import org.pillarone.riskanalytics.domain.pc.cf.structure.Structures
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -153,6 +154,16 @@ class ORSAModel extends StochasticModel {
 
     @Override
     List<IParameterObjectClassifier> configureClassifier(String path, List<IParameterObjectClassifier> classifiers) {
+        if (path.matches("claimsGenerators:(.*):parmClaimsModel:occurrenceDateDistribution")) {
+            return [
+                    DistributionType.DISCRETEEMPIRICALCUMULATIVE,
+                    DistributionType.DISCRETEEMPIRICAL,
+                    DistributionType.CONSTANTS,
+                    DistributionType.CONSTANT,
+                    DistributionType.UNIFORM,
+                    DistributionType.PIECEWISELINEAR
+            ]
+        }
         if (path.matches("reinsuranceContracts:(.*):parmCover") || path.matches("retrospectiveReinsurance:(.*):parmCover")) {
             return [
                     CoverAttributeStrategyType.NONE,
