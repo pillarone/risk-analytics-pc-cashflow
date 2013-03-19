@@ -73,7 +73,4 @@ public class ExceptionUtils {
         double log10Cashflow = Math.log10(positiveValue);
         return ((log10Cashflow * log10Cashflow) / 1000d) + SimulationConstants.EPSILON;
     }
-
-
-
 }
