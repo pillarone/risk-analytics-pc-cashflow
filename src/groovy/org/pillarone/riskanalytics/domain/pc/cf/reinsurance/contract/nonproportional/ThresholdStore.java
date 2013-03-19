@@ -14,6 +14,7 @@ public class ThresholdStore {
     private double thresholdStabilizedCumulated;
 
     private double thresholdUltimate;
+    private double thresholdUltimateIndexed;
     private double thresholdReported;
     private double thresholdPaid;
 
@@ -25,14 +26,17 @@ public class ThresholdStore {
     public void init() {
         thresholdStabilizedCumulated = threshold;
         thresholdUltimate = threshold;
+        thresholdUltimateIndexed = threshold;
         thresholdReported = threshold;
         thresholdPaid = threshold;
     }
 
     public double get(BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
+            case ULTIMATE_UNINDEXED:
                 return thresholdUltimate;
+            case ULTIMATE_INDEXED:
+                return thresholdUltimateIndexed;
             case REPORTED:
                 return thresholdReported;
             case PAID:
@@ -46,9 +50,12 @@ public class ThresholdStore {
         if (stabilizationFactor == 1) return get(claimProperty);
         double thresholdStabilized = threshold * stabilizationFactor;
         switch (claimProperty) {
-            case ULTIMATE:
+            case ULTIMATE_UNINDEXED:
                 thresholdUltimate = thresholdStabilized - (threshold - thresholdUltimate);
                 return thresholdUltimate;
+            case ULTIMATE_INDEXED:
+                thresholdUltimateIndexed = thresholdStabilized - (threshold - thresholdUltimateIndexed);
+                return thresholdUltimateIndexed;
             case REPORTED:
                 thresholdReported = thresholdStabilized - (threshold - thresholdReported);
                 return thresholdReported;
@@ -65,8 +72,11 @@ public class ThresholdStore {
 
     public void set(double threshold, BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
+            case ULTIMATE_UNINDEXED:
                 thresholdUltimate = threshold;
+                break;
+            case ULTIMATE_INDEXED:
+                thresholdUltimateIndexed = threshold;
                 break;
             case REPORTED:
                 thresholdReported = threshold;
@@ -81,8 +91,11 @@ public class ThresholdStore {
 
     public void plus(double summand, BasedOnClaimProperty claimProperty) {
         switch (claimProperty) {
-            case ULTIMATE:
+            case ULTIMATE_UNINDEXED:
                 thresholdUltimate += summand;
+                break;
+            case ULTIMATE_INDEXED:
+                thresholdUltimateIndexed += summand;
                 break;
             case REPORTED:
                 thresholdReported += summand;

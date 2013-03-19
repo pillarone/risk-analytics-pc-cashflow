@@ -95,8 +95,8 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         quotaShare20.doCalculation()
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P0 800 ceded ultimate', 160, quotaShare20.outClaimsCeded[0].ultimate()
-        assertEquals 'P0 800 ceded reported incremental', 160, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
-        assertEquals 'P0 800 ceded reported cumulated', 160, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed
+        assertEquals 'P0 800 ceded ratioReported incremental', 160, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P0 800 ceded ratioReported cumulated', 160, quotaShare20.outClaimsCeded[0].reportedCumulatedIndexed
         assertEquals 'P0 800 ceded paid incremental', 160, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed
         assertEquals 'P0 800 ceded paid cumulated', 160, quotaShare20.outClaimsCeded[0].paidCumulatedIndexed
         assertEquals 'P0 800 ceded reservedIndexed', 0, quotaShare20.outClaimsCeded[0].reservedIndexed()
@@ -104,8 +104,8 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'P0 800 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[0].ibnrIndexed()
 
         assertEquals 'P0 1000 ceded ultimate', 140, quotaShare20.outClaimsCeded[1].ultimate()
-        assertEquals 'P0 1000 ceded reported incremental', 140, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
-        assertEquals 'P0 1000 ceded reported cumulated', 140, quotaShare20.outClaimsCeded[1].reportedCumulatedIndexed
+        assertEquals 'P0 1000 ceded ratioReported incremental', 140, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P0 1000 ceded ratioReported cumulated', 140, quotaShare20.outClaimsCeded[1].reportedCumulatedIndexed
         assertEquals 'P0 1000 ceded paid incremental', 140, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed
         assertEquals 'P0 1000 ceded paid cumulated', 140, quotaShare20.outClaimsCeded[1].paidCumulatedIndexed
         assertEquals 'P0 1000 ceded reservedIndexed', 0, quotaShare20.outClaimsCeded[1].reservedIndexed()
@@ -113,8 +113,8 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'P0 1000 ceded ibnrIndexed', 0, quotaShare20.outClaimsCeded[1].ibnrIndexed()
 
         assertEquals 'P0 1200 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
-        assertEquals 'P0 1200 ceded reported incremental', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
-        assertEquals 'P0 1200 ceded reported cumulated', 0, quotaShare20.outClaimsCeded[2].reportedCumulatedIndexed
+        assertEquals 'P0 1200 ceded ratioReported incremental', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
+        assertEquals 'P0 1200 ceded ratioReported cumulated', 0, quotaShare20.outClaimsCeded[2].reportedCumulatedIndexed
         assertEquals 'P0 1200 ceded paid incremental', 0, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed
         assertEquals 'P0 1200 ceded paid cumulated', 0, quotaShare20.outClaimsCeded[2].paidCumulatedIndexed
         assertEquals 'P0 1200 ceded reservedIndexed', 0, quotaShare20.outClaimsCeded[2].reservedIndexed()
@@ -151,13 +151,13 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P0.0 ceded ultimate', 160, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P0.0 ceded incremental paid', 0, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-        assertEquals 'P0.0 ceded incremental reported', 48, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P0.0 ceded incremental ratioReported', 48, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P0.1 ceded ultimate', 140, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P0.1 ceded incremental paid', 0, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
-        assertEquals 'P0.1 ceded incremental reported', 60, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P0.1 ceded incremental ratioReported', 60, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
         assertEquals 'P0.2 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
         assertEquals 'P0.2 ceded incremental paid', 0, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed, EPSILON
-        assertEquals 'P0.2 ceded incremental reported', 72, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
+        assertEquals 'P0.2 ceded incremental ratioReported', 72, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
@@ -169,13 +169,13 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P1.0 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P1.0 ceded incremental paid', 64, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed
-        assertEquals 'P1.0 ceded incremental reported', 48, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P1.0 ceded incremental ratioReported', 48, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P1.1 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P1.1 ceded incremental paid', 80, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed
-        assertEquals 'P1.1 ceded incremental reported', 60, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P1.1 ceded incremental ratioReported', 60, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
         assertEquals 'P1.2 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
         assertEquals 'P1.2 ceded incremental paid', 96, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed
-        assertEquals 'P1.2 ceded incremental reported', 12, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
+        assertEquals 'P1.2 ceded incremental ratioReported', 12, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
 
 
         quotaShare20.reset()
@@ -188,13 +188,13 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P2.0 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P2.0 ceded incremental paid', 48, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-        assertEquals 'P2.0 ceded incremental reported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P2.0 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P2.1 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P2.1 ceded incremental paid', 12, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
-        assertEquals 'P2.1 ceded incremental reported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P2.1 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
         assertEquals 'P2.2 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
         assertEquals 'P2.2 ceded incremental paid', 0, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed
-        assertEquals 'P2.2 ceded incremental reported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
+        assertEquals 'P2.2 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
 
 
         quotaShare20.reset()
@@ -207,13 +207,13 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P3.0 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P3.0 ceded incremental paid', 0, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed
-        assertEquals 'P3.0 ceded incremental reported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P3.0 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P3.1 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P3.1 ceded incremental paid', 0, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed
-        assertEquals 'P3.1 ceded incremental reported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P3.1 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
         assertEquals 'P3.2 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
         assertEquals 'P3.2 ceded incremental paid', 0, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed
-        assertEquals 'P3.2 ceded incremental reported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
+        assertEquals 'P3.2 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
 
 
         quotaShare20.reset()
@@ -225,7 +225,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
 
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P4 summed ceded ultimate', 0, quotaShare20.outClaimsCeded.ultimate.sum()
-        assertEquals 'P4 summed ceded reported', 0, quotaShare20.outClaimsCeded.reportedIncrementalIndexed.sum()
+        assertEquals 'P4 summed ceded ratioReported', 0, quotaShare20.outClaimsCeded.reportedIncrementalIndexed.sum()
         assertEquals 'P4 summed ceded paid', 0, quotaShare20.outClaimsCeded.paidIncrementalIndexed.sum()
 
         quotaShare20.reset()
@@ -262,13 +262,13 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P0.0 ceded ultimate', 160, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P0.0 ceded incremental paid', 0, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-        assertEquals 'P0.0 ceded incremental reported', 160, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P0.0 ceded incremental ratioReported', 160, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P0.1 ceded ultimate', 140, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P0.1 ceded incremental paid', 0, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
-        assertEquals 'P0.1 ceded incremental reported', 140, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P0.1 ceded incremental ratioReported', 140, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
         assertEquals 'P0.2 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
         assertEquals 'P0.2 ceded incremental paid', 0, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed, EPSILON
-        assertEquals 'P0.2 ceded incremental reported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
+        assertEquals 'P0.2 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
@@ -280,13 +280,13 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P1.0 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P1.0 ceded incremental paid', 57.6, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed
-        assertEquals 'P1.0 ceded incremental reported', -16, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P1.0 ceded incremental ratioReported', -16, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P1.1 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P1.1 ceded incremental paid', 72, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed
-        assertEquals 'P1.1 ceded incremental reported', 16, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P1.1 ceded incremental ratioReported', 16, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
         assertEquals 'P1.2 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
         assertEquals 'P1.2 ceded incremental paid', 86.4, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed
-        assertEquals 'P1.2 ceded incremental reported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
+        assertEquals 'P1.2 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
 
 
         quotaShare20.reset()
@@ -299,13 +299,13 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P2.0 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P2.0 ceded incremental paid', 38.4, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-        assertEquals 'P2.0 ceded incremental reported', -9.599999999999994, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P2.0 ceded incremental ratioReported', -9.599999999999994, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P2.1 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P2.1 ceded incremental paid', 45.6, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
-        assertEquals 'P2.1 ceded incremental reported', 9.599999999999994, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P2.1 ceded incremental ratioReported', 9.599999999999994, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
         assertEquals 'P2.2 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
         assertEquals 'P2.2 ceded incremental paid', 0, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed
-        assertEquals 'P2.2 ceded incremental reported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
+        assertEquals 'P2.2 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
 
 
         quotaShare20.reset()
@@ -318,13 +318,13 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P3.0 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P3.0 ceded incremental paid', 0, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed
-        assertEquals 'P3.0 ceded incremental reported', -4.800000000000011, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P3.0 ceded incremental ratioReported', -4.800000000000011, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P3.1 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P3.1 ceded incremental paid', 0, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed
-        assertEquals 'P3.1 ceded incremental reported', -3.5999999999999943, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P3.1 ceded incremental ratioReported', -3.5999999999999943, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
         assertEquals 'P3.2 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
         assertEquals 'P3.2 ceded incremental paid', 0, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed
-        assertEquals 'P3.2 ceded incremental reported', 8.400000000000006, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
+        assertEquals 'P3.2 ceded incremental ratioReported', 8.400000000000006, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
 
 
         quotaShare20.reset()
@@ -336,7 +336,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
 
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P4 summed ceded ultimate', 0, quotaShare20.outClaimsCeded.ultimate.sum()
-        assertEquals 'P4 summed ceded reported', 0, quotaShare20.outClaimsCeded.reportedIncrementalIndexed.sum()
+        assertEquals 'P4 summed ceded ratioReported', 0, quotaShare20.outClaimsCeded.reportedIncrementalIndexed.sum()
         assertEquals 'P4 summed ceded paid', 0, quotaShare20.outClaimsCeded.paidIncrementalIndexed.sum()
 
         quotaShare20.reset()
@@ -373,22 +373,22 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 6, quotaShare20.outClaimsCeded.size()
         assertEquals 'P0.0 ceded ultimate', 160, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P0.0 ceded incremental paid', 1.6, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-        assertEquals 'P0.0 ceded incremental reported', 112, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P0.0 ceded incremental ratioReported', 112, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P0.1 ceded ultimate', 140, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P0.1 ceded incremental paid', 2, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
-        assertEquals 'P0.1 ceded incremental reported', 140, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P0.1 ceded incremental ratioReported', 140, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
         assertEquals 'P0.2 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
         assertEquals 'P0.2 ceded incremental paid', 2.4, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed, EPSILON
-        assertEquals 'P0.2 ceded incremental reported', 48, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
+        assertEquals 'P0.2 ceded incremental ratioReported', 48, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
         assertEquals 'P1.0 ceded ultimate', 0, quotaShare20.outClaimsCeded[3].ultimate()
         assertEquals 'P1.0 ceded incremental paid', 14.4, quotaShare20.outClaimsCeded[3].paidIncrementalIndexed, EPSILON
-        assertEquals 'P1.0 ceded incremental reported', 0, quotaShare20.outClaimsCeded[3].reportedIncrementalIndexed
+        assertEquals 'P1.0 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[3].reportedIncrementalIndexed
         assertEquals 'P1.1 ceded ultimate', 0, quotaShare20.outClaimsCeded[4].ultimate()
         assertEquals 'P1.1 ceded incremental paid', 18, quotaShare20.outClaimsCeded[4].paidIncrementalIndexed, EPSILON
-        assertEquals 'P1.1 ceded incremental reported', 0, quotaShare20.outClaimsCeded[4].reportedIncrementalIndexed
+        assertEquals 'P1.1 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[4].reportedIncrementalIndexed
         assertEquals 'P1.2 ceded ultimate', 0, quotaShare20.outClaimsCeded[5].ultimate()
         assertEquals 'P1.2 ceded incremental paid', 21.6, quotaShare20.outClaimsCeded[5].paidIncrementalIndexed, EPSILON
-        assertEquals 'P1.2 ceded incremental reported', 0, quotaShare20.outClaimsCeded[5].reportedIncrementalIndexed
+        assertEquals 'P1.2 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[5].reportedIncrementalIndexed
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
@@ -400,13 +400,13 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P2.0 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P2.0 ceded incremental paid', 80, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-        assertEquals 'P2.0 ceded incremental reported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P2.0 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P2.1 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P2.1 ceded incremental paid', 100, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
-        assertEquals 'P2.1 ceded incremental reported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P2.1 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
         assertEquals 'P2.2 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
         assertEquals 'P2.2 ceded incremental paid', 60, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed, EPSILON
-        assertEquals 'P2.2 ceded incremental reported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
+        assertEquals 'P2.2 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
 
 
         quotaShare20.reset()
@@ -419,13 +419,13 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P3.0 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P3.0 ceded incremental paid', 0, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed
-        assertEquals 'P3.0 ceded incremental reported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P3.0 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P3.1 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P3.1 ceded incremental paid', 0, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed
-        assertEquals 'P3.1 ceded incremental reported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P3.1 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
         assertEquals 'P3.2 ceded ultimate', 0, quotaShare20.outClaimsCeded[2].ultimate()
         assertEquals 'P3.2 ceded incremental paid', 0, quotaShare20.outClaimsCeded[2].paidIncrementalIndexed
-        assertEquals 'P3.2 ceded incremental reported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
+        assertEquals 'P3.2 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[2].reportedIncrementalIndexed
 
 
         quotaShare20.reset()
@@ -446,7 +446,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
 
         assertEquals 'number of ceded claims', 3, quotaShare20.outClaimsCeded.size()
         assertEquals 'P4 summed ceded ultimate', 0, quotaShare20.outClaimsCeded.ultimate.sum()
-        assertEquals 'P4 summed ceded reported', 0, quotaShare20.outClaimsCeded.reportedIncrementalIndexed.sum(), EPSILON
+        assertEquals 'P4 summed ceded ratioReported', 0, quotaShare20.outClaimsCeded.reportedIncrementalIndexed.sum(), EPSILON
         assertEquals 'P4 summed ceded paid', 0, quotaShare20.outClaimsCeded.paidIncrementalIndexed.sum(), EPSILON
     }
 
@@ -466,7 +466,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 1, quotaShare20.outClaimsCeded.size()
         assertEquals 'P0.0 ceded ultimate', 120, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P0.0 ceded incremental paid', 0, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-        assertEquals 'P0.0 ceded incremental reported', 48, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P0.0 ceded incremental ratioReported', 48, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
 
         quotaShare20.reset()
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
@@ -480,10 +480,10 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 2, quotaShare20.outClaimsCeded.size()
         assertEquals 'P1.1 ceded ultimate', 120, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P1.1 ceded incremental paid', 0, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-        assertEquals 'P1.1 ceded incremental reported', 60, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P1.1 ceded incremental ratioReported', 60, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P1.0 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P1.0 ceded incremental paid', 64, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed
-        assertEquals 'P1.0 ceded incremental reported', 48, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P1.0 ceded incremental ratioReported', 48, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
 
 
         quotaShare20.reset()
@@ -495,10 +495,10 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 2, quotaShare20.outClaimsCeded.size()
         assertEquals 'P2.1 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P2.1 ceded incremental paid', 80, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-        assertEquals 'P2.1 ceded incremental reported', 60, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P2.1 ceded incremental ratioReported', 60, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P2.0 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P2.0 ceded incremental paid', 48, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
-        assertEquals 'P2.0 ceded incremental reported', 24, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P2.0 ceded incremental ratioReported', 24, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
 
 
         quotaShare20.reset()
@@ -510,10 +510,10 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         assertEquals 'number of ceded claims', 2, quotaShare20.outClaimsCeded.size()
         assertEquals 'P3.1 ceded ultimate', 0, quotaShare20.outClaimsCeded[0].ultimate()
         assertEquals 'P3.1 ceded incremental paid', 40, quotaShare20.outClaimsCeded[0].paidIncrementalIndexed, EPSILON
-        assertEquals 'P3.1 ceded incremental reported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
+        assertEquals 'P3.1 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[0].reportedIncrementalIndexed
         assertEquals 'P3.0 ceded ultimate', 0, quotaShare20.outClaimsCeded[1].ultimate()
         assertEquals 'P3.0 ceded incremental paid', 8, quotaShare20.outClaimsCeded[1].paidIncrementalIndexed, EPSILON
-        assertEquals 'P3.0 ceded incremental reported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
+        assertEquals 'P3.0 ceded incremental ratioReported', 0, quotaShare20.outClaimsCeded[1].reportedIncrementalIndexed
 
 
         quotaShare20.reset()
@@ -524,7 +524,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
 
         assertEquals 'number of ceded claims', 2, quotaShare20.outClaimsCeded.size()
         assertEquals 'P4 summed ceded ultimate', 0, quotaShare20.outClaimsCeded.ultimate.sum()
-        assertEquals 'P4 summed ceded reported', 0, quotaShare20.outClaimsCeded.reportedIncrementalIndexed.sum()
+        assertEquals 'P4 summed ceded ratioReported', 0, quotaShare20.outClaimsCeded.reportedIncrementalIndexed.sum()
         assertEquals 'P4 summed ceded paid', 0, quotaShare20.outClaimsCeded.paidIncrementalIndexed.sum()
 
         quotaShare20.reset()
@@ -534,7 +534,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         quotaShare20.doCalculation()
 
         assertEquals 'number of ceded claims', 1, quotaShare20.outClaimsCeded.size()
-        assertEquals 'P5 summed ceded reported', 0, quotaShare20.outClaimsCeded.reportedIncrementalIndexed.sum()
+        assertEquals 'P5 summed ceded ratioReported', 0, quotaShare20.outClaimsCeded.reportedIncrementalIndexed.sum()
         assertEquals 'P5 summed ceded paid', 0, quotaShare20.outClaimsCeded.paidIncrementalIndexed.sum()
     }
 

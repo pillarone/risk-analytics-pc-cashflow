@@ -67,11 +67,21 @@ class ReinsuranceContractTests extends GroovyTestCase {
                 periodStore: iterationScope.periodStores[0])
     }
 
+    static ReinsuranceContract getCXLContract(double attachmentPoint, double limit, double aggregateLimit, double premium,
+                                             DateTime beginOfCover) {
+        getXLContract(ReinsuranceContractType.CXL, attachmentPoint, limit, aggregateLimit, premium, beginOfCover)
+    }
+
     static ReinsuranceContract getWXLContract(double attachmentPoint, double limit, double aggregateLimit, double premium,
+                                              DateTime beginOfCover) {
+        getXLContract(ReinsuranceContractType.WXL, attachmentPoint, limit, aggregateLimit, premium, beginOfCover)
+    }
+
+    static ReinsuranceContract getXLContract(ReinsuranceContractType type, double attachmentPoint, double limit, double aggregateLimit, double premium,
                                              DateTime beginOfCover) {
         IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
         return new ReinsuranceContract(
-                parmContractStrategy : ReinsuranceContractType.getStrategy(ReinsuranceContractType.WXL, [
+                parmContractStrategy : ReinsuranceContractType.getStrategy(type, [
                         attachmentPoint: attachmentPoint,
                         limit: limit,
                         aggregateLimit: aggregateLimit,

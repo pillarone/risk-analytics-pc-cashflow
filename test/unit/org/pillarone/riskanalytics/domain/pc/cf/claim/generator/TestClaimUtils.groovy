@@ -20,4 +20,13 @@ class TestClaimUtils {
         return grossClaimRoot
     }
 
+    public static  HashMap<Integer, Double>  blankPremMap(){
+        HashMap<Integer, Double> premiumPerPeriod =  new HashMap<Integer, Double>()
+        premiumPerPeriod.put(0, 0d)
+        premiumPerPeriod.put(1, 0d)
+        premiumPerPeriod.put(2, 0d)
+        premiumPerPeriod.put(3, 0d)
+        return premiumPerPeriod
+    }
+
 }

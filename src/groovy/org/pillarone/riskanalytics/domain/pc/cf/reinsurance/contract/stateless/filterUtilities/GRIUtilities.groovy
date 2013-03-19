@@ -9,10 +9,12 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.I
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot
 import org.pillarone.riskanalytics.core.simulation.SimulationException
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 
 /**
  *   author simon.parten @ art-allianz . com
  */
+@Deprecated /* Too slow. Use Java */
 class GRIUtilities {
 
     public static List<ClaimCashflowPacket> cashflowsRelatedToRoots(Set<IClaimRoot> rootClaims, List<ClaimCashflowPacket> cashflows) {
@@ -23,8 +25,12 @@ class GRIUtilities {
         return cashflowPacketList*.getBaseClaim().contains(root)
     }
 
+    public static Double ultimateSumFromMap(Map<IClaimRoot, Collection<ClaimCashflowPacket>> aMap) {
+        return ultimateSumFromCashflows(aMap.values().flatten())
+    }
 
-    public static Double ultimateSumFromCashflows(List<ClaimCashflowPacket> cashflows) {
+    @Deprecated /* too slow */
+    public static Double ultimateSumFromCashflows(Collection<ClaimCashflowPacket> cashflows) {
         Set<IClaimRoot> incurredClaims = RIUtilities.incurredClaims(cashflows, IncurredClaimBase.BASE)
         ArrayList<IClaimRoot> claims = new ArrayList<IClaimRoot>()
         claims.addAll(incurredClaims)
@@ -40,7 +46,7 @@ class GRIUtilities {
         return claim
     }
 
-    public static ClaimCashflowPacket findCashflowToGrossClaim(IClaimRoot cededKeyClaim, List<ClaimCashflowPacket> allCashflows, IncurredClaimBase base) {
+    public static ClaimCashflowPacket findCashflowToGrossClaim(IClaimRoot cededKeyClaim, Collection<ClaimCashflowPacket> allCashflows, IncurredClaimBase base) {
         ClaimCashflowPacket claim = allCashflows.find { cededKeyClaim.equals( base.parentClaim(it) )}
 //        There ought to be no prior ceded claims. Pump out a dummy claim.
         if (claim == null) {
@@ -49,6 +55,7 @@ class GRIUtilities {
         return claim
     }
 
+    @Deprecated /* tool slow ! */
     public static Double ultimateSum(Collection<IClaimRoot> incurredClaims) {
         if (incurredClaims.size() > 0) {
             return (Double) incurredClaims*.getUltimate().sum()
@@ -56,6 +63,7 @@ class GRIUtilities {
         return 0d
     }
 
+    @Deprecated /* Too slow */
     public static Double incrementalCashflowSum(Collection<ClaimCashflowPacket> incurredClaims) {
         if (incurredClaims.size() > 0) {
             return (Double) incurredClaims*.getPaidIncrementalIndexed().sum()
@@ -63,19 +71,27 @@ class GRIUtilities {
         return 0d
     }
 
+    /**
+     * This method is extremely slow. Convert to java...
+      * @param coverageBase
+     * @param coverStart
+     * @param coverEnd
+     * @param incomingClaims
+     * @return
+     */
     public static List<ClaimCashflowPacket> uncoveredClaims(ContractCoverBase coverageBase, DateTime coverStart, DateTime coverEnd, List<ClaimCashflowPacket> incomingClaims) {
 
         final List<ClaimCashflowPacket> uncoveredClaims = incomingClaims.findAll {ClaimCashflowPacket it ->
             DateTime claimCoverDate = coverageBase.claimCoverDate(it);
-            boolean inCoverPeriod = (coverStart.isEqual(claimCoverDate) || coverStart.isBefore(claimCoverDate)) && coverEnd.isAfter(claimCoverDate)
+            Boolean inCoverPeriod = (coverStart.isEqual(claimCoverDate) || coverStart.isBefore(claimCoverDate)) && coverEnd.isAfter(claimCoverDate)
             return !inCoverPeriod
         }
         return uncoveredClaims;
     }
 
-    public static ArrayList<IClaimRoot> claimsCoveredInPeriod(Collection<IClaimRoot> incurredClaims, PeriodScope periodScope, ContractCoverBase base, int period) {
+    public static Collection<IClaimRoot> claimsCoveredInPeriod(Collection<IClaimRoot> incurredClaims, PeriodScope periodScope, ContractCoverBase base, int period) {
 
-        ArrayList<IClaimRoot> claims = incurredClaims.findAll {
+        Collection<IClaimRoot> claims = incurredClaims.findAll {
             it ->
             DateTime coverDate = base.claimCoverDate(it)
             return periodScope.getPeriodCounter().belongsToPeriod(coverDate) == period
@@ -84,12 +100,12 @@ class GRIUtilities {
         return claims
     }
 
-    public static ArrayList<ClaimCashflowPacket> cashflowsCoveredInModelPeriod(Collection<ClaimCashflowPacket> cashflows, PeriodScope periodScope, ContractCoverBase base, int period) {
-
+    public static Collection<ClaimCashflowPacket> cashflowsCoveredInModelPeriod(Collection<ClaimCashflowPacket> cashflows, PeriodScope periodScope, ContractCoverBase base, int period) {
+        IPeriodCounter counter = periodScope.getPeriodCounter()
         return cashflows.findAll {
             it ->
             DateTime coverDate = base.claimCoverDate(it)
-            return periodScope.getPeriodCounter().belongsToPeriod(coverDate) == period
+            return counter.belongsToPeriod(coverDate) == period
         }
     }
 

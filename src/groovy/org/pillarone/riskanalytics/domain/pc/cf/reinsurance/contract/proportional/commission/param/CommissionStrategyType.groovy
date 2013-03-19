@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param
 
+import org.apache.commons.lang.NotImplementedException
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
@@ -15,25 +16,19 @@ class CommissionStrategyType extends AbstractParameterObjectClassifier {
 
     public static final CommissionStrategyType NOCOMMISSION = new CommissionStrategyType("no commission", "NOCOMMISSION", [:])
     public static final CommissionStrategyType FIXEDCOMMISSION = new CommissionStrategyType("fixed commission", "FIXEDCOMMISSION", ['commission':0d])
-    public static final CommissionStrategyType SLIDINGCOMMISSION = new CommissionStrategyType("sliding commission", "SLIDINGCOMMISSION",
-           ['commissionBands': new ConstrainedMultiDimensionalParameter(
-                        [[0d], [0d]],
-                        [SlidingCommissionStrategy.LOSS_RATIO, SlidingCommissionStrategy.COMMISSION],
-                        ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
-            'useClaims': BasedOnClaimProperty.PAID])
     public static final CommissionStrategyType INTERPOLATEDSLIDINGCOMMISSION = new CommissionStrategyType(
             "interpolated sliding commission", "INTERPOLATEDSLIDINGCOMMISSION",
            ['commissionBands': new ConstrainedMultiDimensionalParameter(
                         [[0d], [0d]],
-                        [SlidingCommissionStrategy.LOSS_RATIO, SlidingCommissionStrategy.COMMISSION],
+                        [InterpolatedSlidingCommissionStrategy.LOSS_RATIO, InterpolatedSlidingCommissionStrategy.COMMISSION],
                         ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
-            'useClaims': BasedOnClaimProperty.PAID])
+            'useClaims': CommissionBase.PAID])
     public static final CommissionStrategyType PROFITCOMMISSION = new CommissionStrategyType("profit commission", "PROFITCOMMISSION",
             ['profitCommissionRatio':0d, 'commissionRatio':0d, 'costRatio':0d, 'lossCarriedForwardEnabled':true,
                     'initialLossCarriedForward':0d,
-            'useClaims': BasedOnClaimProperty.PAID])
+            'useClaims': CommissionBase.PAID])
 
-    public static final all = [NOCOMMISSION, FIXEDCOMMISSION, SLIDINGCOMMISSION, INTERPOLATEDSLIDINGCOMMISSION, PROFITCOMMISSION]
+    public static final all = [NOCOMMISSION, FIXEDCOMMISSION, INTERPOLATEDSLIDINGCOMMISSION, PROFITCOMMISSION]
 
     protected static Map types = [:]
     static {
@@ -80,18 +75,15 @@ class CommissionStrategyType extends AbstractParameterObjectClassifier {
                         costRatio : (Double) parameters['costRatio'],
                         lossCarriedForwardEnabled : (Boolean) parameters['lossCarriedForwardEnabled'],
                         initialLossCarriedForward : (Double) parameters['initialLossCarriedForward'],
-                        useClaims : (BasedOnClaimProperty) parameters['useClaims'])
-                break;
-            case CommissionStrategyType.SLIDINGCOMMISSION:
-                commissionStrategy = new SlidingCommissionStrategy(
-                        commissionBands: (ConstrainedMultiDimensionalParameter) parameters['commissionBands'],
-                        useClaims : (BasedOnClaimProperty) parameters['useClaims'])
+                        useClaims : (CommissionBase) parameters['useClaims'])
                 break;
             case CommissionStrategyType.INTERPOLATEDSLIDINGCOMMISSION:
                 commissionStrategy = new InterpolatedSlidingCommissionStrategy(
                         commissionBands: (ConstrainedMultiDimensionalParameter) parameters['commissionBands'],
-                        useClaims : (BasedOnClaimProperty) parameters['useClaims'])
+                        useClaims : (CommissionBase) parameters['useClaims'])
                 break;
+            default:
+                throw new NotImplementedException("$type is not implemented");
         }
         return commissionStrategy;
     }

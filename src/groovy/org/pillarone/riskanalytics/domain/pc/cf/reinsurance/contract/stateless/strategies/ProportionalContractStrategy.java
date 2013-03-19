@@ -1,9 +1,11 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies;
 
+import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
@@ -16,7 +18,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportiona
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.QuotaShareContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.CommissionPeriodParameters;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.QuoteCapConstraints;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts.ICommissionParameterStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts.TemplateContractType;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 
@@ -49,16 +50,19 @@ public class ProportionalContractStrategy extends AbstractParameterObject implem
 
     /**
      * This implementation ignores all provided parameters.
+     *
+     *
      * @param period ignored
      * @param underwritingInfoPackets ignored
      * @param base ignored
      * @param termDeductible ignored
      * @param termLimit ignored
+     * @param claims
      * @return one contract
      */
     public List<IReinsuranceContract> getContracts(int period,
                                                    List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
-                                                   IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit) {
+                                                   IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit, List<ClaimCashflowPacket> claims) {
         initCommissionPeriodParameters();
         IReinsuranceContract contract;
         CommissionPeriodParameters parameters = periodParameters.floorEntry(period).getValue();

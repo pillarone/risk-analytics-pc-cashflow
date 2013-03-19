@@ -4,6 +4,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.InterpolatedSlidingCommission;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
@@ -20,6 +21,8 @@ public class InterpolatedSlidingCommissionStrategy extends AbstractCommissionStr
     public static final String COMMISSION = "Commission rate";
     public static final int LOSS_RATIO_COLUMN_INDEX = 0;
     public static final int COMMISSION_COLUMN_INDEX = 1;
+    private Double[] lossRatios;
+    private Double[] commissionoRate;
 
     private ConstrainedMultiDimensionalParameter commissionBands = new ConstrainedMultiDimensionalParameter(
             GroovyUtils.convertToListOfList(new Object[]{0d, 0d}),
@@ -36,7 +39,7 @@ public class InterpolatedSlidingCommissionStrategy extends AbstractCommissionStr
         return map;
     }
 
-    public ICommission getCalculator() {
+    public ICommission getCalculator(DoubleValuePerPeriod lossCarriedForward) {
         TreeMap<Double, List<Double>> commissionRatesPerLossRatio;
         int numberOfEntries = commissionBands.getValueRowCount();
         commissionRatesPerLossRatio = new TreeMap<Double, List<Double>>();
@@ -50,6 +53,28 @@ public class InterpolatedSlidingCommissionStrategy extends AbstractCommissionStr
             Collections.sort(listOfCommissionRates);
             commissionRatesPerLossRatio.put(lossRatio, listOfCommissionRates);
         }
-        return new InterpolatedSlidingCommission(commissionRatesPerLossRatio, useClaims);
+        return new InterpolatedSlidingCommission(commissionRatesPerLossRatio, useClaims.convert());
+    }
+
+
+    public Double[] getLossRatios() {
+        initValues();
+        return lossRatios;
+    }
+
+    private void initValues() {
+        if (lossRatios == null) {
+            lossRatios = new Double[commissionBands.getValueRowCount() - commissionBands.getTitleRowCount() + 1];
+            commissionoRate = new Double[commissionBands.getValueRowCount() - commissionBands.getTitleRowCount() + 1];
+            for (int i = commissionBands.getTitleRowCount(); i <= commissionBands.getValueRowCount(); i++) {
+                lossRatios[i - commissionBands.getTitleRowCount()] = InputFormatConverter.getDouble(commissionBands.getValueAt(i, LOSS_RATIO_COLUMN_INDEX));
+                commissionoRate[i - commissionBands.getTitleRowCount()] = InputFormatConverter.getDouble(commissionBands.getValueAt(i, COMMISSION_COLUMN_INDEX));
+            }
+        }
+    }
+
+    public Double[] getCommisionRates() {
+        initValues();
+        return commissionoRate;
     }
 }

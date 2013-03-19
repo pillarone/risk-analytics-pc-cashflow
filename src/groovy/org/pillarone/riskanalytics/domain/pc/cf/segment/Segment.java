@@ -65,7 +65,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
-    private PacketList<FinancialsPacket> outNetFinancials = new PacketList<FinancialsPacket>(FinancialsPacket.class);
+    private PacketList<FinancialsPacket> outFinancials = new PacketList<FinancialsPacket>(FinancialsPacket.class);
 
     private ConstrainedString parmCompany = new ConstrainedString(ILegalEntityMarker.class, "");
     private ConstrainedMultiDimensionalParameter parmClaimsPortions = new ConstrainedMultiDimensionalParameter(
@@ -113,15 +113,15 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
                     DiscountUtils.getDiscountedNetValuesAndFillOutChannels(outClaimsCeded, outClaimsNet, outDiscountedValues,
                             outNetPresentValues, periodStore, iterationScope);
                 }
-                fillContractFinancials(iterationScope.getPeriodScope().getPeriodCounter());
+                fillFinancials(iterationScope.getPeriodScope().getPeriodCounter());
             }
         }
     }
 
-    private void fillContractFinancials(IPeriodCounter periodCounter) {
-        if (isSenderWired(outNetFinancials)) {
-            outNetFinancials.addAll(FinancialsPacket.getFinancialsPacketsByInceptionPeriod(outUnderwritingInfoNet,
-                    outUnderwritingInfoCeded, outClaimsNet, periodCounter));
+    private void fillFinancials(IPeriodCounter periodCounter) {
+        if (isSenderWired(outFinancials)) {
+            outFinancials.addAll(FinancialsPacket.getFinancialsPacketsByInceptionPeriod(outUnderwritingInfoGross,
+                    outUnderwritingInfoNet, outUnderwritingInfoCeded, outClaimsGross, outClaimsNet, outClaimsCeded, periodCounter));
         }
         if (!isSenderWired(outClaimsNet)) {
             outClaimsNet.clear();
@@ -167,13 +167,13 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     }
 
     private void calculateNetUnderwritingInfo() {
-        if (isSenderWired(outNetFinancials) || isSenderWired(outUnderwritingInfoNet)) {
+        if (isSenderWired(outFinancials) || isSenderWired(outUnderwritingInfoNet)) {
             outUnderwritingInfoNet.addAll(UnderwritingInfoUtils.calculateNetUnderwritingInfo(outUnderwritingInfoGross, inUnderwritingInfoCeded));
         }
     }
 
     private void calculateNetClaims() {
-        if ((isSenderWired(outNetFinancials) || isSenderWired(outClaimsNet)) && !outClaimsGross.isEmpty()) {
+        if ((isSenderWired(outFinancials) || isSenderWired(outClaimsNet)) && !outClaimsGross.isEmpty()) {
             outClaimsNet.addAll(ClaimUtils.calculateNetClaims(outClaimsGross, outClaimsCeded));
         }
     }
@@ -308,7 +308,7 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         setTransmitterPhaseOutput(outNetPresentValues, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_NET);
-        setTransmitterPhaseOutput(outNetFinancials, PHASE_NET);
+        setTransmitterPhaseOutput(outFinancials, PHASE_NET);
     }
 
     @Override
@@ -484,12 +484,12 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
         this.inLegalEntityDefault = inLegalEntityDefault;
     }
 
-    public PacketList<FinancialsPacket> getOutNetFinancials() {
-        return outNetFinancials;
+    public PacketList<FinancialsPacket> getOutFinancials() {
+        return outFinancials;
     }
 
-    public void setOutNetFinancials(PacketList<FinancialsPacket> outNetFinancials) {
-        this.outNetFinancials = outNetFinancials;
+    public void setOutFinancials(PacketList<FinancialsPacket> outFinancials) {
+        this.outFinancials = outFinancials;
     }
 
 }

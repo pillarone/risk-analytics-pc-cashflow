@@ -2,12 +2,17 @@ package org.pillarone.riskanalytics.domain.pc.cf.structure;
 
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.packets.PacketList;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket;
 import org.pillarone.riskanalytics.domain.utils.marker.IStructureMarker;
+
+import java.util.List;
 
 
 /**
@@ -27,22 +32,35 @@ public class Structure extends Component implements IStructureMarker {
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
+    private PacketList<FinancialsPacket> outFinancials = new PacketList<FinancialsPacket>(FinancialsPacket.class);
 
     private IStructuringStrategy parmBasisOfStructures = StructuringType.getDefault();
+
+    private PeriodScope periodScope;
 
     @Override
     protected void doCalculation() {
         outClaimsGross.addAll(parmBasisOfStructures.filterClaims(inClaimsGross));
         outClaimsCeded.addAll(parmBasisOfStructures.filterClaims(inClaimsCeded));
-        ClaimCashflowPacket netClaim = ClaimUtils.calculateNetClaim(outClaimsGross, outClaimsCeded);
-        if (netClaim != null) {
-            netClaim.removeMarkers();
-            outClaimsNet.add(netClaim);
-        }
+        outClaimsNet.addAll(ClaimUtils.calculateNetClaims(outClaimsGross, outClaimsCeded));
 
         outUnderwritingInfoGross.addAll(parmBasisOfStructures.filterUnderwritingInfos(inUnderwritingInfoGross));
         outUnderwritingInfoCeded.addAll(parmBasisOfStructures.filterUnderwritingInfosCeded(inUnderwritingInfoCeded));
         outUnderwritingInfoNet.addAll(UnderwritingInfoUtils.calculateNetUnderwritingInfo(outUnderwritingInfoGross, outUnderwritingInfoCeded));
+        fillFinancials(periodScope.getPeriodCounter());
+    }
+
+    private void fillFinancials(IPeriodCounter periodCounter) {
+        if (isSenderWired(outFinancials)) {
+            outFinancials.addAll(FinancialsPacket.getFinancialsPacketsByInceptionPeriod(outUnderwritingInfoGross,
+                    outUnderwritingInfoNet, outUnderwritingInfoCeded, outClaimsGross, outClaimsNet, outClaimsCeded, periodCounter));
+        }
+        if (!isSenderWired(outClaimsNet)) {
+            outClaimsNet.clear();
+        }
+        if (!isSenderWired(outUnderwritingInfoNet)) {
+            outUnderwritingInfoNet.clear();
+        }
     }
 
     public PacketList<ClaimCashflowPacket> getInClaimsGross() {
@@ -131,6 +149,22 @@ public class Structure extends Component implements IStructureMarker {
 
     public void setParmBasisOfStructures(IStructuringStrategy parmBasisOfStructures) {
         this.parmBasisOfStructures = parmBasisOfStructures;
+    }
+
+    public PacketList<FinancialsPacket> getOutFinancials() {
+        return outFinancials;
+    }
+
+    public void setOutFinancials(PacketList<FinancialsPacket> outFinancials) {
+        this.outFinancials = outFinancials;
+    }
+
+    public PeriodScope getPeriodScope() {
+        return periodScope;
+    }
+
+    public void setPeriodScope(PeriodScope periodScope) {
+        this.periodScope = periodScope;
     }
 }
 

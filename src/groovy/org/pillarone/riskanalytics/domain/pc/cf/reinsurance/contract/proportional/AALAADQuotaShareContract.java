@@ -6,12 +6,16 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.ILimitStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.ThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.ILossParticipation;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.NoLossParticipation;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,30 +26,46 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
     private ThresholdStore periodLimit;
     private ThresholdStore periodDeductible;
     private AADReduction aadReduction;
-
-
+    private ILimitStrategy limit;
 
     public AALAADQuotaShareContract(double quotaShare, ICommission commission, ILimitStrategy limit) {
-        super(quotaShare, commission);
+        this(quotaShare, commission, limit, new NoLossParticipation());
+    }
+
+    public AALAADQuotaShareContract(double quotaShare, ICommission commission, ILimitStrategy limit, ILossParticipation lossParticipation) {
+        super(quotaShare, commission, lossParticipation);
+        this.limit = limit;
         periodLimit = new ThresholdStore(limit.getAAL());
         periodDeductible = new ThresholdStore(limit.getAAD());
         aadReduction = new AADReduction();
     }
 
-    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
-        double quotaShareUltimate = 0;
-        if (!storage.hasReferenceCeded()) {
-            quotaShareUltimate = adjustedQuote(grossClaim.developedUltimate(), grossClaim.nominalUltimate(),
-                    BasedOnClaimProperty.ULTIMATE, storage);
-            storage.lazyInitCededClaimRoot(quotaShareUltimate);
-        }
+    @Override
+    public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaim, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
+        lossParticipation.initPeriod(grossClaim, grossUnderwritingInfo, limit);
+    }
 
-        double quotaShareReported = adjustedQuote(grossClaim.getReportedCumulatedIndexed(),
-                grossClaim.getReportedIncrementalIndexed(), BasedOnClaimProperty.REPORTED, storage);
-        double quotaSharePaid = adjustedQuote(grossClaim.getPaidCumulatedIndexed(),
-                grossClaim.getPaidIncrementalIndexed(), BasedOnClaimProperty.PAID, storage);
-        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate,
-                quotaShareReported, quotaSharePaid, true);
+    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
+        ClaimCashflowPacket cededClaim;
+        if (lossParticipation.noLossParticipation()) {
+            double quotaShareUltimate = 0;
+            if (!storage.hasReferenceCeded()) {
+                quotaShareUltimate = adjustedQuote(grossClaim.developedUltimate(), grossClaim.nominalUltimate(),
+                        BasedOnClaimProperty.ULTIMATE_UNINDEXED, storage);
+                storage.lazyInitCededClaimRoot(quotaShareUltimate);
+            }
+            double quotaShareUltimateIndexed = adjustedQuote(grossClaim.totalCumulatedIndexed(),
+                    grossClaim.totalIncrementalIndexed(), BasedOnClaimProperty.ULTIMATE_INDEXED, storage);
+            double quotaShareReported = adjustedQuote(grossClaim.getReportedCumulatedIndexed(),
+                    grossClaim.getReportedIncrementalIndexed(), BasedOnClaimProperty.REPORTED, storage);
+            double quotaSharePaid = adjustedQuote(grossClaim.getPaidCumulatedIndexed(),
+                    grossClaim.getPaidIncrementalIndexed(), BasedOnClaimProperty.PAID, storage);
+            cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate, quotaShareUltimateIndexed,
+                    quotaShareReported, quotaSharePaid, true);
+        }
+        else {
+            cededClaim = lossParticipation.cededClaim(quotaShare, grossClaim, storage, true);
+        }
         add(grossClaim, cededClaim);
         return cededClaim;
     }
@@ -71,13 +91,13 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
         StringBuilder builder = new StringBuilder();
         builder.append(super.toString());
         builder.append(", AAL ultimate: ");
-        builder.append(periodLimit.get(BasedOnClaimProperty.ULTIMATE));
+        builder.append(periodLimit.get(BasedOnClaimProperty.ULTIMATE_UNINDEXED));
         builder.append(", AAL reported: ");
         builder.append(periodLimit.get(BasedOnClaimProperty.REPORTED));
         builder.append(", AAL paid: ");
         builder.append(periodLimit.get(BasedOnClaimProperty.PAID));
         builder.append(", AAD ultimate: ");
-        builder.append(periodDeductible.get(BasedOnClaimProperty.ULTIMATE));
+        builder.append(periodDeductible.get(BasedOnClaimProperty.ULTIMATE_UNINDEXED));
         builder.append(", AAD reported: ");
         builder.append(periodDeductible.get(BasedOnClaimProperty.REPORTED));
         builder.append(", AAD paid: ");
@@ -86,6 +106,8 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
     }
 
     private class AADReduction {
+        /** indexed */
+        private Map<IClaimRoot, Double> ultimate;
         private Map<IClaimRoot, Double> reported;
         private Map<IClaimRoot, Double> paid;
 
@@ -94,13 +116,19 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
         }
 
         public void init() {
+            ultimate = new HashMap<IClaimRoot, Double>();
             reported = new HashMap<IClaimRoot, Double>();
             paid = new HashMap<IClaimRoot, Double>();
         }
 
         public void increaseAADReduction(IClaimRoot keyClaim, BasedOnClaimProperty base, double incrementalReduction) {
             switch (base) {
-                case ULTIMATE: {
+                case ULTIMATE_UNINDEXED: {
+                    break;
+                }
+                case ULTIMATE_INDEXED: {
+                    Double previousReduction = ultimate.get(keyClaim);
+                    ultimate.put(keyClaim, incrementalReduction + ((previousReduction != null) ? previousReduction : 0));
                     break;
                 }
                 case REPORTED: {
@@ -122,20 +150,19 @@ public class AALAADQuotaShareContract extends QuotaShareContract {
         public double previousAADReduction(IClaimRoot keyClaim, BasedOnClaimProperty base) {
             Double previousReduction = null;
             switch (base) {
-                case ULTIMATE: {
+                case ULTIMATE_UNINDEXED:
                     break;
-                }
-                case REPORTED: {
+                case ULTIMATE_INDEXED:
+                    previousReduction = ultimate.get(keyClaim);
+                    break;
+                case REPORTED:
                     previousReduction = reported.get(keyClaim);
                     break;
-                }
-                case PAID: {
+                case PAID:
                     previousReduction = paid.get(keyClaim);
                     break;
-                }
-                default: {
+                default:
                     throw new NotImplementedException(base.toString());
-                }
             }
             return ((previousReduction == null) ? 0d : previousReduction);
         }

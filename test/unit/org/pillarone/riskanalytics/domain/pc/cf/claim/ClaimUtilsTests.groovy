@@ -37,8 +37,8 @@ class ClaimUtilsTests extends GroovyTestCase {
         assertEquals "reserves", -1000d * factor, scaledClaim.reservedIndexed()
         assertEquals "IBNR", -(1000 - 700) * factor, scaledClaim.ibnrIndexed()
         assertEquals "outstanding", -700d * factor, scaledClaim.outstandingIndexed()
-        assertEquals "reserve risk", 0, scaledClaim.reserveRisk()
-        assertEquals "premium risk", -800d, scaledClaim.premiumRisk()
+        assertEquals "reserve risk", 0, scaledClaim.getReserveRisk()
+        assertEquals "premium risk", -800d, scaledClaim.getPremiumRisk()
 
         assertNotSame "base claim instance", claims[0].baseClaim, scaledClaim.baseClaim
         assertEquals "base claim", -800d, scaledClaim.baseClaim.ultimate
@@ -67,8 +67,8 @@ class ClaimUtilsTests extends GroovyTestCase {
         assertEquals "reserves", -(700 - 490), scaledClaim.reservedIndexed()
         assertEquals "IBNR", -(1000 - 800) * factor, scaledClaim.ibnrIndexed(), EPSILON
         assertEquals "outstanding", -(560 - 490), scaledClaim.outstandingIndexed(), EPSILON
-        assertEquals "reserve risk", 0d, scaledClaim.reserveRisk(), EPSILON
-        assertEquals "premium risk", 0d, scaledClaim.premiumRisk()
+        assertEquals "reserve risk", 0d, scaledClaim.getReserveRisk(), EPSILON
+        assertEquals "premium risk", 0d, scaledClaim.getPremiumRisk()
 
         // no link to first period as base claim is created from scratch
         assertNotSame "base claim instance", claims[0].baseClaim, scaledClaim.baseClaim
@@ -106,8 +106,8 @@ class ClaimUtilsTests extends GroovyTestCase {
         assertEquals "reserves", -760, scaledClaim.reservedIndexed()
         assertEquals "IBNR", -(760 - 532), scaledClaim.ibnrIndexed()
         assertEquals "outstanding", -532, scaledClaim.outstandingIndexed()
-        assertEquals "reserve risk", 0, scaledClaim.reserveRisk()
-        assertEquals "premium risk", -760, scaledClaim.premiumRisk()
+        assertEquals "reserve risk", 0, scaledClaim.getReserveRisk()
+        assertEquals "premium risk", -760, scaledClaim.getPremiumRisk()
 
         assertNotSame "base claim instance", claims[0].baseClaim, scaledClaim.baseClaim
         assertEquals "base claim", -800, scaledClaim.baseClaim.ultimate
@@ -136,8 +136,8 @@ class ClaimUtilsTests extends GroovyTestCase {
 //        assertEquals "reserves", -(700 - 490), scaledClaim.reservedIndexed()
 //        assertEquals "IBNR", -(1000 - 800) * factor, scaledClaim.ibnrIndexed(), EPSILON
 //        assertEquals "outstanding", -(560 - 490), scaledClaim.outstandingIndexed(), EPSILON
-//        assertEquals "reserve risk", 0d, scaledClaim.reserveRisk(), EPSILON
-//        assertEquals "premium risk", 0d, scaledClaim.premiumRisk()
+//        assertEquals "reserve risk", 0d, scaledClaim.netReserveRisk(), EPSILON
+//        assertEquals "premium risk", 0d, scaledClaim.netPremiumRisk()
 //
 //        // no link to first period as base claim is created from scratch
 //        assertNotSame "base claim instance", claims[0].baseClaim, scaledClaim.baseClaim

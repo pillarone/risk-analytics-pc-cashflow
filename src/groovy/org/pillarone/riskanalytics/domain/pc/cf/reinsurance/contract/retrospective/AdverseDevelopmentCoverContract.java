@@ -8,7 +8,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AbstractReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimsStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
@@ -50,12 +49,7 @@ public class AdverseDevelopmentCoverContract extends AbstractReinsuranceContract
     }
 
     @Override
-    public void initPeriod(int period, List<FactorsPacket> inFactors) {
-        super.initPeriod(period, inFactors);
-    }
-
-    @Override
-    public void initPeriodClaims(List<ClaimCashflowPacket> grossClaims) {
+    public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaims, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
         if (aggregateClaimStorage != null) {
             aggregateClaimStorage.resetIncrementsAndFactors();
         }
@@ -66,7 +60,7 @@ public class AdverseDevelopmentCoverContract extends AbstractReinsuranceContract
             aggregateClaimStorage.add(grossClaim);
         }
 
-        cededFactor(BasedOnClaimProperty.ULTIMATE, aggregateClaimStorage);
+        cededFactor(BasedOnClaimProperty.ULTIMATE_UNINDEXED, aggregateClaimStorage);
         cededFactor(BasedOnClaimProperty.REPORTED, aggregateClaimStorage);
         cededFactor(BasedOnClaimProperty.PAID, aggregateClaimStorage);
     }
@@ -77,12 +71,13 @@ public class AdverseDevelopmentCoverContract extends AbstractReinsuranceContract
         IClaimRoot cededBaseClaim = storage.getCededClaimRoot();
         if (cededBaseClaim == null) {
             // first time this gross claim is treated by this contract
-            cededBaseClaim = storage.lazyInitCededClaimRoot(aggregateClaimStorage.getCededFactorUltimate());
+            cededBaseClaim = storage.lazyInitCededClaimRoot(aggregateClaimStorage.getCededFactor(BasedOnClaimProperty.ULTIMATE_UNINDEXED));
         }
         ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage,
-                aggregateClaimStorage.getCededFactorUltimate(),
-                aggregateClaimStorage.getCededFactorReported(),
-                aggregateClaimStorage.getCededFactorPaid(), false);
+                aggregateClaimStorage.getCededFactor(BasedOnClaimProperty.ULTIMATE_UNINDEXED),
+                aggregateClaimStorage.getCededFactor(BasedOnClaimProperty.ULTIMATE_INDEXED),
+                aggregateClaimStorage.getCededFactor(BasedOnClaimProperty.REPORTED),
+                aggregateClaimStorage.getCededFactor(BasedOnClaimProperty.PAID), false);
         add(grossClaim, cededClaim);
         return cededClaim;
     }
@@ -91,7 +86,7 @@ public class AdverseDevelopmentCoverContract extends AbstractReinsuranceContract
         double aggregateLimitValue = periodLimit.get(claimPropertyBase);
         if (aggregateLimitValue > 0) {
             double claimPropertyIncremental;
-            if (claimPropertyBase.equals(BasedOnClaimProperty.ULTIMATE)) {
+            if (claimPropertyBase.equals(BasedOnClaimProperty.ULTIMATE_UNINDEXED)) {
                 claimPropertyIncremental = storage.getCumulated(claimPropertyBase);
             }
             else {

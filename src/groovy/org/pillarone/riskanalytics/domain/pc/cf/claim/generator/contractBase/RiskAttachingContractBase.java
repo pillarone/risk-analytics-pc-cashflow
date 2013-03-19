@@ -1,13 +1,12 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase;
 
-import org.jfree.util.Log;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
-import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 
@@ -68,6 +67,10 @@ public class RiskAttachingContractBase extends AbstractContractBase implements I
 
     }
 
+    public DateTime generateInceptionDate(IClaimRoot aClaim, PeriodScope periodScope) {
+        return aClaim.getClaimType().generateInceptionDate(aClaim, underlyingContractLength);
+    }
+
     /**
      * The original claim and its ultimate is splitted according to the number of the underlying contract length
      * @return underlyingContractLength
@@ -101,6 +104,10 @@ public class RiskAttachingContractBase extends AbstractContractBase implements I
             }
         }
         return claimRoots;
+    }
+
+    public int getContractLength() {
+        return underlyingContractLength;
     }
 
 }

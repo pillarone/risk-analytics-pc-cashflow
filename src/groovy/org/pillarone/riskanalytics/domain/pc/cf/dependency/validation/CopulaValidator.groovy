@@ -49,6 +49,9 @@ class CopulaValidator implements IParameterizationValidator {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug "validating ${parameter.path}"
                     }
+                    if(parameter.classifier.typeName.equals(CopulaType.MULTI_PERIOD_NORMAL.getTypeName())){
+                        continue
+                    }
                     List<Component> targets = parameter.getBusinessObject().getTargetComponents()
                     targetComponentsPerCopula[parameter.path] = targets
 

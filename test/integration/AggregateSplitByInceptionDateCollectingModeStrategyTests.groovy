@@ -6,8 +6,10 @@ import org.pillarone.riskanalytics.core.output.DBOutput
 import org.pillarone.riskanalytics.core.output.ICollectorOutputStrategy
 import org.pillarone.riskanalytics.core.output.CollectorMapping
 import models.gira.GIRAModel
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceCollectingModeStrategy
 import org.apache.commons.lang.builder.HashCodeBuilder
+import org.pillarone.riskanalytics.core.output.TestDBOutput
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -35,25 +37,22 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
     }
 
     protected ICollectorOutputStrategy getOutputStrategy() {
-        new DBOutput()
+        new TestDBOutput()
     }
 
     int getIterationCount() {
         1
     }
 
-    void setUp() {
-        super.setUp()
-//        CollectorMapping mapping = new CollectorMapping(collectorName: AggregateSplitPerSourceCollectingModeStrategy.IDENTIFIER)
-//        mapping.save()
-//        assertNotNull mapping.save()
-    }
-
     void postSimulationEvaluation() {
         correctPaths()
-        correctFields(['developedResultIndexed', 'appliedIndexValue', 'IBNRIndexed', 'reservesIndexed', 'outstandingIndexed',
+        correctFields(['totalIncrementalIndexed', 'IBNRIndexed', 'reservesIndexed', 'outstandingIndexed',
                 'paidIncrementalIndexed', 'reportedIncrementalIndexed', 'ultimate', 'premiumWritten', 'premiumPaid',
-                'reserveRiskBase', 'premiumRiskBase', 'premiumAndReserveRiskBase'])
+                ClaimCashflowPacket.CHANGES_IN_OUTSTANDING_INDEXED, ClaimCashflowPacket.REPORTED_CUMULATIVE_INDEXED,
+                ClaimCashflowPacket.PAID_CUMULATIVE_INDEXED, ClaimCashflowPacket.TOTAL_CUMULATIVE_INDEXED,
+                ClaimCashflowPacket.RESERVE_RISK_BASE, ClaimCashflowPacket.PREMIUM_AND_RESERVE_RISK_BASE,
+                ClaimCashflowPacket.PREMIUM_RISK_BASE])
+
         correctReportingClaimsResults()
         correctPaidClaimsResults()
         correctPremiumResults()
@@ -75,29 +74,33 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
                 'GIRA:claimsGenerators:subMarine:period:2015:outClaims'
         ]
         def collectedPaths = PathMapping.list()
-        // -2 to ignore the subsubcomponents paths
-        assertEquals '# of paths correct', paths.size(), collectedPaths.size() - 2
+        // on the KTI branch paths are prepared before simulation starts in a generic way, therefore there are more than on the master
+        assertTrue '# of paths correct', paths.size() < collectedPaths.size()
 
         for (int i = 0; i < collectedPaths.size(); i++) {
             if (collectedPaths[i].pathName.contains("subcomponents")) continue
-//            def init = paths.contains(collectedPaths[i].pathName)
-//            if (!paths.remove(collectedPaths[i].pathName)) {
-//                println collectedPaths[i].pathName
-//            }
-            assertTrue "$i ${collectedPaths[i].pathName} found", paths.remove(collectedPaths[i].pathName)
+            def init = paths.contains(collectedPaths[i].pathName)
+
+            if (!paths.remove(collectedPaths[i].pathName)) {
+                println "additionally collected path ${collectedPaths[i].pathName}"
+            }
         }
 
         assertTrue "all paths found $paths.size()", paths.size() == 0
+
     }
 
     void correctFields(List<String> fields) {
         def collectedFields = FieldMapping.list()
-        assertEquals '# of fields correct', fields.size(), collectedFields.size()
+        // on the KTI branch fields are prepared before simulation starts in a generic way, therefore there are more than on the master
+        assertTrue '# of fields correct', fields.size() < collectedFields.size()
 
         for (FieldMapping field : collectedFields) {
-            assertTrue "${field.fieldName}", fields.remove(field.fieldName)
+            if (!fields.remove(field.fieldName)) {
+                println "additionally collected field ${field.fieldName}"
+            }
         }
-        assertTrue 'all field found', fields.size() == 0
+        assertTrue "all field found $fields", fields.size() == 0
     }
 
     void correctReportingClaimsResults() {
@@ -166,7 +169,7 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
 
         def results = SingleValueResult.list()
         for (SingleValueResult result : results) {
-            if (result.field.fieldName == "reserveRisk") {
+            if (result.field.fieldName == "netReserveRisk") {
                 assertEquals "${result.path.pathName}, P${result.period}", resultsPerPath.get(new PeriodPath(result)), result.value, 1E-8d
             }
         }
@@ -181,7 +184,7 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
 
         def results = SingleValueResult.list()
         for (SingleValueResult result : results) {
-            if (result.field.fieldName == "premiumRisk") {
+            if (result.field.fieldName == "netPremiumRisk") {
                 assertEquals "${result.path.pathName}, P${result.period}", resultsPerPath.get(new PeriodPath(result)), result.value, 1E-8d
             }
         }

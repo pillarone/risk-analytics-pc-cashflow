@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproport
 
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimStorageContainer;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimsStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
@@ -43,8 +44,9 @@ public class TermCXLContract extends TermXLContract {
     /**
      * reset cededShareByEvent
      * @param grossClaims
+     * @param grossUnderwritingInfo
      */
-    public void initPeriodClaims(List<ClaimCashflowPacket> grossClaims) {
+    public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaims, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
         cededShareByEvent.reset();
     }
 
@@ -85,19 +87,20 @@ public class TermCXLContract extends TermXLContract {
 
                 if (cededBaseClaim == null) {
                     // first time this gross claim is treated by this contract
-                    cededFactorUltimate = eventStorage.getCededFactorUltimate();
+                    cededFactorUltimate = eventStorage.getCededFactor(BasedOnClaimProperty.ULTIMATE_UNINDEXED);
                     cededBaseClaim = storage.lazyInitCededClaimRoot(cededFactorUltimate);
                 }
-                double cededFactorReported = eventStorage.getCededFactorReported();
-                double cededFactorPaid = eventStorage.getCededFactorPaid();
+                double cededFactorUltimateIndexed = eventStorage.getCededFactor(BasedOnClaimProperty.ULTIMATE_INDEXED);
+                double cededFactorReported = eventStorage.getCededFactor(BasedOnClaimProperty.REPORTED);
+                double cededFactorPaid = eventStorage.getCededFactor(BasedOnClaimProperty.PAID);
 
                 ClaimCashflowPacket cededClaim = cededClaimWithAdjustedReported(grossClaim, storage, cededFactorUltimate,
-                        stabilizationFactor, cededFactorReported, cededFactorPaid);
+                        cededFactorUltimateIndexed, stabilizationFactor, cededFactorReported, cededFactorPaid);
                 add(grossClaim, cededClaim);
                 return cededClaim;
             }
         }
-        return ClaimUtils.getCededClaim(grossClaim, storage, 0, 0, 0, false);
+        return ClaimUtils.getCededClaim(grossClaim, storage, 0, 0, 0, 0, false);
     }
 
     private AggregateEventClaimsStorage updateCededFactor(ClaimCashflowPacket grossClaim, double stabilizationFactor) {
@@ -107,7 +110,7 @@ public class TermCXLContract extends TermXLContract {
                 cededShareByEvent.add(grossClaim, this, storage);
             }
             storage.add(grossClaim);
-            cededFactor(BasedOnClaimProperty.ULTIMATE, storage, stabilizationFactor);
+            cededFactor(BasedOnClaimProperty.ULTIMATE_UNINDEXED, storage, stabilizationFactor);
             cededFactor(BasedOnClaimProperty.REPORTED, storage, stabilizationFactor);
             cededFactor(BasedOnClaimProperty.PAID, storage, stabilizationFactor);
             return storage;

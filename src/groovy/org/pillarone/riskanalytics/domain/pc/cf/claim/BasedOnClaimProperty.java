@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+
 import java.util.Map;
 
 /**
@@ -8,7 +10,12 @@ import java.util.Map;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public enum BasedOnClaimProperty {
-    ULTIMATE {
+    ULTIMATE_UNINDEXED {
+        @Override
+        public double premium(UnderwritingInfoPacket underwritingInfo) {
+            return underwritingInfo.getPremiumWritten();
+        }
+
         @Override
         public double incrementalIndexed(ClaimCashflowPacket claim) {
             return claim.ultimate();
@@ -19,7 +26,28 @@ public enum BasedOnClaimProperty {
             return claim.developedUltimate();
         }
     },
+    ULTIMATE_INDEXED {
+        @Override
+        public double incrementalIndexed(ClaimCashflowPacket claim) {
+            return claim.totalIncrementalIndexed();
+        }
+
+        @Override
+        public double cumulatedIndexed(ClaimCashflowPacket claim) {
+            return claim.totalCumulatedIndexed();
+        }
+
+        @Override
+        public double premium(UnderwritingInfoPacket underwritingInfo) {
+            return underwritingInfo.getPremiumWritten();
+        }
+    },
     REPORTED {
+        @Override
+        public double premium(UnderwritingInfoPacket underwritingInfo) {
+            return underwritingInfo.getPremiumWritten();
+        }
+
         @Override
         public double incrementalIndexed(ClaimCashflowPacket claim) {
             return claim.getReportedIncrementalIndexed();
@@ -30,6 +58,11 @@ public enum BasedOnClaimProperty {
             return claim.getReportedCumulatedIndexed();
         }
     }, PAID {
+        @Override
+        public double premium(UnderwritingInfoPacket underwritingInfo) {
+            return underwritingInfo.getPremiumPaid();
+        }
+
         @Override
         public double incrementalIndexed(ClaimCashflowPacket claim) {
             return claim.getPaidIncrementalIndexed();
@@ -47,4 +80,5 @@ public enum BasedOnClaimProperty {
 
     public abstract double incrementalIndexed(ClaimCashflowPacket claim);
     public abstract double cumulatedIndexed(ClaimCashflowPacket claim);
+    public abstract double premium(UnderwritingInfoPacket underwritingInfo);
 }

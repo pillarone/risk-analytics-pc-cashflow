@@ -22,6 +22,7 @@ public class LossPortfolioTransferContract extends AbstractProportionalReinsuran
     private double reinsurancePremium = 0;
 
     private DoubleValue annualAggregateLimitUltimate = new DoubleValue();
+    private DoubleValue annualAggregateLimitUltimateIndexed = new DoubleValue();
     private DoubleValue annualAggregateLimitPaid = new DoubleValue();
     private DoubleValue annualAggregateLimitReported = new DoubleValue();
 
@@ -29,6 +30,7 @@ public class LossPortfolioTransferContract extends AbstractProportionalReinsuran
         this.cededShare = cededShare;
         this.reinsurancePremium = reinsurancePremium;
         annualAggregateLimitUltimate.value = limit;
+        annualAggregateLimitUltimateIndexed.value = limit;
         annualAggregateLimitPaid.value = limit;
         annualAggregateLimitReported.value = limit;
     }
@@ -43,10 +45,10 @@ public class LossPortfolioTransferContract extends AbstractProportionalReinsuran
             quotaShareUltimate = adjustedQuote(grossClaim.nominalUltimate(), annualAggregateLimitUltimate);
             cededBaseClaim = storage.lazyInitCededClaimRoot(quotaShareUltimate);
         }
-
+        double quotaShareUltimateIndexed = adjustedQuote(grossClaim.totalCumulatedIndexed(), annualAggregateLimitUltimateIndexed);
         double quotaShareReported = adjustedQuote(grossClaim.getReportedIncrementalIndexed(), annualAggregateLimitReported);
         double quotaSharePaid = adjustedQuote(grossClaim.getPaidIncrementalIndexed(), annualAggregateLimitPaid);
-        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate,
+        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate, quotaShareUltimateIndexed,
                 quotaShareReported, quotaSharePaid, true);
         add(grossClaim, cededClaim);
         return cededClaim;

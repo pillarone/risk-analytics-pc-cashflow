@@ -1,8 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless;
 
 
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.APBasis;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis;
 
 import java.util.*;
 

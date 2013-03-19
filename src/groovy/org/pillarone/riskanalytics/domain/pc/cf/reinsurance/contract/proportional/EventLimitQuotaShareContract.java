@@ -1,20 +1,20 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional;
 
 import org.apache.commons.lang.NotImplementedException;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.EventLimitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.ILimitStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.ILossParticipation;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,27 +27,41 @@ public class EventLimitQuotaShareContract extends QuotaShareContract {
     private Map<IClaimRoot, ClaimCashflowPacket> cumulatedCededClaims;
     private Map<EventPacket, EventLimitTracking> limitTrackingPerEvent;
     private double eventLimit;
+    private ILimitStrategy limit;
 
-    public EventLimitQuotaShareContract(double quotaShare, ICommission commission, EventLimitStrategy limit) {
-        super(quotaShare, commission);
+    public EventLimitQuotaShareContract(double quotaShare, ICommission commission, EventLimitStrategy limit, ILossParticipation lossParticipation) {
+        super(quotaShare, commission, lossParticipation);
         cumulatedCededClaims = new HashMap<IClaimRoot, ClaimCashflowPacket>();
         limitTrackingPerEvent = new HashMap<EventPacket, EventLimitTracking>();
+        this.limit = limit;
         eventLimit = limit.getEventLimit();
     }
 
-    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
-        double quotaShareUltimate = 0;
-        ClaimCashflowPacket cumulatedCededClaim = cumulatedCededClaims.get(grossClaim.getKeyClaim());
-        if (!storage.hasReferenceCeded()) {
-            quotaShareUltimate = adjustedQuote(grossClaim, BasedOnClaimProperty.ULTIMATE, cumulatedCededClaim);
-        }
+    @Override
+    public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaim, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
+        lossParticipation.initPeriod(grossClaim, grossUnderwritingInfo, limit);
+        super.initBasedOnAggregateCalculations(grossClaim, grossUnderwritingInfo);
+    }
 
-        double quotaShareReported = adjustedQuote(grossClaim, BasedOnClaimProperty.REPORTED, cumulatedCededClaim);
-        double quotaSharePaid = adjustedQuote(grossClaim, BasedOnClaimProperty.PAID, cumulatedCededClaim);
-        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate,
-                quotaShareReported, quotaSharePaid, true);
+    public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
+        ClaimCashflowPacket cededClaim;
+        if (lossParticipation.noLossParticipation()) {
+            double quotaShareUltimate = 0;
+            ClaimCashflowPacket cumulatedCededClaim = cumulatedCededClaims.get(grossClaim.getKeyClaim());
+            if (!storage.hasReferenceCeded()) {
+                quotaShareUltimate = adjustedQuote(grossClaim, BasedOnClaimProperty.ULTIMATE_UNINDEXED, cumulatedCededClaim);
+            }
+
+            double quotaShareUltimateIndexed = adjustedQuote(grossClaim, BasedOnClaimProperty.ULTIMATE_INDEXED, cumulatedCededClaim);
+            double quotaShareReported = adjustedQuote(grossClaim, BasedOnClaimProperty.REPORTED, cumulatedCededClaim);
+            double quotaSharePaid = adjustedQuote(grossClaim, BasedOnClaimProperty.PAID, cumulatedCededClaim);
+            cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, quotaShareUltimate, quotaShareUltimateIndexed,
+                    quotaShareReported, quotaSharePaid, true);
+            cumulatedCededClaims.put(grossClaim.getKeyClaim(), cededClaim);
+        } else {
+            cededClaim = lossParticipation.cededClaim(quotaShare, grossClaim, storage, true);
+        }
         add(grossClaim, cededClaim);
-        cumulatedCededClaims.put(grossClaim.getKeyClaim(), cededClaim);
         return cededClaim;
     }
 
@@ -80,11 +94,13 @@ public class EventLimitQuotaShareContract extends QuotaShareContract {
     private class EventLimitTracking {
 
         DoubleValue remainingUltimateEventLimit;
+        DoubleValue remainingUltimateIndexedEventLimit;
         DoubleValue remainingReportedEventLimit;
         DoubleValue remainingPaidEventLimit;
 
         private EventLimitTracking(double eventLimit) {
             remainingUltimateEventLimit = new DoubleValue(eventLimit);
+            remainingUltimateIndexedEventLimit = new DoubleValue(eventLimit);
             remainingReportedEventLimit = new DoubleValue(eventLimit);
             remainingPaidEventLimit = new DoubleValue(eventLimit);
         }
@@ -110,8 +126,10 @@ public class EventLimitQuotaShareContract extends QuotaShareContract {
 
         private DoubleValue remainingEventLimit(BasedOnClaimProperty claimProperty) {
             switch (claimProperty) {
-                case ULTIMATE:
+                case ULTIMATE_UNINDEXED:
                     return remainingUltimateEventLimit;
+                case ULTIMATE_INDEXED:
+                    return remainingUltimateIndexedEventLimit;
                 case REPORTED:
                     return remainingReportedEventLimit;
                 case PAID:

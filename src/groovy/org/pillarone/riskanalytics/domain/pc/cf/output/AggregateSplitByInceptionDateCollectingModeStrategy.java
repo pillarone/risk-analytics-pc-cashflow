@@ -4,10 +4,9 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
-import org.joda.time.Months;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.pillarone.riskanalytics.core.output.ICollectingModeStrategy;
+import org.pillarone.riskanalytics.core.output.DrillDownMode;
 import org.pillarone.riskanalytics.core.output.PathMapping;
 import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
 import org.pillarone.riskanalytics.core.packets.Packet;
@@ -18,7 +17,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket;
-import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.*;
 
@@ -26,15 +24,23 @@ import java.util.*;
  * This collecting mode strategy splits claim and underwriting information up by inception date.
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
+ * @deprecated Use general {@link SplitAndFilterCollectionModeStrategy} class for collecting results.
  */
-public class AggregateSplitByInceptionDateCollectingModeStrategy extends AbstractSplitCollectingModeStrategy implements ICollectingModeStrategy {
+public class AggregateSplitByInceptionDateCollectingModeStrategy extends AbstractSplitCollectingModeStrategy {
 
     protected static Log LOG = LogFactory.getLog(AggregateSplitByInceptionDateCollectingModeStrategy.class);
 
     static final String IDENTIFIER = "SPLIT_BY_INCEPTION_DATE";
-    protected static final String RESERVE_RISK_BASE = "reserveRiskBase";
-    protected static final String PREMIUM_RISK_BASE = "premiumRiskBase";
-    protected static final String PREMIUM_AND_RESERVE_RISK_BASE = "premiumAndReserveRiskBase";
+
+    protected static final String GROSS_RESERVE_RISK_BASE = "grossReserveRiskBase";
+    protected static final String GROSS_PREMIUM_RISK_BASE = "grossPremiumRiskBase";
+    protected static final String GROSS_PREMIUM_AND_RESERVE_RISK_BASE = "grossPremiumAndReserveRiskBase";
+    protected static final String NET_RESERVE_RISK_BASE = "netReserveRiskBase";
+    protected static final String NET_PREMIUM_RISK_BASE = "netPremiumRiskBase";
+    protected static final String NET_PREMIUM_AND_RESERVE_RISK_BASE = "netPremiumAndReserveRiskBase";
+    protected static final String CEDED_RESERVE_RISK_BASE = "cededReserveRiskBase";
+    protected static final String CEDED_PREMIUM_RISK_BASE = "cededPremiumRiskBase";
+    protected static final String CEDED_PREMIUM_AND_RESERVE_RISK_BASE = "cededPremiumAndReserveRiskBase";
     private static final String PERIOD = "period";
     private boolean displayUnderwritingYearOnly = true;
     private static final DateTimeFormatter formatter = DateTimeFormat.forPattern(PeriodLabelsUtil.PARAMETER_DISPLAY_FORMAT);
@@ -48,6 +54,9 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
             List<SingleValueResultPOJO> singleValueResults = collectDefaultClaimsProperties(packets, crashSimulationOnError);
             if (packets.get(0) instanceof ClaimCashflowPacket) {
                 singleValueResults.addAll(createPremiumReserveRisk(packets, crashSimulationOnError));
+            }
+            else if (packets.get(0) instanceof FinancialsPacket) {
+                singleValueResults.addAll(createPremiumReserveRiskForFinancials(packets, crashSimulationOnError));
             }
             return singleValueResults;
         } else {
@@ -87,7 +96,6 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
         if (checkInvalidValues(fieldName, value, period, iteration, crashSimulationOnError)) return null;
         else {
             SingleValueResultPOJO result = new SingleValueResultPOJO();
-            result.setSimulationRun(simulationRun);
             result.setIteration(iteration);
             result.setPeriod(period);
             result.setPath(mappingCache.lookupPath(path));
@@ -198,40 +206,131 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     
     protected List<SingleValueResultPOJO> createPremiumReserveRisk(List<ClaimCashflowPacket> claims, boolean crashSimulationOnError) {
         List<SingleValueResultPOJO> results = new ArrayList<SingleValueResultPOJO>();
-        double totalReserveRisk = 0;
-        double premiumRisk = 0;
         Map<String, Double> reserveRiskByPeriodPath = new HashMap<String, Double>();
         for (ClaimCashflowPacket claim : claims) {
-            if (claim.reserveRisk() != 0) {
-                // belongs to reserve risk
-                totalReserveRisk += claim.reserveRisk();
+            if (claim.getReserveRisk() != 0) {
                 if (splitByInceptionPeriod()) {
                     String periodLabel = inceptionPeriod(claim);
                     String pathExtension = PERIOD + PATH_SEPARATOR + periodLabel;
                     String pathExtended = getExtendedPath(claim, pathExtension);
                     Double reserveRisk = reserveRiskByPeriodPath.get(pathExtended);
-                    reserveRisk = reserveRisk == null ? claim.reserveRisk() : reserveRisk + claim.reserveRisk();
+                    reserveRisk = reserveRisk == null ? claim.getReserveRisk() : reserveRisk + claim.getReserveRisk();
                     reserveRiskByPeriodPath.put(pathExtended, reserveRisk);
                 }
-            }
-            else if (claim.premiumRisk() != 0) {
-                // belongs to premium risk
-                premiumRisk += claim.premiumRisk();
             }
         }
         if (splitByInceptionPeriod()) {
             for (Map.Entry<String, Double> reserveRisk : reserveRiskByPeriodPath.entrySet()) {
-                results.add(createSingleValueResult(reserveRisk.getKey(), RESERVE_RISK_BASE, reserveRisk.getValue(), crashSimulationOnError));
+                results.add(createSingleValueResult(reserveRisk.getKey(), ClaimCashflowPacket.RESERVE_RISK_BASE, reserveRisk.getValue(), crashSimulationOnError));
             }
         }
-        if (premiumRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_RISK_BASE, premiumRisk, crashSimulationOnError));
+        return results;
+    }
+
+    protected List<SingleValueResultPOJO> createPremiumReserveRiskForFinancials(List<FinancialsPacket> financials, boolean crashSimulationOnError) {
+        List<SingleValueResultPOJO> results = new ArrayList<SingleValueResultPOJO>();
+        double grossTotalReserveRisk = 0;
+        double netTotalReserveRisk = 0;
+        double cededTotalReserveRisk = 0;
+        double grossPremiumRisk = 0;
+        double netPremiumRisk = 0;
+        double cededPremiumRisk = 0;
+        Map<String, Double> grossReserveRiskByPeriodPath = new HashMap<String, Double>();
+        Map<String, Double> netReserveRiskByPeriodPath = new HashMap<String, Double>();
+        Map<String, Double> cededReserveRiskByPeriodPath = new HashMap<String, Double>();
+        for (FinancialsPacket financialPacket : financials) {
+            String periodLabel = inceptionPeriod(financialPacket);
+            String pathExtension = PERIOD + PATH_SEPARATOR + periodLabel;
+            String pathExtended = getExtendedPath(financialPacket, pathExtension);
+
+            if (financialPacket.getGrossReserveRisk() != 0) {
+                // belongs to reserve risk
+                grossTotalReserveRisk += financialPacket.getGrossReserveRisk();
+                if (splitByInceptionPeriod()) {
+
+                    Double reserveRisk = grossReserveRiskByPeriodPath.get(pathExtended);
+                    reserveRisk = reserveRisk == null ? financialPacket.getGrossReserveRisk() : reserveRisk + financialPacket.getGrossReserveRisk();
+                    grossReserveRiskByPeriodPath.put(pathExtended, reserveRisk);
+                }
+            }
+            else if (financialPacket.getGrossPremiumRisk() != 0) {
+                // belongs to premium risk
+                grossPremiumRisk += financialPacket.getGrossPremiumRisk();
+            }
+            
+            if (financialPacket.getNetReserveRisk() != 0) {
+                // belongs to reserve risk
+                netTotalReserveRisk += financialPacket.getNetReserveRisk();
+                if (splitByInceptionPeriod()) {
+                    
+                    Double reserveRisk = netReserveRiskByPeriodPath.get(pathExtended);
+                    reserveRisk = reserveRisk == null ? financialPacket.getNetReserveRisk() : reserveRisk + financialPacket.getNetReserveRisk();
+                    netReserveRiskByPeriodPath.put(pathExtended, reserveRisk);
+                }
+            }
+            else if (financialPacket.netPremiumRisk() != 0) {
+                // belongs to premium risk
+                netPremiumRisk += financialPacket.netPremiumRisk();
+            }
+
+            if (financialPacket.getCededReserveRisk() != 0) {
+                // belongs to reserve risk
+                cededTotalReserveRisk += financialPacket.getCededReserveRisk();
+                if (splitByInceptionPeriod()) {
+
+                    Double reserveRisk = cededReserveRiskByPeriodPath.get(pathExtended);
+                    reserveRisk = reserveRisk == null ? financialPacket.getCededReserveRisk() : reserveRisk + financialPacket.getCededReserveRisk();
+                    cededReserveRiskByPeriodPath.put(pathExtended, reserveRisk);
+                }
+            }
+            else if (financialPacket.getCededPremiumRisk() != 0) {
+                // belongs to premium risk
+                cededPremiumRisk += financialPacket.getCededPremiumRisk();
+            }
         }
-        if (totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), RESERVE_RISK_BASE, totalReserveRisk, crashSimulationOnError));
+        if (splitByInceptionPeriod()) {
+            for (Map.Entry<String, Double> reserveRisk : netReserveRiskByPeriodPath.entrySet()) {
+                results.add(createSingleValueResult(reserveRisk.getKey(), NET_RESERVE_RISK_BASE, reserveRisk.getValue(), crashSimulationOnError));
+            }
         }
-        if (premiumRisk + totalReserveRisk != 0) {
-            results.add(createSingleValueResult(packetCollector.getPath(), PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk + totalReserveRisk, crashSimulationOnError));
+        if (netPremiumRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), NET_PREMIUM_RISK_BASE, netPremiumRisk, crashSimulationOnError));
+        }
+        if (netTotalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), NET_RESERVE_RISK_BASE, netTotalReserveRisk, crashSimulationOnError));
+        }
+        if (netPremiumRisk + netTotalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), NET_PREMIUM_AND_RESERVE_RISK_BASE, netPremiumRisk + netTotalReserveRisk, crashSimulationOnError));
+        }
+        
+        if (splitByInceptionPeriod()) {
+            for (Map.Entry<String, Double> reserveRisk : grossReserveRiskByPeriodPath.entrySet()) {
+                results.add(createSingleValueResult(reserveRisk.getKey(), GROSS_RESERVE_RISK_BASE, reserveRisk.getValue(), crashSimulationOnError));
+            }
+        }
+        if (grossPremiumRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), GROSS_PREMIUM_RISK_BASE, grossPremiumRisk, crashSimulationOnError));
+        }
+        if (grossTotalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), GROSS_RESERVE_RISK_BASE, grossTotalReserveRisk, crashSimulationOnError));
+        }
+        if (grossPremiumRisk + grossTotalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), GROSS_PREMIUM_AND_RESERVE_RISK_BASE, grossPremiumRisk + grossTotalReserveRisk, crashSimulationOnError));
+        }
+
+        if (splitByInceptionPeriod()) {
+            for (Map.Entry<String, Double> reserveRisk : cededReserveRiskByPeriodPath.entrySet()) {
+                results.add(createSingleValueResult(reserveRisk.getKey(), CEDED_RESERVE_RISK_BASE, reserveRisk.getValue(), crashSimulationOnError));
+            }
+        }
+        if (cededPremiumRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), CEDED_PREMIUM_RISK_BASE, cededPremiumRisk, crashSimulationOnError));
+        }
+        if (cededTotalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), CEDED_RESERVE_RISK_BASE, cededTotalReserveRisk, crashSimulationOnError));
+        }
+        if (cededPremiumRisk + cededTotalReserveRisk != 0) {
+            results.add(createSingleValueResult(packetCollector.getPath(), CEDED_PREMIUM_AND_RESERVE_RISK_BASE, cededPremiumRisk + cededTotalReserveRisk, crashSimulationOnError));
         }
         return results;
     }
@@ -251,5 +350,9 @@ public class AggregateSplitByInceptionDateCollectingModeStrategy extends Abstrac
     public boolean isCompatibleWith(Class packetClass) {
         return super.isCompatibleWith(packetClass) || ContractFinancialsPacket.class.isAssignableFrom(packetClass)
                 || FinancialsPacket.class.isAssignableFrom(packetClass);
+    }
+
+    public List<DrillDownMode> getDrillDownModes() {
+        return DrillDownMode.getDrillDownModesByPeriod();
     }
 }

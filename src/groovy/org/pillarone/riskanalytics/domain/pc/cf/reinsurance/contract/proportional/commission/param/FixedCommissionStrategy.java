@@ -1,6 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param;
 
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.FixedCommission;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
 
@@ -24,7 +26,8 @@ public class FixedCommissionStrategy extends AbstractCommissionStrategy {
         return map;
     }
 
-    public ICommission getCalculator() {
+    @Override
+    public ICommission getCalculator(DoubleValuePerPeriod lossCarriedForward) {
         return new FixedCommission(commission);
     }
 }

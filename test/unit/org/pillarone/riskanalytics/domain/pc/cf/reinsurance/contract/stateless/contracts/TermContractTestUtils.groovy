@@ -4,12 +4,12 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
+
+
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.AdditionalPremiumConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.LayerConstraints;
 
-import java.util.List
+
 import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
@@ -20,14 +20,13 @@ import com.google.common.collect.ListMultimap
 import org.pillarone.riskanalytics.domain.test.SpreadsheetImporter
 import com.google.common.collect.ArrayListMultimap
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis
+import com.google.common.collect.Maps;
 
 public class TermContractTestUtils {
 
-    public static TermReinsuranceContract getLayerContract(Double termExcess, Double termLimit, List<Integer> periods,
-                                                List<Integer> layers, List<Double> shares,
-                                                List<Double> periodExcess, List<Double> periodLimit,
-                                                List<Double> claimExcess, List<Double> claimLimit, DateTime beginOfCover) {
+    public static TermReinsuranceContract getLayerContract(Double termExcess, Double termLimit, List<Integer> periods, List<Integer> layers, List<Double> shares, List<Double> periodExcess, List<Double> periodLimit, List<Double> claimExcess, List<Double> claimLimit, DateTime beginOfCover, List<Double> apPercentages, List<String> apTypes) {
         IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
         int numberOfLayers = layers.size()
         return new TermReinsuranceContract(
@@ -42,7 +41,7 @@ public class TermContractTestUtils {
                                 ),
                                 'structure': new ConstrainedMultiDimensionalParameter(
                                         [periods, layers, shares, periodLimit, periodExcess, claimLimit, claimExcess,
-                                                [0d] * numberOfLayers, ['PREMIUM'] * numberOfLayers],
+                                                apPercentages, apTypes],
                                         LayerConstraints.columnHeaders, ConstraintsFactory.getConstraints(LayerConstraints.IDENTIFIER)
                                 )
                         ]
@@ -56,12 +55,12 @@ public class TermContractTestUtils {
 
 
     public static TermReinsuranceContract getOneLayerContract(double claimExcess, double claimLimit, DateTime beginOfCover) {
-        getLayerContract(0, 10000000000, [1], [0], [1], [0], [0], [claimExcess], [claimLimit], beginOfCover)
+        getLayerContract(0, 10000000000, [1], [0], [1], [0], [0], [claimExcess], [claimLimit], beginOfCover, [0], ['PREMIUM'])
     }
 
     public static TermReinsuranceContract getLayerContract(Double termExcess, Double termLimit, TestLayers layers, DateTime beginOfCover) {
         return getLayerContract(termExcess, termLimit, layers.periods, layers.layers, layers.shares, layers.periodExcess,
-                layers.periodLimit, layers.claimExcess, layers.claimLimits, beginOfCover)
+                layers.periodLimit, layers.claimExcess, layers.claimLimits, beginOfCover, layers.apPercentages, layers.apTypes)
     }
 
     public static Double paidSumOfCalendarYear(List<ClaimCashflowPacket> claims, int calendarYear) {
@@ -107,6 +106,52 @@ public class TermContractTestUtils {
         ultimatesPerPeriod
     }
 
+    public static Map<Integer, Double> getContractPremiumByPeriod(SpreadsheetImporter importer, String sheet) {
+        Map<Integer, Double> premiumsByPeriod = Maps.newHashMap()
+            Map prem = importer.cells([
+                    sheet: sheet, //startRow: row, // startRow counting starts at 0, first line with content
+                    cellMap: ["C4": 'premP0', "D4": 'premP1', "E4": 'premP2']])
+            for (int period = 0; period < 3; period++) {
+                Double ultimate = (Double) prem["premP$period"]
+                if (ultimate != null) {
+                    // invert ultimate sign as claim have a negative sign in pc-cashflow plugin
+                    premiumsByPeriod.put(period, ultimate)
+                }
+        }
+        premiumsByPeriod
+    }
+
+    public static Map<Integer, Double> getAPByPeriod(SpreadsheetImporter importer, String sheet) {
+        Map<Integer, Double> premiumsByPeriod = Maps.newHashMap()
+            Map prem = importer.cells([
+                    sheet: sheet, //startRow: row, // startRow counting starts at 0, first line with content
+                    cellMap: ["C93": 'premP0', "D93": 'premP1', "E93": 'premP2']])
+            for (int period = 0; period < 3; period++) {
+                Double ultimate = (Double) prem["premP$period"]
+                if (ultimate != null) {
+                    // invert ultimate sign as claim have a negative sign in pc-cashflow plugin
+                    premiumsByPeriod.put(period, ultimate)
+                }
+        }
+        premiumsByPeriod
+    }
+
+    public static Map<Integer, Double> paidAPByPeriod(SpreadsheetImporter importer, String sheet) {
+        Map<Integer, Double> premiumsByPeriod = Maps.newHashMap()
+            Map prem = importer.cells([
+                    sheet: sheet, //startRow: row, // startRow counting starts at 0, first line with content
+                    cellMap: [ "C97": 'premP0', "D97": 'premP1', "E97": 'premP2',"F97": 'premP3',"G97": 'premP4',"H97": 'premP5',"I97": 'premP6',"J97": 'premP7', ]
+            ])
+            for (int period = 0; period < 7; period++) {
+                Double ultimate = (Double) prem["premP$period"]
+                if (ultimate != null) {
+                    // invert ultimate sign as claim have a negative sign in pc-cashflow plugin
+                    premiumsByPeriod.put(period, ultimate)
+                }
+        }
+        premiumsByPeriod
+    }
+
     public static class TestLayerPeriodContractParams {
         int layer
         int period
@@ -115,8 +160,10 @@ public class TermContractTestUtils {
         double claimExcess
         double periodLimit
         double periodExcess
+        double apPercentage
+        APBasis apBasis
 
-        public TestLayerPeriodContractParams(int layer, int period, Map<String, Double> params) {
+        public TestLayerPeriodContractParams(int layer, int period, Map<String, Double> params, APBasis apBasis1) {
             this.layer = layer
             this.period = period
             share = params['share'] ? params['share'] : 0d
@@ -124,6 +171,8 @@ public class TermContractTestUtils {
             claimExcess = params['claimExcess'] ? params['claimExcess'] : 0d
             periodLimit = params['periodLimit'] ? params['periodLimit'] : 0d
             periodExcess = params['periodExcess'] ? params['periodExcess'] : 0d
+            apPercentage = params['apPercentage'] ? params['apPercentage'] : 0d
+            apBasis = apBasis1
         }
 
         /**
@@ -145,6 +194,8 @@ public class TermContractTestUtils {
         List<Double> claimExcess = []
         List<Double> periodLimit = []
         List<Double> periodExcess = []
+        List<Double> apPercentages = []
+        List<String> apTypes = []
         int maxPeriod = 0
 
         void add(TestLayerPeriodContractParams params) {
@@ -166,6 +217,8 @@ public class TermContractTestUtils {
                         claimExcess << layerPeriodParams.claimExcess
                         periodLimit << layerPeriodParams.periodLimit
                         periodExcess << layerPeriodParams.periodExcess
+                        apPercentages << layerPeriodParams.apPercentage
+                        apTypes << layerPeriodParams.apBasis.toString()
                     }
                 }
             }

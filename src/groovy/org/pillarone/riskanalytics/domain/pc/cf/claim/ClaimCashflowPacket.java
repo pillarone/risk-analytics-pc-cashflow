@@ -58,6 +58,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private double changeInReservesIndexed;
     private double changeInIBNRIndexed;
     private double appliedIndexValue;
+    private double premiumRisk;
+    private double reserveRisk;
 
     private DateTime updateDate;
     private Integer updatePeriod;
@@ -95,7 +97,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.changeInReservesIndexed = 0d;
         this.updateDate = date;
         setDate(date);
-
+        initRiskBased();
     }
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim) {
@@ -111,6 +113,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.reservesIndexed = 0;
         updateDate = baseClaim.getOccurrenceDate();
         setDate(updateDate);
+        initRiskBased();
     }
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, double ultimate, double nominalUltimate, double paidIncrementalIndexed,
@@ -180,6 +183,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.updatePeriod = updatePeriod;
         this.exposureInfo = exposureInfo;
         setDate(updateDate);
+        initRiskBased();
     }
 
     /**
@@ -191,8 +195,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      */
     public ClaimCashflowPacket(ClaimCashflowPacket grossClaim, ClaimStorage claimStorage, ExposureInfo exposureInfo) {
         this(claimStorage.getReferenceCeded(), grossClaim.getKeyClaim());
-        ultimate = claimStorage.getCumulatedCeded(BasedOnClaimProperty.ULTIMATE);
-        // todo(sku): investigate!
+        ultimate = claimStorage.getCumulatedCeded(BasedOnClaimProperty.ULTIMATE_UNINDEXED);
         nominalUltimate = claimStorage.getReferenceCeded().getUltimate();
         paidIncrementalIndexed = claimStorage.getIncrementalPaidCeded();
         paidCumulatedIndexed = claimStorage.getCumulatedCeded(BasedOnClaimProperty.PAID);
@@ -206,10 +209,11 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         updatePeriod = grossClaim.updatePeriod;
         discountFactors = grossClaim.discountFactors;
         setDate(grossClaim.getUpdateDate());
+        initRiskBased();
     }
 
     /**
-     * Convienience method for setting a new payment amount based on an old Claim Cashflow
+     * Convenience method for setting a new payment amount based on an old Claim Cashflow
      */
     public ClaimCashflowPacket(IClaimRoot baseClaim, ClaimCashflowPacket claimCashflowPacket, double paidIncremental, double cumulatedPaid, boolean setUltimate) {
         this.baseClaim = baseClaim;
@@ -238,6 +242,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         updateDate = claimCashflowPacket.getUpdateDate();
         updatePeriod = claimCashflowPacket.getUpdatePeriod();
         discountFactors = claimCashflowPacket.getDiscountFactors();
+        initRiskBased();
     }
 
     public ClaimCashflowPacket(IClaimRoot baseClaim, IClaimRoot keyClaim, DateTime occurenceDate, double paidIncremental, double cumulatedPaid, int currentPeriod) {
@@ -260,8 +265,18 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         updateDate = occurenceDate;
         updatePeriod = currentPeriod;
         discountFactors = null;
+        initRiskBased();
     }
 
+    /**
+     * When building aggregate claims, this function is not sufficient. Instead the setter methods of premium and reserve
+     * risk should be used.
+     */
+    private void initRiskBased() {
+        double riskBased = reportedIncrementalIndexed + changeInIBNRIndexed;
+        premiumRisk = (ultimate != 0 && !getClaimType().isReserveClaim()) ? riskBased : 0;
+        reserveRisk = (ultimate == 0 || getClaimType().isReserveClaim()) ? riskBased : 0;
+    }
 
     /**
      * Used to modify the packet date property according the persistence date on a cloned instance.
@@ -291,6 +306,13 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     }
 
     /**
+     * @return reported incremental - paid incremental
+     */
+    public double changeInOutstandingIndexed() {
+        return reportedIncrementalIndexed - paidIncrementalIndexed;
+    }
+
+    /**
      * @return ultimate * (1 - cumulated payout factor)
      */
     public double reservedIndexed() {
@@ -302,6 +324,10 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      */
     public double developedUltimate() {
         return reservedIndexed() + paidCumulatedIndexed;
+    }
+
+    public double totalIncrementalIndexed() {
+        return changeInReservesIndexed + paidIncrementalIndexed;
     }
 
     /**
@@ -322,14 +348,6 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         // check necessary due to rounding/rationale numbers
         if (Math.abs(developedUltimate() / nominalUltimate - 1) < 1E-4) return 0d;
         return developedUltimate() - nominalUltimate;
-    }
-
-    public double premiumRisk() {
-        return ultimate() == 0d ? 0 : reportedIncrementalIndexed + changeInIBNRIndexed;
-    }
-
-    public double reserveRisk() {
-        return ultimate() != 0d ? 0 : reportedIncrementalIndexed + changeInIBNRIndexed;
     }
 
     /**
@@ -462,16 +480,29 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     @Override
     public Map<String, Number> getValuesToSave() throws IllegalAccessException {
         Map<String, Number> valuesToSave = new HashMap<String, Number>();
+        // total incremental unindexed
         valuesToSave.put(ULTIMATE, ultimate);    // this and missing default c'tor (final!) leads to failure during result tree building
+        // total incremental
+        valuesToSave.put(TOTAL_INCREMENTAL_INDEXED, totalIncrementalIndexed());
+        // total cumulative
+        valuesToSave.put(TOTAL_CUMULATIVE_INDEXED, developedUltimate());
+        // paid incremental indexed
         valuesToSave.put(PAID_INDEXED, paidIncrementalIndexed);
-        valuesToSave.put(RESERVES_INDEXED, reservedIndexed());
-//        valuesToSave.put(CHANGES_IN_RESERVES_INDEXED, changeInReservesIndexed);
+        valuesToSave.put(PAID_CUMULATIVE_INDEXED, paidCumulatedIndexed);
+        // reported incremental indexed
         valuesToSave.put(REPORTED_INDEXED, reportedIncrementalIndexed);
+        valuesToSave.put(REPORTED_CUMULATIVE_INDEXED, reportedCumulatedIndexed);
+        valuesToSave.put(CHANGES_IN_IBNR_INDEXED, changeInIBNRIndexed);
         valuesToSave.put(IBNR_INDEXED, ibnrIndexed());
-//        valuesToSave.put(CHANGES_IN_IBNR_INDEXED, changeInIBNRIndexed);
+        valuesToSave.put(CHANGES_IN_OUTSTANDING_INDEXED, changeInOutstandingIndexed());
         valuesToSave.put(OUTSTANDING_INDEXED, outstandingIndexed());
-        valuesToSave.put(DEVELOPED_RESULT_INDEXED, developmentResultCumulative());
-        valuesToSave.put(APPLIED_INDEX_VALUE, appliedIndexValue);
+        // case reserve change
+        valuesToSave.put(CHANGES_IN_RESERVES_INDEXED, changeInReservesIndexed);
+        // case reserve
+        valuesToSave.put(RESERVES_INDEXED, reservedIndexed());
+        valuesToSave.put(PREMIUM_RISK_BASE, premiumRisk);
+        valuesToSave.put(RESERVE_RISK_BASE, reserveRisk);
+        valuesToSave.put(PREMIUM_AND_RESERVE_RISK_BASE, premiumRisk + reserveRisk);
         return valuesToSave;
     }
 
@@ -512,6 +543,8 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     }
 
     public final static String ULTIMATE = "ultimate";
+    public final static String TOTAL_CUMULATIVE_INDEXED = "totalCumulativeIndexed";
+    public final static String TOTAL_INCREMENTAL_INDEXED = "totalIncrementalIndexed";
     public final static String REPORTED_INDEXED = "reportedIncrementalIndexed";
     public final static String PAID_INDEXED = "paidIncrementalIndexed";
     public final static String IBNR_INDEXED = "IBNRIndexed";
@@ -519,9 +552,16 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public final static String RESERVES_INDEXED = "reservesIndexed";
     public final static String CHANGES_IN_RESERVES_INDEXED = "changesInReservesIndexed";
     public final static String OUTSTANDING_INDEXED = "outstandingIndexed";
-    public final static String DEVELOPED_ULTIMATE = "developedUltimateIndexed";
-    public final static String DEVELOPED_RESULT_INDEXED = "developedResultIndexed";
+    public final static String DEVELOPED_RESULT_INDEXED = "totalIncrementalIndexed";
     public final static String APPLIED_INDEX_VALUE = "appliedIndexValue";
+    public final static String CHANGES_IN_OUTSTANDING_INDEXED = "changesInOutstandingIndexed";
+    public final static String REPORTED_CUMULATIVE_INDEXED = "reportedCumulativeIndexed";
+    public final static String PAID_CUMULATIVE_INDEXED = "paidCumulativeIndexed";
+    public final static String RESERVE_RISK_BASE = "reserveRiskBase";
+    public final static String PREMIUM_RISK_BASE = "premiumRiskBase";
+    public final static String PREMIUM_AND_RESERVE_RISK_BASE = "premiumAndReserveRiskBase";
+
+
 
     public final static List<String> NON_TRIVIAL_PAYOUT_IBNR = Arrays.asList(ULTIMATE, PAID_INDEXED, RESERVES_INDEXED,
             REPORTED_INDEXED, IBNR_INDEXED, OUTSTANDING_INDEXED, DEVELOPED_RESULT_INDEXED, APPLIED_INDEX_VALUE);
@@ -598,16 +638,28 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public double getChangeInReservesIndexed() {
         return changeInReservesIndexed;
     }
-//
-//    public void setChangeInReservesIndexed(double changeInReservesIndexed) {
-//        this.changeInReservesIndexed = changeInReservesIndexed;
-//    }
 
     public double getChangeInIBNRIndexed() {
         return changeInIBNRIndexed;
     }
-//
-//    public void setChangeInIBNRIndexed(double changeInIBNRIndexed) {
-//        this.changeInIBNRIndexed = changeInIBNRIndexed;
-//    }
+
+    public double getPremiumRisk() {
+        return premiumRisk;
+    }
+
+    public void setPremiumRisk(double premiumRisk) {
+        this.premiumRisk = premiumRisk;
+    }
+
+    public double getReserveRisk() {
+        return reserveRisk;
+    }
+
+    public void setReserveRisk(double reserveRisk) {
+        this.reserveRisk = reserveRisk;
+    }
+
+    public double totalCumulatedIndexed() {
+        return developedUltimate();
+    }
 }

@@ -1,6 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param;
 
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
 
 /**
@@ -11,5 +13,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportiona
  */
 public interface ICommissionStrategy extends IParameterObject {
 
-    ICommission getCalculator();
+    ICommission getCalculator(DoubleValuePerPeriod lossCarryForward);
+
+    DoubleValuePerPeriod getInitialLossCarriedForward();
 }

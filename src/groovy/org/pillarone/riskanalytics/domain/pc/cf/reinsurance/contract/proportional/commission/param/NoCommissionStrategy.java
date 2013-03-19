@@ -4,6 +4,8 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.NoCommission;
 
@@ -28,7 +30,13 @@ public class NoCommissionStrategy extends AbstractParameterObject implements ICo
                                     boolean isFirstPeriod, boolean isAdditive) {
     }
 
-    public ICommission getCalculator() {
+    @Override
+    public ICommission getCalculator(DoubleValuePerPeriod lossCarriedForward) {
         return new NoCommission();
+    }
+
+    @Override
+    public DoubleValuePerPeriod getInitialLossCarriedForward() {
+        return new DoubleValuePerPeriod();
     }
 }

@@ -183,7 +183,7 @@ public class PatternUtils {
     private static TreeMap<DateTime, Double> filterMap(TreeMap<DateTime, Double> aMap, DateTime filterDate) {
         final TreeMap<DateTime, Double> dateTimeDoubleTreeMap = new TreeMap<DateTime, Double>();
         for (Map.Entry<DateTime, Double> entry : aMap.entrySet()) {
-            if(entry.getKey().minusDays(1).isAfter(filterDate)) {
+            if(entry.getKey().minusDays(1).isAfter(filterDate) || entry.getKey().minusDays(1).isEqual(filterDate)) {
                 dateTimeDoubleTreeMap.put(entry.getKey(), entry.getValue());
             }
         }
@@ -230,7 +230,8 @@ public class PatternUtils {
                                                 double ultimate, DateTime baseDate, DateTime occurrenceDate,
                                                 DateTime updateDate, DateTime lastReportedDate, DateTimeUtilities.Days360 days360) {
         if(Math.abs(ultimate) == 0d ) {
-            throw new SimulationException("Insanity detected; Attempted to develop historic claim with 0 ultimate value. Pattern : " + originalPattern.toString() + " ... \n \n Claim Updates : " + claimUpdates.toString()) ;
+            throw new SimulationException("Insanity detected; Attempted to develop historic claim with 0 ultimate value. Pattern : "
+                    + originalPattern.toString() + " ... \n \n Claim Updates : " + claimUpdates.toString()) ;
         }
 
         if (claimUpdates.isEmpty()) {
@@ -262,6 +263,15 @@ public class PatternUtils {
                 }
                 cumulativeValues.add(originalPattern.getCumulativeValues().get(index));
             }
+        }
+
+        if(cumulativeValues.size() == 0 && cumulativePeriods.size() == 0) {
+//          Update date after end of pattern. Pay entire claim at update date.
+            cumulativeValues.add(0d);
+            cumulativePeriods.add(new Period(0));
+
+            cumulativeValues.add(1d);
+            cumulativePeriods.add(new Period(baseDate, updateDate));
         }
         return new PatternPacket(originalPattern, cumulativeValues, cumulativePeriods);
     }

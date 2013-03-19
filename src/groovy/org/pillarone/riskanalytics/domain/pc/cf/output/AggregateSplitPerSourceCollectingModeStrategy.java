@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.components.DynamicComposedComponent;
 import org.pillarone.riskanalytics.core.components.IComponentMarker;
+import org.pillarone.riskanalytics.core.output.DrillDownMode;
 import org.pillarone.riskanalytics.core.output.ICollectingModeStrategy;
 import org.pillarone.riskanalytics.core.output.PathMapping;
 import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
@@ -25,7 +26,7 @@ import java.util.*;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplitCollectingModeStrategy implements ICollectingModeStrategy {
+public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplitCollectingModeStrategy {
 
     protected static Log LOG = LogFactory.getLog(AggregateSplitPerSourceCollectingModeStrategy.class);
 
@@ -95,6 +96,7 @@ public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplit
             Class markerInterface = componentsExtensibleBy.get(claim.sender);
 
             if (!(ISegmentMarker.class.equals(markerInterface))) {
+                // todo(sku): why SEGMENTS used
                 lobPath = getPathMapping(claim, claim.segment(), SEGMENTS);
             }
             PathMapping contractPath = null;
@@ -162,5 +164,9 @@ public class AggregateSplitPerSourceCollectingModeStrategy extends AbstractSplit
     @Override
     public String getIdentifier() {
         return IDENTIFIER;
+    }
+
+    public List<DrillDownMode> getDrillDownModes() {
+        return DrillDownMode.getDrillDownModesBySource();
     }
 }

@@ -16,13 +16,13 @@ components {
 		}
 	}
 	segments {
-		outClaimsCeded = "PREMIUM_RESERVE_RISK_TRIANGLE"
-		outClaimsGross = "PREMIUM_RESERVE_RISK_TRIANGLE"
-		outClaimsNet = "PREMIUM_RESERVE_RISK_TRIANGLE"
+		outClaimsCeded = "AGGREGATE_BY_PERIOD_outstandingIndexed_totalIncrementalIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
+		outClaimsGross = "AGGREGATE_BY_PERIOD_outstandingIndexed_totalIncrementalIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
+		outClaimsNet = "AGGREGATE_BY_PERIOD_outstandingIndexed_totalIncrementalIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
 		subsubcomponents {
-			outClaimsCeded = "PREMIUM_RESERVE_RISK_TRIANGLE"
-			outClaimsGross = "PREMIUM_RESERVE_RISK_TRIANGLE"
-			outClaimsNet = "PREMIUM_RESERVE_RISK_TRIANGLE"
+			outClaimsCeded = "AGGREGATE_BY_PERIOD_outstandingIndexed_totalIncrementalIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
+			outClaimsGross = "AGGREGATE_BY_PERIOD_outstandingIndexed_totalIncrementalIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
+			outClaimsNet = "AGGREGATE_BY_PERIOD_outstandingIndexed_totalIncrementalIndexed_premiumRiskBase_reserveRiskBase_premiumAndReserveRiskBase"
 		}
 	}
 }

@@ -49,7 +49,7 @@ public class ReinsuranceContract extends MultiCounterPartyBaseReinsuranceContrac
         if (isCurrentPeriodCovered()) {
             int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
             periodStore.put(REINSURANCE_CONTRACT, parmContractStrategy.getContracts(
-                    currentPeriod, inUnderwritingInfo, ExposureBase.ABSOLUTE, termDeductible, termLimit));
+                    currentPeriod, inUnderwritingInfo, ExposureBase.ABSOLUTE, termDeductible, termLimit, new ArrayList<ClaimCashflowPacket>()));
         }
     }
 

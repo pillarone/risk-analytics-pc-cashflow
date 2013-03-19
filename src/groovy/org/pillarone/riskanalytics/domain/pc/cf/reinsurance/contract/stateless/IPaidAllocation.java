@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.CededClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache;
 
 import java.util.Collection;
 import java.util.List;

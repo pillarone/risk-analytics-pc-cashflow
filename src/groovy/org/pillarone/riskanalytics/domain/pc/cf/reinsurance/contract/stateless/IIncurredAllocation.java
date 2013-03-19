@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,6 +14,6 @@ import java.util.Set;
  */
 public interface IIncurredAllocation {
 
-    List<ICededRoot> allocateClaims(double incurredInPeriod, Set<IClaimRoot> allIncurredClaims, PeriodScope periodScope, ContractCoverBase base);
+    List<ICededRoot> allocateClaims(double incurredInPeriod, IAllContractClaimCache claimStore, PeriodScope periodScope, ContractCoverBase base);
 
 }

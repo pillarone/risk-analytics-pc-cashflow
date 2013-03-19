@@ -76,7 +76,7 @@ public class TermReinsuranceContract extends BaseReinsuranceContract implements 
         if (isCurrentPeriodCovered()) {
             int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
             periodStore.put(REINSURANCE_CONTRACT, parmContractStructure.getContracts(
-                    currentPeriod, inUnderwritingInfo, parmContractBase.exposureBase(), termDeductible, termLimit));
+                    currentPeriod, inUnderwritingInfo, parmContractBase.exposureBase(), termDeductible, termLimit, new ArrayList<ClaimCashflowPacket>()));
         }
     }
 

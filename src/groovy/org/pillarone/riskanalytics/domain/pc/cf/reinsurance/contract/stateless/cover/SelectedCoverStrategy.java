@@ -37,7 +37,7 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
         return params;
     }
 
-    private List<IPerilMarker> getCoveredPerils() {
+    public List<IPerilMarker> getCoveredPerils() {
         return (List<IPerilMarker>) grossClaims.getValuesAsObjects(0, true);
     }
 
@@ -82,34 +82,18 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
             return;
         }
         for (ClaimCashflowPacket claim : source) {
-            if (perilBasedCover() && contractBasedCover()) {
-                if (coveredContracts.contains(claim.reinsuranceContract()) && claim.reserve() == null
-                        && coveredPerils.contains(claim.peril())) {
-                    if (coveredContractsCoveringCeded.contains(claim.reinsuranceContract())) {
-                        filteredClaims.add(claimValidator.invertClaimSign(claim));
-                    }
-                    else {
-                        filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
-                    }
-                }
-            }
-            else if (perilBasedCover()) {
+            if (perilBasedCover()) {
                 if (coveredPerils.contains(claim.peril())) {
-                    filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
+                    filteredClaims.add(claim);
                 }
             }
-            else if (contractBasedCover()) {
+
+            if (contractBasedCover()) {
                 if (coveredContracts.contains(claim.reinsuranceContract()) && claim.reserve() == null) {
-                    if (coveredContractsCoveringCeded.contains(claim.reinsuranceContract())) {
-                        filteredClaims.add(claimValidator.invertClaimSign(claim));
-                    }
-                    else {
-                        filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
+                    if (coveredContracts.contains(claim.reinsuranceContract())) {
+                        filteredClaims.add(claim);
                     }
                 }
-            }
-            else {
-                // nothing to be filtered
             }
         }
         source.clear();

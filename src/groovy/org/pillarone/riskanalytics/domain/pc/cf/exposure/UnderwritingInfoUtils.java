@@ -3,17 +3,23 @@ package org.pillarone.riskanalytics.domain.pc.cf.exposure;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.XLPremiumBase;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class UnderwritingInfoUtils {
+
+    private static Log LOG = LogFactory.getLog(UnderwritingInfoUtils.class);
 
     /**
      * @param underwritingInfos underwriting info packets to be filtered
@@ -131,6 +137,48 @@ public class UnderwritingInfoUtils {
         return correctMetaProperties(summedUnderwritingInfo, underwritingInfos);
     }
 
+    static public List<UnderwritingInfoPacket> aggregateBySegment(List<UnderwritingInfoPacket> underwritingInfos) {
+        ListMultimap<ISegmentMarker, UnderwritingInfoPacket> underwritingInfoBySegment = ArrayListMultimap.create();
+        List<UnderwritingInfoPacket> aggregateUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
+        for (UnderwritingInfoPacket uwInfo : underwritingInfos) {
+            underwritingInfoBySegment.put(uwInfo.segment(), uwInfo);
+        }
+        for (Collection<UnderwritingInfoPacket> segmentUwInfo : underwritingInfoBySegment.asMap().values()) {
+            List<UnderwritingInfoPacket> uwInfos = new ArrayList<UnderwritingInfoPacket>(segmentUwInfo);
+            if (uwInfos.size() == 1) {
+                aggregateUnderwritingInfo.add(segmentUwInfo.iterator().next());
+            }
+            else if (uwInfos.size() > 1) {
+                UnderwritingInfoPacket aggregatedUwInfo = aggregate(uwInfos);
+                aggregatedUwInfo.setOriginal(uwInfos.get(0));
+                aggregatedUwInfo.setDate(uwInfos.get(0).getDate());
+                aggregateUnderwritingInfo.add(correctMetaProperties(aggregatedUwInfo, uwInfos));
+            }
+        }
+        return aggregateUnderwritingInfo;
+    }
+
+    static public List<UnderwritingInfoPacket> aggregateBySegmentAndInceptionPeriod(List<UnderwritingInfoPacket> underwritingInfos) {
+        ListMultimap<SegmentInceptionPeriodKey, UnderwritingInfoPacket> underwritingInfoBySegment = ArrayListMultimap.create();
+        List<UnderwritingInfoPacket> aggregateUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
+        for (UnderwritingInfoPacket uwInfo : underwritingInfos) {
+            underwritingInfoBySegment.put(new SegmentInceptionPeriodKey(uwInfo.segment(), uwInfo.exposure.getInceptionPeriod()), uwInfo);
+        }
+        for (Collection<UnderwritingInfoPacket> segmentUwInfo : underwritingInfoBySegment.asMap().values()) {
+            List<UnderwritingInfoPacket> uwInfos = new ArrayList<UnderwritingInfoPacket>(segmentUwInfo);
+            if (uwInfos.size() == 1) {
+                aggregateUnderwritingInfo.add(segmentUwInfo.iterator().next());
+            }
+            else if (uwInfos.size() > 1) {
+                UnderwritingInfoPacket aggregatedUwInfo = aggregate(uwInfos);
+                aggregatedUwInfo.setOriginal(uwInfos.get(0));
+                aggregatedUwInfo.setDate(uwInfos.get(0).getDate());
+                aggregateUnderwritingInfo.add(correctMetaProperties(aggregatedUwInfo, uwInfos));
+            }
+        }
+        return aggregateUnderwritingInfo;
+    }
+
     static public CededUnderwritingInfoPacket aggregateCeded(List<CededUnderwritingInfoPacket> underwritingInfos) {
         if (underwritingInfos == null || underwritingInfos.size() == 0) {
             return null;
@@ -145,8 +193,12 @@ public class UnderwritingInfoUtils {
 
     static public UnderwritingInfoPacket correctMetaProperties(UnderwritingInfoPacket result, List<UnderwritingInfoPacket> underwritingInfos) {
         UnderwritingInfoPacket verifiedResult = (UnderwritingInfoPacket) result.clone();
-        ISegmentMarker lob = verifiedResult.segment();
-        IReinsuranceContractMarker reinsuranceContract = verifiedResult.reinsuranceContract();
+        ISegmentMarker lob = null;
+        IReinsuranceContractMarker reinsuranceContract = null;
+        if (underwritingInfos != null && underwritingInfos.size() > 0) {
+            lob = underwritingInfos.get(0).segment();
+            reinsuranceContract = underwritingInfos.get(0).reinsuranceContract;
+        }
         boolean underwritingInfosOfDifferentLobs = lob == null;
         boolean underwritingInfosOfDifferentContracts = reinsuranceContract == null;
         for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
@@ -157,11 +209,12 @@ public class UnderwritingInfoUtils {
                 underwritingInfosOfDifferentContracts = true;
             }
         }
-        if (underwritingInfosOfDifferentLobs) {
-            verifiedResult.setSegment(null);
+        if (!underwritingInfosOfDifferentLobs) {
+            verifiedResult.setSegment(lob);
+            verifiedResult.setLegalEntity(underwritingInfos.get(0).legalEntity);
         }
-        if (underwritingInfosOfDifferentContracts) {
-            verifiedResult.setReinsuranceContract(null);
+        if (!underwritingInfosOfDifferentContracts) {
+            verifiedResult.setReinsuranceContract(reinsuranceContract);
         }
         return verifiedResult;
     }
@@ -261,5 +314,30 @@ public class UnderwritingInfoUtils {
         }
         return underwritingInfoNet;
     }
+
+    public static List<UnderwritingInfoPacket> correctSign(List<UnderwritingInfoPacket> underwritingInfos, boolean invertSign) {
+        List<UnderwritingInfoPacket> result = new ArrayList<UnderwritingInfoPacket>();
+        for (UnderwritingInfoPacket uwInfo : underwritingInfos) {
+            boolean correctSign = true;
+            if (uwInfo instanceof CededUnderwritingInfoPacket) {
+                correctSign = uwInfo.premiumWritten <= 0;
+            }
+            else {
+                correctSign = uwInfo.premiumWritten >= 0;
+            }
+            if (!correctSign) {
+                LOG.error("wrong sign for " + uwInfo.toString());
+            }
+            if (invertSign) {
+                result.add(new UnderwritingInfoPacket(uwInfo, -1));
+            }
+            else {
+                result.add(uwInfo);
+            }
+        }
+
+        return result;
+    }
+
 
 }

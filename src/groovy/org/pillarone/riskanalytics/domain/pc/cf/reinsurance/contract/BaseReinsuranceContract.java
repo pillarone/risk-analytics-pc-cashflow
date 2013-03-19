@@ -1,7 +1,9 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.SetMultimap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
@@ -10,9 +12,7 @@ import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountedValuesPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.NetPresentValuesPacket;
@@ -66,7 +66,7 @@ import java.util.*;
  *                     inClaims. This is basically a mapping of claims and covering contracts</li>
  *                 <li>consumers are
  *                      <ul>
- *                          <li>initContracts() in order to call contract.initPeriodClaims() (i.e. used for none trivial
+ *                          <li>initContracts() in order to call contract.initBasedOnAggregateCalculations() (i.e. used for none trivial
  *                              allocation/event processing)</li>
  *                          <li>calculateCededClaims() in order to call getCededClaim() on every covered gross claim</li>
  *                      </ul>
@@ -135,7 +135,8 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
     }
 
     /**
-     * Resetting contract member variables like deductibles, limits, ...
+     * Resetting contract member variables like deductibles, limits, ... This function has no effect in period 0 as
+     * REINSURANCE_CONTRACT is initialized afterwards.
      * @param contracts to be prepared for the calculation of the current period
      */
     protected void initPeriod(Set<IReinsuranceContract> contracts) {
@@ -143,7 +144,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         initHasMultipleContractsPerPeriod(contracts);
         int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
         if (isProportionalContract) {
-            for (int period = 0; period < currentPeriod; period++) {
+            for (int period = 0; period <= currentPeriod; period++) {  // <= used to make sure occurrencePeriod is set for first period too
                 List<IReinsuranceContract> periodContracts = (List<IReinsuranceContract>) periodStore.get(REINSURANCE_CONTRACT, -currentPeriod + period);
                 if (periodContracts != null) {
                     for (IReinsuranceContract contract : periodContracts) {
@@ -220,7 +221,7 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
      * @param currentPeriod used to get the applicable contract from the periodStore
      * @param claim is used to fill currentPeriodGrossClaims
      */
-    private void updateCurrentPeriodGrossClaims(Set<IReinsuranceContract> contracts,
+    protected void updateCurrentPeriodGrossClaims(Set<IReinsuranceContract> contracts,
                                                 List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims,
                                                 int currentPeriod, ClaimCashflowPacket claim, ClaimStorageContainer claimsHistories) {
         IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
@@ -252,19 +253,34 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
     }
 
     /**
-     * Calls contract.initPeriodClaims for each contract
+     * Calls contract.initBasedOnAggregateCalculations for each contract
      * @param contracts
      */
     private void initContracts(Set<IReinsuranceContract> contracts) {
+        SetMultimap<Integer, UnderwritingInfoPacket> uwInfoByInceptionPeriod = HashMultimap.create();
+        for (UnderwritingInfoPacket uwInfo : inUnderwritingInfo) {
+            uwInfoByInceptionPeriod.put(uwInfo.getExposure().getInceptionPeriod(), uwInfo);
+        }
         for (IReinsuranceContract contract : contracts) {
             List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
             List<ClaimCashflowPacket> contractGrossClaims = new ArrayList<ClaimCashflowPacket>();
+            Integer occurrencePeriod = null;
+            IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
             for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
                 if (grossClaim.hasContract(contract)) {
                     contractGrossClaims.add(grossClaim.getGrossClaim());
+                    if (!grossClaim.getGrossClaim().getClaimType().equals(ClaimType.AGGREGATED_RESERVES)) {
+                        // as occurrence period concept is not implemented for reserves
+                        occurrencePeriod = grossClaim.getGrossClaim().occurrencePeriod(periodCounter);
+                    }
                 }
             }
-            contract.initPeriodClaims(contractGrossClaims);
+            if (occurrencePeriod == null) {
+                contract.initBasedOnAggregateCalculations(contractGrossClaims, new ArrayList<UnderwritingInfoPacket>());
+            }
+            else {
+                contract.initBasedOnAggregateCalculations(contractGrossClaims, new ArrayList<UnderwritingInfoPacket>(uwInfoByInceptionPeriod.get(occurrencePeriod)));
+            }
         }
     }
 
@@ -275,9 +291,9 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
      */
     private void calculateCededClaims(IPeriodCounter periodCounter) {
         List<ClaimHistoryAndApplicableContract> currentPeriodGrossClaims = (List<ClaimHistoryAndApplicableContract>) periodStore.get(GROSS_CLAIMS);
-        Map<IClaimRoot, IClaimRoot> netBaseClaimPerGrossClaim = (Map<IClaimRoot, IClaimRoot>) periodStore.get(NET_BASE_CLAIMS);
+        Map<ClaimKey, IClaimRoot> netBaseClaimPerGrossClaim = (Map<ClaimKey, IClaimRoot>) periodStore.get(NET_BASE_CLAIMS);
         if (netBaseClaimPerGrossClaim == null) {
-            netBaseClaimPerGrossClaim = new HashMap<IClaimRoot, IClaimRoot>();
+            netBaseClaimPerGrossClaim = new HashMap<ClaimKey, IClaimRoot>();
             periodStore.put(NET_BASE_CLAIMS, netBaseClaimPerGrossClaim);
         }
         for (ClaimHistoryAndApplicableContract grossClaim : currentPeriodGrossClaims) {
@@ -285,21 +301,22 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             ListMultimap<ClaimCashflowPacket, ClaimCashflowPacket> cededClaimsByGrossClaim = ArrayListMultimap.create();
             if (!grossClaim.isTrivialContract()) {
                 cededClaim = grossClaim.getCededClaim(periodCounter);
-                double coveredByReinsurers = coveredByReinsurers(grossClaim.getUpdateDate());
-                if (coveredByReinsurers != 1) {
-                    cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers, true, true);
-                }
-                ClaimUtils.applyMarkers(grossClaim.getGrossClaim(), cededClaim);
-                cededClaim.setMarker(this);
-                if (hasMultipleContractsPerPeriod) {
-                    cededClaimsByGrossClaim.put(grossClaim.getGrossClaim(), cededClaim);
-                }
-                else {
-                    outClaimsCeded.add(cededClaim);
-                    if (isSenderWired(outClaimsGross) || isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues)) {
-                        // fill outClaimsGross temporarily if discounting or net present values are calculated as they are relaying on it
-                        outClaimsGross.add(grossClaim.getGrossClaim());
+                if (cededClaim != null) {
+                    double coveredByReinsurers = coveredByReinsurers(grossClaim.getUpdateDate());
+                    if (coveredByReinsurers != 1) {
+                        cededClaim = ClaimUtils.scale(cededClaim, coveredByReinsurers, true, true);
                     }
+                    ClaimUtils.applyMarkers(grossClaim.getGrossClaim(), cededClaim);
+                    cededClaim.setMarker(this);
+                    if (hasMultipleContractsPerPeriod) {
+                        cededClaimsByGrossClaim.put(grossClaim.getGrossClaim(), cededClaim);
+                    } else {
+                        outClaimsCeded.add(cededClaim);
+                    }
+                }
+                if (!hasMultipleContractsPerPeriod && (isSenderWired(outClaimsGross) || isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues))) {
+                    // fill outClaimsGross temporarily if discounting or net present values are calculated as they are relaying on it
+                    outClaimsGross.add(grossClaim.getGrossClaim());
                 }
             }
             if (hasMultipleContractsPerPeriod) {
@@ -307,14 +324,15 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             }
             if (isSenderWired(outClaimsNet) || isSenderWired(outDiscountedValues) || isSenderWired(outNetPresentValues)) {
                 // fill outClaimsNet temporarily if discounting or net present values are calculated as they are relaying on it
-                IClaimRoot netBaseClaim = netBaseClaimPerGrossClaim.get(grossClaim.getGrossClaim().getKeyClaim());
+                ClaimKey key = new ClaimKey(grossClaim.getGrossClaim());
+                IClaimRoot netBaseClaim = netBaseClaimPerGrossClaim.get(key);
                 ClaimCashflowPacket netClaim;
                 if (netBaseClaim != null) {
                     netClaim = ClaimUtils.getNetClaim(grossClaim.getGrossClaim(), cededClaim, netBaseClaim, this);
                 }
                 else {
                     netClaim = ClaimUtils.getNetClaim(grossClaim.getGrossClaim(), cededClaim, this);
-                    netBaseClaimPerGrossClaim.put(grossClaim.getGrossClaim().getKeyClaim(), netClaim.getBaseClaim());
+                    netBaseClaimPerGrossClaim.put(key, netClaim.getBaseClaim());
                 }
                 outClaimsNet.add(netClaim);
             }
@@ -342,31 +360,24 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
         }
     }
 
+    // todo: correct implementation for several contracts per period
+    // todo: simplify implementation by reading from periodStore once only
     private void processUnderwritingInfo() {
         int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
         // map underwriting info to corresponding contracts
-        Set<IReinsuranceContract> contracts = new HashSet<IReinsuranceContract>();
+        SortedMap<Integer, IReinsuranceContract> contracts = new TreeMap<Integer, IReinsuranceContract>();
         if (!inUnderwritingInfo.isEmpty()) {
             for (UnderwritingInfoPacket underwritingInfo : inUnderwritingInfo) {
                 int inceptionPeriod = currentPeriod;
                 if (underwritingInfo.getExposure() != null) {
                     inceptionPeriod = underwritingInfo.getExposure().getInceptionPeriod();
                 }
-                List<IReinsuranceContract> periodContracts = (List<IReinsuranceContract>) periodStore.get(REINSURANCE_CONTRACT, inceptionPeriod - currentPeriod);
+                int periodOffset = inceptionPeriod - currentPeriod;
+                List<IReinsuranceContract> periodContracts = (List<IReinsuranceContract>) periodStore.get(REINSURANCE_CONTRACT, periodOffset);
                 if (periodContracts != null) {
                     for (IReinsuranceContract contract : periodContracts) {
-                        contracts.add(contract);
+                        contracts.put(periodOffset, contract);
                         contract.add(underwritingInfo);
-                    }
-                }
-            }
-        }
-        else {
-            for (int period = 0; period <= currentPeriod; period++) {
-                List<IReinsuranceContract> periodContracts = (List<IReinsuranceContract>) periodStore.get(REINSURANCE_CONTRACT, period - currentPeriod);
-                if (periodContracts != null) {
-                    for (IReinsuranceContract contract : periodContracts) {
-                        contracts.add(contract);
                     }
                 }
             }
@@ -375,8 +386,19 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
             outUnderwritingInfoGross.addAll(inUnderwritingInfo);
         }
         boolean senderUwInfoNetWired = isSenderWired(outUnderwritingInfoNet);
-        DateTime currentPeriodStartDate = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
-        for (IReinsuranceContract contract : contracts) {
+
+        // fill contracts with instances without any gross update
+        for (int period = 0; period <= currentPeriod; period++) {
+            int periodOffset = period - currentPeriod;
+            List<IReinsuranceContract> periodContracts = (List<IReinsuranceContract>) periodStore.get(REINSURANCE_CONTRACT, periodOffset);
+            if (periodContracts != null) {
+                for (IReinsuranceContract contract : periodContracts) {
+                    contracts.put(periodOffset, contract);
+                }
+            }
+        }
+
+        for (IReinsuranceContract contract : contracts.values()) {
             double coveredByReinsurers = coveredByReinsurers(iterationScope.getPeriodScope().getCurrentPeriodStartDate());
             contract.calculateUnderwritingInfo(outUnderwritingInfoCeded, outUnderwritingInfoNet, coveredByReinsurers,
                     senderUwInfoNetWired);
@@ -404,6 +426,20 @@ public abstract class BaseReinsuranceContract extends Component implements IRein
                 }
                 for (UnderwritingInfoPacket baseUwInfo : baseUnderwritingInfos) {
                     outUnderwritingInfoGNPI.add(baseUwInfo.getNet(cededUwOriginal.get(baseUwInfo.getOriginal()), true));
+                }
+            }
+            else if (baseUnderwritingInfos.size() < outUnderwritingInfoCeded.size()) {
+                int extraPacketsForCommissionOfPreviousYears = 0;
+                for (CededUnderwritingInfoPacket packet : outUnderwritingInfoCeded) {
+                    if (packet.getPremiumPaid() == 0 && packet.getPremiumWritten() == 0 && packet.getCommission() != 0) {
+                        extraPacketsForCommissionOfPreviousYears++;
+                    }
+                }
+                if (baseUnderwritingInfos.size() + extraPacketsForCommissionOfPreviousYears != outUnderwritingInfoCeded.size()) {
+                    throw new RuntimeException(getName() + ": different number of incoming GNPI and ceded uw info.");
+                }
+                else {
+                    // its safe to ignore these extra packets as their premium is 0 and does not effect GNPI
                 }
             }
             else {

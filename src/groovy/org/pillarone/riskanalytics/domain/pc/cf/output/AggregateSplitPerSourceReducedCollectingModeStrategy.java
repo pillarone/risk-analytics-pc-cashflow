@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class AggregateSplitPerSourceReducedCollectingModeStrategy extends AggregateSplitPerSourceCollectingModeStrategy implements ICollectingModeStrategy {
+public class AggregateSplitPerSourceReducedCollectingModeStrategy extends AggregateSplitPerSourceCollectingModeStrategy {
 
     protected static Log LOG = LogFactory.getLog(AggregateSplitPerSourceReducedCollectingModeStrategy.class);
 

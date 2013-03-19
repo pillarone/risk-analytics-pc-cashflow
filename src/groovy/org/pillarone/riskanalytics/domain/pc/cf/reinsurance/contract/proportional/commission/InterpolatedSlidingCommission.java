@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission;
 
+import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
@@ -14,7 +15,11 @@ import java.util.TreeMap;
 public class InterpolatedSlidingCommission extends AbstractCommission {
 
     private TreeMap<Double, List<Double>> commissionRatesPerLossRatio;
-    private boolean isStartCoverPeriod = true;
+
+    private double summedCumulatedPremiumCeded = 0;
+
+    private double previousCumulatedFixCommission = 0d;
+    private double previousCumulatedVariableCommission = 0d;
 
     // todo(sku): replace argument with an object
     public InterpolatedSlidingCommission(TreeMap<Double, List<Double>> commissionRatesPerLossRatio,
@@ -23,14 +28,13 @@ public class InterpolatedSlidingCommission extends AbstractCommission {
         super.useClaims = useClaims;
     }
 
-    // todo(sku): add proper handling of Div/0 and corresponding test cases
-    public void calculateCommission(List<ClaimCashflowPacket> claims, List<CededUnderwritingInfoPacket> underwritingInfos,
-                                    boolean isFirstPeriod, boolean isAdditive) {
-//        if (!isStartCoverPeriod) return;
-//        isStartCoverPeriod = false;
-        double summedClaims = sumClaims(claims);
-        double summedPremiumPaid = sumPremiumPaid(underwritingInfos);
-        double totalLossRatio = summedPremiumPaid == 0 ? 0 : summedClaims / -summedPremiumPaid;
+    public void calculateCommission(List<ClaimCashflowPacket> cededClaims,
+                                    List<CededUnderwritingInfoPacket> cededUnderwritingInfos,
+                                    boolean isAdditive, Integer occurrencePeriod) {
+        if (cededClaims.size() == 0 && cededUnderwritingInfos.size() == 0) return;  // as there is no change in commission
+        double summedIncrementalPremiumCeded = sumPremium(cededUnderwritingInfos);
+        summedCumulatedPremiumCeded += summedIncrementalPremiumCeded;
+        double totalLossRatio = summedCumulatedPremiumCeded == 0 ? 0 : sumCumulatedClaims(cededClaims) / -summedCumulatedPremiumCeded;
         double commissionRate;
         double lowestEnteredLossRatio = commissionRatesPerLossRatio.firstKey();
         double highestEnteredLossRatio = commissionRatesPerLossRatio.lastKey();
@@ -48,11 +52,31 @@ public class InterpolatedSlidingCommission extends AbstractCommission {
             double leftCommissionValue = commissionRatesPerLossRatio.get(leftLossRatio).get(0);
             int size = commissionRatesPerLossRatio.get(rightLossRatio).size();
             double rightCommissionValue = commissionRatesPerLossRatio.get(rightLossRatio).get(size - 1);
-            commissionRate = (rightLossRatio - totalLossRatio) / (rightLossRatio - leftLossRatio) * leftCommissionValue +
+            if (rightLossRatio != leftLossRatio) {
+                commissionRate = (rightLossRatio - totalLossRatio) / (rightLossRatio - leftLossRatio) * leftCommissionValue +
                     (totalLossRatio - leftLossRatio) / (rightLossRatio - leftLossRatio) * rightCommissionValue;
+            }
+            else {
+                commissionRate = 0;
+            }
         }
 
-        double variableCommissionRate = commissionRate - fixedCommissionRate;
-        adjustCommissionProperties(underwritingInfos, isAdditive, commissionRate, fixedCommissionRate, variableCommissionRate);
+        double cumulatedFixCommission = fixedCommissionRate * -summedCumulatedPremiumCeded;
+        double incrementalFixCommission = cumulatedFixCommission  - previousCumulatedFixCommission;
+        previousCumulatedFixCommission = cumulatedFixCommission;
+        double cumulatedVariableCommission = commissionRate * -summedCumulatedPremiumCeded - cumulatedFixCommission;
+        double incrementalVariableCommission = cumulatedVariableCommission - previousCumulatedVariableCommission;
+        previousCumulatedVariableCommission = cumulatedVariableCommission;
+        if (incrementalFixCommission != 0 || incrementalVariableCommission != 0) {
+            if (cededUnderwritingInfos.isEmpty() || cededUnderwritingInfos.size() == 0) {
+                DateTime inceptionDate = cededClaims.get(0).getOccurrenceDate();
+                cededUnderwritingInfos.add(extraPacketForCommission(incrementalVariableCommission,
+                        incrementalFixCommission, inceptionDate, occurrencePeriod));
+            }
+            else {
+                adjustCommissionProperties(cededUnderwritingInfos, isAdditive, incrementalFixCommission + incrementalVariableCommission,
+                        incrementalFixCommission, incrementalVariableCommission);
+            }
+        }
     }
 }

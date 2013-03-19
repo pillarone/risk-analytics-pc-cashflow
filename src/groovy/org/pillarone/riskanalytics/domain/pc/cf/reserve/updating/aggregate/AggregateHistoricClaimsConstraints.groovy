@@ -60,6 +60,6 @@ class AggregateHistoricClaimsConstraints implements IMultiDimensionalConstraints
     }
 
     boolean emptyComponentSelectionAllowed(int column) {
-        return false
+        return false;
     }
 }

@@ -6,6 +6,7 @@ import org.joda.time.DateTime
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.AllPeriodUnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis
 
 /**
  * Created with IntelliJ IDEA.

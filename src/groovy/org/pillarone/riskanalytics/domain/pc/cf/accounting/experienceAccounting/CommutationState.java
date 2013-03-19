@@ -5,6 +5,8 @@ import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
+import java.util.Map;
+
 /**
  * This object exists to propagate commutation information, it's state and expected behaviour.
  *
@@ -117,8 +119,19 @@ public class CommutationState extends MultiValuePacket {
     public boolean checkCommutation(PeriodScope periodScope) {
         return !isCommuted() || isCommuted() && getCommutationPeriod() == periodScope.getCurrentPeriod();
     }
+    public Map<String, Number> getValuesToSave() throws IllegalAccessException {
+        Map<String, Number> valuesToSave = super.getValuesToSave();
+        valuesToSave.put("commuted", commuted ? 1 : 0);
+        valuesToSave.put("profitShare", profitShare);
+        valuesToSave.put("commutationPeriod", profitShare);
 
-    @Override
+        return valuesToSave;
+    }
+
+
+
+
+        @Override
     public String toString() {
         return "CommutationState{" +
                 "commuted=" + commuted +

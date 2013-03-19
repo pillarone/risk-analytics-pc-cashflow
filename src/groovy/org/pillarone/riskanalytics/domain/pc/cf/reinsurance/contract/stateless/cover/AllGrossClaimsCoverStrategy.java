@@ -20,6 +20,5 @@ public class AllGrossClaimsCoverStrategy extends AbstractParameterObject impleme
     }
 
     public void coveredClaims(List<ClaimCashflowPacket> source) {
-        ClaimValidator.positiveNominalUltimates(source);
     }
 }

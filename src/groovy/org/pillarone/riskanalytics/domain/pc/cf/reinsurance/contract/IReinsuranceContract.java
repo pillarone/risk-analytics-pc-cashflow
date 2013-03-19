@@ -30,9 +30,10 @@ public interface IReinsuranceContract {
      *  level, ie CXL, SL. As it gets the whole list of covered claims this method can also be used to implement specific
      *  ceded value allocation strategies by preparing weights used afterwards in calculateClaimCeded.
      *  Default implementation is void.
-     *  @param grossClaim
+     * @param grossClaim
+     * @param grossUnderwritingInfo
      */
-    void initPeriodClaims(List<ClaimCashflowPacket> grossClaim);
+    void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaim, List<UnderwritingInfoPacket> grossUnderwritingInfo);
 
     /**
      *  Calculates the claim covered

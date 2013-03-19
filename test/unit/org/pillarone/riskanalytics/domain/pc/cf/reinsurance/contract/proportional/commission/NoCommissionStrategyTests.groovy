@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission
 
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket
@@ -18,7 +19,7 @@ class NoCommissionStrategyTests extends GroovyTestCase {
         CededUnderwritingInfoPacket underwritingInfo200plus50 = new CededUnderwritingInfoPacket(premiumPaid: 200, commission: 50)
         List underwritingInfos = [underwritingInfo100, underwritingInfo100plus5, underwritingInfo200plus50]
 
-        commissionStrategy.calculator.calculateCommission null, underwritingInfos, false, false
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(null, underwritingInfos, false, 0)
 
         assertEquals '# outUnderwritingInfo packets', 3, underwritingInfos.size()
         assertEquals 'underwritingInfo100', 0, underwritingInfos[0].commission
@@ -39,7 +40,7 @@ class NoCommissionStrategyTests extends GroovyTestCase {
         CededUnderwritingInfoPacket underwritingInfo200plus50 = new CededUnderwritingInfoPacket(premiumPaid: 200, commission: 50)
         List underwritingInfos = [underwritingInfo100, underwritingInfo100plus5, underwritingInfo200plus50]
 
-        commissionStrategy.calculator.calculateCommission null, underwritingInfos, false, true
+        commissionStrategy.getCalculator(new DoubleValuePerPeriod()).calculateCommission(null, underwritingInfos, true, 0)
 
         assertEquals '# outUnderwritingInfo packets', 3, underwritingInfos.size()
         assertEquals 'underwritingInfo100', 0, underwritingInfos[0].commission

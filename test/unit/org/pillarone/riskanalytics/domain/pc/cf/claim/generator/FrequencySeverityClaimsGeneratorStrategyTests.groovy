@@ -1,7 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator
 
-import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
-import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
+import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
@@ -9,18 +9,12 @@ import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionMo
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
 import org.joda.time.DateTime
-import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
-import org.pillarone.riskanalytics.core.components.PeriodStore
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FrequencyIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
-import umontreal.iro.lecuyer.probdist.Distribution
-import umontreal.iro.lecuyer.probdist.TruncatedDist
-import umontreal.iro.lecuyer.probdist.ContinuousDistribution
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity
-import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution
 import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionType
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
@@ -34,7 +28,7 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
 
     DateTime date20110101 = new DateTime(2011, 1, 1, 0, 0, 0, 0)
     ClaimsGenerator claimsGenerator
-    RiskBands riskBands = new RiskBands()
+    RiskBands riskBands = new RiskBands(name: 'motor hull')
     RiskBands riskBands2 = new RiskBands()
 
     List<String> targets
@@ -42,28 +36,12 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
     List<EventSeverity> severities2
     RandomFrequencyDistribution systematicFrequency1
     RandomFrequencyDistribution systematicFrequency2
+    IterationScope iterationScope
 
     void setUp() {
+        iterationScope = TestIterationScopeUtilities.getIterationScope(date20110101, 5)
+        claimsGenerator = TestClaimsGenerator.getFrequencySeverityClaimsGenerator('motor hull', iterationScope, 2, 123, [riskBands])
 
-        claimsGenerator = new ClaimsGenerator(name: "motor hull")
-        claimsGenerator.periodScope = TestPeriodScopeUtilities.getPeriodScope(date20110101, 5)
-        claimsGenerator.periodStore = new PeriodStore(claimsGenerator.periodScope)
-        ComboBoxTableMultiDimensionalParameter uwInfoComboBox = new ComboBoxTableMultiDimensionalParameter(
-                ["motor hull"], ["Underwriting Information"], IUnderwritingInfoMarker)
-        uwInfoComboBox.comboBoxValues.put('motor hull', riskBands)
-        claimsGenerator.setParmUnderwritingSegments(uwInfoComboBox)
-        claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
-                ClaimsGeneratorType.FREQUENCY_SEVERITY, [
-                        "frequencyIndices": new ConstrainedMultiDimensionalParameter(
-                                Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
-                                ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
-                        "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2]),
-                        "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "claimsSizeBase": ExposureBase.ABSOLUTE,
-                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
-                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "produceClaim": FrequencySeverityClaimType.SINGLE,])
         ConstraintsFactory.registerConstraint(new DoubleConstraints())
 
         EventSeverity severity1 = new EventSeverity(value: 0.8, event: new EventPacket(new DateTime(2011, 1, 2, 0, 0, 0, 0)))
@@ -89,18 +67,8 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
         assertEquals "occurrence date ", true,
                 claimsGenerator.outClaims[1].getDate() == claimsGenerator.outClaims[1].occurrenceDate
 
-        claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
-                ClaimsGeneratorType.FREQUENCY_SEVERITY, [
-                        "frequencyIndices": new ConstrainedMultiDimensionalParameter(
-                                Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
-                                ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
-                        "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2]),
-                        "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "claimsSizeBase": ExposureBase.ABSOLUTE,
-                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
-                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "produceClaim": FrequencySeverityClaimType.AGGREGATED_EVENT,])
+        claimsGenerator = TestClaimsGenerator.getFrequencySeverityClaimsGenerator('motor hull', iterationScope, 2, 123,
+                [riskBands], FrequencyBase.ABSOLUTE, ExposureBase.ABSOLUTE, FrequencySeverityClaimType.AGGREGATED_EVENT)
 
         claimsGenerator.reset()
         claimsGenerator.doCalculation()
@@ -118,19 +86,8 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
     }
 
     void testFrequencySeverityRelativeClaims() {
-
-        claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
-                ClaimsGeneratorType.FREQUENCY_SEVERITY, [
-                        "frequencyIndices": new ConstrainedMultiDimensionalParameter(
-                                Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
-                                ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
-                        "frequencyBase": FrequencyBase.NUMBER_OF_POLICIES,
-                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2]),
-                        "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
-                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
-                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "produceClaim": FrequencySeverityClaimType.AGGREGATED_EVENT,])
+        claimsGenerator = TestClaimsGenerator.getFrequencySeverityClaimsGenerator('motor hull', iterationScope, 2, 123,
+                [riskBands], FrequencyBase.NUMBER_OF_POLICIES, ExposureBase.PREMIUM_WRITTEN, FrequencySeverityClaimType.AGGREGATED_EVENT)
 
         UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000.5, numberOfPolicies: 20, origin: riskBands)
         claimsGenerator.inUnderwritingInfo.add(underwritingInfo)
@@ -144,20 +101,8 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
         assertEquals "occurrence date equals event date", true,
                 claimsGenerator.outClaims[0].baseClaim.event.getDate() == claimsGenerator.outClaims[0].occurrenceDate
 
-        claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
-                ClaimsGeneratorType.FREQUENCY_SEVERITY, [
-                        "frequencyIndices": new ConstrainedMultiDimensionalParameter(
-                                Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
-                                ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
-                        "frequencyBase": FrequencyBase.PREMIUM_WRITTEN,
-                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2]),
-                        "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
-                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
-                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "produceClaim": FrequencySeverityClaimType.AGGREGATED_EVENT,])
-
-        claimsGenerator.reset()
+        claimsGenerator = TestClaimsGenerator.getFrequencySeverityClaimsGenerator('motor hull', iterationScope, 2, 123,
+                [riskBands], FrequencyBase.PREMIUM_WRITTEN, ExposureBase.PREMIUM_WRITTEN, FrequencySeverityClaimType.AGGREGATED_EVENT)
         claimsGenerator.inUnderwritingInfo.add(underwritingInfo)
 
         claimsGenerator.doCalculation()
@@ -169,20 +114,8 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
         assertEquals "occurrence date equals event date", true,
                 claimsGenerator.outClaims[0].baseClaim.event.getDate() == claimsGenerator.outClaims[0].occurrenceDate
 
-        claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
-                ClaimsGeneratorType.FREQUENCY_SEVERITY, [
-                        "frequencyIndices": new ConstrainedMultiDimensionalParameter(
-                                Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
-                                ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
-                        "frequencyBase": FrequencyBase.NUMBER_OF_POLICIES,
-                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 2d]),
-                        "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "claimsSizeBase": ExposureBase.NUMBER_OF_POLICIES,
-                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 123]),
-                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "produceClaim": FrequencySeverityClaimType.AGGREGATED_EVENT,])
-
-        claimsGenerator.reset()
+        claimsGenerator = TestClaimsGenerator.getFrequencySeverityClaimsGenerator('motor hull', iterationScope, 2, 123,
+                [riskBands], FrequencyBase.NUMBER_OF_POLICIES, ExposureBase.NUMBER_OF_POLICIES, FrequencySeverityClaimType.AGGREGATED_EVENT)
         claimsGenerator.inUnderwritingInfo.add(underwritingInfo)
 
         claimsGenerator.doCalculation()
@@ -227,20 +160,8 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
         assertEquals "occurrence date", new DateTime(2011, 1, 2, 0, 0, 0, 0), claimsGenerator.outClaims[0].baseClaim.occurrenceDate
         assertEquals "occurrence date", new DateTime(2011, 3, 2, 0, 0, 0, 0), claimsGenerator.outClaims[1].occurrenceDate
 
-        claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
-                ClaimsGeneratorType.FREQUENCY_SEVERITY, [
-                        "frequencyIndices": new ConstrainedMultiDimensionalParameter(
-                                Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
-                                ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
-                        "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 4d]),
-                        "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "claimsSizeBase": ExposureBase.ABSOLUTE,
-                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 120]),
-                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "produceClaim": FrequencySeverityClaimType.AGGREGATED_EVENT,])
-
-        claimsGenerator.reset()
+        claimsGenerator = TestClaimsGenerator.getFrequencySeverityClaimsGenerator('motor hull', iterationScope, 4, 120,
+                [riskBands], FrequencyBase.ABSOLUTE, ExposureBase.ABSOLUTE, FrequencySeverityClaimType.AGGREGATED_EVENT)
         claimsGenerator.inEventSeverities << stream1 << stream2
         claimsGenerator.inEventFrequencies << sysFrequencyPacket1
 
@@ -289,21 +210,8 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
         assertEquals "occurrence date", new DateTime(2011, 1, 2, 0, 0, 0, 0), claimsGenerator.outClaims[0].baseClaim.occurrenceDate
         assertEquals "occurrence date", new DateTime(2011, 3, 2, 0, 0, 0, 0), claimsGenerator.outClaims[1].occurrenceDate
 
-
-        claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
-                ClaimsGeneratorType.FREQUENCY_SEVERITY, [
-                        "frequencyIndices": new ConstrainedMultiDimensionalParameter(
-                                Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
-                                ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
-                        "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 3d]),
-                        "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "claimsSizeBase": ExposureBase.PREMIUM_WRITTEN,
-                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 120]),
-                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "produceClaim": FrequencySeverityClaimType.SINGLE,])
-
-        claimsGenerator.reset()
+        claimsGenerator = TestClaimsGenerator.getFrequencySeverityClaimsGenerator('motor hull', iterationScope, 3, 120,
+                [riskBands], FrequencyBase.ABSOLUTE, ExposureBase.PREMIUM_WRITTEN, FrequencySeverityClaimType.SINGLE)
         claimsGenerator.inUnderwritingInfo.add(underwritingInfo)
         claimsGenerator.inEventSeverities << stream1 << stream2
         claimsGenerator.inEventFrequencies << sysFrequencyPacket1
@@ -319,18 +227,8 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
         assertEquals "occurrence date", new DateTime(2011, 1, 2, 0, 0, 0, 0), claimsGenerator.outClaims[0].baseClaim.occurrenceDate
         assertEquals "occurrence date", new DateTime(2011, 3, 2, 0, 0, 0, 0), claimsGenerator.outClaims[1].occurrenceDate
 
-        claimsGenerator.setParmClaimsModel ClaimsGeneratorType.getStrategy(
-                ClaimsGeneratorType.FREQUENCY_SEVERITY, [
-                        "frequencyIndices": new ConstrainedMultiDimensionalParameter(
-                                Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
-                                ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
-                        "frequencyBase": FrequencyBase.ABSOLUTE,
-                        "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: 3d]),
-                        "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "claimsSizeBase": ExposureBase.SUM_INSURED,
-                        "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: 120]),
-                        "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
-                        "produceClaim": FrequencySeverityClaimType.SINGLE,])
+        claimsGenerator = TestClaimsGenerator.getFrequencySeverityClaimsGenerator('motor hull', iterationScope, 3, 120,
+                [riskBands], FrequencyBase.ABSOLUTE, ExposureBase.SUM_INSURED, FrequencySeverityClaimType.SINGLE)
 
         claimsGenerator.reset()
         claimsGenerator.inUnderwritingInfo.add(underwritingInfo)

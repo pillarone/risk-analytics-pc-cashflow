@@ -1,13 +1,10 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover
 
-import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
-import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObjectClassifier
-import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
-import org.pillarone.riskanalytics.core.parameterization.IParameterObject
-import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker
-import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
-import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
+import org.apache.commons.lang.NotImplementedException
+import org.pillarone.riskanalytics.core.parameterization.*
 import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
+import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractContraints
+import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -16,20 +13,28 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
 
     public static final CoverAttributeStrategyType NONE = new CoverAttributeStrategyType("none", "NONE", [:])
     public static final CoverAttributeStrategyType ORIGINALCLAIMS = new CoverAttributeStrategyType("original claims",
-        "ORIGINALCLAIMS", ['filter': FilterStrategyType.getDefault()])
+            "ORIGINALCLAIMS", ['filter': FilterStrategyType.getDefault()])
     public static final CoverAttributeStrategyType CONTRACTS = new CoverAttributeStrategyType(
             'contracts', 'CONTRACTS', [
-                    'contracts': new ConstrainedMultiDimensionalParameter([[], []],
-                            [ReinsuranceContractBasedOn.CONTRACT, ReinsuranceContractBasedOn.BASED_ON],
-                            ConstraintsFactory.getConstraints(ReinsuranceContractBasedOn.IDENTIFIER)),
-                    'filter': FilterStrategyType.getDefault()])
+            'contracts': new ConstrainedMultiDimensionalParameter([[], []],
+                    [ReinsuranceContractBasedOn.CONTRACT, ReinsuranceContractBasedOn.BASED_ON],
+                    ConstraintsFactory.getConstraints(ReinsuranceContractBasedOn.IDENTIFIER)),
+            'filter': FilterStrategyType.getDefault()])
     public static final CoverAttributeStrategyType LEGALENTITIES = new CoverAttributeStrategyType(
             'legal entities', 'LEGALENTITIES',
-            ['legalEntities':new ComboBoxTableMultiDimensionalParameter([], ['Legal Entities'], ILegalEntityMarker),
-             'legalEntityCoverMode': LegalEntityCoverMode.INWARD])
+            ['legalEntities': new ComboBoxTableMultiDimensionalParameter([], ['Legal Entities'], ILegalEntityMarker),
+                    'legalEntityCoverMode': LegalEntityCoverMode.INWARD])
+    public static final CoverAttributeStrategyType MATRIX = new CoverAttributeStrategyType(
+            'matrix', 'MATRIX',
+            ['flexibleCover': new ConstrainedMultiDimensionalParameter([[], [], [], [], [], []],
+                    [CoverMap.CONTRACT_NET_OF, CoverMap.CONTRACT_CEDED_OF, CoverMap.LEGAL_ENTITY,
+                            CoverMap.SEGMENTS, CoverMap.GENERATORS, CoverMap.LOSS_KIND_OF],
+                    ConstraintsFactory.getConstraints(CoverMap.IDENTIFIER)),
+                    'benefitContracts': new ConstrainedMultiDimensionalParameter([[]], Arrays.asList("Benefit Contract"),
+                            ConstraintsFactory.getConstraints(ReinsuranceContractContraints.IDENTIFIER))]
+    )
 
-
-    public static final all = [NONE, ORIGINALCLAIMS, CONTRACTS, LEGALENTITIES]
+    public static final all = [NONE, ORIGINALCLAIMS, CONTRACTS, LEGALENTITIES, MATRIX]
 
 
     protected static Map types = [:]
@@ -61,7 +66,7 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
     }
 
     public static ICoverAttributeStrategy getStrategy(CoverAttributeStrategyType type, Map parameters) {
-        ICoverAttributeStrategy coverStrategy ;
+        ICoverAttributeStrategy coverStrategy;
         switch (type) {
             case CoverAttributeStrategyType.NONE:
                 coverStrategy = new NoneCoverAttributeStrategy()
@@ -80,6 +85,12 @@ class CoverAttributeStrategyType extends AbstractParameterObjectClassifier {
                         legalEntities: (ComboBoxTableMultiDimensionalParameter) parameters['legalEntities'],
                         legalEntityCoverMode: (LegalEntityCoverMode) parameters['legalEntityCoverMode'])
                 break
+            case CoverAttributeStrategyType.MATRIX:
+                coverStrategy = new MatrixCoverAttributeStrategy(
+                        flexibleCover: parameters['flexibleCover'],
+                        benefitContracts: parameters['benefitContracts'])
+                break
+            default: throw new NotImplementedException("$type not implemented.")
         }
         return coverStrategy;
     }

@@ -89,34 +89,36 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
         if (cededBaseClaim == null) {
             // first time this gross claim is treated by this contract
             cededFactorUltimate = cededFactor(grossClaim.ultimate(), grossClaim.ultimate(),
-                                                     BasedOnClaimProperty.ULTIMATE, storage, stabilizationFactor);
-//            cededBaseClaim = storage.lazyInitCededClaimRoot(cededFactorUltimate);
+                                                     BasedOnClaimProperty.ULTIMATE_UNINDEXED, storage, stabilizationFactor);
         }
+        double cededFactorUltimateIndexed = cededFactor(grossClaim.totalCumulatedIndexed(), grossClaim.totalIncrementalIndexed(),
+                BasedOnClaimProperty.ULTIMATE_INDEXED, storage, stabilizationFactor);
         double cededFactorReported = cededFactor(grossClaim.getReportedCumulatedIndexed(), grossClaim.getReportedIncrementalIndexed(),
                 BasedOnClaimProperty.REPORTED, storage, stabilizationFactor);
 
         double cededFactorPaid = cededFactor(grossClaim.getPaidCumulatedIndexed(), grossClaim.getPaidIncrementalIndexed(),
                 BasedOnClaimProperty.PAID, storage, stabilizationFactor);
 
-        ClaimCashflowPacket cededClaim = cededClaimWithAdjustedReported(grossClaim, storage, cededFactorUltimate, stabilizationFactor,
-                cededFactorReported, cededFactorPaid);
+        ClaimCashflowPacket cededClaim = cededClaimWithAdjustedReported(grossClaim, storage, cededFactorUltimate,
+                cededFactorUltimateIndexed, stabilizationFactor, cededFactorReported, cededFactorPaid);
 
         add(grossClaim, cededClaim);
         return cededClaim;
     }
 
     protected ClaimCashflowPacket cededClaimWithAdjustedReported(ClaimCashflowPacket grossClaim, ClaimStorage storage,
-                                                               double cededFactorUltimate, double stabilizationFactor,
-                                                               double cededFactorReported, double cededFactorPaid) {
+                                                               double cededFactorUltimate, double cededFactorUltimateIndexed,
+                                                               double stabilizationFactor, double cededFactorReported,
+                                                               double cededFactorPaid) {
         ClaimCashflowPacket cededClaim;// PMO-1856: positive stabilization factor after reporting pattern end
         if (stabilizationFactor != 1 && cededFactorReported == 0 && grossClaim.getReportedIncrementalIndexed() == 0) {
             double cededReportedValue = cededValue(grossClaim.getReportedCumulatedIndexed(),
                 BasedOnClaimProperty.REPORTED, storage, stabilizationFactor);
             cededClaim = ClaimUtils.getCededClaimReportedAbsolute(grossClaim, storage, cededFactorUltimate,
-                    cededReportedValue, cededFactorPaid, false);
+                    cededReportedValue, cededFactorPaid, false, 0);
         }
         else {
-            cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, cededFactorUltimate,
+            cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, cededFactorUltimate, cededFactorUltimateIndexed,
                 cededFactorReported, cededFactorPaid, false);
         }
         return cededClaim;
@@ -149,10 +151,11 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
         if (isStartCoverPeriod) {
             initCededPremiumAllocation(cededClaims, grossUwInfos);
         }
+        double reinstatementPremiumFactor = reinstatements.calculateReinstatementPremiumFactor();
         for (UnderwritingInfoPacket grossUnderwritingInfo : grossUwInfos) {
             double cededPremiumFixedShare = cededPremiumFixed * riPremiumSplit.getShare(grossUnderwritingInfo);
             cededPremiumFixedShare *= coveredByReinsurers;
-            double cededPremiumVariable = cededPremiumFixedShare * reinstatements.calculateReinstatementPremiumFactor();
+            double cededPremiumVariable = cededPremiumFixedShare * reinstatementPremiumFactor;
             cededPremiumVariable *= coveredByReinsurers;
             double cededPremium = isStartCoverPeriod ? cededPremiumFixedShare + cededPremiumVariable : cededPremiumVariable;
 

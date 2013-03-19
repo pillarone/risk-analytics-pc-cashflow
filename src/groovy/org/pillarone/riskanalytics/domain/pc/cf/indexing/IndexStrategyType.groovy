@@ -92,7 +92,7 @@ class IndexStrategyType extends AbstractParameterObjectClassifier {
                         b:  parameters[OrnsteinUhlenbeckIndexStrategy.B],
                         sigma: parameters[OrnsteinUhlenbeckIndexStrategy.SIGMA])
             default:
-                throw new IllegalArgumentException("Unknown trategy " + type)
+                throw new IllegalArgumentException("Unknown strategy " + type)
         }
     }
 }

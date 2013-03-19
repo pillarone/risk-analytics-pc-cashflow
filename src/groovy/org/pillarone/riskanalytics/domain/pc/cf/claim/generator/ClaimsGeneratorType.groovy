@@ -16,13 +16,13 @@ import org.pillarone.riskanalytics.core.parameterization.*
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FrequencyIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionType
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomFrequencyDistribution
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IFrequencyIndexMarker
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
 
-//    public static final ClaimsGeneratorType NONE = new ClaimsGeneratorType("none", "NONE", [:])
     public static final ClaimsGeneratorType ATTRITIONAL = new ClaimsGeneratorType("attritional", "ATTRITIONAL", [
             claimsSizeBase: ExposureBase.ABSOLUTE,
             claimsSizeDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
@@ -32,10 +32,6 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
             claimsSizeDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
             claimsSizeModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
             occurrenceDateDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0.5d])])
-//    public static final ClaimsGeneratorType SEVERITY_OF_EVENT_GENERATOR = new ClaimsGeneratorType("external severity", "SEVERITY_OF_EVENT_GENERATOR", [
-//            claimsSizeBase: Exposure.ABSOLUTE,
-//            claimsSizeDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
-//            produceClaim: FrequencySeverityClaimType.AGGREGATED_EVENT])
     public static final ClaimsGeneratorType FREQUENCY_AVERAGE_ATTRITIONAL = new ClaimsGeneratorType("frequency average attritional", "FREQUENCY_AVERAGE_ATTRITIONAL", [
             frequencyBase: FrequencyBase.ABSOLUTE,
             frequencyDistribution: FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, ["constant": 0d]),
@@ -47,6 +43,15 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
             frequencyIndices: new ConstrainedMultiDimensionalParameter(
                     Collections.emptyList(), FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
                     ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
+            frequencyBase: FrequencyBase.ABSOLUTE,
+            frequencyDistribution: FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, ["constant": 0d]),
+            frequencyModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
+            claimsSizeBase: ExposureBase.ABSOLUTE,
+            claimsSizeDistribution: DistributionType.getStrategy(DistributionType.CONSTANT, ["constant": 0d]),
+            claimsSizeModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
+            produceClaim: FrequencySeverityClaimType.SINGLE])
+    public static final ClaimsGeneratorType FREQUENCY_SEVERITY_SIMPLIFIED_INDEX = new ClaimsGeneratorType("frequency severity", "FREQUENCY_SEVERITY", [
+            frequencyIndices: new ComboBoxTableMultiDimensionalParameter([''], ['Frequency Index'], IFrequencyIndexMarker),
             frequencyBase: FrequencyBase.ABSOLUTE,
             frequencyDistribution: FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, ["constant": 0d]),
             frequencyModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
@@ -110,9 +115,6 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
     static IClaimsGeneratorStrategy getStrategy(ClaimsGeneratorType type, Map parameters) {
         IClaimsGeneratorStrategy claimsGenerator;
         switch (type) {
-//            case ClaimsGeneratorType.NONE:
-//                claimsGenerator = new NoneClaimsGeneratorStrategy()
-//                break;
             case ClaimsGeneratorType.ATTRITIONAL:
                 claimsGenerator = new AttritionalClaimsGeneratorStrategy(
                         claimsSizeBase: (ExposureBase) parameters.get("claimsSizeBase"),
@@ -146,6 +148,18 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                         claimsSizeModification: (DistributionModified) parameters.get("claimsSizeModification"),
                         produceClaim: (FrequencySeverityClaimType) parameters.get("produceClaim"))
                 break;
+            case ClaimsGeneratorType.FREQUENCY_SEVERITY_SIMPLIFIED_INDEX:
+                return new FrequencySeverityClaimsGeneratorSimplifiedIndexStrategy(
+                        frequencyIndices: (ComboBoxTableMultiDimensionalParameter) parameters.get("frequencyIndices"),
+                        // todo: apply scaling
+                        frequencyBase: ExposureBase.ABSOLUTE,
+                        frequencyDistribution: (RandomDistribution) parameters.get("frequencyDistribution"),
+                        frequencyModification: (DistributionModified) parameters.get("frequencyModification"),
+                        claimsSizeBase: (ExposureBase) parameters.get("claimsSizeBase"),
+                        claimsSizeDistribution: (RandomDistribution) parameters.get("claimsSizeDistribution"),
+                        claimsSizeModification: (DistributionModified) parameters.get("claimsSizeModification"),
+                        produceClaim: (FrequencySeverityClaimType) parameters.get("produceClaim"))
+                break;
             case ClaimsGeneratorType.OCCURRENCE_AND_SEVERITY:
                 claimsGenerator = new OccurrenceFrequencySeverityClaimsGeneratorStrategy(
                         frequencyIndices: (ConstrainedMultiDimensionalParameter) parameters.get("frequencyIndices"),
@@ -158,12 +172,6 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                         occurrenceDateDistribution: (RandomDistribution) parameters.get("occurrenceDateDistribution"),
                         produceClaim: (FrequencySeverityClaimType) parameters.get("produceClaim"))
                 break;
-//            case ClaimsGeneratorType.SEVERITY_OF_EVENT_GENERATOR:
-        //                claimsGenerator = new ExternalSeverityClaimsGeneratorStrategy(
-        //                        claimsSizeBase: (Exposure) parameters.get("claimsSizeBase"),
-        //                        claimsSizeDistribution: (RandomDistribution) parameters.get("claimsSizeDistribution"),
-        //                        produceClaim: (FrequencySeverityClaimType) parameters.get("produceClaim"))
-        //                break;
             case ClaimsGeneratorType.PML:
                 claimsGenerator = new PMLClaimsGeneratorStrategy(
                        claimsSizeBase: (ExposureBase) parameters.get("claimsSizeBase"),

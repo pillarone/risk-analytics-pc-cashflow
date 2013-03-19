@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValuePerPeriod;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,7 @@ abstract public class AbstractCommissionStrategy extends AbstractParameterObject
 
     private static final String USE_CLAIMS = "useClaims";
 
-    protected BasedOnClaimProperty useClaims = BasedOnClaimProperty.REPORTED;
+    protected CommissionBase useClaims = CommissionBase.PAID;
 
     public Map getParameters() {
         Map<String, Object> map = new HashMap<String, Object>(1);
@@ -36,23 +37,23 @@ abstract public class AbstractCommissionStrategy extends AbstractParameterObject
 
     protected double sumClaims(List<ClaimCashflowPacket> claims) {
         double totalClaims = 0;
-        if (useClaims.equals(BasedOnClaimProperty.ULTIMATE)) {
+        if (useClaims.convert().equals(BasedOnClaimProperty.ULTIMATE_UNINDEXED)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.ultimate();
             }
         }
-        else if (useClaims.equals(BasedOnClaimProperty.PAID)) {
+        else if (useClaims.convert().equals(BasedOnClaimProperty.PAID)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.getPaidIncrementalIndexed();
             }
         }
-        else if (useClaims.equals(BasedOnClaimProperty.REPORTED)) {
+        else if (useClaims.convert().equals(BasedOnClaimProperty.REPORTED)) {
             for (ClaimCashflowPacket claim : claims) {
                 totalClaims += claim.getReportedIncrementalIndexed();
             }
         }
         else {
-            throw new NotImplementedException("BasedOnClaimProperty " + useClaims.toString() + " not implemented.");
+            throw new NotImplementedException("CommissionBase " + useClaims.toString() + " not implemented.");
         }
         return totalClaims;
     }
@@ -70,5 +71,10 @@ abstract public class AbstractCommissionStrategy extends AbstractParameterObject
                 underwritingInfo.setCommissionProperties(commissionFactor, fixedCommissionFactor, variableCommissionFactor);
             }
         }
+    }
+
+    @Override
+    public DoubleValuePerPeriod getInitialLossCarriedForward() {
+        return new DoubleValuePerPeriod();
     }
 }

@@ -47,6 +47,12 @@ public class PerilsFilterStrategy extends AbstractParameterObject implements ICo
         return filteredClaims;
     }
 
+    /**
+     * Visits all claims and gets their segments. Filters underwriting information by the segments claims belong too.
+     * @param source is modified and contains the same elements as the returned list
+     * @param coveredGrossClaims
+     * @return
+     */
     public List<UnderwritingInfoPacket> coveredUnderwritingInfo(List<UnderwritingInfoPacket> source, List<ClaimCashflowPacket> coveredGrossClaims) {
         List<UnderwritingInfoPacket> filteredUnderwritingInfo = new ArrayList<UnderwritingInfoPacket>();
         Set<ISegmentMarker> coveredSegments = new HashSet<ISegmentMarker>();

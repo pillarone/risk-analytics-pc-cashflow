@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory
 import org.joda.time.DateTime
 import org.joda.time.Period
 import org.pillarone.riskanalytics.core.model.StochasticModel
+import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.LimitedContinuousPeriodCounter
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
@@ -19,6 +20,10 @@ import org.pillarone.riskanalytics.domain.pc.cf.global.GlobalParameters
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Indices
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntities
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ReinsuranceContracts
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.RetrospectiveCoverAttributeStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerators
 import org.pillarone.riskanalytics.domain.pc.cf.segment.Segments
@@ -145,6 +150,37 @@ class GIRAModel extends StochasticModel {
     }
 
     @Override
+    List<IParameterObjectClassifier> configureClassifier(String path, List<IParameterObjectClassifier> classifiers) {
+        if (path.matches("reinsuranceContracts:(.*):parmCover")) {
+            return [
+                    CoverAttributeStrategyType.NONE,
+                    CoverAttributeStrategyType.ORIGINALCLAIMS,
+                    CoverAttributeStrategyType.CONTRACTS,
+                    CoverAttributeStrategyType.LEGALENTITIES,
+            ]
+        }
+        if (path.matches("reinsuranceContracts:(.*):parmCoveredPeriod")) {
+            return [
+                    PeriodStrategyType.ANNUAL,
+                    PeriodStrategyType.CUSTOM,
+                    PeriodStrategyType.MONTHS,
+                    PeriodStrategyType.ONEYEAR,
+            ]
+        }
+        if (path.matches("reinsuranceContracts:(.*):parmContractStrategy")) {
+            return [
+                    ReinsuranceContractType.CXL,
+                    ReinsuranceContractType.WXL,
+                    ReinsuranceContractType.QUOTASHARE,
+                    ReinsuranceContractType.SURPLUS,
+                    ReinsuranceContractType.STOPLOSS,
+                    ReinsuranceContractType.TRIVIAL,
+            ]
+        }
+        return classifiers
+    }
+
+    @Override
     IPeriodCounter createPeriodCounter(DateTime beginOfFirstPeriod) {
         Period developmentPeriod = lastPatternPeriod()
         int numberOfYears = Math.max(1, Math.ceil(developmentPeriod.months / 12d) + 1)
@@ -173,19 +209,6 @@ class GIRAModel extends StochasticModel {
         }
 
         Map<String, Period> claimsGeneratorPatternLengths = new HashMap<String, Period>()
-        for (Pattern pattern: patterns.subPayoutPatterns.componentList) {
-            Period period = pattern.parmPattern.getPattern(IPayoutPatternMarker.class).getLastCumulativePeriod()
-            LOG.debug("payout pattern $pattern.name $period.months")
-            claimsGeneratorPatternLengths.put(pattern.name, period)
-        }
-        for (Pattern pattern: patterns.subReportingPatterns.componentList) {
-            Period period = pattern.parmPattern.getPattern(IReportingPatternMarker.class).getLastCumulativePeriod()
-            LOG.debug("reporting pattern $pattern.name $period.months")
-            Period existingPeriod = claimsGeneratorPatternLengths.get(pattern.name)
-            if (existingPeriod == null || existingPeriod.months < period.months) {
-                claimsGeneratorPatternLengths.put(pattern.name, period)
-            }
-        }
         for (PayoutReportingCombinedPattern pattern: patterns.subPayoutAndReportingPatterns.componentList) {
             Period period = pattern.parmPattern.getPayoutPattern().getLastCumulativePeriod()
             LOG.debug("combined payout reporting pattern $pattern.name $period.months")

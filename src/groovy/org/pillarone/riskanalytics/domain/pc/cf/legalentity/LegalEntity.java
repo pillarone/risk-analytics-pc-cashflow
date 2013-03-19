@@ -8,7 +8,6 @@ import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.DefaultProbabilities;
 import org.pillarone.riskanalytics.domain.pc.cf.creditrisk.LegalEntityDefault;
@@ -65,7 +64,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
 
-    private PacketList<FinancialsPacket> outNetFinancials = new PacketList<FinancialsPacket>(FinancialsPacket.class);
+    private PacketList<FinancialsPacket> outFinancials = new PacketList<FinancialsPacket>(FinancialsPacket.class);
     private PacketList<DiscountedValuesPacket> outDiscountedValues = new PacketList<DiscountedValuesPacket>(DiscountedValuesPacket.class);
     private PacketList<NetPresentValuesPacket> outNetPresentValues = new PacketList<NetPresentValuesPacket>(NetPresentValuesPacket.class);
 
@@ -157,9 +156,9 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
     }
 
     private void fillContractFinancials(IPeriodCounter periodCounter) {
-        if (isSenderWired(outNetFinancials)) {
-            outNetFinancials.addAll(FinancialsPacket.getFinancialsPacketsByInceptionPeriod(outUnderwritingInfoNet,
-                    outUnderwritingInfoCeded, outClaimsNet, periodCounter));
+        if (isSenderWired(outFinancials)) {
+            outFinancials.addAll(FinancialsPacket.getFinancialsPacketsByInceptionPeriod(outUnderwritingInfoGross,
+                    outUnderwritingInfoNet, outUnderwritingInfoCeded, outClaimsGross, outClaimsNet, outClaimsCeded, periodCounter));
         }
     }
 
@@ -211,7 +210,7 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
         setTransmitterPhaseOutput(outUnderwritingInfoReinsurer, PHASE_CALC);
         setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_CALC);
         setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_CALC);
-        setTransmitterPhaseOutput(outNetFinancials, PHASE_CALC);
+        setTransmitterPhaseOutput(outFinancials, PHASE_CALC);
         setTransmitterPhaseOutput(outDiscountedValues, PHASE_CALC);
         setTransmitterPhaseOutput(outNetPresentValues, PHASE_CALC);
     }
@@ -392,12 +391,12 @@ public class LegalEntity extends MultiPhaseComponent implements ILegalEntityMark
         this.inDefaultProbabilities = inDefaultProbabilities;
     }
 
-    public PacketList<FinancialsPacket> getOutNetFinancials() {
-        return outNetFinancials;
+    public PacketList<FinancialsPacket> getOutFinancials() {
+        return outFinancials;
     }
 
-    public void setOutNetFinancials(PacketList<FinancialsPacket> outNetFinancials) {
-        this.outNetFinancials = outNetFinancials;
+    public void setOutFinancials(PacketList<FinancialsPacket> outFinancials) {
+        this.outFinancials = outFinancials;
     }
 
     public PacketList<DiscountedValuesPacket> getOutDiscountedValues() {

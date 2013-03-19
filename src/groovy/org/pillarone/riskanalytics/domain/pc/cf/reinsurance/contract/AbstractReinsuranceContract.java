@@ -23,10 +23,15 @@ abstract public class AbstractReinsuranceContract implements IReinsuranceContrac
     protected List<UnderwritingInfoPacket> grossUwInfos = new ArrayList<UnderwritingInfoPacket>();
     protected List<CededUnderwritingInfoPacket> cededUwInfos = new ArrayList<CededUnderwritingInfoPacket>();
 
+    protected Integer occurrencePeriod;
+
     public void initPeriod(int period, List<FactorsPacket> inFactors) {
+        if (occurrencePeriod == null) {
+            occurrencePeriod = period;
+        }
     }
 
-    public void initPeriodClaims(List<ClaimCashflowPacket> grossClaim) {
+    public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaim, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
     }
 
     protected void add(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim) {
@@ -35,7 +40,6 @@ abstract public class AbstractReinsuranceContract implements IReinsuranceContrac
     }
 
     public void add(UnderwritingInfoPacket grossUnderwritingInfo) {
-//        if (grossUnderwritingInfo.getPremiumWritten() + grossUnderwritingInfo.getPremiumPaid() < 0) {
         if (grossUnderwritingInfo instanceof CededUnderwritingInfoPacket) {
             UnderwritingInfoPacket convertedPacket = new UnderwritingInfoPacket((CededUnderwritingInfoPacket) grossUnderwritingInfo, -1);
             grossUwInfos.add(convertedPacket);

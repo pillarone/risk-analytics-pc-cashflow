@@ -87,22 +87,22 @@ class ClaimsGeneratorScalingValidator implements IParameterizationValidator {
             if (strategy instanceof FrequencySeverityClaimsGeneratorStrategy
                     || strategy instanceof FrequencyAverageAttritionalClaimsGeneratorStrategy) {
                 if (!strategy.frequencyBase.equals(FrequencyBase.ABSOLUTE) && !hasSelectedUnderwritingInfo) {
-                    ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.WARNING,
+                    ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
                             'frequency.base.requires.underwriting.info', [strategy.frequencyBase.toString()])
                     errors << error
                     error.path = claimsGeneratorName + ':parmClaimsModel:frequencyBase'
-                    error = new ParameterValidationImpl(ValidationType.WARNING,
+                    error = new ParameterValidationImpl(ValidationType.ERROR,
                             'frequency.base.requires.underwriting.info', [strategy.frequencyBase.toString()])
                     errors << error
                     error.path = claimsGeneratorName + ':parmUnderwritingSegments'
                 }
             }
             if (!strategy.claimsSizeBase.equals(ExposureBase.ABSOLUTE) && !hasSelectedUnderwritingInfo) {
-                ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.WARNING,
+                ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
                         'claims.size.base.requires.underwriting.info', [strategy.claimsSizeBase.toString()])
                 errors << error
                 error.path = claimsGeneratorName + ':parmClaimsModel:claimsSizeBase'
-                error = new ParameterValidationImpl(ValidationType.WARNING,
+                error = new ParameterValidationImpl(ValidationType.ERROR,
                         'claims.size.base.requires.underwriting.info', [strategy.claimsSizeBase.toString()])
                 errors << error
                 error.path = claimsGeneratorName + ':parmUnderwritingSegments'

@@ -3,12 +3,14 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportion
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.NoneLimitStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.ILossParticipation;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.NoLossParticipation;
 
 import java.util.List;
 
@@ -22,11 +24,27 @@ public class QuotaShareContract extends AbstractProportionalReinsuranceContract 
     public QuotaShareContract(double quotaShare, ICommission commission) {
         this.quotaShare = quotaShare;
         this.commission = commission;
+        this.lossParticipation = new NoLossParticipation();
+    }
+
+    public QuotaShareContract(double quotaShare, ICommission commission, ILossParticipation lossParticipation) {
+        this(quotaShare, commission);
+        this.lossParticipation = lossParticipation;
+    }
+
+    @Override
+    public void initBasedOnAggregateCalculations(List<ClaimCashflowPacket> grossClaim, List<UnderwritingInfoPacket> grossUnderwritingInfo) {
+        lossParticipation.initPeriod(grossClaim, grossUnderwritingInfo, new NoneLimitStrategy());
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
-//        IClaimRoot cededBaseClaim = storage.lazyInitCededClaimRoot(-quotaShare);
-        ClaimCashflowPacket cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, -quotaShare, -quotaShare, -quotaShare, true);
+        ClaimCashflowPacket cededClaim;
+        if (lossParticipation.noLossParticipation()) {
+            cededClaim = ClaimUtils.getCededClaim(grossClaim, storage, -quotaShare, -quotaShare, -quotaShare, -quotaShare, true);
+        }
+        else {
+            cededClaim = lossParticipation.cededClaim(quotaShare, grossClaim, storage, true);
+        }
         add(grossClaim, cededClaim);
         return cededClaim;
     }
@@ -42,7 +60,7 @@ public class QuotaShareContract extends AbstractProportionalReinsuranceContract 
     }
 
 
-     @Override
+    @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append(quotaShare);

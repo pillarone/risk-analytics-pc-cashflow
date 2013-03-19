@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.AllPeriodUnderwritingIn
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.*;
@@ -48,6 +49,39 @@ public class ScaledPeriodLayerParameters extends PeriodLayerParameters {
     }
 
     public List<LayerParameters> getLayers(int period, IPeriodCounter iPeriodCounter, ExposureBase exposureBase, AllPeriodUnderwritingInfoPacket infoPacket) {
+        double scaleFactor = getUWScaleFactor(period, iPeriodCounter, exposureBase, infoPacket);
+
+        List<LayerParameters> originalParams = super.getLayers(period);
+        List<LayerParameters> scaledParams = new ArrayList<LayerParameters>();
+        for (LayerParameters originalParam : originalParams) {
+            LayerParameters tempParam = new LayerParameters(
+                    originalParam.getShare(),
+                    originalParam.getClaimExcess() * scaleFactor,
+                    originalParam.getClaimLimit() * scaleFactor);
+
+            List<AdditionalPremiumPerLayer> premiums = originalParam.getAdditionalPremiums();
+            if (premiums.size() == 0) {
+                tempParam.addAdditionalPremium(
+                        originalParam.getLayerPeriodExcess() * scaleFactor,
+                        originalParam.getLayerPeriodLimit() * scaleFactor,
+                        0d,
+                        APBasis.LOSS
+                );
+            }
+            for (AdditionalPremiumPerLayer premium : premiums) {
+                tempParam.addAdditionalPremium(
+                        premium.getPeriodExcess() * scaleFactor,
+                        premium.getPeriodLimit() * scaleFactor,
+                        premium.getAdditionalPremium(),
+                        premium.getBasis().uiAPBasis()
+                );
+            }
+            scaledParams.add(tempParam);
+        }
+        return scaledParams;
+    }
+
+    public double getUWScaleFactor(int period, IPeriodCounter iPeriodCounter, ExposureBase exposureBase, AllPeriodUnderwritingInfoPacket infoPacket) {
         List<UnderwritingInfoPacket> relevantPackets = new ArrayList<UnderwritingInfoPacket>();
 
         int periodWithUnderwritingInfo = greatestPeriodWithUnderwritingInformationBeforeCurrent(iPeriodCounter, infoPacket, period);
@@ -81,35 +115,7 @@ public class ScaledPeriodLayerParameters extends PeriodLayerParameters {
             default:
                 throw new SimulationException("Unknown exposure base");
         }
-
-        List<LayerParameters> originalParams = super.getLayers(period);
-        List<LayerParameters> scaledParams = new ArrayList<LayerParameters>();
-        for (LayerParameters originalParam : originalParams) {
-            LayerParameters tempParam = new LayerParameters(
-                    originalParam.getShare(),
-                    originalParam.getClaimExcess() * scaleFactor,
-                    originalParam.getClaimLimit() * scaleFactor);
-
-            List<AdditionalPremiumPerLayer> premiums = originalParam.getAdditionalPremiums();
-            if (premiums.size() == 0) {
-                tempParam.addAdditionalPremium(
-                        originalParam.getLayerPeriodExcess() * scaleFactor,
-                        originalParam.getLayerPeriodLimit() * scaleFactor,
-                        0d,
-                        APBasis.LOSS
-                );
-            }
-            for (AdditionalPremiumPerLayer premium : premiums) {
-                tempParam.addAdditionalPremium(
-                        premium.getPeriodExcess() * scaleFactor,
-                        premium.getPeriodLimit() * scaleFactor,
-                        premium.getAdditionalPremium(),
-                        premium.getBasis()
-                );
-            }
-            scaledParams.add(tempParam);
-        }
-        return scaledParams;
+        return scaleFactor;
     }
 
     private int greatestPeriodWithUnderwritingInformationBeforeCurrent(IPeriodCounter iPeriodCounter, AllPeriodUnderwritingInfoPacket infoPacket, int maxPeriod) {

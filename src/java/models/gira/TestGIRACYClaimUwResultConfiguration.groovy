@@ -5,12 +5,12 @@ displayName = "CY Split for Claims and Underwriting"
 components {
 	claimsGenerators {
 		subsubcomponents {
-			outClaims = "SPLIT_BY_INCEPTION_DATE"
+			outClaims = "AGGREGATE_BY_PERIOD"
 		}
 	}
 	underwritingSegments {
 		subsubcomponents {
-			outUnderwritingInfo = "SPLIT_BY_INCEPTION_DATE"
+			outUnderwritingInfo = "AGGREGATE_BY_PERIOD"
 		}
 	}
 }

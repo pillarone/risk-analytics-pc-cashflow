@@ -62,7 +62,12 @@ public class ContractsCoverAttributeStrategy extends AbstractParameterObject imp
         List coveredContracts = getCoveredReinsuranceContracts();
         for (UnderwritingInfoPacket uwInfo : source) {
             if (coveredContracts.contains(uwInfo.reinsuranceContract())) {
-                filteredUnderwritingInfo.add(uwInfo);
+                if (coveredContractsCoveringCeded.contains(uwInfo.reinsuranceContract())) {
+                    filteredUnderwritingInfo.add(new UnderwritingInfoPacket(uwInfo, -1));
+                }
+                else {
+                    filteredUnderwritingInfo.add(uwInfo);
+                }
             }
         }
         filteredUnderwritingInfo = filter.coveredUnderwritingInfo(filteredUnderwritingInfo, coveredGrossClaims);

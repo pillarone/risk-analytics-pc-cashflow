@@ -1,8 +1,10 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
@@ -45,16 +47,19 @@ public class StopLossConstractStrategy extends AbstractParameterObject implement
 
     /**
      *
+     *
+     *
      * @param period ignored
      * @param underwritingInfoPackets used for scaling relative contract parameters if the contract base is GNPI
      * @param base ignored
      * @param termDeductible ignored
      * @param termLimit ignored
+     * @param claims
      * @return one contract
      */
     public List<IReinsuranceContract> getContracts(int period, List<UnderwritingInfoPacket> underwritingInfoPackets,
                                                    ExposureBase base, IPeriodDependingThresholdStore termDeductible,
-                                                   IPeriodDependingThresholdStore termLimit) {
+                                                   IPeriodDependingThresholdStore termLimit, List<ClaimCashflowPacket> claims) {
         double cededPremiumFixed = premium;
         double scaledAttachmentPoint = attachmentPoint;
         double scaledLimit = limit;

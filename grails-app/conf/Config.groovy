@@ -93,7 +93,7 @@ environments {
                 additivity = false
             }
             info()
-            debug 'org.pillarone.riskanalytics.domain.pc.cf'
+            debug()
 
             warn 'org.grails.plugins.excelimport.DefaultImportCellCollector',
                  'org.grails.plugins.excelimport.ExcelImportUtils'

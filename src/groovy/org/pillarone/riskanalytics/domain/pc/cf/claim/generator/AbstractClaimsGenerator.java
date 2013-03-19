@@ -2,11 +2,19 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import groovy.lang.GroovyObject;
+import groovy.lang.MetaClass;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.codehaus.groovy.runtime.InvokerHelper;
 import org.joda.time.DateTime;
+import org.pillarone.riskanalytics.core.components.MultiPhaseComposedComponent;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.ReinsuranceContractBaseType;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase;
-import org.pillarone.riskanalytics.core.components.MultiPhaseComposedComponent;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
@@ -28,6 +36,7 @@ import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.marker.ICorrelationMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
+import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +47,9 @@ import java.util.List;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponent implements IPerilMarker, ICorrelationMarker {
+abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponent implements IPerilMarker, ICorrelationMarker, GroovyObject {
+
+    static Log LOG = LogFactory.getLog(AbstractClaimsGenerator.class);
 
     protected PeriodScope periodScope;
     protected SimulationScope simulationScope;
@@ -50,11 +61,15 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     protected PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
     protected PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
     protected PacketList<PatternPacket> inPatterns = new PacketList<PatternPacket>(PatternPacket.class);
+//    What is this channel ?
     protected PacketList<EventDependenceStream> inEventSeverities = new PacketList<EventDependenceStream>(EventDependenceStream.class);
     protected PacketList<SystematicFrequencyPacket> inEventFrequencies = new PacketList<SystematicFrequencyPacket>(SystematicFrequencyPacket.class);
+    protected PacketList<DependancePacket> inProbabilities = new PacketList<DependancePacket>(DependancePacket.class);
 
     protected PacketList<CommutationState> inCommutationState = new PacketList<CommutationState>(CommutationState.class);
-    /** don't assume any order in this channel */
+    /**
+     * don't assume any order in this channel
+     */
     protected PacketList<ClaimCashflowPacket> outClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     protected PacketList<ClaimCashflowPacket> outOccurenceUltimateClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
 
@@ -70,7 +85,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     public static final String PHASE_CLAIMS_CALCULATION = "Claims Calculation";
     public static final String PHASE_STORE_COMMUTATION_STATE = "Store Commutation State";
 
-    public static final DateTimeUtilities.Days360 DAYS_360 = DateTimeUtilities.Days360.US;
+    public static final DateTimeUtilities.Days360 US_DAYS_360 = DateTimeUtilities.Days360.US;
 
     @Override
     public void wire() {
@@ -83,7 +98,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
      *
      * @param baseClaims
      * @param parmPayoutPattern
-     * @param periodScope needed to derive the payouts in the current period
+     * @param periodScope       needed to derive the payouts in the current period
      * @param base
      * @return GrossClaimRoot objects of this period
      */
@@ -96,7 +111,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
             int currentPeriod = periodScope.getCurrentPeriod();
             for (ClaimRoot baseClaim : baseClaims) {
                 GrossClaimRoot grossClaimRoot = parmActualClaims.claimWithAdjustedPattern(baseClaim, currentPeriod,
-                        payoutPattern, periodScope, globalUpdateDate, DAYS_360, globalSanityChecks, base);
+                        payoutPattern, periodScope, globalUpdateDate, US_DAYS_360, globalSanityChecks, base);
                 grossClaimRoots.add(grossClaimRoot);
             }
         }
@@ -106,9 +121,10 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     /**
      * Looping over GROSS_CLAIMS in the periodStore payouts of the current period are identified and corresponding
      * claim packets generated.
-     * @param claims resulting claim packets are attached to this list.
+     *
+     * @param claims        resulting claim packets are attached to this list.
      * @param periodCounter needed to derive the payout in the current period
-     * @param factors for payouts in this period
+     * @param factors       for payouts in this period
      */
     protected void developClaimsOfFormerPeriods(List<ClaimCashflowPacket> claims, IPeriodCounter periodCounter, List<Factors> factors) {
         if (!periodScope.isFirstPeriod()) {
@@ -128,14 +144,68 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
     }
 
     /**
+     * Sets GROSS_CLAIMS of periodStore with claims not occurring in current period
+     *
+     * @param grossClaimRoots
+     * @param periodStore
+     */
+    protected void storeClaimsWhichOccurInFuturePeriods(List<GrossClaimRoot> grossClaimRoots, PeriodStore periodStore) {
+        List<GrossClaimRoot> claimsNotOccurringThisPeriod = new ArrayList<GrossClaimRoot>();
+
+        for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
+            boolean occurrenceInCurrentPeriod = grossClaimRoot.occurrenceInCurrentPeriod(periodScope);
+            if (!grossClaimRoot.hasTrivialPayout() || !occurrenceInCurrentPeriod) {
+                // add claim only to period store if development in future periods is required or occurrence is delayed
+                claimsNotOccurringThisPeriod.add(grossClaimRoot);
+            }
+        }
+        periodStore.put(AbstractClaimsGenerator.GROSS_CLAIMS, claimsNotOccurringThisPeriod);
+    }
+
+    /**
+     * Beside returning current period ClaimCashflowPacket outOccurenceUltimateClaims is filled
+     *
+     * @param grossClaimRoots
+     * @param runOffFactors
+     * @param periodScope
+     * @return ClaimCashflowPacket of grossClaimRoot with exposure start in current period
+     */
+    protected List<ClaimCashflowPacket> cashflowsInCurrentPeriod(List<GrossClaimRoot> grossClaimRoots,
+                                                                 List<Factors> runOffFactors, PeriodScope periodScope) {
+        List<ClaimCashflowPacket> claimCashflowPackets = new ArrayList<ClaimCashflowPacket>();
+        IPeriodCounter counter = this.periodScope.getPeriodCounter();
+        for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
+            if (grossClaimRoot.exposureStartInCurrentPeriod(periodScope)) {
+                claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(counter, runOffFactors, false));
+                outOccurenceUltimateClaims.addAll(grossClaimRoot.occurenceCashflow(periodScope));
+            }
+        }
+        return claimCashflowPackets;
+    }
+
+    /**
+     * Implementation void
+     *
+     * @param claims
+     * @param grossClaimRoots
+     * @param baseClaims
+     */
+    protected void doCashflowChecks(List<ClaimCashflowPacket> claims, List<GrossClaimRoot> grossClaimRoots, List<ClaimRoot> baseClaims) {
+        for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
+
+        }
+    }
+
+    /**
      * List containing <b>deterministic</b> claims per period. Only filled if globalDeterministicMode is true.
      */
     private ListMultimap<Integer, ClaimRoot> presetClaimsByPeriod;
 
     /**
      * Provides the same ClaimRoot objects per period for every iteration
+     *
      * @param deterministicClaims parameter containing period and ultimate value
-     * @param periodScope required for occurrence date calculation
+     * @param periodScope         required for occurrence date calculation
      * @param claimType
      * @return unmodified (no relative parameterization) ClaimRoot objects
      */
@@ -149,8 +219,9 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
 
     /**
      * Reads the deterministic claims parameters
+     *
      * @param presetClaims parameter containing period and ultimate value
-     * @param periodScope required for occurrence date calculation
+     * @param periodScope  required for occurrence date calculation
      * @param claimType
      * @return list with claims per period
      */
@@ -169,13 +240,59 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
                 DateTime occurrenceDate = DateTimeUtilities.getDate(periodScope, period, fractionOfPeriod);
                 ClaimRoot claim = new ClaimRoot(claimValue, claimType, occurrenceDate, occurrenceDate);
                 presetClaimsByPeriod.put(period, claim);
-            }
-            else {
+            } else {
                 // ignore preset claim data outside the period scope
-                throw new IllegalArgumentException("Preset claim period was outside the bounds of the iteration scope");
+                throw new SimulationException("Preset claim period was outside the bounds of the iteration scope. Check claim in row; " + (row + 1) + ".");
             }
         }
         return presetClaimsByPeriod;
+    }
+
+    /**
+     * A deal may commute before the end of the contract period. We may hence want to terminate claims generation
+     * depending on the outcome in the experience account. Additionally this method does the book keeping for the commutation state
+     *
+     * @param phase
+     * @return true if new claims have to be generated
+     */
+    protected boolean provideClaims(String phase) {
+        // In this phase check the commutation state from last period. If we are not commuted then calculate claims.
+        if (phase.equals(PHASE_CLAIMS_CALCULATION)) {
+            CommutationState commutationState = (CommutationState) (periodStore.get(COMMUTATION_STATE));
+
+            return !(commutationState.isCommuted() || commutationState.isCommuteThisPeriod());
+        }
+        return false;
+    }
+
+    /**
+     * In this PHASE_STORE_COMMUTATION_STATE check for incoming commutation information. If there is none, i.e the
+     * inCommutationChannel is null, then assume that we want no commutation behaviour. Add an indefinite commutationState
+     * object to the environment.
+     * @param phase
+     */
+    protected void prepareProvidingClaimsInNextPeriodOrNot(String phase) {
+        if (phase.equals(PHASE_STORE_COMMUTATION_STATE)) {
+            if (inCommutationState != null && inCommutationState.size() == 1) {
+                CommutationState packet = inCommutationState.get(0);
+                periodStore.put(COMMUTATION_STATE, packet, 1);
+            } else {
+                throw new SimulationException("Found different to one commutationState in inCommutationState. Period: "
+                        + periodScope.getCurrentPeriod() + " Number of Commutation states: " + inCommutationState.size());
+            }
+        }
+    }
+
+    /**
+     * Adds a default CommutationState packet to the period store at the start of every iteration
+     *
+     * @param periodStore the period store for this object
+     * @param phase       to make sure that the packet is added in the PHASE_CLAIMS_CALCULATION only
+     */
+    protected void initIteration(PeriodStore periodStore, PeriodScope periodScope, String phase) {
+        if (periodScope.isFirstPeriod() && phase.equals(PHASE_CLAIMS_CALCULATION)) {
+            periodStore.put(COMMUTATION_STATE, new CommutationState());
+        }
     }
 
     // period store key
@@ -183,6 +300,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
 
     /**
      * Sets the peril marker and origin of each list element
+     *
      * @param claims
      */
     protected void setTechnicalProperties(List<ClaimCashflowPacket> claims) {
@@ -192,11 +310,50 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
         }
     }
 
+    /**
+     * Checks for negative ultimates
+     *
+     * @param baseClaims
+     */
+    protected void checkBaseClaims(List<ClaimRoot> baseClaims, boolean sanityChecks, IterationScope iterationScope) {
+        if (sanityChecks) {
+
+            for (ClaimRoot baseClaim : baseClaims) {
+                if (baseClaim.getUltimate() < 0) {
+                    throw new SimulationException("Negative claim detected... i.e an inflow of cash!: " + baseClaim.toString());
+                }
+                if (iterationScope.isFirstIteration()) {
+//                    LOG.debug("claim root : " + baseClaim.toString());
+                }
+            }
+        }
+    }
+
+    /**
+     * Do some checks on the claims in this period.
+     * Checks for negative paid claims
+     *
+     * @param cashflowPackets
+     * @param sanityChecks
+     */
+
+    protected void checkCashflowClaims(List<ClaimCashflowPacket> cashflowPackets, boolean sanityChecks) {
+        if (sanityChecks) {
+            for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
+                if (cashflowPacket.getPaidIncrementalIndexed() < 0) {
+                    throw new SimulationException("Negative claim detected... i.e an inflow of cash!; " + cashflowPacket.toString() + " \n" + "Period Info  " + periodScope.toString());
+                }
+            }
+        }
+    }
+
+
     public void allocateChannelsToPhases() {
 //          Calculation channels --------------------------------------------------------------------------
         setTransmitterPhaseInput(inPatterns, PHASE_CLAIMS_CALCULATION);
-        setTransmitterPhaseInput(inEventSeverities, PHASE_CLAIMS_CALCULATION);
+//        setTransmitterPhaseInput(inEventSeverities, PHASE_CLAIMS_CALCULATION);
         setTransmitterPhaseInput(inEventFrequencies, PHASE_CLAIMS_CALCULATION);
+        setTransmitterPhaseInput(inProbabilities, PHASE_CLAIMS_CALCULATION);
         setTransmitterPhaseInput(inFactors, PHASE_CLAIMS_CALCULATION);
         setTransmitterPhaseInput(inUnderwritingInfo, PHASE_CLAIMS_CALCULATION);
 
@@ -255,13 +412,13 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
         this.outClaims = outClaims;
     }
 
-    public PacketList<EventDependenceStream> getInEventSeverities() {
-        return inEventSeverities;
-    }
+//    public PacketList<EventDependenceStream> getInEventSeverities() {
+//        return inEventSeverities;
+//    }
 
-    public void setInEventSeverities(PacketList<EventDependenceStream> inEventSeverities) {
-        this.inEventSeverities = inEventSeverities;
-    }
+//    public void setInEventSeverities(PacketList<EventDependenceStream> inEventSeverities) {
+//        this.inEventSeverities = inEventSeverities;
+//    }
 
     public PacketList<SystematicFrequencyPacket> getInEventFrequencies() {
         return inEventFrequencies;
@@ -349,5 +506,60 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
 
     public void setIterationScope(IterationScope iterationScope) {
         this.iterationScope = iterationScope;
+    }
+
+    public PacketList<DependancePacket> getInProbabilities() {
+        return inProbabilities;
+    }
+
+    public void setInProbabilities(PacketList<DependancePacket> inProbabilities) {
+        this.inProbabilities = inProbabilities;
+    }
+
+    // the following block has been added due to ART-983, while using Grails 1.3.7 with Groovy 1.7.8
+    // it might be removed in future Groovy versions
+
+    // never persist the MetaClass
+    private transient MetaClass metaClass;
+
+    public Object getProperty(String property) {
+        return getMetaClass().getProperty(this, property);
+    }
+
+    public void setProperty(String property, Object newValue) {
+        getMetaClass().setProperty(this, property, newValue);
+    }
+
+    public Object invokeMethod(String name, Object args) {
+        return getMetaClass().invokeMethod(this, name, args);
+    }
+
+    public MetaClass getMetaClass() {
+        if (metaClass == null) {
+            metaClass = InvokerHelper.getMetaClass(getClass());
+        }
+        return metaClass;
+    }
+
+    public void setMetaClass(MetaClass metaClass) {
+        this.metaClass = metaClass;
+    }
+    // ----------------------------- end of ART-983 work-around ----------------------------------------
+
+    protected void doCheckForLossesOccuringAndDependance(boolean globalSanityChecks, IReinsuranceContractBaseStrategy contractBaseStrategy, List<DependancePacket> inProbabilities) {
+        if (!(contractBaseStrategy.getType() == ReinsuranceContractBaseType.LOSSESOCCURRING || contractBaseStrategy.getType() == ReinsuranceContractBaseType.LOSSESOCCURRING_NO_SPLIT)) {
+            throw new SimulationException("Only losses occuring contract base implemented for RMS claims");
+        }
+        checkDependance(globalSanityChecks, inProbabilities);
+    }
+
+    protected void checkDependance(boolean globalSanityChecks, List<DependancePacket> inProbabilities) {
+        if(inProbabilities.size() > 0 && globalSanityChecks){
+            DependancePacket dependancePacket = ClaimUtils.checkForDependance(this, inProbabilities);
+            if(dependancePacket.isDependantGenerator(this)) {
+                throw new SimulationException("Dependancy structure for RMS claims detected; this isn't right. Please check" +
+                        "dependancy structure for generator " + this.getName());
+            }
+        }
     }
 }

@@ -50,7 +50,7 @@ public abstract class MDPConstraintsHelper implements IMultiDimensionalConstrain
     }
 
     boolean emptyComponentSelectionAllowed(int column) {
-        return false
+        return false;
     }
 }
 

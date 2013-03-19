@@ -268,7 +268,10 @@ public class PatternPacket extends Packet implements Cloneable {
         return cumulativeValues.size();
     }
 
+
+    private List<Double> lazyIncrements; /* Optimisation */
     public List<Double> getIncrementalValues(boolean checkSumOne) {
+        if(lazyIncrements != null && lazyIncrements.size() == cumulativeValues.size()) return lazyIncrements;
         final ArrayList<Double> incrementalValues = new ArrayList<Double>();
         double priorValue = 0;
         for (Double cumulativeValue : cumulativeValues) {
@@ -276,6 +279,7 @@ public class PatternPacket extends Packet implements Cloneable {
             priorValue = cumulativeValue;
         }
         if (checkSumOne) checkIncrementalPatternSumTo1();
+        lazyIncrements = incrementalValues;
         return incrementalValues;
     }
 
@@ -291,6 +295,12 @@ public class PatternPacket extends Packet implements Cloneable {
         }
     }
 
+    /**
+     * Replaces the periods with dates using baseDate as starting point. Returned values are incremental or cumulative.
+     * @param baseDate starting point of the pattern
+     * @param incremental if true incremental values will be returned, cumulative else
+     * @return absolute dates with incremental/cumulative values
+     */
     public TreeMap<DateTime, Double> absolutePattern(DateTime baseDate, boolean incremental) {
         TreeMap<DateTime, Double> tempMap = new TreeMap<DateTime, Double>();
         for (int j = 0; j < cumulativePeriods.size(); j++) {
@@ -405,6 +415,10 @@ public class PatternPacket extends Packet implements Cloneable {
         if (checkIncreasingIncrements) {
             checkIncreasingIncrements();
         }
+    }
+
+    public Class<? extends IPatternMarker> getPatternMarker() {
+        return patternMarker;
     }
 
     private void checkIncreasingIncrements() {

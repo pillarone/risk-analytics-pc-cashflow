@@ -1,0 +1,20 @@
+h3. Loss Participation
+Loss participation is a mean to reduce the ceded share in specifiable loss ratio corridors proportionally for quota share
+contracts. The following table allows to reduce the ceded share between the loss ratios 70% and 80%, 20% of the cession
+remains with the cedant.
+
+LP: all figures entered as ratios
+As the loss participation below 70% loss ratio is 0%, the entire quote is applied. Above 80% the quote is reduced by 2%
+as between 70% and 80% only 80% of the normally ceded loss is ceded (0.58 = 0.6 - 0.2 * (0.8 - 0.7).
+
+The loss ratio used for the look up of the loss participation is calculated on gross premium and claims after applying
+any annual aggregate deductible, limit or event limit.
+As calculations for ultimate, reported and paid claims is done separately, three different loss ratios are calculated by
+using premium written for ultimate and reported and premium paid for paid claims.
+Due to the aggregate nature of loss ratios, the same 'adjusted' quota share is applied on all claims ignoring the occurrence/
+updating order and deductibles and limits. So the generally applied concept of the GIRA model of treating claims individually
+according their order and the current contract state is not applied as soon as loss participation is used.<br>
+This results in a different allocation of the aggregate ceded claim to the individual claims where as the sum stays the
+same. Especially individual ceded event claims might be higher than the event limit. Looking at aggregate results of such
+a quota share won't show any difference, but the results of following non-proportional treaties will be different. A
+general conclusion if the volatility is increased or decreased is not possible as this is highly depending on the parametrization.

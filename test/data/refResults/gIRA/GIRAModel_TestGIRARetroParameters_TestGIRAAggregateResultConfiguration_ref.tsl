@@ -1,421 +1,821 @@
-iteration	period	valueIndex	path	field	value
-1	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0
-1	0	0	GIRA:reservesGenerators:subMarine:outReserves	developedResultIndexed	0.0
-1	0	0	GIRA:reservesGenerators:subMarine:outReserves	appliedIndexValue	1.0
-1	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0
-1	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0
-1	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0
-1	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0
-1	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0
-1	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0
-1	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0
-1	0	0	GIRA:reservesGenerators:subMotor:outReserves	developedResultIndexed	0.0
-1	0	0	GIRA:reservesGenerators:subMotor:outReserves	appliedIndexValue	1.0
-1	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0
-1	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0
-1	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0
-1	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0
-1	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0
-1	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	developedResultIndexed	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	appliedIndexValue	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	developedResultIndexed	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	appliedIndexValue	1.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	developedResultIndexed	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	appliedIndexValue	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0
-1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0
-2	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0
-2	0	0	GIRA:reservesGenerators:subMarine:outReserves	developedResultIndexed	0.0
-2	0	0	GIRA:reservesGenerators:subMarine:outReserves	appliedIndexValue	1.0
-2	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0
-2	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0
-2	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0
-2	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0
-2	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0
-2	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0
-2	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0
-2	0	0	GIRA:reservesGenerators:subMotor:outReserves	developedResultIndexed	0.0
-2	0	0	GIRA:reservesGenerators:subMotor:outReserves	appliedIndexValue	1.0
-2	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0
-2	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0
-2	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0
-2	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0
-2	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0
-2	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	developedResultIndexed	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	appliedIndexValue	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	developedResultIndexed	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	appliedIndexValue	1.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	developedResultIndexed	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	appliedIndexValue	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0
-2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0
-3	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0
-3	0	0	GIRA:reservesGenerators:subMarine:outReserves	developedResultIndexed	0.0
-3	0	0	GIRA:reservesGenerators:subMarine:outReserves	appliedIndexValue	1.0
-3	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0
-3	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0
-3	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0
-3	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0
-3	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0
-3	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0
-3	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0
-3	0	0	GIRA:reservesGenerators:subMotor:outReserves	developedResultIndexed	0.0
-3	0	0	GIRA:reservesGenerators:subMotor:outReserves	appliedIndexValue	1.0
-3	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0
-3	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0
-3	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0
-3	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0
-3	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0
-3	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	developedResultIndexed	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	appliedIndexValue	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	developedResultIndexed	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	appliedIndexValue	1.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	developedResultIndexed	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	appliedIndexValue	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0
-3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0
-4	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0
-4	0	0	GIRA:reservesGenerators:subMarine:outReserves	developedResultIndexed	0.0
-4	0	0	GIRA:reservesGenerators:subMarine:outReserves	appliedIndexValue	1.0
-4	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0
-4	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0
-4	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0
-4	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0
-4	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0
-4	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0
-4	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0
-4	0	0	GIRA:reservesGenerators:subMotor:outReserves	developedResultIndexed	0.0
-4	0	0	GIRA:reservesGenerators:subMotor:outReserves	appliedIndexValue	1.0
-4	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0
-4	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0
-4	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0
-4	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0
-4	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0
-4	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	developedResultIndexed	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	appliedIndexValue	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	developedResultIndexed	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	appliedIndexValue	1.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	developedResultIndexed	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	appliedIndexValue	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0
-4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0
-5	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0
-5	0	0	GIRA:reservesGenerators:subMarine:outReserves	developedResultIndexed	0.0
-5	0	0	GIRA:reservesGenerators:subMarine:outReserves	appliedIndexValue	1.0
-5	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0
-5	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0
-5	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0
-5	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0
-5	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0
-5	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0
-5	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0
-5	0	0	GIRA:reservesGenerators:subMotor:outReserves	developedResultIndexed	0.0
-5	0	0	GIRA:reservesGenerators:subMotor:outReserves	appliedIndexValue	1.0
-5	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0
-5	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0
-5	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0
-5	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0
-5	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0
-5	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	developedResultIndexed	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	appliedIndexValue	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	developedResultIndexed	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	appliedIndexValue	1.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	developedResultIndexed	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	appliedIndexValue	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0
-5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0
-6	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0
-6	0	0	GIRA:reservesGenerators:subMarine:outReserves	developedResultIndexed	0.0
-6	0	0	GIRA:reservesGenerators:subMarine:outReserves	appliedIndexValue	1.0
-6	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0
-6	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0
-6	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0
-6	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0
-6	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0
-6	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0
-6	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0
-6	0	0	GIRA:reservesGenerators:subMotor:outReserves	developedResultIndexed	0.0
-6	0	0	GIRA:reservesGenerators:subMotor:outReserves	appliedIndexValue	1.0
-6	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0
-6	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0
-6	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0
-6	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0
-6	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0
-6	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	developedResultIndexed	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	appliedIndexValue	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	developedResultIndexed	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	appliedIndexValue	1.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	developedResultIndexed	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	appliedIndexValue	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0
-6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0
-7	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0
-7	0	0	GIRA:reservesGenerators:subMarine:outReserves	developedResultIndexed	0.0
-7	0	0	GIRA:reservesGenerators:subMarine:outReserves	appliedIndexValue	1.0
-7	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0
-7	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0
-7	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0
-7	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0
-7	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0
-7	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0
-7	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0
-7	0	0	GIRA:reservesGenerators:subMotor:outReserves	developedResultIndexed	0.0
-7	0	0	GIRA:reservesGenerators:subMotor:outReserves	appliedIndexValue	1.0
-7	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0
-7	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0
-7	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0
-7	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0
-7	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0
-7	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	developedResultIndexed	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	appliedIndexValue	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	developedResultIndexed	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	appliedIndexValue	1.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	developedResultIndexed	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	appliedIndexValue	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0
-7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0
-8	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0
-8	0	0	GIRA:reservesGenerators:subMarine:outReserves	developedResultIndexed	0.0
-8	0	0	GIRA:reservesGenerators:subMarine:outReserves	appliedIndexValue	1.0
-8	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0
-8	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0
-8	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0
-8	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0
-8	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0
-8	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0
-8	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0
-8	0	0	GIRA:reservesGenerators:subMotor:outReserves	developedResultIndexed	0.0
-8	0	0	GIRA:reservesGenerators:subMotor:outReserves	appliedIndexValue	1.0
-8	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0
-8	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0
-8	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0
-8	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0
-8	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0
-8	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	developedResultIndexed	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	appliedIndexValue	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	developedResultIndexed	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	appliedIndexValue	1.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	developedResultIndexed	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	appliedIndexValue	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0
-8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0
-9	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0
-9	0	0	GIRA:reservesGenerators:subMarine:outReserves	developedResultIndexed	0.0
-9	0	0	GIRA:reservesGenerators:subMarine:outReserves	appliedIndexValue	1.0
-9	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0
-9	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0
-9	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0
-9	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0
-9	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0
-9	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0
-9	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0
-9	0	0	GIRA:reservesGenerators:subMotor:outReserves	developedResultIndexed	0.0
-9	0	0	GIRA:reservesGenerators:subMotor:outReserves	appliedIndexValue	1.0
-9	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0
-9	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0
-9	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0
-9	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0
-9	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0
-9	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	developedResultIndexed	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	appliedIndexValue	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	developedResultIndexed	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	appliedIndexValue	1.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	developedResultIndexed	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	appliedIndexValue	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0
-9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0
-10	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0
-10	0	0	GIRA:reservesGenerators:subMarine:outReserves	developedResultIndexed	0.0
-10	0	0	GIRA:reservesGenerators:subMarine:outReserves	appliedIndexValue	1.0
-10	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0
-10	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0
-10	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0
-10	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0
-10	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0
-10	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0
-10	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0
-10	0	0	GIRA:reservesGenerators:subMotor:outReserves	developedResultIndexed	0.0
-10	0	0	GIRA:reservesGenerators:subMotor:outReserves	appliedIndexValue	1.0
-10	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0
-10	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0
-10	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0
-10	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0
-10	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0
-10	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	developedResultIndexed	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	appliedIndexValue	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	developedResultIndexed	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	appliedIndexValue	1.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	developedResultIndexed	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	appliedIndexValue	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0
-10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0
+iteration	period	valueIndex	path	field	value	date
+1	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumAndReserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	reserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumAndReserveRiskBase	1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reserveRiskBase	1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumAndReserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+1	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumAndReserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	reserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumAndReserveRiskBase	1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reserveRiskBase	1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumAndReserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+2	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumAndReserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	reserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumAndReserveRiskBase	1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reserveRiskBase	1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumAndReserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+3	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumAndReserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	reserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumAndReserveRiskBase	1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reserveRiskBase	1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumAndReserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+4	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumAndReserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	reserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumAndReserveRiskBase	1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reserveRiskBase	1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumAndReserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+5	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumAndReserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	reserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumAndReserveRiskBase	1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reserveRiskBase	1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumAndReserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+6	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumAndReserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	reserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumAndReserveRiskBase	1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reserveRiskBase	1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumAndReserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+7	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumAndReserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	reserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumAndReserveRiskBase	1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reserveRiskBase	1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumAndReserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+8	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumAndReserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	reserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumAndReserveRiskBase	1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reserveRiskBase	1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumAndReserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+9	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outNominalUltimates	value	-1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	premiumAndReserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	reserveRiskBase	-1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	totalCumulativeIndexed	-1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	paidIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMarine:outReserves	reportedIncrementalIndexed	-1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outNominalUltimates	value	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	changesInReservesIndexed	-0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	ultimate	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	IBNRIndexed	-0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	reservesIndexed	-0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:reservesGenerators:subMotor:outReserves	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	premiumAndReserveRiskBase	1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reserveRiskBase	1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	ultimate	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	totalCumulativeIndexed	1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reservesIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	paidIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsCeded	reportedIncrementalIndexed	1000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	premiumAndReserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reserveRiskBase	-3000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	ultimate	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	totalCumulativeIndexed	-3000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reservesIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	paidIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsGross	reportedIncrementalIndexed	-3000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumRiskBase	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInOutstandingIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInIBNRIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	changesInReservesIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	premiumAndReserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reserveRiskBase	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	outstandingIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	ultimate	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	IBNRIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	totalCumulativeIndexed	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reservesIndexed	0.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	paidIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000
+10	0	0	GIRA:retrospectiveReinsurance:subLPT:outClaimsNet	reportedIncrementalIndexed	-2000.0	01-January-2012 24:00:00 000

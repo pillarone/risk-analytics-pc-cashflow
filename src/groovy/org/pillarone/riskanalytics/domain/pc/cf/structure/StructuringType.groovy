@@ -4,6 +4,11 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverMap
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixCoverAttributeStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixStructureContraints
+import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractContraints
 import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker
 import org.pillarone.riskanalytics.domain.utils.constant.LogicArguments
@@ -25,8 +30,13 @@ class StructuringType extends AbstractParameterObjectClassifier {
     public static final StructuringType CLAIMTYPES = new StructuringType("claim types", "CLAIMTYPES",
             [claimTypes: new ConstrainedMultiDimensionalParameter([], ClaimTypeSelectionTableConstraints.COLUMN_TITLES,
                     ConstraintsFactory.getConstraints(ClaimTypeSelectionTableConstraints.IDENTIFIER))])
+    public static final StructuringType MATRIX = new StructuringType('matrix', 'MATRIX',
+            ['flexibleCover': new ConstrainedMultiDimensionalParameter([[], [], [], []],
+                    [MatrixStructureContraints.LEGAL_ENTITY, MatrixStructureContraints.SEGMENTS, MatrixStructureContraints.GENERATORS, MatrixStructureContraints.LOSS_KIND_OF],
+                    ConstraintsFactory.getConstraints(MatrixStructureContraints.IDENTIFIER))]
+    )
 
-    public static final all = [SEGMENTS, SEGMENTSPERILS, CLAIMTYPES]
+    public static final all = [SEGMENTS, SEGMENTSPERILS, CLAIMTYPES, MATRIX]
 
     protected static Map types = [:]
     static {
@@ -74,6 +84,9 @@ class StructuringType extends AbstractParameterObjectClassifier {
                 strategy = new ClaimTypesStructuringStrategy(
                         claimTypes: (ConstrainedMultiDimensionalParameter) parameters["claimTypes"])
                 break;
+            case StructuringType.MATRIX:
+                strategy = new MatrixCoverAttributeStrategy(alternativeAggregation : true, flexibleCover: parameters['flexibleCover'])
+                break
         }
         return strategy;
     }
