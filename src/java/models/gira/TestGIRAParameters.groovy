@@ -1,5 +1,7 @@
 package models.gira
 
+import org.pillarone.riskanalytics.domain.pc.cf.global.ProjectionPeriodType
+
 model=models.gira.GIRAModel
 periodCount=1
 displayName='Claims'
@@ -19,6 +21,7 @@ components {
 	globalParameters {
 		parmRunOffAfterFirstPeriod[0]=true
 		parmProjectionStartDate[0]=new org.joda.time.DateTime(2011, 1, 1, 0, 0, 0, 0)
+        parmProjection[0] = ProjectionPeriodType.getStrategy(ProjectionPeriodType.COMPLETEROLLOUT, [:]);
 	}
 }
 comments=[]
