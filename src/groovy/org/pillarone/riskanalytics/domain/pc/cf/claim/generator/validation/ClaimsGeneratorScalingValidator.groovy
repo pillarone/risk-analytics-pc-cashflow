@@ -18,11 +18,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.simulation.item.parameter.MultiDimensionalParameterHolder
 import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractSingleClaimsGeneratorStrategy
 import org.pillarone.riskanalytics.domain.utils.validation.ParameterValidationImpl
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.FrequencySeverityClaimsGeneratorStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.FrequencyAverageAttritionalClaimsGeneratorStrategy
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGeneratorStrategy
 import org.apache.commons.lang.NotImplementedException
 import org.pillarone.riskanalytics.core.simulation.InvalidParameterException
 

@@ -15,7 +15,7 @@ import java.util.List;
 public abstract class AbstractPatternStrategy extends AbstractParameterObject {
 
     protected static List<Double> getPatternValues(ConstrainedMultiDimensionalParameter pattern, int monthColumnIndex, int patternColumnIndex) {
-        if (pattern.getValues().size() > 0 && pattern.getValues().get(0) instanceof List) {
+        if (pattern.getValueRowCount() > 0 && pattern.getValues().get(0) instanceof List) {
             int cumulatedMonths = InputFormatConverter.getInt(pattern.getValueAt(pattern.getTitleRowCount(), monthColumnIndex));
             List<Double> patternValues = new ArrayList<Double>();
             if (cumulatedMonths > 0) {
@@ -45,31 +45,46 @@ public abstract class AbstractPatternStrategy extends AbstractParameterObject {
 
     protected static PatternPacket getCumulativePattern(ConstrainedMultiDimensionalParameter cumulativePattern,
                                                         String columnName, Class<? extends IPatternMarker> patternMarker) {
-        int columnMonthIndex = cumulativePattern.getColumnIndex(PatternTableConstraints.MONTHS);
-        List<Double> cumulativeValues = getPatternValues(cumulativePattern, columnMonthIndex,
-                cumulativePattern.getColumnIndex(columnName));
-        List<Period> cumulativePeriods = getCumulativePeriods(cumulativePattern, columnMonthIndex);
-        return new PatternPacket(patternMarker, cumulativeValues, cumulativePeriods);
+        if (cumulativePattern.getValueRowCount() > 0) {
+            int columnMonthIndex = cumulativePattern.getColumnIndex(PatternTableConstraints.MONTHS);
+            List<Double> cumulativeValues = getPatternValues(cumulativePattern, columnMonthIndex,
+                    cumulativePattern.getColumnIndex(columnName));
+            List<Period> cumulativePeriods = getCumulativePeriods(cumulativePattern, columnMonthIndex);
+            return new PatternPacket(patternMarker, cumulativeValues, cumulativePeriods);
+        }
+        else {
+            return new PatternPacket();
+        }
     }
 
     protected static PatternPacket getIncrementalPattern(ConstrainedMultiDimensionalParameter incrementalPattern,
                                                          String columnName, Class<? extends IPatternMarker> patternMarker) {
-        int columnMonthIndex = incrementalPattern.getColumnIndex(PatternTableConstraints.MONTHS);
-        List<Double> incrementalValues = getPatternValues(incrementalPattern, columnMonthIndex,
-                incrementalPattern.getColumnIndex(columnName));
-        List<Double> cumulativeValues = getCumulativePatternValues(incrementalValues);
-        List<Period> cumulativePeriods = getCumulativePeriods(incrementalPattern, columnMonthIndex);
-        return new PatternPacket(patternMarker, cumulativeValues, cumulativePeriods);
+        if (incrementalPattern.getValueRowCount() > 0) {
+            int columnMonthIndex = incrementalPattern.getColumnIndex(PatternTableConstraints.MONTHS);
+            List<Double> incrementalValues = getPatternValues(incrementalPattern, columnMonthIndex,
+                    incrementalPattern.getColumnIndex(columnName));
+            List<Double> cumulativeValues = getCumulativePatternValues(incrementalValues);
+            List<Period> cumulativePeriods = getCumulativePeriods(incrementalPattern, columnMonthIndex);
+            return new PatternPacket(patternMarker, cumulativeValues, cumulativePeriods);
+        }
+        else {
+            return new PatternPacket();
+        }
     }
 
     protected static PatternPacket getAgeToAgePattern(ConstrainedMultiDimensionalParameter ageToAgePattern,
                                                       String columnName, Class<? extends IPatternMarker> patternMarker) {
-        int columnMonthIndex = ageToAgePattern.getColumnIndex(PatternTableConstraints.MONTHS);
-        List<Double> ageToAgeValues = getPatternValues(ageToAgePattern, columnMonthIndex,
-                ageToAgePattern.getColumnIndex(columnName));
-        List<Double> cumulativeValues = getCumulativePatternValuesFromLinkRatios(ageToAgeValues);
-        List<Period> cumulativePeriods = getCumulativePeriods(ageToAgePattern, columnMonthIndex);
-        return new PatternPacket(patternMarker, cumulativeValues, cumulativePeriods);
+        if (ageToAgePattern.getValueRowCount() > 0) {
+            int columnMonthIndex = ageToAgePattern.getColumnIndex(PatternTableConstraints.MONTHS);
+            List<Double> ageToAgeValues = getPatternValues(ageToAgePattern, columnMonthIndex,
+                    ageToAgePattern.getColumnIndex(columnName));
+            List<Double> cumulativeValues = getCumulativePatternValuesFromLinkRatios(ageToAgeValues);
+            List<Period> cumulativePeriods = getCumulativePeriods(ageToAgePattern, columnMonthIndex);
+            return new PatternPacket(patternMarker, cumulativeValues, cumulativePeriods);
+        }
+        else {
+            return new PatternPacket();
+        }
     }
 
     protected static List<Double> getCumulativePatternValues(List<Double> incrementalValues) {
