@@ -17,9 +17,7 @@ class PayoutReportingCombinedPatterns extends DynamicComposedComponent {
     }
 
     @Override protected void doCalculation() {
-        for (Pattern pattern : componentList) {
-            pattern.start()
-        }
+        componentList*.start()
     }
 
     @Override

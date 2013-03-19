@@ -133,7 +133,7 @@ class ReservesGeneratorTests extends GroovyTestCase {
         assertEquals "# reservesIndexed", 1, reserves.size()
         assertEquals " ultimate", 0d, reserves[0].ultimate, EPSILON
         assertEquals " ultimate", -3684d, ultimates[0].value, EPSILON
-        assertEquals " incr. paid", -0d, reserves[0].paidIncrementalIndexed
+        assertEquals " incr. paid", -0d, reserves[0].paidIncrementalIndexed, 0
         assertEquals " cum paid", 0d, reserves[0].paidCumulatedIndexed
         assertEquals " outstandingIndexed", -658d, reserves[0].outstandingIndexed(), EPSILON
         assertEquals " cum reported", -658d, reserves[0].reportedCumulatedIndexed, EPSILON

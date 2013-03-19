@@ -40,6 +40,13 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
     ClaimsGenerator claimGeneratorFireAttritional
     ReinsuranceContract treaty
     MatrixReinsuranceContracts contracts
+    ReinsuranceContract intersectionLegalEntityAndLobTreaty
+    ReinsuranceContract segmentTreaty
+    ReinsuranceContract unionLegalEntityAndSegmentsTreaty
+    ReinsuranceContract legalEntityTreaty
+    ReinsuranceContract segmentNotPartOfLegalEntityTreaty
+    ReinsuranceContract twoEqualFilterRowsTreaty
+    ReinsuranceContract emptyMatrixTreaty
 
     ReinsuranceContract benefitContract
     ReinsuranceContract firstTreaty
@@ -293,13 +300,13 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
     // PMO-2233 Test F1(a), F1(b), F2, F7, F8
     void testIntersectAndUnionCombinations() {
 
-        ReinsuranceContract intersectionLegalEntityAndLobTreaty = createTestContract('intersectionLegalEntityAndLobTreaty', [[''], [''], ['venusInsurance'], ['segmentHome'], [''], ['ANY']])
-        ReinsuranceContract segmentTreaty = createTestContract('segmentTreaty', [[''], [''], [''], ['segmentHome'], [''], ['ANY']])
-        ReinsuranceContract unionLegalEntityAndSegmentsTreaty = createTestContract('unionLegalEntityAndSegmentsTreaty', [['', ''], ['', ''], ['', 'venusInsurance'], ['segmentHome', ''], ['', ''], ['ANY', 'ANY']])
-        ReinsuranceContract legalEntityTreaty = createTestContract('legalEntityTreaty', [[''], [''], ['venusInsurance'], [''], [''], ['ANY']])
-        ReinsuranceContract segmentNotPartOfLegalEntityTreaty = createTestContract('segmentNotPartOfLegalEntityTreaty', [[''], [''], ['venusInsurance'], ['segmentCottage'], [''], ['ANY']])
-        ReinsuranceContract twoEqualFilterRowsTreaty = createTestContract('twoEqualFilterRowsTreaty', [['', ''], ['', ''], ['', ''], ['segmentHome', 'segmentHome'], ['', ''], ['ANY', 'ANY']])
-        ReinsuranceContract emptyMatrixTreaty = createTestContract('emptyMatrixTreaty', [[], [], [], [], [], []])
+        intersectionLegalEntityAndLobTreaty = createTestContract('intersectionLegalEntityAndLobTreaty', [[''], [''], ['venusInsurance'], ['segmentHome'], [''], ['ANY']])
+        segmentTreaty = createTestContract('segmentTreaty', [[''], [''], [''], ['segmentHome'], [''], ['ANY']])
+        unionLegalEntityAndSegmentsTreaty = createTestContract('unionLegalEntityAndSegmentsTreaty', [['', ''], ['', ''], ['', 'venusInsurance'], ['segmentHome', ''], ['', ''], ['ANY', 'ANY']])
+        legalEntityTreaty = createTestContract('legalEntityTreaty', [[''], [''], ['venusInsurance'], [''], [''], ['ANY']])
+        segmentNotPartOfLegalEntityTreaty = createTestContract('segmentNotPartOfLegalEntityTreaty', [[''], [''], ['venusInsurance'], ['segmentCottage'], [''], ['ANY']])
+        twoEqualFilterRowsTreaty = createTestContract('twoEqualFilterRowsTreaty', [['', ''], ['', ''], ['', ''], ['segmentHome', 'segmentHome'], ['', ''], ['ANY', 'ANY']])
+        emptyMatrixTreaty = createTestContract('emptyMatrixTreaty', [[], [], [], [], [], []])
 
         WiringUtils.use(WireCategory) {
             segmentHome.inClaims = claimGeneratorCat.outClaims

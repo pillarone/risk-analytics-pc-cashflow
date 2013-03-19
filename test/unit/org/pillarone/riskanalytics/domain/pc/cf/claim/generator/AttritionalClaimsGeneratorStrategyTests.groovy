@@ -87,7 +87,7 @@ public class AttritionalClaimsGeneratorStrategyTests extends GroovyTestCase {
         claimsGenerator.doCalculation()
 
         assertEquals "one attritional claim", 1, claimsGenerator.outClaims.size()
-        assertEquals "correct value of attritional claim", -0d, claimsGenerator.outClaims[0].ultimate()
+        assertEquals "correct value of attritional claim", -0d, claimsGenerator.outClaims[0].ultimate(), 0
 
         // no cover criteria
         ComboBoxTableMultiDimensionalParameter uwInfoComboBox = new ComboBoxTableMultiDimensionalParameter(
