@@ -1,0 +1,61 @@
+Each simulation requires a result template defining the information to be collected during a simulation run. The granularity
+and amount of selected data has a high impact on simulation run-time. In a result template one can define for every output
+channel the collecting mode. The available modes depend on the type of the output channel. Collecting modes can be
+categorized in the following groups:
+* *single*: every individual claim (or any other information) is persisted individually. This mode increases run-time and needs a lot of disk space and should be used for special purposes only as the vast majority of evaluating results is based on aggregate results only.
+* *aggregated*: all claims produced by the same channel in the same simulation period and iteration are aggregated which saves run-time and disk space. This mode has several sub modes, namely
+** *split by source*: beside the aggregate information additional aggregated information by source is persisted, i.e. if a reinsurance contract covers several perils and segments using split by source will additionally provide aggregated results by peril and segment.
+** *split by period*: in multi-period models claims occur in different periods. Looking only at aggregated values won't disclose the effect of individual underwriting periods. In order to provide more insight, the split by period collectors are very useful.
+** *field filters*: by default a claim contains sixteen different numbers. Depending on the use case and in order to save runtime, it is not necessary to collect always all of them. Combining any of the aggregate modes with different filters provides therefore an additional way of configuration.
+
+{note}
+*Hints*
+
+* select split collectors carefully as their impact on simulation runtime is significant. Furthermore the same figure might be collected several times in different places, i.e. collecting reinsurance figures and using a split by source strategy on ceded segment information would collect the same figures twice.
+* split collectors work on sub component level only
+* split by source doesn't make sense on first components of a model graph. Using them for example on claims/reserve generators and underwriting segments won't provide any extra information.
+* using split by source
+** legal entities and alternative aggregations provide detailed information by peril, segment and contract
+** segments provide detailed information by peril and contract
+** reinsurance contracts provide detailed information by peril and segment
+{note}
+
+{table}
+    *Short Name* | *Long Name* | *Description*
+    paid_inc | paid incremental |
+    paid_cum | paid cumulative |
+    cres_inc | case reserves change |
+    cres_cum | reported reserves | cumulated reported - cumulated paid
+    IBNR_inc | IBNR change |
+    IBNR_cum | IBNR | cumulated total - cumulated reported
+    outst_inc | total reserves change |
+    outst_cum | total reserves | reported reserves + IBNR
+    rep_inc | reported incremental | paid + case reserves
+    rep_cum | reported cumulative |
+    initial | initial | generated ultimate, does not include any run-off index effect
+    total_inc | total incremental | incremental paid + outstanding change
+    total_cum | total cumulative | cumulated paid + outstanding
+    rb_claim_premium | risk base for premium risk, based on claims |
+    rb_claim_reserves | risk base for reserve risk, based on claims |
+    rb_claim_total | risk base for aggregated premium and reserve risk, based on claims |
+    rb_fin_premium | risk base for premium risk, based on financials |
+    rb_fin_reserves | risk base for reserve risk, based on financials |
+    rb_fin_total | risk base for aggregated premium and reserve risk, based on financials |
+{table}
+
+As the current user interface of result template has limited space, naming conventions have been introduced to define the
+different combinations of collecting modes:
+
+!ClaimCollectors.png!
+
+'Agg' stands for aggregated, split y for split by period and split s for split by source. The filter section contains
+abbreviations of the collected field names.
+
+{note}
+*Cumulative Values*
+
+When looking at cumulative values one needs to keep in mind that a claim (or any other information) is sent around until
+it is fully developed. If a parameterization contains different pattern lengths, cumulative values in later periods will
+therefore be too low. This effect can be avoided by applying patterns of equal length at the cost of increased simulation
+runtime.
+{note}

@@ -1,0 +1,24 @@
+The ORSA model contains a very powerful and flexible way to define reinsurance cover including diamond structures.
+
+First there is a matrix defining the gross of the contract. Every single row is interpreted as a filter its columns
+combined with logical 'and'. Several rows are combined with logical 'or'. If a claim would pass several filters it is
+included once only. Leaving the first two columns void (net and ceded of contract) means that only gross information is
+covered.
+
+Gross information is reduced by information provided by the benefit contracts.
+
+Don't include a contract
+* in its own cover definition, neither in the matrix nor in the list of benefit contracts
+* in both lists of ceded and net contracts
+
+A matrix with no line doesn't cover anything. If a line contains only the argument any claim type all gross claims are covered.
+
+h4. Premium
+The gross premium of a contract is calculated according to the selected covered segments or legal entities. Taking for
+the later all segments belonging to a legal entities. If neither a segment or a legal entity is covered, covered claims
+are in inspected in order to find out to which segments they belong and afterwards the whole premium of this segment is
+taken into account.
+
+h4. Restriction for Retro Contracts
+As retro contracts calculate only aggregated reserves it's not possible to define chains of retro contracts.
+

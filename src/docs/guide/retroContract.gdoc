@@ -1,0 +1,12 @@
+The ORSA model contains a unified LPT and ADC contract allowing to define covered underwriting years and the year the
+outstanding claims of these years are converted to reserve claims and covered by the contract. Conversion is done by
+aggregating all claims at the 'covered development period start date' and creating a new aggregated reserve claim based
+on its outstanding amount. The ceded value is calculated in the following way:
+
+@ceded share * max(0, min(limit, -cumulative value - attachment point))@
+
+As calculation is done on an aggregate base allocation to individual segments is not possible.
+{note}
+Time intervals need to be defined as left close, right open. So in order to cover the years 2012 - 2015 enter 01.01.2012
+to 01.01.2015 for covered occurrence period.
+{note}

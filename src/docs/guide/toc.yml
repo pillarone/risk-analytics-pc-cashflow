@@ -1,4 +1,14 @@
-lossParticipation:
-  title: Loss Participation
-commission:
-  title: Commission
+reinsurance:
+  title: Reinsurance
+  proportionalReinsurance:
+    title: Proportional Reinsurance
+    lossParticipation:
+      title: Loss Participation
+    commission:
+      title: Commission
+  reinsuranceProgram:
+    title: Reinsurance Program
+  retroContract:
+    title: Retro Contract
+resultTemplates:
+  title: Result Templates
