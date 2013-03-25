@@ -35,6 +35,8 @@ grails.converters.encoding = "UTF-8"
 // enabled native2ascii conversion of i18n properties files
 grails.enable.native2ascii = true
 grails.doc.images = new File('src/docs/images')
+grails.doc.css = new File('src/docs/css')
+grails.doc.style = new File('src/docs/style')
 
 
 maxIterations = 100000
