@@ -54,6 +54,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.output.SingleUltimatePaidClaimCo
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AdditionalPremium
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.PaidAdditionalPremium
+import org.pillarone.riskanalytics.life.longevity.HistoricMortalityRatesConstraints
+import org.pillarone.riskanalytics.life.longevity.MortalityRatesConstraints
+import org.pillarone.riskanalytics.life.longevity.PolicyContraints
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -113,6 +116,9 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new ReinsuranceContractContraints())
         ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
         ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
+        ConstraintsFactory.registerConstraint(new PolicyContraints())
+        ConstraintsFactory.registerConstraint(new MortalityRatesConstraints())
+        ConstraintsFactory.registerConstraint(new HistoricMortalityRatesConstraints())
 
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
         ValidatorRegistry.addValidator(new PatternStrategyValidator())

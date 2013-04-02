@@ -25,7 +25,7 @@ public abstract class MDPConstraintsHelper implements IMultiDimensionalConstrain
     }
 
     /**
-     * Each individual set of MDP contraints should have a public static string called identifier which describes what the class
+     * Each individual set of MDP constraints should have a public static string called identifier which describes what the class
      * is being used to constrain.
      * @return
      */
