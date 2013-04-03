@@ -3,6 +3,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportion
 import com.google.common.collect.HashMultimap
 import com.google.common.collect.SetMultimap
 import org.apache.commons.lang.NotImplementedException
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.joda.time.DateTime
 import org.joda.time.Period
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
@@ -34,6 +36,7 @@ import static org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.prop
  */
 class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUnitTest {
 
+    static Log LOG = LogFactory.getLog(QuotaShareLossParticipationContract2SpreadsheetTests.class);
     public static final String SLIDING_IN__TRIANGLE = 'Sliding_in_Triangle'
 
     void doSetUp() {
@@ -109,7 +112,7 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
                 for (CededUnderwritingInfoPacket cededUwInfo : contract.outUnderwritingInfoCeded) {
                     double referenceTotalCommission = totalCommission.referenceValue(cededUwInfo)
                     if (Math.abs(referenceTotalCommission - cededUwInfo.commission) > EPSILON) {
-                        println "[${importer.fileName}] correct total commission ${format(cededUwInfo.exposure.inceptionDate)} ${format(cededUwInfo.date)} ${referenceTotalCommission} ${cededUwInfo.commission}"
+                        LOG.info "[${importer.fileName}] correct total commission ${format(cededUwInfo.exposure.inceptionDate)} ${format(cededUwInfo.date)} ${referenceTotalCommission} ${cededUwInfo.commission}"
                     }
                     assertEquals "[${importer.fileName}] correct total commission ${format(cededUwInfo.exposure.inceptionDate)} ${format(cededUwInfo.date)}", referenceTotalCommission, cededUwInfo.commission, EPSILON
                     double referenceFixCommission = fixCommission.referenceValue(cededUwInfo)

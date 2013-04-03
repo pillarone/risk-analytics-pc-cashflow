@@ -29,7 +29,6 @@ class GrossClaimRootTests extends GroovyTestCase {
         claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
                 date20110418, date20110701, payoutPattern, payoutPattern)
         assertTrue 'same pattern (same instance)', claimRoot.hasSynchronizedPatterns()
-        println claimRoot.toString()
     }
 
     void testGetClaimCashflowPackets() {

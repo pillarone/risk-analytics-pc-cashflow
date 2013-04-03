@@ -99,8 +99,7 @@ environments {
             info()
             debug()
 
-            warn 'org.grails.plugins.excelimport.DefaultImportCellCollector',
-                 'org.grails.plugins.excelimport.ExcelImportUtils'
+            warn 'org.grails.plugins.excelimport.DefaultImportCellCollector'
         }
     }
     mysql {

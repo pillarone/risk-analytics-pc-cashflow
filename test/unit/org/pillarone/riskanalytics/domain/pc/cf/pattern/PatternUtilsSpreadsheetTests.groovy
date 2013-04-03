@@ -86,13 +86,13 @@ class PatternUtilsSpreadsheetTests extends SpreadsheetUnitTest {
             int index = 0
             for (ClaimCashflowPacket claim : claims) {
                 if (claim.ultimate() > 0) {
-                    println "${importer.fileName}\n\tultimate @ ${claim.occurrenceDate} ${claim.ultimate()}"
+                    LOG.info "${importer.fileName}\n\tultimate @ ${claim.occurrenceDate} ${claim.ultimate()}"
                     assertEquals "ultimate$index", ultimate, claim.ultimate()
                     assertEquals "occurrence date", occurrenceDate, claim.occurrenceDate
                     index++
                 }
                 else {
-                    println "\tincremental$index @ ${claim.getUpdateDate()} ${claim.getPaidIncrementalIndexed()}"
+                    LOG.info "\tincremental$index @ ${claim.getUpdateDate()} ${claim.getPaidIncrementalIndexed()}"
                 }
                 if (claim.getPaidIncrementalIndexed() > 0) {
                     assertEquals "incremental$index @ ${claim.getUpdateDate()}", payments[index]['futurePayment'], claim.getPaidIncrementalIndexed(), EPSILON

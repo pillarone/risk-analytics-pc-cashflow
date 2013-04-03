@@ -74,7 +74,7 @@ class ClaimCashflowPacketSpreadsheetTests extends SpreadsheetUnitTest {
         assertEquals "$sheet $number developed ultimate", expectedClaim.developedUltimate, claim.developedUltimate(), EPSILON
     }
 
-    private Map claimsSheetStructure(String sheet) {
+    private static Map claimsSheetStructure(String sheet) {
         [
                 sheet: sheet, startRow: 0, // startRow counting starts at 0, first line with content
                 columnMap: ['A': 'rowHeader', 'B': 'Dev0', 'C': 'Dev1', 'D': 'Dev2', 'E': 'Dev3', 'F': 'Dev4']
