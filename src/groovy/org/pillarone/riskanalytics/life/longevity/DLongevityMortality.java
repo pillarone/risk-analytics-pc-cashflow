@@ -5,7 +5,6 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 
-import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -77,18 +76,18 @@ public class DLongevityMortality extends AbstractParameterObject implements IMor
     }
 
     public IMortalityTable getBusinessActualMortality() {
-        return new ActualMortalityTable(actualMortalityRate, 2010d);
+        return new ActualMortalityTable(actualMortalityRate, 2011d, "actualMortalityRate");
     }
 
     public IMortalityTable getBusinessHistoricMortality() {
-        return new HistoricMortalityTable(historicMortalityRates);
+        return new HistoricMortalityTable(historicMortalityRates, "Historic Mortality Rates");
     }
 
     public IMortalityTable getBusinessMortalityRates() {
-        return new ActualMortalityTable(mortalityRates, 2010d);
+        return new SafeActualMortalityTable(mortalityRates, 2010d, "Schedule A rates");
     }
 
     public IMortalityTable getBusinessMortalityRate2010() {
-        return null;
+        return new SafeActualMortalityTableLimitAge(mortalityRate2010, 2010d, "Mortality Table 2010 rates");
     }
 }

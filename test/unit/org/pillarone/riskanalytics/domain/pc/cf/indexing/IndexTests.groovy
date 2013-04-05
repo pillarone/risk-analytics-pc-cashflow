@@ -94,9 +94,9 @@ class IndexTests extends GroovyTestCase {
                         ConstraintsFactory.getConstraints(AnnualIndexTableConstraints.IDENTIFIER))]))
         index.doCalculation()
 
-        double factor1 = Math.pow(1.0094,22d/365d)
-        double factor2 = Math.pow(1.0188,291d/365d+346d/366d)
-        double factor3 = Math.pow(1.0267,20d/366d+110d/365d)
+        double factor1 = /* Math.pow(1.0094,22d/365d) */ 0.0094d
+        double factor2 = /* Math.pow(1.0188,291d/365d+346d/366d) */ 0.0188d
+        double factor3 = /* Math.pow(1.0267,20d/366d+110d/365d) */ 0.0267d
         assertEquals "number of packet", 1, index.outFactors.size()
         assertEquals "factor for 2001-01-01", 1d, index.outFactors[0].getFactorAtDate(date20010101), EPSILON
         assertEquals "factor for 2002-01-01", 1.0222, index.outFactors[0].getFactorAtDate(date20020101), EPSILON

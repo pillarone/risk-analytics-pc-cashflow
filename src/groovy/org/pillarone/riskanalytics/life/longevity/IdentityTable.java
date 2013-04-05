@@ -5,8 +5,9 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 /**
  * author simon.parten @ art-allianz . com
  */
-public class HistoricMortalityTable extends AbstractMortalityTable {
-    public HistoricMortalityTable(ConstrainedMultiDimensionalParameter guiTable, String name) {
-        super(guiTable, name);
+public class IdentityTable implements IMortalityTable {
+
+    public IMortalityTableEntry getMortalityObject(Double age, Double year) {
+        return new MortalityTableEntry(age, year, 1d);
     }
 }

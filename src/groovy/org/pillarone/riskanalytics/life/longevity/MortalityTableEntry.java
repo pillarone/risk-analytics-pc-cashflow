@@ -12,4 +12,5 @@ public class MortalityTableEntry extends AbstractMortalityEntry {
     public MortalityTableEntry(AgeYearKey ageYearKey, double mortalityRate) {
         super(ageYearKey, mortalityRate);
     }
+
 }

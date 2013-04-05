@@ -36,6 +36,8 @@ public class AbstractMortalityEntry implements IMortalityTableEntry {
 
     @Override
     public String toString() {
-        return "Rate : " + mortalityRate + "  " + ageYearKey.toString();
+        return "mortalityRate=" + mortalityRate +
+                ",{ageYearKey=" + ageYearKey +
+                '}';
     }
 }

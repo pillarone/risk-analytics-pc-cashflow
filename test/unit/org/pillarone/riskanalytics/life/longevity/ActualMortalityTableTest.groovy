@@ -9,22 +9,27 @@ class ActualMortalityTableTest extends GroovyTestCase {
 
     private ConstrainedMultiDimensionalParameter  testTable = new
     ConstrainedMultiDimensionalParameter(
-            org.pillarone.riskanalytics.core.util.GroovyUtils.toList([[0.5, 1.5, 2.5], [0.2, 0.3, 0.4]]),
+            [[0.5d, 1.5d, 2.5d], [0.2d, 0.3d, 0.4d]],
             MortalityRatesConstraints.columnnHeaders,
-            MortalityRatesConstraints.class,
+            new MortalityRatesConstraints()
 
     )
 
-     private void testHistoricTableConstruction() {
+     void testActualTableConstruction() {
          Double year = 2010d
-         IMortalityTable actualMortalityTable = new ActualMortalityTable(testTable, year)
+         IMortalityTable actualMortalityTable = new ActualMortalityTable(testTable, year, "aName")
          IMortalityTableEntry anEntry = actualMortalityTable.getMortalityObject(0.5d, year)
          assert anEntry.getAge() == 0.5d
          assert anEntry.getYear() == 2010
          assert anEntry.mortalityRate() == 0.2
-
      }
 
+    void testHistoricTableConstruction(){
 
+    }
 
+    void testIdentityTable(){
+        IMortalityTable identity = new IdentityTable()
+        assert 1 == identity.getMortalityObject(25, 2010 ).mortalityRate()
+    }
 }

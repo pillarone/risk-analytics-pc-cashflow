@@ -6,7 +6,7 @@ import org.pillarone.riskanalytics.life.Gender
 /**
  *   author simon.parten @ art-allianz . com
  */
-class PolicyContraints extends MDPConstraintsHelper {
+class PolicyConstraints extends MDPConstraintsHelper {
 
         public static final String IDENTIFIER = "Longevity Policy Constraints"
 
@@ -19,21 +19,21 @@ class PolicyContraints extends MDPConstraintsHelper {
         public static final Integer SPOUSE_GENDER_COLUMN = 6
 
         public static final Class AGE = Integer
-        public static final Class GENDER = Gender
+        public static final Class GENDER = String
         public static final Class RETIREMENT_YEAR = Integer
         public static final Class MEMBER_ANNUITY_VALUE = Double
         public static final Class SPOUSE_ANNUITY = Double
         public static final Class SPOUSE_AGE = Integer
-        public static final Class SPOUSE_GENDER = Gender
+        public static final Class SPOUSE_GENDER = String
 
     public static final Map<Integer, Class> classMapper = [
-        (PolicyContraints.AGE_COLUMN )              : AGE ,
-        (PolicyContraints.GENDER_COLUMN )           : GENDER ,
-        (PolicyContraints.RETIREMENT_YEAR_COLUMN )  : RETIREMENT_YEAR ,
-        (PolicyContraints.MEMBER_ANNUITY_COLUMN )   : MEMBER_ANNUITY_VALUE ,
-        (PolicyContraints.SPOUSE_ANNUITY_COLUMN )   : SPOUSE_ANNUITY ,
-        (PolicyContraints.SPOUSE_AGE_COLUMN )       : SPOUSE_AGE ,
-        (PolicyContraints.SPOUSE_GENDER_COLUMN )     : SPOUSE_GENDER ,
+        (PolicyConstraints.AGE_COLUMN )              : AGE ,
+        (PolicyConstraints.GENDER_COLUMN )           : GENDER ,
+        (PolicyConstraints.RETIREMENT_YEAR_COLUMN )  : RETIREMENT_YEAR ,
+        (PolicyConstraints.MEMBER_ANNUITY_COLUMN )   : MEMBER_ANNUITY_VALUE ,
+        (PolicyConstraints.SPOUSE_ANNUITY_COLUMN )   : SPOUSE_ANNUITY ,
+        (PolicyConstraints.SPOUSE_AGE_COLUMN )       : SPOUSE_AGE ,
+        (PolicyConstraints.SPOUSE_GENDER_COLUMN )     : SPOUSE_GENDER ,
     ]
 
     public static List<String> columnnHeaders = ['Age', 'Gender','Retirement Year','Member Annuity','Spouse Annuity','Spouse Age','Spouse Gender', ]

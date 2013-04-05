@@ -1,8 +1,11 @@
 package org.pillarone.riskanalytics.domain.pc.cf.indexing;
 
+import com.google.common.collect.Maps;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.pillarone.riskanalytics.core.packets.Packet;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -12,17 +15,36 @@ import java.util.TreeMap;
  */
 public class FactorsPacket extends Packet {
 
-    private TreeMap<DateTime, Double> factorsPerDate = new TreeMap<DateTime, Double>();
+    private final TreeMap<DateTime, Double> incrementalFactors;
+    private TreeMap<DateTime, Double> cumulativeFactorsPerDate = new TreeMap<DateTime, Double>();
 
     public FactorsPacket() {
+        incrementalFactors = Maps.newTreeMap();
     }
 
     public FactorsPacket(DateTime date, double factor) {
+        incrementalFactors = Maps.newTreeMap();
         add(date, factor);
     }
 
     public void add(DateTime date, double factor) {
         getFactorsPerDate().put(date, factor);
+    }
+
+    public void add(DateTime date, double cumulativeFactor, double incrementalFactor){
+        if(incrementalFactors.containsKey(date)) {
+            throw new SimulationException("Attempted to add incrementalFactor which already exists at date : " + DateTimeUtilities.formatDate.print(date) + ". Check your index table and Contact development");
+        }
+        incrementalFactors.put(date, incrementalFactor);
+        add(date, cumulativeFactor);
+    }
+
+    public Double getIncrementalFactor(DateTime date) {
+        Double incFactor = incrementalFactors.get(date);
+        if(incFactor == null) {
+            throw new SimulationException("Attempted to lookup incremental Factor which does not exist at date : " + DateTimeUtilities.formatDate.print(date) + ". Check your index table and Contact development");
+        }
+        return incFactor;
     }
 
     public Double getFactorAtDate(DateTime date) {
@@ -74,10 +96,10 @@ public class FactorsPacket extends Packet {
      * contains absolute factors per date
      */
     public TreeMap<DateTime, Double> getFactorsPerDate() {
-        return factorsPerDate;
+        return cumulativeFactorsPerDate;
     }
 
     public void setFactorsPerDate(TreeMap<DateTime, Double> factorsPerDate) {
-        this.factorsPerDate = factorsPerDate;
+        this.cumulativeFactorsPerDate = factorsPerDate;
     }
 }

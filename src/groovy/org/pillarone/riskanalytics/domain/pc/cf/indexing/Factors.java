@@ -35,6 +35,10 @@ public class Factors {
         }
     }
 
+    public Double getIncrementalFactor(DateTime date) {
+        return packet.getIncrementalFactor(date);
+    }
+
     /**
      * Evaluates the baseDate property to define the evaluation date of getFactor(date)
      * @param periodCounter

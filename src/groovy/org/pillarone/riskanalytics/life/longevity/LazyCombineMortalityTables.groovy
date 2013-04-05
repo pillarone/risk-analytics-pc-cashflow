@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * author simon.parten @ art-allianz . com
  */
-public class LazyCombineMortalityTables implements IMortalityTable {
+public class LazyCombineMortalityTables /* implements IMortalityTable */ {
 
     final Map<AgeYearKey, IMortalityTableEntry> cacheTable;
 

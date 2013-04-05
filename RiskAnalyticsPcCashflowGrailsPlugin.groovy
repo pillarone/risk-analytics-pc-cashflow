@@ -56,7 +56,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.a
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.PaidAdditionalPremium
 import org.pillarone.riskanalytics.life.longevity.HistoricMortalityRatesConstraints
 import org.pillarone.riskanalytics.life.longevity.MortalityRatesConstraints
-import org.pillarone.riskanalytics.life.longevity.PolicyContraints
+import org.pillarone.riskanalytics.life.longevity.PolicyConstraints
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
@@ -116,7 +116,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new ReinsuranceContractContraints())
         ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
         ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
-        ConstraintsFactory.registerConstraint(new PolicyContraints())
+        ConstraintsFactory.registerConstraint(new PolicyConstraints())
         ConstraintsFactory.registerConstraint(new MortalityRatesConstraints())
         ConstraintsFactory.registerConstraint(new HistoricMortalityRatesConstraints())
 

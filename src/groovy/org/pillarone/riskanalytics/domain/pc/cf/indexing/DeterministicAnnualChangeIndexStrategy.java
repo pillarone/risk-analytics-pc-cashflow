@@ -54,13 +54,15 @@ public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObj
                 for (int row = changes.getTitleRowCount(); row < changes.getRowCount(); row++) {
                     DateTime date = (DateTime) changes.getValueAt(row, dateColumnIndex);
                     double change = InputFormatConverter.getDouble(changes.getValueAt(row, changeColumnIndex));
-                    factorProduct *= incrementalFactor(formerDate, formerChange, date);
-                    factors.add(date, factorProduct);
+                    double incFactor = 1 + formerChange;
+                    factorProduct *= incFactor;
+                    factors.add(date, factorProduct, incFactor);
                     formerDate = date;
                     formerChange = change;
                 }
                 DateTime nextDate = formerDate.plus(Period.years(1));
-                factors.add(nextDate, factorProduct * incrementalFactor(formerDate, formerChange, nextDate));
+                double incFactor =  1 + formerChange;
+                factors.add(nextDate, factorProduct, incFactor );
                 factors.origin = origin;
             }
             else {

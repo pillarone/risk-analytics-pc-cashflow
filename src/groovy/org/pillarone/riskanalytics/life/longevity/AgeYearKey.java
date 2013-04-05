@@ -47,6 +47,9 @@ public class AgeYearKey {
 
     @Override
     public String toString() {
-        return "(Age: " + age + "/ (Year : " + year + ")";
+        return "AgeYearKey{" +
+                "age=" + age +
+                ", year=" + year +
+                '}';
     }
 }

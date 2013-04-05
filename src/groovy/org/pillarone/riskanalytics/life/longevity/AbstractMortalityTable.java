@@ -14,8 +14,10 @@ import java.util.Map;
 public class AbstractMortalityTable implements IMortalityTable {
 
     final Map<AgeYearKey, IMortalityTableEntry> table;
+    final String name;
 
-    public AbstractMortalityTable(ConstrainedMultiDimensionalParameter guiTable) {
+    public AbstractMortalityTable(ConstrainedMultiDimensionalParameter guiTable, String name) {
+        this.name = name;
         List<String> columnHeaders = (List<String>) guiTable.getColumnNames();
 
         HashMap<AgeYearKey, IMortalityTableEntry> tableEntries = Maps.newHashMap();
@@ -32,7 +34,8 @@ public class AbstractMortalityTable implements IMortalityTable {
         this.table = Collections.unmodifiableMap(tableEntries);
     }
 
-    public AbstractMortalityTable(ConstrainedMultiDimensionalParameter guiTable, Double year) {
+    public AbstractMortalityTable(ConstrainedMultiDimensionalParameter guiTable, Double year, String name) {
+        this.name = name;
         HashMap<AgeYearKey, IMortalityTableEntry> tableEntries = Maps.newHashMap();
             for (int i = 1; i <= guiTable.getValueRowCount(); i++) {
                 Double age = (Double) guiTable.getValueAt(i, 0);
@@ -46,5 +49,13 @@ public class AbstractMortalityTable implements IMortalityTable {
 
     public IMortalityTableEntry getMortalityObject(Double age, Double year) {
         return table.get(new AgeYearKey(age, year));
+    }
+
+    @Override
+    public String toString() {
+        return "" +
+                "name='" + name +
+                ", table=" + table + '\''
+                ;
     }
 }
