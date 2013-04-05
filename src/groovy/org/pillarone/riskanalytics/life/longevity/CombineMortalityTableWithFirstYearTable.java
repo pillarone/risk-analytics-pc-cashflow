@@ -29,9 +29,9 @@ public class CombineMortalityTableWithFirstYearTable implements IMortalityTable 
         if (year == 2010d) {
             return entry2010;
         }
-//        if(cacheTable.containsKey(new AgeYearKey(age, year))) {
-//            return cacheTable.get(new AgeYearKey(age, year));
-//        }
+        if(cacheTable.containsKey(new AgeYearKey(age, year))) {
+            return cacheTable.get(new AgeYearKey(age, year));
+        }
 
         IMortalityTableEntry mortalityTableEntry = allYearTable.getMortalityObject(age, year);
         if(mortalityTableEntry == null) {
