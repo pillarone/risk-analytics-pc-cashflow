@@ -60,7 +60,7 @@ import org.pillarone.riskanalytics.life.longevity.PolicyConstraints
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.7"
+    def version = "0.7-longevity"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.2.1 > *"
     // the other plugins this plugin depends on
