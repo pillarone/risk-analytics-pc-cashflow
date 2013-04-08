@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.global
 
+import org.apache.commons.lang.NotImplementedException
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
@@ -43,19 +44,18 @@ class ProjectionPeriodType extends AbstractParameterObjectClassifier {
     }
 
     public static IProjectionPeriodStrategy getDefault() {
-        return ProjectionPeriodType.getStrategy(ProjectionPeriodType.COMPLETEROLLOUT, [:])
+        return new RestrictedProjectionPeriodStrategy(number : 5)
     }
 
     public static IProjectionPeriodStrategy getStrategy(ProjectionPeriodType type, Map parameters) {
         IProjectionPeriodStrategy strategy;
         switch (type) {
             case ProjectionPeriodType.COMPLETEROLLOUT:
-                strategy = new CompleteRolloutProjectionPeriodStrategy()
-                break
+                return new CompleteRolloutProjectionPeriodStrategy()
             case ProjectionPeriodType.PERIODS:
-                strategy = new RestrictedProjectionPeriodStrategy(number : parameters[NUMBER_OF_PERIODS])
-                break
+                return new RestrictedProjectionPeriodStrategy(number : parameters[NUMBER_OF_PERIODS])
+            default:
+                throw new NotImplementedException("ProjectionPeriodType " + type.toString() + " not implemented.");
         }
-        return strategy;
     }
 }

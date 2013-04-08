@@ -102,11 +102,9 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         assertTrue "P0, index effect on paid claim", -50 == claimsGenerator.outClaims[0].paidIncrementalIndexed
 
         doCalculationNextPeriod(claimsGenerator)
-        println claimsGenerator.outClaims[0].paidIncrementalIndexed
         assertEquals "P1, index effect on paid claim", 1.0193266424, claimsGenerator.outClaims[0].paidIncrementalIndexed / -30, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        println claimsGenerator.outClaims[0].paidIncrementalIndexed
         assertEquals "P2, index effect on paid claim", 1.0382897717, claimsGenerator.outClaims[0].paidIncrementalIndexed / -20, EPSILON
     }
 
@@ -146,11 +144,9 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         assertEquals "P0, index effect on paid claim", 1.02, claimsGenerator.outClaims[0].paidIncrementalIndexed / -50, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        println claimsGenerator.outClaims[0].paidIncrementalIndexed
         assertEquals "P1, index effect on paid claim", 1.0447690628, claimsGenerator.outClaims[0].paidIncrementalIndexed / -30, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        println claimsGenerator.outClaims[0].paidIncrementalIndexed
         assertEquals "P2, index effect on paid claim", 1.0649609409, claimsGenerator.outClaims[0].paidIncrementalIndexed / -20, EPSILON
     }
 
@@ -191,11 +187,9 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         assertEquals "P0, index effect on paid claim", 1.0242833949, claimsGenerator.outClaims[0].paidIncrementalIndexed / -50, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        println claimsGenerator.outClaims[0].paidIncrementalIndexed
         assertEquals "P1, index effect on paid claim", 1.0440793538, claimsGenerator.outClaims[0].paidIncrementalIndexed / -30, EPSILON
 
         doCalculationNextPeriod(claimsGenerator)
-        println claimsGenerator.outClaims[0].paidIncrementalIndexed
         assertEquals "P2, index effect on paid claim", 1.0635029722, claimsGenerator.outClaims[0].paidIncrementalIndexed / -20, EPSILON
     }
 

@@ -47,7 +47,7 @@ class GraphTests extends GroovyTestCase {
         assertEquals 'number of nodes', 2, graph.getNodes().size()
     }
 
-    private def print(Graph graph) {
+    private static def print(Graph graph) {
         for (Node node: graph.getNodes()) {
             println "$node ancestors ${node.getAncestors()}"
             println "$node parents ${node.getParents()}"

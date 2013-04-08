@@ -31,6 +31,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.structure.Structures
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.*
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.RetrospectiveReinsuranceContracts
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -151,6 +152,16 @@ class GIRAModel extends StochasticModel {
 
     @Override
     List<IParameterObjectClassifier> configureClassifier(String path, List<IParameterObjectClassifier> classifiers) {
+        if (path.matches("claimsGenerators:(.*):parmClaimsModel:occurrenceDateDistribution")) {
+            return [
+                    DistributionType.DISCRETEEMPIRICALCUMULATIVE,
+                    DistributionType.DISCRETEEMPIRICAL,
+                    DistributionType.CONSTANTS,
+                    DistributionType.CONSTANT,
+                    DistributionType.UNIFORM,
+                    DistributionType.PIECEWISELINEAR
+            ]
+        }
         if (path.matches("reinsuranceContracts:(.*):parmCover")) {
             return [
                     CoverAttributeStrategyType.NONE,

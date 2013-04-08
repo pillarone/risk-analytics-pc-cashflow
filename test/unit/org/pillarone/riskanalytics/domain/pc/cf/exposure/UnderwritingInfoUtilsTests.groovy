@@ -49,7 +49,6 @@ class UnderwritingInfoUtilsTests extends GroovyTestCase {
         List<UnderwritingInfoPacket> originalUnderwritingInfoPackets = [segmentFireUwInfo, segmentMotorUwInfo, quoteFireUwInfo]
 
         List<UnderwritingInfoPacket> aggregateBySegment = UnderwritingInfoUtils.aggregateBySegment(originalUnderwritingInfoPackets)
-        println aggregateBySegment
         assert segmentMotorUwInfo, aggregateBySegment[1]            // 'segment motor unmodified'
         assert segmentFire, aggregateBySegment[0].segment
         assert 2500d, aggregateBySegment[0].premiumWritten

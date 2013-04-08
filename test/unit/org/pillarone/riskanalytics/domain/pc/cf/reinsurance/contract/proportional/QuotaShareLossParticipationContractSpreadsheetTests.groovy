@@ -1,7 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional
 
 import org.apache.commons.lang.builder.HashCodeBuilder
-
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.joda.time.DateTime
 
 import org.joda.time.Period
@@ -44,6 +45,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPa
  */
 class QuotaShareLossParticipationContractSpreadsheetTests extends SpreadsheetUnitTest {
 
+    static Log LOG = LogFactory.getLog(QuotaShareLossParticipationContractSpreadsheetTests.class);
+
     void doSetUp() {
         ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
     }
@@ -73,14 +76,14 @@ class QuotaShareLossParticipationContractSpreadsheetTests extends SpreadsheetUni
             for (ClaimCashflowPacket cededClaim : contract.outClaimsCeded) {
                 ReferenceClaim referenceClaim = cededReferenceClaims.get(cededClaim)
                 if (Math.abs(referenceClaim.paid - cededClaim.paidCumulatedIndexed) > EPSILON) {
-                    println "[${importer.fileName}] correct ceded paid ${referenceClaim.dateSummary()} ${referenceClaim.paid}, ${cededClaim.paidCumulatedIndexed}"
+                    LOG.info "[${importer.fileName}] correct ceded paid ${referenceClaim.dateSummary()} ${referenceClaim.paid}, ${cededClaim.paidCumulatedIndexed}"
                 }
                 assertEquals "[${importer.fileName}] correct ceded paid ${referenceClaim.dateSummary()}", referenceClaim.paid, cededClaim.paidCumulatedIndexed, EPSILON
             }
             for (CededUnderwritingInfoPacket cededUwInfo : contract.outUnderwritingInfoCeded) {
                 ReferenceUwInfo referenceUwInfo = cededReferenceUnderwritingInfos.get(cededUwInfo)
                 if (Math.abs(referenceUwInfo.commission - cededUwInfo.commission) > EPSILON) {
-                    println "[${importer.fileName}] commission total ${cededUwInfo.exposure.inceptionDate} ${cededUwInfo.commission}"
+                    LOG.info "[${importer.fileName}] commission total ${cededUwInfo.exposure.inceptionDate} ${cededUwInfo.commission}"
                 }
 //                assertEquals "[${importer.fileName}] correct commission ${referenceUwInfo.dateSummary()}", referenceUwInfo.commission, cededUwInfo.commission, EPSILON
             }

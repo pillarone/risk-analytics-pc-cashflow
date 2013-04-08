@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance
 
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.core.components.IComponentMarker
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
@@ -32,6 +34,9 @@ import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBa
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
 
 class MatrixReinsuranceContractsTests extends GroovyTestCase {
+
+    static Log LOG = LogFactory.getLog(MatrixReinsuranceContractsTests.class);
+
     def params
     ClaimsGenerator claimGeneratorCat
     ClaimsGenerator claimGeneratorFireLarge
@@ -379,7 +384,7 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
         List cededProbe2 = new TestProbe(treatyWithBenefit, 'outClaimsCeded').result
 
         claimGeneratorCat.start()
-        println contracts
+        LOG.info contracts
         assert 1 == netProbe1.size()
         assert 1 == cededProbe1.size()
         def expectedCededUltimate = 84d

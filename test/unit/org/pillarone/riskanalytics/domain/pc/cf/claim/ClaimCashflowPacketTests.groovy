@@ -1,5 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim
 
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.pillarone.riskanalytics.core.simulation.TestPeriodCounterUtilities
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.joda.time.DateTime
@@ -18,6 +20,7 @@ import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarke
  */
 class ClaimCashflowPacketTests extends GroovyTestCase {
 
+    static Log LOG = LogFactory.getLog(ClaimCashflowPacketTests.class);
     public static final Double EPSILON = 1E-10
 
     PatternPacket annualReportingPattern = PatternPacketTests.getPattern([0, 12, 24, 36, 48], [0.0d, 0.7d, 0.8d, 0.95d, 1.0d])
@@ -272,9 +275,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period paid", 150, claims[claimNumber].paidIncrementalIndexed, EPSILON
         assertEquals "P$period outstandingIndexed", 0, claims[claimNumber].outstandingIndexed()
 
-        println "paid incrementals summed up ${claims.paidIncrementalIndexed.sum()}"
-        println "paid reported summed up ${claims.reportedIncrementalIndexed.sum()}"
-        println "developed ultimate ${claims[-1].developedUltimate()}"
+        LOG.info "paid incrementals summed up ${claims.paidIncrementalIndexed.sum()}"
+        LOG.info "paid reported summed up ${claims.reportedIncrementalIndexed.sum()}"
+        LOG.info "developed ultimate ${claims[-1].developedUltimate()}"
     }
 
     void testWithIBNRReportingStartsInFirstPeriod() {
@@ -366,9 +369,9 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period paid", 150, claims[claimNumber].paidIncrementalIndexed, EPSILON
         assertEquals "P$period outstandingIndexed", 0, claims[claimNumber].outstandingIndexed()
 
-        println "paid incrementals summed up ${claims.paidIncrementalIndexed.sum()}"
-        println "paid reported summed up ${claims.reportedIncrementalIndexed.sum()}"
-        println "developed ultimate ${claims[-1].developedUltimate()}"
+        LOG.info "paid incrementals summed up ${claims.paidIncrementalIndexed.sum()}"
+        LOG.info "paid reported summed up ${claims.reportedIncrementalIndexed.sum()}"
+        LOG.info "developed ultimate ${claims[-1].developedUltimate()}"
     }
 
     void testPayoutsAndIBNRWithIndex() {
@@ -468,10 +471,10 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         assertEquals "P$period IBNR_INDEXED", 0, claims[claimNumber].ibnrIndexed()
         assertEquals "P$period changeInIBNRIndexed", 0, claims[claimNumber].changeInIBNRIndexed
 
-        println "paid incrementals summed up ${claims.paidIncrementalIndexed.sum()}"
+        LOG.info "paid incrementals summed up ${claims.paidIncrementalIndexed.sum()}"
         // todo(sku): discuss, is currently lower as changes are applied earlier than for paids
-        println "paid reported summed up ${claims.reportedIncrementalIndexed.sum()}"
-        println "developed ultimate ${claims[-1].developedUltimate()}"
+        LOG.info "paid reported summed up ${claims.reportedIncrementalIndexed.sum()}"
+        LOG.info "developed ultimate ${claims[-1].developedUltimate()}"
     }
 
     // use case described in https://issuetracking.intuitive-collaboration.com/jira/browse/ART-687

@@ -1,0 +1,34 @@
+/*
+   Dummy stylesheet allowing for some customisation without having to
+   copy and modify the other stylesheets.
+*/
+#main.reference h1 {
+    color: #9F0404;
+}
+
+#table-of-content a:hover {
+    text-decoration: none;
+    border-right: 2px solid #9F0404;
+}
+
+a, a:hover, a:focus, a:active, a:hover, #main .project strong, #table-of-content a:hover strong,
+#table-of-content a strong, .menu .menu-block h1, .menu a:hover, .local .local-title .toggle a,
+#navigation #nav-summary-childs a:hover, #main h1, #main h2 {
+    color: #9F0404;
+}
+
+#navigation .selected a {
+    background: #9F0404;
+}
+
+#navigation a:hover {
+    background: #800404;
+}
+
+#navigation .selected a:hover, #navigation .active .button {
+    background: #9F0404;
+}
+
+.wiki-table th, #navigation {
+    background: #c00404 url(../../../target/docs/img/default/linear-gradient-green.png) repeat-x 0 0;
+}

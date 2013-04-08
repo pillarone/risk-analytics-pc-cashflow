@@ -1,6 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts
 
 import com.google.common.collect.ListMultimap
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
@@ -32,6 +34,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
  */
 class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
 
+    static Log LOG = LogFactory.getLog(StatelessSpreadsheetContractTests.class);
     static final double EPSILON = 1E-8
 
     static DateTime beginOfCover = new DateTime(2012, 1, 1, 0, 0, 0, 0)
@@ -122,7 +125,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                 'Test6',
         ]
         for (String sheet in sheets) {
-            println sheet
+            LOG.info sheet
             SpreadsheetImporter importer = importers[0]
             ListMultimap<Integer, Double> ultimatesPerPeriod = TermContractTestUtils.getUltimatesByPeriod(importer, sheet)
             PatternPacket payoutPattern = getPayoutPattern(importer, sheet)
@@ -211,11 +214,11 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
 
                 contract.inClaims.addAll claims
                 for (ClaimCashflowPacket grossClaim : claims) {
-                    println "gross $period $grossClaim"
+                    LOG.info "gross $period $grossClaim"
                 }
                 contract.doCalculation()
                 for (ClaimCashflowPacket cededClaim : contract.outClaimsCeded) {
-                    println "ceded $period $cededClaim"
+                    LOG.info "ceded $period $cededClaim"
                 }
 
                 if (contract.outClaimsCeded.size() > 0) {

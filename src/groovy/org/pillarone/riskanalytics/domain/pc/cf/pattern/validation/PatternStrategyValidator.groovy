@@ -91,7 +91,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
             PatternPacket payoutPattern = payoutPatterns[payoutPatternPerClaimsGenerator[claimsGeneratorPath]]
             TreeMap<Integer, Double> reportingValuesPerMonth = getCumulativeValuePerMonth(reportingPattern)
             TreeMap<Integer, Double> payoutValuesPerMonth = getCumulativeValuePerMonth(payoutPattern)
-            for (Map.Entry<Integer, Double> payoutEntry: payoutValuesPerMonth.entrySet()) {
+            for (Map.Entry<Integer, Double> payoutEntry: payoutValuesPerMonth?.entrySet()) {
                 if (payoutEntry.value <= reportingValuesPerMonth.floorEntry(payoutEntry.key).value + EPSILON) continue
                 ParameterValidationImpl error = new ParameterValidationImpl(ValidationType.ERROR,
                         'claims.generator.reporting.pattern.smaller.than.payout.pattern',
@@ -154,6 +154,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
 
         validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
             double[] values = type.cumulativePattern.getColumnByName(PatternStrategyType.CUMULATIVE2)
+            if (values.length == 0) return
             if (values[values.length - 1] == 1) return true
             [ValidationType.ERROR, "cumulative.pattern.error.last.value.not.one", values[values.length - 1]]
         }
@@ -195,6 +196,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PatternStrategyType.AGE_TO_AGE) {
             Map type ->
             double[] values = type.ageToAgePattern.getColumnByName(PatternStrategyType.LINK_RATIOS)
+            if (values.length == 0) return
             if (values[values.length - 1] == 1) return true
             [ValidationType.ERROR, "age.to.age.pattern.error.last.ratio.not.one", values[values.length - 1]]
         }
@@ -369,6 +371,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
             Map type ->
             double[] payoutValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_PAYOUT)
+            if (payoutValues.length == 0) return
             if (payoutValues[payoutValues.length - 1] == 1) return true
             [ValidationType.ERROR, "cumulative.combined.pattern.payout.error.last.value.not.one", payoutValues[payoutValues.length - 1]]
         }
@@ -376,6 +379,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
             Map type ->
             double[] reportedValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_REPORTED)
+            if (reportedValues.length == 0) return
             if (reportedValues[reportedValues.length - 1] == 1) return true
             [ValidationType.ERROR, "cumulative.combined.pattern.reported.error.last.value.not.one", reportedValues[reportedValues.length - 1]]
         }
@@ -460,6 +464,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PayoutReportingCombinedPatternStrategyType.AGE_TO_AGE) {
             Map type ->
             double[] reportedValues = type.ageToAgePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.LINK_RATIOS_REPORTED)
+            if (reportedValues.length == 0) return
             if (reportedValues[reportedValues.length - 1] == 1) return true
             [ValidationType.ERROR, "age.to.age.combined.pattern.error.last.reported.ratio.not.one", reportedValues[reportedValues.length - 1]]
         }
@@ -467,6 +472,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PayoutReportingCombinedPatternStrategyType.AGE_TO_AGE) {
             Map type ->
             double[] payoutValues = type.ageToAgePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.LINK_RATIOS_PAYOUT)
+            if (payoutValues.length == 0) return
             if (payoutValues[payoutValues.length - 1] == 1) return true
             [ValidationType.ERROR, "age.to.age.combined.pattern.error.last.payout.ratio.not.one", payoutValues[payoutValues.length - 1]]
         }
@@ -499,6 +505,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
             Map type ->
             double[] months = type.cumulativePattern.getColumnByName(PatternTableConstraints.MONTHS)
+            if (months.length == 0) return
             if (months[0] < 0) {
                 return [ValidationType.ERROR, "cumulative.combined.pattern.error.cumulative.months.not.non-negative", months[0]]
             }
@@ -519,7 +526,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PayoutReportingCombinedPatternStrategyType.INCREMENTAL) {
             Map type ->
             double[] months = type.incrementalPattern.getColumnByName(PatternTableConstraints.MONTHS)
-
+            if (months.length == 0) return
             if (months[0] < 0) {
                 return [ValidationType.ERROR, "incremental.combined.pattern.error.cumulative.months.not.non-negative", months[0]]
             }
@@ -540,7 +547,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PayoutReportingCombinedPatternStrategyType.AGE_TO_AGE) {
             Map type ->
             double[] months = type.ageToAgePattern.getColumnByName(PatternTableConstraints.MONTHS)
-
+            if (months.length == 0) return
             if (months[0] < 0) {
                 return [ValidationType.ERROR, "age.to.age.combined.pattern.error.cumulative.months.not.non-negative", months[0]]
             }
@@ -567,6 +574,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         }
         List<Period> periods = pattern.getCumulativePeriods()
         List<Double> values = pattern.getCumulativeValues()
+        if (periods.size() == 0) return
         for (int i = 0; i < periods.size(); i++) {
             valuePerMonth.put(periods[i].months, values[i])
         }
