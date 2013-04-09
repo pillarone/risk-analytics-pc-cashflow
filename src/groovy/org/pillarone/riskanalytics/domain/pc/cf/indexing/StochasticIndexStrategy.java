@@ -50,10 +50,10 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
         lazyInitGenerator(periodScope);
         Double filteredSeverity = filterSeverity(origin, eventStreams);
         // note: indexGenerator.getDistribution() yields the unmodified distribution; hence this is only correct if there is no DistributionModifier
-        double factor = filteredSeverity == null ? previousPeriodFactor * (1 + indexGenerator.nextValue().doubleValue()) :
-                previousPeriodFactor * (1 + indexGenerator.getDistribution().inverseF(filteredSeverity));
+        double incrementalFactor = filteredSeverity == null ? (1 + indexGenerator.nextValue().doubleValue()) : (1 + indexGenerator.getDistribution().inverseF(filteredSeverity));
+        double factor = previousPeriodFactor * incrementalFactor;
         previousPeriodFactor = factor;
-        factors.add(periodScope.getCurrentPeriodStartDate(), factor);
+        factors.add(periodScope.getCurrentPeriodStartDate(), factor, incrementalFactor);
         factors.origin = origin;
         return factors;
     }
