@@ -25,6 +25,7 @@ public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObj
 
     private ConstrainedMultiDimensionalParameter changes;
     private FactorsPacket factors;
+    private DateTimeUtilities.Days360 days360 = DateTimeUtilities.Days360.US;
 
 
     public IParameterObjectClassifier getType() {
@@ -54,15 +55,15 @@ public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObj
                 for (int row = changes.getTitleRowCount(); row < changes.getRowCount(); row++) {
                     DateTime date = (DateTime) changes.getValueAt(row, dateColumnIndex);
                     double change = InputFormatConverter.getDouble(changes.getValueAt(row, changeColumnIndex));
-                    double incFactor = 1 + formerChange;
+                    double incFactor = incrementalFactor(formerDate, formerChange, date);
                     factorProduct *= incFactor;
                     factors.add(date, factorProduct, incFactor);
                     formerDate = date;
                     formerChange = change;
                 }
                 DateTime nextDate = formerDate.plus(Period.years(1));
-                double incFactor =  1 + formerChange;
-                factors.add(nextDate, factorProduct, incFactor );
+                double incFactor =  incrementalFactor(formerDate, formerChange, nextDate);
+                factors.add(nextDate, factorProduct, incFactor);
                 factors.origin = origin;
             }
             else {
@@ -73,8 +74,8 @@ public class DeterministicAnnualChangeIndexStrategy extends AbstractParameterObj
 
     private double incrementalFactor(DateTime formerDate, double formerChange, DateTime date) {
         if (formerDate != null) {
-            double interestRate = DateTimeUtilities.getInterestRateForTimeInterval(formerChange, formerDate, date);
-            return 1d + interestRate;
+                double days360Length = days360.days360(formerDate, date);
+                return 1d + (formerChange * (days360Length / 360d));
         }
         return 1d;
     }
