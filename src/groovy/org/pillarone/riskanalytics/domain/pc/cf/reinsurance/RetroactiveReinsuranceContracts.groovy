@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance
 
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
+import org.pillarone.riskanalytics.core.components.Component
 import org.pillarone.riskanalytics.core.components.DynamicComposedComponent
 import org.pillarone.riskanalytics.core.packets.PacketList
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
@@ -174,5 +175,34 @@ class RetroactiveReinsuranceContracts extends DynamicComposedComponent {
         }
         LOG.debug("removed contracts: ${contractsWithNoCover.collectAll { it.normalizedName }}");
         componentList.size() > contractsWithNoCover.size()
+    }
+
+    private Map allProps = [:]
+    /**
+     * This has to be overridden so that dynamic sub components are recognized as properties.
+     * The values are cached because this method is called often. The cache is invalidated when a
+     * component is added or removed. In this case this is especially necessary to enable setting of periodScope in mergers
+     */
+    public Map getProperties() {
+        Map superProps = super.getProperties()
+        if (allProps == null) {
+            allProps.putAll(superProps)
+            for (Component component in claimMergers + uwInfoMergers) {
+                allProps[component.name] = component
+            }
+        }
+        return allProps
+    }
+
+    /**
+     *  Sub components are either properties on the component or in case
+     *  of dynamically composed components stored in its componentList.
+     *  @return all sub components
+     */
+    public List<Component> allSubComponents() {
+        List<Component> subComponents = super.allSubComponents()
+        subComponents.addAll(claimMergers)
+        subComponents.addAll(uwInfoMergers)
+        return subComponents
     }
 }

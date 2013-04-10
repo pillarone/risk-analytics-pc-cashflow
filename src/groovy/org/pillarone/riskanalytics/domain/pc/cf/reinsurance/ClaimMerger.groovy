@@ -3,6 +3,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.core.components.Component
 import org.pillarone.riskanalytics.core.packets.PacketList
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils
@@ -10,6 +12,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixCoverAttributeStrategy
 
 class ClaimMerger extends Component {
+
     PacketList<ClaimCashflowPacket> inClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> inClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
@@ -22,10 +25,14 @@ class ClaimMerger extends Component {
     MatrixCoverAttributeStrategy coverAttributeStrategy
 
     Map<IClaimRoot, IClaimRoot> baseClaimByKeyClaim = [:]
-
+    PeriodScope periodScope
 
     @Override
     protected void doCalculation() {
+        if (periodScope.firstPeriod) {
+            // claims need to be kept only within one iteration
+            baseClaimByKeyClaim.clear()
+        }
         filterNetAndCededClaims()
         // TODO (dbe) make more robust, e.g. no gross found.
         if (isReceiverWired(inClaimsGross)) {
@@ -167,11 +174,6 @@ class ClaimMerger extends Component {
 
     private boolean onlyNetAndNoCededContractsCovered() {
         coverAttributeStrategy.coveredNetOfContracts().size() > 0 && coverAttributeStrategy.coveredCededOfContracts().size() == 0
-    }
-
-    protected void reset() {
-     super.reset()
-     baseClaimByKeyClaim.clear()
     }
 
     private filterNetAndCededClaims() {

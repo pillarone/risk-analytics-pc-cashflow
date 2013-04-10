@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.core.packets.PacketList
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.simulation.LimitedContinuousPeriodCounter
+import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.pillarone.riskanalytics.core.util.TestPretendInChannelWired
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
@@ -33,7 +34,7 @@ class ClaimMergerTests extends GrailsUnitTestCase {
     protected void setUp() {
         super.setUp()
         ConstraintsFactory.registerConstraint(new CoverMap())
-        merger = new ClaimMerger()
+        merger = new ClaimMerger(periodScope: TestPeriodScopeUtilities.getPeriodScope(new DateTime(2013,1,1,0,0,0,0), 5))
         merger.coverAttributeStrategy = setupStrategy()
         marker = new ClaimsGenerator(name: 'attritional')
         contract1 = new TermReinsuranceContract(name: 'contract1')
