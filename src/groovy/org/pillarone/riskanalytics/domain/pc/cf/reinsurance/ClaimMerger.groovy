@@ -155,6 +155,11 @@ class ClaimMerger extends Component {
         coverAttributeStrategy.coveredNetOfContracts().size() > 0 && coverAttributeStrategy.coveredCededOfContracts().size() == 0
     }
 
+    protected void reset() {
+     super.reset()
+     baseClaimByKeyClaim.clear()
+    }
+
     private filterNetAndCededClaims() {
         coverAttributeStrategy.coveredClaims(inClaimsNet, false)
         coverAttributeStrategy.coveredClaims(inClaimsCededForNet, false)
