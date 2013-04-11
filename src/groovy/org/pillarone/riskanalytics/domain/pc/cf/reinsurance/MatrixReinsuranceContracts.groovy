@@ -88,8 +88,8 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
         for (ReinsuranceContract contract : componentList) {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
             if (strategy?.mergerRequired()) {
-                ClaimMerger claimMerger = new ClaimMerger(coverAttributeStrategy: strategy, name: "preceeding ${contract.name}")
-                UnderwritingInfoMerger uwInfoMerger = new UnderwritingInfoMerger(coverAttributeStrategy: strategy, name: "preceeding ${contract.name}")
+                ClaimMerger claimMerger = new ClaimMerger(coverAttributeStrategy: strategy, name: "${contract.name}Preceeding")
+                UnderwritingInfoMerger uwInfoMerger = new UnderwritingInfoMerger(coverAttributeStrategy: strategy, name: "${contract.name}Preceeding")
                 claimMergers << claimMerger
                 uwInfoMergers << uwInfoMerger
                 List<IReinsuranceContractMarker> benefitContracts = strategy.benefitContracts
@@ -182,23 +182,6 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
         }
         LOG.debug("removed contracts: ${contractsWithNoCover.collectAll { it.normalizedName }}");
         componentList.size() > contractsWithNoCover.size()
-    }
-
-    private Map allProps = [:]
-    /**
-     * This has to be overridden so that dynamic sub components are recognized as properties.
-     * The values are cached because this method is called often. The cache is invalidated when a
-     * component is added or removed. In this case this is especially necessary to enable setting of periodScope in mergers
-     */
-    public Map getProperties() {
-        Map superProps = super.getProperties()
-        if (allProps == null) {
-            allProps.putAll(superProps)
-            for (Component component in claimMergers + uwInfoMergers) {
-                allProps[component.name] = component
-            }
-        }
-        return allProps
     }
 
     /**
