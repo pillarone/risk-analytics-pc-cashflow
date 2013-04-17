@@ -11,6 +11,7 @@ import java.util.Map;
 public class SingleMortalityTableTransform implements IMortalityTable {
 
     final Map<AgeYearKey, IMortalityTableEntry> cacheTable;
+    /** death probabilities */
     final IMortalityTable startTable;
     final String name;
 
@@ -22,6 +23,11 @@ public class SingleMortalityTableTransform implements IMortalityTable {
     }
 
 
+    /**
+     * @param age
+     * @param year
+     * @return survival probabilities
+     */
     public IMortalityTableEntry getMortalityObject(Double age, Double year) {
         double startYear = 2010d;
         if (cacheTable.containsKey(new AgeYearKey(age, year))) {
@@ -56,8 +62,8 @@ public class SingleMortalityTableTransform implements IMortalityTable {
 
         double survivalProbLast = Math.sqrt(1 - simulatedQxNexttYear.mortalityRate());
         double survivalProbThis = Math.sqrt(1 - simulatedQxThisYear.mortalityRate());
-        double survialProbability = survivalProbLast * survivalProbThis * priorYear.mortalityRate();
-        IMortalityTableEntry entry = new MortalityTableEntry(age, year, survialProbability);
+        double survivalProbability = survivalProbLast * survivalProbThis * priorYear.mortalityRate();
+        IMortalityTableEntry entry = new MortalityTableEntry(age, year, survivalProbability);
         cacheTable.put(entry.getAgeYearKey(), entry);
 
         return entry;
