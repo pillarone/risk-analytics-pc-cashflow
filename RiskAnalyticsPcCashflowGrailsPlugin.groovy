@@ -197,6 +197,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
 
 
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [CCP.ULTIMATE, CCP.PAID_INDEXED]))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE], [CCP.ULTIMATE, CCP.PAID_INDEXED]))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [CCP.ULTIMATE, CCP.PAID_INDEXED]))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_TYPE], [], [AdditionalPremium, PaidAdditionalPremium]))
     }

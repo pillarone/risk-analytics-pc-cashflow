@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exceptionUtils.ExceptionUtils;
@@ -93,6 +94,7 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                     cashflowClaimsForPeriodCheck.add(claimCashflowPacket);
                     doPaidLessThanIncurredCheck(sanityChecks, cededRoot, cumulatedCededForThisClaim, claimCashflowPacket);
                     setUltimate = false;
+                    ClaimUtils.applyMarkers(cashflowPacket, claimCashflowPacket);
                     claimsOfInterest.add(claimCashflowPacket);
 
                 }
