@@ -207,96 +207,128 @@ mappings = {
                     "ultimate" "ORSA:segments:[%segment%]:outClaimsNet:ultimate", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:ultimate"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:ultimate"
                         }
                     }
                     "totalCumulative" "ORSA:segments:[%segment%]:outClaimsNet:totalCumulativeIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:totalCumulativeIndexed"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:totalCumulativeIndexed"
                         }
                     }
                     "totalIncremental" "ORSA:segments:[%segment%]:outClaimsNet:totalIncrementalIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:totalIncrementalIndexed"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:totalIncrementalIndexed"
                         }
                     }
                     "reportedCumulativeIndexed" "ORSA:segments:[%segment%]:outClaimsNet:reportedCumulativeIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:reportedCumulativeIndexed"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:reportedCumulativeIndexed"
                         }
                     }
                     "reportedIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsNet:reportedIncrementalIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:reportedIncrementalIndexed"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:reportedIncrementalIndexed"
                         }
                     }
                     "paidCumulativeIndexed" "ORSA:segments:[%segment%]:outClaimsNet:paidCumulativeIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:paidCumulativeIndexed"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:paidCumulativeIndexed"
                         }
                     }
                     "paidIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsNet:paidIncrementalIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:paidIncrementalIndexed"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:paidIncrementalIndexed"
                         }
                     }
                     "outstandingIndexed" "ORSA:segments:[%segment%]:outClaimsNet:outstandingIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:outstandingIndexed"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:outstandingIndexed"
                         }
                     }
                     "changesInOutstandingIndexed" "ORSA:segments:[%segment%]:outClaimsNet:changesInOutstandingIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:changesInOutstandingIndexed"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:changesInOutstandingIndexed"
                         }
                     }
                     "IBNRIndexed" "ORSA:segments:[%segment%]:outClaimsNet:IBNRIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:IBNRIndexed"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:IBNRIndexed"
                         }
                     }
                     "changesInIBNRIndexed" "ORSA:segments:[%segment%]:outClaimsNet:changesInIBNRIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:changesInIBNRIndexed"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:changesInIBNRIndexed"
                         }
                     }
                     "reservesIndexed" "ORSA:segments:[%segment%]:outClaimsNet:reservesIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:reservesIndexed"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:reservesIndexed"
                         }
                     }
                     "changesInReservesIndexed" "ORSA:segments:[%segment%]:outClaimsNet:changesInReservesIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:changesInReservesIndexed"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:changesInReservesIndexed"
                         }
                     }
                     "premiumRiskBase" "ORSA:segments:[%segment%]:outClaimsNet:premiumRiskBase", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:premiumRiskBase"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:premiumRiskBase"
                         }
                     }
                     "reserveRiskBase" "ORSA:segments:[%segment%]:outClaimsNet:reserveRiskBase", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:reserveRiskBase"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:reserveRiskBase"
                         }
                     }
                     "premiumAndReserveRiskBase" "ORSA:segments:[%segment%]:outClaimsNet:premiumAndReserveRiskBase", {
                         "byPeril" {
                             "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsNet:premiumAndReserveRiskBase"
+                        }
+                        "byReserve" {
                             "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsNet:premiumAndReserveRiskBase"
                         }
                     }
@@ -304,96 +336,128 @@ mappings = {
                         "ultimate" "ORSA:segments:[%segment%]:outClaimsGross:ultimate", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:ultimate"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:ultimate"
                             }
                         }
                         "totalCumulative" "ORSA:segments:[%segment%]:outClaimsGross:totalCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:totalCumulativeIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:totalCumulativeIndexed"
                             }
                         }
                         "totalIncremental" "ORSA:segments:[%segment%]:outClaimsGross:totalIncrementalIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:totalIncrementalIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:totalIncrementalIndexed"
                             }
                         }
                         "reportedCumulativeIndexed" "ORSA:segments:[%segment%]:outClaimsGross:reportedCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:reportedCumulativeIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:reportedCumulativeIndexed"
                             }
                         }
                         "reportedIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsGross:reportedIncrementalIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:reportedIncrementalIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:reportedIncrementalIndexed"
                             }
                         }
                         "paidCumulativeIndexed" "ORSA:segments:[%segment%]:outClaimsGross:paidCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:paidCumulativeIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:paidCumulativeIndexed"
                             }
                         }
                         "paidIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsGross:paidIncrementalIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:paidIncrementalIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:paidIncrementalIndexed"
                             }
                         }
                         "outstandingIndexed" "ORSA:segments:[%segment%]:outClaimsGross:outstandingIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:outstandingIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:outstandingIndexed"
                             }
                         }
                         "changesInOutstandingIndexed" "ORSA:segments:[%segment%]:outClaimsGross:changesInOutstandingIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:changesInOutstandingIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:changesInOutstandingIndexed"
                             }
                         }
                         "IBNRIndexed" "ORSA:segments:[%segment%]:outClaimsGross:IBNRIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:IBNRIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:IBNRIndexed"
                             }
                         }
                         "changesInIBNRIndexed" "ORSA:segments:[%segment%]:outClaimsGross:changesInIBNRIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:changesInIBNRIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:changesInIBNRIndexed"
                             }
                         }
                         "reservesIndexed" "ORSA:segments:[%segment%]:outClaimsGross:reservesIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:reservesIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:reservesIndexed"
                             }
                         }
                         "changesInReservesIndexed" "ORSA:segments:[%segment%]:outClaimsGross:changesInReservesIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:changesInReservesIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:changesInReservesIndexed"
                             }
                         }
                         "premiumRiskBase" "ORSA:segments:[%segment%]:outClaimsGross:premiumRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:premiumRiskBase"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:premiumRiskBase"
                             }
                         }
                         "reserveRiskBase" "ORSA:segments:[%segment%]:outClaimsGross:reserveRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:reserveRiskBase"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:reserveRiskBase"
                             }
                         }
                         "premiumAndReserveRiskBase" "ORSA:segments:[%segment%]:outClaimsGross:premiumAndReserveRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsGross:premiumAndReserveRiskBase"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsGross:premiumAndReserveRiskBase"
                             }
                         }
@@ -402,6 +466,8 @@ mappings = {
                         "ultimate" "ORSA:segments:[%segment%]:outClaimsCeded:ultimate", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:ultimate"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:ultimate"
                             }
                             "byContract" {
@@ -411,6 +477,8 @@ mappings = {
                         "totalCumulative" "ORSA:segments:[%segment%]:outClaimsCeded:totalCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:totalCumulativeIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:totalCumulativeIndexed"
                             }
                             "byContract" {
@@ -420,6 +488,8 @@ mappings = {
                         "totalIncremental" "ORSA:segments:[%segment%]:outClaimsCeded:totalIncrementalIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:totalIncrementalIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:totalIncrementalIndexed"
                             }
                             "byContract" {
@@ -429,6 +499,8 @@ mappings = {
                         "reportedCumulativeIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:reportedCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:reportedCumulativeIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:reportedCumulativeIndexed"
                             }
                             "byContract" {
@@ -438,6 +510,8 @@ mappings = {
                         "reportedIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:reportedIncrementalIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:reportedIncrementalIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:reportedIncrementalIndexed"
                             }
                             "byContract" {
@@ -447,6 +521,8 @@ mappings = {
                         "paidCumulativeIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:paidCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:paidCumulativeIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:paidCumulativeIndexed"
                             }
                             "byContract" {
@@ -456,6 +532,8 @@ mappings = {
                         "paidIncrementalIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:paidIncrementalIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:paidIncrementalIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:paidIncrementalIndexed"
                             }
                             "byContract" {
@@ -465,6 +543,8 @@ mappings = {
                         "outstandingIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:outstandingIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:outstandingIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:outstandingIndexed"
                             }
                             "byContract" {
@@ -474,6 +554,8 @@ mappings = {
                         "changesInOutstandingIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:changesInOutstandingIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInOutstandingIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInOutstandingIndexed"
                             }
                             "byContract" {
@@ -483,6 +565,8 @@ mappings = {
                         "IBNRIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:IBNRIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:IBNRIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:IBNRIndexed"
                             }
                             "byContract" {
@@ -492,6 +576,8 @@ mappings = {
                         "changesInIBNRIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:changesInIBNRIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInIBNRIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInIBNRIndexed"
                             }
                             "byContract" {
@@ -501,6 +587,8 @@ mappings = {
                         "reservesIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:reservesIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:reservesIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:reservesIndexed"
                             }
                             "byContract" {
@@ -510,6 +598,8 @@ mappings = {
                         "changesInReservesIndexed" "ORSA:segments:[%segment%]:outClaimsCeded:changesInReservesIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInReservesIndexed"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInReservesIndexed"
                             }
                             "byContract" {
@@ -519,6 +609,8 @@ mappings = {
                         "premiumRiskBase" "ORSA:segments:[%segment%]:outClaimsCeded:premiumRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:premiumRiskBase"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:premiumRiskBase"
                             }
                             "byContract" {
@@ -528,6 +620,8 @@ mappings = {
                         "reserveRiskBase" "ORSA:segments:[%segment%]:outClaimsCeded:reserveRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:reserveRiskBase"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:reserveRiskBase"
                             }
                             "byContract" {
@@ -537,6 +631,8 @@ mappings = {
                         "premiumAndReserveRiskBase" "ORSA:segments:[%segment%]:outClaimsCeded:premiumAndReserveRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:claimsGenerators:[%peril%]:outClaimsCeded:premiumAndReserveRiskBase"
+                            }
+                            "byReserve" {
                                 "[%peril%]" "ORSA:segments:[%segment%]:reservesGenerators:[%peril%]:outClaimsCeded:premiumAndReserveRiskBase"
                             }
                             "byContract" {
@@ -599,6 +695,9 @@ mappings = {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:ultimate"
                     }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:ultimate"
+                    }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:ultimate"
                     }
@@ -606,6 +705,9 @@ mappings = {
                 "totalCumulative" "ORSA:legalEntities:[%legalEntity%]:outClaimsNet:totalCumulativeIndexed", {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:totalCumulativeIndexed"
+                    }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:totalCumulativeIndexed"
                     }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:totalCumulativeIndexed"
@@ -615,6 +717,9 @@ mappings = {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:totalIncrementalIndexed"
                     }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:totalIncrementalIndexed"
+                    }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:totalIncrementalIndexed"
                     }
@@ -622,6 +727,9 @@ mappings = {
                 "reportedCumulativeIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsNet:reportedCumulativeIndexed", {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:reportedCumulativeIndexed"
+                    }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:reportedCumulativeIndexed"
                     }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:reportedCumulativeIndexed"
@@ -631,6 +739,9 @@ mappings = {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:reportedIncrementalIndexed"
                     }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:reportedIncrementalIndexed"
+                    }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:reportedIncrementalIndexed"
                     }
@@ -638,6 +749,9 @@ mappings = {
                 "paidCumulativeIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsNet:paidCumulativeIndexed", {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:paidCumulativeIndexed"
+                    }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:paidCumulativeIndexed"
                     }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:paidCumulativeIndexed"
@@ -647,6 +761,9 @@ mappings = {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:paidIncrementalIndexed"
                     }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:paidIncrementalIndexed"
+                    }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:paidIncrementalIndexed"
                     }
@@ -654,6 +771,9 @@ mappings = {
                 "outstandingIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsNet:outstandingIndexed", {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:outstandingIndexed"
+                    }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:outstandingIndexed"
                     }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:outstandingIndexed"
@@ -663,6 +783,9 @@ mappings = {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:changesInOutstandingIndexed"
                     }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:changesInOutstandingIndexed"
+                    }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:changesInOutstandingIndexed"
                     }
@@ -670,6 +793,9 @@ mappings = {
                 "IBNRIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsNet:IBNRIndexed", {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:IBNRIndexed"
+                    }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:IBNRIndexed"
                     }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:IBNRIndexed"
@@ -679,6 +805,9 @@ mappings = {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:ultimate"
                     }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:ultimate"
+                    }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:ultimate"
                     }
@@ -686,6 +815,9 @@ mappings = {
                 "reservesIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsNet:reservesIndexed", {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:reservesIndexed"
+                    }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:reservesIndexed"
                     }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:reservesIndexed"
@@ -695,6 +827,9 @@ mappings = {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:changesInReservesIndexed"
                     }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:changesInReservesIndexed"
+                    }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:changesInReservesIndexed"
                     }
@@ -702,6 +837,9 @@ mappings = {
                 "premiumRiskBase" "ORSA:legalEntities:[%legalEntity%]:outClaimsNet:premiumRiskBase", {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:premiumRiskBase"
+                    }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:premiumRiskBase"
                     }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:premiumRiskBase"
@@ -711,6 +849,9 @@ mappings = {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:reserveRiskBase"
                     }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:reserveRiskBase"
+                    }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:reserveRiskBase"
                     }
@@ -718,6 +859,9 @@ mappings = {
                 "premiumAndReserveRiskBase" "ORSA:legalEntities:[%legalEntity%]:outClaimsNet:premiumAndReserveRiskBase", {
                     "byPeril" {
                         "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsNet:premiumAndReserveRiskBase"
+                    }
+                    "byReserve" {
+                        "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsNet:premiumAndReserveRiskBase"
                     }
                     "bySegment" {
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsNet:premiumAndReserveRiskBase"
@@ -729,6 +873,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:ultimate"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:ultimate"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:ultimate"
                             }
@@ -736,6 +883,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:ultimate", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:ultimate"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:ultimate"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:ultimate"
@@ -747,6 +897,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:totalCumulativeIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:totalCumulativeIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:totalCumulativeIndexed"
                             }
@@ -754,6 +907,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:totalCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:totalCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:totalCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:totalCumulativeIndexed"
@@ -765,6 +921,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:totalIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:totalIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:totalIncrementalIndexed"
                             }
@@ -772,6 +931,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:totalIncrementalIndexed", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:totalIncrementalIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:totalIncrementalIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:totalIncrementalIndexed"
@@ -783,6 +945,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:reportedCumulativeIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:reportedCumulativeIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:reportedCumulativeIndexed"
                             }
@@ -790,6 +955,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reportedCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:reportedCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:reportedCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:reportedCumulativeIndexed"
@@ -801,6 +969,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed"
                             }
@@ -808,6 +979,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reportedIncrementalIndexed", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:reportedIncrementalIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:reportedIncrementalIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:reportedIncrementalIndexed"
@@ -819,6 +993,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:paidCumulativeIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:paidCumulativeIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:paidCumulativeIndexed"
                             }
@@ -826,6 +1003,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:paidCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:paidCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:paidCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:paidCumulativeIndexed"
@@ -837,6 +1017,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:paidIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:paidIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:paidIncrementalIndexed"
                             }
@@ -844,6 +1027,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:paidIncrementalIndexed", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:paidIncrementalIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:paidIncrementalIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:paidIncrementalIndexed"
@@ -855,6 +1041,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:outstandingIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:outstandingIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:outstandingIndexed"
                             }
@@ -862,6 +1051,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:outstandingIndexed", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:outstandingIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:outstandingIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:outstandingIndexed"
@@ -873,6 +1065,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInOutstandingIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInOutstandingIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:changesInOutstandingIndexed"
                             }
@@ -880,6 +1075,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:changesInOutstandingIndexed", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:changesInOutstandingIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:changesInOutstandingIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:changesInOutstandingIndexed"
@@ -891,6 +1089,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:IBNRIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:IBNRIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:IBNRIndexed"
                             }
@@ -898,6 +1099,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:IBNRIndexed", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:IBNRIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:IBNRIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:IBNRIndexed"
@@ -909,6 +1113,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInIBNRIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInIBNRIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:changesInIBNRIndexed"
                             }
@@ -916,6 +1123,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:changesInIBNRIndexed", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:changesInIBNRIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:changesInIBNRIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:changesInIBNRIndexed"
@@ -927,6 +1137,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:reservesIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:reservesIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:reservesIndexed"
                             }
@@ -934,6 +1147,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reservesIndexed", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:reservesIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:reservesIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:reservesIndexed"
@@ -945,6 +1161,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInReservesIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInReservesIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:changesInReservesIndexed"
                             }
@@ -952,6 +1171,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:changesInReservesIndexed", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:changesInReservesIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:changesInReservesIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:changesInReservesIndexed"
@@ -963,6 +1185,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:premiumRiskBase"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:premiumRiskBase"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:premiumRiskBase"
                             }
@@ -970,6 +1195,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:premiumRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:premiumRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:premiumRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:premiumRiskBase"
@@ -981,6 +1209,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:reserveRiskBase"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:reserveRiskBase"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:reserveRiskBase"
                             }
@@ -988,6 +1219,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reserveRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:reserveRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:reserveRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:reserveRiskBase"
@@ -999,6 +1233,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:premiumAndReserveRiskBase"
                             }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:premiumAndReserveRiskBase"
+                            }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:premiumAndReserveRiskBase"
                             }
@@ -1006,6 +1243,9 @@ mappings = {
                         "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:premiumAndReserveRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:premiumAndReserveRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:premiumAndReserveRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:premiumAndReserveRiskBase"
@@ -1018,6 +1258,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:ultimate"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:ultimate"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:ultimate"
                         }
@@ -1028,6 +1271,9 @@ mappings = {
                     "totalCumulative" "ORSA:legalEntities:[%legalEntity%]:outClaimsCeded:totalCumulativeIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:totalCumulativeIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:totalCumulativeIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:totalCumulativeIndexed"
@@ -1040,6 +1286,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:totalIncrementalIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:totalIncrementalIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:totalIncrementalIndexed"
                         }
@@ -1050,6 +1299,9 @@ mappings = {
                     "reportedCumulativeIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsCeded:reportedCumulativeIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:reportedCumulativeIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:reportedCumulativeIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:reportedCumulativeIndexed"
@@ -1062,6 +1314,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:reportedIncrementalIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:reportedIncrementalIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:reportedIncrementalIndexed"
                         }
@@ -1072,6 +1327,9 @@ mappings = {
                     "paidCumulativeIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsCeded:paidCumulativeIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:paidCumulativeIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:paidCumulativeIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:paidCumulativeIndexed"
@@ -1084,6 +1342,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:paidIncrementalIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:paidIncrementalIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:paidIncrementalIndexed"
                         }
@@ -1094,6 +1355,9 @@ mappings = {
                     "outstandingIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsCeded:outstandingIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:outstandingIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:outstandingIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:outstandingIndexed"
@@ -1106,6 +1370,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInOutstandingIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInOutstandingIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:changesInOutstandingIndexed"
                         }
@@ -1116,6 +1383,9 @@ mappings = {
                     "IBNRIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsCeded:IBNRIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:IBNRIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:IBNRIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:IBNRIndexed"
@@ -1128,6 +1398,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:ultimate"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:ultimate"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:ultimate"
                         }
@@ -1138,6 +1411,9 @@ mappings = {
                     "reservesIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsCeded:reservesIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:reservesIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:reservesIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:reservesIndexed"
@@ -1150,6 +1426,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInReservesIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInReservesIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:changesInReservesIndexed"
                         }
@@ -1160,6 +1439,9 @@ mappings = {
                     "premiumRiskBase" "ORSA:legalEntities:[%legalEntity%]:outClaimsCeded:premiumRiskBase", {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:premiumRiskBase"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:premiumRiskBase"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:premiumRiskBase"
@@ -1172,6 +1454,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:reserveRiskBase"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:reserveRiskBase"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:reserveRiskBase"
                         }
@@ -1182,6 +1467,9 @@ mappings = {
                     "premiumAndReserveRiskBase" "ORSA:legalEntities:[%legalEntity%]:outClaimsCeded:premiumAndReserveRiskBase", {
                         "byPeril" {
                             "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsCeded:premiumAndReserveRiskBase"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsCeded:premiumAndReserveRiskBase"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsCeded:premiumAndReserveRiskBase"
@@ -1283,6 +1571,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:ultimate"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:ultimate"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:ultimate"
                         }
@@ -1293,6 +1584,9 @@ mappings = {
                     "totalCumulative" "ORSA:structures:[%structure%]:outClaimsNet:totalCumulativeIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:totalCumulativeIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:totalCumulativeIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:totalCumulativeIndexed"
@@ -1305,6 +1599,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:totalIncrementalIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:totalIncrementalIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:totalIncrementalIndexed"
                         }
@@ -1315,6 +1612,9 @@ mappings = {
                     "reportedCumulativeIndexed" "ORSA:structures:[%structure%]:outClaimsNet:reportedCumulativeIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:reportedCumulativeIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:reportedCumulativeIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:reportedCumulativeIndexed"
@@ -1327,6 +1627,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:reportedIncrementalIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:reportedIncrementalIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:reportedIncrementalIndexed"
                         }
@@ -1337,6 +1640,9 @@ mappings = {
                     "paidCumulativeIndexed" "ORSA:structures:[%structure%]:outClaimsNet:paidCumulativeIndexed",{
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:paidCumulativeIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:paidCumulativeIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:paidCumulativeIndexed"
@@ -1349,6 +1655,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:paidIncrementalIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:paidIncrementalIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:paidIncrementalIndexed"
                         }
@@ -1359,6 +1668,9 @@ mappings = {
                     "outstandingIndexed" "ORSA:structures:[%structure%]:outClaimsNet:outstandingIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:outstandingIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:outstandingIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:outstandingIndexed"
@@ -1371,6 +1683,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:changesInOutstandingIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:changesInOutstandingIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:changesInOutstandingIndexed"
                         }
@@ -1381,6 +1696,9 @@ mappings = {
                     "IBNRIndexed" "ORSA:structures:[%structure%]:outClaimsNet:IBNRIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:IBNRIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:IBNRIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:IBNRIndexed"
@@ -1393,6 +1711,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:changesInIBNRIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:changesInIBNRIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:changesInIBNRIndexed"
                         }
@@ -1403,6 +1724,9 @@ mappings = {
                     "reservesIndexed" "ORSA:structures:[%structure%]:outClaimsNet:reservesIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:reservesIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:reservesIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:reservesIndexed"
@@ -1415,6 +1739,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:changesInReservesIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:changesInReservesIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:changesInReservesIndexed"
                         }
@@ -1425,6 +1752,9 @@ mappings = {
                     "premiumRiskBase" "ORSA:structures:[%structure%]:outClaimsNet:premiumRiskBase", {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:premiumRiskBase"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:premiumRiskBase"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:premiumRiskBase"
@@ -1437,6 +1767,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:reserveRiskBase"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:reserveRiskBase"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:reserveRiskBase"
                         }
@@ -1447,6 +1780,9 @@ mappings = {
                     "premiumAndReserveRiskBase" "ORSA:structures:[%structure%]:outClaimsNet:premiumAndReserveRiskBase", {
                         "byPeril" {
                             "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsNet:premiumAndReserveRiskBase"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsNet:premiumAndReserveRiskBase"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsNet:premiumAndReserveRiskBase"
@@ -1460,6 +1796,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:ultimate"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:ultimate"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:ultimate"
                             }
@@ -1470,6 +1809,9 @@ mappings = {
                         "totalCumulative" "ORSA:structures:[%structure%]:outClaimsGross:totalCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:totalCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:totalCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:totalCumulativeIndexed"
@@ -1482,6 +1824,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:totalIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:totalIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:totalIncrementalIndexed"
                             }
@@ -1492,6 +1837,9 @@ mappings = {
                         "reportedCumulativeIndexed" "ORSA:structures:[%structure%]:outClaimsGross:reportedCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:reportedCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:reportedCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:reportedCumulativeIndexed"
@@ -1504,6 +1852,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:reportedIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:reportedIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:reportedIncrementalIndexed"
                             }
@@ -1514,6 +1865,9 @@ mappings = {
                         "paidCumulativeIndexed" "ORSA:structures:[%structure%]:outClaimsGross:paidCumulativeIndexed",{
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:paidCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:paidCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:paidCumulativeIndexed"
@@ -1526,6 +1880,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:paidIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:paidIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:paidIncrementalIndexed"
                             }
@@ -1536,6 +1893,9 @@ mappings = {
                         "outstandingIndexed" "ORSA:structures:[%structure%]:outClaimsGross:outstandingIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:outstandingIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:outstandingIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:outstandingIndexed"
@@ -1548,6 +1908,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:changesInOutstandingIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:changesInOutstandingIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:changesInOutstandingIndexed"
                             }
@@ -1558,6 +1921,9 @@ mappings = {
                         "IBNRIndexed" "ORSA:structures:[%structure%]:outClaimsGross:IBNRIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:IBNRIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:IBNRIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:IBNRIndexed"
@@ -1570,6 +1936,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:changesInIBNRIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:changesInIBNRIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:changesInIBNRIndexed"
                             }
@@ -1580,6 +1949,9 @@ mappings = {
                         "reservesIndexed" "ORSA:structures:[%structure%]:outClaimsGross:reservesIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:reservesIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:reservesIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:reservesIndexed"
@@ -1592,6 +1964,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:changesInReservesIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:changesInReservesIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:changesInReservesIndexed"
                             }
@@ -1602,6 +1977,9 @@ mappings = {
                         "premiumRiskBase" "ORSA:structures:[%structure%]:outClaimsGross:premiumRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:premiumRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:premiumRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:premiumRiskBase"
@@ -1614,6 +1992,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:reserveRiskBase"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:reserveRiskBase"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:reserveRiskBase"
                             }
@@ -1624,6 +2005,9 @@ mappings = {
                         "premiumAndReserveRiskBase" "ORSA:structures:[%structure%]:outClaimsGross:premiumAndReserveRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsGross:premiumAndReserveRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsGross:premiumAndReserveRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsGross:premiumAndReserveRiskBase"
@@ -1638,6 +2022,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:ultimate"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:ultimate"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:ultimate"
                             }
@@ -1648,6 +2035,9 @@ mappings = {
                         "totalCumulative" "ORSA:structures:[%structure%]:outClaimsCeded:totalCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:totalCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:totalCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:totalCumulativeIndexed"
@@ -1660,6 +2050,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:totalIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:totalIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:totalIncrementalIndexed"
                             }
@@ -1670,6 +2063,9 @@ mappings = {
                         "reportedCumulativeIndexed" "ORSA:structures:[%structure%]:outClaimsCeded:reportedCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:reportedCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:reportedCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:reportedCumulativeIndexed"
@@ -1682,6 +2078,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:reportedIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:reportedIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:reportedIncrementalIndexed"
                             }
@@ -1692,6 +2091,9 @@ mappings = {
                         "paidCumulativeIndexed" "ORSA:structures:[%structure%]:outClaimsCeded:paidCumulativeIndexed",{
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:paidCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:paidCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:paidCumulativeIndexed"
@@ -1704,6 +2106,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:paidIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:paidIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:paidIncrementalIndexed"
                             }
@@ -1714,6 +2119,9 @@ mappings = {
                         "outstandingIndexed" "ORSA:structures:[%structure%]:outClaimsCeded:outstandingIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:outstandingIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:outstandingIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:outstandingIndexed"
@@ -1726,6 +2134,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInOutstandingIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInOutstandingIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:changesInOutstandingIndexed"
                             }
@@ -1736,6 +2147,9 @@ mappings = {
                         "IBNRIndexed" "ORSA:structures:[%structure%]:outClaimsCeded:IBNRIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:IBNRIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:IBNRIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:IBNRIndexed"
@@ -1748,6 +2162,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInIBNRIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInIBNRIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:changesInIBNRIndexed"
                             }
@@ -1758,6 +2175,9 @@ mappings = {
                         "reservesIndexed" "ORSA:structures:[%structure%]:outClaimsCeded:reservesIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:reservesIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:reservesIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:reservesIndexed"
@@ -1770,6 +2190,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInReservesIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInReservesIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:changesInReservesIndexed"
                             }
@@ -1780,6 +2203,9 @@ mappings = {
                         "premiumRiskBase" "ORSA:structures:[%structure%]:outClaimsCeded:premiumRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:premiumRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:premiumRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:premiumRiskBase"
@@ -1792,6 +2218,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:reserveRiskBase"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:reserveRiskBase"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:reserveRiskBase"
                             }
@@ -1802,6 +2231,9 @@ mappings = {
                         "premiumAndReserveRiskBase" "ORSA:structures:[%structure%]:outClaimsCeded:premiumAndReserveRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:structures:[%structure%]:claimsGenerators:[%peril%]:outClaimsCeded:premiumAndReserveRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:structures:[%structure%]:reservesGenerators:[%peril%]:outClaimsCeded:premiumAndReserveRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:structures:[%structure%]:segments:[%segment%]:outClaimsCeded:premiumAndReserveRiskBase"
@@ -1877,6 +2309,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:ultimate"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:ultimate"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:ultimate"
                         }
@@ -1884,6 +2319,9 @@ mappings = {
                     "totalCumulative" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:totalCumulativeIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:totalCumulativeIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:totalCumulativeIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:totalCumulativeIndexed"
@@ -1893,6 +2331,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:totalIncrementalIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:totalIncrementalIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:totalIncrementalIndexed"
                         }
@@ -1900,6 +2341,9 @@ mappings = {
                     "reportedCumulativeIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:reportedCumulativeIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:reportedCumulativeIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:reportedCumulativeIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:reportedCumulativeIndexed"
@@ -1909,6 +2353,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:reportedIncrementalIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:reportedIncrementalIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:reportedIncrementalIndexed"
                         }
@@ -1916,6 +2363,9 @@ mappings = {
                     "paidCumulativeIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:paidCumulativeIndexed",{
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:paidCumulativeIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:paidCumulativeIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:paidCumulativeIndexed"
@@ -1925,6 +2375,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:paidIncrementalIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:paidIncrementalIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:paidIncrementalIndexed"
                         }
@@ -1932,6 +2385,9 @@ mappings = {
                     "outstandingIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:outstandingIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:outstandingIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:outstandingIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:outstandingIndexed"
@@ -1941,6 +2397,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:changesInOutstandingIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:changesInOutstandingIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:changesInOutstandingIndexed"
                         }
@@ -1948,6 +2407,9 @@ mappings = {
                     "IBNRIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:IBNRIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:IBNRIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:IBNRIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:IBNRIndexed"
@@ -1957,6 +2419,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:changesInIBNRIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:changesInIBNRIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:changesInIBNRIndexed"
                         }
@@ -1964,6 +2429,9 @@ mappings = {
                     "reservesIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:reservesIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:reservesIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:reservesIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:reservesIndexed"
@@ -1973,6 +2441,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:changesInReservesIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:changesInReservesIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:changesInReservesIndexed"
                         }
@@ -1980,6 +2451,9 @@ mappings = {
                     "premiumRiskBase" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:premiumRiskBase", {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:premiumRiskBase"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:premiumRiskBase"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:premiumRiskBase"
@@ -1989,6 +2463,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:reserveRiskBase"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:reserveRiskBase"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:reserveRiskBase"
                         }
@@ -1996,6 +2473,9 @@ mappings = {
                     "premiumAndReserveRiskBase" "ORSA:reinsuranceContracts:[%contract%]:outClaimsNet:premiumAndReserveRiskBase", {
                         "byPeril" {
                             "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:premiumAndReserveRiskBase"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:premiumAndReserveRiskBase"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsNet:premiumAndReserveRiskBase"
@@ -2006,6 +2486,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:ultimate"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:ultimate"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:ultimate"
                             }
@@ -2013,6 +2496,9 @@ mappings = {
                         "totalCumulative" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:totalCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:totalCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:totalCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:totalCumulativeIndexed"
@@ -2022,6 +2508,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:totalIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:totalIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:totalIncrementalIndexed"
                             }
@@ -2029,6 +2518,9 @@ mappings = {
                         "reportedCumulativeIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:reportedCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:reportedCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:reportedCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:reportedCumulativeIndexed"
@@ -2038,6 +2530,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:reportedIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:reportedIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:reportedIncrementalIndexed"
                             }
@@ -2045,6 +2540,9 @@ mappings = {
                         "paidCumulativeIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:paidCumulativeIndexed",{
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:paidCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:paidCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:paidCumulativeIndexed"
@@ -2054,6 +2552,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:paidIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:paidIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:paidIncrementalIndexed"
                             }
@@ -2061,6 +2562,9 @@ mappings = {
                         "outstandingIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:outstandingIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:outstandingIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:outstandingIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:outstandingIndexed"
@@ -2070,6 +2574,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:changesInOutstandingIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:changesInOutstandingIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:changesInOutstandingIndexed"
                             }
@@ -2077,6 +2584,9 @@ mappings = {
                         "IBNRIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:IBNRIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:IBNRIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:IBNRIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:IBNRIndexed"
@@ -2086,6 +2596,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:changesInIBNRIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:changesInIBNRIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:changesInIBNRIndexed"
                             }
@@ -2093,6 +2606,9 @@ mappings = {
                         "reservesIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:reservesIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:reservesIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:reservesIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:reservesIndexed"
@@ -2102,6 +2618,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:changesInReservesIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:changesInReservesIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:changesInReservesIndexed"
                             }
@@ -2109,6 +2628,9 @@ mappings = {
                         "premiumRiskBase" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:premiumRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:premiumRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:premiumRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:premiumRiskBase"
@@ -2118,6 +2640,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:reserveRiskBase"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:reserveRiskBase"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:reserveRiskBase"
                             }
@@ -2125,6 +2650,9 @@ mappings = {
                         "premiumAndReserveRiskBase" "ORSA:reinsuranceContracts:[%contract%]:outClaimsGross:premiumAndReserveRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:premiumAndReserveRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:premiumAndReserveRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsGross:premiumAndReserveRiskBase"
@@ -2136,6 +2664,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:ultimate"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:ultimate"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:ultimate"
                             }
@@ -2143,6 +2674,9 @@ mappings = {
                         "totalCumulative" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:totalCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:totalCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:totalCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:totalCumulativeIndexed"
@@ -2152,6 +2686,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:totalIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:totalIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:totalIncrementalIndexed"
                             }
@@ -2159,6 +2696,9 @@ mappings = {
                         "reportedCumulativeIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:reportedCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:reportedCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:reportedCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:reportedCumulativeIndexed"
@@ -2168,6 +2708,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:reportedIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:reportedIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:reportedIncrementalIndexed"
                             }
@@ -2175,6 +2718,9 @@ mappings = {
                         "paidCumulativeIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:paidCumulativeIndexed",{
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:paidCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:paidCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:paidCumulativeIndexed"
@@ -2184,6 +2730,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:paidIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:paidIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:paidIncrementalIndexed"
                             }
@@ -2191,6 +2740,9 @@ mappings = {
                         "outstandingIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:outstandingIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:outstandingIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:outstandingIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:outstandingIndexed"
@@ -2200,6 +2752,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInOutstandingIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInOutstandingIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:changesInOutstandingIndexed"
                             }
@@ -2207,6 +2762,9 @@ mappings = {
                         "IBNRIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:IBNRIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:IBNRIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:IBNRIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:IBNRIndexed"
@@ -2216,6 +2774,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInIBNRIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInIBNRIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:changesInIBNRIndexed"
                             }
@@ -2223,6 +2784,9 @@ mappings = {
                         "reservesIndexed" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:reservesIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:reservesIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:reservesIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:reservesIndexed"
@@ -2232,6 +2796,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInReservesIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInReservesIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:changesInReservesIndexed"
                             }
@@ -2239,6 +2806,9 @@ mappings = {
                         "premiumRiskBase" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:premiumRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:premiumRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:premiumRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:premiumRiskBase"
@@ -2248,6 +2818,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:reserveRiskBase"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:reserveRiskBase"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:reserveRiskBase"
                             }
@@ -2255,6 +2828,9 @@ mappings = {
                         "premiumAndReserveRiskBase" "ORSA:reinsuranceContracts:[%contract%]:outClaimsCeded:premiumAndReserveRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:premiumAndReserveRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:reinsuranceContracts:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:premiumAndReserveRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:reinsuranceContracts:[%contract%]:segments:[%segment%]:outClaimsCeded:premiumAndReserveRiskBase"
@@ -2311,6 +2887,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:ultimate"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:ultimate"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:ultimate"
                         }
@@ -2318,6 +2897,9 @@ mappings = {
                     "totalCumulative" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:totalCumulativeIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:totalCumulativeIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:totalCumulativeIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:totalCumulativeIndexed"
@@ -2327,6 +2909,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:totalIncrementalIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:totalIncrementalIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:totalIncrementalIndexed"
                         }
@@ -2334,6 +2919,9 @@ mappings = {
                     "reportedCumulativeIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:reportedCumulativeIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:reportedCumulativeIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:reportedCumulativeIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:reportedCumulativeIndexed"
@@ -2343,6 +2931,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:reportedIncrementalIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:reportedIncrementalIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:reportedIncrementalIndexed"
                         }
@@ -2350,6 +2941,9 @@ mappings = {
                     "paidCumulativeIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:paidCumulativeIndexed",{
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:paidCumulativeIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:paidCumulativeIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:paidCumulativeIndexed"
@@ -2359,6 +2953,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:paidIncrementalIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:paidIncrementalIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:paidIncrementalIndexed"
                         }
@@ -2366,6 +2963,9 @@ mappings = {
                     "outstandingIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:outstandingIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:outstandingIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:outstandingIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:outstandingIndexed"
@@ -2375,6 +2975,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:changesInOutstandingIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:changesInOutstandingIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:changesInOutstandingIndexed"
                         }
@@ -2382,6 +2985,9 @@ mappings = {
                     "IBNRIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:IBNRIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:IBNRIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:IBNRIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:IBNRIndexed"
@@ -2391,6 +2997,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:changesInIBNRIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:changesInIBNRIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:changesInIBNRIndexed"
                         }
@@ -2398,6 +3007,9 @@ mappings = {
                     "reservesIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:reservesIndexed", {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:reservesIndexed"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:reservesIndexed"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:reservesIndexed"
@@ -2407,6 +3019,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:changesInReservesIndexed"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:changesInReservesIndexed"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:changesInReservesIndexed"
                         }
@@ -2414,6 +3029,9 @@ mappings = {
                     "premiumRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:premiumRiskBase", {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:premiumRiskBase"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:premiumRiskBase"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:premiumRiskBase"
@@ -2423,6 +3041,9 @@ mappings = {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:reserveRiskBase"
                         }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:reserveRiskBase"
+                        }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:reserveRiskBase"
                         }
@@ -2430,6 +3051,9 @@ mappings = {
                     "premiumAndReserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsNet:premiumAndReserveRiskBase", {
                         "byPeril" {
                             "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsNet:premiumAndReserveRiskBase"
+                        }
+                        "byReserve" {
+                            "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsNet:premiumAndReserveRiskBase"
                         }
                         "bySegment" {
                             "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsNet:premiumAndReserveRiskBase"
@@ -2440,6 +3064,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:ultimate"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:ultimate"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:ultimate"
                             }
@@ -2447,6 +3074,9 @@ mappings = {
                         "totalCumulative" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:totalCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:totalCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:totalCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:totalCumulativeIndexed"
@@ -2456,6 +3086,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:totalIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:totalIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:totalIncrementalIndexed"
                             }
@@ -2463,6 +3096,9 @@ mappings = {
                         "reportedCumulativeIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:reportedCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:reportedCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:reportedCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:reportedCumulativeIndexed"
@@ -2472,6 +3108,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:reportedIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:reportedIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:reportedIncrementalIndexed"
                             }
@@ -2479,6 +3118,9 @@ mappings = {
                         "paidCumulativeIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:paidCumulativeIndexed",{
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:paidCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:paidCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:paidCumulativeIndexed"
@@ -2488,6 +3130,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:paidIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:paidIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:paidIncrementalIndexed"
                             }
@@ -2495,6 +3140,9 @@ mappings = {
                         "outstandingIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:outstandingIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:outstandingIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:outstandingIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:outstandingIndexed"
@@ -2504,6 +3152,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:changesInOutstandingIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:changesInOutstandingIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:changesInOutstandingIndexed"
                             }
@@ -2511,6 +3162,9 @@ mappings = {
                         "IBNRIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:IBNRIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:IBNRIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:IBNRIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:IBNRIndexed"
@@ -2520,6 +3174,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:changesInIBNRIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:changesInIBNRIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:changesInIBNRIndexed"
                             }
@@ -2527,6 +3184,9 @@ mappings = {
                         "reservesIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:reservesIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:reservesIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:reservesIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:reservesIndexed"
@@ -2536,6 +3196,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:changesInReservesIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:changesInReservesIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:changesInReservesIndexed"
                             }
@@ -2543,6 +3206,9 @@ mappings = {
                         "premiumRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:premiumRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:premiumRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:premiumRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:premiumRiskBase"
@@ -2552,6 +3218,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:reserveRiskBase"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:reserveRiskBase"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:reserveRiskBase"
                             }
@@ -2559,6 +3228,9 @@ mappings = {
                         "premiumAndReserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsGross:premiumAndReserveRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsGross:premiumAndReserveRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsGross:premiumAndReserveRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsGross:premiumAndReserveRiskBase"
@@ -2570,6 +3242,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:ultimate"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:ultimate"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:ultimate"
                             }
@@ -2577,6 +3252,9 @@ mappings = {
                         "totalCumulative" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:totalCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:totalCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:totalCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:totalCumulativeIndexed"
@@ -2586,6 +3264,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:totalIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:totalIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:totalIncrementalIndexed"
                             }
@@ -2593,6 +3274,9 @@ mappings = {
                         "reportedCumulativeIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:reportedCumulativeIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:reportedCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:reportedCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:reportedCumulativeIndexed"
@@ -2602,6 +3286,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:reportedIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:reportedIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:reportedIncrementalIndexed"
                             }
@@ -2609,6 +3296,9 @@ mappings = {
                         "paidCumulativeIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:paidCumulativeIndexed",{
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:paidCumulativeIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:paidCumulativeIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:paidCumulativeIndexed"
@@ -2618,6 +3308,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:paidIncrementalIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:paidIncrementalIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:paidIncrementalIndexed"
                             }
@@ -2625,6 +3318,9 @@ mappings = {
                         "outstandingIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:outstandingIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:outstandingIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:outstandingIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:outstandingIndexed"
@@ -2634,6 +3330,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInOutstandingIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInOutstandingIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:changesInOutstandingIndexed"
                             }
@@ -2641,6 +3340,9 @@ mappings = {
                         "IBNRIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:IBNRIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:IBNRIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:IBNRIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:IBNRIndexed"
@@ -2650,6 +3352,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInIBNRIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInIBNRIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:changesInIBNRIndexed"
                             }
@@ -2657,6 +3362,9 @@ mappings = {
                         "reservesIndexed" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:reservesIndexed", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:reservesIndexed"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:reservesIndexed"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:reservesIndexed"
@@ -2666,6 +3374,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:changesInReservesIndexed"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:changesInReservesIndexed"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:changesInReservesIndexed"
                             }
@@ -2673,6 +3384,9 @@ mappings = {
                         "premiumRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:premiumRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:premiumRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:premiumRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:premiumRiskBase"
@@ -2682,6 +3396,9 @@ mappings = {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:reserveRiskBase"
                             }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:reserveRiskBase"
+                            }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:reserveRiskBase"
                             }
@@ -2689,6 +3406,9 @@ mappings = {
                         "premiumAndReserveRiskBase" "ORSA:retrospectiveReinsurance:[%contract%]:outClaimsCeded:premiumAndReserveRiskBase", {
                             "byPeril" {
                                 "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:claimsGenerators:[%peril%]:outClaimsCeded:premiumAndReserveRiskBase"
+                            }
+                            "byReserve" {
+                                "[%peril%]" "ORSA:retrospectiveReinsurance:[%contract%]:reservesGenerators:[%peril%]:outClaimsCeded:premiumAndReserveRiskBase"
                             }
                             "bySegment" {
                                 "[%segment%]" "ORSA:retrospectiveReinsurance:[%contract%]:segments:[%segment%]:outClaimsCeded:premiumAndReserveRiskBase"

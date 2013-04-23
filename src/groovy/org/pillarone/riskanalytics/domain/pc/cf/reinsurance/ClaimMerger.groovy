@@ -3,14 +3,16 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.core.components.Component
 import org.pillarone.riskanalytics.core.packets.PacketList
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixCoverAttributeStrategy
 
 class ClaimMerger extends Component {
+
     PacketList<ClaimCashflowPacket> inClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> inClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
@@ -23,10 +25,14 @@ class ClaimMerger extends Component {
     MatrixCoverAttributeStrategy coverAttributeStrategy
 
     Map<IClaimRoot, IClaimRoot> baseClaimByKeyClaim = [:]
-
+    PeriodScope periodScope
 
     @Override
     protected void doCalculation() {
+        if (periodScope.firstPeriod) {
+            // claims need to be kept only within one iteration
+            baseClaimByKeyClaim.clear()
+        }
         filterNetAndCededClaims()
         // TODO (dbe) make more robust, e.g. no gross found.
         if (isReceiverWired(inClaimsGross)) {
@@ -37,18 +43,16 @@ class ClaimMerger extends Component {
             //net matrix case
             if (!hasBenefitContracts()) {
                 for (Map.Entry<IClaimRoot, ClaimCashflowPacket> netClaim : netClaimsByKeyClaim.entrySet()) {
-                    if (severalNetContractsCovered()) {
-                        IClaimRoot baseClaim = baseClaimByKeyClaim.get(netClaim.key)
-                        outClaims.add(getNetClaim(netClaim, cededClaimsForNetByKeyClaim));
+                    if (onlyNetAndNoCededContractsCovered()) {
+                        outClaims.add(getNetClaim(netClaim, cededClaimsForNetByKeyClaim))
                     }
-                    else if (severalCededContractsCovered()) {
+                    else if (onlyCededNoNetContractsCovered()) {
                         // todo: think: this won't be used as netClaimsByBase is empty
                         outClaims.addAll(ClaimUtils.aggregateByBaseClaim(inClaimsCeded))
                     }
                     else if (netAndCededContractsCovered()) {
                         ClaimCashflowPacket netClaimPacket = netClaim.value
-                        if (severalNetContractsCovered()) {
-                            IClaimRoot baseClaim = baseClaimByKeyClaim.get(netClaim.key)
+                        if (onlyNetAndNoCededContractsCovered()) {
                             netClaimPacket = getNetClaim(netClaim, cededClaimsForNetByKeyClaim)
                         }
                         ClaimCashflowPacket mergedClaim = ClaimUtils.getNetClaim(netClaimPacket, cededClaimsByKeyClaim.get(netClaim.key), netClaim.value.reinsuranceContract())
@@ -59,39 +63,56 @@ class ClaimMerger extends Component {
                         outClaims.add(netClaim.value)
                     }
                 }
-                if (netClaimsByKeyClaim.isEmpty() && severalCededContractsCovered()) {
+                if (netClaimsByKeyClaim.isEmpty() && onlyCededNoNetContractsCovered()) {
                     outClaims.addAll(ClaimUtils.aggregateByBaseClaim(inClaimsCeded))
                 }
             }
             else {
-                if (severalNetContractsCovered()) {
+                if (onlyNetAndNoCededContractsCovered()) {
                     //benefit net matrix case
                     for (ClaimCashflowPacket netClaim : netClaimsByKeyClaim.values()) {
-                        ClaimCashflowPacket grossClaim = ClaimUtils.findClaimByBaseClaim(inClaimsGross, netClaim.keyClaim)
-                        ClaimCashflowPacket cededClaim = cededClaimsByKeyClaim.get(netClaim.keyClaim)
-                        ClaimCashflowPacket netClaimBeforeBenefit = ClaimUtils.getNetClaim(grossClaim, cededClaim, netClaim.reinsuranceContract())
                         ClaimCashflowPacket benefitClaim = benefitClaimsByKeyClaim.get(netClaim.keyClaim)
-                        ClaimCashflowPacket netClaimAfterBenefit = ClaimUtils.getNetClaim(netClaimBeforeBenefit, benefitClaim,
-                                baseClaim(netClaimBeforeBenefit, benefitClaim), netClaim.reinsuranceContract())
-                        outClaims.add(netClaimAfterBenefit)
+                        if (benefitClaim) {
+                            ClaimCashflowPacket grossClaim = ClaimUtils.findClaimByBaseClaim(inClaimsGross, netClaim.keyClaim)
+                            ClaimCashflowPacket cededClaim = cededClaimsByKeyClaim.get(netClaim.keyClaim)
+                            ClaimCashflowPacket netClaimBeforeBenefit = ClaimUtils.getNetClaim(grossClaim, cededClaim, netClaim.reinsuranceContract())
+
+                            ClaimCashflowPacket netClaimAfterBenefit = ClaimUtils.getNetClaim(netClaimBeforeBenefit, benefitClaim,
+                                    baseClaim(netClaimBeforeBenefit, benefitClaim), netClaim.reinsuranceContract())
+                            outClaims.add(netClaimAfterBenefit)
+                        }
+                        else {
+                            // no need for any adjustment if there is no matching benefit claim
+                            outClaims.add netClaim
+                        }
                     }
-                } else if (severalCededContractsCovered()){
+                } else if (onlyCededNoNetContractsCovered()){
                     //benefit ceded matrix case
                     for (ClaimCashflowPacket cededClaimBase : cededClaimsByKeyClaim.values()) {
-                        ClaimCashflowPacket cededClaim = cededClaimsByKeyClaim.get(cededClaimBase.keyClaim)
                         ClaimCashflowPacket benefitClaim = benefitClaimsByKeyClaim.get(cededClaimBase.keyClaim)
-                        ClaimCashflowPacket netClaim = ClaimUtils.getNetClaim(cededClaim, benefitClaim,
+                        if (benefitClaim) {
+                            ClaimCashflowPacket cededClaim = cededClaimsByKeyClaim.get(cededClaimBase.keyClaim)
+                            ClaimCashflowPacket netClaim = ClaimUtils.getNetClaim(cededClaim, benefitClaim,
                                 baseClaim(cededClaim, benefitClaim), cededClaimBase?.reinsuranceContract())
-                        outClaims.add(netClaim)
+                            outClaims.add netClaim
+                        }
+                        else {
+                            outClaims.add cededClaimBase
+                        }
                     }
                 } else if (netAndCededContractsCovered()){
-                    // TODO might be part of condition 1 (severalNetContractsCovered())
+                    // TODO might be part of condition 1 (onlyNetAndNoCededContractsCovered())
                 } else if (grossCovered()){
                     for (ClaimCashflowPacket grossClaimBase : filterGrossClaims()) {
                         ClaimCashflowPacket benefitClaim = benefitClaimsByKeyClaim.get(grossClaimBase.keyClaim)
-                        ClaimCashflowPacket netClaim = ClaimUtils.getNetClaim(grossClaimBase, benefitClaim,
+                        if (benefitClaim) {
+                            ClaimCashflowPacket netClaim = ClaimUtils.getNetClaim(grossClaimBase, benefitClaim,
                                 baseClaim(grossClaimBase, benefitClaim), benefitClaim?.reinsuranceContract())
-                        outClaims.add(netClaim)
+                            outClaims.add netClaim
+                        }
+                        else {
+                            outClaims.add grossClaimBase
+                        }
                     }
                 }
             }
@@ -147,11 +168,11 @@ class ClaimMerger extends Component {
         coverAttributeStrategy.coveredNetOfContracts().size() > 0 && coverAttributeStrategy.coveredCededOfContracts().size() > 0
     }
 
-    private boolean severalCededContractsCovered() {
+    private boolean onlyCededNoNetContractsCovered() {
         coverAttributeStrategy.coveredNetOfContracts().size() == 0 && coverAttributeStrategy.coveredCededOfContracts().size() > 0
     }
 
-    private boolean severalNetContractsCovered() {
+    private boolean onlyNetAndNoCededContractsCovered() {
         coverAttributeStrategy.coveredNetOfContracts().size() > 0 && coverAttributeStrategy.coveredCededOfContracts().size() == 0
     }
 

@@ -155,6 +155,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
             double[] values = type.cumulativePattern.getColumnByName(PatternStrategyType.CUMULATIVE2)
             if (values.length == 0) return
+            if (values.length == 0) return
             if (values[values.length - 1] == 1) return true
             [ValidationType.ERROR, "cumulative.pattern.error.last.value.not.one", values[values.length - 1]]
         }
@@ -196,6 +197,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PatternStrategyType.AGE_TO_AGE) {
             Map type ->
             double[] values = type.ageToAgePattern.getColumnByName(PatternStrategyType.LINK_RATIOS)
+            if (values.length == 0) return
             if (values.length == 0) return
             if (values[values.length - 1] == 1) return true
             [ValidationType.ERROR, "age.to.age.pattern.error.last.ratio.not.one", values[values.length - 1]]
@@ -372,6 +374,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
             Map type ->
             double[] payoutValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_PAYOUT)
             if (payoutValues.length == 0) return
+            if (payoutValues.length == 0) return
             if (payoutValues[payoutValues.length - 1] == 1) return true
             [ValidationType.ERROR, "cumulative.combined.pattern.payout.error.last.value.not.one", payoutValues[payoutValues.length - 1]]
         }
@@ -379,6 +382,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PayoutReportingCombinedPatternStrategyType.CUMULATIVE) {
             Map type ->
             double[] reportedValues = type.cumulativePattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.CUMULATIVE_REPORTED)
+            if (reportedValues.length == 0) return
             if (reportedValues.length == 0) return
             if (reportedValues[reportedValues.length - 1] == 1) return true
             [ValidationType.ERROR, "cumulative.combined.pattern.reported.error.last.value.not.one", reportedValues[reportedValues.length - 1]]
@@ -566,7 +570,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         }
     }
 
-    private TreeMap<Integer, Double> getCumulativeValuePerMonth(PatternPacket pattern) {
+    private static TreeMap<Integer, Double> getCumulativeValuePerMonth(PatternPacket pattern) {
         TreeMap<Integer, Double> valuePerMonth = new TreeMap<Integer, Double>();
         if (pattern == null) {
             valuePerMonth.put(0, 1d)
@@ -574,7 +578,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         }
         List<Period> periods = pattern.getCumulativePeriods()
         List<Double> values = pattern.getCumulativeValues()
-        if (periods.size() == 0) return
+        if (periods == null) return
         for (int i = 0; i < periods.size(); i++) {
             valuePerMonth.put(periods[i].months, values[i])
         }
@@ -584,7 +588,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         return valuePerMonth
     }
 
-    private PatternPacket getPattern(ParameterHolder parameter) {
+    private static PatternPacket getPattern(ParameterHolder parameter) {
         try {
             return parameter.getBusinessObject().getPattern()
         }

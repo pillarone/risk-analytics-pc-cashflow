@@ -45,6 +45,7 @@ class ProjectionPeriodType extends AbstractParameterObjectClassifier {
 
     public static IProjectionPeriodStrategy getDefault() {
         return new RestrictedProjectionPeriodStrategy(number : 5)
+        return new RestrictedProjectionPeriodStrategy(number : 5)
     }
 
     public static IProjectionPeriodStrategy getStrategy(ProjectionPeriodType type, Map parameters) {
@@ -57,5 +58,6 @@ class ProjectionPeriodType extends AbstractParameterObjectClassifier {
             default:
                 throw new NotImplementedException("ProjectionPeriodType " + type.toString() + " not implemented.");
         }
+        return strategy;
     }
 }

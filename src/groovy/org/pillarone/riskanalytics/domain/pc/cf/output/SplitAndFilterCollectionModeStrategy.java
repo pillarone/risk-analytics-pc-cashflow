@@ -42,6 +42,7 @@ import java.util.*;
 public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectingModeStrategy {
 
     private static final String PERILS = "claimsGenerators";
+    private static final String RESERVES = "reservesGenerators";
     private static final String CONTRACTS = "reinsuranceContracts";
     private static final String SEGMENTS = "segments";
 
@@ -171,6 +172,7 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         for (Packet c : claims) {
             ClaimCashflowPacket claim = (ClaimCashflowPacket) c;
             PathMapping perilPath = null;
+            PathMapping reservePath = null;
             PathMapping lobPath = null;
 
             if (!componentsExtensibleBy.containsKey(claim.sender)) {
@@ -193,6 +195,7 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
                     || IReinsuranceContractMarker.class.equals(markerInterface)
                     || ILegalEntityMarker.class.equals(markerInterface)) {
                 perilPath = getPathMapping(claim, claim.peril(), PERILS);
+                reservePath = getPathMapping(claim, claim.reserve(), RESERVES);
             }
             if (!(ISegmentMarker.class.equals(markerInterface))) {
                 lobPath = getPathMapping(claim, claim.segment(), SEGMENTS);
@@ -203,11 +206,13 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
             }
             if (ISegmentMarker.class.equals(markerInterface)) {
                 addToMap(claim, perilPath, resultMap);
+                addToMap(claim, reservePath, resultMap);
                 addToMap(claim, contractPath, resultMap);
             }
             if (IReinsuranceContractMarker.class.equals(markerInterface)) {
                 addToMap(claim, lobPath, resultMap);
                 addToMap(claim, perilPath, resultMap);
+                addToMap(claim, reservePath, resultMap);
                 if (lobPath != null && perilPath != null) {
                     PathMapping lobPerilPath = getPathMapping(claim, claim.segment(), SEGMENTS, claim.peril(), PERILS);
                     addToMap(claim, lobPerilPath, resultMap);
@@ -215,6 +220,7 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
             }
             if (ILegalEntityMarker.class.equals(markerInterface) || IStructureMarker.class.equals(markerInterface)) {
                 addToMap(claim, perilPath, resultMap);
+                addToMap(claim, reservePath, resultMap);
                 addToMap(claim, contractPath, resultMap);
                 addToMap(claim, lobPath, resultMap);
             }

@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance
 
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
+import org.pillarone.riskanalytics.core.components.Component
 import org.pillarone.riskanalytics.core.components.DynamicComposedComponent
 import org.pillarone.riskanalytics.core.packets.PacketList
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
@@ -83,8 +84,8 @@ class RetroactiveReinsuranceContracts extends DynamicComposedComponent {
         for (RetroactiveReinsuranceContract contract : componentList) {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
             if (strategy?.mergerRequired()) {
-                ClaimMerger claimMerger = new ClaimMerger(coverAttributeStrategy: strategy, name: "preceeding ${contract.name}")
-                UnderwritingInfoMerger uwInfoMerger = new UnderwritingInfoMerger(coverAttributeStrategy: strategy, name: "preceeding ${contract.name}")
+                ClaimMerger claimMerger = new ClaimMerger(coverAttributeStrategy: strategy, name: "${contract.name}Preceeding")
+                UnderwritingInfoMerger uwInfoMerger = new UnderwritingInfoMerger(coverAttributeStrategy: strategy, name: "${contract.name}Preceeding")
                 claimMergers << claimMerger
                 uwInfoMergers << uwInfoMerger
                 List<IReinsuranceContractMarker> benefitContracts = strategy.benefitContracts
@@ -174,5 +175,17 @@ class RetroactiveReinsuranceContracts extends DynamicComposedComponent {
         }
         LOG.debug("removed contracts: ${contractsWithNoCover.collectAll { it.normalizedName }}");
         componentList.size() > contractsWithNoCover.size()
+    }
+
+    /**
+     *  Sub components are either properties on the component or in case
+     *  of dynamically composed components stored in its componentList.
+     *  @return all sub components
+     */
+    public List<Component> allSubComponents() {
+        List<Component> subComponents = super.allSubComponents()
+        subComponents.addAll(claimMergers)
+        subComponents.addAll(uwInfoMergers)
+        return subComponents
     }
 }
