@@ -1,6 +1,5 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,13 +9,13 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.IEvent;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 
 import java.util.*;
 
@@ -416,7 +415,7 @@ public final class GrossClaimRoot implements IClaimRoot {
         return claimRoot.hasEvent();
     }
 
-    public EventPacket getEvent() {
+    public IEvent getEvent() {
         return claimRoot.getEvent();
     }
 

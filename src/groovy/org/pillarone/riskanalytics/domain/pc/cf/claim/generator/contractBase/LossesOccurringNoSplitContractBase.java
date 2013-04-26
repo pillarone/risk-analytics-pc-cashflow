@@ -1,19 +1,15 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase;
 
 import org.joda.time.DateTime;
-import org.joda.time.Months;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
-import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

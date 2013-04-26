@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.IEvent;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
@@ -32,6 +33,7 @@ public class LossesOccurringContractBase extends AbstractContractBase implements
 
     /**
      *
+     *
      * @param inceptionDate ignored in the context of this strategy
      * @param dateGenerator
      * @param periodScope
@@ -39,7 +41,7 @@ public class LossesOccurringContractBase extends AbstractContractBase implements
      * @return generates a new date if event is null or returns the event date
      */
     public DateTime occurrenceDate(DateTime inceptionDate, IRandomNumberGenerator dateGenerator,
-                                   PeriodScope periodScope, EventPacket event) {
+                                   PeriodScope periodScope, IEvent event) {
         if (event == null) {
             return DateTimeUtilities.randomDate(inceptionDate, periodScope.getNextPeriodStartDate(), dateGenerator);
         }

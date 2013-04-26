@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.IEvent;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 
 import java.util.Collections;
@@ -29,7 +30,7 @@ public class DefaultContractBase extends AbstractContractBase implements IReinsu
     }
 
     public DateTime occurrenceDate(DateTime inceptionDate, IRandomNumberGenerator dateGenerator,
-                                   PeriodScope periodScope, EventPacket event) {
+                                   PeriodScope periodScope, IEvent event) {
         throw new SimulationException(errorMessage);
     }
 

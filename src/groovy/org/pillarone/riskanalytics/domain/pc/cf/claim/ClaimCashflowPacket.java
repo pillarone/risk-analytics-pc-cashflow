@@ -10,6 +10,7 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.IEvent;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
@@ -608,7 +609,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return getBaseClaim().getClaimType().equals(ClaimType.EVENT) || getBaseClaim().getClaimType().equals(ClaimType.AGGREGATED_EVENT);
     }
 
-    public EventPacket getEvent() {
+    public IEvent getEvent() {
         return getBaseClaim().getEvent();
     }
 

@@ -4,9 +4,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
-import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.IEvent;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
@@ -21,7 +21,7 @@ public class ClaimRoot implements IClaimRoot, Cloneable {
     private static Log LOG = LogFactory.getLog(ClaimRoot.class);
 
     private double ultimate;
-    private EventPacket event;
+    private IEvent event;
     private ClaimType claimType;
     private ExposureInfo exposure;
     private DateTime exposureStartDate;
@@ -38,7 +38,7 @@ public class ClaimRoot implements IClaimRoot, Cloneable {
         this.occurrenceDate = occurrenceDate;
     }
 
-    public ClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate, EventPacket event){
+    public ClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate, IEvent event){
         this(ultimate, claimType, exposureStartDate, occurrenceDate);
         this.event = event;
     }
@@ -80,7 +80,7 @@ public class ClaimRoot implements IClaimRoot, Cloneable {
         return event != null;
     }
 
-    public final EventPacket getEvent() {
+    public final IEvent getEvent() {
         return event;
     }
 

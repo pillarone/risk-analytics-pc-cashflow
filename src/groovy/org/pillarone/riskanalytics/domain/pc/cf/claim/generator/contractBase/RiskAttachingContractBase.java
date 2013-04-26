@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.IEvent;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 
@@ -33,6 +34,7 @@ public class RiskAttachingContractBase extends AbstractContractBase implements I
     }
 
     /**
+     *
      * @param inceptionDate
      * @param dateGenerator
      * @param periodScope
@@ -40,7 +42,7 @@ public class RiskAttachingContractBase extends AbstractContractBase implements I
      * @return occurrence date x days after inception date
      */
     public DateTime occurrenceDate(DateTime inceptionDate, IRandomNumberGenerator dateGenerator,
-                                   PeriodScope periodScope, EventPacket event) {
+                                   PeriodScope periodScope, IEvent event) {
         double aNumber = dateGenerator.nextValue().doubleValue();
         DateTime inceptionStartDate = periodScope.getCurrentPeriodStartDate();
         int days = Days.daysBetween(inceptionStartDate, periodScope.getNextPeriodStartDate()).getDays();

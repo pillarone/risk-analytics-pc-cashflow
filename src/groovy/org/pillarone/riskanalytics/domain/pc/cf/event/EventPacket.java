@@ -3,14 +3,19 @@ package org.pillarone.riskanalytics.domain.pc.cf.event;
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.packets.Packet;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class EventPacket extends Packet {
+public class EventPacket extends Packet implements IEvent {
 
     public EventPacket(DateTime date){
         setDate(date);
+    }
+
+    public int getEventID() {
+        throw new SimulationException("");
     }
 
     @Override

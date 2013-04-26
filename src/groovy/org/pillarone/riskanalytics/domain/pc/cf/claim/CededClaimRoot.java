@@ -7,8 +7,7 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
-import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
+import org.pillarone.riskanalytics.domain.pc.cf.event.IEvent;
 
 public class CededClaimRoot implements ICededRoot {
 
@@ -30,7 +29,7 @@ public class CededClaimRoot implements ICededRoot {
         return grossClaim.hasEvent();
     }
 
-    public EventPacket getEvent() {
+    public IEvent getEvent() {
         return grossClaim.getEvent();
     }
 
