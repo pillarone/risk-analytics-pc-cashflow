@@ -92,6 +92,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
             Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER));
 
     private IExposureBaseStrategy parmContractBase = ExposureBaseType.getDefault();
+    private ClaimCoverType parmCoverType = ClaimCoverType.SINGLE_CLAIM ;
 
     /**
      * MAGIC STRINGS
@@ -198,11 +199,12 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     private void initIteration(){
         if (periodScope.isFirstPeriod()) {
-            final IAllContractClaimCache claimStore = new UberCacheClaimStore();
+            final IAllContractClaimCache claimStore = parmCoverType.getClaimCache();
+
             final IPaidCalculation termCalc = new TermPaidRespectIncurredByClaim();
             periodStore.put(GROSS_CLAIMS, claimStore);
             periodStore.put(TERM_CALC, termCalc);
-            periodStore.put(INCOMING_PREMIUM, new HashMap<Integer, Double >());
+            periodStore.put(INCOMING_PREMIUM, new HashMap<Integer, Double>());
         }
     }
 
@@ -444,5 +446,13 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     public void setOutApAllPaid(PacketList<PaidAdditionalPremium> outApAllPaid) {
         this.outApAllPaid = outApAllPaid;
+    }
+
+    public ClaimCoverType getParmCoverType() {
+        return parmCoverType;
+    }
+
+    public void setParmCoverType(ClaimCoverType parmCoverType) {
+        this.parmCoverType = parmCoverType;
     }
 }
