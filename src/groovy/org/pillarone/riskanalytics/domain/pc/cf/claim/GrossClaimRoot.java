@@ -16,6 +16,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
+import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.*;
 
@@ -499,7 +500,7 @@ public final class GrossClaimRoot implements IClaimRoot {
         result.append(separator);
         result.append(getClaimType());
         result.append(separator);
-        result.append(getOccurrenceDate());
+        result.append(DateTimeUtilities.formatDate.print(getOccurrenceDate()));
         return result.toString();
     }
 
