@@ -46,7 +46,7 @@ public class ListOnlyContractClaimStore implements IAllContractClaimCache {
                 incurredClaimsByKey().values(), coverBase);
     }
 
-    public Set<IClaimRoot> allIncurredClaimsCurrentModelPeriod(PeriodScope periodScope, ContractCoverBase coverBase) {
+    public Set<IClaimRoot> allIncurredClaimsCurrentModelPeriodForAllocation(PeriodScope periodScope, ContractCoverBase coverBase) {
         return RIUtilities.incurredClaimsByPeriod(
                 periodScope.getCurrentPeriod(), periodScope.getPeriodCounter(), allIncurredClaims(), coverBase);
     }

@@ -14,7 +14,7 @@ public class EventPacket extends Packet implements IEvent {
         setDate(date);
     }
 
-    public int getEventID() {
+    public int getEventId() {
         throw new SimulationException("");
     }
 

@@ -17,7 +17,7 @@ public class IncurredAllocation implements IIncurredAllocation {
 
     public List<ICededRoot> allocateClaims(double incurredInPeriod, IAllContractClaimCache claimStore, PeriodScope periodScope, ContractCoverBase base) {
 
-        Set<IClaimRoot> grossClaimsThisPeriod = claimStore.allIncurredClaimsCurrentModelPeriod(periodScope, base)
+        Set<IClaimRoot> grossClaimsThisPeriod = claimStore.allIncurredClaimsCurrentModelPeriodForAllocation(periodScope, base)
 
         Double grossIncurred = (Double) grossClaimsThisPeriod*.getUltimate().sum()
 

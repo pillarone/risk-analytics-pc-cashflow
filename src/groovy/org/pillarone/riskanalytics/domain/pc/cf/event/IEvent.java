@@ -9,6 +9,6 @@ public interface IEvent {
 
     public DateTime getDate();
 
-    public int getEventID();
+    public int getEventId();
 
 }

@@ -58,7 +58,7 @@ public class ContractClaimStoreTestIncurredClaimImpl implements IAllContractClai
         return RIUtilities.incurredClaimsByPeriod(anInt, periodScope.getPeriodCounter(), someGrossClaims, coverBase );
     }
 
-    public Set<IClaimRoot> allIncurredClaimsCurrentModelPeriod(PeriodScope periodScope, ContractCoverBase coverBase) {
+    public Set<IClaimRoot> allIncurredClaimsCurrentModelPeriodForAllocation(PeriodScope periodScope, ContractCoverBase coverBase) {
         throw new SimulationException("");
     }
 

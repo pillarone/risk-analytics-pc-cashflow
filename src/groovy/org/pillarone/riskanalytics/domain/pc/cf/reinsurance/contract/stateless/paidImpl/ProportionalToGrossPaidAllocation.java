@@ -82,6 +82,7 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                         ClaimCashflowPacket claimCashflowPacket = new ClaimCashflowPacket(cededRoot, cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, setUltimate);
                         cashflowClaimsForPeriodCheck.add(claimCashflowPacket);
                         doPaidLessThanIncurredCheck(sanityChecks, cededRoot, cumulatedCededForThisClaim, claimCashflowPacket);
+                        ClaimUtils.applyMarkers(cashflowPacket, claimCashflowPacket);
                         claimsOfInterest.add(claimCashflowPacket);
                         break;
                     } else {

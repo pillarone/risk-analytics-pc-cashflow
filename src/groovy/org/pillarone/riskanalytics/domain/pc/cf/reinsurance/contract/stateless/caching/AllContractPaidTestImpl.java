@@ -36,7 +36,7 @@ public class AllContractPaidTestImpl implements IAllContractClaimCache {
         return RIUtilities.incurredClaimsByPeriod(anInt, periodScope.getPeriodCounter(), roots, coverBase);
     }
 
-    public Set<IClaimRoot> allIncurredClaimsCurrentModelPeriod(PeriodScope periodScope, ContractCoverBase coverBase) {
+    public Set<IClaimRoot> allIncurredClaimsCurrentModelPeriodForAllocation(PeriodScope periodScope, ContractCoverBase coverBase) {
         throw new SimulationException("");
     }
 
