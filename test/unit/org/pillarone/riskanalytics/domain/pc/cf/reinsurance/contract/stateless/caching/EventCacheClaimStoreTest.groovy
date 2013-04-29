@@ -17,19 +17,38 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.C
 /**
 *   author simon.parten @ art-allianz . com
  */
-class EventCacheClaimStoreTest extends UberCacheClaimStoreTest {
+class EventCacheClaimStoreTest extends GroovyTestCase {
+
+    DateTime start2010 = new DateTime(2010, 1, 1, 1, 0, 0, 0, DateTimeZone.UTC)
+    DateTime start2011 = new DateTime(2011, 1, 1, 1, 0, 0, 0, DateTimeZone.UTC)
+    DateTime start2012 = new DateTime(2012, 1, 1, 1, 0, 0, 0, DateTimeZone.UTC)
+    List<ClaimCashflowPacket> grossClaims = new ArrayList<ClaimCashflowPacket>()
+    Set<IClaimRoot> rooClaims = new ArrayList<GrossClaimRoot>()
+    IAllContractClaimCache aTestStore
+
+    Comparator<ClaimCashflowPacket> cashflowPacketComparator = new Comparator<ClaimCashflowPacket>() {
+        int compare(ClaimCashflowPacket o1, ClaimCashflowPacket o2) {
+            return o1.getDate().compareTo(o2.getDate())
+        }
+    }
+
+    Comparator<IClaimRoot> claimRootComparator = new Comparator<IClaimRoot>() {
+        int compare(IClaimRoot o1, IClaimRoot o2) {
+            return o1.getOccurrenceDate().compareTo(o2.getOccurrenceDate())
+        }
+    }
 
     protected void setUp() {
 
         IEvent event1 = new EventPacket(new DateTime(2012,1, 1, 0, 0, 0, 0))
-        IEvent event2 = new EventPacket(new DateTime(2012,1, 1, 0, 0, 0, 0))
+        IEvent event2 = new EventPacket(new DateTime(2012,2, 1, 0, 0, 0, 0))
 
         aTestStore = new EventCacheClaimsStore()
         IPeriodCounter counter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(start2010, 4)
         GrossClaimRoot grossClaimRoot1 = TestClaimUtils.getGrossClaim([5i, 13i], [0.5d, 1d], 100, start2010, start2010, start2010, event1) /* 50 + 50 */
         GrossClaimRoot grossClaimRoot2 = TestClaimUtils.getGrossClaim([5i, 13i], [0.5d, 1d], 200, start2010, start2010, start2010, event1) /* 100 + 100 */
-        GrossClaimRoot grossClaimRoot3 = TestClaimUtils.getGrossClaim([5i, 13i], [0.5d, 1d], 100, start2010, start2010, start2010, event2) /* 50 + 50 */
-        GrossClaimRoot grossClaimRoot4 = TestClaimUtils.getGrossClaim([5i, 13i], [0.5d, 1d], 300, start2010, start2010, start2010, event2) /* 150 + 150 */
+        GrossClaimRoot grossClaimRoot3 = TestClaimUtils.getGrossClaim([5i, 13i], [0.5d, 1d], 100, start2010, start2010.plusDays(1), start2010, event2) /* 50 + 50 */
+        GrossClaimRoot grossClaimRoot4 = TestClaimUtils.getGrossClaim([5i, 13i], [0.5d, 1d], 300, start2010, start2010.plusDays(1), start2010, event2) /* 150 + 150 */
         rooClaims.clear()
 
         rooClaims << grossClaimRoot1
@@ -54,10 +73,11 @@ class EventCacheClaimStoreTest extends UberCacheClaimStoreTest {
 
     void testClaimRoots(){
         PeriodScope periodScope = TestPeriodScopeUtilities.getPeriodScope(start2010, 5)
-        Collection<IClaimRoot> aggregatedClaims = aTestStore.allIncurredClaimsInModelPeriod(0, periodScope, ContractCoverBase.LOSSES_OCCURING)
+        Collection<IClaimRoot> aggregatedClaims = aTestStore.allIncurredClaimsInModelPeriod(0, periodScope, ContractCoverBase.LOSSES_OCCURING).asList()
+        Collections.sort( aggregatedClaims , claimRootComparator )
         assert aggregatedClaims.size() == 2
-        assert aggregatedClaims.asList().get(0).getUltimate() == 400
-        assert aggregatedClaims.asList().get(1).getUltimate() == 300
+        assert aggregatedClaims.asList().get(0).getUltimate() == 300
+        assert aggregatedClaims.asList().get(1).getUltimate() == 400
     }
 
     void testSafety(){
@@ -71,8 +91,11 @@ class EventCacheClaimStoreTest extends UberCacheClaimStoreTest {
     void testCashflows(){
         PeriodScope periodScope = TestPeriodScopeUtilities.getPeriodScope(start2010, 5)
         aTestStore.allIncurredClaimsInModelPeriod(0, periodScope, ContractCoverBase.LOSSES_OCCURING)
-        Collection<ClaimCashflowPacket> cashflowPacketCollection1 = aTestStore.cashflowsByUnderwritingPeriodUpToSimulationPeriod(0, 0, periodScope, ContractCoverBase.LOSSES_OCCURING)
-        Collection<ClaimCashflowPacket> cashflowPacketCollection2 = aTestStore.cashflowsByUnderwritingPeriodUpToSimulationPeriod(1, 0, periodScope, ContractCoverBase.LOSSES_OCCURING)
+        Collection<ClaimCashflowPacket> cashflowPacketCollection1 = aTestStore.cashflowsByUnderwritingPeriodUpToSimulationPeriod(0, 0, periodScope, ContractCoverBase.LOSSES_OCCURING).asList()
+        Collection<ClaimCashflowPacket> cashflowPacketCollection2 = aTestStore.cashflowsByUnderwritingPeriodUpToSimulationPeriod(1, 0, periodScope, ContractCoverBase.LOSSES_OCCURING).asList()
+        Collections.sort(cashflowPacketCollection1, cashflowPacketComparator)
+        Collections.sort(cashflowPacketCollection2, cashflowPacketComparator)
+
         assert cashflowPacketCollection1.size() == 2
         assert cashflowPacketCollection2.size() == 2
         assert cashflowPacketCollection1.asList().get(0).getPaidCumulatedIndexed() == 200
