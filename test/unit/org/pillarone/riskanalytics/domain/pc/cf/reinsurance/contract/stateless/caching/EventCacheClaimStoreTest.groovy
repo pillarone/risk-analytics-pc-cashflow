@@ -45,10 +45,10 @@ class EventCacheClaimStoreTest extends GroovyTestCase {
 
         aTestStore = new EventCacheClaimsStore()
         IPeriodCounter counter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(start2010, 4)
-        GrossClaimRoot grossClaimRoot1 = TestClaimUtils.getGrossClaim([5i, 13i], [0.5d, 1d], 100, start2010, start2010, start2010, event1) /* 50 + 50 */
+        GrossClaimRoot grossClaimRoot1 = TestClaimUtils.getGrossClaim([5i, 13i], [0.5d, 1d], 100, start2010, start2010.plusDays(1), start2010.plusDays(1), event1) /* 50 + 50 */
         GrossClaimRoot grossClaimRoot2 = TestClaimUtils.getGrossClaim([5i, 13i], [0.5d, 1d], 200, start2010, start2010, start2010, event1) /* 100 + 100 */
-        GrossClaimRoot grossClaimRoot3 = TestClaimUtils.getGrossClaim([5i, 13i], [0.5d, 1d], 100, start2010, start2010.plusDays(1), start2010, event2) /* 50 + 50 */
-        GrossClaimRoot grossClaimRoot4 = TestClaimUtils.getGrossClaim([5i, 13i], [0.5d, 1d], 300, start2010, start2010.plusDays(1), start2010, event2) /* 150 + 150 */
+        GrossClaimRoot grossClaimRoot3 = TestClaimUtils.getGrossClaim([5i, 13i], [0.5d, 1d], 100, start2010, start2010.plusDays(3), start2010.plusDays(3), event2) /* 50 + 50 */
+        GrossClaimRoot grossClaimRoot4 = TestClaimUtils.getGrossClaim([5i, 13i], [0.5d, 1d], 300, start2010, start2010.plusDays(2), start2010.plusDays(2), event2) /* 150 + 150 */
         rooClaims.clear()
 
         rooClaims << grossClaimRoot1
@@ -74,10 +74,8 @@ class EventCacheClaimStoreTest extends GroovyTestCase {
     void testClaimRoots(){
         PeriodScope periodScope = TestPeriodScopeUtilities.getPeriodScope(start2010, 5)
         Collection<IClaimRoot> aggregatedClaims = aTestStore.allIncurredClaimsInModelPeriod(0, periodScope, ContractCoverBase.LOSSES_OCCURING).asList()
-        Collections.sort( aggregatedClaims , claimRootComparator )
         assert aggregatedClaims.size() == 2
-        assert aggregatedClaims.asList().get(0).getUltimate() == 300
-        assert aggregatedClaims.asList().get(1).getUltimate() == 400
+        assert aggregatedClaims.asList()*.getUltimate().containsAll([300d, 400d])
     }
 
     void testSafety(){
@@ -94,17 +92,10 @@ class EventCacheClaimStoreTest extends GroovyTestCase {
         Collection<ClaimCashflowPacket> cashflowPacketCollection1 = aTestStore.cashflowsByUnderwritingPeriodUpToSimulationPeriod(0, 0, periodScope, ContractCoverBase.LOSSES_OCCURING).asList()
         Collection<ClaimCashflowPacket> cashflowPacketCollection2 = aTestStore.cashflowsByUnderwritingPeriodUpToSimulationPeriod(1, 0, periodScope, ContractCoverBase.LOSSES_OCCURING).asList()
 
-
-        Collections.sort(cashflowPacketCollection1, cashflowPacketComparator)
         assert cashflowPacketCollection1.size() == 2
-        assert cashflowPacketCollection1.asList().get(0).getPaidCumulatedIndexed() == 200
-        assert cashflowPacketCollection1.asList().get(1).getPaidCumulatedIndexed() == 150
-
-        Collections.sort(cashflowPacketCollection2, cashflowPacketComparator)
         assert cashflowPacketCollection2.size() == 2
-        assert cashflowPacketCollection2.asList().get(0).getPaidCumulatedIndexed() == 400
-        assert cashflowPacketCollection2.asList().get(1).getPaidCumulatedIndexed() == 300
-
+        assert cashflowPacketCollection1.asList()*.getPaidCumulatedIndexed().containsAll([200d, 150d])
+        assert cashflowPacketCollection2.asList()*.getPaidCumulatedIndexed().containsAll([400d, 300d])
     }
 
 }
