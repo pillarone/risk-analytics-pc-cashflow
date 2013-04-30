@@ -93,13 +93,15 @@ class EventCacheClaimStoreTest extends GroovyTestCase {
         aTestStore.allIncurredClaimsInModelPeriod(0, periodScope, ContractCoverBase.LOSSES_OCCURING)
         Collection<ClaimCashflowPacket> cashflowPacketCollection1 = aTestStore.cashflowsByUnderwritingPeriodUpToSimulationPeriod(0, 0, periodScope, ContractCoverBase.LOSSES_OCCURING).asList()
         Collection<ClaimCashflowPacket> cashflowPacketCollection2 = aTestStore.cashflowsByUnderwritingPeriodUpToSimulationPeriod(1, 0, periodScope, ContractCoverBase.LOSSES_OCCURING).asList()
-        Collections.sort(cashflowPacketCollection1, cashflowPacketComparator)
-        Collections.sort(cashflowPacketCollection2, cashflowPacketComparator)
 
+
+        Collections.sort(cashflowPacketCollection1, cashflowPacketComparator)
         assert cashflowPacketCollection1.size() == 2
-        assert cashflowPacketCollection2.size() == 2
         assert cashflowPacketCollection1.asList().get(0).getPaidCumulatedIndexed() == 200
         assert cashflowPacketCollection1.asList().get(1).getPaidCumulatedIndexed() == 150
+
+        Collections.sort(cashflowPacketCollection2, cashflowPacketComparator)
+        assert cashflowPacketCollection2.size() == 2
         assert cashflowPacketCollection2.asList().get(0).getPaidCumulatedIndexed() == 400
         assert cashflowPacketCollection2.asList().get(1).getPaidCumulatedIndexed() == 300
 
