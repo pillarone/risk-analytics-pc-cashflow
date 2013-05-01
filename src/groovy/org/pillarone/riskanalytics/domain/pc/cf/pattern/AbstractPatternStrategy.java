@@ -11,7 +11,6 @@ import java.util.List;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-// todo(sku): read complete column instead of every single row
 public abstract class AbstractPatternStrategy extends AbstractParameterObject {
 
     protected static List<Double> getPatternValues(ConstrainedMultiDimensionalParameter pattern, int monthColumnIndex, int patternColumnIndex) {

@@ -151,8 +151,7 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
             case ClaimsGeneratorType.FREQUENCY_SEVERITY_SIMPLIFIED_INDEX:
                 return new FrequencySeverityClaimsGeneratorSimplifiedIndexStrategy(
                         frequencyIndices: (ComboBoxTableMultiDimensionalParameter) parameters.get("frequencyIndices"),
-                        // todo: apply scaling
-                        frequencyBase: ExposureBase.ABSOLUTE,
+                        frequencyBase: (FrequencyBase) parameters.get("frequencyBase"),
                         frequencyDistribution: (RandomDistribution) parameters.get("frequencyDistribution"),
                         frequencyModification: (DistributionModified) parameters.get("frequencyModification"),
                         claimsSizeBase: (ExposureBase) parameters.get("claimsSizeBase"),

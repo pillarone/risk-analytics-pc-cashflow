@@ -63,8 +63,7 @@ public class FrequencySeverityClaimsGeneratorSimplifiedIndexStrategy extends Abs
                                           IPerilMarker filterCriteria) {
         setClaimNumberGenerator(frequencyDistribution, frequencyModification);
         List<Factors> factors = IndexUtils.filterFactors(factorPackets, frequencyIndices, IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
-        // todo: apply correct frequency base!
-        baseClaims.addAll(generateClaims(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, FrequencyBase.ABSOLUTE, factors, periodScope));
+        baseClaims.addAll(generateClaims(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, frequencyBase.convert(), factors, periodScope));
         return baseClaims;
     }
 

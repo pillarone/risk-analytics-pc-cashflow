@@ -21,7 +21,6 @@ import java.util.List;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-// todo(sku): implement additional premium
 public class ProRataTermXLContract extends TermWCXLContract {
 
     private double share;

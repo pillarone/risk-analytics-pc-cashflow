@@ -433,8 +433,7 @@ public class PatternPacket extends Packet implements Cloneable {
     public static final class TrivialPattern extends PatternPacket {
 
         public TrivialPattern(Class<? extends IPatternMarker> patternMarker) {
-            // todo(sku): use immutable lists
-            super(patternMarker, Arrays.asList(1d), Arrays.asList(Period.days(0)));
+            super(patternMarker, Collections.unmodifiableList(Arrays.asList(1d)), Collections.unmodifiableList(Arrays.asList(Period.days(0))));
         }
     }
 
