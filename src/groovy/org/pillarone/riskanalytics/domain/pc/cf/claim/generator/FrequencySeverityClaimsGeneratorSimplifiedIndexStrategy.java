@@ -1,8 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
-import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
@@ -16,9 +16,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionUtils;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomFrequencyDistribution;
 
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +61,10 @@ public class FrequencySeverityClaimsGeneratorSimplifiedIndexStrategy extends Abs
                                           IPerilMarker filterCriteria) {
         setClaimNumberGenerator(frequencyDistribution, frequencyModification);
         List<Factors> factors = IndexUtils.filterFactors(factorPackets, frequencyIndices, IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
-        baseClaims.addAll(generateClaims(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, frequencyBase.convert(), factors, periodScope));
+        if(frequencyBase != null) {
+            throw new SimulationException("It appears you have initilaised the number of claims by frequency parameter. Please implement the correct logic here...");
+        }
+        baseClaims.addAll(generateClaims(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, FrequencyBase.ABSOLUTE, factors, periodScope));
         return baseClaims;
     }
 

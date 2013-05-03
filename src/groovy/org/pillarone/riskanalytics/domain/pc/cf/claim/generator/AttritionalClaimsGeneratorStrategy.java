@@ -48,21 +48,24 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
     }
 
     /**
+     *
      * @param uwInfos
      * @param uwInfosFilterCriteria
-     * @param factorsPackets        is ignored for attritional claims
-     * @param periodScope
-     * @return
+     * @param frequencyFactorsPackets       is ignored for attritional claims
+     *@param periodScope  @return
      */
     public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims,  List<UnderwritingInfoPacket> uwInfos,
                                           List<Factors> severityFactors, List uwInfosFilterCriteria,
-                                          List<FactorsPacket> factorsPackets, PeriodScope periodScope,
+                                          List<FactorsPacket> frequencyFactorsPackets, PeriodScope periodScope,
                                           List<SystematicFrequencyPacket> systematicFrequencies, IPerilMarker filterCriteria) {
         if (baseClaims.size() == 1) {
             return baseClaims;
         }
-        return generateClaim(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, periodScope);
-    }
+//        if(frequencyFactorsPackets.size() > 0 ) {
+//            throw new SimulationException("Recieved frequency indexing factors in Attritional claims generator. This makes no sense. Please contact development. Got " + frequencyFactorsPackets.size()  + " packets");
+//        }
+            return generateClaim(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, periodScope);
+        }
 
     @Override
     public List<ClaimRoot> calculateDependantClaimsWithContractBase(DependancePacket dependancePacket, IPerilMarker filterCriteria, PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase, Double underwritingInfoScaleFactor, List<Factors> indexSeverityFactors) {
