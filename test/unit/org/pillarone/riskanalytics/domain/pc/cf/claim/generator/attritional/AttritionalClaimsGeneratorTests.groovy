@@ -118,7 +118,7 @@ class AttritionalClaimsGeneratorTests extends GroovyTestCase {
         ComboBoxTableMultiDimensionalParameter uwInfoComboBox = new ComboBoxTableMultiDimensionalParameter(
                 ["motor hull"], ["Underwriting Information"], IUnderwritingInfoMarker)
         uwInfoComboBox.comboBoxValues.put('motor hull', riskBands)
-        AttritionalClaimsGenerator generator = createGenerator(1)
+        AttritionalClaimsGenerator generator = createGenerator(3)
         generator.subClaimsModel.parmSeverityBase = ExposureBaseType.getStrategy(ExposureBaseType.EXPOSURE, ['underwritingInfo': uwInfoComboBox])
         UnderwritingInfoPacket underwritingInfo = new UnderwritingInfoPacket(premiumWritten: 1000, numberOfPolicies: 20, origin: riskBands)
 

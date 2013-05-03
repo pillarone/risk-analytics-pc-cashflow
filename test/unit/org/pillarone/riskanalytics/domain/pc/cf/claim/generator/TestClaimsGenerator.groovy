@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator
 
+import com.google.common.collect.Lists
 import org.pillarone.riskanalytics.core.components.PeriodStore
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
@@ -42,12 +43,44 @@ abstract class TestClaimsGenerator {
         return generator
     }
 
+    static ClaimsGenerator getFrequencySeverityClaimsGenerator(String name, IterationScope iterationScope, double frequency,
+                                                               double claimSize, List<IUnderwritingInfoMarker> riskBands = null,
+                                                               FrequencyBase frequencyBase = FrequencyBase.ABSOLUTE,
+                                                               ExposureBase claimsSizeBase = ExposureBase.ABSOLUTE,
+                                                               FrequencySeverityClaimType claimType = FrequencySeverityClaimType.SINGLE) {
+        ClaimsGenerator generator = new ClaimsGenerator(name: name)
+        generator.periodScope = iterationScope.periodScope
+        generator.periodStore = new PeriodStore(generator.periodScope)
+        generator.parmClaimsModel = ClaimsGeneratorType.getStrategy(
+                ClaimsGeneratorType.FREQUENCY_SEVERITY, [
+                "frequencyIndices": new ConstrainedMultiDimensionalParameter(
+                        [], FrequencyIndexSelectionTableConstraints.COLUMN_TITLES,
+                        ConstraintsFactory.getConstraints(FrequencyIndexSelectionTableConstraints.IDENTIFIER)),
+                "frequencyBase": frequencyBase,
+                "frequencyDistribution": FrequencyDistributionType.getStrategy(FrequencyDistributionType.CONSTANT, [constant: frequency]),
+                "frequencyModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
+                "claimsSizeBase": claimsSizeBase,
+                "claimsSizeDistribution": DistributionType.getStrategy(DistributionType.CONSTANT, [constant: claimSize]),
+                "claimsSizeModification": DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
+                "produceClaim": claimType])
+
+        ComboBoxTableMultiDimensionalParameter uwInfoComboBox = new ComboBoxTableMultiDimensionalParameter(
+                [riskBands*.name], ["Underwriting Information"], IUnderwritingInfoMarker)
+        for (IUnderwritingInfoMarker riskBand : riskBands) {
+            uwInfoComboBox.comboBoxValues[riskBand.name] = riskBand
+        }
+        generator.parmUnderwritingSegments = uwInfoComboBox
+
+        return generator
+    }
+
     static FrequencySeverityClaimsGenerator getFrequencySeveritySimpleIndexClaimsGenerator(String name, IterationScope iterationScope) {
         FrequencySeverityClaimsGenerator generator = new FrequencySeverityClaimsGenerator(name: name)
         generator.periodScope = iterationScope.periodScope
         generator.periodStore = new PeriodStore(generator.periodScope)
         FrequencySeverityClaimsModel claimsModel = new FrequencySeverityClaimsModel()
-
+        claimsModel.parmFrequencyIndices = new ComboBoxTableMultiDimensionalParameter(
+                Lists.newArrayList(), Arrays.asList("Frequency Index"), IFrequencyIndexMarker.class);
 
         generator.subClaimsModel = claimsModel
         return generator
@@ -62,7 +95,7 @@ abstract class TestClaimsGenerator {
         generator.doCalculation(AbstractClaimsGenerator.PHASE_STORE_COMMUTATION_STATE)
     }
 
-    public static void addPayoutPattern (AttritionalClaimsGenerator generator ) {
+    public static void addPayoutPattern (AbstractClaimsGenerator generator ) {
         PatternPacket trivialReportingPattern = new PatternPacket.TrivialPattern(IPayoutPatternMarker.class);
         trivialReportingPattern.origin = new PayoutPattern(name: 'nothing')
         generator.parmPayoutPattern = new ConstrainedString(IPayoutPatternMarker, trivialReportingPattern.origin.name)
