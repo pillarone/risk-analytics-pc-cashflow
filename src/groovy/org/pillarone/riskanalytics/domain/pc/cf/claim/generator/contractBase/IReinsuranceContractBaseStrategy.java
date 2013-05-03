@@ -23,10 +23,11 @@ public interface IReinsuranceContractBaseStrategy {
                             PeriodScope periodScope, IEvent event);
 
     /**
+     *
      * @param event
      * @return event date
      */
-    DateTime occurrenceDate(EventPacket event);
+    DateTime occurrenceDate(IEvent event);
 
     /**
      * @param underwritingInfo
