@@ -24,12 +24,10 @@ categorized in the following groups:
     *Short Name* | *Long Name* | *Description*
     paid_inc | paid incremental |
     paid_cum | paid cumulative |
-    cres_inc | case reserves change |
-    cres_cum | reported reserves | cumulated reported - cumulated paid
+    RepRes_cum | reported reserves | cumulated reported - cumulated paid
     IBNR_inc | IBNR change |
     IBNR_cum | IBNR | cumulated total - cumulated reported
-    outst_inc | total reserves change |
-    outst_cum | total reserves | reported reserves + IBNR
+    TotRes_cum | total reserves | reported reserves + IBNR
     rep_inc | reported incremental | paid + case reserves
     rep_cum | reported cumulative |
     initial | initial | generated ultimate, does not include any run-off index effect
