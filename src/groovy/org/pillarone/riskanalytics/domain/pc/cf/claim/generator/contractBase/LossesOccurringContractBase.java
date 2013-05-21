@@ -61,7 +61,7 @@ public class LossesOccurringContractBase extends AbstractContractBase implements
     }
 
     public DateTime generateInceptionDate(IClaimRoot aClaim, PeriodScope periodScope) {
-        return periodScope.getCurrentPeriodStartDate();
+        return periodScope.getPeriodCounter().startOfPeriod(aClaim.getOccurrenceDate());
     }
 
 
@@ -90,7 +90,6 @@ public class LossesOccurringContractBase extends AbstractContractBase implements
         return claimRoots;
     }
 
-    @Override
     public int getContractLength() {
         return 0;
     }

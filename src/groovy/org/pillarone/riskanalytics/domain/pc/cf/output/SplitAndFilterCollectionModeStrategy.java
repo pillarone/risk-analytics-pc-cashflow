@@ -433,13 +433,8 @@ public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectin
         }
     }
 
-    // todo(dbr): isn't this legacy code? can't we simply return the member variable as in filter()?
     public List<DrillDownMode> getDrillDownModes() {
-        List<DrillDownMode> result = new ArrayList<DrillDownMode>();
-        for (DrillDownMode mode : drillDownModes) {
-            result.add(mode);
-        }
-        return result;
+        return drillDownModes;
     }
 
     /**

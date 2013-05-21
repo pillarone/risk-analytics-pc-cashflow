@@ -107,9 +107,9 @@ public class FrequencySeverityClaimsGeneratorStrategyTests extends GroovyTestCas
 
         claimsGenerator.doCalculation()
 
-        assertEquals "number of claims", 2000, claimsGenerator.outClaims.size()
+        assertEquals "number of claims", 2001, claimsGenerator.outClaims.size()
         assertEquals "correct value of claim", -123*1000.5, claimsGenerator.outClaims[0].ultimate()
-        assertEquals "correct value of claim", -123*1000.5, claimsGenerator.outClaims[1999].ultimate()
+        assertEquals "correct value of claim", -123*1000.5, claimsGenerator.outClaims[2000].ultimate()
         assertEquals "event one", true, claimsGenerator.outClaims[0].baseClaim.event != null
         assertEquals "occurrence date equals event date", true,
                 claimsGenerator.outClaims[0].baseClaim.event.getDate() == claimsGenerator.outClaims[0].occurrenceDate

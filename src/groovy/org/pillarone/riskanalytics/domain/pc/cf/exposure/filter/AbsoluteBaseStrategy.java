@@ -6,7 +6,9 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,6 +18,10 @@ public class AbsoluteBaseStrategy extends AbstractParameterObject implements IEx
 
     public double factor(PacketList<UnderwritingInfoPacket> underwritingInfos) {
         return 1;
+    }
+
+    public List filteredUnderwritingSegments() {
+        return new ArrayList();
     }
 
     public void coveredUnderwritingInfo(PacketList<UnderwritingInfoPacket> underwritingInfos) {

@@ -32,7 +32,6 @@ import com.google.common.collect.LinkedListMultimap
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-// todo(sku): diamond cover, mixing contract and company cover allowed?
 class ReinsuranceContracts extends DynamicComposedComponent {
 
     static Log LOG = LogFactory.getLog(ReinsuranceContracts)

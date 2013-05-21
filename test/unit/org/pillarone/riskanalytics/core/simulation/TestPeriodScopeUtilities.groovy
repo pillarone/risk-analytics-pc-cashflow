@@ -12,4 +12,9 @@ public class TestPeriodScopeUtilities {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date, numberOfPeriods);
         return new PeriodScope(periodCounter: periodCounter)
     }
+
+    public static PeriodScope getPeriodScopeWithDates(DateTime date, int numberOfPeriods) {
+        IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounterWithDates(date, numberOfPeriods);
+        return new PeriodScope(periodCounter: periodCounter)
+    }
 }

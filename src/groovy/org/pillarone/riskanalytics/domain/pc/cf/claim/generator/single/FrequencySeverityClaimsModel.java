@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.single;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.ArrayUtils;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.packets.PacketList;
@@ -81,7 +82,7 @@ public class FrequencySeverityClaimsModel extends Component {
      * @param inEventFrequencies ignored for attritional claims
      * @param inEventSeverities
      * @param severityFactors
-     * @param filterCriteria for inEventSeverities
+     * @param dependanceFilterCriteria for inEventSeverities
      * @param periodScope
      * @return ClaimRoot objects
      */
@@ -90,21 +91,25 @@ public class FrequencySeverityClaimsModel extends Component {
                                       PacketList<EventDependenceStream> inEventSeverities,
                                       List<Factors> severityFactors,
                                       IReinsuranceContractBaseStrategy contractBase,
-                                      IPerilMarker filterCriteria,
+                                      IPerilMarker dependanceFilterCriteria,
                                       PeriodScope periodScope,
                                       List<DependancePacket> dependancePackets) {
         int period = periodScope.getCurrentPeriod();
-        double scaleFactor = parmSeverityBase.factor(inUnderwritingInfo);
-        List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(inEventSeverities, filterCriteria);
-        DependancePacket dependancePacket = ClaimUtils.checkForDependance(filterCriteria, dependancePackets);
-        if ( dependancePacket.isDependantGenerator(filterCriteria) ) {
+
+        DependancePacket dependancePacket = ClaimUtils.checkForDependance(dependanceFilterCriteria, dependancePackets);
+        if ( dependancePacket.isDependantGenerator(dependanceFilterCriteria) ) {
             throw new SimulationException("Freq severity dependance not implemented");
+//            double scaleFactor = parmSeverityBase.factor(inUnderwritingInfo);
 //            return claimsModel(period).calculateClaims(-scaleFactor, periodScope, eventSeverities);
         }
         else {
 //            return claimsModel(period).generateClaims(-scaleFactor, severityFactors, 1, periodScope, contractBase);
-            List<ClaimRoot> baseClaims = claimsModel(period).calculateClaims(-scaleFactor, periodScope, eventSeverities);
-            baseClaims = claimsModel(period).generateClaims(baseClaims, inUnderwritingInfo, severityFactors, Collections.emptyList(), new ArrayList<FactorsPacket>(), periodScope, inEventFrequencies, filterCriteria);
+            List<ClaimRoot> baseClaims = Lists.newArrayList();
+            if(parmFrequencyIndices.getValueRowCount() > 0) {
+                throw new SimulationException("Frequency Factors not implemented for freq sev modelling at the moment");
+            }
+            baseClaims = claimsModel(period).generateClaims(baseClaims, inUnderwritingInfo, severityFactors, parmSeverityBase.filteredUnderwritingSegments(),
+                    new ArrayList<FactorsPacket>(), periodScope, inEventFrequencies, dependanceFilterCriteria);
             List<ClaimRoot> baseClaimsCorrectedSign = new ArrayList<ClaimRoot>();
             for (ClaimRoot claim : baseClaims) {
                 baseClaimsCorrectedSign.add(new ClaimRoot(-claim.getUltimate(), claim));

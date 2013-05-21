@@ -80,7 +80,6 @@ class RetroactiveReinsuranceContracts extends DynamicComposedComponent {
     }
 
     private void wireWithMerger() {
-        // todo: wire uw info
         for (RetroactiveReinsuranceContract contract : componentList) {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
             if (strategy?.mergerRequired()) {
