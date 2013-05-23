@@ -1,13 +1,14 @@
 package org.pillarone.riskanalytics.domain.pc.cf.exposure.filter;
 
+import com.google.common.collect.Lists;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.AllPeriodUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,9 +37,8 @@ abstract public class RelativeBaseStrategy extends AbstractParameterObject imple
     /**
      * @param underwritingInfos uncovered underwriting info is removed from this list
      */
-    @Override
     public void coveredUnderwritingInfo(PacketList<UnderwritingInfoPacket> underwritingInfos) {
-        List<UnderwritingInfoPacket> filteredList = new ArrayList<UnderwritingInfoPacket>();
+        List<UnderwritingInfoPacket> filteredList = Lists.newArrayList();
         List filterCriteria = filteredUnderwritingSegments();
         for (UnderwritingInfoPacket underwritingInfo : underwritingInfos) {
             if (filterCriteria.contains(underwritingInfo.riskBand())) {
@@ -49,5 +49,20 @@ abstract public class RelativeBaseStrategy extends AbstractParameterObject imple
         if (!filteredList.isEmpty()) {
             underwritingInfos.addAll(filteredList);
         }
+    }
+
+    public List<AllPeriodUnderwritingInfoPacket> coveredAllPeriodUnderwritingInfo(PacketList<AllPeriodUnderwritingInfoPacket> allPeriodUnderwritingInfos) {
+        List<AllPeriodUnderwritingInfoPacket> filteredList = Lists.newArrayList();
+        List filterCriteria = filteredUnderwritingSegments();
+        for (AllPeriodUnderwritingInfoPacket underwritingInfo : allPeriodUnderwritingInfos) {
+            if (filterCriteria.contains(underwritingInfo.getOrigin())) {
+                filteredList.add(underwritingInfo);
+            }
+        }
+        allPeriodUnderwritingInfos.clear();
+        if (!filteredList.isEmpty()) {
+            allPeriodUnderwritingInfos.addAll(filteredList);
+        }
+        return filteredList;
     }
 }
