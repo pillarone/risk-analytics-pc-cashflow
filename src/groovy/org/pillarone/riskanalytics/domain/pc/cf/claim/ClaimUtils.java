@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import groovy.lang.Closure;
 import org.apache.commons.lang.NotImplementedException;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
@@ -565,5 +566,11 @@ public class ClaimUtils {
     }
 
 
-
+    public static boolean uniqueKeyClaims(List<ClaimCashflowPacket> claims) {
+        Set<IClaimRoot> keyClaims = new HashSet<IClaimRoot>();
+        for (ClaimCashflowPacket claim : claims) {
+            keyClaims.add(claim.getKeyClaim());
+        }
+        return keyClaims.size() == claims.size();
+    }
 }
