@@ -33,7 +33,6 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
 
     PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
-//    PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket)
     PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
     PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault)
 
@@ -52,7 +51,7 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
                         ConstraintsFactory.getConstraints(LegalEntityPortionConstraints.IDENTIFIER)),
                 parmCover: CoverAttributeStrategyType.getDefault(),
                 parmCoveredPeriod: PeriodStrategyType.getDefault(),
-                parmContractStrategy: ReinsuranceContractType.getDefault());
+                parmContractStrategy: ReinsuranceContractType.getDefault())
     }
 
     @Override
@@ -70,9 +69,9 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
         }
     }
 
-/**
- * in channels of contracts based on original (gross) claims can be wired directly with replicating in channels
- */
+    /**
+     * in channels of contracts based on original (gross) claims can be wired directly with replicating in channels
+     */
     private void wireContractsBasedOnGross() {
         for (ReinsuranceContract contract : componentList) {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
@@ -84,7 +83,6 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
     }
 
     private void wireWithMerger() {
-        // todo: wire uw info
         for (ReinsuranceContract contract : componentList) {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
             if (strategy?.mergerRequired()) {
@@ -122,7 +120,7 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
         }
     }
 
-    private MatrixCoverAttributeStrategy getCoverStrategy(ReinsuranceContract contract) {
+    private static MatrixCoverAttributeStrategy getCoverStrategy(ReinsuranceContract contract) {
         if (contract.parmCover instanceof MatrixCoverAttributeStrategy) {
             return (MatrixCoverAttributeStrategy) contract.parmCover
         } else if (contract.parmCover instanceof NoneCoverAttributeStrategy) {
@@ -157,7 +155,8 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
     }
 
     /**
-     * All ceded information is wired directly to a replicating channel independently of specific reinsurance program.
+     * All ceded information is wired directly to a replicating channel independently of the specific reinsurance program
+     * as long as it is not a virtual contract.
      * Includes all replicating wiring independent of a p14n.
      */
     private void wireProgramIndependentReplications() {
@@ -180,8 +179,9 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
                 contractsWithNoCover.add(contract)
             }
         }
-        LOG.debug("removed contracts: ${contractsWithNoCover.collectAll { it.normalizedName }}");
-        componentList.size() > contractsWithNoCover.size()
+        componentList.removeAll(contractsWithNoCover)
+        LOG.debug("trivial contracts removed: ${contractsWithNoCover.collectAll { it.normalizedName }}");
+        componentList.size() > 0
     }
 
     /**

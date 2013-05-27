@@ -36,6 +36,9 @@ class ClaimMerger extends Component {
         filterNetAndCededClaims()
         // TODO (dbe) make more robust, e.g. no gross found.
         if (isReceiverWired(inClaimsGross)) {
+            boolean cededKeyClaimsUnique = ClaimUtils.uniqueKeyClaims(inClaimsCeded)
+            boolean netKeyClaimsUnique = ClaimUtils.uniqueKeyClaims(inClaimsNet)
+            boolean benefitKeyClaimsUnique = ClaimUtils.uniqueKeyClaims(inClaimsBenefit)
             Map<IClaimRoot, ClaimCashflowPacket> cededClaimsByKeyClaim = ClaimUtils.aggregateByKeyClaim(inClaimsCeded)
             Map<IClaimRoot, ClaimCashflowPacket> cededClaimsForNetByKeyClaim = ClaimUtils.aggregateByKeyClaim(inClaimsCededForNet)
             Map<IClaimRoot, ClaimCashflowPacket> netClaimsByKeyClaim = ClaimUtils.aggregateByKeyClaim(inClaimsNet)
@@ -44,7 +47,12 @@ class ClaimMerger extends Component {
             if (!hasBenefitContracts()) {
                 for (Map.Entry<IClaimRoot, ClaimCashflowPacket> netClaim : netClaimsByKeyClaim.entrySet()) {
                     if (onlyNetAndNoCededContractsCovered()) {
-                        outClaims.add(getNetClaim(netClaim, cededClaimsForNetByKeyClaim))
+                        if (netKeyClaimsUnique) {
+                            outClaims.add(netClaim.value)
+                        }
+                        else {
+                            outClaims.add(getNetClaim(netClaim, cededClaimsForNetByKeyClaim))
+                        }
                     }
                     else if (onlyCededNoNetContractsCovered()) {
                         // todo: think: this won't be used as netClaimsByBase is empty
