@@ -60,6 +60,7 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
 
     protected void doCalculation(String phase) {
         try {
+            initSimulation();
             initIteration(periodStore, periodScope, PHASE_CLAIMS_CALCULATION);
             if (provideClaims(phase)) {
                 // A deal may commute before the end of the contract period. We may hence want to terminate claims generation
@@ -67,7 +68,7 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
                 IPeriodCounter periodCounter = periodScope.getPeriodCounter();
                 List<ClaimCashflowPacket> claims = new ArrayList<ClaimCashflowPacket>();
 
-                if(!(parmParameterizationBasis.getType().equals(ReinsuranceContractBaseType.LOSSESOCCURRING))) {
+                if (!(parmParameterizationBasis.getType().equals(ReinsuranceContractBaseType.LOSSESOCCURRING))) {
                     throw new SimulationException("Only losses occuring implemented for frequency severity at the moment");
                 }
                 List<Factors> runoffFactors = null;
@@ -96,17 +97,29 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
                 checkCashflowClaims(claims, globalSanityChecks);
                 setTechnicalProperties(claims);
                 outClaims.addAll(claims);
-            }
-            else {
+            } else {
                 prepareProvidingClaimsInNextPeriodOrNot(phase);
             }
         } catch (SimulationException e) {
-            throw new SimulationException("Problem in claims generator in Iteration : "
+            throw new SimulationException("Problem in claims generator; " +  this.getName() + " in Iteration : "
                     + iterationScope.getCurrentIteration() + ". Period :" + periodScope.getCurrentPeriod()
                     + " with seed : " + simulationScope.getSimulation().getRandomSeed().toString() + " update date:  " + DateTimeUtilities.formatDate.print( globalUpdateDate )
                     + "\n \n " + e.getMessage(), e);
         }
 
+    }
+
+    private void initSimulation() {
+        if(iterationScope.getCurrentIteration() == 1 && periodScope.isFirstPeriod()){
+            if(subClaimsModel.getParmFrequencyIndices().getValueRowCount() > 0) {
+                List aList = (List) subClaimsModel.getParmFrequencyIndices().getValuesAsObjects().get(0);
+                if (aList instanceof ArrayList) {
+                    if (aList.get(0) != null) {
+                        throw new SimulationException("Frequency Factors not implemented for freq sev modelling at the moment. Size of frequency indicies list: " + subClaimsModel.getParmFrequencyIndices().getValueRowCount());
+                    }
+                }
+            }
+        }
     }
 
     private void randomDrawInfo(ISingleUpdatingMethodologyStrategy.GrossClaimAndRandomDraws updatingResult) {

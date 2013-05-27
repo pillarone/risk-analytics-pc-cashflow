@@ -105,9 +105,6 @@ public class FrequencySeverityClaimsModel extends Component {
         else {
 //            return claimsModel(period).generateClaims(-scaleFactor, severityFactors, 1, periodScope, contractBase);
             List<ClaimRoot> baseClaims = Lists.newArrayList();
-            if(parmFrequencyIndices.getValueRowCount() > 0) {
-                throw new SimulationException("Frequency Factors not implemented for freq sev modelling at the moment");
-            }
             baseClaims = claimsModel(period).generateClaims(baseClaims, inUnderwritingInfo, severityFactors, parmSeverityBase.filteredUnderwritingSegments(),
                     new ArrayList<FactorsPacket>(), periodScope, inEventFrequencies, dependanceFilterCriteria);
             List<ClaimRoot> baseClaimsCorrectedSign = new ArrayList<ClaimRoot>();
