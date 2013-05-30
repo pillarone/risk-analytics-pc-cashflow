@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
+import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
@@ -40,6 +41,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
     static DateTime beginOfCover = new DateTime(2012, 1, 1, 0, 0, 0, 0)
 
     static StatelessRIContract getArtLayerContract(Double termExcess, Double termLimit, List<Integer> periods, List<Integer> layers, List<Double> shares, List<Double> periodExcess, List<Double> periodLimit, List<Double> claimExcess, List<Double> claimLimit, DateTime beginOfCover, List<Double> apPercentages, List<String> apTypes) {
+
         IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
         ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
         int numberOfLayers = layers.size()

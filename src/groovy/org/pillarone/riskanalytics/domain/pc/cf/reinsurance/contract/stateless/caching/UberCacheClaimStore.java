@@ -9,9 +9,12 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ClaimRIOutcome;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimRIOutcome;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 
@@ -183,5 +186,37 @@ public class UberCacheClaimStore implements IAllContractClaimCache {
 
 //        Collection<ClaimCashflowPacket> cashflowsPaidAgainsThisModelPeriod = GRIUtilities.cashflowsCoveredInModelPeriod(claimsToSimPeriod, periodScope, coverBase, uWPeriod);
         return simPeriodUwPeriodClaims.get(simPeriod).get(uWPeriod);
+    }
+
+    private List<ClaimRIOutcome> allCededCashflows = Lists.newArrayList();
+    private List<IncurredClaimRIOutcome> allIncurredOutcomes = Lists.newArrayList();
+    @Override
+    public void cacheCededClaims(final List<ClaimRIOutcome> cededCashflows, final List<IncurredClaimRIOutcome> cededIncurred) {
+        allCededCashflows.addAll(cededCashflows);
+        allIncurredOutcomes.addAll(cededIncurred);
+    }
+
+    @Override
+    public List<ClaimCashflowPacket> allCededCashlowsToDate() {
+        final List<ClaimCashflowPacket> packets = Lists.newArrayList();
+        for (ClaimRIOutcome allCededCashflow : allCededCashflows) {
+            packets.add(allCededCashflow.getCededClaim());
+        }
+        return packets;
+    }
+
+    @Override
+    public List<ClaimRIOutcome> allRIOutcomesToDate() {
+        return allCededCashflows;
+    }
+
+    @Override
+    public List<ICededRoot> allCededRootClaimsToDate() {
+        return new ArrayList<ICededRoot>( RIUtilities.incurredCededClaims(allCededCashlowsToDate(), IncurredClaimBase.BASE) );
+    }
+
+    @Override
+    public Collection<IncurredClaimRIOutcome> allIncurredRIOutcomesToDate() {
+        return allIncurredOutcomes;
     }
 }

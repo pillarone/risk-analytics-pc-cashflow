@@ -14,6 +14,6 @@ import java.util.Set;
  */
 public interface IIncurredAllocation {
 
-    List<ICededRoot> allocateClaims(double incurredInPeriod, IAllContractClaimCache claimStore, PeriodScope periodScope, ContractCoverBase base);
+    AllClaimsRIOutcome allocateClaims(double incurredInPeriod, IAllContractClaimCache claimStore, PeriodScope periodScope, ContractCoverBase base);
 
 }

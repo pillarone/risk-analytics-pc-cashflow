@@ -113,14 +113,9 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         initIteration();
         doFilter();
         storePremium();
-        periodStore.put(CEDED_CLAIMS, new ArrayList<ClaimCashflowPacket>()); /* Otherwise null pointer on startup - overwrite this list later in this method */
         IAllContractClaimCache claimStore = (IAllContractClaimCache) periodStore.get(GROSS_CLAIMS, -periodScope.getCurrentPeriod());
         IPaidCalculation paidCalculation = (IPaidCalculation) periodStore.get(TERM_CALC, -periodScope.getCurrentPeriod());
         claimStore.cacheClaims(inClaims, periodScope.getCurrentPeriod());
-        List<ClaimCashflowPacket> cededCashflowsToDate = allClaimsToDate(periodScope, periodStore, CEDED_CLAIMS);
-        Set<ICededRoot> allIncurredCeded = RIUtilities.incurredCededClaims(cededCashflowsToDate, IncurredClaimBase.BASE);
-        List<ICededRoot> allIncurredCededClaims = new ArrayList<ICededRoot>();
-        allIncurredCededClaims.addAll(new ArrayList<ICededRoot>(allIncurredCeded));
         Map<Integer, Double> premiumPerPeriod = (Map<Integer, Double>) periodStore.get(INCOMING_PREMIUM, -periodScope.getCurrentPeriod());
 
         Double termLimit = parmContractStructure.getTermLimit();
@@ -130,33 +125,25 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
                 periodScope, termExcess, termLimit, parmCoverageBase, premiumPerPeriod);
         IncurredLossAndAP incurredLossAndAP = incurredInPeriod.getLayerLossesByPeriod().get(periodScope.getCurrentPeriod());
 
-        final List<ClaimCashflowPacket> paidClaims;
-        final List<ContractFinancialsPacket> contractFinancialsPacket;
+        final AllCashflowClaimsRIOutcome claimsAfterContractApplication;
+        final AllClaimsRIOutcome incurredClaimOutcome;
         try {
-//            Leave this code here for the moment as evaulating the right hand side in the debugger can be useful, but it incurrs a performance penalty when uncommented.
-//            final Map<Integer, Double> cededIncurredByPeriod = new TermIncurredCalculation().cededIncurredsByPeriods(incurredClaims.keys(), periodScope, termExcess, termLimit, setupLayerParameters() , parmCoverageBase);
-            final List<ICededRoot> cededClaims = new IncurredAllocation().allocateClaims(incurredInPeriod.getIncLossAfterTermStructureCurrentSimPeriod(), claimStore, periodScope, parmCoverageBase);
-            allIncurredCededClaims.addAll(cededClaims);
-
+            incurredClaimOutcome = new IncurredAllocation().allocateClaims(incurredInPeriod.getIncLossAfterTermStructureCurrentSimPeriod(), claimStore, periodScope, parmCoverageBase);
             final TermLossAndPaidAps paidStuff = paidCalculation.cededIncrementalPaidRespectTerm(claimStore, setupLayerParameters(),
                     periodScope, parmCoverageBase, termLimit, termExcess, globalSanityChecks, incurredInPeriod.getLayerLossesByPeriod(), premiumPerPeriod);
             AllTermAPLayers allTermLayers = ((NonPropTemplateContractStrategy) parmContractStructure).getTermLayers();
             AdditionalPremiumAndPaidTuple termAPs = allTermLayers.incrementalTermLoss(incurredInPeriod.getPeriodLosses(), termLimit, termExcess, periodScope);
             fillAPChannels(incurredLossAndAP, paidStuff, termAPs);
-            paidClaims = new ProportionalToGrossPaidAllocation().allocatePaid(paidStuff.getTermLosses(), inClaims,
-                    cededCashflowsToDate, periodScope, parmCoverageBase, allIncurredCededClaims, globalSanityChecks);
-            contractFinancialsPacket = ContractFinancialsPacket.getContractFinancialsPacketsByInceptionPeriod(
-                    paidClaims, new ArrayList<ClaimCashflowPacket>(), new ArrayList<CededUnderwritingInfoPacket>(),
-                    new ArrayList<UnderwritingInfoPacket>(), periodScope.getPeriodCounter());
+            claimsAfterContractApplication = new ProportionalToGrossPaidAllocation().allocatePaid(paidStuff.getTermLosses(), inClaims,
+                    claimStore, periodScope, parmCoverageBase, incurredClaimOutcome, globalSanityChecks);
         } catch (SimulationException ex) {
+            double seed = (simulationScope == null ? 0d : simulationScope.getSimulation().getRandomSeed());
             throw new SimulationException(" Insanity detected in structure module : " + this.getName() + "\n In iteration :"
-                    + iterationScope.getCurrentIteration() + "\n Period : " + periodScope.getCurrentPeriod() + ". Seed : " + simulationScope.getSimulation().getRandomSeed() + "   .... Please see logs.   \n" + ex.getMessage(), ex);
+                    + iterationScope.getCurrentIteration() + "\n Period : " + periodScope.getCurrentPeriod() + ". Seed : " + seed +"   .... Please see logs.   \n" + ex.getMessage(), ex);
         }
-        RIUtilities.addMarkers(paidClaims, this);
-        outClaimsCeded.addAll(paidClaims);
-        outContractFinancials.addAll(contractFinancialsPacket);
-        periodStore.put(CEDED_CLAIMS, paidClaims);
-
+        outClaimsCeded.addAll(claimsAfterContractApplication.getAllCededClaims());
+        outClaimsNet.addAll(claimsAfterContractApplication.getAllNetClaims());
+        claimStore.cacheCededClaims(claimsAfterContractApplication.getAllIncurredOutcomes(), incurredClaimOutcome.getAllIncurredOutcomes() );
     }
 
     private void storePremium() {

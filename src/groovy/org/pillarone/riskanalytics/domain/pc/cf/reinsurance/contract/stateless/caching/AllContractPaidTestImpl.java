@@ -1,16 +1,21 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.SetMultimap;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ClaimRIOutcome;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimRIOutcome;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -98,5 +103,40 @@ public class AllContractPaidTestImpl implements IAllContractClaimCache {
         }
         Map<Integer, Collection<ClaimCashflowPacket>> uwPMap = simPUwPerCashflow.get(simPeriod);
         uwPMap.put(uwPeriod, coll);
+    }
+
+    public void addCededPackets(List<ClaimCashflowPacket> moreCededCashflows) {
+        this.cededCashflows.addAll(moreCededCashflows);
+    }
+
+    public void addCededIncurred(List<IncurredClaimRIOutcome> someIncurred) {
+        this.cededIncurred.addAll(someIncurred);
+    }
+
+    private List<ClaimCashflowPacket> cededCashflows = Lists.newArrayList();
+    private List<IncurredClaimRIOutcome> cededIncurred = Lists.newArrayList();
+
+    public List<ClaimCashflowPacket> allCededCashlowsToDate() {
+        return cededCashflows;
+    }
+
+    @Override
+    public List<ICededRoot> allCededRootClaimsToDate() {
+        throw new SimulationException("");
+    }
+
+    @Override
+    public void cacheCededClaims(final List<ClaimRIOutcome> cededCashflows, final List<IncurredClaimRIOutcome> cededIncurred) {
+        throw new SimulationException("");
+    }
+
+    @Override
+    public List<ClaimRIOutcome> allRIOutcomesToDate() {
+        throw new SimulationException("");
+    }
+
+    @Override
+    public Collection<IncurredClaimRIOutcome> allIncurredRIOutcomesToDate() {
+        return cededIncurred;
     }
 }

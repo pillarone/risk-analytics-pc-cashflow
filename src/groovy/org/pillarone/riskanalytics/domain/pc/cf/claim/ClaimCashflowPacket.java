@@ -9,7 +9,6 @@ import org.pillarone.riskanalytics.core.packets.MultiValuePacket;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
-import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.IEvent;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
@@ -216,19 +215,19 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     /**
      * Convenience method for setting a new payment amount based on an old Claim Cashflow
      */
-    public ClaimCashflowPacket(IClaimRoot baseClaim, ClaimCashflowPacket claimCashflowPacket, double paidIncremental, double cumulatedPaid, boolean setUltimate) {
+    public ClaimCashflowPacket(IClaimRoot baseClaim, ClaimCashflowPacket grossCashflow, double paidIncremental, double cumulatedPaid, boolean setUltimate, final double ultimate) {
         this.baseClaim = baseClaim;
-        this.keyClaim = claimCashflowPacket.getBaseClaim();
+        this.keyClaim = grossCashflow.getBaseClaim();
         if(setUltimate) {
             this.ultimate = baseClaim.getUltimate();
-            this.nominalUltimate = ultimate;
+            this.nominalUltimate = this.ultimate;
         } else {
             this.ultimate = 0d;
             this.nominalUltimate = 0d;
         }
 
-        this.updateDate = claimCashflowPacket.getUpdateDate();
-        setDate(claimCashflowPacket.getDate());
+        this.updateDate = grossCashflow.getUpdateDate();
+        setDate(grossCashflow.getDate());
         this.paidIncrementalIndexed = paidIncremental;
         this.paidCumulatedIndexed = cumulatedPaid;
 
@@ -240,9 +239,9 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         changeInIBNRIndexed = 0;
 
 
-        updateDate = claimCashflowPacket.getUpdateDate();
-        updatePeriod = claimCashflowPacket.getUpdatePeriod();
-        discountFactors = claimCashflowPacket.getDiscountFactors();
+        updateDate = grossCashflow.getUpdateDate();
+        updatePeriod = grossCashflow.getUpdatePeriod();
+        discountFactors = grossCashflow.getDiscountFactors();
         initRiskBased();
     }
 

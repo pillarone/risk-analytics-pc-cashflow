@@ -124,7 +124,19 @@ public enum ClaimType {
         public DateTime generateInceptionDate(IClaimRoot claimRoot, int contractLength) {
             throw new SimulationException("Not implemented for " + this.toString());
         }
-    };
+    },
+    NET {
+        @Override
+        boolean isReserveClaim() {
+            return false;
+        }
+
+        @Override
+        public DateTime generateInceptionDate(IClaimRoot claimRoot, int contractLength) {
+            throw new SimulationException("Not implemented for " + this.toString());
+        }
+    },
+    ;
 
     public Object getConstructionString(Map parameters) {
         return getClass().getName() + "." + this;
