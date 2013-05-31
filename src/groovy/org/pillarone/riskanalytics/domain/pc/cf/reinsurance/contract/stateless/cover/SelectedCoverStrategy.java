@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover;
 
+import com.google.common.collect.Lists;
 import org.pillarone.riskanalytics.core.parameterization.*;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
@@ -41,10 +42,10 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
         return (List<IPerilMarker>) grossClaims.getValuesAsObjects(0, true);
     }
 
+    private List<ReinsuranceContractAndBase.ContractAndBaseIdentifier> contractAndBaseIdentifiers;
     private List<ReinsuranceContractAndBase> coveredContractsAndBase;
     private List<IReinsuranceContractMarker> coveredContracts;
     private List<IReinsuranceContractMarker> coveredContractsCoveringCeded;
-    private ClaimValidator claimValidator = new ClaimValidator();
 
     private void lazyInitCoveredContracts() {
         if (coveredContracts == null) {
@@ -53,6 +54,7 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
             if (contractBasedCover()) {
                 for (ReinsuranceContractAndBase contract : coveredContractsAndBase) {
                     coveredContracts.add(contract.reinsuranceContract);
+                    contractAndBaseIdentifiers.add(contract.getContractAndBaseIdentifier());
                     if (contract.contractBase.equals(ReinsuranceContractBase.CEDED)) {
                         coveredContractsCoveringCeded.add(contract.reinsuranceContract);
                     }
@@ -63,7 +65,7 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
 
     public List<ReinsuranceContractAndBase> getCoveredReinsuranceContractsAndBase() {
         if (coveredContractsAndBase == null) {
-            coveredContractsAndBase = new ArrayList<ReinsuranceContractAndBase>();
+            coveredContractsAndBase = Lists.newArrayList();
             for (int row = structures.getTitleRowCount(); row < structures.getRowCount(); row++) {
                 IReinsuranceContractMarker contract = (IReinsuranceContractMarker) structures.getValueAtAsObject(row, ReinsuranceContractBasedOn.CONTRACT_COLUMN_INDEX);
                 String contractBase = (String) structures.getValueAt(row, ReinsuranceContractBasedOn.BASED_ON_COLUMN_INDEX);
@@ -74,23 +76,29 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
     }
 
     public void coveredClaims(List<ClaimCashflowPacket> source) {
-        List<ClaimCashflowPacket> filteredClaims = new ArrayList<ClaimCashflowPacket>();
+        List<ClaimCashflowPacket> filteredClaims = Lists.newArrayList();
         List coveredPerils = getCoveredPerils();
 //        This call to no cover initialises the coveredContracts field... crucial to avoid a null pointer later, and not entirely obvious.
-        if(noCover()) {
+        boolean perilCover = perilBasedCover();
+        boolean contractCover = contractBasedCover();
+        if (noCover()) {
             source.clear();
             return;
         }
         for (ClaimCashflowPacket claim : source) {
-            if (perilBasedCover()) {
+            if (perilCover) {
                 if (coveredPerils.contains(claim.peril())) {
                     filteredClaims.add(claim);
                 }
             }
-
-            if (contractBasedCover()) {
-                if (coveredContracts.contains(claim.reinsuranceContract()) && claim.reserve() == null) {
-                    if (coveredContracts.contains(claim.reinsuranceContract())) {
+            if (contractCover) {
+                for (ReinsuranceContractAndBase reinsuranceContractAndBase : coveredContractsAndBase) {
+                    if (
+                            reinsuranceContractAndBase.reinsuranceContract.equals(claim.reinsuranceContract())
+                                    &&
+                            reinsuranceContractAndBase.contractBase.equals(claim.getClaimType().coveredByContractBase())
+                        )
+                    {
                         filteredClaims.add(claim);
                     }
                 }

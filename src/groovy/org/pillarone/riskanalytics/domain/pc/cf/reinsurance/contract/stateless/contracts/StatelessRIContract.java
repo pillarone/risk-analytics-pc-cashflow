@@ -16,9 +16,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.AllPeriodUnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType;
@@ -28,12 +26,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranc
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.UberCacheClaimStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ContractBasedOn;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.CoverStrategyType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ICoverStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.SelectedCoverStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl.IncurredAllocation;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl.TermIncurredCalculation;
@@ -143,7 +138,9 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         }
         outClaimsCeded.addAll(claimsAfterContractApplication.getAllCededClaims());
         outClaimsNet.addAll(claimsAfterContractApplication.getAllNetClaims());
-        claimStore.cacheCededClaims(claimsAfterContractApplication.getAllIncurredOutcomes(), incurredClaimOutcome.getAllIncurredOutcomes() );
+        RIUtilities.addMarkers(outClaimsCeded, this);
+        RIUtilities.addMarkers(outClaimsNet, this);
+        claimStore.cacheCededClaims(claimsAfterContractApplication.getAllCashflowOutcomes(), incurredClaimOutcome.getAllIncurredOutcomes() );
     }
 
     private void storePremium() {
@@ -175,18 +172,6 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     private void initSimulation() {
         if (iterationScope.isFirstIteration() && periodScope.isFirstPeriod()) {
-
-            if (parmCover instanceof SelectedCoverStrategy) {
-                ConstrainedMultiDimensionalParameter structureCover = (ConstrainedMultiDimensionalParameter) parmCover.getParameters().get("structures");
-                if (structureCover.getValueRowCount() > 0) {
-                    List<String> grossOrNet = structureCover.getColumn(ContractBasedOn.BASED_ON_COLUMN_INDEX);
-                    for (String s : grossOrNet) {
-                        if (s.equals("NET")) {
-                            throw new SimulationException("Net cover not implemented");
-                        }
-                    }
-                }
-            }
 
             List<AllPeriodUnderwritingInfoPacket> allPeriodUnderwritingInfoPacketList = parmContractBase.coveredAllPeriodUnderwritingInfo(inAllPeriodUnderwritingInfo);
             if (parmContractBase.exposureBase() != ExposureBase.ABSOLUTE) {

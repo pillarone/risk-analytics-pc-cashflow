@@ -87,7 +87,7 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                         doPaidLessThanIncurredCheck(sanityChecks, cededRoot.getCededClaim(), cumulatedCededForThisClaim, cededClaim);
                         ClaimUtils.applyMarkers(cashflowPacket, cededClaim);
                         ClaimUtils.applyMarkers(cashflowPacket, netClaim);
-                        final ClaimRIOutcome claimRIOutcome = new ClaimRIOutcome(new ClaimCashflowPacket(), cededClaim, cashflowPacket);
+                        final ClaimRIOutcome claimRIOutcome = new ClaimRIOutcome(netClaim, cededClaim, cashflowPacket);
                         claimsOfInterest.addClaim(claimRIOutcome);
                         break;
                     } else {

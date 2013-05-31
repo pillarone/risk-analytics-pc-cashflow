@@ -1,6 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl;
 
+import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.CededClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AllClaimsRIOutcome;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IIncurredAllocation;
@@ -25,6 +27,10 @@ public class IncurredAllocation implements IIncurredAllocation {
 
         Set<IClaimRoot> grossClaimsThisPeriod = claimStore.allIncurredClaimsCurrentModelPeriodForAllocation(periodScope, base);
         double grossIncurred = RIUtilities.ultimateSum(grossClaimsThisPeriod);
+        if(incurredInPeriod > grossIncurred) {
+            throw new SimulationException("Ceded amount in contract: " + incurredInPeriod + " is greater than the grossIncurred in the period : " + grossIncurred + ". " +
+                    "This is non-sensical, please contact development");
+        }
 
         /* If the incurred amount is zero we want to cede no claims ! Divide by a large number */
         if (grossClaimsThisPeriod.size() > 0) {
@@ -36,8 +42,9 @@ public class IncurredAllocation implements IIncurredAllocation {
         final AllClaimsRIOutcome allClaimsRIOutcome = new AllClaimsRIOutcome();
         for (IClaimRoot iClaimRoot : grossClaimsThisPeriod) {
             double cededRatio = iClaimRoot.getUltimate() / grossIncurred;
-            ICededRoot cededClaim = new CededClaimRoot(cededRatio * incurredInPeriod, iClaimRoot);
-            ICededRoot netClaim = new CededClaimRoot((1 - cededRatio) * incurredInPeriod, iClaimRoot);
+            double cededIncurred = cededRatio * incurredInPeriod;
+            ICededRoot cededClaim = new CededClaimRoot( cededIncurred , iClaimRoot, ClaimType.CEDED);
+            ICededRoot netClaim = new CededClaimRoot( iClaimRoot.getUltimate() - cededIncurred , iClaimRoot, ClaimType.NET);
             IncurredClaimRIOutcome incurredClaimRIOutcome = new IncurredClaimRIOutcome(netClaim, cededClaim, iClaimRoot);
             allClaimsRIOutcome.addClaim(incurredClaimRIOutcome);
         }

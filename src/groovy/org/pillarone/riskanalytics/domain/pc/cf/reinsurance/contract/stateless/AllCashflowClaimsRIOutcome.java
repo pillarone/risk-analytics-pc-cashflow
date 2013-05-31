@@ -3,7 +3,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless;
 import com.google.common.collect.Lists;
 import edu.emory.mathcs.backport.java.util.Collections;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 
 import java.util.List;
 
@@ -13,19 +12,19 @@ import java.util.List;
  */
 public class AllCashflowClaimsRIOutcome {
 
-    final List<ClaimRIOutcome> allIncurredOutcomes;
+    final List<ClaimRIOutcome> allCashflowOutcomes;
 
     public AllCashflowClaimsRIOutcome() {
-        this.allIncurredOutcomes = Lists.newArrayList();
+        this.allCashflowOutcomes = Lists.newArrayList();
     }
 
     public void addClaim(ClaimRIOutcome claim) {
-        allIncurredOutcomes.add(claim);
+        allCashflowOutcomes.add(claim);
     }
 
     public List<ClaimCashflowPacket> getAllCededClaims(){
         final List<ClaimCashflowPacket> iCededRoots = Lists.newArrayList();
-        for (ClaimRIOutcome allIncurredOutcome : allIncurredOutcomes) {
+        for (ClaimRIOutcome allIncurredOutcome : allCashflowOutcomes) {
             iCededRoots.add(allIncurredOutcome.getCededClaim());
         }
         return Collections.unmodifiableList(iCededRoots);
@@ -33,20 +32,20 @@ public class AllCashflowClaimsRIOutcome {
 
     public List<ClaimCashflowPacket> getAllNetClaims(){
         final List<ClaimCashflowPacket> iCededRoots = Lists.newArrayList();
-        for (ClaimRIOutcome allIncurredOutcome : allIncurredOutcomes) {
+        for (ClaimRIOutcome allIncurredOutcome : allCashflowOutcomes) {
             iCededRoots.add(allIncurredOutcome.getNetClaim());
         }
         return Collections.unmodifiableList(iCededRoots);
     }
 
-    public List<ClaimRIOutcome> getAllIncurredOutcomes() {
-        return Collections.unmodifiableList( allIncurredOutcomes );
+    public List<ClaimRIOutcome> getAllCashflowOutcomes() {
+        return Collections.unmodifiableList(allCashflowOutcomes);
     }
 
     @Override
     public String toString() {
         return "AllCashflowClaimsRIOutcome{" +
-                "allIncurredOutcomes=" + allIncurredOutcomes +
+                "allCashflowOutcomes=" + allCashflowOutcomes +
                 '}';
     }
 }

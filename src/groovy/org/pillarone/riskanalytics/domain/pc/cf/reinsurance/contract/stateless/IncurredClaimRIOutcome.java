@@ -35,9 +35,9 @@ public class IncurredClaimRIOutcome {
     @Override
     public String toString() {
         return "Outcome{" +
-                "net=" + netClaim +
-                ", ceded=" + cededClaim +
-                ", gross=" + grossClaim +
+                "Net=" + netClaim +
+                ", Ceded=" + cededClaim +
+                ", Gross=" + grossClaim +
                 '}';
     }
 }

@@ -46,7 +46,7 @@ public class AllClaimsRIOutcome {
     @Override
     public String toString() {
         return "AllClaimsRIOutcome{" +
-                "allIncurredOutcomes=" + allIncurredOutcomes +
+                "allCashflowOutcomes=" + allIncurredOutcomes +
                 '}';
     }
 }

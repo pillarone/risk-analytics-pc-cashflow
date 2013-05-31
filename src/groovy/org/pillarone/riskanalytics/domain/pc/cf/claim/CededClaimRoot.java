@@ -15,10 +15,18 @@ public class CededClaimRoot implements ICededRoot {
 
     private double ultimate;
     private IClaimRoot grossClaim;
+    private ClaimType claimType;
 
     public CededClaimRoot(double ultimate, IClaimRoot grossClaim) {
         this.ultimate = ultimate;
         this.grossClaim = grossClaim;
+        this.claimType = ClaimType.CEDED;
+    }
+
+    public CededClaimRoot(double ultimate, IClaimRoot grossClaim, ClaimType claimType) {
+        this.ultimate = ultimate;
+        this.grossClaim = grossClaim;
+        this.claimType = claimType;
     }
 
     public double getUltimate() {
@@ -34,7 +42,7 @@ public class CededClaimRoot implements ICededRoot {
     }
 
     public ClaimType getClaimType() {
-        return ClaimType.CEDED;
+        return claimType;
     }
 
     public DateTime getExposureStartDate() {
@@ -79,7 +87,7 @@ public class CededClaimRoot implements ICededRoot {
 
     @Override
     public String toString() {
-        return "CededClaimRoot{" +
+        return "Ceded{" +
                 "ultimate=" + ultimate +
                 ", grossClaim=" + grossClaim.toString() +
                 '}';

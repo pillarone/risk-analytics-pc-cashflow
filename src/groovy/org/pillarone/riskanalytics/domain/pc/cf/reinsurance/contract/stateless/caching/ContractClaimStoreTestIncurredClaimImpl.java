@@ -1,6 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Sets;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
@@ -19,8 +21,8 @@ import java.util.*;
  */
 public class ContractClaimStoreTestIncurredClaimImpl implements IAllContractClaimCache {
 
-    Set<IClaimRoot> someGrossClaims = new HashSet<IClaimRoot>();
-    Collection<ClaimCashflowPacket> claimCashflowPackets = new ArrayList<ClaimCashflowPacket>();
+    Set<IClaimRoot> someGrossClaims = Sets.newHashSet();
+    Collection<ClaimCashflowPacket> claimCashflowPackets = Lists.newArrayList();
 
     public ContractClaimStoreTestIncurredClaimImpl(Collection<IClaimRoot> someClaims) {
         this.someGrossClaims = new HashSet<IClaimRoot>(someClaims);
@@ -59,7 +61,7 @@ public class ContractClaimStoreTestIncurredClaimImpl implements IAllContractClai
     }
 
     public Set<IClaimRoot> allIncurredClaimsCurrentModelPeriodForAllocation(PeriodScope periodScope, ContractCoverBase coverBase) {
-        throw new SimulationException("");
+        return someGrossClaims;
     }
 
     @Override
