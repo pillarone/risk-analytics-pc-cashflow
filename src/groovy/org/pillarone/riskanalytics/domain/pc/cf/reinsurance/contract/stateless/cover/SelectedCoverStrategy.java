@@ -42,19 +42,17 @@ public class SelectedCoverStrategy extends AbstractParameterObject implements IC
         return (List<IPerilMarker>) grossClaims.getValuesAsObjects(0, true);
     }
 
-    private List<ReinsuranceContractAndBase.ContractAndBaseIdentifier> contractAndBaseIdentifiers;
     private List<ReinsuranceContractAndBase> coveredContractsAndBase;
     private List<IReinsuranceContractMarker> coveredContracts;
     private List<IReinsuranceContractMarker> coveredContractsCoveringCeded;
 
     private void lazyInitCoveredContracts() {
         if (coveredContracts == null) {
-            coveredContracts = new ArrayList<IReinsuranceContractMarker>();
-            coveredContractsCoveringCeded = new ArrayList<IReinsuranceContractMarker>();
+            coveredContracts = Lists.newArrayList();
+            coveredContractsCoveringCeded = Lists.newArrayList();
             if (contractBasedCover()) {
                 for (ReinsuranceContractAndBase contract : coveredContractsAndBase) {
                     coveredContracts.add(contract.reinsuranceContract);
-                    contractAndBaseIdentifiers.add(contract.getContractAndBaseIdentifier());
                     if (contract.contractBase.equals(ReinsuranceContractBase.CEDED)) {
                         coveredContractsCoveringCeded.add(contract.reinsuranceContract);
                     }

@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot
 
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
@@ -14,6 +15,7 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.TestClaimUtils
 import org.pillarone.riskanalytics.domain.pc.cf.claim.CededClaimRoot
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AllCashflowClaimsRIOutcome
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AllClaimsRIOutcome
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
@@ -50,7 +52,6 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         cashflowPacketList.addAll(grossClaimRoot1.getClaimCashflowPackets(counter))
 
         // Assume that there are no prior ceded claims.
-        List<ICededRoot> cededClaims = new ArrayList<ICededRoot>()
         CededClaimRoot cededClaimRoot = new CededClaimRoot(50d, grossClaimRoot1)
         IncurredClaimRIOutcome claimRIOutcome = new IncurredClaimRIOutcome(cededClaimRoot, cededClaimRoot, grossClaimRoot1)
         allClaimsRIOutcome.addClaim(claimRIOutcome)
@@ -60,13 +61,17 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         contractPaidThisPeriod.put(0, 50d)
         IAllContractClaimCache claimStore = new AllContractPaidTestImpl()
         ProportionalToGrossPaidAllocation allocation = new ProportionalToGrossPaidAllocation()
-        List<ClaimCashflowPacket> cededPackets = allocation.allocatePaid(contractPaidThisPeriod, cashflowPacketList, claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, allClaimsRIOutcome, true).getAllCededClaims()
+        AllCashflowClaimsRIOutcome cededPackets = allocation.allocatePaid(contractPaidThisPeriod, cashflowPacketList, claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, allClaimsRIOutcome, true)
 
-        assert cededPackets.size() == cashflowPacketList.size()
-        assertEquals "Check 50 ceded", 50d, cededPackets*.getPaidIncrementalIndexed().sum()
-        for (int i = 0; i < cededPackets.size(); i++) {
-           assertEquals("check dates : ", cededPackets.get(i).getDate(), cashflowPacketList.get(i).getDate())
-           assertEquals("check severity : ",cededPackets.get(i).getPaidIncrementalIndexed(), cashflowPacketList.get(i).getPaidIncrementalIndexed() * 0.5, 0.000001)
+        assert cededPackets.getAllCashflowOutcomes().size() == cashflowPacketList.size()
+        assertEquals "Check 50 ceded", 50d, cededPackets.getAllCededClaims()*.getPaidIncrementalIndexed().sum()
+        for (int i = 0; i < cededPackets.getAllCashflowOutcomes().size(); i++) {
+           assertEquals("check dates : ", cededPackets.getAllCededClaims().get(i).getDate(), cashflowPacketList.get(i).getDate())
+           assertEquals("check severity : ",cededPackets.getAllCededClaims().get(i).getPaidIncrementalIndexed(), cashflowPacketList.get(i).getPaidIncrementalIndexed() * 0.5, 0.000001)
+        }
+        for (int i = 0; i < cededPackets.getAllCashflowOutcomes().size(); i++) {
+           assertEquals("check dates : ", cededPackets.getAllNetClaims().get(i).getDate(), cashflowPacketList.get(i).getDate())
+           assertEquals("check severity : ",cededPackets.getAllNetClaims().get(i).getPaidIncrementalIndexed(), cashflowPacketList.get(i).getPaidIncrementalIndexed() * 0.5, 0.000001)
         }
     }
 
@@ -104,17 +109,17 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         contractPaidPeriod1.put(0, 25d)
 
         ProportionalToGrossPaidAllocation allocation = new ProportionalToGrossPaidAllocation()
-        List<ClaimCashflowPacket> cededPackets = allocation.allocatePaid(contractPaidPeriod1, cashflowPacketList1, claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, incurredClaimOutcome, true).getAllCededClaims()
+        AllCashflowClaimsRIOutcome cededPackets = allocation.allocatePaid(contractPaidPeriod1, cashflowPacketList1, claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, incurredClaimOutcome, true)
         claimStore.addCededIncurred([claimRIOutcome])
-        assert cededPackets.size() == cashflowPacketList1.size()
-        claimStore.addCededPackets(cededPackets)
+        assert cededPackets.getAllCashflowOutcomes().size() == cashflowPacketList1.size()
+        claimStore.addCededPackets(cededPackets.getAllCededClaims())
 
         periodScope.prepareNextPeriod()
         AllClaimsRIOutcome outComeP2 = new AllClaimsRIOutcome()
         List<ClaimCashflowPacket> cashflowPacketList2 = new ArrayList<ClaimCashflowPacket>()
         cashflowPacketList2.addAll(grossClaimRoot1.getClaimCashflowPackets(counter, null, false))
 
-        //        Allocation independant of incurred strategy, and paid amount, only contract paid is needed.
+        // Allocation independant of incurred strategy, and paid amount, only contract paid is needed.
         Map<Integer, Double> contractPaidPeriod2 = new HashMap<Integer, Double>()
         contractPaidPeriod2.put(0, 12.5d)
         contractPaidPeriod2.put(1, 0d)
@@ -135,8 +140,8 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         contractPaidPeriod3.put(2, 0d)
 
         contractPaidPeriod3.put(0, 12.5d)
-        List<ClaimCashflowPacket> cededPacketsPeriod3 = allocation.allocatePaid(contractPaidPeriod3, cashflowPacketList3, claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, outComeP2, true).getAllCededClaims()
-        assertEquals("Check cumulated amount : ", 50, cededPacketsPeriod3.get(1).getPaidCumulatedIndexed())
+        AllCashflowClaimsRIOutcome cededPacketsPeriod3 = allocation.allocatePaid(contractPaidPeriod3, cashflowPacketList3, claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, outComeP2, true)
+        assertEquals("Check cumulated amount : ", 50, cededPacketsPeriod3.getAllCededClaims().get(1).getPaidCumulatedIndexed())
     }
 
 
@@ -145,13 +150,15 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         IPeriodCounter counter = periodScope.getPeriodCounter()
         /* Gross claim setup */
         GrossClaimRoot grossClaimRoot1 = TestClaimUtils.getGrossClaim([5i], [1d], 100d, start2010, start2010, start2010) /* 100 */
-        GrossClaimRoot grossClaimRoot2 = TestClaimUtils.getGrossClaim([6i, 7i], [0.5d, 1d], 120d, start2010, start2010, start2010) /* 60+60 */
+        GrossClaimRoot grossClaimRoot2 = TestClaimUtils.getGrossClaim([6i, 7i], [0.5d, 1d], 120d, start2010, start2010, start2010) /* 60+60 */ /* All paid P1 */
         GrossClaimRoot grossClaimRoot3 = TestClaimUtils.getGrossClaim([7i, 15i], [0.5d, 1d], 100d, start2010, start2010, start2010) /* 50 + 50 */
         GrossClaimRoot grossClaimRoot4 = TestClaimUtils.getGrossClaim([5i], [1d], 100d, start2010, start2011, start2011) /* 100 */
 
         /* Gross Incurred amount P1 : 300 */ /* Ceded incurred loss by claim: 10d, 30d, 10d */
+        /* Contract p1 individual XOL 40 XS 90 */
+        /* Contract should pay 40  ceded in p1 */
 
-        /* Gross Incurred amount P2 : 100 */
+        /* Gross Incurred amount P2 : 100. Paid immediately. */
         IAllContractClaimCache claimStore = new AllContractPaidTestImpl()
         List<IClaimRoot> rootClaims = new ArrayList<IClaimRoot>()
         rootClaims << grossClaimRoot1 << grossClaimRoot2 << grossClaimRoot3
@@ -159,15 +166,18 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         List<ClaimCashflowPacket> cashflowPacketList = new ArrayList<ClaimCashflowPacket>()
         cashflowPacketList.addAll(createCashflows(rootClaims, periodScope.getPeriodCounter()))
 
-        List<ICededRoot> cededClaims = new ArrayList<ICededRoot>()
-        CededClaimRoot cededClaimRoot1 = new CededClaimRoot(50d * 100 / 320, grossClaimRoot1)
-        CededClaimRoot cededClaimRoot2 = new CededClaimRoot(50d * 120 / 320, grossClaimRoot2)
-        CededClaimRoot cededClaimRoot3 = new CededClaimRoot(50d * 100 / 320, grossClaimRoot3)
+        CededClaimRoot cededClaimRoot1 = new CededClaimRoot(50d * 100 / 320, grossClaimRoot1, ClaimType.CEDED)
+        CededClaimRoot cededClaimRoot2 = new CededClaimRoot(50d * 120 / 320, grossClaimRoot2, ClaimType.CEDED)
+        CededClaimRoot cededClaimRoot3 = new CededClaimRoot(50d * 100 / 320, grossClaimRoot3, ClaimType.CEDED)
+
+        CededClaimRoot netClaimRoot1 = new CededClaimRoot(50d * 200 / 320, grossClaimRoot1, ClaimType.NET)
+        CededClaimRoot netClaimRoot2 = new CededClaimRoot(50d * 200 / 320, grossClaimRoot2, ClaimType.NET)
+        CededClaimRoot netClaimRoot3 = new CededClaimRoot(50d * 200 / 320, grossClaimRoot3, ClaimType.NET)
 
         AllClaimsRIOutcome allClaimsRIOutcome = new AllClaimsRIOutcome()
-        IncurredClaimRIOutcome claimRIOutcome1 = new IncurredClaimRIOutcome(cededClaimRoot1, cededClaimRoot1, grossClaimRoot1)
-        IncurredClaimRIOutcome claimRIOutcome2 = new IncurredClaimRIOutcome(cededClaimRoot2, cededClaimRoot2, grossClaimRoot2)
-        IncurredClaimRIOutcome claimRIOutcome3 = new IncurredClaimRIOutcome(cededClaimRoot3, cededClaimRoot3, grossClaimRoot3)
+        IncurredClaimRIOutcome claimRIOutcome1 = new IncurredClaimRIOutcome(netClaimRoot1, cededClaimRoot1, grossClaimRoot1)
+        IncurredClaimRIOutcome claimRIOutcome2 = new IncurredClaimRIOutcome(netClaimRoot2, cededClaimRoot2, grossClaimRoot2)
+        IncurredClaimRIOutcome claimRIOutcome3 = new IncurredClaimRIOutcome(netClaimRoot3, cededClaimRoot3, grossClaimRoot3)
         allClaimsRIOutcome.addClaim(claimRIOutcome1)
         allClaimsRIOutcome.addClaim(claimRIOutcome2)
         allClaimsRIOutcome.addClaim(claimRIOutcome3)
@@ -175,39 +185,54 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
 
 //        Allocation independant of incurred strategy, and paid amount, only contract paid is needed.
         Map<Integer, Double> contractPaidThisPeriod = new HashMap<Integer, Double>()
-        contractPaidThisPeriod.put(0, 40d)
+        double cededPaid = 40d
+        double netPaid = 100d + 60d + 60d + 50d - 40d
+        contractPaidThisPeriod.put(0, cededPaid)
 
         ProportionalToGrossPaidAllocation allocation = new ProportionalToGrossPaidAllocation()
-        List<ClaimCashflowPacket> cededPackets1 = allocation.allocatePaid(contractPaidThisPeriod, cashflowPacketList, claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, allClaimsRIOutcome, true).getAllCededClaims()
+        AllCashflowClaimsRIOutcome cededPackets1 = allocation.allocatePaid(contractPaidThisPeriod, cashflowPacketList, claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, allClaimsRIOutcome, true)
         claimStore.addCededIncurred([claimRIOutcome1, claimRIOutcome2, claimRIOutcome3])
 
-        assert cededPackets1.size() == cashflowPacketList.size()
-        assertEquals "Check 40 ceded", 40d, cededPackets1*.getPaidIncrementalIndexed().sum()
-        claimStore.addCededPackets(cededPackets1)
+        assert cededPackets1.allCashflowOutcomes.size() == cashflowPacketList.size()
+
+
+        assertEquals "Check 40 ceded", cededPaid, cededPackets1.getAllCededClaims()*.getPaidIncrementalIndexed().sum()
+        assertEquals "Check remaining is net", netPaid, cededPackets1.getAllNetClaims()*.getPaidIncrementalIndexed().sum()
+        claimStore.addCededPackets(cededPackets1.allCededClaims)
 
         Map<Integer, Double> contractPaidPeriod1 = new HashMap<Integer, Double>()
-        contractPaidPeriod1.put(0, 10d)
-        contractPaidPeriod1.put(1, 80d)
+        double p0CededPaid = 10d
+        double p0NetPaid = 50d - 10d
+        contractPaidPeriod1.put(0, p0CededPaid)
+        contractPaidPeriod1.put(1, 20d)
 
-        final AllClaimsRIOutcome outcome = new AllClaimsRIOutcome()
+        final AllClaimsRIOutcome incurredOutcome = new AllClaimsRIOutcome()
         CededClaimRoot cededClaimRoot4 = new CededClaimRoot(80d, grossClaimRoot4)
-        IncurredClaimRIOutcome claimRIOutcome = new IncurredClaimRIOutcome(cededClaimRoot4, cededClaimRoot4, grossClaimRoot4)
-        outcome.addClaim(claimRIOutcome)
+        CededClaimRoot netClaimRoot4 = new CededClaimRoot(20d, grossClaimRoot4)
+        IncurredClaimRIOutcome claimRIOutcome = new IncurredClaimRIOutcome(netClaimRoot4, cededClaimRoot4, grossClaimRoot4)
+        incurredOutcome.addClaim(claimRIOutcome)
 
         periodScope.prepareNextPeriod()
         rootClaims.add(grossClaimRoot4)
         List<ClaimCashflowPacket> cashflowPacketList2 = new ArrayList<ClaimCashflowPacket>()
         cashflowPacketList2.addAll(createCashflows(rootClaims, periodScope.getPeriodCounter()))
         List<ClaimCashflowPacket> cededPackets2 = allocation.allocatePaid(contractPaidPeriod1, cashflowPacketList2,
-                claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, outcome, true).getAllCededClaims()
+                claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, incurredOutcome, true).getAllCededClaims()
+
+        List<ClaimCashflowPacket> netPackets2 = allocation.allocatePaid(contractPaidPeriod1, cashflowPacketList2,
+                claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, incurredOutcome, true).getAllNetClaims()
 
         List<ClaimCashflowPacket> cededClaimsP0 = RIUtilities.cashflowsClaimsByPeriod(0, periodScope.getPeriodCounter(), cededPackets2, ContractCoverBase.LOSSES_OCCURING)
         List<ClaimCashflowPacket> cededClaimsP1 = RIUtilities.cashflowsClaimsByPeriod(1, periodScope.getPeriodCounter(), cededPackets2, ContractCoverBase.LOSSES_OCCURING)
 
-        assertEquals "", 10d, cededClaimsP0*.getPaidIncrementalIndexed().sum()
-        assertEquals "", 80d, cededClaimsP1*.getPaidIncrementalIndexed().sum()
+        List<ClaimCashflowPacket> netClaimsP0 = RIUtilities.cashflowsClaimsByPeriod(0, periodScope.getPeriodCounter(), netPackets2, ContractCoverBase.LOSSES_OCCURING)
+        List<ClaimCashflowPacket> netClaimsP1 = RIUtilities.cashflowsClaimsByPeriod(1, periodScope.getPeriodCounter(), netPackets2, ContractCoverBase.LOSSES_OCCURING)
 
+        assert p0CededPaid == cededClaimsP0*.getPaidIncrementalIndexed().sum()
+        assert 20d == cededClaimsP1*.getPaidIncrementalIndexed().sum()
 
+        assert p0NetPaid == netClaimsP0*.getPaidIncrementalIndexed().sum()
+        assert 80d == netClaimsP1*.getPaidIncrementalIndexed().sum()
     }
 
 

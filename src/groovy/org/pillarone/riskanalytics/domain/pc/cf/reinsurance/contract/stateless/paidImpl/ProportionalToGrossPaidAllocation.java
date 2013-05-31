@@ -77,12 +77,14 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                 double cumulatedCededForThisClaim = latestCededCashflow.getPaidCumulatedIndexed();
                 for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
                     double paidAgainstThisPacket = 0;
+                    double netPaid = 0d;
 
                     if (sumIncrementsOfThisClaim == 0) {
                         paidAgainstThisPacket = claimPaidInContractYear;
                         paidAgainstThisPacket = checkPaidAgainstThisClaim(cededRoot.getCededClaim(), cumulatedCededForThisClaim, paidAgainstThisPacket);
+                        netPaid = cashflowPacket.getPaidIncrementalIndexed() - paidAgainstThisPacket;
                         ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(cededRoot.getCededClaim(), cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, setUltimate, cededRoot.getCededClaim().getUltimate());
-                        ClaimCashflowPacket netClaim = new ClaimCashflowPacket(cededRoot.getNetClaim(), cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, setUltimate, cededRoot.getNetClaim().getUltimate() );
+                        ClaimCashflowPacket netClaim = new ClaimCashflowPacket(cededRoot.getNetClaim(), cashflowPacket, netPaid, cumulatedCededForThisClaim, setUltimate, cededRoot.getNetClaim().getUltimate() );
                         cashflowClaimsForPeriodCheck.add(cededClaim);
                         doPaidLessThanIncurredCheck(sanityChecks, cededRoot.getCededClaim(), cumulatedCededForThisClaim, cededClaim);
                         ClaimUtils.applyMarkers(cashflowPacket, cededClaim);
@@ -93,11 +95,12 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
                     } else {
                         paidAgainstThisPacket = claimPaidInContractYear * cashflowPacket.getPaidIncrementalIndexed() / sumIncrementsOfThisClaim;
                         paidAgainstThisPacket = checkPaidAgainstThisClaim(cededRoot.getCededClaim(), cumulatedCededForThisClaim, paidAgainstThisPacket);
+                        netPaid = cashflowPacket.getPaidIncrementalIndexed() - paidAgainstThisPacket;
                     }
 
                     cumulatedCededForThisClaim += paidAgainstThisPacket;
                     ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(cededRoot.getCededClaim(), cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, setUltimate, cededRoot.getCededClaim().getUltimate());
-                    ClaimCashflowPacket netClaim = new ClaimCashflowPacket(cededRoot.getNetClaim(), cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, setUltimate, cededRoot.getNetClaim().getUltimate() );
+                    ClaimCashflowPacket netClaim = new ClaimCashflowPacket(cededRoot.getNetClaim(), cashflowPacket, netPaid, cumulatedCededForThisClaim, setUltimate, cededRoot.getNetClaim().getUltimate() );
                     cashflowClaimsForPeriodCheck.add(cededClaim);
                     doPaidLessThanIncurredCheck(sanityChecks, cededRoot.getCededClaim(), cumulatedCededForThisClaim, cededClaim);
                     setUltimate = false;
