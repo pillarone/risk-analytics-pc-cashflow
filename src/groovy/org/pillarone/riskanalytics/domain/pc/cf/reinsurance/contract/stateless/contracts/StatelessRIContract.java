@@ -28,7 +28,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.a
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.CoverStrategyType;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ExclusionStrategyType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ICoverStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.IExclusionCoverStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl.IncurredAllocation;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl.TermIncurredCalculation;
@@ -85,6 +87,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
      */
     private ContractCoverBase parmCoverageBase = ContractCoverBase.LOSSES_OCCURING;
     private ICoverStrategy parmCover = CoverStrategyType.getDefault();
+    private IExclusionCoverStrategy parmExclusionFilter = ExclusionStrategyType.getDefault();
     private ConstrainedMultiDimensionalParameter parmPremiumCover = new ConstrainedMultiDimensionalParameter(GroovyUtils.toList("[]"),
             Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER));
 
@@ -216,6 +219,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
         inClaims.removeAll(uncoveredClaims);
         parmCover.coveredClaims(inClaims);
+        parmExclusionFilter.exclusionClaims(inClaims);
         outClaimsGross.addAll(inClaims);
         parmContractBase.coveredUnderwritingInfo(inUnderwritingInfo);
         filterPremium();
@@ -420,5 +424,13 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     public void setParmCoverType(ClaimCoverType parmCoverType) {
         this.parmCoverType = parmCoverType;
+    }
+
+    public IExclusionCoverStrategy getParmExclusionFilter() {
+        return parmExclusionFilter;
+    }
+
+    public void setParmExclusionFilter(final IExclusionCoverStrategy parmExclusionFilter) {
+        this.parmExclusionFilter = parmExclusionFilter;
     }
 }
