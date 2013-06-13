@@ -8,31 +8,15 @@ import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope
 import org.pillarone.riskanalytics.core.simulation.item.Simulation
-import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationState
-import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.TestClaimsGenerator
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.attritional.AttritionalClaimsGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.ReinsuranceContractBaseType
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.single.FrequencySeverityClaimsGenerator
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket
-import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket
-import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FrequencyIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
 import org.pillarone.riskanalytics.domain.utils.constraint.PeriodDistributionsConstraints
 import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
-import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionParams
-import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
-import org.pillarone.riskanalytics.domain.utils.math.distribution.FrequencyDistributionType
-import org.pillarone.riskanalytics.domain.utils.math.distribution.RandomFrequencyDistribution
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersDistributionType
 
 /**

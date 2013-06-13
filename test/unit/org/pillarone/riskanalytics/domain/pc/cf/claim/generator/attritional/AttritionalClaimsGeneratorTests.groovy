@@ -8,31 +8,29 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
+import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationBehaviour
+import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationState
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.TestClaimsGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.ReinsuranceContractBaseType
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType
+import org.pillarone.riskanalytics.domain.pc.cf.global.SimulationConstants
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.ISeverityIndexMarker
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndex
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PayoutPattern
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.AggregateActualClaimsStrategy
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
 import org.pillarone.riskanalytics.domain.utils.constraint.PeriodDistributionsConstraints
 import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionParams
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersDistributionType
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionTableConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGenerator
-import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationState
-import org.pillarone.riskanalytics.domain.pc.cf.accounting.experienceAccounting.CommutationBehaviour
-import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker
-import org.pillarone.riskanalytics.domain.pc.cf.global.SimulationConstants
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.AggregateActualClaimsStrategy
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

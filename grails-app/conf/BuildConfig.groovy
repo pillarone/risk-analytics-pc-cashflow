@@ -1,5 +1,5 @@
 //Use a custom plugins dir, because different branches use different plugin versions
-grails.project.plugins.dir = "../local-plugins/risk-analytics-pc-cashflow-netClaims"
+grails.project.plugins.dir = "../local-plugins/risk-analytics-pc-cashflow-master"
 
 grails.project.dependency.resolution = {
     inherits "global" // inherit Grails' default dependencies
@@ -25,7 +25,7 @@ grails.project.dependency.resolution = {
 
         if (appName == "risk-analytics-pc-cashflow") {
             runtime "org.pillarone:risk-analytics-core:1.7-a13"
-            runtime("org.pillarone:risk-analytics-commons:1.7-a2") { transitive = false }
+            runtime("org.pillarone:risk-analytics-commons:1.7-a4") { transitive = false }
         }
     }
 

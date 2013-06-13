@@ -1,24 +1,15 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.paidImpl
 
 import com.google.common.collect.Lists
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
-import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
-
 import org.joda.time.DateTime
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot
-
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
-
-import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
+import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
+import org.pillarone.riskanalytics.domain.pc.cf.claim.*
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.TestClaimUtils
-import org.pillarone.riskanalytics.domain.pc.cf.claim.CededClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AllCashflowClaimsRIOutcome
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AllClaimsRIOutcome
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimRIOutcome
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.AllContractPaidTestImpl
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache

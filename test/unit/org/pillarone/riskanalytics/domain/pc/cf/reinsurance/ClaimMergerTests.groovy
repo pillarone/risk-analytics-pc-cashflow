@@ -13,8 +13,6 @@ import org.pillarone.riskanalytics.core.util.TestPretendInChannelWired
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractTests
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts.TermReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverMap

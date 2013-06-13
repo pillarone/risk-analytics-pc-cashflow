@@ -1,7 +1,7 @@
 package org.pillarone.riskanalytics.core.simulation
 
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.joda.time.DateTime
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

@@ -1,24 +1,23 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.attritional
 
-import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersDistributionType
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IClaimsGeneratorStrategy
-import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
-import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionParams
-import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
-import org.pillarone.riskanalytics.domain.utils.constraint.PeriodDistributionsConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
-import org.pillarone.riskanalytics.core.packets.PacketList
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
-import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
-import org.joda.time.DateTime
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.LossesOccurringContractBase
-import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors
 import com.google.common.collect.Lists
+import org.joda.time.DateTime
+import org.pillarone.riskanalytics.core.packets.PacketList
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
+import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
+import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IClaimsGeneratorStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.LossesOccurringContractBase
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors
+import org.pillarone.riskanalytics.domain.utils.constraint.PeriodDistributionsConstraints
+import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionParams
+import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersDistributionType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

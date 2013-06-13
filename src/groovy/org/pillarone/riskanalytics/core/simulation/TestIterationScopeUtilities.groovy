@@ -1,8 +1,8 @@
 package org.pillarone.riskanalytics.core.simulation
 
 import org.joda.time.DateTime
-import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.core.components.PeriodStore
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 
 /**
