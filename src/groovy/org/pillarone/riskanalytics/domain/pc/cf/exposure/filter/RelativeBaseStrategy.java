@@ -69,4 +69,12 @@ abstract public class RelativeBaseStrategy extends AbstractParameterObject imple
         }
         return filteredList;
     }
+
+    public ComboBoxTableMultiDimensionalParameter getUnderwritingInfo() {
+        return underwritingInfo;
+    }
+
+    public void setUnderwritingInfo(final ComboBoxTableMultiDimensionalParameter underwritingInfo) {
+        this.underwritingInfo = underwritingInfo;
+    }
 }
