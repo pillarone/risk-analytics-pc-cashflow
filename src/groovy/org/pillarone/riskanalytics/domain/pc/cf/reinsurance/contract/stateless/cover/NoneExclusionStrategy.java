@@ -8,21 +8,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author stefan.kunz (at) intuitive-collaboration (dot) com
- */
 public class NoneExclusionStrategy extends AbstractParameterObject implements IExclusionCoverStrategy {
 
     public IParameterObjectClassifier getType() {
-        return CoverStrategyType.NONE;
+        return ExclusionStrategyType.NONE;
     }
 
     public Map getParameters() {
         return Collections.emptyMap();
     }
 
-    @Override
     public void exclusionClaims(final List<ClaimCashflowPacket> source) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        return;
     }
 }

@@ -1,20 +1,14 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover;
 
 import com.google.common.collect.Lists;
-import org.pillarone.riskanalytics.core.parameterization.*;
-import org.pillarone.riskanalytics.core.util.GroovyUtils;
+import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
+import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
+import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.ReinsuranceContractAndBase;
-import org.pillarone.riskanalytics.domain.utils.constant.ReinsuranceContractBase;
-import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
-import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
 import java.util.*;
 
-/**
- * @author stefan.kunz (at) intuitive-collaboration (dot) com
- */
 public class ExclusionCoverStrategy extends AbstractParameterObject implements IExclusionCoverStrategy {
 
     private ComboBoxTableMultiDimensionalParameter grossClaims = new ComboBoxTableMultiDimensionalParameter(
@@ -27,7 +21,7 @@ public class ExclusionCoverStrategy extends AbstractParameterObject implements I
         return params;
     }
 
-    public List<IPerilMarker> getCoveredPerils() {
+    public List<IPerilMarker> getExcludedPerils() {
         return (List<IPerilMarker>) grossClaims.getValuesAsObjects(0, true);
     }
 
@@ -35,20 +29,28 @@ public class ExclusionCoverStrategy extends AbstractParameterObject implements I
         return ExclusionStrategyType.SELECTED;
     }
 
-    @Override
     public void exclusionClaims(final List<ClaimCashflowPacket> source) {
         final List<ClaimCashflowPacket> filteredClaims = Lists.newArrayList();
-        List coveredPerils = getCoveredPerils();
-        if(coveredPerils.size() == 0) {
+        List<IPerilMarker> excludedPerils = getExcludedPerils();
+        if(getExcludedPerils().size() == 0 ) {
             return;
         }
         for (ClaimCashflowPacket claim : source) {
-            if (!coveredPerils.contains(claim.peril())) {
-                filteredClaims.add(claim);
+            if (excludedPerils.contains(claim.peril())){
+                continue;
             }
+            filteredClaims.add(claim);
         }
         source.clear();
         source.addAll(filteredClaims);
+    }
+
+    public ComboBoxTableMultiDimensionalParameter getGrossClaims() {
+        return grossClaims;
+    }
+
+    public void setGrossClaims(final ComboBoxTableMultiDimensionalParameter grossClaims) {
+        this.grossClaims = grossClaims;
     }
 }
 

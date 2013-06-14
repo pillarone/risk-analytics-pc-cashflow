@@ -1,22 +1,19 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover
 
-import org.pillarone.riskanalytics.core.parameterization.*
+import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObjectClassifier
+import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
+import org.pillarone.riskanalytics.core.parameterization.IParameterObject
+import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker
 
-/**
- * @author stefan.kunz (at) intuitive-collaboration (dot) com
- */
 public class ExclusionStrategyType extends AbstractParameterObjectClassifier {
 
-    public static final ExclusionStrategyType NONE = new ExclusionStrategyType('None', 'None', [:])
+    public static final ExclusionStrategyType NONE = new ExclusionStrategyType('None', 'NONE', [:])
     public static final ExclusionStrategyType SELECTED = new ExclusionStrategyType('selected', 'SELECTED',
             ['grossClaims': new ComboBoxTableMultiDimensionalParameter([],
                     ['Covered gross claims'], IPerilMarker.class),
-//                    'claimFilters': new ComboBoxTableMultiDimensionalParameter([],
-//                            ['Covered gross claims'], IClaimFilterMarker.class),
-                    'structures': new ConstrainedMultiDimensionalParameter([[], []],
-                            [ContractBasedOn.CONTRACT, ContractBasedOn.BASED_ON],
-                            ConstraintsFactory.getConstraints(ContractBasedOn.IDENTIFIER))])
+            ]
+    )
 
     public static final all = [
             NONE,
@@ -57,7 +54,7 @@ public class ExclusionStrategyType extends AbstractParameterObjectClassifier {
                 return new NoneExclusionStrategy();
             case SELECTED:
                 return new ExclusionCoverStrategy(
-                        grossClaims: (ComboBoxTableMultiDimensionalParameter) parameters['grossClaims']
+                        grossClaims: (ComboBoxTableMultiDimensionalParameter) parameters['grossClaims'],
                 )
             default :
                 throw new IllegalArgumentException("Unknown cover strategy in " + this.toString());

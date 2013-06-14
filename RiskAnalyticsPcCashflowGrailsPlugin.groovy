@@ -27,6 +27,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportiona
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AdditionalPremium
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.PaidAdditionalPremium
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ContractConstraint
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.XLStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverMap
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixStructureContraints
@@ -37,7 +38,7 @@ import org.pillarone.riskanalytics.domain.utils.constraint.*
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "1.7-a6"
+    def version = "1.7-a7"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.2.1 > *"
     // the other plugins this plugin depends on
@@ -93,6 +94,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new ReinsuranceContractContraints())
         ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
         ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
+        ConstraintsFactory.registerConstraint(new ContractConstraint())
 
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
         ValidatorRegistry.addValidator(new PatternStrategyValidator())
