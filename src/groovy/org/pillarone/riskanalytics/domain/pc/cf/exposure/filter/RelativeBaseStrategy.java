@@ -20,6 +20,10 @@ abstract public class RelativeBaseStrategy extends AbstractParameterObject imple
 
     protected ComboBoxTableMultiDimensionalParameter underwritingInfo;
 
+    protected RelativeBaseStrategy(final ComboBoxTableMultiDimensionalParameter underwritingInfo) {
+        this.underwritingInfo = underwritingInfo;
+    }
+
     public Map getParameters() {
         Map<String, Object> map = new HashMap<String, Object>(1);
         map.put("underwritingInfo", underwritingInfo);
