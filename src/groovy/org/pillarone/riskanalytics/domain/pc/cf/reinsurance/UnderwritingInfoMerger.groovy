@@ -29,7 +29,7 @@ class UnderwritingInfoMerger extends Component {
 
         List<UnderwritingInfoPacket> uwInfosWithCorrectedSign = UnderwritingInfoUtils.correctSign(inUnderwritingInfoGross, false)
         uwInfosWithCorrectedSign.addAll(UnderwritingInfoUtils.correctSign(inUnderwritingInfoNet, false))
-        uwInfosWithCorrectedSign.addAll(UnderwritingInfoUtils.correctSign(inUnderwritingInfoCeded, true))
+        uwInfosWithCorrectedSign.addAll(UnderwritingInfoUtils.correctSign(inUnderwritingInfoCeded, !onlyCededNoNetContractsCovered()))
         uwInfosWithCorrectedSign.addAll(UnderwritingInfoUtils.correctSign(inUnderwritingInfoBenefit, false))
 
         outUnderwritingInfo.addAll(UnderwritingInfoUtils.aggregateBySegmentAndInceptionPeriod(uwInfosWithCorrectedSign))
@@ -62,5 +62,9 @@ class UnderwritingInfoMerger extends Component {
                 }
             }
         }
+    }
+
+    private boolean onlyCededNoNetContractsCovered() {
+        coverAttributeStrategy.coveredNetOfContracts().size() == 0 && coverAttributeStrategy.coveredCededOfContracts().size() > 0
     }
 }

@@ -119,7 +119,11 @@ public class CounterPartyState {
     public boolean newInitializationRequired() {
         return initialStateModified;
     }
-    
+
+    public boolean hasCounterParties() {
+        return !(counterPartyFactors.isEmpty());
+    }
+
     private Set<ILegalEntityMarker> getCounterParties() {
         return counterPartyFactors.keySet();
     }

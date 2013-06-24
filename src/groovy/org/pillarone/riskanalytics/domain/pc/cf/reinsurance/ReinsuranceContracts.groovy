@@ -109,8 +109,8 @@ class ReinsuranceContracts extends DynamicComposedComponent {
         for (Map.Entry<ReinsuranceContract, ReinsuranceContractAndBase> contractCoveredByContracts: coverForContracts.entries()) {
             for (ReinsuranceContractAndBase contractAndBase : contractCoveredByContracts.value) {
                 if (contractAndBase.contractBase.equals(ReinsuranceContractBase.CEDED)) {
-                    doWire WC, contractCoveredByContracts.key, 'inClaims', contractAndBase.reinsuranceContract, 'outClaimsCeded'
-                    doWire WC, contractCoveredByContracts.key, 'inUnderwritingInfo', contractAndBase.reinsuranceContract, 'outUnderwritingInfoCeded'
+                    doWire WC, contractCoveredByContracts.key, 'inClaims', contractAndBase.reinsuranceContract, 'outClaimsInward'
+                    doWire WC, contractCoveredByContracts.key, 'inUnderwritingInfo', contractAndBase.reinsuranceContract, 'outUnderwritingInfoInward'
                 }
                 else {
                     doWire WC, contractCoveredByContracts.key, 'inClaims', contractAndBase.reinsuranceContract, 'outClaimsNet'

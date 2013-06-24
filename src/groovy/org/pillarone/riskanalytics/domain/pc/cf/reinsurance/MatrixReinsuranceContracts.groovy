@@ -94,8 +94,8 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
                 List<IReinsuranceContractMarker> coveredNetOfContracts = strategy.coveredNetOfContracts()
                 List<IReinsuranceContractMarker> coveredCededOfContracts = strategy.coveredCededOfContracts()
                 for (IReinsuranceContractMarker coveredContract : coveredCededOfContracts) {
-                    doWire WC, claimMerger, 'inClaimsCeded', coveredContract, 'outClaimsCeded'
-                    doWire WC, uwInfoMerger, 'inUnderwritingInfoCeded', coveredContract, 'outUnderwritingInfoCeded'
+                    doWire WC, claimMerger, 'inClaimsCeded', coveredContract, 'outClaimsInward'
+                    doWire WC, uwInfoMerger, 'inUnderwritingInfoCeded', coveredContract, 'outUnderwritingInfoInward'
                 }
                 if (coveredNetOfContracts.size() > 0 || benefitContracts.size() > 0) {
                     for (IReinsuranceContractMarker coveredContract : coveredNetOfContracts) {
@@ -147,8 +147,8 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
             if (strategy && !strategy?.mergerRequired()) {
                 for (IReinsuranceContractMarker coveredContract : strategy.coveredCededOfContracts()) {
-                    doWire WC, contract, 'inClaims', coveredContract, 'outClaimsCeded'
-                    doWire WC, contract, 'inUnderwritingInfo', coveredContract, 'outUnderwritingInfoCeded'
+                    doWire WC, contract, 'inClaims', coveredContract, 'outClaimsInward'
+                    doWire WC, contract, 'inUnderwritingInfo', coveredContract, 'outUnderwritingInfoInward'
                 }
             }
         }

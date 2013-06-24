@@ -58,12 +58,7 @@ public class MatrixCoverAttributeRow {
                     (peril == null || peril == claim.peril()) &&
                     claimTypeMatches(claimTypeSelector, claim)) {
                 if (checkedSign && !isStructure) {
-                    if (cededContract == null) {
-                        result.add(ClaimValidator.positiveNominalUltimate(claim));
-                    }
-                    else {
-                        result.add(claimValidator.invertClaimSign(claim));
-                    }
+                    result.add(ClaimValidator.positiveNominalUltimate(claim));
                 }
                 else {
                     result.add(claim);
@@ -83,12 +78,7 @@ public class MatrixCoverAttributeRow {
             ISegmentMarker uwSegment = ((UnderwritingInfoPacket) underwritingInfo).segment();
             if ((legalEntity == null || legalEntity == ((UnderwritingInfoPacket) underwritingInfo).legalEntity()) &&
                     ((segment == uwSegment) || (segment == null && implicitSegments.contains(uwSegment)))) {
-                if (cededContract == null || !(underwritingInfo instanceof CededUnderwritingInfoPacket)) {
-                    result.add(underwritingInfo);
-                }
-                else {
-                    result.add(new UnderwritingInfoPacket((CededUnderwritingInfoPacket) underwritingInfo, -1d));
-                }
+                result.add(underwritingInfo);
             }
         }
         return result;

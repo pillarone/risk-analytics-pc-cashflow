@@ -307,7 +307,10 @@ public class UnderwritingInfoUtils {
             aggregateCededUnderwritingInfos.put(cededUnderwritingInfo.getOriginal(), cededUnderwritingInfo);
         }
         for (UnderwritingInfoPacket grossUwInfo : underwritingInfoGross) {
-            List<CededUnderwritingInfoPacket> cededUnderwritingInfoPackets = aggregateCededUnderwritingInfos.get(grossUwInfo);
+            List<CededUnderwritingInfoPacket> cededUnderwritingInfoPackets = aggregateCededUnderwritingInfos.get(grossUwInfo.getOriginal());
+            if (cededUnderwritingInfoPackets == null) {     // todo(sku): requires proper refactoring key uw concept missing
+                cededUnderwritingInfoPackets = aggregateCededUnderwritingInfos.get(grossUwInfo);
+            }
             CededUnderwritingInfoPacket aggregateCededUwInfo = aggregateCeded(cededUnderwritingInfoPackets);
             UnderwritingInfoPacket netUwInfo = grossUwInfo.getNet(aggregateCededUwInfo, true);
             underwritingInfoNet.add(netUwInfo);

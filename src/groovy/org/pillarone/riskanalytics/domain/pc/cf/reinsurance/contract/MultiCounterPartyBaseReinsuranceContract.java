@@ -131,10 +131,15 @@ public abstract class MultiCounterPartyBaseReinsuranceContract extends BaseReins
         if (isSenderWired(outClaimsInward)) {
             for (ClaimCashflowPacket cededClaim : outClaimsCeded) {
                 if (ClaimUtils.notTrivialValues(cededClaim)) {
-                    for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.getFactors(cededClaim.getUpdateDate()).entrySet()) {
-                        ClaimCashflowPacket counterPartyCededClaim = ClaimUtils.scale(cededClaim, -legalEntityAndFactor.getValue(), true, true);
-                        counterPartyCededClaim.setMarker(legalEntityAndFactor.getKey());
-                        outClaimsInward.add(counterPartyCededClaim);
+                    if (counterPartyFactors.hasCounterParties()) {
+                        for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.getFactors(cededClaim.getUpdateDate()).entrySet()) {
+                            ClaimCashflowPacket counterPartyCededClaim = ClaimUtils.scale(cededClaim, -legalEntityAndFactor.getValue(), true, true);
+                            counterPartyCededClaim.setMarker(legalEntityAndFactor.getKey());
+                            outClaimsInward.add(counterPartyCededClaim);
+                        }
+                    }
+                    else {
+                        outClaimsInward.add(ClaimUtils.scale(cededClaim, -1, false, true));
                     }
                 }
             }
@@ -150,10 +155,15 @@ public abstract class MultiCounterPartyBaseReinsuranceContract extends BaseReins
     private void splitCededUnderwritingInfoByCounterParty() {
         if (isSenderWired(outUnderwritingInfoInward)) {
             for (UnderwritingInfoPacket cededUnderwritingInfo : outUnderwritingInfoCeded) {
-                for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.getFactors(cededUnderwritingInfo.getDate()).entrySet()) {
-                    UnderwritingInfoPacket counterPartyCededUnderwritingInfo = cededUnderwritingInfo.withFactorsApplied(1, -legalEntityAndFactor.getValue());
-                    counterPartyCededUnderwritingInfo.setMarker(legalEntityAndFactor.getKey());
-                    outUnderwritingInfoInward.add(counterPartyCededUnderwritingInfo);
+                if (counterPartyFactors.hasCounterParties()) {
+                    for (Map.Entry<ILegalEntityMarker, Double> legalEntityAndFactor : counterPartyFactors.getFactors(cededUnderwritingInfo.getDate()).entrySet()) {
+                        UnderwritingInfoPacket counterPartyCededUnderwritingInfo = cededUnderwritingInfo.withFactorsApplied(1, -legalEntityAndFactor.getValue());
+                        counterPartyCededUnderwritingInfo.setMarker(legalEntityAndFactor.getKey());
+                        outUnderwritingInfoInward.add(counterPartyCededUnderwritingInfo);
+                    }
+                }
+                else {
+                    outUnderwritingInfoInward.add(cededUnderwritingInfo.withFactorsApplied(1, -1));
                 }
             }
         }

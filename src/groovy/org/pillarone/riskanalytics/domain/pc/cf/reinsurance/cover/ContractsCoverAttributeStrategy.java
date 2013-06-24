@@ -41,12 +41,7 @@ public class ContractsCoverAttributeStrategy extends AbstractParameterObject imp
         List coveredContracts = getCoveredReinsuranceContracts();
         for (ClaimCashflowPacket claim : source) {
             if (coveredContracts.contains(claim.reinsuranceContract()) && claim.reserve() == null) {
-                if (coveredContractsCoveringCeded.contains(claim.reinsuranceContract())) {
-                    filteredClaims.add(claimValidator.invertClaimSign(claim));
-                }
-                else {
-                    filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
-                }
+                filteredClaims.add(ClaimValidator.positiveNominalUltimate(claim));
             }
         }
         filteredClaims = filter.coveredClaims(filteredClaims);
@@ -62,12 +57,7 @@ public class ContractsCoverAttributeStrategy extends AbstractParameterObject imp
         List coveredContracts = getCoveredReinsuranceContracts();
         for (UnderwritingInfoPacket uwInfo : source) {
             if (coveredContracts.contains(uwInfo.reinsuranceContract())) {
-                if (coveredContractsCoveringCeded.contains(uwInfo.reinsuranceContract())) {
-                    filteredUnderwritingInfo.add(new UnderwritingInfoPacket(uwInfo, -1));
-                }
-                else {
-                    filteredUnderwritingInfo.add(uwInfo);
-                }
+                filteredUnderwritingInfo.add(uwInfo);
             }
         }
         filteredUnderwritingInfo = filter.coveredUnderwritingInfo(filteredUnderwritingInfo, coveredGrossClaims);
