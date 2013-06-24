@@ -683,7 +683,8 @@ mappings = {
                 }
             }
         }
-        "[%legalEntity%]" "ORSA:legalEntities:[%legalEntity%]:outFinancials:netCashflow", {
+        "legalEntities" {
+            "[%legalEntity%]" "ORSA:legalEntities:[%legalEntity%]:outFinancials:netCashflow", {
             "financialsNetCashflow" "ORSA:legalEntities:[%legalEntity%]:outFinancials:netCashflow", {
                 "lossRatio" "ORSA:legalEntities:[%legalEntity%]:outFinancials:netLossRatioWrittenUltimate"
                 "premium" "ORSA:legalEntities:[%legalEntity%]:outFinancials:netPremiumPaid"
@@ -869,386 +870,386 @@ mappings = {
                 }
                 "claimsGross" {
                     "ultimate" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:ultimate", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:ultimate", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:ultimate", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:ultimate"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:ultimate"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:ultimate"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:ultimate"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:ultimate"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:ultimate"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:ultimate", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:ultimate", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:ultimate"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:ultimate"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:ultimate"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:ultimate"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:ultimate"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:ultimate"
                             }
                         }
                     }
                     "totalCumulative" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:totalCumulativeIndexed", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:totalCumulativeIndexed", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:totalCumulativeIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:totalCumulativeIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:totalCumulativeIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:totalCumulativeIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:totalCumulativeIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:totalCumulativeIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:totalCumulativeIndexed"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:totalCumulativeIndexed", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:totalCumulativeIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:totalCumulativeIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:totalCumulativeIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:totalCumulativeIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:totalCumulativeIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:totalCumulativeIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:totalCumulativeIndexed"
                             }
                         }
                     }
                     "totalIncremental" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:totalIncrementalIndexed", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:totalIncrementalIndexed", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:totalIncrementalIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:totalIncrementalIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:totalIncrementalIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:totalIncrementalIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:totalIncrementalIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:totalIncrementalIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:totalIncrementalIndexed"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:totalIncrementalIndexed", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:totalIncrementalIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:totalIncrementalIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:totalIncrementalIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:totalIncrementalIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:totalIncrementalIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:totalIncrementalIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:totalIncrementalIndexed"
                             }
                         }
                     }
                     "reportedCumulativeIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:reportedCumulativeIndexed", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:reportedCumulativeIndexed", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:reportedCumulativeIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:reportedCumulativeIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:reportedCumulativeIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:reportedCumulativeIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:reportedCumulativeIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:reportedCumulativeIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:reportedCumulativeIndexed"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reportedCumulativeIndexed", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reportedCumulativeIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:reportedCumulativeIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:reportedCumulativeIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:reportedCumulativeIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:reportedCumulativeIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:reportedCumulativeIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:reportedCumulativeIndexed"
                             }
                         }
                     }
                     "reportedIncrementalIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:reportedIncrementalIndexed", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:reportedIncrementalIndexed"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reportedIncrementalIndexed", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reportedIncrementalIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:reportedIncrementalIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:reportedIncrementalIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:reportedIncrementalIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:reportedIncrementalIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:reportedIncrementalIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:reportedIncrementalIndexed"
                             }
                         }
                     }
                     "paidCumulativeIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:paidCumulativeIndexed", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:paidCumulativeIndexed", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:paidCumulativeIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:paidCumulativeIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:paidCumulativeIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:paidCumulativeIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:paidCumulativeIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:paidCumulativeIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:paidCumulativeIndexed"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:paidCumulativeIndexed", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:paidCumulativeIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:paidCumulativeIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:paidCumulativeIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:paidCumulativeIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:paidCumulativeIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:paidCumulativeIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:paidCumulativeIndexed"
                             }
                         }
                     }
                     "paidIncrementalIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:paidIncrementalIndexed", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:paidIncrementalIndexed", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:paidIncrementalIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:paidIncrementalIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:paidIncrementalIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:paidIncrementalIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:paidIncrementalIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:paidIncrementalIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:paidIncrementalIndexed"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:paidIncrementalIndexed", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:paidIncrementalIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:paidIncrementalIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:paidIncrementalIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:paidIncrementalIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:paidIncrementalIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:paidIncrementalIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:paidIncrementalIndexed"
                             }
                         }
                     }
                     "outstandingIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:outstandingIndexed", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:outstandingIndexed", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:outstandingIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:outstandingIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:outstandingIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:outstandingIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:outstandingIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:outstandingIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:outstandingIndexed"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:outstandingIndexed", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:outstandingIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:outstandingIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:outstandingIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:outstandingIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:outstandingIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:outstandingIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:outstandingIndexed"
                             }
                         }
                     }
                     "changesInOutstandingIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:changesInOutstandingIndexed", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:changesInOutstandingIndexed", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:changesInOutstandingIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInOutstandingIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInOutstandingIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInOutstandingIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInOutstandingIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:changesInOutstandingIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:changesInOutstandingIndexed"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:changesInOutstandingIndexed", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:changesInOutstandingIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:changesInOutstandingIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:changesInOutstandingIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:changesInOutstandingIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:changesInOutstandingIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:changesInOutstandingIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:changesInOutstandingIndexed"
                             }
                         }
                     }
                     "IBNRIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:IBNRIndexed", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:IBNRIndexed", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:IBNRIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:IBNRIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:IBNRIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:IBNRIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:IBNRIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:IBNRIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:IBNRIndexed"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:IBNRIndexed", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:IBNRIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:IBNRIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:IBNRIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:IBNRIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:IBNRIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:IBNRIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:IBNRIndexed"
                             }
                         }
                     }
                     "changesInIBNRIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:changesInIBNRIndexed", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:changesInIBNRIndexed", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:changesInIBNRIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInIBNRIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInIBNRIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInIBNRIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInIBNRIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:changesInIBNRIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:changesInIBNRIndexed"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:changesInIBNRIndexed", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:changesInIBNRIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:changesInIBNRIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:changesInIBNRIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:changesInIBNRIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:changesInIBNRIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:changesInIBNRIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:changesInIBNRIndexed"
                             }
                         }
                     }
                     "reservesIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:reservesIndexed", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:reservesIndexed", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:reservesIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:reservesIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:reservesIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:reservesIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:reservesIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:reservesIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:reservesIndexed"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reservesIndexed", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reservesIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:reservesIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:reservesIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:reservesIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:reservesIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:reservesIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:reservesIndexed"
                             }
                         }
                     }
                     "changesInReservesIndexed" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:changesInReservesIndexed", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:changesInReservesIndexed", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:changesInReservesIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInReservesIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInReservesIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInReservesIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:changesInReservesIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:changesInReservesIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:changesInReservesIndexed"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:changesInReservesIndexed", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:changesInReservesIndexed", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:changesInReservesIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:changesInReservesIndexed"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:changesInReservesIndexed"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:changesInReservesIndexed"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:changesInReservesIndexed"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:changesInReservesIndexed"
                             }
                         }
                     }
                     "premiumRiskBase" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:premiumRiskBase", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:premiumRiskBase", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:premiumRiskBase", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:premiumRiskBase"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:premiumRiskBase"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:premiumRiskBase"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:premiumRiskBase"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:premiumRiskBase"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:premiumRiskBase"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:premiumRiskBase", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:premiumRiskBase", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:premiumRiskBase"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:premiumRiskBase"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:premiumRiskBase"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:premiumRiskBase"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:premiumRiskBase"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:premiumRiskBase"
                             }
                         }
                     }
                     "reserveRiskBase" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:reserveRiskBase", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:reserveRiskBase", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:reserveRiskBase", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:reserveRiskBase"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:reserveRiskBase"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:reserveRiskBase"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:reserveRiskBase"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:reserveRiskBase"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:reserveRiskBase"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reserveRiskBase", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:reserveRiskBase", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:reserveRiskBase"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:reserveRiskBase"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:reserveRiskBase"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:reserveRiskBase"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:reserveRiskBase"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:reserveRiskBase"
                             }
                         }
                     }
                     "premiumAndReserveRiskBase" "ORSA:legalEntities:[%legalEntity%]:outClaimsGross:premiumAndReserveRiskBase", {
-                        "primaryInsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:premiumAndReserveRiskBase", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsPrimaryInsurer:premiumAndReserveRiskBase", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:premiumAndReserveRiskBase"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsPrimaryInsurer:premiumAndReserveRiskBase"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:premiumAndReserveRiskBase"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsPrimaryInsurer:premiumAndReserveRiskBase"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:premiumAndReserveRiskBase"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsPrimaryInsurer:premiumAndReserveRiskBase"
                             }
                         }
-                        "reinsurer" "GIRA:legalEntities:[%legalEntity%]:outClaimsReinsurer:premiumAndReserveRiskBase", {
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outClaimsReinsurer:premiumAndReserveRiskBase", {
                             "byPeril" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:premiumAndReserveRiskBase"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:claimsGenerators:[%peril%]:outClaimsReinsurer:premiumAndReserveRiskBase"
                             }
                             "byReserve" {
-                                "[%peril%]" "GIRA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:premiumAndReserveRiskBase"
+                                "[%peril%]" "ORSA:legalEntities:[%legalEntity%]:reservesGenerators:[%peril%]:outClaimsReinsurer:premiumAndReserveRiskBase"
                             }
                             "bySegment" {
-                                "[%segment%]" "GIRA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:premiumAndReserveRiskBase"
+                                "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outClaimsReinsurer:premiumAndReserveRiskBase"
                             }
                         }
                     }
@@ -1483,6 +1484,8 @@ mappings = {
             "premium" {
                 "premiumWrittenNet" "ORSA:legalEntities:[%legalEntity%]:outUnderwritingInfoNet:premiumWritten", {
                     "gross" "ORSA:legalEntities:[%legalEntity%]:outUnderwritingInfoGross:premiumWritten", {
+                        "primaryInsurer" "ORSA:legalEntities:[%legalEntity%]:outUnderwritingInfoPrimeryInsurer:premiumWritten"
+                        "reinsurer" "ORSA:legalEntities:[%legalEntity%]:outUnderwritingInfoReinsurer:premiumWritten"
                         "[%segment%]" "ORSA:legalEntities:[%legalEntity%]:segments:[%segment%]:outUnderwritingInfoGross:premiumWritten"
                     }
                     "ceded" "ORSA:legalEntities:[%legalEntity%]:outUnderwritingInfoCeded:premiumWritten", {
@@ -1506,6 +1509,7 @@ mappings = {
                 "fixed" "ORSA:legalEntities:[%legalEntity%]:outUnderwritingInfoCeded:commissionFixed"
                 "variable" "ORSA:legalEntities:[%legalEntity%]:outUnderwritingInfoCeded:commissionVariable"
             }
+        }
         }
         "structures" {
             "[%structure%]" {
