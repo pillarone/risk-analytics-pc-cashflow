@@ -91,7 +91,7 @@ class ClaimMergerTests extends GrailsUnitTestCase {
     }
 
     void testCededClaims() {
-        ClaimCashflowPacket cededClaim = getClaimCashflowPacket(baseClaim, 20)
+        ClaimCashflowPacket cededClaim = getClaimCashflowPacket(baseClaim, -20) // negative sign to simulate inward logic
         cededClaim.setMarker(contract1)
         merger.coverAttributeStrategy = setupStrategy([[''], ['contract1'], [''], [''], [''], ['ANY']])
         merger.inClaimsCeded.add(cededClaim)
