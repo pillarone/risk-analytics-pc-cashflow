@@ -98,14 +98,14 @@ public class FrequencySeveritySimplifiedIndexClaimsGeneratorTests extends Groovy
         claimsGenerator.inProbabilities << dependancePacket
         claimsGenerator.subClaimsModel = frequencySeverityClaimsModel
         TestClaimsGenerator.doClaimsCalcWithNoCommutation(claimsGenerator, true)
-        assert claimsGenerator.outClaims*.ultimate().sum() == new PoissonDist(meanClaimNumber).inverseF(0.8) * -1000d
+        assert claimsGenerator.outClaims*.ultimate().sum() == new PoissonDist(meanClaimNumber).inverseF(0.8) * 1000d
 
         claimsGenerator.reset()
         claimsGenerator.periodScope.prepareNextPeriod()
 
         claimsGenerator.inProbabilities << dependancePacket
         TestClaimsGenerator.doClaimsCalcWithNoCommutation(claimsGenerator, true)
-        assert claimsGenerator.outClaims*.ultimate().sum() == new PoissonDist(meanClaimNumber).inverseF(0.5) * -1000d
+        assert claimsGenerator.outClaims*.ultimate().sum() == new PoissonDist(meanClaimNumber).inverseF(0.5) * 1000d
     }
 
     void testGenerateSimpleClaimsScaleUWInfo(){
