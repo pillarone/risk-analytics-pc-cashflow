@@ -2,7 +2,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import groovy.lang.Closure;
 import org.apache.commons.lang.NotImplementedException;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
@@ -549,6 +548,10 @@ public class ClaimUtils {
         }
     }
 
+    /*
+    This method really checks that we haven't been supplied with two dependance packets for a single generator. I.e that the user
+    has tried to 'double correlate' something. Ideally it would be called before and dependant claims generation.
+     */
     public static DependancePacket checkForDependance(IPerilMarker filterCriteria, List<DependancePacket> dependancePacketList) {
         DependancePacket dependancePacket = new DependancePacket();
         boolean foundPacket = false;

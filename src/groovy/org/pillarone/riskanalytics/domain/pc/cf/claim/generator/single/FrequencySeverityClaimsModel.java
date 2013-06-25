@@ -5,29 +5,28 @@ import org.apache.commons.lang.ArrayUtils;
 import org.pillarone.riskanalytics.core.components.Component;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter;
-import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorType;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.IClaimsGeneratorStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.event.EventSeverity;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.IExposureBaseStrategy;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IFrequencyIndexMarker;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ISeverityIndexMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.IVaryingParametersDistributionStrategy;
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersDistributionType;
-
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,9 +97,8 @@ public class FrequencySeverityClaimsModel extends Component {
 
         DependancePacket dependancePacket = ClaimUtils.checkForDependance(dependanceFilterCriteria, dependancePackets);
         if ( dependancePacket.isDependantGenerator(dependanceFilterCriteria) ) {
-            throw new SimulationException("Freq severity dependance not implemented");
-//            double scaleFactor = parmSeverityBase.factor(inUnderwritingInfo);
-//            return claimsModel(period).calculateClaims(-scaleFactor, periodScope, eventSeverities);
+            double underwritingInfoScaleFactor = parmSeverityBase.factor(inUnderwritingInfo);
+            return claimsModel(period).calculateDependantClaimsWithContractBase(dependancePacket, dependanceFilterCriteria, periodScope, contractBase, underwritingInfoScaleFactor, severityFactors);
         }
         else {
 //            return claimsModel(period).generateClaims(-scaleFactor, severityFactors, 1, periodScope, contractBase);

@@ -16,16 +16,16 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
 import org.pillarone.riskanalytics.domain.utils.constraint.PeriodDistributionsConstraints
 import org.pillarone.riskanalytics.domain.utils.marker.IUnderwritingInfoMarker
+import org.pillarone.riskanalytics.domain.utils.math.dependance.DependancePacket
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionParams
 import org.pillarone.riskanalytics.domain.utils.math.distribution.varyingparams.VaryingParametersDistributionType
+import umontreal.iro.lecuyer.probdist.PoissonDist
 
-/**
- * @author jessika.walter (at) intuitive-collaboration (dot) com
- */
 public class FrequencySeveritySimplifiedIndexClaimsGeneratorTests extends GroovyTestCase {
 
     DateTime date20110101 = new DateTime(2011, 1, 1, 0, 0, 0, 0)
     FrequencySeverityClaimsGenerator claimsGenerator
+    private static final String generatorName = "booyaka shah"
 
     void setUp() {
 //        So we don't get null pointers from the error handling itself.
@@ -44,6 +44,7 @@ public class FrequencySeveritySimplifiedIndexClaimsGeneratorTests extends Groovy
         claimsGenerator.parmParameterizationBasis = ReinsuranceContractBaseType.getStrategy(
                 ReinsuranceContractBaseType.LOSSESOCCURRING, new HashMap());
         claimsGenerator.globalLastCoveredPeriod = 3
+        claimsGenerator.setName(generatorName)
 
         ConstraintsFactory.registerConstraint(new DoubleConstraints())
 
@@ -65,6 +66,46 @@ public class FrequencySeveritySimplifiedIndexClaimsGeneratorTests extends Groovy
 
         TestClaimsGenerator.doClaimsCalcWithNoCommutation(claimsGenerator, true)
         assert claimsGenerator.outClaims*.ultimate().sum() == 3 * 3000
+    }
+
+    void testGenerateDependantClaims(){
+        double meanClaimNumber = 10d
+        FrequencySeverityClaimsModel frequencySeverityClaimsModel = prepareConstantGenerator()
+        frequencySeverityClaimsModel.parmFrequencyDistribution = VaryingParametersDistributionType.getStrategy(
+                VaryingParametersDistributionType.POISSON,
+                [
+                        (DistributionParams.LAMBDA.toString()): new ConstrainedMultiDimensionalParameter(
+                                [[1i], [meanClaimNumber]],
+                                [DistributionParams.PERIOD.toString(), DistributionParams.LAMBDA.toString()],
+                                ConstraintsFactory.getConstraints(PeriodDistributionsConstraints.IDENTIFIER)
+                        )
+                ]
+        );
+        frequencySeverityClaimsModel.parmSeverityDistribution = VaryingParametersDistributionType.getStrategy(
+                VaryingParametersDistributionType.CONSTANT,
+                [
+                        (DistributionParams.CONSTANT.toString()): new ConstrainedMultiDimensionalParameter(
+                                [[1i], [1000d]],
+                                [DistributionParams.PERIOD.toString(), DistributionParams.CONSTANT.toString()],
+                                ConstraintsFactory.getConstraints(PeriodDistributionsConstraints.IDENTIFIER)
+                        )
+                ]
+        );
+        DependancePacket dependancePacket = new DependancePacket([claimsGenerator])
+        dependancePacket.addMarginal(generatorName, 0, 0.8)
+        dependancePacket.addMarginal(generatorName, 1, 0.5)
+
+        claimsGenerator.inProbabilities << dependancePacket
+        claimsGenerator.subClaimsModel = frequencySeverityClaimsModel
+        TestClaimsGenerator.doClaimsCalcWithNoCommutation(claimsGenerator, true)
+        assert claimsGenerator.outClaims*.ultimate().sum() == new PoissonDist(meanClaimNumber).inverseF(0.8) * -1000d
+
+        claimsGenerator.reset()
+        claimsGenerator.periodScope.prepareNextPeriod()
+
+        claimsGenerator.inProbabilities << dependancePacket
+        TestClaimsGenerator.doClaimsCalcWithNoCommutation(claimsGenerator, true)
+        assert claimsGenerator.outClaims*.ultimate().sum() == new PoissonDist(meanClaimNumber).inverseF(0.5) * -1000d
     }
 
     void testGenerateSimpleClaimsScaleUWInfo(){

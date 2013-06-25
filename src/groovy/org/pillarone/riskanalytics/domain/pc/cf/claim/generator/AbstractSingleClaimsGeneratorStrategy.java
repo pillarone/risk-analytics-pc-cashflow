@@ -10,7 +10,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.*;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.AbstractRandomDistribution;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 
@@ -59,6 +61,10 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
             claimNumberGenerator = RandomNumberGeneratorFactory.getGenerator(distribution, modifier);
             cachedClaimNumberGenerators.put(key, claimNumberGenerator);
         }
+    }
+
+    public IRandomNumberGenerator getClaimNumberGenerator() {
+        return claimNumberGenerator;
     }
 
     protected void setClaimNumberGenerator(AbstractRandomDistribution distribution) {
