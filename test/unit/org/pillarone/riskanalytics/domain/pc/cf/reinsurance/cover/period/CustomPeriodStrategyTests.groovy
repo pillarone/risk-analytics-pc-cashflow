@@ -22,6 +22,7 @@ class CustomPeriodStrategyTests extends GroovyTestCase {
     private DateTime date20130831 = new DateTime(2013,  8, 31, 0, 0, 0, 0)
     private DateTime date20131231 = new DateTime(2013, 12, 31, 0, 0, 0, 0)
     private DateTime date20140101 = new DateTime(2014,  1,  1, 0, 0, 0, 0)
+    private DateTime date20150101 = new DateTime(2015,  1,  1, 0, 0, 0, 0)
 
     private IPeriodCounter periodCounter3y
 
@@ -103,5 +104,22 @@ class CustomPeriodStrategyTests extends GroovyTestCase {
         assertTrue periodStrategy.currentPeriodContainsCover(periodCounter3y)
         assertTrue periodStrategy.currentPeriodContainsCover(periodCounter3y.next())
         assertFalse periodStrategy.currentPeriodContainsCover(periodCounter3y.next())
+    }
+
+    @Test
+    void dateList(){
+        CustomPeriodStrategy periodStrategy = new CustomPeriodStrategy(periods: new ConstrainedMultiDimensionalParameter(
+                [
+                [date20120101, date20120701, date20140101],
+                [date20120701, date20131231, date20150101]
+                ],
+                ['Start Date', 'End Date'], ConstraintsFactory.getConstraints(DateTimeConstraints.IDENTIFIER)))
+
+        assert periodStrategy.getDates().contains(date20120101)
+        assert periodStrategy.getDates().contains(date20120701)
+        assert periodStrategy.getDates().contains(date20140101)
+        assert periodStrategy.getDates().contains(date20150101)
+        assert periodStrategy.getDates().size() == 4
+        periodStrategy
     }
 }

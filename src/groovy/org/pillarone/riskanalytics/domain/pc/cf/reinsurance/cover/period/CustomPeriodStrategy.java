@@ -1,11 +1,10 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period;
 
+import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
-import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities;
 
 import java.util.*;
 
@@ -73,6 +72,15 @@ public class CustomPeriodStrategy extends AbstractPeriodStrategy {
                 coverMap.put((DateTime) periods.getValueAt(row, startDateColumnIndex), (DateTime) periods.getValueAt(row, endDateColumnIndex));
             }
         }
+    }
+
+    @Override
+    public List<DateTime> getDates() {
+        initCoverMap();
+        List<DateTime> aList = Lists.newArrayList();
+        aList.addAll(coverMap.keySet());
+        aList.add(coverMap.lastEntry().getValue());
+        return aList;
     }
 
     private void initCoverPeriods(IPeriodCounter periodCounter) {

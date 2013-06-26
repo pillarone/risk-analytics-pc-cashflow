@@ -3,7 +3,6 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 
 import java.util.List;
 
@@ -20,6 +19,11 @@ public interface IPeriodStrategy extends IParameterObject {
      * @return number of years
      */
     int getNumberOfPeriods();
+
+    /**
+     * @return all start period dates and the last end period date
+     */
+    List<DateTime> getDates();
 
     /**
      * @param date
