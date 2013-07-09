@@ -5,9 +5,7 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ClaimRIOutcome;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimRIOutcome;
@@ -261,6 +259,11 @@ public class RIUtilities {
         for (IncurredClaimRIOutcome incurredCededClaim : incurredCededClaims) {
             if(grossClaim.equals(incurredCededClaim.getGrossClaim())) {
                 return incurredCededClaim;
+            }
+            if(incurredCededClaim.getGrossClaim() instanceof ICededRoot) {
+                if(((ICededRoot) incurredCededClaim.getGrossClaim()).getGrossClaim().equals(grossClaim)) {
+                    return incurredCededClaim;
+                }
             }
         }
         throw new SimulationException("Failed to match a gross claim to the list of ceded claims; " + grossClaim.toString());

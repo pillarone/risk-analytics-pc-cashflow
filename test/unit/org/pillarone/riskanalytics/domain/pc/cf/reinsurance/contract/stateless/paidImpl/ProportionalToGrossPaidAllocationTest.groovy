@@ -2,17 +2,31 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.
 
 import com.google.common.collect.Lists
 import org.joda.time.DateTime
+import org.pillarone.riskanalytics.core.components.IterationStore
+import org.pillarone.riskanalytics.core.components.PeriodStore
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
+import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
+import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
+import org.pillarone.riskanalytics.core.util.GroovyUtils
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.TestClaimUtils
+import org.pillarone.riskanalytics.domain.pc.cf.global.AnnualPeriodStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AllCashflowClaimsRIOutcome
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AllClaimsRIOutcome
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimRIOutcome
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.AllContractPaidTestImpl
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.AdditionalPremiumConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.LayerConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts.StatelessRIContract
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts.TemplateContractType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ContractBasedOn
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities
 
 /**
@@ -54,22 +68,14 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         ProportionalToGrossPaidAllocation allocation = new ProportionalToGrossPaidAllocation()
         AllCashflowClaimsRIOutcome cededPackets = allocation.allocatePaid(contractPaidThisPeriod, cashflowPacketList, claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, allClaimsRIOutcome, true)
 
-        assert cededPackets.getAllCashflowOutcomes().size() == cashflowPacketList.size()
+        assert cededPackets.getAllCashflowOutcomes().size() == cashflowPacketList.size() + 1
         assertEquals "Check 50 ceded", 50d, cededPackets.getAllCededClaims()*.getPaidIncrementalIndexed().sum()
-        for (int i = 0; i < cededPackets.getAllCashflowOutcomes().size(); i++) {
-           assertEquals("check dates : ", cededPackets.getAllCededClaims().get(i).getDate(), cashflowPacketList.get(i).getDate())
-           assertEquals("check severity : ",cededPackets.getAllCededClaims().get(i).getPaidIncrementalIndexed(), cashflowPacketList.get(i).getPaidIncrementalIndexed() * 0.5, 0.000001)
-        }
-        for (int i = 0; i < cededPackets.getAllCashflowOutcomes().size(); i++) {
-           assertEquals("check dates : ", cededPackets.getAllNetClaims().get(i).getDate(), cashflowPacketList.get(i).getDate())
-           assertEquals("check severity : ",cededPackets.getAllNetClaims().get(i).getPaidIncrementalIndexed(), cashflowPacketList.get(i).getPaidIncrementalIndexed() * 0.5, 0.000001)
-        }
     }
 
     public static List<ClaimCashflowPacket> createCashflows(List<IClaimRoot> grossClaims, IPeriodCounter counter) {
         List<ClaimCashflowPacket> allClaims = new ArrayList<ClaimCashflowPacket>()
             for (GrossClaimRoot aRoot in grossClaims) {
-                List<ClaimCashflowPacket> cashflows = aRoot.getClaimCashflowPackets(counter)
+                List<ClaimCashflowPacket> cashflows = aRoot.getClaimCashflowPackets(counter, null, false)
                 if(cashflows.size() == 0){
                     cashflows.add(aRoot.zeroPaidIncrement(counter))
                 }
@@ -102,7 +108,7 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         ProportionalToGrossPaidAllocation allocation = new ProportionalToGrossPaidAllocation()
         AllCashflowClaimsRIOutcome cededPackets = allocation.allocatePaid(contractPaidPeriod1, cashflowPacketList1, claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, incurredClaimOutcome, true)
         claimStore.addCededIncurred([claimRIOutcome])
-        assert cededPackets.getAllCashflowOutcomes().size() == cashflowPacketList1.size()
+        assert cededPackets.getAllCashflowOutcomes().size() == cashflowPacketList1.size() + 1
         claimStore.addCededPackets(cededPackets.getAllCededClaims())
 
         periodScope.prepareNextPeriod()
@@ -184,7 +190,7 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         AllCashflowClaimsRIOutcome cededPackets1 = allocation.allocatePaid(contractPaidThisPeriod, cashflowPacketList, claimStore, periodScope, ContractCoverBase.LOSSES_OCCURING, allClaimsRIOutcome, true)
         claimStore.addCededIncurred([claimRIOutcome1, claimRIOutcome2, claimRIOutcome3])
 
-        assert cededPackets1.allCashflowOutcomes.size() == cashflowPacketList.size()
+        assert cededPackets1.allCashflowOutcomes.size() == cashflowPacketList.size() + rootClaims.size()
 
 
         assertEquals "Check 40 ceded", cededPaid, cededPackets1.getAllCededClaims()*.getPaidIncrementalIndexed().sum()
@@ -225,6 +231,106 @@ class ProportionalToGrossPaidAllocationTest extends GroovyTestCase {
         assert p0NetPaid == netClaimsP0*.getPaidIncrementalIndexed().sum()
         assert 80d == netClaimsP1*.getPaidIncrementalIndexed().sum()
     }
+
+    void testStacking(){
+        ConstraintsFactory.registerConstraint(new AdditionalPremiumConstraints())
+        ConstraintsFactory.registerConstraint(new LayerConstraints())
+        ConstraintsFactory.registerConstraint(new ContractBasedOn())
+
+
+        IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(start2010, 3)
+        periodScope = iterationScope.getPeriodScope()
+        IPeriodCounter counter = iterationScope.getPeriodScope().getPeriodCounter()
+        /* Setup contracts */
+        StatelessRIContract nonUSContract = getArtLayerContract(0d, Double.MAX_VALUE, [1], [1], [1], [0d], [Double.MAX_VALUE],  [10], [230], start2010, [0d], ["NONE"], iterationScope   )
+        StatelessRIContract usContract = getArtLayerContract(0d, Double.MAX_VALUE, [1], [1], [1], [0d], [Double.MAX_VALUE],  [60], [245], start2010, [0d], ["NONE"], iterationScope   )
+        StatelessRIContract aggContract = getArtLayerContract(0d, Double.MAX_VALUE, [1], [1], [1], [400d], [350d],  [0], [0], start2010, [0d], ["NONE"], iterationScope   )
+        usContract.periodStore = new PeriodStore(periodScope)
+        nonUSContract.periodStore = new PeriodStore(periodScope)
+        aggContract.periodStore = new PeriodStore(periodScope)
+
+        GrossClaimRoot nonUSClaim1 = TestClaimUtils.getGrossClaim([24i - 1], [1d], 1000, start2010, start2010, start2010) /* 100 */
+        GrossClaimRoot nonUSClaim2 = TestClaimUtils.getGrossClaim([48i - 1], [1d], 10d, start2010, start2010, start2010) /* 100 */
+        GrossClaimRoot USClaim1 = TestClaimUtils.getGrossClaim([12i - 1], [1d], 400, start2010, start2010, start2010) /* 100 */
+        GrossClaimRoot USClaim2 = TestClaimUtils.getGrossClaim([36i - 1], [1d], 60.5d, start2010, start2010, start2010) /* 100 */
+
+        List<IClaimRoot> usClaims = [USClaim1, USClaim2]
+        List<IClaimRoot> nonUSClaims = [nonUSClaim1, nonUSClaim2]
+        List<ClaimCashflowPacket> usCashflow = createCashflows(usClaims, counter)
+        List<ClaimCashflowPacket> nonUSCashflow = createCashflows(nonUSClaims, counter)
+
+        /* PERIOD 1 */
+        usContract.inClaims.addAll( usCashflow )
+        usContract.doCalculation()
+        List<ClaimCashflowPacket> usCededClaimsP1 = usContract.outClaimsCeded
+        assertEquals "", usCededClaimsP1*.getPaidIncrementalIndexed().sum(), 245 , 0.01d
+
+        nonUSContract.inClaims.addAll( nonUSCashflow )
+        nonUSContract.doCalculation()
+        List<ClaimCashflowPacket> nonUSCededClaimsP1 = nonUSContract.outClaimsCeded
+        assert nonUSCededClaimsP1*.getPaidIncrementalIndexed().sum() == 0d
+
+        aggContract.inClaims.addAll( usCededClaimsP1 )
+        aggContract.inClaims.addAll( nonUSCededClaimsP1 )
+        aggContract.doCalculation()
+        List<ClaimCashflowPacket> aggContractCededP1 = aggContract.outClaimsCeded
+        assert aggContractCededP1*.getPaidIncrementalIndexed().sum() == 0d
+        assertEquals "", aggContractCededP1*.ultimate().sum(), 75.5 , 0.01d
+
+        /* PERIOD 2 */
+        iterationScope.getPeriodScope().prepareNextPeriod()
+        List<ClaimCashflowPacket> usCashflow2 = createCashflows(usClaims, counter)
+        List<ClaimCashflowPacket> nonUSCashflow2 = createCashflows(nonUSClaims, counter)
+        usContract.reset()
+        usContract.inClaims.addAll( usCashflow2 )
+        usContract.doCalculation()
+        List<ClaimCashflowPacket> usCededClaimsP2 = usContract.outClaimsCeded
+        assert usCededClaimsP2*.getPaidIncrementalIndexed().sum() == 0d
+
+        nonUSContract.reset()
+        nonUSContract.inClaims.addAll( nonUSCashflow2 )
+        nonUSContract.doCalculation()
+        List<ClaimCashflowPacket> nonUSCededClaimsP2 = nonUSContract.outClaimsCeded
+        assert nonUSCededClaimsP2*.getPaidIncrementalIndexed().sum() == 230d
+
+        aggContract.reset()
+        aggContract.inClaims.addAll( usCededClaimsP2 )
+        aggContract.inClaims.addAll( nonUSCededClaimsP2 )
+        aggContract.doCalculation()
+        List<ClaimCashflowPacket> aggContractCededP2 = aggContract.outClaimsCeded
+        assertEquals( "", aggContractCededP2*.getPaidIncrementalIndexed().sum(), 75d, 0.01d )
+    }
+
+    static StatelessRIContract getArtLayerContract(
+            Double termExcess, Double termLimit, List<Integer> periods, List<Integer> layers, List<Double> shares, List<Double> periodExcess, List<Double> periodLimit,
+            List<Double> claimExcess, List<Double> claimLimit, DateTime beginOfCover, List<Double> apPercentages, List<String> apTypes, IterationScope iterationScope ) {
+
+
+        ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
+        int numberOfLayers = layers.size()
+        return new StatelessRIContract(
+                parmContractStructure: TemplateContractType.getStrategy(
+                        TemplateContractType.NONPROPORTIONAL,
+                        ['termLimit': termLimit,
+                                'termExcess': termExcess,
+                                'termAP': new ConstrainedMultiDimensionalParameter(
+                                        [[0d], [0d], [0d]], AdditionalPremiumConstraints.columnHeaders,
+                                        ConstraintsFactory.getConstraints(AdditionalPremiumConstraints.IDENTIFIER)),
+                                'structure': new ConstrainedMultiDimensionalParameter(
+                                        [
+                                                periods, layers, shares, periodLimit, periodExcess, claimLimit, claimExcess, apPercentages, apTypes
+                                        ],
+                                        LayerConstraints.columnHeaders, ConstraintsFactory.getConstraints(LayerConstraints.IDENTIFIER))]),
+                iterationScope: iterationScope,
+                iterationStore: new IterationStore(iterationScope),
+                periodScope: iterationScope.getPeriodScope(),
+                globalCover: new AnnualPeriodStrategy(startCover: beginOfCover),
+                periodStore: iterationScope.periodStores[0],
+                parmPremiumCover: new ConstrainedMultiDimensionalParameter(GroovyUtils.toList("[]"),
+                        Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER))
+        )
+    }
+
 
 
     void setUp() {
