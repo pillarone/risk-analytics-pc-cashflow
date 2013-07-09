@@ -24,8 +24,8 @@ grails.project.dependency.resolution = {
         compile ":excel-import:1.0.0"
 
         if (appName == "risk-analytics-pc-cashflow") {
-            runtime "org.pillarone:risk-analytics-core:1.7-b1"
-            runtime("org.pillarone:risk-analytics-commons:1.7-b1") { transitive = false }
+            runtime "org.pillarone:risk-analytics-core:1.7"
+            runtime("org.pillarone:risk-analytics-commons:1.7") { transitive = false }
         }
     }
 
