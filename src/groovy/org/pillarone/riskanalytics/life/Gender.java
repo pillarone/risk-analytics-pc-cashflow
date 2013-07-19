@@ -38,7 +38,7 @@ public enum Gender {
         if(string.equals("FEMALE") || string.equals("F")) {
             return FEMALE;
         }
-        throw new RiskAnalyticsInconsistencyException("Unrecopgnised value : {" + string +" } is not recognised as a valid entry for this table.");
+        throw new RiskAnalyticsInconsistencyException("Unrecognised value : {" + string +" } is not recognised as a valid entry for this table.");
 
     }
 
