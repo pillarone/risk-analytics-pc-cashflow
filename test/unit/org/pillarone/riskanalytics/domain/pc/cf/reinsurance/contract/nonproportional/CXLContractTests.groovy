@@ -443,7 +443,7 @@ class CXLContractTests extends GroovyTestCase {
 
         List<GrossClaimRoot> claimRoots = [getBaseClaim(-400, event20110101), getBaseClaim(-400, event20110201),
                 getBaseClaim(-400, event20110301), getBaseClaim(-100, event20110401), getBaseClaim(-100, event20110401),
-                getBaseClaim(-200, event20110401), getBaseClaim(-50, event20110501), getBaseClaim(-350, event20110501)]
+                getBaseClaim(-200, event20110401), getBaseClaim(-50, event20110501), getBaseClaim(-350, event20110501 )]
         addClaimCashflowOfCurrentPeriod(cxl, claimRoots, periodCounter, true)
 
         UnderwritingInfoPacket uw120 = new UnderwritingInfoPacket(premiumWritten: 120, premiumPaid: 100,

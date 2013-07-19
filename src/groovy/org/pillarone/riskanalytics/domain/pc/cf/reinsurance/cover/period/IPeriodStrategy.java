@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period;
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 
 import java.util.List;
 
@@ -35,4 +36,6 @@ public interface IPeriodStrategy extends IParameterObject {
      * @param date
      */
     void initStartCover(DateTime date);
+
+    boolean currentPeriodContainsCover(IPeriodCounter periodCounter);
 }

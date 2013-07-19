@@ -1,12 +1,16 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.SetMultimap;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ClaimRIOutcome;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimRIOutcome;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 
@@ -46,7 +50,7 @@ public class ListOnlyContractClaimStore implements IAllContractClaimCache {
                 incurredClaimsByKey().values(), coverBase);
     }
 
-    public Set<IClaimRoot> allIncurredClaimsCurrentModelPeriod(PeriodScope periodScope, ContractCoverBase coverBase) {
+    public Set<IClaimRoot> allIncurredClaimsCurrentModelPeriodForAllocation(PeriodScope periodScope, ContractCoverBase coverBase) {
         return RIUtilities.incurredClaimsByPeriod(
                 periodScope.getCurrentPeriod(), periodScope.getPeriodCounter(), allIncurredClaims(), coverBase);
     }
@@ -91,5 +95,38 @@ public class ListOnlyContractClaimStore implements IAllContractClaimCache {
         Collection<ClaimCashflowPacket> claimsToSimPeriod = allCashflowClaimsUpToSimulationPeriod(simulationPeriod, periodScope, coverBase);
         Collection<ClaimCashflowPacket> cashflowsPaidAgainsThisModelPeriod = GRIUtilities.cashflowsCoveredInModelPeriod(claimsToSimPeriod, periodScope, coverBase, underwritingPeriod);
         return cashflowsPaidAgainsThisModelPeriod;
+    }
+
+    private List<ClaimRIOutcome> allCededCashflows = Lists.newArrayList();
+    private List<IncurredClaimRIOutcome> allCededIncured = Lists.newArrayList();
+
+    @Override
+    public void cacheCededClaims(final List<ClaimRIOutcome> cededCashflows, final List<IncurredClaimRIOutcome> cededIncurred) {
+        allCededCashflows.addAll(cededCashflows);
+        allCededIncured.addAll(cededIncurred);
+    }
+
+    @Override
+    public List<ClaimCashflowPacket> allCededCashlowsToDate() {
+        final List<ClaimCashflowPacket> packets = Lists.newArrayList();
+        for (ClaimRIOutcome allCededCashflow : allCededCashflows) {
+            packets.add(allCededCashflow.getCededClaim());
+        }
+        return packets;
+    }
+
+    @Override
+    public List<ClaimRIOutcome> allRIOutcomesToDate() {
+        return allCededCashflows;
+    }
+
+    @Override
+    public List<ICededRoot> allCededRootClaimsToDate() {
+        return new ArrayList<ICededRoot>( RIUtilities.incurredCededClaims(allCededCashlowsToDate(), IncurredClaimBase.BASE) );
+    }
+
+    @Override
+    public Collection<IncurredClaimRIOutcome> allIncurredRIOutcomesToDate() {
+        return allCededIncured;
     }
 }

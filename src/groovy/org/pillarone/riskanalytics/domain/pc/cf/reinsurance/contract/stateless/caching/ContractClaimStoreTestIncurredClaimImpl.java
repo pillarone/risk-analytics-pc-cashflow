@@ -1,26 +1,28 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Sets;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ClaimRIOutcome;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimRIOutcome;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * author simon.parten @ art-allianz . com
  */
 public class ContractClaimStoreTestIncurredClaimImpl implements IAllContractClaimCache {
 
-    Set<IClaimRoot> someGrossClaims = new HashSet<IClaimRoot>();
-    Collection<ClaimCashflowPacket> claimCashflowPackets = new ArrayList<ClaimCashflowPacket>();
+    Set<IClaimRoot> someGrossClaims = Sets.newHashSet();
+    Collection<ClaimCashflowPacket> claimCashflowPackets = Lists.newArrayList();
 
     public ContractClaimStoreTestIncurredClaimImpl(Collection<IClaimRoot> someClaims) {
         this.someGrossClaims = new HashSet<IClaimRoot>(someClaims);
@@ -58,8 +60,8 @@ public class ContractClaimStoreTestIncurredClaimImpl implements IAllContractClai
         return RIUtilities.incurredClaimsByPeriod(anInt, periodScope.getPeriodCounter(), someGrossClaims, coverBase );
     }
 
-    public Set<IClaimRoot> allIncurredClaimsCurrentModelPeriod(PeriodScope periodScope, ContractCoverBase coverBase) {
-        throw new SimulationException("");
+    public Set<IClaimRoot> allIncurredClaimsCurrentModelPeriodForAllocation(PeriodScope periodScope, ContractCoverBase coverBase) {
+        return someGrossClaims;
     }
 
     @Override
@@ -96,5 +98,31 @@ public class ContractClaimStoreTestIncurredClaimImpl implements IAllContractClai
 
         Collection<ClaimCashflowPacket> cashflowsPaidAgainsThisModelPeriod = GRIUtilities.cashflowsCoveredInModelPeriod(claimCashflowPackets, periodScope, coverBase, underwritingPeriod);
         return cashflowsPaidAgainsThisModelPeriod;
+    }
+
+
+    @Override
+    public List<ClaimCashflowPacket> allCededCashlowsToDate() {
+        throw new SimulationException("");
+    }
+
+    @Override
+    public List<ICededRoot> allCededRootClaimsToDate() {
+        throw new SimulationException("");
+    }
+
+    @Override
+    public void cacheCededClaims(final List<ClaimRIOutcome> cededCashflows, final List<IncurredClaimRIOutcome> cededIncurred) {
+        throw new SimulationException("");
+    }
+
+    @Override
+    public List<ClaimRIOutcome> allRIOutcomesToDate() {
+        throw new SimulationException("");
+    }
+
+    @Override
+    public Collection<IncurredClaimRIOutcome> allIncurredRIOutcomesToDate() {
+        throw new SimulationException("");
     }
 }

@@ -16,9 +16,7 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.AllPeriodUnderwritingInfoPacket;
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.filter.ExposureBaseType;
@@ -28,10 +26,11 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranc
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.UberCacheClaimStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.CoverStrategyType;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ExclusionStrategyType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ICoverStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.IExclusionCoverStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl.IncurredAllocation;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl.TermIncurredCalculation;
@@ -88,17 +87,19 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
      */
     private ContractCoverBase parmCoverageBase = ContractCoverBase.LOSSES_OCCURING;
     private ICoverStrategy parmCover = CoverStrategyType.getDefault();
+    private IExclusionCoverStrategy parmExclusionFilter = ExclusionStrategyType.getDefault();
     private ConstrainedMultiDimensionalParameter parmPremiumCover = new ConstrainedMultiDimensionalParameter(GroovyUtils.toList("[]"),
             Arrays.asList(PremiumSelectionConstraints.PREMIUM_TITLE), ConstraintsFactory.getConstraints(PremiumSelectionConstraints.IDENTIFIER));
 
     private IExposureBaseStrategy parmContractBase = ExposureBaseType.getDefault();
+    private ClaimCoverType parmCoverType = ClaimCoverType.SINGLE_CLAIM;
 
     /**
      * MAGIC STRINGS
      */
 
     public static final String GROSS_CLAIMS = "All covered cashflows";
-    public static final String TERM_CALC= "paid term calculation cache";
+    public static final String TERM_CALC = "paid term calculation cache";
     public static final String CEDED_CLAIMS = "All ceded cashflows";
     public static final String CEDED_INCURRED_CLAIMS = "All ceded cashflows";
     public static final String UWINFO = "All period UW info";
@@ -110,14 +111,9 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         initIteration();
         doFilter();
         storePremium();
-        periodStore.put(CEDED_CLAIMS, new ArrayList<ClaimCashflowPacket>()); /* Otherwise null pointer on startup - overwrite this list later in this method */
         IAllContractClaimCache claimStore = (IAllContractClaimCache) periodStore.get(GROSS_CLAIMS, -periodScope.getCurrentPeriod());
         IPaidCalculation paidCalculation = (IPaidCalculation) periodStore.get(TERM_CALC, -periodScope.getCurrentPeriod());
         claimStore.cacheClaims(inClaims, periodScope.getCurrentPeriod());
-        List<ClaimCashflowPacket> cededCashflowsToDate = allClaimsToDate(periodScope, periodStore, CEDED_CLAIMS);
-        Set<ICededRoot> allIncurredCeded = RIUtilities.incurredCededClaims(cededCashflowsToDate, IncurredClaimBase.BASE);
-        List<ICededRoot> allIncurredCededClaims = new ArrayList<ICededRoot>();
-        allIncurredCededClaims.addAll(new ArrayList<ICededRoot>(allIncurredCeded));
         Map<Integer, Double> premiumPerPeriod = (Map<Integer, Double>) periodStore.get(INCOMING_PREMIUM, -periodScope.getCurrentPeriod());
 
         Double termLimit = parmContractStructure.getTermLimit();
@@ -127,33 +123,27 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
                 periodScope, termExcess, termLimit, parmCoverageBase, premiumPerPeriod);
         IncurredLossAndAP incurredLossAndAP = incurredInPeriod.getLayerLossesByPeriod().get(periodScope.getCurrentPeriod());
 
-        final List<ClaimCashflowPacket> paidClaims;
-        final List<ContractFinancialsPacket> contractFinancialsPacket;
+        final AllCashflowClaimsRIOutcome claimsAfterContractApplication;
+        final AllClaimsRIOutcome incurredClaimOutcome;
         try {
-//            Leave this code here for the moment as evaulating the right hand side in the debugger can be useful, but it incurrs a performance penalty when uncommented.
-//            final Map<Integer, Double> cededIncurredByPeriod = new TermIncurredCalculation().cededIncurredsByPeriods(incurredClaims.keys(), periodScope, termExcess, termLimit, setupLayerParameters() , parmCoverageBase);
-            final List<ICededRoot> cededClaims = new IncurredAllocation().allocateClaims(incurredInPeriod.getIncLossAfterTermStructureCurrentSimPeriod(), claimStore, periodScope, parmCoverageBase);
-            allIncurredCededClaims.addAll(cededClaims);
-
+            incurredClaimOutcome = new IncurredAllocation().allocateClaims(incurredInPeriod.getIncLossAfterTermStructureCurrentSimPeriod(), claimStore, periodScope, parmCoverageBase);
             final TermLossAndPaidAps paidStuff = paidCalculation.cededIncrementalPaidRespectTerm(claimStore, setupLayerParameters(),
                     periodScope, parmCoverageBase, termLimit, termExcess, globalSanityChecks, incurredInPeriod.getLayerLossesByPeriod(), premiumPerPeriod);
             AllTermAPLayers allTermLayers = ((NonPropTemplateContractStrategy) parmContractStructure).getTermLayers();
             AdditionalPremiumAndPaidTuple termAPs = allTermLayers.incrementalTermLoss(incurredInPeriod.getPeriodLosses(), termLimit, termExcess, periodScope);
             fillAPChannels(incurredLossAndAP, paidStuff, termAPs);
-            paidClaims =  new ProportionalToGrossPaidAllocation().allocatePaid(paidStuff.getTermLosses(), inClaims,
-                    cededCashflowsToDate, periodScope, parmCoverageBase, allIncurredCededClaims, globalSanityChecks);
-            contractFinancialsPacket = ContractFinancialsPacket.getContractFinancialsPacketsByInceptionPeriod(
-                    paidClaims, new ArrayList<ClaimCashflowPacket>(), new ArrayList<CededUnderwritingInfoPacket>(),
-                    new ArrayList<UnderwritingInfoPacket>(), periodScope.getPeriodCounter());
+            claimsAfterContractApplication = new ProportionalToGrossPaidAllocation().allocatePaid(paidStuff.getTermLosses(), inClaims,
+                    claimStore, periodScope, parmCoverageBase, incurredClaimOutcome, globalSanityChecks);
         } catch (SimulationException ex) {
+            double seed = (simulationScope == null ? 0d : simulationScope.getSimulation().getRandomSeed());
             throw new SimulationException(" Insanity detected in structure module : " + this.getName() + "\n In iteration :"
-                    + iterationScope.getCurrentIteration() + "\n Period : " + periodScope.getCurrentPeriod() + ". Seed : " + simulationScope.getSimulation().getRandomSeed() + "   .... Please see logs.   \n" + ex.getMessage(), ex);
+                    + iterationScope.getCurrentIteration() + "\n Period : " + periodScope.getCurrentPeriod() + ". Seed : " + seed +"   .... Please see logs.   \n" + ex.getMessage(), ex);
         }
-        RIUtilities.addMarkers(paidClaims, this);
-        outClaimsCeded.addAll(paidClaims);
-        outContractFinancials.addAll(contractFinancialsPacket);
-        periodStore.put(CEDED_CLAIMS, paidClaims);
-
+        outClaimsCeded.addAll(claimsAfterContractApplication.getAllCededClaims());
+        outClaimsNet.addAll(claimsAfterContractApplication.getAllNetClaims());
+        RIUtilities.addMarkers(outClaimsCeded, this);
+        RIUtilities.addMarkers(outClaimsNet, this);
+        claimStore.cacheCededClaims(claimsAfterContractApplication.getAllCashflowOutcomes(), incurredClaimOutcome.getAllIncurredOutcomes() );
     }
 
     private void storePremium() {
@@ -168,7 +158,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
     private void fillAPChannels(IncurredLossAndAP lossAndAP, TermLossAndPaidAps paidStuff, AdditionalPremiumAndPaidTuple termAP) {
         outApAll.addAll(lossAndAP.getAddtionalPremiums());
         outApAllPaid.addAll(paidStuff.getPaidAPs());
-        if(termAP.getAdditionalPremium().getAdditionalPremium() != 0 ){
+        if (termAP.getAdditionalPremium().getAdditionalPremium() != 0) {
             outApAll.add(termAP.getAdditionalPremium());
             outApAllPaid.add(termAP.getPaidAdditionalPremium());
         }
@@ -185,51 +175,32 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     private void initSimulation() {
         if (iterationScope.isFirstIteration() && periodScope.isFirstPeriod()) {
+
+            List<AllPeriodUnderwritingInfoPacket> allPeriodUnderwritingInfoPacketList = parmContractBase.coveredAllPeriodUnderwritingInfo(inAllPeriodUnderwritingInfo);
             if (parmContractBase.exposureBase() != ExposureBase.ABSOLUTE) {
-                AllPeriodUnderwritingInfoPacket uwInfo = inAllPeriodUnderwritingInfo.get(0);
+                if(allPeriodUnderwritingInfoPacketList.size() != 1) {
+                    throw new SimulationException("You have set a contract to be relative to underwriting information, but the list of filtered underwriting information is of size; " + allPeriodUnderwritingInfoPacketList.size() + ". This is not allowed. " +
+                            "One (and only one) piece of underwriting information is required");
+                }
+                AllPeriodUnderwritingInfoPacket uwInfo = allPeriodUnderwritingInfoPacketList.get(0);
                 iterationStore.put(UWINFO, uwInfo);
             } else {
                 AllPeriodUnderwritingInfoPacket uwInfo = new AllPeriodUnderwritingInfoPacket();
                 iterationStore.put(UWINFO, uwInfo);
-
             }
         }
     }
 
-    private void initIteration(){
+    private void initIteration() {
         if (periodScope.isFirstPeriod()) {
-            final IAllContractClaimCache claimStore = new UberCacheClaimStore();
+            final IAllContractClaimCache claimStore = parmCoverType.getClaimCache();
+
             final IPaidCalculation termCalc = new TermPaidRespectIncurredByClaim();
             periodStore.put(GROSS_CLAIMS, claimStore);
             periodStore.put(TERM_CALC, termCalc);
-            periodStore.put(INCOMING_PREMIUM, new HashMap<Integer, Double >());
+            periodStore.put(INCOMING_PREMIUM, new HashMap<Integer, Double>());
         }
     }
-
-/*    private IncurredClaimAndAP incurredResultsThisSimPeriod(IAllContractClaimCache claimCache, double termLimit, double termExcess) {
-
-        IIncurredCalculation incurredCalc = new TermIncurredCalculation();
-
-        ScaledPeriodLayerParameters layerParameters = setupLayerParameters();
-        List<LayerParameters> layers = layerParameters.getLayers(periodScope.getCurrentPeriod());
-        List<IClaimRoot> incurredClaims = new ArrayList<IClaimRoot>(claimCache.allIncurredClaims());
-
-        double incurredInPeriod = incurredCalc.cededIncurredRespectTerm(claimCache, layerParameters, periodScope, termExcess, termLimit, periodScope.getPeriodCounter(), parmCoverageBase);
-        double additionalPremiumInperiod = incurredCalc.additionalPremiumAllLayers(
-                claimCache.allIncurredClaimsCurrentModelPeriod(periodScope, parmCoverageBase), layers, 0d);
-        return new IncurredClaimAndAP(incurredInPeriod, additionalPremiumInperiod);
-    }*/
-
-/*     private Map<Integer, Double> incrementalPaidAmountByModelPeriod(double termLimit, double termExcess, IAllContractClaimCache claimCache) {
-        ScaledPeriodLayerParameters layerParameters = setupLayerParameters();
-
-        TermPaidRespectIncurredByClaim iPaidCalculation = new TermPaidRespectIncurredByClaim();
-        DateTime endPriorPeriod = periodScope.getCurrentPeriodStartDate().minusMillis(1);
-        Map<Integer, Double> paidByModelPeriod = iPaidCalculation.cededIncrementalPaidRespectTerm(claimCache, layerParameters,
-                periodScope, parmCoverageBase, termLimit, termExcess, globalSanityChecks);
-        return paidByModelPeriod;
-    }*/
-
 
     List<ClaimCashflowPacket> allClaimsToDate(PeriodScope periodScope, PeriodStore periodStore, String storeKey) {
         List<ClaimCashflowPacket> allClaims = new ArrayList<ClaimCashflowPacket>();
@@ -248,6 +219,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
         inClaims.removeAll(uncoveredClaims);
         parmCover.coveredClaims(inClaims);
+        parmExclusionFilter.exclusionClaims(inClaims);
         outClaimsGross.addAll(inClaims);
         parmContractBase.coveredUnderwritingInfo(inUnderwritingInfo);
         filterPremium();
@@ -258,7 +230,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         List<UnderwritingInfoPacket> uncoveredPremium = Lists.newArrayList();
         for (UnderwritingInfoPacket underwritingInfoPacket : inPremiumPerPeriod) {
             for (IPremiumInfoMarker coveredPremium : coveredPremiums) {
-                if(!underwritingInfoPacket.getOrigin().getName().equals(coveredPremium.getName())) {
+                if (!underwritingInfoPacket.getOrigin().getName().equals(coveredPremium.getName())) {
                     uncoveredPremium.add(underwritingInfoPacket);
                 }
             }
@@ -414,7 +386,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         this.simulationScope = simulationScope;
     }
 
-   public ConstrainedMultiDimensionalParameter getParmPremiumCover() {
+    public ConstrainedMultiDimensionalParameter getParmPremiumCover() {
         return parmPremiumCover;
     }
 
@@ -444,5 +416,21 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
 
     public void setOutApAllPaid(PacketList<PaidAdditionalPremium> outApAllPaid) {
         this.outApAllPaid = outApAllPaid;
+    }
+
+    public ClaimCoverType getParmCoverType() {
+        return parmCoverType;
+    }
+
+    public void setParmCoverType(ClaimCoverType parmCoverType) {
+        this.parmCoverType = parmCoverType;
+    }
+
+    public IExclusionCoverStrategy getParmExclusionFilter() {
+        return parmExclusionFilter;
+    }
+
+    public void setParmExclusionFilter(final IExclusionCoverStrategy parmExclusionFilter) {
+        this.parmExclusionFilter = parmExclusionFilter;
     }
 }

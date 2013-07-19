@@ -5,10 +5,10 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.components.IComponentMarker;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimRIOutcome;
 
 import java.util.*;
 
@@ -134,8 +134,7 @@ public class RIUtilities {
         Set<IClaimRoot> claimRoots = RIUtilities.incurredClaims(cashflows, base);
 
         ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByKey = cashflowsByRoot(cashflows, base);
-
-        List<ClaimCashflowPacket> latestUpdates = new ArrayList<ClaimCashflowPacket>();
+        List<ClaimCashflowPacket> latestUpdates = Lists.newArrayList();
 
         for (IClaimRoot claimRoot : claimRoots) {
 
@@ -256,10 +255,15 @@ public class RIUtilities {
         return uncoveredClaims;
     }
 
-    public static ICededRoot findCededClaimRelatedToGrossClaim(IClaimRoot grossClaim, List<ICededRoot> incurredCededClaims) {
-        for (ICededRoot incurredCededClaim : incurredCededClaims) {
+    public static IncurredClaimRIOutcome findCededClaimRelatedToGrossClaim(IClaimRoot grossClaim, Collection<IncurredClaimRIOutcome> incurredCededClaims) {
+        for (IncurredClaimRIOutcome incurredCededClaim : incurredCededClaims) {
             if(grossClaim.equals(incurredCededClaim.getGrossClaim())) {
                 return incurredCededClaim;
+            }
+            if(incurredCededClaim.getGrossClaim() instanceof ICededRoot) {
+                if(((ICededRoot) incurredCededClaim.getGrossClaim()).getGrossClaim().equals(grossClaim)) {
+                    return incurredCededClaim;
+                }
             }
         }
         throw new SimulationException("Failed to match a gross claim to the list of ceded claims; " + grossClaim.toString());

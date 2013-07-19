@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
-import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.IEvent;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
@@ -14,7 +14,7 @@ import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGener
  */
 abstract public class AbstractContractBase extends AbstractParameterObject implements IReinsuranceContractBaseStrategy {
 
-    public DateTime occurrenceDate(EventPacket event) {
+    public DateTime occurrenceDate(IEvent event) {
         return event.getDate();
     }
 

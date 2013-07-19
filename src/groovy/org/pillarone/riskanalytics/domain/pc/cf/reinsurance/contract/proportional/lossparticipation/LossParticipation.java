@@ -1,6 +1,8 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -15,6 +17,8 @@ import java.util.SortedMap;
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
 public class LossParticipation implements ILossParticipation {
+
+    private static Log LOG = LogFactory.getLog(LossParticipation.class);
 
     private SortedMap<Double, Double> table;
     private AggregateValues cumulatedGross;
@@ -120,14 +124,14 @@ public class LossParticipation implements ILossParticipation {
                 cumulatedCededReported = cumulatedGross.premiumWritten * quotaShare * adjustedLossRatio;
             }
             else {
-//                todo log ...
+                LOG.warn("trivial results for loss participation as cumulated premium written gross is 0");
             }
             if (cumulatedGross.premiumPaid != 0) {
                 double adjustedLossRatio = lossRatioAdjustedByLossParticipation(limit.appliedLimit(cumulatedGross.paid) / cumulatedGross.premiumPaid);
                 cumulatedCededPaid = cumulatedGross.premiumPaid * quotaShare * adjustedLossRatio;
             }
             else {
-//                todo log ...
+                LOG.warn("trivial results for loss participation as cumulated premium paid gross is 0");
             }
             cumulatedCeded = new AggregateValues(cumulatedCededUltimate, cumulatedCededReported, cumulatedCededPaid);
         }

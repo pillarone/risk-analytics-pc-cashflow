@@ -8,12 +8,11 @@ import org.pillarone.riskanalytics.core.packets.PacketList
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.simulation.LimitedContinuousPeriodCounter
+import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.pillarone.riskanalytics.core.util.TestPretendInChannelWired
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractTests
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts.TermReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverMap
@@ -33,7 +32,7 @@ class ClaimMergerTests extends GrailsUnitTestCase {
     protected void setUp() {
         super.setUp()
         ConstraintsFactory.registerConstraint(new CoverMap())
-        merger = new ClaimMerger()
+        merger = new ClaimMerger(periodScope: TestPeriodScopeUtilities.getPeriodScope(new DateTime(2013,1,1,0,0,0,0), 5))
         merger.coverAttributeStrategy = setupStrategy()
         marker = new ClaimsGenerator(name: 'attritional')
         contract1 = new TermReinsuranceContract(name: 'contract1')
@@ -92,7 +91,7 @@ class ClaimMergerTests extends GrailsUnitTestCase {
     }
 
     void testCededClaims() {
-        ClaimCashflowPacket cededClaim = getClaimCashflowPacket(baseClaim, 20)
+        ClaimCashflowPacket cededClaim = getClaimCashflowPacket(baseClaim, -20) // negative sign to simulate inward logic
         cededClaim.setMarker(contract1)
         merger.coverAttributeStrategy = setupStrategy([[''], ['contract1'], [''], [''], [''], ['ANY']])
         merger.inClaimsCeded.add(cededClaim)

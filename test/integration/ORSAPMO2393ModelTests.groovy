@@ -34,6 +34,6 @@ class ORSAPMO2393ModelTests extends ModelTest {
     }
 
     protected boolean shouldCompareResults() {
-        false       // todo: check why variable premium of CXL is not constant
+        true
     }
 }

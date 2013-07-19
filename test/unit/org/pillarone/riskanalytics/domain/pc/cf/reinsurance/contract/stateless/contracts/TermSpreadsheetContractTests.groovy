@@ -1,26 +1,17 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts
 
-import org.pillarone.riskanalytics.domain.test.SpreadsheetUnitTest
 import org.joda.time.DateTime
-import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
-import org.pillarone.riskanalytics.domain.test.SpreadsheetImporter
-import com.google.common.collect.ListMultimap
+import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
-import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
-import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
-import com.google.common.collect.ArrayListMultimap
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
-import org.apache.commons.lang.builder.HashCodeBuilder
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.TestClaimUtils
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.AdditionalPremiumConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.LayerConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.global.AnnualPeriodStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ContractBasedOn
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
-import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
+import org.pillarone.riskanalytics.domain.test.SpreadsheetImporter
+import org.pillarone.riskanalytics.domain.test.SpreadsheetUnitTest
 
 /**
  * This spreadsheet test does not check any reinstatements and AP calculations as they are not implemented so far

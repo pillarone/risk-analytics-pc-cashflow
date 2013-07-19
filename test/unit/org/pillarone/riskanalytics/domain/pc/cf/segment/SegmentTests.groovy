@@ -1,39 +1,28 @@
 package org.pillarone.riskanalytics.domain.pc.cf.segment
 
+import org.joda.time.DateTime
+import org.pillarone.riskanalytics.core.components.IComponentMarker
+import org.pillarone.riskanalytics.core.components.PeriodStore
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
-import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion
-import org.pillarone.riskanalytics.domain.utils.constraint.UnderwritingPortion
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
-
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils
-import org.pillarone.riskanalytics.core.util.TestProbe
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.RiskBands
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage
-import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
-import org.joda.time.DateTime
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
-import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
-import org.pillarone.riskanalytics.core.components.IComponentMarker
-import org.pillarone.riskanalytics.domain.utils.constraint.ReservePortion
-import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter
-import org.pillarone.riskanalytics.domain.pc.cf.discounting.IDiscountMarker
-import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerator
-import org.pillarone.riskanalytics.core.components.PeriodStore
 import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
-import org.pillarone.riskanalytics.domain.pc.cf.discounting.Discounting
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.DeterministicIndexTableConstraints
-import org.pillarone.riskanalytics.core.wiring.WiringUtils
+import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
+import org.pillarone.riskanalytics.core.util.TestProbe
 import org.pillarone.riskanalytics.core.wiring.WireCategory
+import org.pillarone.riskanalytics.core.wiring.WiringUtils
+import org.pillarone.riskanalytics.domain.pc.cf.claim.*
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
 import org.pillarone.riskanalytics.domain.pc.cf.discounting.DiscountedValuesPacket
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.Discounting
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.*
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.DeterministicIndexTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexStrategyType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.ReservesGenerator
+import org.pillarone.riskanalytics.domain.utils.constraint.PerilPortion
+import org.pillarone.riskanalytics.domain.utils.constraint.ReservePortion
+import org.pillarone.riskanalytics.domain.utils.constraint.UnderwritingPortion
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com

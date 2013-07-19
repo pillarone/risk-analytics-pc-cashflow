@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
@@ -10,7 +11,6 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.Reinsurance
 import org.pillarone.riskanalytics.domain.pc.cf.structure.IStructuringStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.structure.StructuringType;
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
-import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
 
 import java.util.*;
 
@@ -124,14 +124,11 @@ public class MatrixCoverAttributeStrategy extends AbstractParameterObject implem
     }
 
     public List<IReinsuranceContractMarker> getCoveredReinsuranceContracts() {
-        // todo
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new NotImplementedException();
     }
 
     public List<ReinsuranceContractAndBase> getCoveredReinsuranceContractsAndBase(Map<String, ReinsuranceContract> reinsuranceContracts) {
-        // todo
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
+        throw new NotImplementedException();    }
 
     public List<MatrixCoverAttributeRow> getRowFilters() {
         if (rowFilters == null) {

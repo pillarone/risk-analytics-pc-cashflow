@@ -22,6 +22,6 @@ public class NoneCoverStrategy extends AbstractParameterObject implements ICover
     }
 
     public void coveredClaims(List<ClaimCashflowPacket> source) {
-
+        return;
     }
 }

@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional;
 
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.NotImplementedException;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
@@ -7,6 +8,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.event.IEvent;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.DoubleValue;
@@ -25,14 +27,14 @@ import java.util.Map;
 public class EventLimitQuotaShareContract extends QuotaShareContract {
 
     private Map<IClaimRoot, ClaimCashflowPacket> cumulatedCededClaims;
-    private Map<EventPacket, EventLimitTracking> limitTrackingPerEvent;
+    private Map<IEvent, EventLimitTracking> limitTrackingPerEvent;
     private double eventLimit;
     private ILimitStrategy limit;
 
     public EventLimitQuotaShareContract(double quotaShare, ICommission commission, EventLimitStrategy limit, ILossParticipation lossParticipation) {
         super(quotaShare, commission, lossParticipation);
-        cumulatedCededClaims = new HashMap<IClaimRoot, ClaimCashflowPacket>();
-        limitTrackingPerEvent = new HashMap<EventPacket, EventLimitTracking>();
+        cumulatedCededClaims = Maps.newHashMap();
+        limitTrackingPerEvent = Maps.newHashMap();
         this.limit = limit;
         eventLimit = limit.getEventLimit();
     }

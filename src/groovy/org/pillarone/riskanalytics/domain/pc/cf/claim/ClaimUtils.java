@@ -202,23 +202,23 @@ public class ClaimUtils {
                     changeInIBNRIndexed += claim.getChangeInIBNRIndexed();
                 }
                 IClaimRoot baseClaim = null;
-                if (claims.get(0).getBaseClaim() instanceof GrossClaimRoot) {
-                    baseClaim = new GrossClaimRoot((GrossClaimRoot) claims.get(0).getBaseClaim());
+                if (firstClaim.getBaseClaim() instanceof GrossClaimRoot) {
+                    baseClaim = new GrossClaimRoot((GrossClaimRoot) firstClaim.getBaseClaim());
                 } else {
-                    baseClaim = new ClaimRoot(ultimate, claims.get(0).getBaseClaim());
+                    baseClaim = new ClaimRoot(ultimate, firstClaim.getBaseClaim());
                 }
                 int updatePeriod = 0;
-                if (claims.get(0).getUpdatePeriod() != null) {
-                    updatePeriod = claims.get(0).getUpdatePeriod();
+                if (firstClaim.getUpdatePeriod() != null) {
+                    updatePeriod = firstClaim.getUpdatePeriod();
                 }
-                IClaimRoot keyClaim = claims.get(0).getKeyClaim();
+                IClaimRoot keyClaim = firstClaim.getKeyClaim();
                 ClaimCashflowPacket aggregateClaim = new ClaimCashflowPacket(baseClaim, keyClaim, ultimate, nominalUltimate,
                         paidIncremental, paidCumulated, reportedIncremental, reportedCumulated, latestReserves,
                         changeInReservesIndexed, changeInIBNRIndexed, null, mostRecentClaimUpdate, updatePeriod);
                 aggregateClaim.setAppliedIndexValue(appliedIndex);
                 aggregateClaim.setPremiumRisk(premiumRisk);
                 aggregateClaim.setReserveRisk(reserveRisk);
-                applyMarkers(claims.get(0), aggregateClaim);
+                applyMarkers(firstClaim, aggregateClaim);
                 aggregateByKeyClaim.put(firstClaim.getKeyClaim(), aggregateClaim);
             }
         }
@@ -548,6 +548,10 @@ public class ClaimUtils {
         }
     }
 
+    /*
+    This method really checks that we haven't been supplied with two dependance packets for a single generator. I.e that the user
+    has tried to 'double correlate' something. Ideally it would be called before and dependant claims generation.
+     */
     public static DependancePacket checkForDependance(IPerilMarker filterCriteria, List<DependancePacket> dependancePacketList) {
         DependancePacket dependancePacket = new DependancePacket();
         boolean foundPacket = false;
@@ -565,5 +569,11 @@ public class ClaimUtils {
     }
 
 
-
+    public static boolean uniqueKeyClaims(List<ClaimCashflowPacket> claims) {
+        Set<IClaimRoot> keyClaims = new HashSet<IClaimRoot>();
+        for (ClaimCashflowPacket claim : claims) {
+            keyClaims.add(claim.getKeyClaim());
+        }
+        return keyClaims.size() == claims.size();
+    }
 }

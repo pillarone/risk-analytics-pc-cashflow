@@ -53,10 +53,11 @@ class ExposureBaseType extends AbstractParameterObjectClassifier {
                 return new AbsoluteBaseStrategy()
             case ExposureBaseType.PREMIUM:
                 return new PremiumBaseStrategy(
-                        underwritingInfo: (ComboBoxTableMultiDimensionalParameter) parameters['underwritingInfo'])
+                        (ComboBoxTableMultiDimensionalParameter) parameters['underwritingInfo']
+                )
             case ExposureBaseType.EXPOSURE:
                 return new ExposureBaseStrategy(
-                        underwritingInfo: (ComboBoxTableMultiDimensionalParameter) parameters['underwritingInfo'])
+                        (ComboBoxTableMultiDimensionalParameter) parameters['underwritingInfo'])
         }
     }
 }

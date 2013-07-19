@@ -1,66 +1,44 @@
+import org.pillarone.riskanalytics.core.output.CollectingModeFactory
 import org.pillarone.riskanalytics.core.output.DrillDownMode
-import org.pillarone.riskanalytics.domain.pc.cf.output.SplitAndFilterCollectionModeStrategy
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternTableConstraints
+import org.pillarone.riskanalytics.core.output.aggregation.PacketAggregatorRegistry
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.AnnualIndexTableConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.SeverityIndexSelectionTableConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FrequencyIndexSelectionTableConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.PremiumIndexSelectionTableConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.PolicyIndexSelectionTableConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.DeterministicIndexTableConstraints
-
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.PMLClaimsGeneratorStrategyValidator
 import org.pillarone.riskanalytics.core.parameterization.validation.ValidatorRegistry
+import org.pillarone.riskanalytics.core.util.ResourceBundleRegistry
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket as CCP
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimPacketAggregator
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimTypeSelectionTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.validation.RiskAllocationValidator
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.ClaimsGeneratorScalingValidator
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.PMLClaimsGeneratorStrategyValidator
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.validation.CopulaValidator
+import org.pillarone.riskanalytics.domain.pc.cf.dependency.validation.MultipleProbabilitiesCopulaValidator
+import org.pillarone.riskanalytics.domain.pc.cf.discounting.YieldCurveTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacketAggregator
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.*
+import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.output.*
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternTableConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.PatternStrategyValidator
+import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.RecoveryPatternStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.ContractFinancialsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.InterpolatedSlidingCommissionValidator
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.LossParticipationValidator
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AdditionalPremium
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.PaidAdditionalPremium
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ContractConstraint
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.XLStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverMap
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixStructureContraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.validation.CoverAttributeValidator
 import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket as FP
-import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
-import org.pillarone.riskanalytics.domain.utils.constraint.DateTimeConstraints
-import org.pillarone.riskanalytics.core.util.ResourceBundleRegistry
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.RecoveryPatternStrategyValidator
-import org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.PatternStrategyValidator
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.LinkRatioIndexTableConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.ReservesIndexSelectionTableConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.ClaimsGeneratorScalingValidator
-import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.validation.RiskAllocationValidator
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimTypeSelectionTableConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.validation.CopulaValidator
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.validation.MultipleProbabilitiesCopulaValidator
-import org.pillarone.riskanalytics.core.output.aggregation.PacketAggregatorRegistry
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket as CCP
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimPacketAggregator
-import org.pillarone.riskanalytics.domain.pc.cf.discounting.YieldCurveTableConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceCollectingModeStrategy
-import org.pillarone.riskanalytics.core.output.CollectingModeFactory
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.XLStrategyValidator
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacketAggregator
-import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
-import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractContraints
-import org.pillarone.riskanalytics.domain.utils.constraint.SegmentPortion
-import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateClaimCollectingModeStrategy
-import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateReportedPaidClaimCollectingModeStrategy
-import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimatePaidClaimCollectingModeStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.structure.validation.ClaimTypeStructuringValidator
-import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceReducedCollectingModeStrategy
-import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateUltimateReportedClaimCollectingModeStrategy
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.RunOffIndexSelectionTableConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.output.SingleUltimatePaidClaimCollectingModeStrategy
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AdditionalPremium
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.PaidAdditionalPremium
-import org.pillarone.riskanalytics.life.longevity.HistoricMortalityRatesConstraints
-import org.pillarone.riskanalytics.life.longevity.MortalityRatesConstraints
-import org.pillarone.riskanalytics.life.longevity.PolicyConstraints
+import org.pillarone.riskanalytics.domain.utils.constraint.*
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "0.7-longevity"
+    def version = "1.7-b3"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.2.1 > *"
     // the other plugins this plugin depends on
@@ -119,6 +97,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new PolicyConstraints())
         ConstraintsFactory.registerConstraint(new MortalityRatesConstraints())
         ConstraintsFactory.registerConstraint(new HistoricMortalityRatesConstraints())
+        ConstraintsFactory.registerConstraint(new ContractConstraint())
 
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
         ValidatorRegistry.addValidator(new PatternStrategyValidator())
@@ -203,6 +182,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
 
 
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [CCP.ULTIMATE, CCP.PAID_INDEXED]))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE], [CCP.ULTIMATE, CCP.PAID_INDEXED]))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [CCP.ULTIMATE, CCP.PAID_INDEXED]))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_TYPE], [], [AdditionalPremium, PaidAdditionalPremium]))
     }

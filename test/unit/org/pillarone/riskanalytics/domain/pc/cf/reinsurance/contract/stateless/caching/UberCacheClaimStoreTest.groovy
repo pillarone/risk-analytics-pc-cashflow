@@ -1,15 +1,15 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching
 
-import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
-import org.pillarone.riskanalytics.core.simulation.TestPeriodCounterUtilities
-import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
-import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.TestClaimUtils
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
+import org.pillarone.riskanalytics.core.simulation.TestPeriodCounterUtilities
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
+import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
+import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.TestClaimUtils
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
 
 /**
@@ -22,7 +22,7 @@ class UberCacheClaimStoreTest extends GroovyTestCase {
     DateTime start2012 = new DateTime(2012, 1, 1, 1, 0, 0, 0, DateTimeZone.UTC)
     List<ClaimCashflowPacket> grossClaims = new ArrayList<ClaimCashflowPacket>()
     Set<IClaimRoot> rooClaims = new ArrayList<GrossClaimRoot>()
-    UberCacheClaimStore aTestStore
+    IAllContractClaimCache aTestStore
 
     protected void setUp() {
         aTestStore = new UberCacheClaimStore()

@@ -18,7 +18,7 @@ public interface IContractClaimByModelPeriod {
 
     Set<IClaimRoot> allIncurredClaimsInModelPeriod(Integer uwPeriod, PeriodScope periodScope, ContractCoverBase coverBase);
 
-    Set<IClaimRoot> allIncurredClaimsCurrentModelPeriod(PeriodScope periodScope, ContractCoverBase coverBase);
+    Set<IClaimRoot> allIncurredClaimsCurrentModelPeriodForAllocation(PeriodScope periodScope, ContractCoverBase coverBase);
 
     void cacheClaims(Collection<ClaimCashflowPacket> claims);
 

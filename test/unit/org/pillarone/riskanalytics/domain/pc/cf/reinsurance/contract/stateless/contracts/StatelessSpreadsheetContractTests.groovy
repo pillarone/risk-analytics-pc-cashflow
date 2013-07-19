@@ -4,28 +4,26 @@ import com.google.common.collect.ListMultimap
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.joda.time.DateTime
+import org.pillarone.riskanalytics.core.components.IterationStore
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
+import org.pillarone.riskanalytics.core.util.GroovyUtils
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
+import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
+import org.pillarone.riskanalytics.domain.pc.cf.global.AnnualPeriodStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.AdditionalPremiumConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.LayerConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ContractBasedOn
 import org.pillarone.riskanalytics.domain.test.SpreadsheetImporter
 import org.pillarone.riskanalytics.domain.test.SpreadsheetUnitTest
-import org.pillarone.riskanalytics.domain.pc.cf.global.AnnualPeriodStrategy
-
-import org.pillarone.riskanalytics.core.components.IterationStore
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints
-import org.pillarone.riskanalytics.core.util.GroovyUtils
-
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis
-import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 
 /**
  * This spreadsheet test does not check any reinstatements and AP calculations as they are not implemented so far
@@ -40,6 +38,7 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
     static DateTime beginOfCover = new DateTime(2012, 1, 1, 0, 0, 0, 0)
 
     static StatelessRIContract getArtLayerContract(Double termExcess, Double termLimit, List<Integer> periods, List<Integer> layers, List<Double> shares, List<Double> periodExcess, List<Double> periodLimit, List<Double> claimExcess, List<Double> claimLimit, DateTime beginOfCover, List<Double> apPercentages, List<String> apTypes) {
+
         IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
         ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
         int numberOfLayers = layers.size()

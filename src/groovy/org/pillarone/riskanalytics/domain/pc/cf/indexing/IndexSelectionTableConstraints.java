@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-// todo(sku): discuss with msp if framework extension to support different marker interfaces within one implementation class only
 public class IndexSelectionTableConstraints implements IMultiDimensionalConstraints {
 
     public static final String IDENTIFIER = "INDEX_SELECTION";

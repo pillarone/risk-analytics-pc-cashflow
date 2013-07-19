@@ -79,9 +79,7 @@ public class ReinsuranceContract extends MultiCounterPartyBaseReinsuranceContrac
     }
 
     protected boolean isCurrentPeriodCovered() {
-        DateTime periodStart = iterationScope.getPeriodScope().getCurrentPeriodStartDate();
-        DateTime periodEnd = iterationScope.getPeriodScope().getNextPeriodStartDate();
-        return parmCoveredPeriod.isCovered(periodStart) || parmCoveredPeriod.isCovered(periodEnd);
+        return iterationScope != null && parmCoveredPeriod.currentPeriodContainsCover(iterationScope.getPeriodScope().getPeriodCounter());
     }
 
     public IReinsuranceContractStrategy getParmContractStrategy() {

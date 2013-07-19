@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim
 
 import org.joda.time.DateTime
+import org.junit.Test
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.TestPeriodCounterUtilities
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
@@ -151,6 +152,17 @@ class ClaimUtilsTests extends GroovyTestCase {
 //        assertEquals "base claim, previous IBNR", -200d, scaledClaim.keyClaim.previousIBNR, EPSILON
     }
 
+    @Test
+    void uniqueKeyClaims() {
+        IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, 7);
+        List<ClaimCashflowPacket> claims1000 = grossClaims(periodCounter, 1000, null)
+        List<ClaimCashflowPacket> claims800 = grossClaims(periodCounter, 800, null)
+
+        assertTrue ClaimUtils.uniqueKeyClaims([claims1000[0], claims800[0]])
+        assertFalse ClaimUtils.uniqueKeyClaims([claims1000[0], claims1000[0]])
+        assertFalse ClaimUtils.uniqueKeyClaims([claims800[0], claims800[0]])
+    }
+
 
 //    void testScaleKeepingKeyClaim() {
 //        ClaimCashflowPacket scaledClaim = ClaimUtils.scale(claim, 0.8, false, true)
@@ -172,7 +184,7 @@ class ClaimUtilsTests extends GroovyTestCase {
 //
 //    }
 
-    private List<ClaimCashflowPacket> grossClaims(IPeriodCounter periodCounter, double ultimate,
+    private static List<ClaimCashflowPacket> grossClaims(IPeriodCounter periodCounter, double ultimate,
                                                   List<Factors> factors, ClaimType claimType = ClaimType.AGGREGATED) {
         PatternPacket reportingPattern = PatternPacketTests.getPattern([0, 12, 24, 36], [0.7d, 0.8d, 0.95d, 1.0d])
         PatternPacket payoutPattern = PatternPacketTests.getPattern([0, 12, 24, 36, 48], [0d, 0.7d, 0.8d, 0.95d, 1.0d])

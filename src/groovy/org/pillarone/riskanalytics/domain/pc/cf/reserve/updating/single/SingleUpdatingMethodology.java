@@ -55,7 +55,6 @@ public class SingleUpdatingMethodology extends AbstractParameterObject implement
                                                    int contractPeriod, DateTimeUtilities.Days360 days360, PayoutPatternBase base,
                                                    PatternPacket payoutPattern, boolean sanityChecks) {
         List<GrossClaimRoot> modifiedGeneratedAndActualClaims = new ArrayList<GrossClaimRoot>();
-        // todo(sku): where do we need the updating pattern, where the payout pattern
         PatternPacket updatePattern = PatternUtils.filterPattern(patterns, updatingPattern, IUpdatingPatternMarker.class);
         DateTime lastReportedDate = actualClaims.lastReportedDate(periodCounter, updateDate, base);
         SingleUpdatingMethod.ClaimAndRandomDraws updatingResult = methodology.filterIBNRClaims(baseClaims, updateDate, lastReportedDate, updatePattern, periodCounter, days360);

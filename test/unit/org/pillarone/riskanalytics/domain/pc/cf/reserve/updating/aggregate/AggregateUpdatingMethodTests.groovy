@@ -2,17 +2,16 @@ package org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate
 
 import org.joda.time.DateTime
 import org.joda.time.Period
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString
+import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IUpdatingPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.UpdatingPattern
-import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
-import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
-import com.google.common.collect.ArrayListMultimap
 import org.pillarone.riskanalytics.domain.utils.datetime.DateTimeUtilities
 
 /**

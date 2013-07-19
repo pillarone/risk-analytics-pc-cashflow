@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
+import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.LossesOccurringContractBase;
@@ -9,7 +10,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
-import org.pillarone.riskanalytics.domain.utils.math.distribution.*;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.AbstractRandomDistribution;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified;
+import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 import org.pillarone.riskanalytics.domain.utils.math.generator.RandomNumberGeneratorFactory;
 
@@ -29,11 +32,9 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
                                           List uwInfosFilterCriteria, ExposureBase severityBase, FrequencyBase frequencyBase,
                                           List<Factors> factors, PeriodScope periodScope) {
         double frequencyScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, frequencyBase, uwInfosFilterCriteria);
-        int numberOfClaims = 0;
-        for (int i = 0; i < (int) frequencyScalingFactor; i++) {
-            numberOfClaims += claimNumberGenerator.nextValue().intValue();
-        }
-        numberOfClaims = calculateNumberOfClaimsWithAppliedIndices(numberOfClaims, periodScope, factors);
+        DateTime currentPeriodStartDate = periodScope.getCurrentPeriodStartDate();
+        double indexFactor = IndexUtils.aggregateFactor(factors, currentPeriodStartDate, periodScope.getPeriodCounter(), currentPeriodStartDate);
+        int numberOfClaims = claimNumberGenerator.nextValue(frequencyScalingFactor * indexFactor).intValue();
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
         return generateClaims(severityScalingFactor, severityFacotrs, numberOfClaims, periodScope, new LossesOccurringContractBase());
     }
@@ -60,6 +61,10 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
             claimNumberGenerator = RandomNumberGeneratorFactory.getGenerator(distribution, modifier);
             cachedClaimNumberGenerators.put(key, claimNumberGenerator);
         }
+    }
+
+    public IRandomNumberGenerator getClaimNumberGenerator() {
+        return claimNumberGenerator;
     }
 
     protected void setClaimNumberGenerator(AbstractRandomDistribution distribution) {

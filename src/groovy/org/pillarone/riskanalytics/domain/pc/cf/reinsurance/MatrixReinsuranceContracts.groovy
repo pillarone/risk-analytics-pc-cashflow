@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance
 
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
+import org.pillarone.riskanalytics.core.components.Component
 import org.pillarone.riskanalytics.core.components.DynamicComposedComponent
 import org.pillarone.riskanalytics.core.packets.PacketList
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
@@ -32,7 +33,6 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
 
     PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
-//    PacketList<LegalEntityDefaultPacket> inReinsurersDefault = new PacketList<LegalEntityDefaultPacket>(LegalEntityDefaultPacket)
     PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket)
     PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault)
 
@@ -51,7 +51,7 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
                         ConstraintsFactory.getConstraints(LegalEntityPortionConstraints.IDENTIFIER)),
                 parmCover: CoverAttributeStrategyType.getDefault(),
                 parmCoveredPeriod: PeriodStrategyType.getDefault(),
-                parmContractStrategy: ReinsuranceContractType.getDefault());
+                parmContractStrategy: ReinsuranceContractType.getDefault())
     }
 
     @Override
@@ -69,9 +69,9 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
         }
     }
 
-/**
- * in channels of contracts based on original (gross) claims can be wired directly with replicating in channels
- */
+    /**
+     * in channels of contracts based on original (gross) claims can be wired directly with replicating in channels
+     */
     private void wireContractsBasedOnGross() {
         for (ReinsuranceContract contract : componentList) {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
@@ -83,20 +83,19 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
     }
 
     private void wireWithMerger() {
-        // todo: wire uw info
         for (ReinsuranceContract contract : componentList) {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
             if (strategy?.mergerRequired()) {
-                ClaimMerger claimMerger = new ClaimMerger(coverAttributeStrategy: strategy, name: "preceeding ${contract.name}")
-                UnderwritingInfoMerger uwInfoMerger = new UnderwritingInfoMerger(coverAttributeStrategy: strategy, name: "preceeding ${contract.name}")
+                ClaimMerger claimMerger = new ClaimMerger(coverAttributeStrategy: strategy, name: "${contract.name}Preceeding")
+                UnderwritingInfoMerger uwInfoMerger = new UnderwritingInfoMerger(coverAttributeStrategy: strategy, name: "${contract.name}Preceeding")
                 claimMergers << claimMerger
                 uwInfoMergers << uwInfoMerger
                 List<IReinsuranceContractMarker> benefitContracts = strategy.benefitContracts
                 List<IReinsuranceContractMarker> coveredNetOfContracts = strategy.coveredNetOfContracts()
                 List<IReinsuranceContractMarker> coveredCededOfContracts = strategy.coveredCededOfContracts()
                 for (IReinsuranceContractMarker coveredContract : coveredCededOfContracts) {
-                    doWire WC, claimMerger, 'inClaimsCeded', coveredContract, 'outClaimsCeded'
-                    doWire WC, uwInfoMerger, 'inUnderwritingInfoCeded', coveredContract, 'outUnderwritingInfoCeded'
+                    doWire WC, claimMerger, 'inClaimsCeded', coveredContract, 'outClaimsInward'
+                    doWire WC, uwInfoMerger, 'inUnderwritingInfoCeded', coveredContract, 'outUnderwritingInfoInward'
                 }
                 if (coveredNetOfContracts.size() > 0 || benefitContracts.size() > 0) {
                     for (IReinsuranceContractMarker coveredContract : coveredNetOfContracts) {
@@ -121,7 +120,7 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
         }
     }
 
-    private MatrixCoverAttributeStrategy getCoverStrategy(ReinsuranceContract contract) {
+    private static MatrixCoverAttributeStrategy getCoverStrategy(ReinsuranceContract contract) {
         if (contract.parmCover instanceof MatrixCoverAttributeStrategy) {
             return (MatrixCoverAttributeStrategy) contract.parmCover
         } else if (contract.parmCover instanceof NoneCoverAttributeStrategy) {
@@ -148,15 +147,16 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
             MatrixCoverAttributeStrategy strategy = getCoverStrategy(contract)
             if (strategy && !strategy?.mergerRequired()) {
                 for (IReinsuranceContractMarker coveredContract : strategy.coveredCededOfContracts()) {
-                    doWire WC, contract, 'inClaims', coveredContract, 'outClaimsCeded'
-                    doWire WC, contract, 'inUnderwritingInfo', coveredContract, 'outUnderwritingInfoCeded'
+                    doWire WC, contract, 'inClaims', coveredContract, 'outClaimsInward'
+                    doWire WC, contract, 'inUnderwritingInfo', coveredContract, 'outUnderwritingInfoInward'
                 }
             }
         }
     }
 
     /**
-     * All ceded information is wired directly to a replicating channel independently of specific reinsurance program.
+     * All ceded information is wired directly to a replicating channel independently of the specific reinsurance program
+     * as long as it is not a virtual contract.
      * Includes all replicating wiring independent of a p14n.
      */
     private void wireProgramIndependentReplications() {
@@ -179,7 +179,20 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
                 contractsWithNoCover.add(contract)
             }
         }
-        LOG.debug("removed contracts: ${contractsWithNoCover.collectAll { it.normalizedName }}");
-        componentList.size() > contractsWithNoCover.size()
+        componentList.removeAll(contractsWithNoCover)
+        LOG.debug("trivial contracts removed: ${contractsWithNoCover.collectAll { it.normalizedName }}");
+        componentList.size() > 0
+    }
+
+    /**
+     *  Sub components are either properties on the component or in case
+     *  of dynamically composed components stored in its componentList.
+     *  @return all sub components
+     */
+    public List<Component> allSubComponents() {
+        List<Component> subComponents = super.allSubComponents()
+        subComponents.addAll(claimMergers)
+        subComponents.addAll(uwInfoMergers)
+        return subComponents
     }
 }

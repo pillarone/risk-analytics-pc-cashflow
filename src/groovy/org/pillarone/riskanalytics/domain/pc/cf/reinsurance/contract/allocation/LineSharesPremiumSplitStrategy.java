@@ -61,7 +61,7 @@ public class LineSharesPremiumSplitStrategy extends AbstractPremiumSplit {
             segmentShares.put(segment, share);
         }
         // normalize entered segment shares to 1
-        if (totalShare != 1.0) {
+        if (totalShare != 1.0 && totalShare != 0d) {
             for (Map.Entry<ISegmentMarker, Double> segmentShare : segmentShares.entrySet()) {
                 segmentShares.put(segmentShare.getKey(), (segmentShare.getValue() / totalShare));
             }

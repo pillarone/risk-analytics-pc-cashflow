@@ -377,6 +377,9 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
         contracts.addSubComponent(treatyWithoutBenefit)
         contracts.addSubComponent(benefitContract)
         contracts.internalWiring()
+        contracts.claimMergers.each {
+            it.periodScope = firstTreaty.iterationScope.periodScope
+        }
 
         List netProbe1 = new TestProbe(treatyWithoutBenefit, 'outClaimsNet').result
         List cededProbe1 = new TestProbe(treatyWithoutBenefit, 'outClaimsCeded').result
@@ -408,6 +411,9 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
         contracts.addSubComponent(quotaShareTreaty)
         contracts.addSubComponent(benefitContract)
         contracts.internalWiring()
+        contracts.claimMergers.each {
+            it.periodScope = firstTreaty.iterationScope.periodScope
+        }
 
         WiringUtils.use(WireCategory) {
             segmentHome.inClaims = claimGeneratorCat.outClaims
@@ -457,6 +463,9 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
         contracts.addSubComponent(treatyWithBenefit)
         contracts.addSubComponent(benefitContract)
         contracts.internalWiring()
+        contracts.claimMergers.each {
+            it.periodScope = firstTreaty.iterationScope.periodScope
+        }
 
         WiringUtils.use(WireCategory) {
             segmentHome.inClaims = claimGeneratorMotorCat.outClaims

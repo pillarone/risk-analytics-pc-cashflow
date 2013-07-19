@@ -112,9 +112,9 @@ class PatternStrategyValidator implements IParameterizationValidator {
     private void registerConstraints() {
 
         validationService.register(PatternStrategyType.INCREMENTAL) {Map type ->
-            double[] values = type.incrementalPattern.getColumnByName(PatternStrategyType.INCREMENTS)
-            double sum = (double) GroovyCollections.sum(values)
-            if (sum >= 1.0 - EPSILON && sum <= 1.0 + EPSILON) return true
+            Double[] values = type.incrementalPattern.getColumnByName(PatternStrategyType.INCREMENTS)
+            Double sum = GroovyCollections.sum(values) as Double
+            if (sum == null || sum >= 1.0 - EPSILON && sum <= 1.0 + EPSILON) return true
             [ValidationType.ERROR, "incremental.pattern.error.sum.not.one", sum]
         }
 
@@ -140,6 +140,28 @@ class PatternStrategyValidator implements IParameterizationValidator {
 
             return true
         }
+
+        validationService.register(PatternStrategyType.INCREMENTAL) {
+            Map type ->
+                double[] months = type.incrementalPattern.getColumnByName(PatternTableConstraints.MONTHS)
+
+                if (months.length > 0 && months[0] < 0) {
+                    return [ValidationType.ERROR, "incremental.pattern.error.cumulative.months.not.non-negative", months[0]]
+                }
+                return true
+        }
+
+        validationService.register(PatternStrategyType.INCREMENTAL) {
+            Map type ->
+                double[] months = type.incrementalPattern.getColumnByName(PatternTableConstraints.MONTHS)
+                for (int i = 0; i < months.length - 1; i++) {
+                    if (months[i + 1] <= months[i]) {
+                        return [ValidationType.ERROR, "incremental.pattern.error.cumulative.months.not.strictly.increasing", i + 2, months[i], months[i + 1]]
+                    }
+                }
+                return true
+        }
+
 
         validationService.register(PatternStrategyType.CUMULATIVE) {Map type ->
             double[] values = type.cumulativePattern.getColumnByName(PatternStrategyType.CUMULATIVE2)
@@ -217,27 +239,6 @@ class PatternStrategyValidator implements IParameterizationValidator {
             for (int i = 0; i < months.length - 1; i++) {
                 if (months[i + 1] <= months[i]) {
                     return [ValidationType.ERROR, "cumulative.pattern.error.cumulative.months.not.strictly.increasing", i + 2, months[i], months[i + 1]]
-                }
-            }
-            return true
-        }
-
-        validationService.register(PatternStrategyType.INCREMENTAL) {
-            Map type ->
-            double[] months = type.incrementalPattern.getColumnByName(PatternTableConstraints.MONTHS)
-
-            if (months[0] < 0) {
-                return [ValidationType.ERROR, "incremental.pattern.error.cumulative.months.not.non-negative", months[0]]
-            }
-            return true
-        }
-
-        validationService.register(PatternStrategyType.INCREMENTAL) {
-            Map type ->
-            double[] months = type.incrementalPattern.getColumnByName(PatternTableConstraints.MONTHS)
-            for (int i = 0; i < months.length - 1; i++) {
-                if (months[i + 1] <= months[i]) {
-                    return [ValidationType.ERROR, "incremental.pattern.error.cumulative.months.not.strictly.increasing", i + 2, months[i], months[i + 1]]
                 }
             }
             return true
@@ -566,7 +567,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         }
     }
 
-    private TreeMap<Integer, Double> getCumulativeValuePerMonth(PatternPacket pattern) {
+    private static TreeMap<Integer, Double> getCumulativeValuePerMonth(PatternPacket pattern) {
         TreeMap<Integer, Double> valuePerMonth = new TreeMap<Integer, Double>();
         if (pattern == null) {
             valuePerMonth.put(0, 1d)
@@ -574,7 +575,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         }
         List<Period> periods = pattern.getCumulativePeriods()
         List<Double> values = pattern.getCumulativeValues()
-        if (periods.size() == 0) return
+        if (periods == null) return
         for (int i = 0; i < periods.size(); i++) {
             valuePerMonth.put(periods[i].months, values[i])
         }
@@ -584,7 +585,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         return valuePerMonth
     }
 
-    private PatternPacket getPattern(ParameterHolder parameter) {
+    private static PatternPacket getPattern(ParameterHolder parameter) {
         try {
             return parameter.getBusinessObject().getPattern()
         }

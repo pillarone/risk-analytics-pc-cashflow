@@ -1,23 +1,26 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.paidImpl;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Sets;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exceptionUtils.ExceptionUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.global.SimulationConstants;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IPaidAllocation;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimBase;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.GRIUtilities;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.*;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.ICededClaimStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * author simon.parten @ art-allianz . com
@@ -27,16 +30,18 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
     private static Log LOG = LogFactory.getLog(ProportionalToGrossPaidAllocation.class);
     private static DecimalFormat df = new DecimalFormat("#,###.##");
 
-    public List<ClaimCashflowPacket> allocatePaid(Map<Integer, Double> incrementalPaidByPeriod, List<ClaimCashflowPacket> grossCashflowsThisPeriod,
-                                                  List<ClaimCashflowPacket> cededCashflowsToDate,
-                                                  PeriodScope periodScope,
-                                                  ContractCoverBase coverageBase, List<ICededRoot> incurredCededClaims, boolean sanityChecks) {
+    public AllCashflowClaimsRIOutcome allocatePaid(Map<Integer, Double> incrementalPaidByPeriod, List<ClaimCashflowPacket> grossCashflowsThisPeriod,
+                                                   ICededClaimStore claimStore,
+                                                   PeriodScope periodScope,
+                                                   ContractCoverBase coverageBase, AllClaimsRIOutcome incurredCededClaims, boolean sanityChecks) {
 
 
         IncurredClaimBase base = IncurredClaimBase.BASE;
-
-        List<ClaimCashflowPacket> claimsOfInterest = new ArrayList<ClaimCashflowPacket>();
-        Collection<ClaimCashflowPacket> latestCededCashflowsByIncurredClaim = RIUtilities.latestCashflowByIncurredClaim(cededCashflowsToDate, base);
+        AllCashflowClaimsRIOutcome claimsOfInterest = new AllCashflowClaimsRIOutcome();
+        Collection<ClaimCashflowPacket> latestCededCashflowsByIncurredClaim = RIUtilities.latestCashflowByIncurredClaim(claimStore.allCededCashlowsToDate(), base);
+        Collection<IncurredClaimRIOutcome> allIncurredOutcomesToDate = Sets.newHashSet();
+        allIncurredOutcomesToDate.addAll(incurredCededClaims.getAllIncurredOutcomes());
+        allIncurredOutcomesToDate.addAll(claimStore.allIncurredRIOutcomesToDate());
 
 //        For each model period
         for (Map.Entry<Integer, Double> entry : incrementalPaidByPeriod.entrySet()) {
@@ -49,7 +54,8 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
             Map<IClaimRoot, Collection<ClaimCashflowPacket>> cashflows = cashflowsByKey.asMap();
 
             for (Map.Entry<IClaimRoot, Collection<ClaimCashflowPacket>> packetEntrys : cashflows.entrySet()) {
-                ICededRoot cededRoot = RIUtilities.findCededClaimRelatedToGrossClaim(packetEntrys.getKey(), incurredCededClaims);
+//                Make this return an RIOutcome
+                IncurredClaimRIOutcome cededRoot = RIUtilities.findCededClaimRelatedToGrossClaim(packetEntrys.getKey(), allIncurredOutcomesToDate);
                 List<ClaimCashflowPacket> cashflowPackets = new ArrayList<ClaimCashflowPacket>(packetEntrys.getValue());
                 double grossIncurredByClaimRatio;
                 if (Math.abs(grossIncurredInPeriod) == 0) {
@@ -73,28 +79,48 @@ public class ProportionalToGrossPaidAllocation implements IPaidAllocation {
 
                 double cumulatedCededForThisClaim = latestCededCashflow.getPaidCumulatedIndexed();
                 for (ClaimCashflowPacket cashflowPacket : cashflowPackets) {
+
+                    if(setUltimate) {
+                        ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(cededRoot.getCededClaim(), cashflowPacket, 0d, 0d, setUltimate, cededRoot.getCededClaim().getUltimate());
+                        ClaimCashflowPacket netClaim = new ClaimCashflowPacket(cededRoot.getNetClaim(), cashflowPacket, 0d, 0d, setUltimate, cededRoot.getNetClaim().getUltimate() );
+                        ClaimUtils.applyMarkers(cashflowPacket, cededClaim);
+                        ClaimUtils.applyMarkers(cashflowPacket, netClaim);
+                        final ClaimRIOutcome claimRIOutcome = new ClaimRIOutcome(netClaim, cededClaim, cashflowPacket);
+                        claimsOfInterest.addClaim(claimRIOutcome);
+                        setUltimate = false;
+                    }
                     double paidAgainstThisPacket = 0;
+                    double netPaid = 0d;
 
                     if (sumIncrementsOfThisClaim == 0) {
                         paidAgainstThisPacket = claimPaidInContractYear;
-                        paidAgainstThisPacket = checkPaidAgainstThisClaim(cededRoot, cumulatedCededForThisClaim, paidAgainstThisPacket);
-                        ClaimCashflowPacket claimCashflowPacket = new ClaimCashflowPacket(cededRoot, cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, setUltimate);
-                        cashflowClaimsForPeriodCheck.add(claimCashflowPacket);
-                        doPaidLessThanIncurredCheck(sanityChecks, cededRoot, cumulatedCededForThisClaim, claimCashflowPacket);
-                        claimsOfInterest.add(claimCashflowPacket);
+                        paidAgainstThisPacket = checkPaidAgainstThisClaim(cededRoot.getCededClaim(), cumulatedCededForThisClaim, paidAgainstThisPacket);
+                        netPaid = cashflowPacket.getPaidIncrementalIndexed() - paidAgainstThisPacket;
+                        ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(cededRoot.getCededClaim(), cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim + paidAgainstThisPacket, false, cededRoot.getCededClaim().getUltimate());
+                        ClaimCashflowPacket netClaim = new ClaimCashflowPacket(cededRoot.getNetClaim(), cashflowPacket, netPaid, cumulatedCededForThisClaim + netPaid , false, cededRoot.getNetClaim().getUltimate() );
+                        cashflowClaimsForPeriodCheck.add(cededClaim);
+                        doPaidLessThanIncurredCheck(sanityChecks, cededRoot.getCededClaim(), cumulatedCededForThisClaim, cededClaim);
+                        ClaimUtils.applyMarkers(cashflowPacket, cededClaim);
+                        ClaimUtils.applyMarkers(cashflowPacket, netClaim);
+                        final ClaimRIOutcome claimRIOutcome = new ClaimRIOutcome(netClaim, cededClaim, cashflowPacket);
+                        claimsOfInterest.addClaim(claimRIOutcome);
                         break;
                     } else {
                         paidAgainstThisPacket = claimPaidInContractYear * cashflowPacket.getPaidIncrementalIndexed() / sumIncrementsOfThisClaim;
-                        paidAgainstThisPacket = checkPaidAgainstThisClaim(cededRoot, cumulatedCededForThisClaim, paidAgainstThisPacket);
+                        paidAgainstThisPacket = checkPaidAgainstThisClaim(cededRoot.getCededClaim(), cumulatedCededForThisClaim, paidAgainstThisPacket);
+                        netPaid = cashflowPacket.getPaidIncrementalIndexed() - paidAgainstThisPacket;
                     }
 
                     cumulatedCededForThisClaim += paidAgainstThisPacket;
-                    ClaimCashflowPacket claimCashflowPacket = new ClaimCashflowPacket(cededRoot, cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, setUltimate);
-                    cashflowClaimsForPeriodCheck.add(claimCashflowPacket);
-                    doPaidLessThanIncurredCheck(sanityChecks, cededRoot, cumulatedCededForThisClaim, claimCashflowPacket);
+                    ClaimCashflowPacket cededClaim = new ClaimCashflowPacket(cededRoot.getCededClaim(), cashflowPacket, paidAgainstThisPacket, cumulatedCededForThisClaim, false, cededRoot.getCededClaim().getUltimate());
+                    ClaimCashflowPacket netClaim = new ClaimCashflowPacket(cededRoot.getNetClaim(), cashflowPacket, netPaid, cumulatedCededForThisClaim, false, cededRoot.getNetClaim().getUltimate() );
+                    cashflowClaimsForPeriodCheck.add(cededClaim);
+                    doPaidLessThanIncurredCheck(sanityChecks, cededRoot.getCededClaim(), cumulatedCededForThisClaim, cededClaim);
                     setUltimate = false;
-                    claimsOfInterest.add(claimCashflowPacket);
-
+                    ClaimUtils.applyMarkers(cashflowPacket, cededClaim);
+                    ClaimUtils.applyMarkers(cashflowPacket, netClaim);
+                    final ClaimRIOutcome claimRIOutcome = new ClaimRIOutcome(netClaim, cededClaim, cashflowPacket);
+                    claimsOfInterest.addClaim(claimRIOutcome);
                 }
             }
             double checkCededPaidInModelPeriod = RIUtilities.incrementalCashflowSum(cashflowClaimsForPeriodCheck);

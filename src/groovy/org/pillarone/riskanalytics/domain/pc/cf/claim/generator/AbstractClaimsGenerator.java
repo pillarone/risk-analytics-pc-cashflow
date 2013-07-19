@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Lists;
 import groovy.lang.GroovyObject;
 import groovy.lang.MetaClass;
 import org.apache.commons.logging.Log;
@@ -172,7 +173,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
      */
     protected List<ClaimCashflowPacket> cashflowsInCurrentPeriod(List<GrossClaimRoot> grossClaimRoots,
                                                                  List<Factors> runOffFactors, PeriodScope periodScope) {
-        List<ClaimCashflowPacket> claimCashflowPackets = new ArrayList<ClaimCashflowPacket>();
+        List<ClaimCashflowPacket> claimCashflowPackets = Lists.newArrayList();
         IPeriodCounter counter = this.periodScope.getPeriodCounter();
         for (GrossClaimRoot grossClaimRoot : grossClaimRoots) {
             if (grossClaimRoot.exposureStartInCurrentPeriod(periodScope)) {
