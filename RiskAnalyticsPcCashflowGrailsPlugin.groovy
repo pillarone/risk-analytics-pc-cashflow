@@ -35,6 +35,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.validation.Cov
 import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket as FP
 import org.pillarone.riskanalytics.domain.pc.cf.structure.validation.ClaimTypeStructuringValidator
 import org.pillarone.riskanalytics.domain.utils.constraint.*
+import org.pillarone.riskanalytics.life.longevity.HistoricMortalityRatesConstraints
+import org.pillarone.riskanalytics.life.longevity.MortalityRatesConstraints
+import org.pillarone.riskanalytics.life.longevity.PolicyConstraints
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
