@@ -2,17 +2,16 @@ package org.pillarone.riskanalytics.life.longevity;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bouncycastle.crypto.params.CCMParameters;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeFieldType;
 import org.pillarone.riskanalytics.core.components.IterationStore;
 import org.pillarone.riskanalytics.core.components.PeriodStore;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractClaimsGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.*;
 import org.pillarone.riskanalytics.life.longevity.PolicyConstraints;
@@ -43,8 +42,8 @@ public class LongevityClaimsGenerator extends AbstractClaimsGenerator {
     private ConstrainedMultiDimensionalParameter parmPolicyData = new ConstrainedMultiDimensionalParameter(
             Arrays.asList(""), PolicyConstraints.columnnHeaders, new PolicyConstraints());
 
-    private IMortalityStrategy parmMaleMortality = MortalityStrategyType.getDefault();
-    private IMortalityStrategy parmFemaleMortality = MortalityStrategyType.getDefault();
+    private ConstrainedString parmMaleMortality = new ConstrainedString(IMortalityTableMarker.class, "");
+    private ConstrainedString parmFemaleMortality = new ConstrainedString(IMortalityTableMarker.class, "");
 
     private ConstrainedMultiDimensionalParameter parmMaleImprovementIndex = new ConstrainedMultiDimensionalParameter(
             Arrays.asList(""), Arrays.asList("Index"), new SeverityIndexSelectionTableConstraints());
@@ -95,23 +94,23 @@ public class LongevityClaimsGenerator extends AbstractClaimsGenerator {
     @Override
     protected void initIteration(PeriodStore periodStore, PeriodScope periodScope, String phase) {
         if(periodScope.isFirstPeriod() && phase.equals(PHASE_CLAIMS_CALCULATION)) {
-            IMortalityTable maleMortalityRate2010 = parmMaleMortality.getBusinessMortalityRate2010();
-            IMortalityTable maleActualMortalityRates = parmMaleMortality.getBusinessActualMortality();
-            IIndexedMortalityTable maleMortalityIndexedFrom2010Rates = new CombineWithRateActualMortalityTable(maleActualMortalityRates, maleMortalityRate2010, "Simulated Q(x) Male With Index");
-            IMortalityTable maleMortalityRatesAfterSchedule4 = new CombineMortalityTableWithFirstYearTable(parmMaleMortality.getBusinessMortalityRates(), maleMortalityIndexedFrom2010Rates, "Simulated Q(x) Male Combined with Schedule A");
-            IMortalityTable maleSurvivalRates = new SingleMortalityTableTransform(maleMortalityRatesAfterSchedule4, "Survival Male");
+//            IMortalityTable maleMortalityRate2010 = parmMaleMortality.getBusinessMortalityRate2010();
+//            IMortalityTable maleActualMortalityRates = parmMaleMortality.getBusinessActualMortality();
+//            IIndexedMortalityTable maleMortalityIndexedFrom2010Rates = new CombineWithRateActualMortalityTable(maleActualMortalityRates, maleMortalityRate2010, "Simulated Q(x) Male With Index");
+//            IMortalityTable maleMortalityRatesAfterSchedule4 = new CombineMortalityTableWithFirstYearTable(parmMaleMortality.getBusinessMortalityRates(), maleMortalityIndexedFrom2010Rates, "Simulated Q(x) Male Combined with Schedule A");
+//            IMortalityTable maleSurvivalRates = new SingleMortalityTableTransformStrategy(maleMortalityRatesAfterSchedule4, "Survival Male");
 
-            IMortalityTable femaleMortalityRate2010 = parmFemaleMortality.getBusinessMortalityRate2010();
-            IMortalityTable femaleActualMortalityRates = parmFemaleMortality.getBusinessActualMortality();
-            IIndexedMortalityTable femaleMortalityIndexedFrom2010Rates = new CombineWithRateActualMortalityTable(femaleActualMortalityRates, femaleMortalityRate2010, "Simulated Q(x) Female");
-            IMortalityTable femaleMortalityRatesAfterSchedule4 = new CombineMortalityTableWithFirstYearTable(parmFemaleMortality.getBusinessMortalityRates(), femaleMortalityIndexedFrom2010Rates, "Simulated Q(x) FeMale");
-            IMortalityTable femaleSurvivalRates = new SingleMortalityTableTransform(femaleMortalityRatesAfterSchedule4, "Survival Male");
+//            IMortalityTable femaleMortalityRate2010 = parmFemaleMortality.getBusinessMortalityRate2010();
+//            IMortalityTable femaleActualMortalityRates = parmFemaleMortality.getBusinessActualMortality();
+//            IIndexedMortalityTable femaleMortalityIndexedFrom2010Rates = new CombineWithRateActualMortalityTable(femaleActualMortalityRates, femaleMortalityRate2010, "Simulated Q(x) Female");
+//            IMortalityTable femaleMortalityRatesAfterSchedule4 = new CombineMortalityTableWithFirstYearTable(parmFemaleMortality.getBusinessMortalityRates(), femaleMortalityIndexedFrom2010Rates, "Simulated Q(x) FeMale");
+//            IMortalityTable femaleSurvivalRates = new SingleMortalityTableTransformStrategy(femaleMortalityRatesAfterSchedule4, "Survival Male");
 
-            periodStore.put(MALE_INDEXED_TABLE, maleMortalityIndexedFrom2010Rates);
-            periodStore.put(FEMALE_INDEXED_TABLE, femaleMortalityIndexedFrom2010Rates);
-
-            periodStore.put(MALE_SURVIVAL_RATES, maleSurvivalRates);
-            periodStore.put(FEMALE_SURVIVAL_RATES, femaleSurvivalRates);
+//            periodStore.put(MALE_INDEXED_TABLE, maleMortalityIndexedFrom2010Rates);
+//            periodStore.put(FEMALE_INDEXED_TABLE, femaleMortalityIndexedFrom2010Rates);
+//
+//            periodStore.put(MALE_SURVIVAL_RATES, maleSurvivalRates);
+//            periodStore.put(FEMALE_SURVIVAL_RATES, femaleSurvivalRates);
 
         }
         super.initIteration(periodStore, periodScope, phase);    //To change body of overridden methods use File | Settings | File Templates.
@@ -120,16 +119,16 @@ public class LongevityClaimsGenerator extends AbstractClaimsGenerator {
 
     private void initSimulation(String phase){
         if(iterationScope.isFirstIteration() && periodScope.isFirstPeriod() && phase.equals(PHASE_CLAIMS_CALCULATION) ) {
-            IMortalityTable actualMaleMortality = parmMaleMortality.getBusinessActualMortality();
-            IMortalityTable actualFemaleMortality = parmFemaleMortality.getBusinessActualMortality();
+//            IMortalityTable actualMaleMortality = parmMaleMortality.getBusinessActualMortality();
+//            IMortalityTable actualFemaleMortality = parmFemaleMortality.getBusinessActualMortality();
+//
+//            IMortalityTable historicMaleMortality = parmMaleMortality.getBusinessHistoricMortality();
+//            IMortalityTable historicFemaleMortality = parmFemaleMortality.getBusinessHistoricMortality();
 
-            IMortalityTable historicMaleMortality = parmMaleMortality.getBusinessHistoricMortality();
-            IMortalityTable historicFemaleMortality = parmFemaleMortality.getBusinessHistoricMortality();
-
-            iterationStore.put(ACTUAL_MALE_MORTALITY, actualMaleMortality);
-            iterationStore.put(ACTUAL_FEMALE_MORTALITY, actualFemaleMortality);
-            iterationStore.put(HISTORIC_MALE_MORTALITY, historicMaleMortality);
-            iterationStore.put(HISTORIC_FEMALE_MORTALITY, historicFemaleMortality);
+//            iterationStore.put(ACTUAL_MALE_MORTALITY, actualMaleMortality);
+//            iterationStore.put(ACTUAL_FEMALE_MORTALITY, actualFemaleMortality);
+//            iterationStore.put(HISTORIC_MALE_MORTALITY, historicMaleMortality);
+//            iterationStore.put(HISTORIC_FEMALE_MORTALITY, historicFemaleMortality);
 
             PolicyData policyData = new PolicyData(parmPolicyData, periodScope.getCurrentPeriodStartDate());
             iterationStore.put(POLICY_DATA, policyData);
@@ -161,19 +160,19 @@ public class LongevityClaimsGenerator extends AbstractClaimsGenerator {
         this.parmFemaleImprovementIndex = parmFemaleImprovementIndex;
     }
 
-    public IMortalityStrategy getParmMaleMortality() {
+    public ConstrainedString getParmMaleMortality() {
         return parmMaleMortality;
     }
 
-    public void setParmMaleMortality(IMortalityStrategy parmMaleMortality) {
+    public void setParmMaleMortality(ConstrainedString parmMaleMortality) {
         this.parmMaleMortality = parmMaleMortality;
     }
 
-    public IMortalityStrategy getParmFemaleMortality() {
+    public ConstrainedString getParmFemaleMortality() {
         return parmFemaleMortality;
     }
 
-    public void setParmFemaleMortality(IMortalityStrategy parmFemaleMortality) {
+    public void setParmFemaleMortality(ConstrainedString parmFemaleMortality) {
         this.parmFemaleMortality = parmFemaleMortality;
     }
 

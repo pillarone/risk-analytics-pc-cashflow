@@ -12,7 +12,7 @@ public class CombineWithRateActualMortalityTable implements IMortalityTable, IIn
     final Map<AgeYearKey, IMortalityTableEntry> cacheTable;
     final IMortalityTable rates2010;
     final IMortalityTable actual;
-    final FixedMortalityTable indexRates;
+    final FixedMortalityTableStrategy indexRates;
     final String name;
 
 
@@ -21,7 +21,7 @@ public class CombineWithRateActualMortalityTable implements IMortalityTable, IIn
         this.actual = actual;
         this.name = name;
         cacheTable = Maps.newHashMap();
-        indexRates = new FixedMortalityTable(name);
+        indexRates = new FixedMortalityTableStrategy(name);
     }
 
     public void addIndexValue(Double year, Double rate){

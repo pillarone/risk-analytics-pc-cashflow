@@ -29,7 +29,7 @@ class ActualMortalityTableTest extends GroovyTestCase {
     }
 
     void testIdentityTable(){
-        IMortalityTable identity = new IdentityTable()
+        IMortalityTable identity = new IdentityTableStrategy()
         assert 1 == identity.getMortalityObject(25, 2010 ).mortalityRate()
     }
 }
