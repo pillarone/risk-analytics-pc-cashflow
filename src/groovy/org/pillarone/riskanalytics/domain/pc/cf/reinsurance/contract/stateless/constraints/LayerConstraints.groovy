@@ -43,6 +43,15 @@ class LayerConstraints extends MDPConstraintsHelper   {
 
     ]
 
-    public static List<String> columnHeaders = ['Period','Layer','Share','Period Limit','Period Excess','Claim Limit',
-            'Claim Excess','AP','Basis']
+    public static List<String> columnHeaders = [
+            'Period',
+            'Layer',
+            'Share',
+            'Period Limit',
+            'Period Excess',
+            'Claim Limit',
+            'Claim Excess',
+            'AP',
+            'Basis'
+    ]
 }

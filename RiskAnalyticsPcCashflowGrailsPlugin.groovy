@@ -27,6 +27,10 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportiona
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AdditionalPremium
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.PaidAdditionalPremium
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumSelectionConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumStructureAPConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumStructureConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumStructureProfitCommissionConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumStructureReinstatementConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ContractConstraint
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.XLStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverMap
@@ -95,6 +99,11 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
         ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
         ConstraintsFactory.registerConstraint(new ContractConstraint())
+
+        ConstraintsFactory.registerConstraint(new PremiumStructureReinstatementConstraints())
+        ConstraintsFactory.registerConstraint(new PremiumStructureConstraints())
+        ConstraintsFactory.registerConstraint(new PremiumStructureAPConstraints())
+        ConstraintsFactory.registerConstraint(new PremiumStructureProfitCommissionConstraints())
 
         ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
         ValidatorRegistry.addValidator(new PatternStrategyValidator())
