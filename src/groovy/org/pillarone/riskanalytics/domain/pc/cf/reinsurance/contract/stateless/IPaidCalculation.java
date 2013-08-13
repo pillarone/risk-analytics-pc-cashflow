@@ -20,7 +20,7 @@ public interface IPaidCalculation {
     double layerCededPaid(Collection<ClaimCashflowPacket> layerCashflows, LayerParameters layerParameters);
 
     TermLossAndPaidAps cededIncrementalPaidRespectTerm(IAllContractClaimCache claimCache, ScaledPeriodLayerParameters layerParameters,
-                                                       PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess, boolean sanityChecks, Map<Integer, IncurredLossAndAP> incurredAPs, Map<Integer, Double> premiumPerPeriod);
+                                                       PeriodScope periodScope, ContractCoverBase coverageBase, double termLimit, double termExcess, boolean sanityChecks, Map<Integer, IncurredLossAndAP> incurredAPs, IPremiumPerPeriod premiumPerPeriod);
 
     AllLayersPaidLoss paidLossAllLayers(Collection<ClaimCashflowPacket> allLayerCashflows, Collection<LayerParameters> layerParameters);
 

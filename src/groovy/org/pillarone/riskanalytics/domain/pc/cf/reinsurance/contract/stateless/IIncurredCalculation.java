@@ -18,7 +18,7 @@ public interface IIncurredCalculation {
 
     Collection<AdditionalPremium> additionalPremiumByLayer(Collection<IClaimRoot> incurredClaims, LayerParameters layerParameters, double layerPremium);
 
-    LossAfterTermStructure cededIncurredRespectTerm(IAllContractClaimCache claimStore, ScaledPeriodLayerParameters scaledLayerParameters, PeriodScope periodScope, double termExcess, double termLimit, ContractCoverBase coverageBase, Map<Integer, Double> premiumPerPeriod);
+    LossAfterTermStructure cededIncurredRespectTerm(IAllContractClaimCache claimStore, ILayersInPeriod scaledLayerParameters, PeriodScope periodScope, double termExcess, double termLimit, ContractCoverBase coverageBase, IPremiumPerPeriod premiumPerPeriod);
 
     Collection<LayerAndAP> additionalPremiumAllLayers(Collection<IClaimRoot> incurredClaims, Collection<LayerParameters> layerParameters, double layerPremium);
 

@@ -114,7 +114,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         IAllContractClaimCache claimStore = (IAllContractClaimCache) periodStore.get(GROSS_CLAIMS, -periodScope.getCurrentPeriod());
         IPaidCalculation paidCalculation = (IPaidCalculation) periodStore.get(TERM_CALC, -periodScope.getCurrentPeriod());
         claimStore.cacheClaims(inClaims, periodScope.getCurrentPeriod());
-        Map<Integer, Double> premiumPerPeriod = (Map<Integer, Double>) periodStore.get(INCOMING_PREMIUM, -periodScope.getCurrentPeriod());
+        IPremiumPerPeriod premiumPerPeriod = (MapPremiumPerPeriod) periodStore.get(INCOMING_PREMIUM, -periodScope.getCurrentPeriod());
 
         Double termLimit = parmContractStructure.getTermLimit();
         Double termExcess = parmContractStructure.getTermDeductible();
@@ -147,8 +147,8 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
     }
 
     private void storePremium() {
+        Map<Integer, Double> premiumPerPeriod = ((MapPremiumPerPeriod) periodStore.get(INCOMING_PREMIUM, -periodScope.getCurrentPeriod())).getPremiumPerPeriod();
         double subjectPremium = 0d;
-        Map<Integer, Double> premiumPerPeriod = (Map<Integer, Double>) periodStore.get(INCOMING_PREMIUM, -periodScope.getCurrentPeriod());
         for (UnderwritingInfoPacket underwritingInfoPacket : inPremiumPerPeriod) {
             subjectPremium += underwritingInfoPacket.getPremiumWritten();
         }

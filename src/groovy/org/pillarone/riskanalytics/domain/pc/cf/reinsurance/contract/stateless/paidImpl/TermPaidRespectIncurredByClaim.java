@@ -40,7 +40,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
 
     public TermLossAndPaidAps cededIncrementalPaidRespectTerm(IAllContractClaimCache claimCache, ScaledPeriodLayerParameters layerParameters,
                                                               PeriodScope periodScope, ContractCoverBase coverageBase,
-                                                              double termLimit, double termExcess, boolean sanityChecks, Map<Integer, IncurredLossAndAP> incurredAPs, Map<Integer, Double> premiumPerPeriod) {
+                                                              double termLimit, double termExcess, boolean sanityChecks, Map<Integer, IncurredLossAndAP> incurredAPs, IPremiumPerPeriod premiumPerPeriod) {
 
         TermLossAndLossByLayer paidByPeriodUpToFilterFromDate = cededCumulativePaidRespectTerm(periodScope.getCurrentPeriod() - 1, layerParameters, periodScope, coverageBase, termLimit, termExcess, claimCache, coverageBase, premiumPerPeriod);
         TermLossAndLossByLayer cumulativePaidToDate = cededCumulativePaidRespectTerm(periodScope.getCurrentPeriod(), layerParameters, periodScope, coverageBase, termLimit, termExcess, claimCache, coverageBase, premiumPerPeriod);
@@ -139,7 +139,7 @@ public class TermPaidRespectIncurredByClaim implements IPaidCalculation {
 
 
     public TermLossAndLossByLayer cededCumulativePaidRespectTerm(Integer claimsToSimulationPeriod, ScaledPeriodLayerParameters layerParameters, PeriodScope periodScope,
-                                                                 ContractCoverBase coverageBase, double termLimit, double termExcess, IAllContractClaimCache claimCache, ContractCoverBase coverBase, Map<Integer, Double> premiumPerPeriod) {
+                                                                 ContractCoverBase coverageBase, double termLimit, double termExcess, IAllContractClaimCache claimCache, ContractCoverBase coverBase, IPremiumPerPeriod premiumPerPeriod) {
         if (claimsToSimulationPeriod == -1) {
             final HashMap<Integer, Double> integerDoubleHashMap = new HashMap<Integer, Double>();
             integerDoubleHashMap.put(0, 0d);
