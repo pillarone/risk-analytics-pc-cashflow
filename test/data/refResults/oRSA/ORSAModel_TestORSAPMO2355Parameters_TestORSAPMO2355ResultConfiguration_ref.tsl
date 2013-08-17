@@ -1,306 +1,306 @@
 iteration	period	valueIndex	path	field	value	date
+1	0	0	ORSA:segments:subSegment1:outClaimsGross	totalIncrementalIndexed	-1802.148456246457	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsGross	totalCumulativeIndexed	-1802.148456246457	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsGross	premiumRiskBase	-1802.148456246457	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsGross	premiumAndReserveRiskBase	-1802.148456246457	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsGross	reserveRiskBase	0.0	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsGross	outstandingIndexed	-540.6445368739371	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsGross	ultimate	-1802.148456246457	06-February-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:outUnderwritingInfoGross	premiumWritten	5000.0	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:outUnderwritingInfoGross	premiumPaid	5000.0	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoGross	premiumWritten	5000.0	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoGross	premiumPaid	5000.0	01-January-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsGross	totalIncrementalIndexed	-2021.3562810318938	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsGross	totalCumulativeIndexed	-2021.3562810318938	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsGross	premiumRiskBase	-2021.356281031894	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsGross	premiumAndReserveRiskBase	-2021.356281031894	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsGross	reserveRiskBase	0.0	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsGross	outstandingIndexed	-606.4068843095681	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsGross	ultimate	-2021.356281031894	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsGross	totalIncrementalIndexed	-2021.3562810318938	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsGross	totalCumulativeIndexed	-2021.3562810318938	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsGross	premiumRiskBase	-2021.356281031894	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsGross	premiumAndReserveRiskBase	-2021.356281031894	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsGross	totalIncrementalIndexed	-1802.148456246457	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsGross	totalCumulativeIndexed	-1802.148456246457	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsGross	premiumRiskBase	-1802.148456246457	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsGross	premiumAndReserveRiskBase	-1802.148456246457	06-February-2012 24:00:00 000
 1	0	0	ORSA:segments:outClaimsGross	reserveRiskBase	0.0	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsGross	outstandingIndexed	-606.4068843095681	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsGross	ultimate	-2021.356281031894	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsGross	outstandingIndexed	-540.6445368739371	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsGross	ultimate	-1802.148456246457	06-February-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:outFinancials	grossPremiumPaid	5000.0	null
 1	0	0	ORSA:segments:subSegment1:outFinancials	grossPremiumWritten	5000.0	null
 1	0	0	ORSA:segments:subSegment1:outFinancials	netPremiumPaid	1200.0	null
 1	0	0	ORSA:segments:subSegment1:outFinancials	netPremiumWritten	1200.0	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	netPremiumReserveRisk	966.3619418075799	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	grossBestEstimate	2978.643718968106	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	grossClaimPaid	-808.5425124127576	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	netPremiumReserveRisk	1024.2328075509354	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	grossBestEstimate	3197.851543753543	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	grossClaimPaid	-720.8593824985828	null
 1	0	0	ORSA:segments:subSegment1:outFinancials	cededPremiumWritten	-3800.0	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	netLossRatioWrittenUltimate	0.4042712562063789	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	netClaimPaid	-194.05020297906185	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	netBestEstimate	714.8744925523454	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	cededPremiumRisk	-2012.2817771605264	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	netCashflow	1257.4372462761726	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	cededClaimPaid	614.4923094336957	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	commission	251.48744925523454	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	netLossRatioWrittenUltimate	0.3604296912492914	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	netClaimPaid	-173.00625179965988	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	netBestEstimate	767.4843705008503	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	cededPremiumRisk	-2173.6187362026076	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	netCashflow	1283.742185250425	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	cededClaimPaid	547.8531306989229	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	commission	256.748437050085	null
 1	0	0	ORSA:segments:subSegment1:outFinancials	cededPremiumPaid	-3800.0	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	netLossRatioPaidPaid	0.16170850248255153	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	netLossRatioPaidPaid	0.14417187649971658	null
 1	0	0	ORSA:segments:subSegment1:outFinancials	grossReserveRisk	0.0	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	grossLossRatioPaidPaid	0.1617085024825515	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	grossPremiumReserveRisk	2978.6437189681064	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	cededLossRatioPaidPaid	0.1617085024825515	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	cededLossRatioWrittenUltimate	0.40427125620637877	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	grossLossRatioPaidPaid	0.14417187649971655	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	grossPremiumReserveRisk	3197.851543753543	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	cededLossRatioPaidPaid	0.14417187649971655	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	cededLossRatioWrittenUltimate	0.36042969124929136	null
 1	0	0	ORSA:segments:subSegment1:outFinancials	netReserveRisk	0.0	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	grossLossRatioWrittenUltimate	0.4042712562063788	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	grossCashflow	4191.457487587242	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	cededPremiumReserveRisk	-2012.2817771605264	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	cededCashflow	-2934.02024131107	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	netPremiumRisk	966.3619418075799	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	grossLossRatioWrittenUltimate	0.3604296912492914	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	grossCashflow	4279.140617501417	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	cededPremiumReserveRisk	-2173.6187362026076	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	cededCashflow	-2995.398432250992	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	netPremiumRisk	1024.2328075509354	null
 1	0	0	ORSA:segments:subSegment1:outFinancials	cededReserveRisk	0.0	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	netClaimUltimate	-485.1255074476546	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	cededBestEstimate	-2263.7692264157604	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	cededClaimUltimate	1536.2307735842394	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	grossClaimUltimate	-2021.356281031894	null
-1	0	0	ORSA:segments:subSegment1:outFinancials	grossPremiumRisk	2978.6437189681064	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	netClaimUltimate	-432.51562949914967	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	cededBestEstimate	-2430.3671732526927	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	cededClaimUltimate	1369.6328267473073	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	grossClaimUltimate	-1802.148456246457	null
+1	0	0	ORSA:segments:subSegment1:outFinancials	grossPremiumRisk	3197.851543753543	null
 1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossPremiumPaid	5000.0	null
 1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossPremiumWritten	5000.0	null
 1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netPremiumPaid	1200.0	null
 1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netPremiumWritten	1200.0	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netPremiumReserveRisk	966.3619418075799	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossBestEstimate	2978.643718968106	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossClaimPaid	-808.5425124127576	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netPremiumReserveRisk	1024.2328075509354	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossBestEstimate	3197.851543753543	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossClaimPaid	-720.8593824985828	null
 1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededPremiumWritten	-3800.0	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netLossRatioWrittenUltimate	0.4042712562063789	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netClaimPaid	-194.05020297906185	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netBestEstimate	714.8744925523454	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededPremiumRisk	-2012.2817771605264	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netCashflow	1257.4372462761726	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededClaimPaid	614.4923094336957	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	commission	251.48744925523454	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netLossRatioWrittenUltimate	0.3604296912492914	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netClaimPaid	-173.00625179965988	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netBestEstimate	767.4843705008503	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededPremiumRisk	-2173.6187362026076	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netCashflow	1283.742185250425	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededClaimPaid	547.8531306989229	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	commission	256.748437050085	null
 1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededPremiumPaid	-3800.0	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netLossRatioPaidPaid	0.16170850248255153	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netLossRatioPaidPaid	0.14417187649971658	null
 1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossReserveRisk	0.0	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossLossRatioPaidPaid	0.1617085024825515	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossPremiumReserveRisk	2978.6437189681064	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededLossRatioPaidPaid	0.1617085024825515	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededLossRatioWrittenUltimate	0.40427125620637877	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossLossRatioPaidPaid	0.14417187649971655	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossPremiumReserveRisk	3197.851543753543	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededLossRatioPaidPaid	0.14417187649971655	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededLossRatioWrittenUltimate	0.36042969124929136	null
 1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netReserveRisk	0.0	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossLossRatioWrittenUltimate	0.4042712562063788	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossCashflow	4191.457487587242	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededPremiumReserveRisk	-2012.2817771605264	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededCashflow	-2934.02024131107	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netPremiumRisk	966.3619418075799	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossLossRatioWrittenUltimate	0.3604296912492914	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossCashflow	4279.140617501417	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededPremiumReserveRisk	-2173.6187362026076	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededCashflow	-2995.398432250992	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netPremiumRisk	1024.2328075509354	null
 1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededReserveRisk	0.0	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netClaimUltimate	-485.1255074476546	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededBestEstimate	-2263.7692264157604	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededClaimUltimate	1536.2307735842394	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossClaimUltimate	-2021.356281031894	null
-1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossPremiumRisk	2978.6437189681064	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	netClaimUltimate	-432.51562949914967	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededBestEstimate	-2430.3671732526927	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededClaimUltimate	1369.6328267473073	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossClaimUltimate	-1802.148456246457	null
+1	0	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossPremiumRisk	3197.851543753543	null
 1	0	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	commissionFixed	0.0	01-January-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	commissionVariable	251.48744925523454	01-January-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	commissionVariable	256.748437050085	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	premiumPaidVariable	0.0	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	premiumWritten	-3800.0	01-January-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	commission	251.48744925523454	01-January-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	commission	256.748437050085	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	premiumPaidFixed	-3800.0	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	premiumPaid	-3800.0	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	commissionFixed	0.0	01-January-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	commissionVariable	251.48744925523454	01-January-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	commissionVariable	256.748437050085	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	premiumPaidVariable	0.0	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	premiumWritten	-3800.0	01-January-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	commission	251.48744925523454	01-January-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	commission	256.748437050085	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	premiumPaidFixed	-3800.0	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	premiumPaid	-3800.0	01-January-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsNet	totalIncrementalIndexed	-485.12550744765457	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsNet	totalCumulativeIndexed	-485.12550744765457	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsNet	premiumRiskBase	-485.1255074476545	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsNet	premiumAndReserveRiskBase	-485.1255074476545	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsNet	reserveRiskBase	0.0	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsNet	outstandingIndexed	-145.53765223429627	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsNet	ultimate	-485.1255074476546	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsCeded	totalIncrementalIndexed	1536.2307735842392	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsCeded	totalCumulativeIndexed	1536.2307735842392	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsCeded	premiumRiskBase	1536.2307735842394	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsCeded	premiumAndReserveRiskBase	1536.2307735842394	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsCeded	reserveRiskBase	0.0	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsCeded	outstandingIndexed	460.86923207527184	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:subSegment1:outClaimsCeded	ultimate	1536.2307735842394	06-February-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:outUnderwritingInfoNet	premiumWritten	1200.0	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:outUnderwritingInfoNet	premiumPaid	1200.0	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoNet	premiumWritten	1200.0	01-January-2012 24:00:00 000
 1	0	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoNet	premiumPaid	1200.0	01-January-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	totalIncrementalIndexed	1536.2307735842392	19-June-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	totalCumulativeIndexed	1536.2307735842392	19-June-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	premiumRiskBase	1536.2307735842394	19-June-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	premiumAndReserveRiskBase	1536.2307735842394	19-June-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	reserveRiskBase	0.0	19-June-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	outstandingIndexed	460.86923207527184	19-June-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	ultimate	1536.2307735842394	19-June-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsGross	totalIncrementalIndexed	-2021.3562810318938	06-February-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsGross	totalCumulativeIndexed	-2021.3562810318938	06-February-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsGross	premiumRiskBase	-2021.356281031894	06-February-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsGross	premiumAndReserveRiskBase	-2021.356281031894	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsCeded	totalIncrementalIndexed	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsCeded	totalCumulativeIndexed	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsCeded	premiumRiskBase	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsCeded	premiumAndReserveRiskBase	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsCeded	reserveRiskBase	0.0	24-April-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsCeded	outstandingIndexed	410.88984802419225	24-April-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsCeded	ultimate	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsNet	totalIncrementalIndexed	-432.51562949914967	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsNet	totalCumulativeIndexed	-432.51562949914967	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsNet	premiumRiskBase	-432.5156294991496	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsNet	premiumAndReserveRiskBase	-432.5156294991496	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsNet	reserveRiskBase	0.0	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsNet	outstandingIndexed	-129.75468884974492	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:subSegment1:outClaimsNet	ultimate	-432.51562949914967	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsNet	totalIncrementalIndexed	-432.51562949914967	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsNet	totalCumulativeIndexed	-432.51562949914967	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsNet	premiumRiskBase	-432.5156294991496	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsNet	premiumAndReserveRiskBase	-432.5156294991496	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsNet	reserveRiskBase	0.0	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsNet	outstandingIndexed	-129.75468884974492	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsNet	ultimate	-432.51562949914967	06-February-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsCeded	totalIncrementalIndexed	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsCeded	totalCumulativeIndexed	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsCeded	premiumRiskBase	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsCeded	premiumAndReserveRiskBase	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsCeded	reserveRiskBase	0.0	24-April-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsCeded	outstandingIndexed	410.88984802419225	24-April-2012 24:00:00 000
+1	0	0	ORSA:segments:outClaimsCeded	ultimate	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	totalIncrementalIndexed	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	totalCumulativeIndexed	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	premiumRiskBase	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	premiumAndReserveRiskBase	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	reserveRiskBase	0.0	24-April-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	outstandingIndexed	410.88984802419225	24-April-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsCeded	ultimate	1369.6328267473073	24-April-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsGross	totalIncrementalIndexed	-1802.148456246457	06-February-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsGross	totalCumulativeIndexed	-1802.148456246457	06-February-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsGross	premiumRiskBase	-1802.148456246457	06-February-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsGross	premiumAndReserveRiskBase	-1802.148456246457	06-February-2012 24:00:00 000
 1	0	0	ORSA:structures:subAllSegments:outClaimsGross	reserveRiskBase	0.0	06-February-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsGross	outstandingIndexed	-606.4068843095681	06-February-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsGross	ultimate	-2021.356281031894	06-February-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsNet	totalIncrementalIndexed	-485.12550744765457	19-June-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsNet	totalCumulativeIndexed	-485.12550744765457	19-June-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsNet	premiumRiskBase	-485.1255074476545	19-June-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsNet	premiumAndReserveRiskBase	-485.1255074476545	19-June-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsNet	reserveRiskBase	0.0	19-June-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsNet	outstandingIndexed	-145.53765223429627	19-June-2012 24:00:00 000
-1	0	0	ORSA:structures:subAllSegments:outClaimsNet	ultimate	-485.1255074476546	19-June-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsGross	outstandingIndexed	-540.6445368739371	06-February-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsGross	ultimate	-1802.148456246457	06-February-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsNet	totalIncrementalIndexed	-432.51562949914967	06-February-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsNet	totalCumulativeIndexed	-432.51562949914967	06-February-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsNet	premiumRiskBase	-432.5156294991496	06-February-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsNet	premiumAndReserveRiskBase	-432.5156294991496	06-February-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsNet	reserveRiskBase	0.0	06-February-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsNet	outstandingIndexed	-129.75468884974492	06-February-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:outClaimsNet	ultimate	-432.51562949914967	06-February-2012 24:00:00 000
 1	0	0	ORSA:structures:subAllSegments:outFinancials	grossPremiumPaid	5000.0	null
 1	0	0	ORSA:structures:subAllSegments:outFinancials	grossPremiumWritten	5000.0	null
 1	0	0	ORSA:structures:subAllSegments:outFinancials	netPremiumPaid	1200.0	null
 1	0	0	ORSA:structures:subAllSegments:outFinancials	netPremiumWritten	1200.0	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	netPremiumReserveRisk	966.3619418075799	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	grossBestEstimate	2978.643718968106	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	grossClaimPaid	-808.5425124127576	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	netPremiumReserveRisk	1024.2328075509354	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	grossBestEstimate	3197.851543753543	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	grossClaimPaid	-720.8593824985828	null
 1	0	0	ORSA:structures:subAllSegments:outFinancials	cededPremiumWritten	-3800.0	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	netLossRatioWrittenUltimate	0.4042712562063789	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	netClaimPaid	-194.05020297906185	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	netBestEstimate	714.8744925523454	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	cededPremiumRisk	-2012.2817771605264	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	netCashflow	1257.4372462761726	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	cededClaimPaid	614.4923094336957	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	commission	251.48744925523454	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	netLossRatioWrittenUltimate	0.3604296912492914	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	netClaimPaid	-173.00625179965988	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	netBestEstimate	767.4843705008503	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	cededPremiumRisk	-2173.6187362026076	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	netCashflow	1283.742185250425	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	cededClaimPaid	547.8531306989229	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	commission	256.748437050085	null
 1	0	0	ORSA:structures:subAllSegments:outFinancials	cededPremiumPaid	-3800.0	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	netLossRatioPaidPaid	0.16170850248255153	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	netLossRatioPaidPaid	0.14417187649971658	null
 1	0	0	ORSA:structures:subAllSegments:outFinancials	grossReserveRisk	0.0	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	grossLossRatioPaidPaid	0.1617085024825515	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	grossPremiumReserveRisk	2978.6437189681064	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	cededLossRatioPaidPaid	0.1617085024825515	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	cededLossRatioWrittenUltimate	0.40427125620637877	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	grossLossRatioPaidPaid	0.14417187649971655	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	grossPremiumReserveRisk	3197.851543753543	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	cededLossRatioPaidPaid	0.14417187649971655	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	cededLossRatioWrittenUltimate	0.36042969124929136	null
 1	0	0	ORSA:structures:subAllSegments:outFinancials	netReserveRisk	0.0	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	grossLossRatioWrittenUltimate	0.4042712562063788	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	grossCashflow	4191.457487587242	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	cededPremiumReserveRisk	-2012.2817771605264	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	cededCashflow	-2934.02024131107	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	netPremiumRisk	966.3619418075799	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	grossLossRatioWrittenUltimate	0.3604296912492914	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	grossCashflow	4279.140617501417	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	cededPremiumReserveRisk	-2173.6187362026076	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	cededCashflow	-2995.398432250992	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	netPremiumRisk	1024.2328075509354	null
 1	0	0	ORSA:structures:subAllSegments:outFinancials	cededReserveRisk	0.0	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	netClaimUltimate	-485.1255074476546	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	cededBestEstimate	-2263.7692264157604	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	cededClaimUltimate	1536.2307735842394	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	grossClaimUltimate	-2021.356281031894	null
-1	0	0	ORSA:structures:subAllSegments:outFinancials	grossPremiumRisk	2978.6437189681064	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	netClaimUltimate	-432.51562949914967	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	cededBestEstimate	-2430.3671732526927	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	cededClaimUltimate	1369.6328267473073	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	grossClaimUltimate	-1802.148456246457	null
+1	0	0	ORSA:structures:subAllSegments:outFinancials	grossPremiumRisk	3197.851543753543	null
 1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossPremiumPaid	5000.0	null
 1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossPremiumWritten	5000.0	null
 1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netPremiumPaid	1200.0	null
 1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netPremiumWritten	1200.0	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netPremiumReserveRisk	966.3619418075799	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossBestEstimate	2978.643718968106	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossClaimPaid	-808.5425124127576	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netPremiumReserveRisk	1024.2328075509354	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossBestEstimate	3197.851543753543	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossClaimPaid	-720.8593824985828	null
 1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededPremiumWritten	-3800.0	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netLossRatioWrittenUltimate	0.4042712562063789	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netClaimPaid	-194.05020297906185	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netBestEstimate	714.8744925523454	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededPremiumRisk	-2012.2817771605264	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netCashflow	1257.4372462761726	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededClaimPaid	614.4923094336957	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	commission	251.48744925523454	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netLossRatioWrittenUltimate	0.3604296912492914	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netClaimPaid	-173.00625179965988	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netBestEstimate	767.4843705008503	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededPremiumRisk	-2173.6187362026076	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netCashflow	1283.742185250425	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededClaimPaid	547.8531306989229	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	commission	256.748437050085	null
 1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededPremiumPaid	-3800.0	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netLossRatioPaidPaid	0.16170850248255153	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netLossRatioPaidPaid	0.14417187649971658	null
 1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossReserveRisk	0.0	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossLossRatioPaidPaid	0.1617085024825515	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossPremiumReserveRisk	2978.6437189681064	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededLossRatioPaidPaid	0.1617085024825515	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededLossRatioWrittenUltimate	0.40427125620637877	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossLossRatioPaidPaid	0.14417187649971655	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossPremiumReserveRisk	3197.851543753543	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededLossRatioPaidPaid	0.14417187649971655	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededLossRatioWrittenUltimate	0.36042969124929136	null
 1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netReserveRisk	0.0	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossLossRatioWrittenUltimate	0.4042712562063788	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossCashflow	4191.457487587242	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededPremiumReserveRisk	-2012.2817771605264	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededCashflow	-2934.02024131107	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netPremiumRisk	966.3619418075799	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossLossRatioWrittenUltimate	0.3604296912492914	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossCashflow	4279.140617501417	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededPremiumReserveRisk	-2173.6187362026076	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededCashflow	-2995.398432250992	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netPremiumRisk	1024.2328075509354	null
 1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededReserveRisk	0.0	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netClaimUltimate	-485.1255074476546	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededBestEstimate	-2263.7692264157604	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededClaimUltimate	1536.2307735842394	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossClaimUltimate	-2021.356281031894	null
-1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossPremiumRisk	2978.6437189681064	null
-1	0	0	ORSA:segments:outClaimsCeded	totalIncrementalIndexed	1536.2307735842392	19-June-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsCeded	totalCumulativeIndexed	1536.2307735842392	19-June-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsCeded	premiumRiskBase	1536.2307735842394	19-June-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsCeded	premiumAndReserveRiskBase	1536.2307735842394	19-June-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsCeded	reserveRiskBase	0.0	19-June-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsCeded	outstandingIndexed	460.86923207527184	19-June-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsCeded	ultimate	1536.2307735842394	19-June-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsNet	totalIncrementalIndexed	-485.12550744765457	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsNet	totalCumulativeIndexed	-485.12550744765457	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsNet	premiumRiskBase	-485.1255074476545	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsNet	premiumAndReserveRiskBase	-485.1255074476545	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsNet	reserveRiskBase	0.0	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsNet	outstandingIndexed	-145.53765223429627	06-February-2012 24:00:00 000
-1	0	0	ORSA:segments:outClaimsNet	ultimate	-485.1255074476546	06-February-2012 24:00:00 000
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netClaimUltimate	-432.51562949914967	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededBestEstimate	-2430.3671732526927	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededClaimUltimate	1369.6328267473073	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossClaimUltimate	-1802.148456246457	null
+1	0	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossPremiumRisk	3197.851543753543	null
+1	1	0	ORSA:segments:subSegment1:outClaimsGross	totalIncrementalIndexed	-1665.26521977856	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsGross	totalCumulativeIndexed	-3467.4136760250167	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsGross	premiumRiskBase	-1779.9611774704535	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsGross	premiumAndReserveRiskBase	-1665.2652197785599	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsGross	reserveRiskBase	114.69595769189374	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsGross	outstandingIndexed	-856.1860585931292	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsGross	ultimate	-1995.9142515742096	24-April-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoGross	premiumWritten	5000.0	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoGross	premiumPaid	5000.0	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2013:outUnderwritingInfoGross	premiumWritten	5000.0	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2013:outUnderwritingInfoGross	premiumPaid	5000.0	01-January-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsGross	totalIncrementalIndexed	-1706.8216566556714	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsGross	totalCumulativeIndexed	-3728.177937687565	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsGross	premiumRiskBase	-1798.3090073167014	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsGross	premiumAndReserveRiskBase	-1706.8216566556714	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsGross	reserveRiskBase	91.48735066103	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsGross	outstandingIndexed	-913.2681748477125	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsGross	ultimate	-1942.8232288593008	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsGross	totalIncrementalIndexed	-1706.8216566556714	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsGross	totalCumulativeIndexed	-3728.177937687565	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsGross	premiumRiskBase	-1798.3090073167014	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsGross	premiumAndReserveRiskBase	-1706.8216566556714	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsGross	reserveRiskBase	91.48735066103	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsGross	outstandingIndexed	-913.2681748477125	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsGross	ultimate	-1942.8232288593008	06-February-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsGross	totalIncrementalIndexed	-1665.26521977856	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsGross	totalCumulativeIndexed	-3467.4136760250167	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsGross	premiumRiskBase	-1779.9611774704535	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsGross	premiumAndReserveRiskBase	-1665.2652197785599	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsGross	reserveRiskBase	114.69595769189374	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsGross	outstandingIndexed	-856.1860585931292	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsGross	ultimate	-1995.9142515742096	24-April-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:outFinancials	grossPremiumPaid	5000.0	null
 1	1	0	ORSA:segments:subSegment1:outFinancials	grossPremiumWritten	5000.0	null
 1	1	0	ORSA:segments:subSegment1:outFinancials	netPremiumPaid	1200.0	null
 1	1	0	ORSA:segments:subSegment1:outFinancials	netPremiumWritten	1200.0	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	netPremiumReserveRisk	1024.7768578678758	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	grossBestEstimate	3057.176771140699	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	grossClaimPaid	-1093.0990755793828	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	netPremiumReserveRisk	1038.2854166727348	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	grossBestEstimate	3004.0857484257904	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	grossClaimPaid	-1034.182176340175	null
 1	1	0	ORSA:segments:subSegment1:outFinancials	cededPremiumWritten	-3800.0	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	netLossRatioWrittenUltimate	0.3885646457718602	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	netClaimPaid	-262.343778139052	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	netBestEstimate	733.7224250737678	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	cededPremiumRisk	-2176.4445706149077	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	netCashflow	915.2296935017858	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	cededClaimPaid	830.755297440331	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	commission	234.41405546523703	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	netLossRatioWrittenUltimate	0.3991828503148419	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	netClaimPaid	-248.20372232164203	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	netBestEstimate	720.9805796221897	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	cededPremiumRisk	-2189.9485733817464	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	netCashflow	932.4644153572383	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	cededClaimPaid	785.978454018533	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	commission	237.94906941958953	null
 1	1	0	ORSA:segments:subSegment1:outFinancials	cededPremiumPaid	-3800.0	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	netLossRatioPaidPaid	0.21861981511587666	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	grossReserveRisk	91.48735066102995	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	grossLossRatioPaidPaid	0.21861981511587655	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	grossPremiumReserveRisk	3293.178343344329	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	cededLossRatioPaidPaid	0.21861981511587658	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	cededLossRatioWrittenUltimate	0.3885646457718602	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	netReserveRisk	-0.4695642005149523	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	grossLossRatioWrittenUltimate	0.3885646457718602	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	grossCashflow	3884.474396061455	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	cededPremiumReserveRisk	-2268.4014854764528	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	cededCashflow	-2991.671230918831	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	netPremiumRisk	1025.2464220683908	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	cededReserveRisk	-91.95691486154487	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	netClaimUltimate	-466.2775749262322	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	cededBestEstimate	-2323.454346066931	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	cededClaimUltimate	1476.5456539330687	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	grossClaimUltimate	-1942.8232288593008	null
-1	1	0	ORSA:segments:subSegment1:outFinancials	grossPremiumRisk	3201.6909926832986	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	netLossRatioPaidPaid	0.20683643526803502	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	grossReserveRisk	114.69595769189374	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	grossLossRatioPaidPaid	0.206836435268035	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	grossPremiumReserveRisk	3334.7347802214404	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	cededLossRatioPaidPaid	0.206836435268035	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	cededLossRatioWrittenUltimate	0.3991828503148419	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	netReserveRisk	8.195167524934803	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	grossLossRatioWrittenUltimate	0.3991828503148419	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	grossCashflow	3946.4859613387057	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	cededPremiumReserveRisk	-2296.449363548705	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	cededCashflow	-3033.3534083025866	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	netPremiumRisk	1030.0902491478	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	cededReserveRisk	-106.5007901669589	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	netClaimUltimate	-479.0194203778103	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	cededBestEstimate	-2283.1051688036005	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	cededClaimUltimate	1516.8948311963993	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	grossClaimUltimate	-1995.9142515742096	null
+1	1	0	ORSA:segments:subSegment1:outFinancials	grossPremiumRisk	3220.0388225295465	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossPremiumPaid	0.0	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossPremiumWritten	0.0	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netPremiumPaid	0.0	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netPremiumWritten	0.0	null
-1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netPremiumReserveRisk	-0.4695642005149523	null
+1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netPremiumReserveRisk	8.195167524934803	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossBestEstimate	0.0	null
-1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossClaimPaid	-373.77547265270226	null
+1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossClaimPaid	-322.1977053519936	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededPremiumWritten	0.0	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netLossRatioWrittenUltimate	0.0	null
-1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netClaimPaid	-89.70611343664856	null
+1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netClaimPaid	-77.32744928447848	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netBestEstimate	0.0	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededPremiumRisk	0.0	null
-1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netCashflow	-112.13264179581071	null
-1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededClaimPaid	284.0693592160537	null
-1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	commission	-22.42652835916215	null
+1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netCashflow	-96.65931160559803	null
+1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededClaimPaid	244.87025606751513	null
+1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	commission	-19.33186232111956	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededPremiumPaid	0.0	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netLossRatioPaidPaid	0.0	null
-1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossReserveRisk	91.48735066102995	null
+1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossReserveRisk	114.69595769189374	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossLossRatioPaidPaid	0.0	null
-1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossPremiumReserveRisk	91.48735066102995	null
+1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossPremiumReserveRisk	114.69595769189374	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededLossRatioPaidPaid	0.0	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededLossRatioWrittenUltimate	0.0	null
-1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netReserveRisk	-0.4695642005149523	null
+1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netReserveRisk	8.195167524934803	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossLossRatioWrittenUltimate	0.0	null
-1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossCashflow	-373.77547265270226	null
-1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededPremiumReserveRisk	-91.95691486154487	null
-1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededCashflow	261.6428308568916	null
+1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	grossCashflow	-322.1977053519936	null
+1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededPremiumReserveRisk	-106.5007901669589	null
+1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededCashflow	225.53839374639557	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netPremiumRisk	0.0	null
-1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededReserveRisk	-91.95691486154487	null
+1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededReserveRisk	-106.5007901669589	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	netClaimUltimate	0.0	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededBestEstimate	0.0	null
 1	1	0	ORSA:segments:subSegment1:period:2012:outFinancials	cededClaimUltimate	0.0	null
@@ -310,159 +310,173 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossPremiumWritten	5000.0	null
 1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netPremiumPaid	1200.0	null
 1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netPremiumWritten	1200.0	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netPremiumReserveRisk	1025.2464220683908	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossBestEstimate	3057.176771140699	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossClaimPaid	-719.3236029266806	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netPremiumReserveRisk	1030.0902491478	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossBestEstimate	3004.0857484257904	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossClaimPaid	-711.9844709881814	null
 1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededPremiumWritten	-3800.0	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netLossRatioWrittenUltimate	0.3885646457718602	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netClaimPaid	-172.6376647024034	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netBestEstimate	733.7224250737678	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededPremiumRisk	-2176.4445706149077	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netCashflow	1284.2029191219956	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededClaimPaid	546.6859382242773	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	commission	256.8405838243992	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netLossRatioWrittenUltimate	0.3991828503148419	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netClaimPaid	-170.87627303716357	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netBestEstimate	720.9805796221897	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededPremiumRisk	-2189.9485733817464	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netCashflow	1286.4046587035455	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededClaimPaid	541.1081979510178	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	commission	257.2809317407091	null
 1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededPremiumPaid	-3800.0	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netLossRatioPaidPaid	0.14386472058533617	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netLossRatioPaidPaid	0.14239689419763632	null
 1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossReserveRisk	0.0	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossLossRatioPaidPaid	0.14386472058533611	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossPremiumReserveRisk	3201.6909926832986	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededLossRatioPaidPaid	0.14386472058533611	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededLossRatioWrittenUltimate	0.3885646457718602	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossLossRatioPaidPaid	0.1423968941976363	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossPremiumReserveRisk	3220.0388225295465	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededLossRatioPaidPaid	0.14239689419763626	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededLossRatioWrittenUltimate	0.3991828503148419	null
 1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netReserveRisk	0.0	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossLossRatioWrittenUltimate	0.3885646457718602	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossCashflow	4280.676397073319	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededPremiumReserveRisk	-2176.4445706149077	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededCashflow	-2996.4734779513233	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netPremiumRisk	1025.2464220683908	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossLossRatioWrittenUltimate	0.3991828503148419	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossCashflow	4288.015529011818	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededPremiumReserveRisk	-2189.9485733817464	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededCashflow	-3001.610870308273	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netPremiumRisk	1030.0902491478	null
 1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededReserveRisk	0.0	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netClaimUltimate	-466.2775749262322	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededBestEstimate	-2323.454346066931	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededClaimUltimate	1476.5456539330687	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossClaimUltimate	-1942.8232288593008	null
-1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossPremiumRisk	3201.6909926832986	null
-1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	commissionFixed	-22.42652835916215	01-January-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	commissionVariable	256.8405838243992	01-January-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	netClaimUltimate	-479.0194203778103	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededBestEstimate	-2283.1051688036005	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	cededClaimUltimate	1516.8948311963993	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossClaimUltimate	-1995.9142515742096	null
+1	1	0	ORSA:segments:subSegment1:period:2013:outFinancials	grossPremiumRisk	3220.0388225295465	null
+1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	commissionFixed	-19.33186232111956	01-January-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	commissionVariable	257.2809317407091	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	premiumPaidVariable	0.0	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	premiumWritten	-3800.0	01-January-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	commission	234.41405546523703	01-January-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	commission	237.94906941958953	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	premiumPaidFixed	-3800.0	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoCeded	premiumPaid	-3800.0	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2013:outUnderwritingInfoCeded	commissionFixed	0.0	01-January-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:period:2013:outUnderwritingInfoCeded	commissionVariable	256.8405838243992	01-January-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:period:2013:outUnderwritingInfoCeded	commissionVariable	257.2809317407091	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2013:outUnderwritingInfoCeded	premiumPaidVariable	0.0	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2013:outUnderwritingInfoCeded	premiumWritten	-3800.0	01-January-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:period:2013:outUnderwritingInfoCeded	commission	256.8405838243992	01-January-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:period:2013:outUnderwritingInfoCeded	commission	257.2809317407091	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2013:outUnderwritingInfoCeded	premiumPaidFixed	-3800.0	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2013:outUnderwritingInfoCeded	premiumPaid	-3800.0	01-January-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	commissionFixed	-22.42652835916215	06-February-2012 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	commissionFixed	-19.33186232111956	06-February-2012 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	commissionVariable	0.0	06-February-2012 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	premiumPaidVariable	0.0	06-February-2012 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	premiumWritten	0.0	06-February-2012 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	commission	-22.42652835916215	06-February-2012 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	commission	-19.33186232111956	06-February-2012 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	premiumPaidFixed	0.0	06-February-2012 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2012:outUnderwritingInfoCeded	premiumPaid	0.0	06-February-2012 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsNet	totalIncrementalIndexed	-409.6371975973612	19-June-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsNet	totalCumulativeIndexed	-894.7627050450158	19-June-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsNet	premiumRiskBase	-431.59416175600836	19-June-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsNet	premiumAndReserveRiskBase	-409.63719759736114	19-June-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsNet	reserveRiskBase	21.956964158647246	19-June-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsNet	outstandingIndexed	-219.184361963451	19-June-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsNet	ultimate	-466.2775749262322	19-June-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsCeded	totalIncrementalIndexed	1297.1844590583103	19-June-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsCeded	totalCumulativeIndexed	2833.415232642549	19-June-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsCeded	premiumRiskBase	1366.714845560693	19-June-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsCeded	premiumAndReserveRiskBase	1297.1844590583103	19-June-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsCeded	reserveRiskBase	-69.53038650238277	19-June-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsCeded	outstandingIndexed	694.0838128842618	19-June-2013 24:00:00 000
-1	1	0	ORSA:segments:subSegment1:outClaimsCeded	ultimate	1476.5456539330687	19-June-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoNet	premiumWritten	1200.0	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:outUnderwritingInfoNet	premiumPaid	1200.0	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2013:outUnderwritingInfoNet	premiumWritten	1200.0	01-January-2013 24:00:00 000
 1	1	0	ORSA:segments:subSegment1:period:2013:outUnderwritingInfoNet	premiumPaid	1200.0	01-January-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	totalIncrementalIndexed	1297.1844590583103	19-June-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	totalCumulativeIndexed	2833.415232642549	19-June-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	premiumRiskBase	1366.714845560693	19-June-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	premiumAndReserveRiskBase	1297.1844590583103	19-June-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	reserveRiskBase	-69.53038650238277	19-June-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	outstandingIndexed	694.0838128842618	19-June-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	ultimate	1476.5456539330687	19-June-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsGross	totalIncrementalIndexed	-1706.8216566556714	28-September-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsGross	totalCumulativeIndexed	-3728.177937687565	28-September-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsGross	premiumRiskBase	-1798.3090073167014	28-September-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsGross	premiumAndReserveRiskBase	-1706.8216566556714	28-September-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsGross	reserveRiskBase	91.48735066103	28-September-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsGross	outstandingIndexed	-913.2681748477125	28-September-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsGross	ultimate	-1942.8232288593008	28-September-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsNet	totalIncrementalIndexed	-409.6371975973612	06-February-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsNet	totalCumulativeIndexed	-894.7627050450158	06-February-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsNet	premiumRiskBase	-431.59416175600836	06-February-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsNet	premiumAndReserveRiskBase	-409.63719759736114	06-February-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsNet	reserveRiskBase	21.956964158647246	06-February-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsNet	outstandingIndexed	-219.184361963451	06-February-2013 24:00:00 000
-1	1	0	ORSA:structures:subAllSegments:outClaimsNet	ultimate	-466.2775749262322	06-February-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsCeded	totalIncrementalIndexed	1265.6015670317051	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsCeded	totalCumulativeIndexed	2635.234393779013	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsCeded	premiumRiskBase	1352.7704948775445	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsCeded	premiumAndReserveRiskBase	1265.6015670317051	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsCeded	reserveRiskBase	-87.16892784583929	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsCeded	outstandingIndexed	650.7014045307781	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsCeded	ultimate	1516.8948311963993	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsNet	totalIncrementalIndexed	-399.6636527468546	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsNet	totalCumulativeIndexed	-832.1792822460043	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsNet	premiumRiskBase	-427.19068259290907	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsNet	premiumAndReserveRiskBase	-399.6636527468546	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsNet	reserveRiskBase	27.52702984605445	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsNet	outstandingIndexed	-205.48465406235118	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:subSegment1:outClaimsNet	ultimate	-479.0194203778103	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsNet	totalIncrementalIndexed	-399.6636527468546	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsNet	totalCumulativeIndexed	-832.1792822460043	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsNet	premiumRiskBase	-427.19068259290907	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsNet	premiumAndReserveRiskBase	-399.6636527468546	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsNet	reserveRiskBase	27.52702984605445	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsNet	outstandingIndexed	-205.48465406235118	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsNet	ultimate	-479.0194203778103	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsCeded	totalIncrementalIndexed	1265.6015670317051	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsCeded	totalCumulativeIndexed	2635.234393779013	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsCeded	premiumRiskBase	1352.7704948775445	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsCeded	premiumAndReserveRiskBase	1265.6015670317051	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsCeded	reserveRiskBase	-87.16892784583929	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsCeded	outstandingIndexed	650.7014045307781	24-April-2013 24:00:00 000
+1	1	0	ORSA:segments:outClaimsCeded	ultimate	1516.8948311963993	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	totalIncrementalIndexed	1265.6015670317051	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	totalCumulativeIndexed	2635.234393779013	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	premiumRiskBase	1352.7704948775445	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	premiumAndReserveRiskBase	1265.6015670317051	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	reserveRiskBase	-87.16892784583929	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	outstandingIndexed	650.7014045307781	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsCeded	ultimate	1516.8948311963993	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsGross	totalIncrementalIndexed	-1665.26521977856	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsGross	totalCumulativeIndexed	-3467.4136760250167	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsGross	premiumRiskBase	-1779.9611774704535	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsGross	premiumAndReserveRiskBase	-1665.2652197785599	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsGross	reserveRiskBase	114.69595769189374	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsGross	outstandingIndexed	-856.1860585931292	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsGross	ultimate	-1995.9142515742096	24-April-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsNet	totalIncrementalIndexed	-399.6636527468546	18-March-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsNet	totalCumulativeIndexed	-832.1792822460043	18-March-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsNet	premiumRiskBase	-427.19068259290907	18-March-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsNet	premiumAndReserveRiskBase	-399.6636527468546	18-March-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsNet	reserveRiskBase	27.52702984605445	18-March-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsNet	outstandingIndexed	-205.48465406235118	18-March-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:outClaimsNet	ultimate	-479.0194203778103	18-March-2013 24:00:00 000
 1	1	0	ORSA:structures:subAllSegments:outFinancials	grossPremiumPaid	5000.0	null
 1	1	0	ORSA:structures:subAllSegments:outFinancials	grossPremiumWritten	5000.0	null
 1	1	0	ORSA:structures:subAllSegments:outFinancials	netPremiumPaid	1200.0	null
 1	1	0	ORSA:structures:subAllSegments:outFinancials	netPremiumWritten	1200.0	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	netPremiumReserveRisk	1024.7768578678758	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	grossBestEstimate	3057.176771140699	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	grossClaimPaid	-1093.0990755793828	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	netPremiumReserveRisk	1038.2854166727348	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	grossBestEstimate	3004.0857484257904	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	grossClaimPaid	-1034.182176340175	null
 1	1	0	ORSA:structures:subAllSegments:outFinancials	cededPremiumWritten	-3800.0	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	netLossRatioWrittenUltimate	0.3885646457718602	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	netClaimPaid	-262.343778139052	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	netBestEstimate	733.7224250737678	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	cededPremiumRisk	-2176.4445706149077	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	netCashflow	915.2296935017858	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	cededClaimPaid	830.755297440331	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	commission	234.41405546523703	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	netLossRatioWrittenUltimate	0.3991828503148419	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	netClaimPaid	-248.20372232164203	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	netBestEstimate	720.9805796221897	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	cededPremiumRisk	-2189.9485733817464	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	netCashflow	932.4644153572383	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	cededClaimPaid	785.978454018533	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	commission	237.94906941958953	null
 1	1	0	ORSA:structures:subAllSegments:outFinancials	cededPremiumPaid	-3800.0	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	netLossRatioPaidPaid	0.21861981511587666	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	grossReserveRisk	91.48735066102995	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	grossLossRatioPaidPaid	0.21861981511587655	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	grossPremiumReserveRisk	3293.178343344329	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	cededLossRatioPaidPaid	0.21861981511587658	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	cededLossRatioWrittenUltimate	0.3885646457718602	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	netReserveRisk	-0.4695642005149523	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	grossLossRatioWrittenUltimate	0.3885646457718602	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	grossCashflow	3884.474396061455	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	cededPremiumReserveRisk	-2268.4014854764528	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	cededCashflow	-2991.671230918831	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	netPremiumRisk	1025.2464220683908	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	cededReserveRisk	-91.95691486154487	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	netClaimUltimate	-466.2775749262322	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	cededBestEstimate	-2323.454346066931	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	cededClaimUltimate	1476.5456539330687	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	grossClaimUltimate	-1942.8232288593008	null
-1	1	0	ORSA:structures:subAllSegments:outFinancials	grossPremiumRisk	3201.6909926832986	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	netLossRatioPaidPaid	0.20683643526803502	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	grossReserveRisk	114.69595769189374	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	grossLossRatioPaidPaid	0.206836435268035	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	grossPremiumReserveRisk	3334.7347802214404	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	cededLossRatioPaidPaid	0.206836435268035	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	cededLossRatioWrittenUltimate	0.3991828503148419	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	netReserveRisk	8.195167524934803	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	grossLossRatioWrittenUltimate	0.3991828503148419	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	grossCashflow	3946.4859613387057	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	cededPremiumReserveRisk	-2296.449363548705	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	cededCashflow	-3033.3534083025866	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	netPremiumRisk	1030.0902491478	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	cededReserveRisk	-106.5007901669589	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	netClaimUltimate	-479.0194203778103	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	cededBestEstimate	-2283.1051688036005	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	cededClaimUltimate	1516.8948311963993	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	grossClaimUltimate	-1995.9142515742096	null
+1	1	0	ORSA:structures:subAllSegments:outFinancials	grossPremiumRisk	3220.0388225295465	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossPremiumPaid	0.0	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossPremiumWritten	0.0	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netPremiumPaid	0.0	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netPremiumWritten	0.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netPremiumReserveRisk	-0.4695642005149523	null
+1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netPremiumReserveRisk	8.195167524934803	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossBestEstimate	0.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossClaimPaid	-373.77547265270226	null
+1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossClaimPaid	-322.1977053519936	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededPremiumWritten	0.0	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netLossRatioWrittenUltimate	0.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netClaimPaid	-89.70611343664856	null
+1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netClaimPaid	-77.32744928447848	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netBestEstimate	0.0	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededPremiumRisk	0.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netCashflow	-112.13264179581071	null
-1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededClaimPaid	284.0693592160537	null
-1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	commission	-22.42652835916215	null
+1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netCashflow	-96.65931160559803	null
+1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededClaimPaid	244.87025606751513	null
+1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	commission	-19.33186232111956	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededPremiumPaid	0.0	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netLossRatioPaidPaid	0.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossReserveRisk	91.48735066102995	null
+1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossReserveRisk	114.69595769189374	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossLossRatioPaidPaid	0.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossPremiumReserveRisk	91.48735066102995	null
+1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossPremiumReserveRisk	114.69595769189374	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededLossRatioPaidPaid	0.0	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededLossRatioWrittenUltimate	0.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netReserveRisk	-0.4695642005149523	null
+1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netReserveRisk	8.195167524934803	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossLossRatioWrittenUltimate	0.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossCashflow	-373.77547265270226	null
-1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededPremiumReserveRisk	-91.95691486154487	null
-1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededCashflow	261.6428308568916	null
+1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	grossCashflow	-322.1977053519936	null
+1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededPremiumReserveRisk	-106.5007901669589	null
+1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededCashflow	225.53839374639557	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netPremiumRisk	0.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededReserveRisk	-91.95691486154487	null
+1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededReserveRisk	-106.5007901669589	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	netClaimUltimate	0.0	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededBestEstimate	0.0	null
 1	1	0	ORSA:structures:subAllSegments:period:2012:outFinancials	cededClaimUltimate	0.0	null
@@ -472,47 +486,33 @@ iteration	period	valueIndex	path	field	value	date
 1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossPremiumWritten	5000.0	null
 1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netPremiumPaid	1200.0	null
 1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netPremiumWritten	1200.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netPremiumReserveRisk	1025.2464220683908	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossBestEstimate	3057.176771140699	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossClaimPaid	-719.3236029266806	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netPremiumReserveRisk	1030.0902491478	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossBestEstimate	3004.0857484257904	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossClaimPaid	-711.9844709881814	null
 1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededPremiumWritten	-3800.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netLossRatioWrittenUltimate	0.3885646457718602	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netClaimPaid	-172.6376647024034	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netBestEstimate	733.7224250737678	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededPremiumRisk	-2176.4445706149077	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netCashflow	1284.2029191219956	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededClaimPaid	546.6859382242773	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	commission	256.8405838243992	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netLossRatioWrittenUltimate	0.3991828503148419	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netClaimPaid	-170.87627303716357	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netBestEstimate	720.9805796221897	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededPremiumRisk	-2189.9485733817464	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netCashflow	1286.4046587035455	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededClaimPaid	541.1081979510178	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	commission	257.2809317407091	null
 1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededPremiumPaid	-3800.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netLossRatioPaidPaid	0.14386472058533617	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netLossRatioPaidPaid	0.14239689419763632	null
 1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossReserveRisk	0.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossLossRatioPaidPaid	0.14386472058533611	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossPremiumReserveRisk	3201.6909926832986	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededLossRatioPaidPaid	0.14386472058533611	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededLossRatioWrittenUltimate	0.3885646457718602	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossLossRatioPaidPaid	0.1423968941976363	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossPremiumReserveRisk	3220.0388225295465	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededLossRatioPaidPaid	0.14239689419763626	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededLossRatioWrittenUltimate	0.3991828503148419	null
 1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netReserveRisk	0.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossLossRatioWrittenUltimate	0.3885646457718602	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossCashflow	4280.676397073319	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededPremiumReserveRisk	-2176.4445706149077	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededCashflow	-2996.4734779513233	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netPremiumRisk	1025.2464220683908	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossLossRatioWrittenUltimate	0.3991828503148419	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossCashflow	4288.015529011818	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededPremiumReserveRisk	-2189.9485733817464	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededCashflow	-3001.610870308273	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netPremiumRisk	1030.0902491478	null
 1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededReserveRisk	0.0	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netClaimUltimate	-466.2775749262322	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededBestEstimate	-2323.454346066931	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededClaimUltimate	1476.5456539330687	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossClaimUltimate	-1942.8232288593008	null
-1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossPremiumRisk	3201.6909926832986	null
-1	1	0	ORSA:segments:outClaimsCeded	totalIncrementalIndexed	1297.1844590583103	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsCeded	totalCumulativeIndexed	2833.415232642549	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsCeded	premiumRiskBase	1366.714845560693	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsCeded	premiumAndReserveRiskBase	1297.1844590583103	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsCeded	reserveRiskBase	-69.53038650238277	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsCeded	outstandingIndexed	694.0838128842618	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsCeded	ultimate	1476.5456539330687	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsNet	totalIncrementalIndexed	-409.6371975973612	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsNet	totalCumulativeIndexed	-894.7627050450158	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsNet	premiumRiskBase	-431.59416175600836	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsNet	premiumAndReserveRiskBase	-409.63719759736114	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsNet	reserveRiskBase	21.956964158647246	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsNet	outstandingIndexed	-219.184361963451	06-February-2013 24:00:00 000
-1	1	0	ORSA:segments:outClaimsNet	ultimate	-466.2775749262322	06-February-2013 24:00:00 000
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	netClaimUltimate	-479.0194203778103	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededBestEstimate	-2283.1051688036005	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	cededClaimUltimate	1516.8948311963993	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossClaimUltimate	-1995.9142515742096	null
+1	1	0	ORSA:structures:subAllSegments:period:2013:outFinancials	grossPremiumRisk	3220.0388225295465	null
