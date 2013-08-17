@@ -48,19 +48,19 @@ class IndexTests extends GroovyTestCase {
         index.doCalculation()
 
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2012-01-01", 1.1039751667482924, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1)), EPSILON
+        assertEquals "factor for 2012-01-01", 1.1039434657073302, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1)), EPSILON
 
         index.reset()
         index.periodScope.prepareNextPeriod()
         index.doCalculation()
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2013-01-01", 1.1049224089826477, index.outFactors[0].getFactorAtDate(date20110101.plusYears(2)), EPSILON
+        assertEquals "factor for 2013-01-01", 1.1048906807412866, index.outFactors[0].getFactorAtDate(date20110101.plusYears(2)), EPSILON
 
         index.reset()
         index.periodScope.prepareNextPeriod()
         index.doCalculation()
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2014-01-01", 1.1238156820729095, index.outFactors[0].getFactorAtDate(date20110101.plusYears(3)), EPSILON
+        assertEquals "factor for 2014-01-01", 1.123783411304468, index.outFactors[0].getFactorAtDate(date20110101.plusYears(3)), EPSILON
     }
 
     void testStochasticIndexSystematicSeverities() {
@@ -81,8 +81,8 @@ class IndexTests extends GroovyTestCase {
         index.doCalculation()
 
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2012-01-01", 1 + 4.5 * 0.95d, index.outFactors[0].getFactorAtDate(date20110101), EPSILON
-        assertEquals "factor for 2012-01-01", 1d, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1))
+        assertEquals "factor for 2012-01-01", 4.144218329888718, index.outFactors[0].getFactorAtDate(date20110101), EPSILON
+        assertEquals "factor for 2012-01-01", 5.2749999999999995, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1))
     }
 
     void testDeterministicAnnualChange() {
