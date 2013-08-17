@@ -65,8 +65,9 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
      *
      * @param uwInfos               is ignored
      * @param uwInfosFilterCriteria is ignored
-     * @param frequencyFactorsPackets
-     *@param periodScope  @return
+     * @param frequencyFactorsPackets is ignored
+     * @param periodScope
+     * @return
      */
     public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
                                           List<Factors> severityFactors, List uwInfosFilterCriteria,
