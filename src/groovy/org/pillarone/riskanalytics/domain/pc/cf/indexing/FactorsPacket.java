@@ -67,6 +67,9 @@ public class FactorsPacket extends Packet {
         double elapsedTime = Days.daysBetween(floorEntry.getKey(), date).getDays();
         double keyDifference = Days.daysBetween(floorEntry.getKey(), ceilingEntry.getKey()).getDays();
         double factorRatio = ceilingEntry.getValue() / floorEntry.getValue();
+        if (factorRatio < 0) {
+            return -Math.pow(-factorRatio, elapsedTime / keyDifference) * floorEntry.getValue();
+        }
         return Math.pow(factorRatio, elapsedTime / keyDifference) * floorEntry.getValue();
     }
 
