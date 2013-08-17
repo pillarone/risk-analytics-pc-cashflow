@@ -91,6 +91,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ConstraintsFactory.registerConstraint(new CoverMap())
         ConstraintsFactory.registerConstraint(new MatrixStructureContraints())
         ConstraintsFactory.registerConstraint(new DoubleConstraints())
+        ConstraintsFactory.registerConstraint(new IntDateTimeDoubleConstraints())
         ConstraintsFactory.registerConstraint(new DateTimeConstraints())
         ConstraintsFactory.registerConstraint(new ClaimTypeSelectionTableConstraints())
         ConstraintsFactory.registerConstraint(new YieldCurveTableConstraints())

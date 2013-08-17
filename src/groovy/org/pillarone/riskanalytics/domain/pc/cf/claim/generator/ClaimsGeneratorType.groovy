@@ -1,13 +1,11 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim.generator
 
-/**
- * @author stefan.kunz (at) intuitive-collaboration (dot) com
- */
-
+import org.apache.commons.lang.NotImplementedException
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints
+import org.pillarone.riskanalytics.domain.utils.constraint.IntDateTimeDoubleConstraints
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionType
@@ -77,9 +75,13 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                     ConstraintsFactory.getConstraints(DoubleConstraints.IDENTIFIER)),
             claimsSizeModification: DistributionModifier.getStrategy(DistributionModifier.NONE, [:]),
             produceClaim: FrequencySeverityClaimType.AGGREGATED_EVENT])
+    public static final ClaimsGeneratorType EXTERNAL_VALUES = new ClaimsGeneratorType("external values by iteration", "EXTERNAL_VALUES", [
+            claimsSizeBase: ExposureBase.ABSOLUTE,
+            values: ExternalValuesType.getDefault(),
+            produceClaim: FrequencySeverityClaimType.SINGLE])
 
     public static final all = [ATTRITIONAL, FREQUENCY_SEVERITY, ATTRITIONAL_WITH_DATE, FREQUENCY_AVERAGE_ATTRITIONAL,
-            OCCURRENCE_AND_SEVERITY, /*SEVERITY_OF_EVENT_GENERATOR,*/ PML]
+            OCCURRENCE_AND_SEVERITY, /*SEVERITY_OF_EVENT_GENERATOR,*/ PML, EXTERNAL_VALUES]
 
     protected static Map types = [:]
     static {
@@ -177,6 +179,15 @@ public class ClaimsGeneratorType extends AbstractParameterObjectClassifier {
                         pmlData: (ConstrainedMultiDimensionalParameter) parameters.get("pmlData"),
                         claimsSizeModification: (DistributionModified) parameters.get("claimsSizeModification"),
                         produceClaim: (FrequencySeverityClaimType) parameters.get("produceClaim"))
+                break;
+            case ClaimsGeneratorType.EXTERNAL_VALUES:
+                claimsGenerator = new ExternalValuesStrategy(
+                    claimsSizeBase: (ExposureBase) parameters.get("claimsSizeBase"),
+                    values: (IExternalValuesStrategy) parameters.get("values"),
+                    produceClaim: (FrequencySeverityClaimType) parameters.get("produceClaim"))
+                break;
+            default:
+                throw new NotImplementedException(type.toString())
         }
         return claimsGenerator;
     }
