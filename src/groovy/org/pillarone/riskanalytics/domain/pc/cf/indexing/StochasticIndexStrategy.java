@@ -27,6 +27,7 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
     public static final String DISTRIBUTION = "distribution";
 
     private DateTime startDate;
+    private DateTime lastDayOfPeriod;
     private RandomDistribution distribution;
 
     private IRandomNumberGenerator indexGenerator;
@@ -54,7 +55,7 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
         double factor = filteredSeverity == null ? previousPeriodFactor * (1 + indexGenerator.nextValue().doubleValue()) :
                 previousPeriodFactor * (1 + indexGenerator.getDistribution().inverseF(filteredSeverity));
         previousPeriodFactor = factor;
-        factors.add(startDate.plusYears(preparatoryPeriods + periodScope.getCurrentPeriod() + 1), factor);
+        factors.add(lastDayOfPeriod.plusYears(periodScope.getCurrentPeriod()), factor);
         factors.origin = origin;
         return factors;
     }
@@ -64,17 +65,18 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
             indexGenerator = RandomNumberGeneratorFactory.getGenerator(distribution);
         }
         if (periodScope.isFirstPeriod()) {
-            preparatoryPeriods = 0;
             DateTime indexDate = new DateTime(startDate);
             previousPeriodFactor = 1d;
             factors = new FactorsPacket();
             while (indexDate.isBefore(periodScope.getCurrentPeriodStartDate())) {
-                preparatoryPeriods++;
                 previousPeriodFactor *= 1 + indexGenerator.nextValue().doubleValue();
                 factors.add(indexDate, previousPeriodFactor);
                 indexDate = indexDate.plusYears(1);
             }
-            factors.add(indexDate, previousPeriodFactor * (1 + indexGenerator.nextValue().doubleValue()));
+            lastDayOfPeriod = periodScope.getNextPeriodStartDate().minusDays(1);
+            if (!(indexDate.equals(lastDayOfPeriod))) {
+                factors.add(lastDayOfPeriod.minusYears(1), previousPeriodFactor * (1 + indexGenerator.nextValue().doubleValue()));
+            }
         }
     }
 
