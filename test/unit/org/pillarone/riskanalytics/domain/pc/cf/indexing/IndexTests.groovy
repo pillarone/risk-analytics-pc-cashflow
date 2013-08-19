@@ -23,6 +23,7 @@ class IndexTests extends GroovyTestCase {
     DateTime date20030316 = new DateTime(2003, 3, 16, 0, 0, 0, 0)
     DateTime date20041212 = new DateTime(2004, 12, 12, 0, 0, 0, 0)
     DateTime date20050421 = new DateTime(2005, 4, 21, 0, 0, 0, 0)
+    DateTime date20101231 = new DateTime(2010, 12, 31, 0, 0, 0, 0)
     DateTime date20110101 = new DateTime(2011, 1, 1, 0, 0, 0, 0)
 
     void testTrivialIndex() {
@@ -35,32 +36,32 @@ class IndexTests extends GroovyTestCase {
         MathUtils.initRandomStreamBase(123)
 
         Index index = new Index(parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.STOCHASTIC,
-                [startDate: date20110101,
+                [startDate: date20101231,
                         distribution: DistributionType.getStrategy(DistributionType.LOGNORMAL, ['mean': 0.03, 'stDev': 0.2])]))
         index.periodScope = TestPeriodScopeUtilities.getPeriodScope(date20110101, 5)
         index.doCalculation()
 
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2011-01-01", 1.000028716181532, index.outFactors[0].getFactorAtDate(date20110101) // 1 by definition
+        assertEquals "factor for 2011-01-01", 1.000028716181532, index.outFactors[0].getFactorAtDate(date20101231) // 1 by definition
 
         index.reset()
         index.periodScope.prepareNextPeriod()
         index.doCalculation()
 
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2012-01-01", 1.1039434657073302, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1)), EPSILON
+        assertEquals "factor for 2012-01-01", 1.1039751667482924, index.outFactors[0].getFactorAtDate(date20101231.plusYears(1)), EPSILON
 
         index.reset()
         index.periodScope.prepareNextPeriod()
         index.doCalculation()
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2013-01-01", 1.1048906807412866, index.outFactors[0].getFactorAtDate(date20110101.plusYears(2)), EPSILON
+        assertEquals "factor for 2013-01-01", 1.1049224089826477, index.outFactors[0].getFactorAtDate(date20101231.plusYears(2)), EPSILON
 
         index.reset()
         index.periodScope.prepareNextPeriod()
         index.doCalculation()
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2014-01-01", 1.123783411304468, index.outFactors[0].getFactorAtDate(date20110101.plusYears(3)), EPSILON
+        assertEquals "factor for 2014-01-01", 1.1238156820729095, index.outFactors[0].getFactorAtDate(date20101231.plusYears(3)), EPSILON
     }
 
     void testStochasticIndexSystematicSeverities() {
@@ -72,7 +73,7 @@ class IndexTests extends GroovyTestCase {
         List<EventSeverity> severities = new ArrayList<EventSeverity>([severity1, severity2, severity3])
 
         Index index = new Index(name: "index", parmIndex: IndexStrategyType.getStrategy(IndexStrategyType.STOCHASTIC,
-                [startDate: date20110101,
+                [startDate: date20101231,
                         distribution: DistributionType.getStrategy(DistributionType.UNIFORM, [a: 0, b: 4.5])]))
         index.periodScope = TestPeriodScopeUtilities.getPeriodScope(date20110101, 5)
 
@@ -81,8 +82,8 @@ class IndexTests extends GroovyTestCase {
         index.doCalculation()
 
         assertEquals "one factor only", 1, index.outFactors.size()
-        assertEquals "factor for 2012-01-01", 4.144218329888718, index.outFactors[0].getFactorAtDate(date20110101), EPSILON
-        assertEquals "factor for 2012-01-01", 5.2749999999999995, index.outFactors[0].getFactorAtDate(date20110101.plusYears(1))
+        assertEquals "factor for 2010-12-31", 4.144218329888718, index.outFactors[0].getFactorAtDate(date20101231), EPSILON
+        assertEquals "factor for 2011-12-31", 21.860751690162985, index.outFactors[0].getFactorAtDate(date20101231.plusYears(1))
     }
 
     void testDeterministicAnnualChange() {
