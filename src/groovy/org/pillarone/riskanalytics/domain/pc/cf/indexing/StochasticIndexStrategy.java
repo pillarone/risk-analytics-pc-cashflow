@@ -21,6 +21,8 @@ import java.util.Map;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
+// todo(sku): allow indices to start at or after projection date
+// todo(sku): handle same stddev if index series starts at 1.1. before project start
 public class StochasticIndexStrategy extends AbstractParameterObject implements IIndexStrategy {
 
     public static final String START_DATE = "startDate";
