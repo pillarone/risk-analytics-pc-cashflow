@@ -6,6 +6,11 @@ displayName='CapitalEagle NP+MTPL50'
 applicationVersion='1.6-ALPHA-1'
 periodLabels=["2011-01-01","2012-01-01","2013-01-01","2014-01-01","2015-01-01","2016-01-01","2017-01-01","2018-01-01","2019-01-01","2020-01-01","2021-01-01","2022-01-01","2023-01-01","2024-01-01","2025-01-01","2026-01-01","2027-01-01","2028-01-01","2029-01-01","2030-01-01","2031-01-01","2032-01-01","2033-01-01","2034-01-01"]
 components {
+    dependencies {
+        subAttritionals {
+            parmCopulaStrategy[0]=org.pillarone.riskanalytics.domain.utils.math.copula.CopulaType.getStrategy(org.pillarone.riskanalytics.domain.utils.math.copula.CopulaType.NORMAL, ["dependencyMatrix":new org.pillarone.riskanalytics.core.parameterization.ComboBoxMatrixMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([[1.0, 0.5, 0.25, 0.25], [0.5, 1.0, 0.25, 0.25], [0.25, 0.25, 1.0, 0.25], [0.25, 0.25, 0.25, 1.0]]),["subMotorHullAttritional","subMotorThirdPartyLiabilityAttritional","subPersonalAccidentAttritional","subPropertyAttritional"],org.pillarone.riskanalytics.domain.utils.marker.ICorrelationMarker),])
+        }
+    }
     claimsGenerators {
         subMotorHullAttritional {
             parmAssociateExposureInfo[0]=org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.RiskAllocatorType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.RiskAllocatorType.NONE, [:])
