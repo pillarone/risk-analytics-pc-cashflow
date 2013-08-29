@@ -9,10 +9,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPa
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.utils.constant.ReinsuranceContractBase;
-import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
-import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
-import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
-import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,7 +23,7 @@ public class MatrixCoverAttributeRow {
     ILegalEntityMarker legalEntity;
     ISegmentMarker segment;
     Set<ISegmentMarker> implicitSegments = new HashSet<ISegmentMarker>();
-    IPerilMarker peril;
+    IClaimMarker peril;
     ClaimTypeSelector claimTypeSelector;
     boolean isStructure;
 
@@ -40,7 +37,7 @@ public class MatrixCoverAttributeRow {
         }
         legalEntity = (ILegalEntityMarker) flexibleCover.getValueAtAsObject(rowIndex, isStructure ? MatrixStructureContraints.LEGAL_ENTITY_OF_COLUMN_INDEX : CoverMap.LEGAL_ENTITY_OF_COLUMN_INDEX);
         segment = (ISegmentMarker) flexibleCover.getValueAtAsObject(rowIndex, isStructure ? MatrixStructureContraints.SEGMENTS_OF_COLUMN_INDEX : CoverMap.SEGMENTS_OF_COLUMN_INDEX);
-        peril = (IPerilMarker) flexibleCover.getValueAtAsObject(rowIndex, isStructure ? MatrixStructureContraints.GENERATORS_OF_COLUMN_INDEX : CoverMap.GENERATORS_OF_COLUMN_INDEX);
+        peril = (IClaimMarker) flexibleCover.getValueAtAsObject(rowIndex, isStructure ? MatrixStructureContraints.GENERATORS_OF_COLUMN_INDEX : CoverMap.GENERATORS_OF_COLUMN_INDEX);
         claimTypeSelector = ClaimTypeSelector.valueOf((String) flexibleCover.getValueAtAsObject(rowIndex, isStructure ? MatrixStructureContraints.LOSS_KIND_OF_OF_COLUMN_INDEX : CoverMap.LOSS_KIND_OF_OF_COLUMN_INDEX));
     }
 
@@ -55,7 +52,7 @@ public class MatrixCoverAttributeRow {
                     (cededContract == null || cededContract == claim.reinsuranceContract()) &&
                     (legalEntity == null || legalEntity == claim.legalEntity()) &&
                     (segment == null || segment == claim.segment()) &&
-                    (peril == null || peril == claim.peril()) &&
+                    (peril == null || peril == claim.peril() || peril == claim.reserve()) &&
                     claimTypeMatches(claimTypeSelector, claim)) {
                 if (checkedSign && !isStructure) {
                     result.add(ClaimValidator.positiveNominalUltimate(claim));

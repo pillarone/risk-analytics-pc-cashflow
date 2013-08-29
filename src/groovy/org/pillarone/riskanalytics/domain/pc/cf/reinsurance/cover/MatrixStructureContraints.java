@@ -2,10 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover;
 
 import org.pillarone.riskanalytics.core.parameterization.IMultiDimensionalConstraints;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimTypeSelector;
-import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
-import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
-import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
-import org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker;
+import org.pillarone.riskanalytics.domain.utils.marker.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -35,7 +32,7 @@ public class MatrixStructureContraints implements IMultiDimensionalConstraints {
     public Class getColumnType(int column) {
         if (column == 0) return ILegalEntityMarker.class;
         if (column == 1) return ISegmentMarker.class;
-        if (column == 2) return IPerilMarker.class;
+        if (column == 2) return IClaimMarker.class;
         if (column == 3) return ClaimTypeSelector.class;
         return null;
     }
@@ -45,7 +42,7 @@ public class MatrixStructureContraints implements IMultiDimensionalConstraints {
             return LEGAL_ENTITY_OF_COLUMN_INDEX;
         } else if (ISegmentMarker.class.isAssignableFrom(marker)) {
             return SEGMENTS_OF_COLUMN_INDEX;
-        } else if (IPerilMarker.class.isAssignableFrom(marker)) {
+        } else if (IClaimMarker.class.isAssignableFrom(marker)) {
             return GENERATORS_OF_COLUMN_INDEX;
         }
         return null;
