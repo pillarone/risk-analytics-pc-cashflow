@@ -179,9 +179,9 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [FP.GROSS_RESERVE_RISK, FP.GROSS_PREMIUM_RISK, FP.GROSS_PREMIUM_RESERVE_RISK, FP.NET_RESERVE_RISK, FP.NET_PREMIUM_RISK, FP.NET_PREMIUM_RESERVE_RISK, FP.CEDED_RESERVE_RISK, FP.CEDED_PREMIUM_RISK, FP.CEDED_PREMIUM_RESERVE_RISK, FP.GROSS_PREMIUM_WRITTEN, FP.NET_PREMIUM_WRITTEN, FP.CEDED_PREMIUM_WRITTEN], [FP],"GNC"))
 
 
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [CCP.ULTIMATE, CCP.PAID_INDEXED]))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE], [CCP.ULTIMATE, CCP.PAID_INDEXED]))
-        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [CCP.ULTIMATE, CCP.PAID_INDEXED]))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_PERIOD], [CCP.ULTIMATE, CCP.PAID_INDEXED],[CCP]))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_SOURCE], [CCP.ULTIMATE, CCP.PAID_INDEXED],[CCP]))
+        CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([], [CCP.ULTIMATE, CCP.PAID_INDEXED],[CCP]))
         CollectingModeFactory.registerStrategy(new SplitAndFilterCollectionModeStrategy([DrillDownMode.BY_TYPE], [], [AdditionalPremium, PaidAdditionalPremium]))
     }
 
