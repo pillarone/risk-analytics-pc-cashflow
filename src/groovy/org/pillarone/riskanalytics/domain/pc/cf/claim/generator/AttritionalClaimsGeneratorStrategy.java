@@ -93,7 +93,7 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
     }
 
     @Override
-    void lazyInitClaimsSizeGenerator() {
+    public void lazyInitClaimsSizeGenerator() {
         setGenerator(claimsSizeDistribution, claimsSizeModification);
     }
 }

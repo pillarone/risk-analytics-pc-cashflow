@@ -74,7 +74,7 @@ public class FrequencySeverityClaimsGeneratorSimplifiedIndexStrategy extends Abs
     }
 
     @Override
-    void lazyInitClaimsSizeGenerator() {
+    public void lazyInitClaimsSizeGenerator() {
         setGenerator(claimsSizeDistribution, claimsSizeModification);
     }
 

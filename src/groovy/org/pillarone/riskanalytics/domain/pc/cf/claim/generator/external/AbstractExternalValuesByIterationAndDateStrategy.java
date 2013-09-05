@@ -1,65 +1,39 @@
-package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
+package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.external;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
-import org.pillarone.riskanalytics.core.model.IModelVisitor;
-import org.pillarone.riskanalytics.core.model.ModelPath;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
-import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
-import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
-import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.LossesOccurringContractBase;
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
-import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
-import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.utils.InputFormatConverter;
-import org.pillarone.riskanalytics.domain.utils.constraint.IntDateTimeDoubleConstraints;
-import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.math.generator.IRandomNumberGenerator;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class ExternalValuesByIterationAndDateStrategy extends AbstractParameterObject implements IExternalValuesStrategy{
-
-    static Log LOG = LogFactory.getLog(ExternalValuesByIterationAndDateStrategy.class);
+abstract public class AbstractExternalValuesByIterationAndDateStrategy extends AbstractParameterObject implements IExternalValuesStrategy{
 
     public static final String ITERATION = "iteration";
     public static final String VALUE = "value";
     public static final String DATE = "date";
 
-    private ConstrainedMultiDimensionalParameter valueTableExtended = new ConstrainedMultiDimensionalParameter(
-            GroovyUtils.toList("[[0], [], [0d]]"), Arrays.asList("iteration", "date", "value"),
-            ConstraintsFactory.getConstraints(IntDateTimeDoubleConstraints.IDENTIFIER));
+    abstract public ConstrainedMultiDimensionalParameter table();
 
     private ListMultimap<IterationPeriod, DateDouble> internalValueByIteration = ArrayListMultimap.create();
     private int iteration = 0;
-
-    public IParameterObjectClassifier getType() {
-        return ExternalValuesType.BY_ITERATION_AND_DATE;
-    }
-
-    public Map getParameters() {
-        Map<String, Object> parameters = new HashMap<String, Object>(1);
-        parameters.put("valueTableExtended", valueTableExtended);
-        return parameters;
-    }
 
     /**
      *
@@ -99,13 +73,13 @@ public class ExternalValuesByIterationAndDateStrategy extends AbstractParameterO
 
     private void lazyInitializeDistributionMaps(PeriodScope periodScope) {
         if (internalValueByIteration.isEmpty()) {
-            int columnIndexIteration = valueTableExtended.getColumnIndex(ITERATION);
-            int columnIndexDate = valueTableExtended.getColumnIndex(DATE);
-            int columnIndexValue = valueTableExtended.getColumnIndex(VALUE);
-            for (int row = valueTableExtended.getTitleRowCount(); row < valueTableExtended.getRowCount(); row++) {
-                int iteration = InputFormatConverter.getInt(valueTableExtended.getValueAt(row, columnIndexIteration));
-                double value = InputFormatConverter.getDouble(valueTableExtended.getValueAt(row, columnIndexValue));
-                DateTime date = (DateTime) valueTableExtended.getValueAt(row, columnIndexDate);
+            int columnIndexIteration = table().getColumnIndex(ITERATION);
+            int columnIndexDate = table().getColumnIndex(DATE);
+            int columnIndexValue = table().getColumnIndex(VALUE);
+            for (int row = table().getTitleRowCount(); row < table().getRowCount(); row++) {
+                int iteration = InputFormatConverter.getInt(table().getValueAt(row, columnIndexIteration));
+                double value = InputFormatConverter.getDouble(table().getValueAt(row, columnIndexValue));
+                DateTime date = (DateTime) table().getValueAt(row, columnIndexDate);
                 int period = periodScope.getPeriodCounter().belongsToPeriod(date);
                 internalValueByIteration.put(new IterationPeriod(iteration, period), new DateDouble(date, value));
             }

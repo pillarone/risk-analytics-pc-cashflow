@@ -1,4 +1,4 @@
-package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
+package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.external;
 
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
