@@ -57,7 +57,7 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
      * {@link #setGenerator(org.pillarone.riskanalytics.domain.utils.math.distribution.RandomDistribution, org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModified)}
      * function.
      */
-    abstract void lazyInitClaimsSizeGenerator();
+    abstract public void lazyInitClaimsSizeGenerator();
 
     /**
      * This function attempts to lookup a random distribution and modifier pair against their hash key in the

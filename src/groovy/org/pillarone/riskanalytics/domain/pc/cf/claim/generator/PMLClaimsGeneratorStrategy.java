@@ -79,7 +79,7 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
     }
 
     @Override
-    void lazyInitClaimsSizeGenerator() {
+    public void lazyInitClaimsSizeGenerator() {
         LOG.debug("This function shouldn't be called for PML claims!");
     }
 

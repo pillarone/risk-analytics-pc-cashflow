@@ -2,6 +2,9 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator
 
 import org.apache.commons.lang.NotImplementedException
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.external.ExternalValuesStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.external.ExternalValuesType
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.external.IExternalValuesStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.FrequencyBase
 import org.pillarone.riskanalytics.domain.utils.constraint.DoubleConstraints

@@ -71,7 +71,7 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
     }
 
     @Override
-    void lazyInitClaimsSizeGenerator() {
+    public void lazyInitClaimsSizeGenerator() {
         setGenerator(claimsSizeDistribution, claimsSizeModification);
     }
 

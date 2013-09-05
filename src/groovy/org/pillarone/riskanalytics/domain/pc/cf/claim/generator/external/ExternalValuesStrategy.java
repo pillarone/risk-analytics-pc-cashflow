@@ -1,4 +1,4 @@
-package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
+package org.pillarone.riskanalytics.domain.pc.cf.claim.generator.external;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -7,6 +7,8 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractSingleClaimsGeneratorStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorType;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
@@ -66,7 +68,7 @@ public class ExternalValuesStrategy extends AbstractSingleClaimsGeneratorStrateg
     }
 
     @Override
-    void lazyInitClaimsSizeGenerator() {
+    public void lazyInitClaimsSizeGenerator() {
         LOG.debug("This function is not required");
     }
 
