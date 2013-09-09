@@ -123,7 +123,7 @@ public class EventLimitQuotaShareContract extends QuotaShareContract {
             double cessionReduction = Math.min(-incrementalCession, maxCession.value);
             maxCession.minus(cessionReduction);
             double incrementalCessionNotAdjusted = quote * claimProperty.incrementalIndexed(claim);
-            return incrementalCession == 0 ?  0 : cessionReduction / incrementalCessionNotAdjusted * quote;
+            return incrementalCessionNotAdjusted == 0 ?  0 : cessionReduction / incrementalCessionNotAdjusted * quote;
         }
 
         private DoubleValue remainingEventLimit(BasedOnClaimProperty claimProperty) {
