@@ -8,6 +8,13 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.IncurredLoss
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.IncurredLossAndAP
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.IncurredLossWithTerm
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts.ContractOrderingMethod
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.YearLayerIdentifier
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.ContractLayer
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.ContractStructure
 
 /**
 *   author simon.parten @ art-allianz . com
@@ -35,6 +42,18 @@ class TestClaimUtils {
         premiumPerPeriod.put(2, 0d)
         premiumPerPeriod.put(3, 0d)
         return premiumPerPeriod
+    }
+
+    public static IncurredLossWithTerm getTestLossAndAP(double lossValue){
+        final IncurredLoss p = new IncurredLoss(null) {
+            @Override
+            double getLossWithShareAppliedAllLayers() {
+                return 0d
+            }
+        }
+        IncurredLossWithTerm incurredLossWithTerm = new IncurredLossWithTerm(
+                p, lossValue, 0d, new ContractStructure(0d, 0d, new HashMap<YearLayerIdentifier, ContractLayer>(), ContractOrderingMethod.INCURRED), 0i )
+        return incurredLossWithTerm
     }
 
 }

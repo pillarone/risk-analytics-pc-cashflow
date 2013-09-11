@@ -1,25 +1,19 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless;
 
-import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AdditionalPremium;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.LayerAndAP;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.IncurredLossAndAP;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.LossAfterTermStructure;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache;
 
 import java.util.Collection;
-import java.util.Map;
 
 public interface IIncurredCalculation {
 
-    double layerCededIncurred(Collection<IClaimRoot> incurredClaims, LayerParameters layerParameters);
+    LossAfterClaimAndAnnualStructures layerCededIncurred(Collection<IClaimRoot> incurredClaims, IRiLayer layerParameters);
 
-    Collection<AdditionalPremium> additionalPremiumByLayer(Collection<IClaimRoot> incurredClaims, LayerParameters layerParameters, double layerPremium);
+    Collection<AdditionalPremium> additionalPremiumByLayer(double layerPremium, final IncurredLossWithTerm lossAndLayer, final IRiLayer layerParams);
 
-    LossAfterTermStructure cededIncurredRespectTerm(IAllContractClaimCache claimStore, ILayersInPeriod scaledLayerParameters, PeriodScope periodScope, double termExcess, double termLimit, ContractCoverBase coverageBase, IPremiumPerPeriod premiumPerPeriod);
+    IncurredLossAndApsAfterTermStructure cededIncurredAndApsRespectTerm(IAllContractClaimCache claimStore, IContractStructure scaledLayerParameters, PeriodScope periodScope, ContractCoverBase coverageBase, IPremiumPerPeriod premiumPerPeriod);
 
-    Collection<LayerAndAP> additionalPremiumAllLayers(Collection<IClaimRoot> incurredClaims, Collection<LayerParameters> layerParameters, double layerPremium);
-
+//    Collection<LayerAndAP> additionalPremiumAllLayers(Collection<IClaimRoot> incurredClaims, Collection<LayerParameters> layerParameters, double layerPremium);
 }

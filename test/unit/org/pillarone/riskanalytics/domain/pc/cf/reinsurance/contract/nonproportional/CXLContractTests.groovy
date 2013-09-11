@@ -451,6 +451,7 @@ class CXLContractTests extends GroovyTestCase {
         cxl.inUnderwritingInfo.add(uw120)
 
         cxl.doCalculation()
+
         assertEquals 'number of ceded claims', 8, cxl.outClaimsCeded.size()
         assertEquals 'P0.0 ceded ultimates', [0, 0, 100, 0, 100, 100, 0, 200], cxl.outClaimsCeded*.ultimate()
         assertEquals 'P0.0 ceded incremental reported', [0, 0, 100, 0, 60, 140, 0, 200], cxl.outClaimsCeded*.reportedIncrementalIndexed

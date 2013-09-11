@@ -17,7 +17,7 @@ class UnderwritingSegments extends DynamicComposedComponent {
 
     @Override
     Component createDefaultSubComponent() {
-        return new RiskBands();
+       return new RiskBands();
     }
 
     @Override

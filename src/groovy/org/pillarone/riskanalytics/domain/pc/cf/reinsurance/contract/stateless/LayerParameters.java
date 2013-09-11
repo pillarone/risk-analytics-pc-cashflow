@@ -1,10 +1,15 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.CalcAPBasis;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.YearLayerIdentifier;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.AdditionalPremiumLayer;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.ProfitCommissions;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.ReinstatementLayer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -12,8 +17,10 @@ import java.util.List;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class LayerParameters {
+public class LayerParameters implements IRiLayer {
 
+    private final int year;
+    private final int layer;
     private final double share;
     private final double claimExcess;
     private final double claimLimit;
@@ -29,12 +36,15 @@ public class LayerParameters {
      * @param share
      * @param claimExcess
      * @param claimLimit
+     * @param year
+     * @param layer
      */
-    public LayerParameters(double share, double claimExcess, double claimLimit) {
+    public LayerParameters(double share, double claimExcess, double claimLimit, final int year, final int layer) {
         this.share = share;
         this.claimExcess = claimExcess;
         this.additionalPremiums = new ArrayList<AdditionalPremiumPerLayer>();
-
+        this.year = year;
+        this.layer = layer;
         if (claimLimit == 0) {
             this.claimLimit = Double.MAX_VALUE;
         } else {
@@ -88,6 +98,11 @@ public class LayerParameters {
         return layerPeriodLimit;
     }
 
+    @Override
+    public double getInitialPremium() {
+        return 0;
+    }
+
     public List<AdditionalPremiumPerLayer> getAdditionalPremiums() {
         return additionalPremiums;
     }
@@ -107,64 +122,38 @@ public class LayerParameters {
         return new LayerIdentifier(share, claimExcess, claimLimit, layerPeriodExcess, layerPeriodLimit);
     }
 
-    public static class LayerIdentifier {
-        private final double share;
-        private final double claimExcess;
-        private final double claimLimit;
-        private final double layerPeriodExcess;
-        private final double layerPeriodLimit;
+    @Override
+    public YearLayerIdentifier getYearLayerIdentifier() {
+        return new YearLayerIdentifier(year, layer);
+    }
 
-        public LayerIdentifier(double share, double claimExcess, double claimLimit, double layerPeriodExcess, double layerPeriodLimit) {
-            this.share = share;
-            this.claimExcess = claimExcess;
-            this.claimLimit = claimLimit;
-            this.layerPeriodExcess = layerPeriodExcess;
-            this.layerPeriodLimit = layerPeriodLimit;
+    @Override
+    public Collection<AdditionalPremiumPerLayer> getLegacyAdditionalPremiums() {
+        return additionalPremiums;
+    }
+
+    @Override
+    public Collection<ProfitCommissions> getProfitCommissions() {
+        return new ArrayList<ProfitCommissions>();
+    }
+
+    @Override
+    public Collection<ReinstatementLayer> getReinstatements() {
+        return new ArrayList<ReinstatementLayer>();
+    }
+
+    @Override
+    public Collection<AdditionalPremiumLayer> getAddPrem() {
+        return new ArrayList<AdditionalPremiumLayer>();
+    }
+
+    public double getNcbPercentage() {
+        for (AdditionalPremiumPerLayer ap : additionalPremiums) {
+            if(ap.getBasis().equals(CalcAPBasis.NCB)) {
+                return ap.getAdditionalPremium();
+            }
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            LayerIdentifier that = (LayerIdentifier) o;
-
-            if (Double.compare(that.claimExcess, claimExcess) != 0) return false;
-            if (Double.compare(that.claimLimit, claimLimit) != 0) return false;
-            if (Double.compare(that.layerPeriodExcess, layerPeriodExcess) != 0) return false;
-            if (Double.compare(that.layerPeriodLimit, layerPeriodLimit) != 0) return false;
-            if (Double.compare(that.share, share) != 0) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result;
-            long temp;
-            temp = share != +0.0d ? Double.doubleToLongBits(share) : 0L;
-            result = (int) (temp ^ (temp >>> 32));
-            temp = claimExcess != +0.0d ? Double.doubleToLongBits(claimExcess) : 0L;
-            result = 31 * result + (int) (temp ^ (temp >>> 32));
-            temp = claimLimit != +0.0d ? Double.doubleToLongBits(claimLimit) : 0L;
-            result = 31 * result + (int) (temp ^ (temp >>> 32));
-            temp = layerPeriodExcess != +0.0d ? Double.doubleToLongBits(layerPeriodExcess) : 0L;
-            result = 31 * result + (int) (temp ^ (temp >>> 32));
-            temp = layerPeriodLimit != +0.0d ? Double.doubleToLongBits(layerPeriodLimit) : 0L;
-            result = 31 * result + (int) (temp ^ (temp >>> 32));
-            return result;
-        }
-
-        @Override
-        public String toString() {
-            return "LayerIdentifier{" +
-                    "share=" + share +
-                    ", claimExcess=" + claimExcess +
-                    ", claimLimit=" + claimLimit +
-                    ", layerPeriodExcess=" + layerPeriodExcess +
-                    ", layerPeriodLimit=" + layerPeriodLimit +
-                    '}';
-        }
+        return 0d;
     }
 }
 

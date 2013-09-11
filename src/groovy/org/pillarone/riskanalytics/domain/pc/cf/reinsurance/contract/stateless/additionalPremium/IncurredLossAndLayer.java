@@ -1,36 +1,38 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium;
 
-import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IRiLayer;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LossAfterClaimAndAnnualStructures;
 
 /**
  * author simon.parten @ art-allianz . com
  */
 public class IncurredLossAndLayer {
 
-    private final double loss;
-    private final LayerParameters layerParameters;
+    private final LossAfterClaimAndAnnualStructures lossAfterClaimAndAnnualStructures;
+    private final IRiLayer layerParameters;
 
-    public IncurredLossAndLayer(double loss, LayerParameters layerParameters) {
-        this.loss = loss;
+    public IncurredLossAndLayer(final LossAfterClaimAndAnnualStructures lossAfterClaimAndAnnualStructures, IRiLayer layerParameters) {
+        this.lossAfterClaimAndAnnualStructures = lossAfterClaimAndAnnualStructures;
         this.layerParameters = layerParameters;
     }
 
-    public double getLoss() {
-        return loss;
+    public double getLossShareApplied() {
+        return lossAfterClaimAndAnnualStructures.getLossAfterAnnualStructureWithShareApplied();
     }
 
-    public LayerParameters getLayerParameters() {
+    public IRiLayer getLayerParameters() {
         return layerParameters;
+    }
+
+    public LossAfterClaimAndAnnualStructures getLossAfterClaimAndAnnualStructures() {
+        return lossAfterClaimAndAnnualStructures;
     }
 
     @Override
     public String toString() {
         return "IncurredLossAndLayer{" +
-                "loss=" + loss +
+                "loss=" + getLossShareApplied() +
                 ", layerParameters=" + layerParameters +
                 '}';
     }

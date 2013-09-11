@@ -3,10 +3,9 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.
 import com.google.common.collect.Lists;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerIdentifier;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters;
-import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -42,19 +41,32 @@ public class IncurredLossAndAP {
 
     }
 
-    public double getLoss() {
+    public double getLossWithShareAppliedAllLayers() {
         double totalLoss = 0d;
         for (IncurredLossAndLayer los : loss) {
-            totalLoss += los.getLoss();
+            totalLoss += los.getLossShareApplied();
         }
         return totalLoss;
+    }
+
+    public Collection<IncurredLossAndLayer> getLoss() {
+        return Collections.unmodifiableCollection( loss );
+    }
+
+    public double getLossAfterClaimStructureOnly(){
+        double totalLoss = 0d;
+        for (IncurredLossAndLayer los : loss) {
+            totalLoss += los.getLossAfterClaimAndAnnualStructures().getLossAfterClaimStructure();
+        }
+        return totalLoss;
+
     }
 
     public Collection<LayerAndAP> getAps() {
         return Collections.unmodifiableCollection( aps );
     }
 
-    public IncurredLossAndLayer getLayerAndIncurredLoss(LayerParameters.LayerIdentifier layerIdentifier) {
+    public IncurredLossAndLayer getLayerAndIncurredLoss(LayerIdentifier layerIdentifier) {
         for (IncurredLossAndLayer los : loss) {
             if(los.getLayerParameters().getLayerIdentifier().equals(layerIdentifier) ) {
                 return los;
@@ -74,7 +86,7 @@ public class IncurredLossAndAP {
     @Override
     public String toString() {
         return "IncurredLossAndAP{" +
-                "loss=" + getLoss() +
+                "loss=" + getLossWithShareAppliedAllLayers() +
                 ", aps=" + getAdditionalPremium() +
                 '}';
     }

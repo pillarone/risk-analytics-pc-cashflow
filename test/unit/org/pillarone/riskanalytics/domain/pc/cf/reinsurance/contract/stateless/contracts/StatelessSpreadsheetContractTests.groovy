@@ -157,8 +157,8 @@ class StatelessSpreadsheetContractTests extends SpreadsheetUnitTest {
                 }
                 contract.inClaims.addAll claims
                 contract.inPremiumPerPeriod << premium
-                contract.doCalculation()
                 Double expectedIncurredAP = incurredAPByPeriod.get(period) != null ? incurredAPByPeriod.get(period) : 0d
+                contract.doCalculation()
                 Double contractAP = contract.outApAll.size() > 0 ? contract.outApAll.additionalPremium.sum() : 0
                 assertEquals contractAP, expectedIncurredAP, EPSILON
                 Double totalPaidAP = paidApByPeriod.get(period) != null ? paidApByPeriod.get(period) : 0d

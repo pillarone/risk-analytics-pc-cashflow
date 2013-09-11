@@ -9,9 +9,15 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.TestClaimUtils
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AllClaimsRIOutcome
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.IncurredLossAndAP
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.IncurredLossWithTerm
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.ContractClaimStoreTestIncurredClaimImpl
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IContractClaimByModelPeriod
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts.ContractOrderingMethod
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.YearLayerIdentifier
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.incurredImpl.IncurredAllocation
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.ContractLayer
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.ContractStructure
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,16 +47,19 @@ class IncurredAlloocationTest extends GroovyTestCase {
         final AllClaimsRIOutcome outcome = new AllClaimsRIOutcome()
         double totalIncurred = grossClaimRoot1.getUltimate() + grossClaimRoot2.getUltimate() + grossClaimRoot3.getUltimate()
 
-        outcome = allocation.allocateClaims(0d, byModelPeriod, scope, ContractCoverBase.LOSSES_OCCURING)
+        outcome = allocation.allocateClaims(TestClaimUtils.getTestLossAndAP(0d), byModelPeriod, scope, ContractCoverBase.LOSSES_OCCURING,)
         assert outcome.allCededClaims*.getUltimate().sum()  == 0d
         assert outcome.allNetClaims*.getUltimate().sum()  == totalIncurred
 
-        outcome = allocation.allocateClaims(60d, byModelPeriod, scope, ContractCoverBase.LOSSES_OCCURING)
+        outcome = allocation.allocateClaims(TestClaimUtils.getTestLossAndAP(60d), byModelPeriod, scope, ContractCoverBase.LOSSES_OCCURING,)
         assert outcome.allCededClaims*.getUltimate().sum()  == 60d
         assert outcome.allNetClaims*.getUltimate().sum()  == totalIncurred - 60
 
-        outcome = allocation.allocateClaims(totalIncurred, byModelPeriod, scope, ContractCoverBase.LOSSES_OCCURING)
+        outcome = allocation.allocateClaims(TestClaimUtils.getTestLossAndAP(totalIncurred), byModelPeriod, scope, ContractCoverBase.LOSSES_OCCURING,)
         assert outcome.allCededClaims*.getUltimate().sum()  == totalIncurred
         assert outcome.allNetClaims*.getUltimate().sum()  == 0d
     }
+
+
+
 }

@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.
 
 import org.pillarone.riskanalytics.core.packets.SingleValuePacket;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IRiLayer;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters;
 
 import java.util.ArrayList;
@@ -12,15 +13,15 @@ import java.util.Collection;
  */
 public class LayerAndAP {
 
-    private final LayerParameters layerParameters;
+    private final IRiLayer layerParameters;
     private final Collection<AdditionalPremium> additionalPremiums;
 
-    public LayerAndAP(LayerParameters layerParameters, Collection<AdditionalPremium> additionalPremiums) {
+    public LayerAndAP(IRiLayer layerParameters, Collection<AdditionalPremium> additionalPremiums) {
         this.layerParameters = layerParameters;
         this.additionalPremiums = additionalPremiums;
     }
 
-    public LayerParameters getLayerParameters() {
+    public IRiLayer getLayerParameters() {
         return layerParameters;
     }
 

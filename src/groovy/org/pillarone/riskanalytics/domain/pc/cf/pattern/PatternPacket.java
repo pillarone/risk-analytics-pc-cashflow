@@ -477,4 +477,8 @@ public class PatternPacket extends Packet implements Cloneable {
         }
         return new PatternPacket(patternMarker, clonedCumulativeValues, clonedCumulativePeriods, stochasticHitPattern);
     }
+
+    public boolean isStochasticHitPattern() {
+        return stochasticHitPattern;
+    }
 }

@@ -44,6 +44,18 @@ public enum CalcAPBasis implements IGetAPDates {
             throw new IllegalStateException("Should never be called - not valid in UI");
         }
     },
+    REINSTATEMENT_PREMIUM {
+        @Override
+        public APBasis uiAPBasis() {
+            throw new IllegalStateException("Should never be called - not valid in UI");
+        }
+    },
+    LOSS_AP {
+        @Override
+        public APBasis uiAPBasis() {
+            throw new IllegalStateException("Should never be called - not valid in UI");
+        }
+    },
     NCB{
         @Override
         public APBasis uiAPBasis() {

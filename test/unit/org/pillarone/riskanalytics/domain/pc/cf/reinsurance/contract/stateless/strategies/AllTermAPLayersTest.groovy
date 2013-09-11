@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ScaledPeriodLayerParameters
 
 /**
 *   author simon.parten @ art-allianz . com
@@ -22,17 +23,21 @@ class AllTermAPLayersTest extends GroovyTestCase {
 
         PeriodScope periodScope = TestPeriodScopeUtilities.getPeriodScope (new DateTime(2012, 1, 1, 1, 0, 0, 0), 5)
 
-        assert allTermAPLayers.incrementalTermLoss(losses, 25d, 4d, periodScope).getAdditionalPremium().additionalPremium == 0
+        ScaledPeriodLayerParameters layerParameters = new ScaledPeriodLayerParameters()
+        layerParameters.setTermExcess(4d)
+        layerParameters.setTermLimit(25d)
+
+        assert allTermAPLayers.incrementalTermLoss(losses, periodScope, layerParameters).getAdditionalPremium().additionalPremium == 0
         periodScope.prepareNextPeriod()
-        assert allTermAPLayers.incrementalTermLoss(losses, 25, 4, periodScope).getAdditionalPremium().additionalPremium == 0
+        assert allTermAPLayers.incrementalTermLoss(losses, periodScope, layerParameters).getAdditionalPremium().additionalPremium == 0
         periodScope.prepareNextPeriod()
-        assert allTermAPLayers.incrementalTermLoss(losses, 25, 4, periodScope).getAdditionalPremium().additionalPremium == 1 * 0.5
+        assert allTermAPLayers.incrementalTermLoss(losses, periodScope, layerParameters).getAdditionalPremium().additionalPremium == 1 * 0.5
         periodScope.prepareNextPeriod()
-        assert allTermAPLayers.incrementalTermLoss(losses, 25, 4, periodScope).getAdditionalPremium().additionalPremium == 4 * 0.5 - 0.5
+        assert allTermAPLayers.incrementalTermLoss(losses, periodScope, layerParameters).getAdditionalPremium().additionalPremium == 4 * 0.5 - 0.5
         periodScope.prepareNextPeriod()
-        assert allTermAPLayers.incrementalTermLoss(losses, 25, 4, periodScope).getAdditionalPremium().additionalPremium == (10 * 0.5 + 7) - 2
+        assert allTermAPLayers.incrementalTermLoss(losses, periodScope, layerParameters).getAdditionalPremium().additionalPremium == (10 * 0.5 + 7) - 2
         periodScope.prepareNextPeriod()
-        assert allTermAPLayers.incrementalTermLoss(losses, 25, 4, periodScope).getAdditionalPremium().additionalPremium == (10 * 0.5 + 10) - 12
+        assert allTermAPLayers.incrementalTermLoss(losses, periodScope, layerParameters).getAdditionalPremium().additionalPremium == (10 * 0.5 + 10) - 12
 
 
     }

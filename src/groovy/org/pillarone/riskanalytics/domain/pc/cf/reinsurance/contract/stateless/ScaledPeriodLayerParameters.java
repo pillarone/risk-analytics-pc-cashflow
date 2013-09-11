@@ -26,8 +26,8 @@ public class ScaledPeriodLayerParameters extends PeriodLayerParameters {
     private IPeriodCounter counter = null;
     private AllPeriodUnderwritingInfoPacket uwInfo = null;
 
-    public ScaledPeriodLayerParameters(PeriodLayerParameters layerParams) {
-        super(layerParams);
+    public ScaledPeriodLayerParameters(PeriodLayerParameters layerParams, final double termLimit, final double termExcess) {
+        super(layerParams, termLimit, termExcess);
     }
 
     public ScaledPeriodLayerParameters() {
@@ -57,7 +57,8 @@ public class ScaledPeriodLayerParameters extends PeriodLayerParameters {
             LayerParameters tempParam = new LayerParameters(
                     originalParam.getShare(),
                     originalParam.getClaimExcess() * scaleFactor,
-                    originalParam.getClaimLimit() * scaleFactor);
+                    originalParam.getClaimLimit() * scaleFactor,
+                    (int) originalParam.getYearLayerIdentifier().getYear(), (int) originalParam.getYearLayerIdentifier().getLayer());
 
             List<AdditionalPremiumPerLayer> premiums = originalParam.getAdditionalPremiums();
             if (premiums.size() == 0) {

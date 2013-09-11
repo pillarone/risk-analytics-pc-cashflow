@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.
 import org.pillarone.riskanalytics.core.parameterization.*
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IPremiumContractStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.PremiumStructreAPBasis
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.AdditionalPremiumConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.LayerConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumStructureAPConstraints
@@ -22,10 +23,10 @@ class PremiumContractType extends AbstractParameterObjectClassifier {
     public static final PremiumContractType XOL = new PremiumContractType("non proportional", "NONPROPORTIONAL",
             [
                     (PremiumContractStrategy.STRUCTURE) : new ConstrainedMultiDimensionalParameter(
-                            [[1],[1],[1d],[0d],[0d],[0d],[0d],[0d]],
+                            [[1],[1],[1d],[0d],[0d],[0d],[0d],[0d], [0d], [PremiumStructreAPBasis.PREMIUM]],
                             PremiumStructureConstraints.columnHeaders, ConstraintsFactory.getConstraints(PremiumStructureConstraints.IDENTIFIER)),
                     (PremiumContractStrategy.REINSTATEMENTS) : new ConstrainedMultiDimensionalParameter(
-                            [[1],[1],[0d],[0d]],
+                            [[1],[1],[0d]],
                             PremiumStructureReinstatementConstraints.columnHeaders, ConstraintsFactory.getConstraints(PremiumStructureReinstatementConstraints.IDENTIFIER)),
                     (PremiumContractStrategy.ADDITIONALPREMIUMS) : new ConstrainedMultiDimensionalParameter(
                             [[1],[1],[0d],[0d],[0d]],
@@ -76,10 +77,10 @@ class PremiumContractType extends AbstractParameterObjectClassifier {
     static IPremiumContractStrategy getDefault() {
         return new PremiumContractStrategy(
                 new ConstrainedMultiDimensionalParameter(
-                        [[1],[1],[1d],[0d],[0d],[0d],[0d],[0d]],
+                        [[1],[1],[1d],[0d],[0d],[0d],[0d],[0d], [0d], [PremiumStructreAPBasis.PREMIUM]],
                         PremiumStructureConstraints.columnHeaders, ConstraintsFactory.getConstraints(PremiumStructureConstraints.IDENTIFIER)),
                 new ConstrainedMultiDimensionalParameter(
-                        [[1],[1],[0d],[0d]],
+                        [[1],[1],[0d]],
                         PremiumStructureReinstatementConstraints.columnHeaders, ConstraintsFactory.getConstraints(PremiumStructureReinstatementConstraints.IDENTIFIER)),
                 new ConstrainedMultiDimensionalParameter(
                         [[1],[1],[0d],[0d],[0d]],

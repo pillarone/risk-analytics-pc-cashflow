@@ -162,7 +162,7 @@ public class NonPropTemplateContractStrategy extends AbstractParameterObject imp
 
     public ScaledPeriodLayerParameters scalablePeriodLayerParameters() {
         initContractsByPeriodAndPeriodCovered();
-        return new ScaledPeriodLayerParameters(contractsByPeriod);
+        return new ScaledPeriodLayerParameters(contractsByPeriod, termLimit, termExcess);
     }
 
     public static final String TERM_LIMIT = "termLimit";

@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.
 
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LossAfterClaimAndAnnualStructures;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,16 +12,16 @@ import java.util.Collection;
  */
 public class LayerAndPaidLoss {
 
-    private final double paidLoss;
+    private final LossAfterClaimAndAnnualStructures paidLoss;
     private final LayerParameters layerParameters;
 
-    public LayerAndPaidLoss(double paidLoss, LayerParameters layerParameters) {
+    public LayerAndPaidLoss(LossAfterClaimAndAnnualStructures paidLoss, LayerParameters layerParameters) {
         this.paidLoss = paidLoss;
         this.layerParameters = layerParameters;
     }
 
-    public double getPaidLoss() {
-        return paidLoss;
+    public double getPaidLossAfterAnnualStructureWithShare() {
+        return paidLoss.getLossAfterAnnualStructureWithShareApplied();
     }
 
     public LayerParameters getLayerParameters() {

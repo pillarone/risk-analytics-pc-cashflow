@@ -116,22 +116,19 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         claimStore.cacheClaims(inClaims, periodScope.getCurrentPeriod());
         IPremiumPerPeriod premiumPerPeriod = (MapPremiumPerPeriod) periodStore.get(INCOMING_PREMIUM, -periodScope.getCurrentPeriod());
 
-        Double termLimit = parmContractStructure.getTermLimit();
-        Double termExcess = parmContractStructure.getTermDeductible();
-
-        LossAfterTermStructure incurredInPeriod = new TermIncurredCalculation().cededIncurredRespectTerm(claimStore, setupLayerParameters(),
-                periodScope, termExcess, termLimit, parmCoverageBase, premiumPerPeriod);
-        IncurredLossAndAP incurredLossAndAP = incurredInPeriod.getLayerLossesByPeriod().get(periodScope.getCurrentPeriod());
+        IncurredLossAndApsAfterTermStructure incurredInPeriod = new TermIncurredCalculation().cededIncurredAndApsRespectTerm(claimStore, setupLayerParameters(),
+                periodScope, parmCoverageBase, premiumPerPeriod);
+        IncurredLossWithTerm termLoss = incurredInPeriod.getIncurredLossAfterTermStructure(periodScope.getCurrentPeriod());
 
         final AllCashflowClaimsRIOutcome claimsAfterContractApplication;
         final AllClaimsRIOutcome incurredClaimOutcome;
         try {
-            incurredClaimOutcome = new IncurredAllocation().allocateClaims(incurredInPeriod.getIncLossAfterTermStructureCurrentSimPeriod(), claimStore, periodScope, parmCoverageBase);
+            incurredClaimOutcome = new IncurredAllocation().allocateClaims(termLoss, claimStore, periodScope, parmCoverageBase);
             final TermLossAndPaidAps paidStuff = paidCalculation.cededIncrementalPaidRespectTerm(claimStore, setupLayerParameters(),
-                    periodScope, parmCoverageBase, termLimit, termExcess, globalSanityChecks, incurredInPeriod.getLayerLossesByPeriod(), premiumPerPeriod);
+                    periodScope, parmCoverageBase, globalSanityChecks, incurredInPeriod, premiumPerPeriod);
             AllTermAPLayers allTermLayers = ((NonPropTemplateContractStrategy) parmContractStructure).getTermLayers();
-            AdditionalPremiumAndPaidTuple termAPs = allTermLayers.incrementalTermLoss(incurredInPeriod.getPeriodLosses(), termLimit, termExcess, periodScope);
-            fillAPChannels(incurredLossAndAP, paidStuff, termAPs);
+            AdditionalPremiumAndPaidTuple termAPs = allTermLayers.incrementalTermLoss(incurredInPeriod.getPeriodLosses(), periodScope, setupLayerParameters());
+            fillAPChannels(incurredInPeriod.getLayerApsByPeriodWithTerm().get(periodScope.getCurrentPeriod()) , paidStuff, termAPs);
             claimsAfterContractApplication = new ProportionalToGrossPaidAllocation().allocatePaid(paidStuff.getTermLosses(), inClaims,
                     claimStore, periodScope, parmCoverageBase, incurredClaimOutcome, globalSanityChecks);
         } catch (SimulationException ex) {
@@ -155,8 +152,8 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         premiumPerPeriod.put(periodScope.getCurrentPeriod(), subjectPremium);
     }
 
-    private void fillAPChannels(IncurredLossAndAP lossAndAP, TermLossAndPaidAps paidStuff, AdditionalPremiumAndPaidTuple termAP) {
-        outApAll.addAll(lossAndAP.getAddtionalPremiums());
+    private void fillAPChannels(IncurredAPsWithTerm aPsWithTerm, TermLossAndPaidAps paidStuff, AdditionalPremiumAndPaidTuple termAP) {
+        outApAll.addAll(aPsWithTerm.getAdditionalPremiums());
         outApAllPaid.addAll(paidStuff.getPaidAPs());
         if (termAP.getAdditionalPremium().getAdditionalPremium() != 0) {
             outApAll.add(termAP.getAdditionalPremium());
@@ -170,6 +167,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
         layerParameters.setExposureBase(parmContractBase.exposureBase());
         layerParameters.setCounter(periodScope.getPeriodCounter());
         layerParameters.setUwInfo(packet);
+
         return layerParameters;
     }
 
@@ -198,7 +196,7 @@ public class StatelessRIContract extends Component implements IReinsuranceContra
             final IPaidCalculation termCalc = new TermPaidRespectIncurredByClaim();
             periodStore.put(GROSS_CLAIMS, claimStore);
             periodStore.put(TERM_CALC, termCalc);
-            periodStore.put(INCOMING_PREMIUM, new HashMap<Integer, Double>());
+            periodStore.put(INCOMING_PREMIUM, new MapPremiumPerPeriod(  new HashMap<Integer, Double>() ));
         }
     }
 

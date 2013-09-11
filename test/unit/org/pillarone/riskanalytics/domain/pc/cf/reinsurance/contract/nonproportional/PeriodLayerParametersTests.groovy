@@ -1,8 +1,10 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional
 
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IRiLayer
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.LayerParameters
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.PeriodLayerParameters
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.YearLayerIdentifier
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -83,7 +85,7 @@ class PeriodLayerParametersTests extends GroovyTestCase {
     }
 
     void testLayerParameterLargeLimits() {
-        LayerParameters params = new LayerParameters(1, 0, 0)
+        LayerParameters params = new LayerParameters(1, 0, 0, 1,1)
         assert params.getClaimLimit() == Double.MAX_VALUE
 
         params.addAdditionalPremium(30, 0, 0.5, APBasis.LOSS)
@@ -97,6 +99,21 @@ class PeriodLayerParametersTests extends GroovyTestCase {
         shouldFail {
             params.addAdditionalPremium( 50 , 50, 0.5, APBasis.LOSS )
         }
+    }
+
+    void testMappingToNewDataStructure() {
+        PeriodLayerParameters params = new PeriodLayerParameters()
+        params.add(0, 1, 0.5, 25000000, 50000000, 0, 50000000, 1d, APBasis.PREMIUM)
+        params.add(0, 1, 0.5, 25000000, 50000000, 50000000, 50000000, -1d, APBasis.PREMIUM)
+        params.add(0, 1, 0.5, 25000000, 50000000, 100000000, 50000000, -0.01d, APBasis.PREMIUM)
+        params.add(0, 1, 0.5, 25000000, 50000000, 150000000, 50000000, 0d, APBasis.PREMIUM)
+        params.add(2, 1, 1, 0, 10000000, 0, 100000000, 0d, APBasis.PREMIUM)
+
+        List<IRiLayer> someLayers = params.getContractLayers(0)
+        assert someLayers.size() == 2
+
+        assert someLayers.findAll {  it -> it.getYearLayerIdentifier().equals(new YearLayerIdentifier(0, 1)) } . size() == 1
+        assert someLayers.findAll {  it -> it.getYearLayerIdentifier().equals(new YearLayerIdentifier(0, 1)) } . get(0).getLegacyAdditionalPremiums().size() == 3
     }
 
 }

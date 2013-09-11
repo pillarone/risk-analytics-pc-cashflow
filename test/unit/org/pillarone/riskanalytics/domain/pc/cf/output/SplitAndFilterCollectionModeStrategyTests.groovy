@@ -18,10 +18,14 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.YearLayerIdentifier
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.AdditionalPremiumLayer
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.ContractLayer
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.ProfitCommissions
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies.ReinstatementLayer
 import org.pillarone.riskanalytics.domain.pc.cf.segment.Segment
 import org.pillarone.riskanalytics.core.output.DrillDownMode
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.AdditionalPremium
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.APBasis
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.contracts.StatelessRIContract
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
 import org.pillarone.riskanalytics.core.packets.Packet
@@ -163,7 +167,8 @@ class SplitAndFilterCollectionModeStrategyTests extends GrailsUnitTestCase {
     }
 
     AdditionalPremium makeAPPacket(DateTime simStart, StatelessRIContract contract){
-        def packet = new AdditionalPremium(10, CalcAPBasis.NCB)
+        def packet = new AdditionalPremium(10, CalcAPBasis.NCB, new ContractLayer(new YearLayerIdentifier(0d, 0d), 0d, 0d, 0d, 0d, 0d, 0d,
+                new ArrayList<ReinstatementLayer>(), new ArrayList<AdditionalPremiumLayer>(), new ArrayList<ProfitCommissions>(), 0d))
         packet.senderChannelName = 'senderChannelName'
         packet.addMarker(IReinsuranceContractMarker, contract )
         return packet

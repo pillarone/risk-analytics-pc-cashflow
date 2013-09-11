@@ -7,10 +7,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exceptionUtils.ExceptionUtils;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.AllClaimsRIOutcome;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.ContractCoverBase;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IIncurredAllocation;
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.IncurredClaimRIOutcome;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.*;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.IncurredLossAndAP;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.additionalPremium.IncurredLossWithTerm;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching.IAllContractClaimCache;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.filterUtilities.RIUtilities;
 
@@ -21,13 +20,13 @@ import java.util.Set;
  */
 public class IncurredAllocation implements IIncurredAllocation {
 
-    public AllClaimsRIOutcome allocateClaims(double incurredInPeriod, IAllContractClaimCache claimStore, PeriodScope periodScope, ContractCoverBase base) {
+    public AllClaimsRIOutcome allocateClaims(final IncurredLossWithTerm inLossAndAP, IAllContractClaimCache claimStore, PeriodScope periodScope, ContractCoverBase base) {
 
         Set<IClaimRoot> grossClaimsThisPeriod = claimStore.allIncurredClaimsCurrentModelPeriodForAllocation(periodScope, base);
         double grossIncurred = RIUtilities.ultimateSum(grossClaimsThisPeriod);
         double checkValue = ExceptionUtils.getCheckValue(grossIncurred);
-        if(  incurredInPeriod > grossIncurred + checkValue) {
-            throw new SimulationException("Ceded amount in contract: " + incurredInPeriod + " is greater than the grossIncurred in the period : " + grossIncurred + ". " +
+        if(  inLossAndAP.getIncurredLossAfterTermStructurte()  > grossIncurred + checkValue) {
+            throw new SimulationException("Ceded amount in contract: " + inLossAndAP.getIncurredLossAfterTermStructurte()  + " is greater than the grossIncurred in the period : " + grossIncurred + ". " +
                     "This is non-sensical, please contact development");
         }
 
@@ -41,7 +40,7 @@ public class IncurredAllocation implements IIncurredAllocation {
         final AllClaimsRIOutcome allClaimsRIOutcome = new AllClaimsRIOutcome();
         for (IClaimRoot iClaimRoot : grossClaimsThisPeriod) {
             double cededRatio = iClaimRoot.getUltimate() / grossIncurred;
-            double cededIncurred = cededRatio * incurredInPeriod;
+            double cededIncurred = cededRatio * inLossAndAP.getIncurredLossAfterTermStructurte() ;
             ICededRoot cededClaim = new CededClaimRoot( cededIncurred , iClaimRoot, ClaimType.CEDED);
             ICededRoot netClaim = new CededClaimRoot( iClaimRoot.getUltimate() - cededIncurred , iClaimRoot, ClaimType.NET);
             IncurredClaimRIOutcome incurredClaimRIOutcome = new IncurredClaimRIOutcome(netClaim, cededClaim, iClaimRoot);
