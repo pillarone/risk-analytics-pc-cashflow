@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractSingleClaimsGeneratorStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorType;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
@@ -64,7 +65,9 @@ public class ExternalValuesStrategy extends AbstractSingleClaimsGeneratorStrateg
                                           List<Factors> severityFactors, List uwInfosFilterCriteria,
                                           List<FactorsPacket> frequencyFactorsPackets, PeriodScope periodScope,
                                           List<SystematicFrequencyPacket> systematicFrequencies, IPerilMarker filterCriteria) {
-        return values.generateClaims(baseClaims, uwInfos, severityFactors, uwInfosFilterCriteria, periodScope, claimType(), claimsSizeBase, dateGenerator);
+        int iteration = ((ClaimsGenerator) filterCriteria).getIterationScope().getCurrentIteration();
+        return values.generateClaims(baseClaims, uwInfos, severityFactors, uwInfosFilterCriteria, periodScope, claimType(),
+            claimsSizeBase, dateGenerator, iteration);
     }
 
     @Override

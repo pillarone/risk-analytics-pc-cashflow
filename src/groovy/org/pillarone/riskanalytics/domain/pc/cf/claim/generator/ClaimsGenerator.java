@@ -9,6 +9,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.engine.IterationScope;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.allocation.IRiskAllocatorStrategy;
@@ -33,6 +34,7 @@ import java.util.*;
  */
 public class ClaimsGenerator extends Component implements IPerilMarker, ICorrelationMarker {
 
+    private IterationScope iterationScope;
     private PeriodScope periodScope;
     private PeriodStore periodStore;
     private boolean globalRunOffAfterFirstPeriod  = true;
@@ -283,5 +285,13 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
 
     public void setParmSeverityIndices(ConstrainedMultiDimensionalParameter parmSeverityIndices) {
         this.parmSeverityIndices = parmSeverityIndices;
+    }
+
+    public IterationScope getIterationScope() {
+        return iterationScope;
+    }
+
+    public void setIterationScope(IterationScope iterationScope) {
+        this.iterationScope = iterationScope;
     }
 }
