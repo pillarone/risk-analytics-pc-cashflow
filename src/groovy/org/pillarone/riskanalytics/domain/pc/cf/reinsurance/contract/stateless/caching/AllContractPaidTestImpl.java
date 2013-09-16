@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.SetMultimap;
@@ -138,5 +139,9 @@ public class AllContractPaidTestImpl implements IAllContractClaimCache {
     @Override
     public Collection<IncurredClaimRIOutcome> allIncurredRIOutcomesToDate() {
         return cededIncurred;
+    }
+
+    public ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByBaseClaim() {
+        throw new SimulationException("");
     }
 }

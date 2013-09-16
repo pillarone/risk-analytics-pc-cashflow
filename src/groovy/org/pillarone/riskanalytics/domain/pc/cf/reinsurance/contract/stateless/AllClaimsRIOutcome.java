@@ -2,6 +2,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless;
 
 import com.google.common.collect.Lists;
 import edu.emory.mathcs.backport.java.util.Collections;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 
@@ -41,6 +43,32 @@ public class AllClaimsRIOutcome {
 
     public List<IncurredClaimRIOutcome> getAllIncurredOutcomes() {
         return Collections.unmodifiableList( allIncurredOutcomes );
+    }
+
+    public List<ClaimCashflowPacket> cededClaims( IPeriodCounter periodCounter  ) {
+        List<ClaimCashflowPacket> toPersist = Lists.newArrayList();
+        for (ICededRoot root : getAllCededClaims()) {
+
+            final ClaimCashflowPacket claimCashflowPacket = new ClaimCashflowPacket(
+                    root, root.getGrossClaim(),
+                    root.getUltimate(), root.getUltimate(), 0d, 0d, 0d, 0d, 0d, 0d,
+                    null, root.getGrossClaim().getOccurrenceDate(), root.getInceptionPeriod(periodCounter));
+            toPersist.add(claimCashflowPacket);
+        }
+        return toPersist;
+    }
+
+    public List<ClaimCashflowPacket> netClaims( IPeriodCounter periodCounter  ) {
+        List<ClaimCashflowPacket> toPersist = Lists.newArrayList();
+        for (ICededRoot root : getAllNetClaims()) {
+
+            final ClaimCashflowPacket claimCashflowPacket = new ClaimCashflowPacket(
+                    root, root.getGrossClaim(),
+                    root.getUltimate(), root.getUltimate(), 0d, 0d, 0d, 0d, 0d, 0d,
+                    null, root.getGrossClaim().getOccurrenceDate(), root.getInceptionPeriod(periodCounter));
+            toPersist.add(claimCashflowPacket);
+        }
+        return toPersist;
     }
 
     @Override

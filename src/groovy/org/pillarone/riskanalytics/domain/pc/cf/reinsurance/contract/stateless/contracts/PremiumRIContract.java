@@ -179,6 +179,8 @@ public class PremiumRIContract extends Component implements IReinsuranceContract
             }
         }
 
+        outClaimsCeded.addAll(incurredClaimOutcome.cededClaims(periodScope.getPeriodCounter()));
+        outClaimsNet.addAll(incurredClaimOutcome.netClaims(periodScope.getPeriodCounter()));
 
 
         periodScope.getCurrentPeriod();

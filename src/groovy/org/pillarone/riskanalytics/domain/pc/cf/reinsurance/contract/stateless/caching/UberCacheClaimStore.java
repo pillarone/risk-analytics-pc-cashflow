@@ -1,9 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.caching;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.SetMultimap;
+import com.google.common.collect.*;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
@@ -218,5 +215,13 @@ public class UberCacheClaimStore implements IAllContractClaimCache {
     @Override
     public Collection<IncurredClaimRIOutcome> allIncurredRIOutcomesToDate() {
         return allIncurredOutcomes;
+    }
+
+    public ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByBaseClaim() {
+        ArrayListMultimap<IClaimRoot, ClaimCashflowPacket> cashflowsByBaseClaim = ArrayListMultimap.create();
+        for (ClaimCashflowPacket aCashflow : allCashflows) {
+            cashflowsByBaseClaim.put(aCashflow.getBaseClaim(), aCashflow);
+        }
+        return cashflowsByBaseClaim;
     }
 }
