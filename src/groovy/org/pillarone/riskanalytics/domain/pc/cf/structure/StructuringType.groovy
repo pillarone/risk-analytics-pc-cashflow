@@ -36,7 +36,7 @@ class StructuringType extends AbstractParameterObjectClassifier {
                     ConstraintsFactory.getConstraints(MatrixStructureContraints.IDENTIFIER))]
     )
 
-    public static final all = [SEGMENTS, SEGMENTSPERILS, CLAIMTYPES, MATRIX]
+    public static final all = [SEGMENTS, SEGMENTSPERILS, MATRIX]
 
     protected static Map types = [:]
     static {
