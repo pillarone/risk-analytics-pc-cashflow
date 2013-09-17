@@ -19,5 +19,5 @@ public interface IExternalValuesStrategy extends IParameterObject {
     public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
                                           List<Factors> severityFactors, List uwInfosFilterCriteria,
                                           PeriodScope periodScope, ClaimType claimType, ExposureBase claimsSizeBase,
-                                          IRandomNumberGenerator dateGenerator);
+                                          IRandomNumberGenerator dateGenerator, int iteration);
 }

@@ -33,7 +33,6 @@ abstract public class AbstractExternalValuesByIterationAndDateStrategy extends A
     abstract public ConstrainedMultiDimensionalParameter table();
 
     private ListMultimap<IterationPeriod, DateDouble> internalValueByIteration = ArrayListMultimap.create();
-    private int iteration = 0;
 
     /**
      *
@@ -49,11 +48,8 @@ abstract public class AbstractExternalValuesByIterationAndDateStrategy extends A
     public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
                                           List<Factors> severityFactors, List uwInfosFilterCriteria,
                                           PeriodScope periodScope, ClaimType claimType, ExposureBase claimsSizeBase,
-                                          IRandomNumberGenerator dateGenerator) {
+                                          IRandomNumberGenerator dateGenerator, int iteration) {
         lazyInitializeDistributionMaps(periodScope);
-        if (periodScope.isFirstPeriod()) {
-            iteration++;
-        }
         List<DateDouble> ultimates = internalValueByIteration.get(new IterationPeriod(iteration, periodScope.getCurrentPeriod()));
         int numberOfClaims = ultimates.size();
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, claimsSizeBase, uwInfosFilterCriteria);
