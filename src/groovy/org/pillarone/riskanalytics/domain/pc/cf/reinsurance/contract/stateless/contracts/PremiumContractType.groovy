@@ -77,7 +77,7 @@ class PremiumContractType extends AbstractParameterObjectClassifier {
     static IPremiumContractStrategy getDefault() {
         return new PremiumContractStrategy(
                 new ConstrainedMultiDimensionalParameter(
-                        [[1],[1],[1d],[0d],[0d],[0d],[0d],[0d], [0d], [PremiumStructreAPBasis.PREMIUM]],
+                        [[1],[1],[1d],[0d],[0d],[0d],[0d],[0d], [0d], [PremiumStructreAPBasis.PREMIUM.toString()]],
                         PremiumStructureConstraints.columnHeaders, ConstraintsFactory.getConstraints(PremiumStructureConstraints.IDENTIFIER)),
                 new ConstrainedMultiDimensionalParameter(
                         [[1],[1],[0d]],
