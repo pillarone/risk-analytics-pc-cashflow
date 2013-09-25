@@ -32,6 +32,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.c
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumStructureProfitCommissionConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumStructureReinstatementConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ContractConstraint
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.CounterPartyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.XLStrategyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverMap
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixStructureContraints
@@ -118,6 +119,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ValidatorRegistry.addValidator(new CoverAttributeValidator())
         ValidatorRegistry.addValidator(new LossParticipationValidator())
         ValidatorRegistry.addValidator(new InterpolatedSlidingCommissionValidator())
+        ValidatorRegistry.addValidator(new CounterPartyValidator())
 
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.pMLClaimsGeneratorStrategyValidator")
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.patternStrategyValidator")
@@ -130,6 +132,7 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.structure.validation.claimTypeStructuringValidator")
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.structure.validation.claimTypeStructuringValidator")
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.validation.coverAttributeValidator")
+        ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.counterPartyValidator")
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.lossparticipation.lossParticipationValidator")
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.interpolatedSlidingCommissionValidator")
 
