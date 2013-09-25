@@ -53,7 +53,6 @@ public class CustomPeriodStrategy extends AbstractPeriodStrategy {
     public DateTime getEndCover() {
         int endDateColumnIndex = periods.getColumnIndex(ENDDATE);
         DateTime endOfLastPeriod = (DateTime) periods.getValueAt(periods.getRowCount() - 1, endDateColumnIndex);
-        // todo: make p14n consistent
         return endOfLastPeriod.plusDays(1); // in order to have an interval open on the right side
     }
 

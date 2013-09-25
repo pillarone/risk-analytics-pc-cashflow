@@ -37,7 +37,7 @@ public class RetroactivePeriodStrategy extends AbstractPeriodStrategy {
     }
 
     public DateTime getEndCover() {
-        return coveredOccurencePeriodTo;
+        return coveredOccurencePeriodTo.plusDays(1); // in order to have an interval open on the right side
     }
 
     public int getNumberOfPeriods() {
