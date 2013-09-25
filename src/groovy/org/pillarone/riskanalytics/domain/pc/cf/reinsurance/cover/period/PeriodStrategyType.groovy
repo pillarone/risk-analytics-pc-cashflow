@@ -64,7 +64,7 @@ class PeriodStrategyType extends AbstractParameterObjectClassifier {
         DateTime baseDate = new DateTime(new DateTime().year,1,1,0,0,0,0)
         return PeriodStrategyType.getStrategy(PeriodStrategyType.RETROACTIVE,
                 ['coveredOccurencePeriodFrom': baseDate,
-                 'coveredOccurencePeriodTo': baseDate.plusYears(1),
+                 'coveredOccurencePeriodTo': baseDate.plusYears(1).minusDays(1),
                  'coveredDevelopmentPeriodStartDate': baseDate.plusYears(1)])
     }
 
