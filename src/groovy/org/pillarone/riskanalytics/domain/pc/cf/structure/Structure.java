@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.structure;
 
 import org.pillarone.riskanalytics.core.components.Component;
+import org.pillarone.riskanalytics.core.output.PacketCollector;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
@@ -26,7 +27,9 @@ public class Structure extends Component implements IStructureMarker {
     private PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
 
     private PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
-    /** contains one aggregate net claim only */
+    /**
+     * contains one aggregate net claim only
+     */
     private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     private PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
@@ -40,6 +43,14 @@ public class Structure extends Component implements IStructureMarker {
 
     @Override
     protected void doCalculation() {
+        PacketList<ClaimCashflowPacket> deserialize = PacketCollector.deserialize(
+                "ORSA:segments:outClaimsCeded",
+                simulationScope.getIterationScope().getCurrentIteration(),
+                simulationScope.getIterationScope().getPeriodScope().getCurrentPeriod(),
+                1,
+                ClaimCashflowPacket.class);
+        inClaimsCeded.clear();
+        inClaimsCeded.addAll(deserialize);
         outClaimsGross.addAll(parmBasisOfStructures.filterClaims(inClaimsGross));
         outClaimsCeded.addAll(parmBasisOfStructures.filterClaims(inClaimsCeded));
         outClaimsNet.addAll(ClaimUtils.calculateNetClaims(outClaimsGross, outClaimsCeded));
@@ -48,6 +59,7 @@ public class Structure extends Component implements IStructureMarker {
         outUnderwritingInfoCeded.addAll(parmBasisOfStructures.filterUnderwritingInfosCeded(inUnderwritingInfoCeded));
         outUnderwritingInfoNet.addAll(UnderwritingInfoUtils.calculateNetUnderwritingInfo(outUnderwritingInfoGross, outUnderwritingInfoCeded));
         fillFinancials(periodScope.getPeriodCounter());
+        System.out.println("done");
     }
 
     private void fillFinancials(IPeriodCounter periodCounter) {
