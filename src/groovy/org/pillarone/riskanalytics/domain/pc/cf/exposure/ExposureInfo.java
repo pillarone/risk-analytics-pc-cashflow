@@ -7,10 +7,12 @@ import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.NotInProjectionHorizon;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 
+import java.io.Serializable;
+
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class ExposureInfo {
+public class ExposureInfo implements Serializable{
 
     private static Log LOG = LogFactory.getLog(ExposureInfo.class);
 

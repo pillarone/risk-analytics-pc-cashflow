@@ -6,10 +6,12 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.event.IEvent;
 
+import java.io.Serializable;
+
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public interface IClaimRoot {
+public interface IClaimRoot extends Serializable{
 
     public double getUltimate();
     public boolean hasEvent();

@@ -2,13 +2,14 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 
 import org.joda.time.DateTime;
 
+import java.io.Serializable;
 import java.lang.StringBuilder;
 
 /**
  * Similar functionality as in DoubleValue but available value is resetted to initialValue for every new annual period
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class DoubleValuePerPeriod {
+public class DoubleValuePerPeriod implements Serializable{
 
     public double initialValue;
     private double value;

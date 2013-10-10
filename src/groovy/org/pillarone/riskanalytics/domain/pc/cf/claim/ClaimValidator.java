@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.claim;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +8,7 @@ import java.util.Map;
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class ClaimValidator {
+public class ClaimValidator implements Serializable{
 
     /** key: original claim root, value: inverted base claim */
     private Map<IClaimRoot, IClaimRoot> invertedByOriginalClaim = new HashMap<IClaimRoot, IClaimRoot>();

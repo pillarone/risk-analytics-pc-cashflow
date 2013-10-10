@@ -4,6 +4,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import java.util.Map;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class ClaimStorageContainer {
+public class ClaimStorageContainer implements Serializable {
 
     private Map<ClaimStorageKey, ClaimStorage> container = new HashMap<ClaimStorageKey, ClaimStorage>();
 
@@ -34,7 +35,7 @@ public class ClaimStorageContainer {
         container.put(new ClaimStorageKey(keyClaim, baseClaim, contract), claimStorage);
     }
 
-    private class ClaimStorageKey {
+    private class ClaimStorageKey implements Serializable {
         IClaimRoot keyClaim;
         IClaimRoot baseClaim;
         IReinsuranceContract contract;

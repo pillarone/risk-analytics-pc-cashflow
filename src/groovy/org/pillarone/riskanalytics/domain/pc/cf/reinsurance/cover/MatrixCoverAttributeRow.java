@@ -11,12 +11,13 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.utils.constant.ReinsuranceContractBase;
 import org.pillarone.riskanalytics.domain.utils.marker.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MatrixCoverAttributeRow {
+public class MatrixCoverAttributeRow implements Serializable {
 
     IReinsuranceContractMarker netContract;
     IReinsuranceContractMarker cededContract;
@@ -51,7 +52,7 @@ public class MatrixCoverAttributeRow {
             else if ((netContract == null || netContract == claim.reinsuranceContract()) &&
                     (cededContract == null || cededContract == claim.reinsuranceContract()) &&
                     (legalEntity == null || legalEntity == claim.legalEntity()) &&
-                    (segment == null || segment == claim.segment()) &&
+                    (segment == null || segment.getName().equals(claim.segment().getName())) &&
                     (peril == null || peril == claim.peril() || peril == claim.reserve()) &&
                     claimTypeMatches(claimTypeSelector, claim)) {
                 if (checkedSign && !isStructure) {

@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import static org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils.avoidNegativeZero;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class ClaimStorage {
+public class ClaimStorage implements Serializable{
     /** required in order to map with claim of previous period */
     private IClaimRoot reference;
     private IClaimRoot referenceCeded;

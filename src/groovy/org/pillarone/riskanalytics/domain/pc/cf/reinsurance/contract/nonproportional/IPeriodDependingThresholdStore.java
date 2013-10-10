@@ -2,10 +2,12 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproport
 
 import org.pillarone.riskanalytics.domain.pc.cf.claim.BasedOnClaimProperty;
 
+import java.io.Serializable;
+
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public interface IPeriodDependingThresholdStore {
+public interface IPeriodDependingThresholdStore extends Serializable{
 
     void initPeriod(int period);
 

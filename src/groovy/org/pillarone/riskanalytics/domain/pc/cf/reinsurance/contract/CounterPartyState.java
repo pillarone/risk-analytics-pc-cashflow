@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -10,7 +11,7 @@ import java.util.*;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class CounterPartyState {
+public class CounterPartyState implements Serializable{
 
     private Map<ILegalEntityMarker, TreeMap<DateTime, Double>> counterPartyFactors;
     private TreeMap<DateTime, Double> coveredByReinsurersByDate;

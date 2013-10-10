@@ -6,12 +6,14 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.TrivialContract;
 
+import java.io.Serializable;
+
 /**
  * This objects links a ClaimCashflowPacket with its ClaimStorage and the IReinsuranceContract being applied to it.
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class ClaimHistoryAndApplicableContract {
+public class ClaimHistoryAndApplicableContract implements Serializable {
     private ClaimCashflowPacket claim;
     private IReinsuranceContract contract;
     private ClaimStorage storage;

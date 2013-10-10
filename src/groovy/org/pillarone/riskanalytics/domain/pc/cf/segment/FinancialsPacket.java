@@ -14,6 +14,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPa
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -506,7 +507,7 @@ public class FinancialsPacket extends MultiValuePacket {
         ceded.lossRatioWrittenUltimate = cededLossRatioWrittenUltimate;
     }
     
-    private class Financials {
+    private class Financials implements Serializable {
         double cashflow;
         double premiumPaid;
         double claimTotal;

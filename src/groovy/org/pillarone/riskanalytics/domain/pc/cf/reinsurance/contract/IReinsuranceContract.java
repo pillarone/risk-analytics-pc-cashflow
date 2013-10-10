@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPa
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public interface IReinsuranceContract {
+public interface IReinsuranceContract extends Serializable{
 
     /** used to reset deductibles, limits if required
      * @param period
