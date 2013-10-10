@@ -171,4 +171,42 @@ public class ClaimRoot implements IClaimRoot, Cloneable {
         result.append(DateTimeUtilities.formatDate.print(occurrenceDate));
         return result.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ClaimRoot claimRoot = (ClaimRoot) o;
+
+        if (childCounter != claimRoot.childCounter) return false;
+        if (Double.compare(claimRoot.ultimate, ultimate) != 0) return false;
+        if (claimType != claimRoot.claimType) return false;
+        if (event != null ? !event.equals(claimRoot.event) : claimRoot.event != null) return false;
+        if (exposure != null ? !exposure.equals(claimRoot.exposure) : claimRoot.exposure != null) return false;
+        if (exposureStartDate != null ? !exposureStartDate.equals(claimRoot.exposureStartDate) : claimRoot.exposureStartDate != null)
+            return false;
+        if (occurrenceDate != null ? !occurrenceDate.equals(claimRoot.occurrenceDate) : claimRoot.occurrenceDate != null)
+            return false;
+        if (occurrencePeriod != null ? !occurrencePeriod.equals(claimRoot.occurrencePeriod) : claimRoot.occurrencePeriod != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(ultimate);
+        result = (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (event != null ? event.hashCode() : 0);
+        result = 31 * result + (claimType != null ? claimType.hashCode() : 0);
+        result = 31 * result + (exposure != null ? exposure.hashCode() : 0);
+        result = 31 * result + (exposureStartDate != null ? exposureStartDate.hashCode() : 0);
+        result = 31 * result + (occurrenceDate != null ? occurrenceDate.hashCode() : 0);
+        result = 31 * result + (occurrencePeriod != null ? occurrencePeriod.hashCode() : 0);
+        result = 31 * result + childCounter;
+        return result;
+    }
 }

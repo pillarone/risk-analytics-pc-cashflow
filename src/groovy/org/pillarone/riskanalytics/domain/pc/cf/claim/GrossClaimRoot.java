@@ -517,4 +517,52 @@ public final class GrossClaimRoot implements IClaimRoot {
             }
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GrossClaimRoot that = (GrossClaimRoot) o;
+
+        if (childCounter != that.childCounter) return false;
+        if (Double.compare(that.paidCumulatedIncludingAppliedFactors, paidCumulatedIncludingAppliedFactors) != 0)
+            return false;
+        if (Double.compare(that.previousIBNR, previousIBNR) != 0) return false;
+        if (Double.compare(that.remainingReserves, remainingReserves) != 0) return false;
+        if (Double.compare(that.reportedCumulatedIncludingAppliedFactors, reportedCumulatedIncludingAppliedFactors) != 0)
+            return false;
+        if (claimRoot != null ? !claimRoot.equals(that.claimRoot) : that.claimRoot != null) return false;
+        if (payoutPattern != null ? !payoutPattern.equals(that.payoutPattern) : that.payoutPattern != null)
+            return false;
+        if (reportingPattern != null ? !reportingPattern.equals(that.reportingPattern) : that.reportingPattern != null)
+            return false;
+        if (startDateForPatterns != null ? !startDateForPatterns.equals(that.startDateForPatterns) : that.startDateForPatterns != null)
+            return false;
+        if (synchronizedPatterns != null ? !synchronizedPatterns.equals(that.synchronizedPatterns) : that.synchronizedPatterns != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = claimRoot != null ? claimRoot.hashCode() : 0;
+        temp = Double.doubleToLongBits(remainingReserves);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(previousIBNR);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (payoutPattern != null ? payoutPattern.hashCode() : 0);
+        result = 31 * result + (reportingPattern != null ? reportingPattern.hashCode() : 0);
+        result = 31 * result + (synchronizedPatterns != null ? synchronizedPatterns.hashCode() : 0);
+        result = 31 * result + (startDateForPatterns != null ? startDateForPatterns.hashCode() : 0);
+        temp = Double.doubleToLongBits(paidCumulatedIncludingAppliedFactors);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(reportedCumulatedIncludingAppliedFactors);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + childCounter;
+        return result;
+    }
 }
