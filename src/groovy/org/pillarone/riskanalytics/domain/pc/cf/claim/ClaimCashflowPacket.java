@@ -76,7 +76,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     private ILegalEntityMarker legalEntity;
     private IReserveMarker reserve;
 
-    private List<Factors> discountFactors;
+    private transient List<Factors> discountFactors;
 
     /**
      * Used for 'zero' claims
@@ -218,7 +218,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public ClaimCashflowPacket(IClaimRoot baseClaim, ClaimCashflowPacket grossCashflow, double paidIncremental, double cumulatedPaid, boolean setUltimate, final double ultimate) {
         this.baseClaim = baseClaim;
         this.keyClaim = grossCashflow.getBaseClaim();
-        if(setUltimate) {
+        if (setUltimate) {
             this.ultimate = baseClaim.getUltimate();
             this.nominalUltimate = this.ultimate;
         } else {
@@ -560,7 +560,6 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public final static String RESERVE_RISK_BASE = "reserveRiskBase";
     public final static String PREMIUM_RISK_BASE = "premiumRiskBase";
     public final static String PREMIUM_AND_RESERVE_RISK_BASE = "premiumAndReserveRiskBase";
-
 
 
     public final static List<String> NON_TRIVIAL_PAYOUT_IBNR = Arrays.asList(ULTIMATE, PAID_INDEXED, RESERVES_INDEXED,

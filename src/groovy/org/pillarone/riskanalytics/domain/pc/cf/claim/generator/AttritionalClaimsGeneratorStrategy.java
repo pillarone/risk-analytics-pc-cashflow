@@ -31,9 +31,9 @@ import java.util.Map;
  */
 public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorStrategy {
 
-    protected ExposureBase claimsSizeBase;
-    protected RandomDistribution claimsSizeDistribution;
-    protected DistributionModified claimsSizeModification;
+    protected transient ExposureBase claimsSizeBase;
+    protected transient RandomDistribution claimsSizeDistribution;
+    protected transient DistributionModified claimsSizeModification;
 
     public IParameterObjectClassifier getType() {
         return ClaimsGeneratorType.ATTRITIONAL;

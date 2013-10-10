@@ -23,14 +23,14 @@ public class UnderwritingInfoPacket extends MultiValuePacket {
     protected double sumInsured;
     protected double maxSumInsured;
 
-    protected ExposureInfo exposure;
+    protected transient ExposureInfo exposure;
     protected Integer inceptionPeriod;
 
-    protected UnderwritingInfoPacket original;
-    private IUnderwritingInfoMarker riskBand;
-    protected ISegmentMarker segment;
-    protected IReinsuranceContractMarker reinsuranceContract;
-    protected ILegalEntityMarker legalEntity;
+    protected transient UnderwritingInfoPacket original;
+    private transient IUnderwritingInfoMarker riskBand;
+    protected transient ISegmentMarker segment;
+    protected transient IReinsuranceContractMarker reinsuranceContract;
+    protected transient ILegalEntityMarker legalEntity;
 
     public UnderwritingInfoPacket() {
         super();

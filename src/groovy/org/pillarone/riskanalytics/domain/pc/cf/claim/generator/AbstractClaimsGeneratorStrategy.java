@@ -34,7 +34,7 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
     private Map<String, IRandomNumberGenerator> cachedClaimSizeGenerators = new HashMap<String, IRandomNumberGenerator>();
     private IRandomNumberGenerator claimSizeGenerator;
     protected IRandomNumberGenerator dateGenerator = RandomNumberGeneratorFactory.getUniformGenerator();
-    protected Distribution modifiedClaimsSizeDistribution;
+    protected transient Distribution modifiedClaimsSizeDistribution;
     protected double shift;
 
     public List<ClaimRoot> generateClaim(List<UnderwritingInfoPacket> uwInfos, List<Factors> severityFactors,

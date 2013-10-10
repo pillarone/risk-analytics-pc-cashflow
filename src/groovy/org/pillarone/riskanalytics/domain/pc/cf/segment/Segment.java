@@ -38,8 +38,8 @@ import java.util.*;
 // todo(sku): problem with no packets after default -> zero packets required!
 public class Segment extends MultiPhaseComponent implements ISegmentMarker {
 
-    private IterationScope iterationScope;
-    private PeriodStore periodStore;
+    private transient IterationScope iterationScope;
+    private transient PeriodStore periodStore;
     public static final String NET_PRESENT_VALUE_GROSS = "netPresentValueGross";
     public static final String NET_PRESENT_VALUE_CEDED = "netPresentValueCeded";
     public static final String NET_PRESENT_VALUE_NET = "netPresentValueNet";
@@ -47,39 +47,39 @@ public class Segment extends MultiPhaseComponent implements ISegmentMarker {
     public static final String DISCOUNTED_RESERVED_GROSS = "discountedReservedGross";
     public static final String FILTERED_FACTORS = "filteredFactors";
 
-    private PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
-    private PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
-    private PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded
+    private transient PacketList<ClaimCashflowPacket> inClaims = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    private transient PacketList<ClaimCashflowPacket> inClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    private transient PacketList<UnderwritingInfoPacket> inUnderwritingInfo = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    private transient PacketList<CededUnderwritingInfoPacket> inUnderwritingInfoCeded
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
-    private PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
-    private PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
+    private transient PacketList<FactorsPacket> inFactors = new PacketList<FactorsPacket>(FactorsPacket.class);
+    private transient PacketList<LegalEntityDefault> inLegalEntityDefault = new PacketList<LegalEntityDefault>(LegalEntityDefault.class);
 
-    private PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    private transient PacketList<ClaimCashflowPacket> outClaimsGross = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
     /** contains one aggregate net claim only */
-    private PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
-    private PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
-    private PacketList<DiscountedValuesPacket> outDiscountedValues = new PacketList<DiscountedValuesPacket>(DiscountedValuesPacket.class);
-    private PacketList<NetPresentValuesPacket> outNetPresentValues = new PacketList<NetPresentValuesPacket>(NetPresentValuesPacket.class);
-    private PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
-    private PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
+    private transient PacketList<ClaimCashflowPacket> outClaimsNet = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    private transient PacketList<ClaimCashflowPacket> outClaimsCeded = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket.class);
+    private transient PacketList<DiscountedValuesPacket> outDiscountedValues = new PacketList<DiscountedValuesPacket>(DiscountedValuesPacket.class);
+    private transient PacketList<NetPresentValuesPacket> outNetPresentValues = new PacketList<NetPresentValuesPacket>(NetPresentValuesPacket.class);
+    private transient PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    private transient PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket.class);
+    private transient PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded
             = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket.class);
-    private PacketList<FinancialsPacket> outFinancials = new PacketList<FinancialsPacket>(FinancialsPacket.class);
+    private transient PacketList<FinancialsPacket> outFinancials = new PacketList<FinancialsPacket>(FinancialsPacket.class);
 
-    private ConstrainedString parmCompany = new ConstrainedString(ILegalEntityMarker.class, "");
-    private ConstrainedMultiDimensionalParameter parmClaimsPortions = new ConstrainedMultiDimensionalParameter(
+    private transient ConstrainedString parmCompany = new ConstrainedString(ILegalEntityMarker.class, "");
+    private transient ConstrainedMultiDimensionalParameter parmClaimsPortions = new ConstrainedMultiDimensionalParameter(
             GroovyUtils.toList("[[],[]]"), Arrays.asList(PERIL, PORTION), ConstraintsFactory.getConstraints(PerilPortion.IDENTIFIER));
-    private ConstrainedMultiDimensionalParameter parmUnderwritingPortions = new ConstrainedMultiDimensionalParameter(
+    private transient ConstrainedMultiDimensionalParameter parmUnderwritingPortions = new ConstrainedMultiDimensionalParameter(
             GroovyUtils.toList("[[],[]]"), Arrays.asList(UNDERWRITING, PORTION),
             ConstraintsFactory.getConstraints(UnderwritingPortion.IDENTIFIER));
-    private ConstrainedMultiDimensionalParameter parmReservesPortions = new ConstrainedMultiDimensionalParameter(
+    private transient ConstrainedMultiDimensionalParameter parmReservesPortions = new ConstrainedMultiDimensionalParameter(
             GroovyUtils.toList("[[],[]]"), Arrays.asList(RESERVE, PORTION), ConstraintsFactory.getConstraints(ReservePortion.IDENTIFIER));
-    private ComboBoxTableMultiDimensionalParameter parmDiscounting = new ComboBoxTableMultiDimensionalParameter(
+    private transient ComboBoxTableMultiDimensionalParameter parmDiscounting = new ComboBoxTableMultiDimensionalParameter(
             Arrays.asList(""), Arrays.asList("Discount Index"), IDiscountMarker.class);
 
-    private Map<IClaimRoot, IClaimRoot> incomingScaledBaseClaimMapping = new HashMap<IClaimRoot, IClaimRoot>();
-    private Map<IClaimRoot, IClaimRoot> incomingScaledBaseReservesMapping = new HashMap<IClaimRoot, IClaimRoot>();
+    private transient Map<IClaimRoot, IClaimRoot> incomingScaledBaseClaimMapping = new HashMap<IClaimRoot, IClaimRoot>();
+    private transient Map<IClaimRoot, IClaimRoot> incomingScaledBaseReservesMapping = new HashMap<IClaimRoot, IClaimRoot>();
 
     private static final String PERIL = "Claims Generator";
     private static final String RESERVE = "Reserves Generator";

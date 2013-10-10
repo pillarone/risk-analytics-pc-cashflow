@@ -28,13 +28,13 @@ abstract public class AbstractSplitCollectingModeStrategy implements ICollecting
     protected static final String PATH_SEPARATOR = ":";
     protected String displayName;
 
-    protected PacketCollector packetCollector;
+    protected transient PacketCollector packetCollector;
 
     // the following variables are used for caching purposes
     protected String componentPath;
     protected Map<IComponentMarker, PathMapping> markerPaths;
     protected Map<ComposedMarkerKey, PathMapping> markerComposedPaths;
-    protected MappingCache mappingCache;
+    protected transient MappingCache mappingCache;
     protected int iteration = 0;
     protected int period = 0;
 
