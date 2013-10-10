@@ -21,12 +21,16 @@ import org.pillarone.riskanalytics.domain.utils.marker.IPerilMarker;
 import org.pillarone.riskanalytics.domain.utils.marker.ILegalEntityMarker;
 
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.*;
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-public class ClaimCashflowPacket extends MultiValuePacket {
+public class ClaimCashflowPacket extends MultiValuePacket implements Externalizable {
 
     private static Log LOG = LogFactory.getLog(ClaimCashflowPacket.class);
 
@@ -34,12 +38,12 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      * This property is used for the calculation of derived figures and has to be individually set for every gross, ceded
      * and net claim.
      */
-    private final IClaimRoot baseClaim;
+    private IClaimRoot baseClaim;
     /**
      * This property is used as key and should be the same for claims derived of a common original claim. Don't use
      * it for any calculations!
      */
-    private final IClaimRoot keyClaim;
+    private IClaimRoot keyClaim;
     private ExposureInfo exposureInfo;
 
     /**
@@ -660,5 +664,46 @@ public class ClaimCashflowPacket extends MultiValuePacket {
 
     public double totalCumulatedIndexed() {
         return developedUltimate();
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(baseClaim);
+        out.writeObject(keyClaim);
+        out.writeObject(updateDate);
+        out.writeDouble(ultimate);
+        out.writeDouble(nominalUltimate);
+        out.writeDouble(nominalUltimate);
+        out.writeDouble(paidIncrementalIndexed);
+        out.writeDouble(paidCumulatedIndexed);
+        out.writeDouble(reportedIncrementalIndexed);
+        out.writeDouble(reportedCumulatedIndexed);
+        out.writeDouble(reservesIndexed);
+        out.writeDouble(changeInReservesIndexed);
+        out.writeDouble(changeInIBNRIndexed);
+        out.writeDouble(appliedIndexValue);
+        out.writeDouble(premiumRisk);
+        out.writeDouble(reserveRisk);
+        out.writeObject(segment);
+        out.flush();
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        baseClaim = (IClaimRoot) in.readObject();
+        keyClaim = (IClaimRoot) in.readObject();
+        updateDate = (DateTime) in.readObject();
+        ultimate = in.readDouble();
+        nominalUltimate = in.readDouble();
+        nominalUltimate = in.readDouble();
+        paidIncrementalIndexed = in.readDouble();
+        paidCumulatedIndexed = in.readDouble();
+        reportedIncrementalIndexed = in.readDouble();
+        reportedCumulatedIndexed = in.readDouble();
+        reservesIndexed = in.readDouble();
+        changeInReservesIndexed = in.readDouble();
+        changeInIBNRIndexed = in.readDouble();
+        appliedIndexValue = in.readDouble();
+        premiumRisk = in.readDouble();
+        reserveRisk = in.readDouble();
+        segment = (ISegmentMarker) in.readObject();
     }
 }
