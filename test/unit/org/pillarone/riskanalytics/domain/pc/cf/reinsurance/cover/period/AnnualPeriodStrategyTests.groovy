@@ -5,10 +5,12 @@ import org.junit.Test
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.TestPeriodCounterUtilities
 
+import static org.junit.Assert.*
+
 /**
  * @author stefan (dot) kunz (at) intuitive-collaboration (dot) com
  */
-class AnnualPeriodStrategyTests extends GroovyTestCase {
+class AnnualPeriodStrategyTests  {
     DateTime date20100101 = new DateTime(2010, 1, 1, 0, 0, 0, 0)
     DateTime date20110101 = new DateTime(2011, 1, 1, 0, 0, 0, 0)
     DateTime date20120101 = new DateTime(2012, 1, 1, 0, 0, 0, 0)

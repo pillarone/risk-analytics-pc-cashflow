@@ -7,6 +7,8 @@ import org.pillarone.riskanalytics.core.output.ICollectorOutputStrategy
 import models.gira.GIRAModel
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 
+import static org.junit.Assert.*
+
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */

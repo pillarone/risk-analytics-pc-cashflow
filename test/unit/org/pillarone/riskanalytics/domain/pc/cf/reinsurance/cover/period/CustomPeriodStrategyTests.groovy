@@ -1,6 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period
 
 import org.joda.time.DateTime
+import org.junit.Before
 import org.junit.Test
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
@@ -11,7 +12,7 @@ import org.pillarone.riskanalytics.domain.utils.constraint.DateTimeConstraints
 /**
  * @author stefan (dot) kunz (at) intuitive-collaboration (dot) com
  */
-class CustomPeriodStrategyTests extends GroovyTestCase {
+class CustomPeriodStrategyTests {
 
     private DateTime date20110101 = new DateTime(2011,  1,  1, 0, 0, 0, 0)
     private DateTime date20120101 = new DateTime(2012,  1,  1, 0, 0, 0, 0)
@@ -26,8 +27,8 @@ class CustomPeriodStrategyTests extends GroovyTestCase {
 
     private IPeriodCounter periodCounter3y
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    void setUp() throws Exception {
         periodCounter3y = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20120101, 3)
     }
 

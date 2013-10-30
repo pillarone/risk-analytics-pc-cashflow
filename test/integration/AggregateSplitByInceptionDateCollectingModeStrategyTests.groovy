@@ -11,6 +11,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.output.AggregateSplitPerSourceCo
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.pillarone.riskanalytics.core.output.TestDBOutput
 
+import static org.junit.Assert.*
+
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
@@ -209,33 +211,34 @@ class AggregateSplitByInceptionDateCollectingModeStrategyTests extends ModelTest
         }
     }
     
-    private class PeriodPath {
-        String path
-        int period
+}
 
-        PeriodPath(SingleValueResult result) {
-            path = result.path
-            period = result.period
-        }
+class PeriodPath {
+    String path
+    int period
 
-        PeriodPath(String path, int period) {
-            this.path = path
-            this.period = period
-        }
+    PeriodPath(SingleValueResult result) {
+        path = result.path
+        period = result.period
+    }
 
-        public int hashCode() {
-            HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
-            hashCodeBuilder.append(path);
-            hashCodeBuilder.append(period);
-            return hashCodeBuilder.toHashCode();
-        }
+    PeriodPath(String path, int period) {
+        this.path = path
+        this.period = period
+    }
 
-        public boolean equals(Object obj) {
-            if (obj instanceof PeriodPath) {
-                    return ((PeriodPath) obj).path.equals(path) && ((PeriodPath) obj).period.equals(period)
-            } else {
-                return false;
-            }
+    public int hashCode() {
+        HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
+        hashCodeBuilder.append(path);
+        hashCodeBuilder.append(period);
+        return hashCodeBuilder.toHashCode();
+    }
+
+    public boolean equals(Object obj) {
+        if (obj instanceof PeriodPath) {
+            return ((PeriodPath) obj).path.equals(path) && ((PeriodPath) obj).period.equals(period)
+        } else {
+            return false;
         }
     }
 }
