@@ -17,7 +17,7 @@ grails.project.dependency.resolution = {
 
     plugins {
         runtime ":background-thread:1.3"
-        runtime ":hibernate:3.6.10.2"
+        runtime ":hibernate:3.6.10.3"
         runtime ":joda-time:0.5"
         runtime ":release:3.0.1"
         runtime ":quartz:0.4.2"
@@ -28,8 +28,8 @@ grails.project.dependency.resolution = {
         compile ":excel-import:1.0.0"
 
         if (appName == "risk-analytics-pc-cashflow") {
-            runtime "org.pillarone:risk-analytics-core:1.9-a1"
-            runtime("org.pillarone:risk-analytics-commons:1.9-a1") { transitive = false }
+            runtime "org.pillarone:risk-analytics-core:1.9-a3"
+            runtime("org.pillarone:risk-analytics-commons:1.9-a2") { transitive = false }
         }
     }
 

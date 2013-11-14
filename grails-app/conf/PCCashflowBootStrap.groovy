@@ -10,8 +10,9 @@ class PCCashflowBootStrap {
             // All available collectors must exist within the DB before simulation can run.
             CollectingModeFactory.getAvailableStrategies().each { ICollectingModeStrategy strategy ->
                 def c = new CollectorMapping(collectorName: strategy.identifier)
-                if (CollectorMapping.find(c) == null)
+                if (CollectorMapping.findByCollectorName(c.collectorName) == null){
                     c.save()
+                }
             }
         }
     }
