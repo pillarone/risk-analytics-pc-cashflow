@@ -268,7 +268,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PayoutReportingCombinedPatternStrategyType.INCREMENTAL) {
             Map type ->
             double[] payoutValues = type.incrementalPattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.INCREMENTS_PAYOUT)
-            double sum = (double) GroovyCollections.sum(payoutValues)
+            Double sum = (Double) GroovyCollections.sum(payoutValues)
             if (sum >= 1.0 - EPSILON && sum <= 1.0 + EPSILON) return true
             [ValidationType.ERROR, "incremental.combined.pattern.payout.error.sum.not.one", sum]
         }
@@ -276,7 +276,7 @@ class PatternStrategyValidator implements IParameterizationValidator {
         validationService.register(PayoutReportingCombinedPatternStrategyType.INCREMENTAL) {
             Map type ->
             double[] reportedValues = type.incrementalPattern.getColumnByName(PayoutReportingCombinedPatternStrategyType.INCREMENTS_REPORTED)
-            double sum = (double) GroovyCollections.sum(reportedValues)
+            Double sum = (Double) GroovyCollections.sum(reportedValues)
             if (sum >= 1.0 - EPSILON && sum <= 1.0 + EPSILON) return true
             [ValidationType.ERROR, "incremental.combined.pattern.reported.error.sum.not.one", sum]
         }
