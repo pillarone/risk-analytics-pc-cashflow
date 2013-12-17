@@ -22,5 +22,12 @@ class PatternStrategyValidatorTests extends GroovyTestCase {
         List<ParameterValidation> validationResult = new PatternStrategyValidator().validate([new ParameterObjectParameterHolder('path', 0, strategy)])
         assert 1 == validationResult.size()
         assert 'incremental.pattern.error.incremental.values.empty' == validationResult[0].msg
+
+        params = new ConstrainedMultiDimensionalParameter([], [PatternTableConstraints.MONTHS, PatternStrategyType.INCREMENTS],
+                ConstraintsFactory.getConstraints(PatternTableConstraints.IDENTIFIER))
+        strategy = PatternStrategyType.getStrategy(PatternStrategyType.INCREMENTAL, [incrementalPattern:params])
+        validationResult = new PatternStrategyValidator().validate([new ParameterObjectParameterHolder('path', 0, strategy)])
+        assert 1 == validationResult.size()
+        assert 'incremental.pattern.error.incremental.values.empty' == validationResult[0].msg
     }
 }
