@@ -220,6 +220,21 @@ public class RiskBands extends Component implements IUnderwritingInfoMarker {
         }
     }
 
+    public boolean allRowsContainSumInsuredInformation() {
+        boolean sumInsuredCompletelyFilledIn = true;
+        int numberOfSegments = parmUnderwritingInformation.getRowCount();
+        int columnIndexMaxSumInsured = parmUnderwritingInformation.getColumnIndex(MAXIMUM_SUM_INSURED);
+        int columnIndexAverageSumInsured = parmUnderwritingInformation.getColumnIndex(AVERAGE_SUM_INSURED);
+        for (int i = 1; i < numberOfSegments && sumInsuredCompletelyFilledIn; i++) {
+            Double maxSumInsured = InputFormatConverter.getDouble(
+                parmUnderwritingInformation.getValueAt(i, columnIndexMaxSumInsured));
+            Double sumInsured = InputFormatConverter.getDouble(
+                parmUnderwritingInformation.getValueAt(i, columnIndexAverageSumInsured));
+            sumInsuredCompletelyFilledIn = maxSumInsured > 0 && sumInsured > 0;
+        }
+        return sumInsuredCompletelyFilledIn;
+    }
+
     public static final String UNDERWRITING_INFOS = "underwriting infos";
     public static final String MAXIMUM_SUM_INSURED = "maximum sum insured";
     public static final String AVERAGE_SUM_INSURED = "average sum insured";
