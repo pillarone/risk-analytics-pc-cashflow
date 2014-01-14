@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class AnnualPeriodStrategy extends AbstractPeriodStrategy {
 
-    private DateTime startCover = new DateTime(2010, 1, 1, 0, 0, 0, 0);
+    private DateTime startCover = new DateTime(new DateTime().getYear()+1, 1, 1, 0, 0, 0, 0);
     private Integer numberOfYears = 3;
 
     public IParameterObjectClassifier getType() {

@@ -59,7 +59,7 @@ public class PatternPacket extends Packet implements Cloneable {
      * throws an IllegalArgumentException if cumulativePeriods are not of increasing duration.
      */
     private void checkIncreasingPeriodLengths() {
-        DateTime reference = new DateTime(2010, 1, 1, 0, 0, 0, 0);
+        DateTime reference = new DateTime(2010, 1, 1, 0, 0, 0, 0);  // todo: why do we have a fixed date in here?
         Period previousPeriod = Period.days(0);
         for (Period period : cumulativePeriods) {
             if (reference.plus(previousPeriod).isAfter(reference.plus(period))) {

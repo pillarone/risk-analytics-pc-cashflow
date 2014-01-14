@@ -19,13 +19,13 @@ class PeriodStrategyType extends AbstractParameterObjectClassifier {
 
     public static final PeriodStrategyType ONEYEAR = new PeriodStrategyType("One Year as from Projection Start", "ONEYEAR", [:])
     public static final PeriodStrategyType MONTHS = new PeriodStrategyType("Months", "MONTHS",
-            ['startCover': new DateTime(2012, 1, 1, 0, 0, 0, 0), 'numberOfMonths': 12])
+            ['startCover': new DateTime(new DateTime().getYear()+1, 1, 1, 0, 0, 0, 0), 'numberOfMonths': 12])
     public static final PeriodStrategyType CUSTOM = new PeriodStrategyType(
             'Custom', 'CUSTOM', ['periods': new ConstrainedMultiDimensionalParameter(
-            [[new DateTime(2012, 1, 1, 0, 0, 0, 0)], [new DateTime(2012, 12, 31, 0, 0, 0, 0)]],
+            [[new DateTime(new DateTime().getYear()+1, 1, 1, 0, 0, 0, 0)], [new DateTime(new DateTime().getYear()+1, 12, 31, 0, 0, 0, 0)]],
             ['Start Date', 'End Date'], ConstraintsFactory.getConstraints(DateTimeConstraints.IDENTIFIER))])
     public static final PeriodStrategyType ANNUAL = new PeriodStrategyType("Annual", "ANNUAL",
-            ['startCover': new DateTime(2010, 1, 1, 0, 0, 0, 0), 'numberOfYears': 3])
+            ['startCover': new DateTime(new DateTime().getYear()+1, 1, 1, 0, 0, 0, 0), 'numberOfYears': 3])
     public static final PeriodStrategyType RETROACTIVE = new PeriodStrategyType("Retroactive", "RETROACTIVE",
             ["coveredOccurencePeriodFrom": new DateTime(), "coveredOccurencePeriodTo": new DateTime(),
                     "coveredDevelopmentPeriodStartDate": new DateTime()])
