@@ -12,7 +12,9 @@ grails.project.dependency.resolution = {
         grailsCentral()
         mavenCentral()
         mavenRepo "https://repository.intuitive-collaboration.com/nexus/content/repositories/pillarone-public/"
-        mavenRepo "https://repository.intuitive-collaboration.com/nexus/content/repositories/pillarone-public-snapshot/"
+        mavenRepo("https://repository.intuitive-collaboration.com/nexus/content/repositories/pillarone-public-snapshot/") {
+            updatePolicy System.getProperty('snapshotUpdatePolicy') ?: 'daily'
+        }
         mavenRepo "http://repo.spring.io/milestone/" //needed for spring-security-core 2.0-rc2 plugin
     }
 
@@ -61,11 +63,11 @@ grails.project.dependency.distribution = {
         }else {
             scpUrl = properties.get("url")
         }
+	remoteRepository(id: "pillarone", url: scpUrl) {
+        	authentication username: user, password: password
+    	}
 
     } catch (Throwable t) {
-    }
-    remoteRepository(id: "pillarone", url: scpUrl) {
-        authentication username: user, password: password
     }
 }
 
