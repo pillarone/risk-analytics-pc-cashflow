@@ -4,10 +4,12 @@ import org.pillarone.riskanalytics.core.parameterization.IMultiDimensionalConstr
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.joda.time.DateTime
+import org.pillarone.riskanalytics.core.util.Manual
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
+@Manual
 class AggregateHistoricClaimsConstraints implements IMultiDimensionalConstraints {
 
     private static final String CONTRACT_PERIOD = "Contract Period"

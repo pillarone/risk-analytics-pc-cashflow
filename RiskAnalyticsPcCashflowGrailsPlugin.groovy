@@ -39,6 +39,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverMap
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixStructureContraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.validation.CoverAttributeValidator
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.AggregateHistoricClaimsConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.single.SingleHistoricClaimsConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket as FP
 import org.pillarone.riskanalytics.domain.pc.cf.structure.validation.ClaimTypeStructuringValidator
 import org.pillarone.riskanalytics.domain.utils.constraint.*
@@ -82,6 +84,8 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
     def doWithApplicationContext = { applicationContext ->
 
         ConstraintsFactory.registerConstraint(new ContractBasedOn()) //manually due to clash with same class in another plugin
+        ConstraintsFactory.registerConstraint(new SingleHistoricClaimsConstraints()) //manually due to clash with same class in another plugin
+        ConstraintsFactory.registerConstraint(new AggregateHistoricClaimsConstraints()) //manually due to clash with same class in another plugin
 
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.pMLClaimsGeneratorStrategyValidator")
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.patternStrategyValidator")

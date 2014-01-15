@@ -4,10 +4,12 @@ import org.joda.time.DateTime
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.parameterization.IMultiDimensionalConstraints
+import org.pillarone.riskanalytics.core.util.Manual
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
+@Manual
 class SingleHistoricClaimsConstraints implements IMultiDimensionalConstraints {
 
     private static final String ID = "Claim ID"
