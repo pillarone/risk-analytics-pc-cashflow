@@ -30,34 +30,37 @@ class RiskToBandAllocatorStrategy extends AbstractParameterObject implements IRi
         // get risk map
         Map<Double, UnderwritingInfoPacket> riskMap = getRiskMap(underwritingInfos)
 
+        if (riskMap.size() > 0) {
         // allocate the claims
-        Map<Double, Double> targetDistributionMaxSI = getTargetDistribution(underwritingInfos, allocationBase)
-        targetDistributionMaxSI = convertKeysToDouble(targetDistributionMaxSI)
+            Map<Double, Double> targetDistributionMaxSI = getTargetDistribution(underwritingInfos, allocationBase)
+            targetDistributionMaxSI = convertKeysToDouble(targetDistributionMaxSI)
 
-        List<ClaimRoot> allocatedClaims = new ArrayList<ClaimRoot>();
-        if (targetDistributionMaxSI) {
-            Map<Double, List<ClaimRoot>> largeClaimsAllocation = allocateSingleClaims(
+            List<ClaimRoot> allocatedClaims = new ArrayList<ClaimRoot>();
+            if (targetDistributionMaxSI) {
+                Map<Double, List<ClaimRoot>> largeClaimsAllocation = allocateSingleClaims(
                     filterClaimsByType(claims, ClaimType.SINGLE), riskMap, targetDistributionMaxSI)
-            for (Map.Entry<Double, List<ClaimRoot>> entry: largeClaimsAllocation.entrySet()) {
-                UnderwritingInfoPacket underwritingInfo = riskMap[entry.key]
-                for (ClaimRoot claim: entry.value) {
-                    if (claim.hasExposureInfo()) throw new IllegalArgumentException("RiskToBandAllocatorStrategy.impossibleExposureRemap")
-                    // todo(jwa): ask Stefan; information from underwritingInfo already completely available in ExposureInfo or
-                    // do I have to set underwritingInfo.getExposure().setMaxS... epxlicitly ?
-                    ClaimRoot copy = claim.withExposure(underwritingInfo.getExposure());
-                    // before: claim.exposure = underwritingInfo
-                    allocatedClaims << copy
+                for (Map.Entry<Double, List<ClaimRoot>> entry : largeClaimsAllocation.entrySet()) {
+                    UnderwritingInfoPacket underwritingInfo = riskMap[entry.key]
+                    for (ClaimRoot claim : entry.value) {
+                        if (claim.hasExposureInfo()) throw new IllegalArgumentException("RiskToBandAllocatorStrategy.impossibleExposureRemap")
+                        // todo(jwa): ask Stefan; information from underwritingInfo already completely available in ExposureInfo or
+                        // do I have to set underwritingInfo.getExposure().setMaxS... epxlicitly ?
+                        ClaimRoot copy = claim.withExposure(underwritingInfo.getExposure());
+                        // before: claim.exposure = underwritingInfo
+                        allocatedClaims << copy
+                    }
                 }
-            }
 
-            allocatedClaims.addAll(internalGetAllocatedClaims(claims, ClaimType.ATTRITIONAL, riskMap, targetDistributionMaxSI))
-            allocatedClaims.addAll(internalGetAllocatedClaims(claims, ClaimType.EVENT, riskMap, targetDistributionMaxSI))
-            allocatedClaims.addAll(internalGetAllocatedClaims(claims, ClaimType.AGGREGATED, riskMap, targetDistributionMaxSI))
-            allocatedClaims.addAll(internalGetAllocatedClaims(claims, ClaimType.AGGREGATED_ATTRITIONAL, riskMap, targetDistributionMaxSI))
-            allocatedClaims.addAll(internalGetAllocatedClaims(claims, ClaimType.AGGREGATED_EVENT, riskMap, targetDistributionMaxSI))
-            allocatedClaims.addAll(internalGetAllocatedClaims(claims, ClaimType.AGGREGATED_SINGLE, riskMap, targetDistributionMaxSI))
+                allocatedClaims.addAll(internalGetAllocatedClaims(claims, ClaimType.ATTRITIONAL, riskMap, targetDistributionMaxSI))
+                allocatedClaims.addAll(internalGetAllocatedClaims(claims, ClaimType.EVENT, riskMap, targetDistributionMaxSI))
+                allocatedClaims.addAll(internalGetAllocatedClaims(claims, ClaimType.AGGREGATED, riskMap, targetDistributionMaxSI))
+                allocatedClaims.addAll(internalGetAllocatedClaims(claims, ClaimType.AGGREGATED_ATTRITIONAL, riskMap, targetDistributionMaxSI))
+                allocatedClaims.addAll(internalGetAllocatedClaims(claims, ClaimType.AGGREGATED_EVENT, riskMap, targetDistributionMaxSI))
+                allocatedClaims.addAll(internalGetAllocatedClaims(claims, ClaimType.AGGREGATED_SINGLE, riskMap, targetDistributionMaxSI))
+            }
+            return allocatedClaims
         }
-        return allocatedClaims
+        return claims   // return original list as no underwriting info was available
     }
 
     private List<ClaimRoot> internalGetAllocatedClaims(List<ClaimRoot> claims, ClaimType claimType, Map<Double,
@@ -66,16 +69,17 @@ class RiskToBandAllocatorStrategy extends AbstractParameterObject implements IRi
         List<ClaimRoot> allocatedClaims = new ArrayList<ClaimRoot>(aggrAllocation.size());
         for (Map.Entry<Double, List<ClaimRoot>> entry: aggrAllocation.entrySet()) {
             UnderwritingInfoPacket underwritingInfo = riskMap[entry.key]
-            for (ClaimRoot claim: entry.value) {
-//                if (claim.hasExposureInfo()) throw new IllegalArgumentException("RiskToBandAllocatorStrategy.impossibleExposureRemap")
-                ClaimRoot copy = claim.withExposure(underwritingInfo.getExposure());
-                allocatedClaims << copy
+            if (underwritingInfo) {
+                for (ClaimRoot claim: entry.value) {
+                    ClaimRoot copy = claim.withExposure(underwritingInfo.getExposure());
+                    allocatedClaims << copy
+                }
             }
         }
         return allocatedClaims
     }
 
-    // todo(sku): refactor and simplify and re-enable custom and loss probability (idea: add property map in packet tUnderwritingInfo)
+    // todo(sku): refactor and simplify and re-enable custom and loss probability (idea: add property map in packet UnderwritingInfo)
 
     private static Map<Double, Double> getTargetDistribution(List<UnderwritingInfoPacket> underwritingInfos, RiskBandAllocationBaseLimited allocationBase) {
         Map<Double, Double> targetDistribution = [:]

@@ -32,7 +32,7 @@ class IndexStrategyType extends AbstractParameterObjectClassifier {
                     LinkRatioIndexTableConstraints.COLUMN_TITLES,
                     ConstraintsFactory.getConstraints(LinkRatioIndexTableConstraints.IDENTIFIER))])
     public static final IndexStrategyType STOCHASTIC = new IndexStrategyType("stochastic", "STOCHASTIC", [
-            startDate: new DateTime(2011,1,1,0,0,0,0),
+            startDate: new DateTime(new DateTime().getYear(),1,1,0,0,0,0),
             distribution: DistributionType.getStrategy(DistributionType.NORMAL, [mean: 0d, stDev: 1d])])
     public static final IndexStrategyType ORNSTEINUHLENBECK = new IndexStrategyType("Ornstein-Uhlenbeck", "ORNSTEINUHLENBECK", [
             startValue: 0d, a: 0d, b: 0d, sigma: 1d])
@@ -68,7 +68,6 @@ class IndexStrategyType extends AbstractParameterObjectClassifier {
     }
 
     static IIndexStrategy getStrategy(IndexStrategyType type, Map parameters) {
-        IIndexStrategy indexStrategy;
         switch (type) {
             case IndexStrategyType.NONE:
                 return new TrivialIndexStrategy()

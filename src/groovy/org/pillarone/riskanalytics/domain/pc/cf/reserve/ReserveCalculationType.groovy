@@ -11,16 +11,16 @@ import org.joda.time.DateTime
 class ReserveCalculationType extends AbstractParameterObjectClassifier {
 
     public static final ReserveCalculationType ULTIMATE = new ReserveCalculationType("fixed ultimate", "ULTIMATE",
-            [ultimateAtReportingDate: 0d, reportingDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
-             averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0)])
+            [ultimateAtReportingDate: 0d, reportingDate: new DateTime(new DateTime().getYear(), 1, 1, 0, 0, 0, 0),
+             averageInceptionDate: new DateTime(new DateTime().getYear(), 1, 1, 0, 0, 0, 0)])
 
     public static final ReserveCalculationType REPORTEDBASED = new ReserveCalculationType("based on reported information", "REPORTEDBASED",
-            [reportedAtReportingDate: 0d, reportingDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
-             averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0), interpolationMode: InterpolationMode.NONE])
+            [reportedAtReportingDate: 0d, reportingDate: new DateTime(new DateTime().getYear(), 1, 1, 0, 0, 0, 0),
+             averageInceptionDate: new DateTime(new DateTime().getYear(), 1, 1, 0, 0, 0, 0), interpolationMode: InterpolationMode.NONE])
 
     public static final ReserveCalculationType OUTSTANDINGBASED = new ReserveCalculationType("based on outstanding information", "OUTSTANDINGBASED",
-            [outstandingAtReportingDate: 0d, reportingDate: new DateTime(2010, 1, 1, 0, 0, 0, 0),
-             averageInceptionDate: new DateTime(2010, 1, 1, 0, 0, 0, 0), interpolationMode: InterpolationMode.NONE])
+            [outstandingAtReportingDate: 0d, reportingDate: new DateTime(new DateTime().getYear(), 1, 1, 0, 0, 0, 0),
+             averageInceptionDate: new DateTime(new DateTime().getYear(), 1, 1, 0, 0, 0, 0), interpolationMode: InterpolationMode.NONE])
 
     public static final all = [ULTIMATE, REPORTEDBASED, OUTSTANDINGBASED]
 
@@ -50,8 +50,8 @@ class ReserveCalculationType extends AbstractParameterObjectClassifier {
     static IReserveCalculationStrategy getDefault() {
         return new FixedUltimateReserveCalculationStrategy(
                 ultimateAtReportingDate: 0d,
-                reportingDate: new DateTime(2012, 1, 1, 0, 0, 0, 0),
-                averageInceptionDate: new DateTime(2011, 1, 1, 0, 0, 0, 0))
+                reportingDate: new DateTime(new DateTime().getYear(), 1, 1, 0, 0, 0, 0),
+                averageInceptionDate: new DateTime(new DateTime().getYear()-1, 1, 1, 0, 0, 0, 0))
     }
 
     static IReserveCalculationStrategy getStrategy(ReserveCalculationType type, Map parameters) {

@@ -1,10 +1,9 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless;
 
 import com.google.common.collect.Lists;
-import edu.emory.mathcs.backport.java.util.Collections;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ICededRoot;
-import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
