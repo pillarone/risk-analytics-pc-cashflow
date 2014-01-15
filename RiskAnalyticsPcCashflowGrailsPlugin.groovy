@@ -104,19 +104,6 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         // doc urls
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.HELP, "org/pillarone/riskanalytics/domain/pc/cf/ComponentHelp")
 
-        PacketAggregatorRegistry.registerAggregator(CCP, new ClaimPacketAggregator())
-        PacketAggregatorRegistry.registerAggregator(UnderwritingInfoPacket, new UnderwritingInfoPacketAggregator())
-
-        CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceReducedCollectingModeStrategy())
-
-        CollectingModeFactory.registerStrategy(new AggregateUltimateClaimCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new AggregateUltimateReportedPaidClaimCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new AggregateUltimateReportedClaimCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new AggregateUltimatePaidClaimCollectingModeStrategy())
-
-        CollectingModeFactory.registerStrategy(new SingleUltimatePaidClaimCollectingModeStrategy())
-
         // PMO-2231
         def claimFields = [CCP.PAID_INDEXED, CCP.PAID_CUMULATIVE_INDEXED, CCP.CHANGES_IN_RESERVES_INDEXED, CCP.RESERVES_INDEXED, CCP.CHANGES_IN_IBNR_INDEXED, CCP.IBNR_INDEXED,
                 CCP.CHANGES_IN_OUTSTANDING_INDEXED, CCP.OUTSTANDING_INDEXED, CCP.REPORTED_INDEXED, CCP.REPORTED_CUMULATIVE_INDEXED, CCP.ULTIMATE, CCP.TOTAL_INCREMENTAL_INDEXED,
