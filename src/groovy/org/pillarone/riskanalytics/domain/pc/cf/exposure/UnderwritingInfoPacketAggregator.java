@@ -36,4 +36,9 @@ public class UnderwritingInfoPacketAggregator implements IPacketAggregator<Under
         }
         return oneCededUnderwritingInfoPacketFound;
     }
+
+    @Override
+    public Class<UnderwritingInfoPacket> getPacketClass() {
+        return UnderwritingInfoPacket.class;
+    }
 }

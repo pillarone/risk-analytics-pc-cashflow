@@ -13,4 +13,9 @@ public class ClaimPacketAggregator implements IPacketAggregator<ClaimCashflowPac
         List<ClaimCashflowPacket> aggregateClaimsByBaseClaim = ClaimUtils.aggregateByBaseClaim(packetList);
         return ClaimUtils.sum(aggregateClaimsByBaseClaim, true);
     }
+
+    @Override
+    public Class<ClaimCashflowPacket> getPacketClass() {
+        return ClaimCashflowPacket.class;
+    }
 }

@@ -14,6 +14,7 @@ import org.pillarone.riskanalytics.core.output.SingleValueResultPOJO;
 import org.pillarone.riskanalytics.core.packets.Packet;
 import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.util.Manual;
 import org.pillarone.riskanalytics.core.util.PeriodLabelsUtil;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -39,6 +40,7 @@ import java.util.*;
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
+@Manual
 public class SplitAndFilterCollectionModeStrategy extends AbstractSplitCollectingModeStrategy {
 
     private static final String PERILS = "claimsGenerators";

@@ -79,50 +79,6 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
     }
 
     def doWithApplicationContext = { applicationContext ->
-        ConstraintsFactory.registerConstraint(new AnnualIndexTableConstraints())
-        ConstraintsFactory.registerConstraint(new LinkRatioIndexTableConstraints())
-        ConstraintsFactory.registerConstraint(new DeterministicIndexTableConstraints())
-        ConstraintsFactory.registerConstraint(new PolicyIndexSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new PremiumIndexSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new FrequencyIndexSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new SeverityIndexSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new RunOffIndexSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new ReservesIndexSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
-        ConstraintsFactory.registerConstraint(new PatternTableConstraints())
-        ConstraintsFactory.registerConstraint(new CoverMap())
-        ConstraintsFactory.registerConstraint(new MatrixStructureContraints())
-        ConstraintsFactory.registerConstraint(new DoubleConstraints())
-        ConstraintsFactory.registerConstraint(new IntDateTimeDoubleConstraints())
-        ConstraintsFactory.registerConstraint(new DateTimeConstraints())
-        ConstraintsFactory.registerConstraint(new ClaimTypeSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new YieldCurveTableConstraints())
-        ConstraintsFactory.registerConstraint(new SegmentPortion())
-        ConstraintsFactory.registerConstraint(new ReinsuranceContractContraints())
-        ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
-        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
-        ConstraintsFactory.registerConstraint(new ContractConstraint())
-
-        ConstraintsFactory.registerConstraint(new PremiumStructureReinstatementConstraints())
-        ConstraintsFactory.registerConstraint(new PremiumStructureConstraints())
-        ConstraintsFactory.registerConstraint(new PremiumStructureAPConstraints())
-        ConstraintsFactory.registerConstraint(new PremiumStructureProfitCommissionConstraints())
-
-        ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
-        ValidatorRegistry.addValidator(new PatternStrategyValidator())
-        ValidatorRegistry.addValidator(new RecoveryPatternStrategyValidator())
-        ValidatorRegistry.addValidator(new ClaimsGeneratorScalingValidator())
-        ValidatorRegistry.addValidator(new RiskAllocationValidator())
-        ValidatorRegistry.addValidator(new CopulaValidator())
-        ValidatorRegistry.addValidator(new MultipleProbabilitiesCopulaValidator())
-        ValidatorRegistry.addValidator(new XLStrategyValidator())
-        ValidatorRegistry.addValidator(new ClaimTypeStructuringValidator())
-        ValidatorRegistry.addValidator(new CoverAttributeValidator())
-        ValidatorRegistry.addValidator(new LossParticipationValidator())
-        ValidatorRegistry.addValidator(new InterpolatedSlidingCommissionValidator())
-        ValidatorRegistry.addValidator(new CounterPartyValidator())
-        ValidatorRegistry.addValidator(new UnifiedADCLPTStrategyValidator())
-
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.pMLClaimsGeneratorStrategyValidator")
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.patternStrategyValidator")
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.recoveryPatternStrategyValidator")
@@ -143,19 +99,6 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.RESOURCE, "org.pillarone.riskanalytics.domain.pc.cf.exceptionResources")
         // doc urls
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.HELP, "org/pillarone/riskanalytics/domain/pc/cf/ComponentHelp")
-
-        PacketAggregatorRegistry.registerAggregator(CCP, new ClaimPacketAggregator())
-        PacketAggregatorRegistry.registerAggregator(UnderwritingInfoPacket, new UnderwritingInfoPacketAggregator())
-
-        CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new AggregateSplitPerSourceReducedCollectingModeStrategy())
-
-        CollectingModeFactory.registerStrategy(new AggregateUltimateClaimCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new AggregateUltimateReportedPaidClaimCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new AggregateUltimateReportedClaimCollectingModeStrategy())
-        CollectingModeFactory.registerStrategy(new AggregateUltimatePaidClaimCollectingModeStrategy())
-
-        CollectingModeFactory.registerStrategy(new SingleUltimatePaidClaimCollectingModeStrategy())
 
         // PMO-2231
         def claimFields = [CCP.PAID_INDEXED, CCP.PAID_CUMULATIVE_INDEXED, CCP.CHANGES_IN_RESERVES_INDEXED, CCP.RESERVES_INDEXED, CCP.CHANGES_IN_IBNR_INDEXED, CCP.IBNR_INDEXED,
