@@ -1,11 +1,13 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover
 
 import org.pillarone.riskanalytics.core.parameterization.IMultiDimensionalConstraints
+import org.pillarone.riskanalytics.core.util.Manual
 import org.pillarone.riskanalytics.domain.utils.marker.IReinsuranceContractMarker
 
 /**
 *   author simon.parten @ art-allianz . com
  */
+@Manual
 public class ContractBasedOn implements IMultiDimensionalConstraints {
 
     public static final String IDENTIFIER = "CONTRACT_BASEDON"

@@ -31,6 +31,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.c
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumStructureConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumStructureProfitCommissionConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.constraints.PremiumStructureReinstatementConstraints
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ContractBasedOn
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.cover.ContractConstraint
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.CounterPartyValidator
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.validation.XLStrategyValidator
@@ -79,49 +80,8 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
     }
 
     def doWithApplicationContext = { applicationContext ->
-        ConstraintsFactory.registerConstraint(new AnnualIndexTableConstraints())
-        ConstraintsFactory.registerConstraint(new LinkRatioIndexTableConstraints())
-        ConstraintsFactory.registerConstraint(new DeterministicIndexTableConstraints())
-        ConstraintsFactory.registerConstraint(new PolicyIndexSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new PremiumIndexSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new FrequencyIndexSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new SeverityIndexSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new RunOffIndexSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new ReservesIndexSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new LegalEntityPortionConstraints())
-        ConstraintsFactory.registerConstraint(new PatternTableConstraints())
-        ConstraintsFactory.registerConstraint(new CoverMap())
-        ConstraintsFactory.registerConstraint(new MatrixStructureContraints())
-        ConstraintsFactory.registerConstraint(new DoubleConstraints())
-        ConstraintsFactory.registerConstraint(new IntDateTimeDoubleConstraints())
-        ConstraintsFactory.registerConstraint(new DateTimeConstraints())
-        ConstraintsFactory.registerConstraint(new ClaimTypeSelectionTableConstraints())
-        ConstraintsFactory.registerConstraint(new YieldCurveTableConstraints())
-        ConstraintsFactory.registerConstraint(new SegmentPortion())
-        ConstraintsFactory.registerConstraint(new ReinsuranceContractContraints())
-        ConstraintsFactory.registerConstraint(new PremiumSelectionConstraints())
-        ConstraintsFactory.registerConstraint(new ReinsuranceContractBasedOn())
-        ConstraintsFactory.registerConstraint(new ContractConstraint())
 
-        ConstraintsFactory.registerConstraint(new PremiumStructureReinstatementConstraints())
-        ConstraintsFactory.registerConstraint(new PremiumStructureConstraints())
-        ConstraintsFactory.registerConstraint(new PremiumStructureAPConstraints())
-        ConstraintsFactory.registerConstraint(new PremiumStructureProfitCommissionConstraints())
-
-        ValidatorRegistry.addValidator(new PMLClaimsGeneratorStrategyValidator())
-        ValidatorRegistry.addValidator(new PatternStrategyValidator())
-        ValidatorRegistry.addValidator(new RecoveryPatternStrategyValidator())
-        ValidatorRegistry.addValidator(new ClaimsGeneratorScalingValidator())
-        ValidatorRegistry.addValidator(new RiskAllocationValidator())
-        ValidatorRegistry.addValidator(new CopulaValidator())
-        ValidatorRegistry.addValidator(new MultipleProbabilitiesCopulaValidator())
-        ValidatorRegistry.addValidator(new XLStrategyValidator())
-        ValidatorRegistry.addValidator(new ClaimTypeStructuringValidator())
-        ValidatorRegistry.addValidator(new CoverAttributeValidator())
-        ValidatorRegistry.addValidator(new LossParticipationValidator())
-        ValidatorRegistry.addValidator(new InterpolatedSlidingCommissionValidator())
-        ValidatorRegistry.addValidator(new CounterPartyValidator())
-        ValidatorRegistry.addValidator(new UnifiedADCLPTStrategyValidator())
+        ConstraintsFactory.registerConstraint(new ContractBasedOn()) //manually due to clash with same class in another plugin
 
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.pMLClaimsGeneratorStrategyValidator")
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.patternStrategyValidator")
