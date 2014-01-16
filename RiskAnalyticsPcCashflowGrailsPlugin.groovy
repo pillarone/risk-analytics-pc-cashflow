@@ -83,10 +83,6 @@ class RiskAnalyticsPcCashflowGrailsPlugin {
 
     def doWithApplicationContext = { applicationContext ->
 
-        ConstraintsFactory.registerConstraint(new ContractBasedOn()) //manually due to clash with same class in another plugin
-        ConstraintsFactory.registerConstraint(new SingleHistoricClaimsConstraints()) //manually due to clash with same class in another plugin
-        ConstraintsFactory.registerConstraint(new AggregateHistoricClaimsConstraints()) //manually due to clash with same class in another plugin
-
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.claim.generator.validation.pMLClaimsGeneratorStrategyValidator")
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.patternStrategyValidator")
         ResourceBundleRegistry.addBundle(ResourceBundleRegistry.VALIDATION, "org.pillarone.riskanalytics.domain.pc.cf.pattern.validation.recoveryPatternStrategyValidator")
