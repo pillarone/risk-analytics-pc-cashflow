@@ -17,7 +17,7 @@ public class ResourceExternalValuesByIterationStrategy extends AbstractExternalV
     static Log LOG = LogFactory.getLog(ResourceExternalValuesByIterationStrategy.class);
 
 
-    private ResourceHolder<ExternalValuesResource> referencedIterationData = new ResourceHolder<ExternalValuesResource>(ExternalValuesResource.class);
+    private ResourceHolder<ExternalValuesResource> referencedIterationData = new ResourceHolder<ExternalValuesResource>(ExternalValuesResource.class, null, null);
 
 
     public IParameterObjectClassifier getType() {
