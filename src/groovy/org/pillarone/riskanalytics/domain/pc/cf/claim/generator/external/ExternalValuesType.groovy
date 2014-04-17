@@ -24,7 +24,7 @@ class ExternalValuesType extends AbstractParameterObjectClassifier {
             referencedIterationData: new ResourceHolder<ExternalValuesResource>(ExternalValuesResource, null, null)])
     public static
     final ExternalValuesType BY_ITERATION_AND_DATE_RESOURCE = new ExternalValuesType('by iteration and date (resource)', 'BY_ITERATION_AND_DATE_RESOURCE', [
-            referencedIterationDateData: new ResourceHolder<ExternalValuesExtendedResource>(ExternalValuesExtendedResource, null, null)])
+            referencedIterationDateData: new ResourceHolder<ExternalValuesExtendedResource>(ExternalValuesExtendedResource, 'externalValuesExtendedResource', null)])
 
     public static
     final all = [BY_ITERATION_AND_DATE, BY_ITERATION, BY_ITERATION_RESOURCE, BY_ITERATION_AND_DATE_RESOURCE]

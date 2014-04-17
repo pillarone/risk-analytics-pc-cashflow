@@ -16,7 +16,7 @@ public class ResourceExternalValuesByIterationAndDateStrategy extends AbstractEx
 
     static Log LOG = LogFactory.getLog(ResourceExternalValuesByIterationAndDateStrategy.class);
 
-    private ResourceHolder<ExternalValuesExtendedResource> referencedIterationDateData = new ResourceHolder<ExternalValuesExtendedResource>(ExternalValuesExtendedResource.class, null, null);
+    private ResourceHolder<ExternalValuesExtendedResource> referencedIterationDateData = new ResourceHolder<ExternalValuesExtendedResource>(ExternalValuesExtendedResource.class, "externalValuesExtendedResource", null);
 
     public IParameterObjectClassifier getType() {
         return ExternalValuesType.BY_ITERATION_AND_DATE_RESOURCE;
