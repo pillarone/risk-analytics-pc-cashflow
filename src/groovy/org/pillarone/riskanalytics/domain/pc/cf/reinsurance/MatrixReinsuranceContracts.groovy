@@ -1,5 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance
 
+import org.apache.commons.lang.NotImplementedException
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.pillarone.riskanalytics.core.components.Component
@@ -17,6 +18,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
 import org.pillarone.riskanalytics.domain.pc.cf.legalentity.LegalEntityPortionConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.VirtualizationMode
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.CommissionPacket
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.MatrixCoverAttributeStrategy
@@ -162,9 +164,21 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
     private void wireProgramIndependentReplications() {
         replicateOutChannels this, outCommission
         for (ReinsuranceContract contract : componentList) {
-            if (!contract.getParmVirtual()) {
-                doWire PRC, this, 'outUnderwritingInfoCeded', contract, 'outUnderwritingInfoCeded'
-                doWire PRC, this, 'outClaimsCeded', contract, 'outClaimsCeded'
+            switch (contract.parmVirtual) {
+                case VirtualizationMode.NO :
+                    doWire PRC, this, 'outUnderwritingInfoCeded', contract, 'outUnderwritingInfoCeded'
+                    doWire PRC, this, 'outClaimsCeded', contract, 'outClaimsCeded'
+                    break
+                case VirtualizationMode.CLAIMS :
+                    doWire PRC, this, 'outUnderwritingInfoCeded', contract, 'outUnderwritingInfoCeded'
+                    break
+                case VirtualizationMode.PREMIUM :
+                    doWire PRC, this, 'outClaimsCeded', contract, 'outClaimsCeded'
+                    break
+                case VirtualizationMode.CLAIMS_AND_PREMIUM :
+                    break
+                default :
+                    throw new NotImplementedException(contract.parmVirtual.toString())
             }
         }
     }

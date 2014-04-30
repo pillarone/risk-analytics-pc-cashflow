@@ -18,6 +18,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.IReportingPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractTests
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.VirtualizationMode
 import org.pillarone.riskanalytics.domain.pc.cf.segment.Segment
 import org.pillarone.riskanalytics.domain.utils.constant.LogicArguments
 import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
@@ -470,7 +471,7 @@ class ReinsuranceContractsTests extends GroovyTestCase {
 
         ReinsuranceContract xl500xs500 = ReinsuranceContractTests.getWXLContract(500, 500, 500, 200, date20110101)
         xl500xs500.name = 'xl 500 xs 500'
-        xl500xs500.parmVirtual = true
+        xl500xs500.parmVirtual = VirtualizationMode.CLAIMS_AND_PREMIUM
         ReinsuranceContract quoteOnXLNet = ReinsuranceContractTests.getQuotaShareContract(0.2, date20110101)
         quoteOnXLNet.parmCover = CoverAttributeStrategyType.getStrategy(CoverAttributeStrategyType.CONTRACTS,
                 ["contracts": new ConstrainedMultiDimensionalParameter([["xl 500 xs 500"], ["NET"]], ["Covered Contracts", "Based On"],

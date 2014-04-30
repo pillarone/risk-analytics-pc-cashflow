@@ -20,7 +20,7 @@ public class ReinsuranceContract extends MultiCounterPartyBaseReinsuranceContrac
 
     private IPeriodStrategy parmCoveredPeriod = PeriodStrategyType.getDefault();
     private IReinsuranceContractStrategy parmContractStrategy = ReinsuranceContractType.getDefault();
-    private Boolean parmVirtual = Boolean.FALSE;
+    private VirtualizationMode parmVirtual = VirtualizationMode.NO;
     private IPeriodDependingThresholdStore termDeductible;
     private IPeriodDependingThresholdStore termLimit;
 
@@ -98,11 +98,11 @@ public class ReinsuranceContract extends MultiCounterPartyBaseReinsuranceContrac
         this.parmCoveredPeriod = parmCoveredPeriod;
     }
 
-    public Boolean getParmVirtual() {
+    public VirtualizationMode getParmVirtual() {
         return parmVirtual;
     }
 
-    public void setParmVirtual(Boolean parmVirtual) {
+    public void setParmVirtual(VirtualizationMode parmVirtual) {
         this.parmVirtual = parmVirtual;
     }
 }

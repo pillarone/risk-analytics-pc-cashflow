@@ -75,7 +75,7 @@ components {
 			parmCover[0]=org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType.ORIGINALCLAIMS, ["filter":org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.FilterStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.FilterStrategyType.SEGMENTS, ["segments":new org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([["subMTPL"]]),["Segments"], org.pillarone.riskanalytics.domain.utils.marker.ISegmentMarker),]),])
 			parmCoveredPeriod[0]=org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType.getStrategy(org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType.ONEYEAR, [:])
 			parmReinsurers[0]=new org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter(org.pillarone.riskanalytics.core.util.GroovyUtils.toList([[]]),["Reinsurer","Covered Portion"], org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory.getConstraints('LEGAL_ENTITY_PORTION'))
-			parmVirtual[0]=false
+			parmVirtual[0]=org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.VirtualizationMode.NO
 		}
 	}
 	segments {
