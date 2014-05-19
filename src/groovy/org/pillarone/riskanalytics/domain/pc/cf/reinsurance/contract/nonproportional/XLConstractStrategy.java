@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.IBoundaryIndexStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
     protected double limit;
     protected double aggregateDeductible;
     protected double aggregateLimit;
+    protected IBoundaryIndexStrategy boundaryIndex;
     protected IStabilizationStrategy stabilization;
 
 
@@ -44,6 +46,7 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
         params.put(LIMIT, limit);
         params.put(AGGREGATE_DEDUCTIBLE, aggregateDeductible);
         params.put(AGGREGATE_LIMIT, aggregateLimit);
+        params.put(BOUNDARY_INDEX, boundaryIndex);
         params.put(STABILIZATION, stabilization);
         return params;
     }
@@ -68,5 +71,6 @@ public abstract class XLConstractStrategy extends AbstractParameterObject implem
     public static final String LIMIT = "limit";
     public static final String AGGREGATE_DEDUCTIBLE = "aggregateDeductible";
     public static final String AGGREGATE_LIMIT = "aggregateLimit";
+    public static final String BOUNDARY_INDEX = "boundaryIndex";
     public static final String STABILIZATION = "stabilization";
 }

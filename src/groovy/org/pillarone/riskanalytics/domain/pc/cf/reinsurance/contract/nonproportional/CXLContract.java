@@ -3,9 +3,11 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproport
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.*;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimsStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.IBoundaryIndexStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 
 import java.util.*;
@@ -32,9 +34,10 @@ public class CXLContract extends XLContract {
      */
     public CXLContract(double cededPremiumFixed, double attachmentPoint, double limit, double aggregateDeductible,
                        double aggregateLimit, IStabilizationStrategy stabilization,
-                       List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy riPremiumSplit) {
+                       List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy riPremiumSplit,
+                       IBoundaryIndexStrategy boundaryIndex, List<FactorsPacket> factors, IPeriodCounter periodCounter) {
         super(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit, stabilization,
-                reinstatementPremiumFactors, riPremiumSplit);
+                reinstatementPremiumFactors, riPremiumSplit, boundaryIndex, factors, periodCounter);
     }
 
     /**

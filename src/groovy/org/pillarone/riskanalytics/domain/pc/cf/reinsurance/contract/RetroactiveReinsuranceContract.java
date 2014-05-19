@@ -44,8 +44,9 @@ public class RetroactiveReinsuranceContract extends MultiCounterPartyBaseReinsur
     protected void updateContractParameters() {
         if (isCurrentPeriodCovered()) {
             startOfDevPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
+            IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
             periodStore.put(REINSURANCE_CONTRACT, parmContractStrategy.getContracts(
-                    startOfDevPeriod, inUnderwritingInfo, ExposureBase.ABSOLUTE, null, null, inClaims));
+                    periodCounter, inUnderwritingInfo, ExposureBase.ABSOLUTE, null, null, inClaims, inFactors));
         }
     }
 

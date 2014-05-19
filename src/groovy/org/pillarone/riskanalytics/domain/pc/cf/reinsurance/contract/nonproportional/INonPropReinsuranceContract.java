@@ -16,5 +16,4 @@ public interface INonPropReinsuranceContract extends IReinsuranceContract {
 
     void initCededPremiumAllocation(List<ClaimCashflowPacket> cededClaims, List<UnderwritingInfoPacket> grossUnderwritingInfos);
 
-
 }

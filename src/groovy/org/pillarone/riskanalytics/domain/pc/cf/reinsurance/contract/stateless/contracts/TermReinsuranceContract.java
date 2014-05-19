@@ -74,9 +74,10 @@ public class TermReinsuranceContract extends BaseReinsuranceContract implements 
 
     protected void updateContractParameters() {
         if (isCurrentPeriodCovered()) {
-            int currentPeriod = iterationScope.getPeriodScope().getCurrentPeriod();
+            IPeriodCounter periodCounter = iterationScope.getPeriodScope().getPeriodCounter();
             periodStore.put(REINSURANCE_CONTRACT, parmContractStructure.getContracts(
-                    currentPeriod, inUnderwritingInfo, parmContractBase.exposureBase(), termDeductible, termLimit, new ArrayList<ClaimCashflowPacket>()));
+                    periodCounter, inUnderwritingInfo, parmContractBase.exposureBase(), termDeductible, termLimit,
+                    new ArrayList<ClaimCashflowPacket>(), inFactors));
         }
     }
 

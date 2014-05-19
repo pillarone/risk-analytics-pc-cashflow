@@ -3,8 +3,10 @@ package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproport
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.IBoundaryIndexStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 
 import java.util.List;
@@ -28,9 +30,10 @@ public class WXLContract extends XLContract {
      */
     public WXLContract(double cededPremiumFixed, double attachmentPoint, double limit, double aggregateDeductible,
                        double aggregateLimit, IStabilizationStrategy stabilization,
-                       List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy premiumAllocation) {
+                       List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy premiumAllocation,
+                       IBoundaryIndexStrategy boundaryIndex, List<FactorsPacket> factors, IPeriodCounter periodCounter) {
         super(cededPremiumFixed, attachmentPoint, limit, aggregateDeductible, aggregateLimit, stabilization,
-                reinstatementPremiumFactors, premiumAllocation);
+                reinstatementPremiumFactors, premiumAllocation, boundaryIndex, factors, periodCounter);
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {

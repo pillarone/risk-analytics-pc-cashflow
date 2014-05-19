@@ -1,14 +1,15 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stateless.strategies;
 
-import org.pillarone.riskanalytics.core.packets.PacketList;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.ILimitStrategy;
@@ -52,20 +53,23 @@ public class ProportionalContractStrategy extends AbstractParameterObject implem
      * This implementation ignores all provided parameters.
      *
      *
-     * @param period ignored
+     * @param periodCounter ignored
      * @param underwritingInfoPackets ignored
      * @param base ignored
      * @param termDeductible ignored
      * @param termLimit ignored
      * @param claims
+     * @param factors
      * @return one contract
      */
-    public List<IReinsuranceContract> getContracts(int period,
+    public List<IReinsuranceContract> getContracts(IPeriodCounter periodCounter,
                                                    List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
-                                                   IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit, List<ClaimCashflowPacket> claims) {
+                                                   IPeriodDependingThresholdStore termDeductible,
+                                                   IPeriodDependingThresholdStore termLimit,
+                                                   List<ClaimCashflowPacket> claims, List<FactorsPacket> factors) {
         initCommissionPeriodParameters();
         IReinsuranceContract contract;
-        CommissionPeriodParameters parameters = periodParameters.floorEntry(period).getValue();
+        CommissionPeriodParameters parameters = periodParameters.floorEntry(periodCounter.currentPeriodIndex()).getValue();
         double quotaShare = parameters.getQuote();
         double aal = parameters.getCap() * UnderwritingInfoUtils.scalingFactor(underwritingInfoPackets, base);
         if (aal == 0) {

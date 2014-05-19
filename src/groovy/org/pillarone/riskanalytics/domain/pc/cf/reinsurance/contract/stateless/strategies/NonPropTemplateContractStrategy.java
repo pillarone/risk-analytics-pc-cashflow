@@ -5,11 +5,13 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
+import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranceContractStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
@@ -64,18 +66,21 @@ public class NonPropTemplateContractStrategy extends AbstractParameterObject imp
     /**
      *
      *
-     * @param period contracts of this period should be returned, normally this is the current period
+     * @param periodCounter contracts of this period should be returned, normally this is the current period
      * @param underwritingInfoPackets used for scaling relative contract parameters
      * @param base defines which property of the underwritingInfoPackets should be used for scaling. Depending on the
      *             contracts are parametrized, this parameter is ignored and instead a local strategy parameter is used
      * @param termDeductible deductible shared among several contracts
      * @param termLimit limit shared among several contracts
      * @param claims
+     * @param factors
      * @return list containing ProRataTermXLContract contracts
      */
-    public List<IReinsuranceContract> getContracts(int period,
+    public List<IReinsuranceContract> getContracts(IPeriodCounter periodCounter,
                                                    List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
-                                                   IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit, List<ClaimCashflowPacket> claims) {
+                                                   IPeriodDependingThresholdStore termDeductible,
+                                                   IPeriodDependingThresholdStore termLimit,
+                                                   List<ClaimCashflowPacket> claims, List<FactorsPacket> factors) {
         initContractsByPeriodAndPeriodCovered();
 
         // setting defaults
@@ -87,8 +92,8 @@ public class NonPropTemplateContractStrategy extends AbstractParameterObject imp
         double contractBase = UnderwritingInfoUtils.scalingFactor(underwritingInfoPackets, base);
 
         List<IReinsuranceContract> contracts = new ArrayList<IReinsuranceContract>();
-        for (LayerParameters layer : contractsByPeriod.getLayers(period)) {
-            contracts.add(new ProRataTermXLContract(layer, period, contractBase, stabilization,
+        for (LayerParameters layer : contractsByPeriod.getLayers(periodCounter.currentPeriodIndex())) {
+            contracts.add(new ProRataTermXLContract(layer, periodCounter.currentPeriodIndex(), contractBase, stabilization,
                     reinstatementPremiumFactors, premiumAllocation, termDeductible, termLimit));
         }
         return contracts;

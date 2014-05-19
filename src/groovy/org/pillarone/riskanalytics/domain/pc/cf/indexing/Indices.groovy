@@ -19,6 +19,7 @@ class Indices extends ComposedComponent {
     SeverityIndices subSeverityIndices = new SeverityIndices()
     PolicyIndices subPolicyIndices = new PolicyIndices()
     PremiumIndices subPremiumIndices = new PremiumIndices()
+    ReinsuranceContractIndices subReinsuranceContractIndices = new ReinsuranceContractIndices()
 
     @Override
     void wire() {
@@ -28,11 +29,13 @@ class Indices extends ComposedComponent {
             this.outFactors = subFrequencyIndices.outFactors
             this.outFactors = subPolicyIndices.outFactors
             this.outFactors = subPremiumIndices.outFactors
+            this.outFactors = subReinsuranceContractIndices.outFactors
             subRunOffIndices.inEventSeverities = this.inEventSeverities
             subSeverityIndices.inEventSeverities = this.inEventSeverities
             subFrequencyIndices.inEventSeverities = this.inEventSeverities
             subPolicyIndices.inEventSeverities = this.inEventSeverities
             subPremiumIndices.inEventSeverities = this.inEventSeverities
+            subReinsuranceContractIndices.inEventSeverities = this.inEventSeverities
         }
     }
 }

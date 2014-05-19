@@ -8,10 +8,13 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.IClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AbstractReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.IStabilizationStrategy;
 
 import java.util.List;
@@ -40,7 +43,7 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
 
     protected ThresholdStore periodDeductible;
     protected ThresholdStore periodLimit;
-
+    protected IBoundaryIndexStrategy boundaryIndex;
     protected IStabilizationStrategy stabilization;
 
     /**
@@ -56,15 +59,22 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
      */
     public XLContract(double cededPremiumFixed, double attachmentPoint, double limit, double aggregateDeductible,
                       double aggregateLimit, IStabilizationStrategy stabilization,
-                      List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy riPremiumSplit) {
+                      List<Double> reinstatementPremiumFactors, IRIPremiumSplitStrategy riPremiumSplit,
+                      IBoundaryIndexStrategy boundaryIndex, List<FactorsPacket> factors, IPeriodCounter periodCounter) {
         this.cededPremiumFixed = cededPremiumFixed;
         this.attachmentPoint = attachmentPoint;
         this.limit = limit;
         this.riPremiumSplit = riPremiumSplit;
         periodDeductible = new ThresholdStore(aggregateDeductible);
         this.stabilization = stabilization;
+        this.boundaryIndex = boundaryIndex;
         periodLimit = new ThresholdStore(aggregateLimit);
-        reinstatements = new ReinstatementsAndLimitStore(periodLimit, limit, reinstatementPremiumFactors);
+        if (boundaryIndex != null && !(boundaryIndex.getType().equals(XLBoundaryIndexType.NONE))) {
+            List<Factors> filterFactors = IndexUtils.filterFactors(factors, boundaryIndex.getIndex());
+            double factor = IndexUtils.aggregateFactor(filterFactors, periodCounter.getCurrentPeriodStart());
+            ((XLIndexedBoundaryIndexStrategy) boundaryIndex).getIndexedValues().applicableIndex(this, factor);
+        }
+        reinstatements = new ReinstatementsAndLimitStore(periodLimit, this.limit, reinstatementPremiumFactors);
     }
 
     /**
@@ -170,6 +180,22 @@ public class XLContract extends AbstractReinsuranceContract implements INonPropR
             }
         }
         isStartCoverPeriod = false;
+    }
+
+    public void multiplyLimitBy(double factor) {
+        limit *= factor;
+    }
+
+    public void multiplyAttachmentPoint(double factor) {
+        attachmentPoint *= factor;
+    }
+
+    public void multiplyAggregateLimitBy(double factor) {
+        periodLimit = new ThresholdStore(periodLimit.threshold() * factor);
+    }
+
+    public void multiplyAggregateDeductibleBy(double factor) {
+        periodDeductible = new ThresholdStore(periodDeductible.threshold() * factor);
     }
 
     @Override

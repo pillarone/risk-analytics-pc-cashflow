@@ -7,10 +7,14 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AbstractReinsuranceContract;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.AggregateEventClaimsStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.*;
 
 import java.util.List;
 
@@ -30,6 +34,7 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
 
     private ThresholdStore periodAttachmentPoint;
     private ThresholdStore periodLimit;
+    protected IBoundaryIndexStrategy boundaryIndex;
 
     // todo(sku): check if reset is required!
     private AggregateEventClaimsStorage aggregateClaimStorage;
@@ -42,11 +47,18 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
      * @param riPremiumSplit
      */
     public StopLossContract(double cededPremiumFixed, double attachmentPoint, double limit,
-                            IRIPremiumSplitStrategy riPremiumSplit) {
+                            IRIPremiumSplitStrategy riPremiumSplit,
+                            IBoundaryIndexStrategy boundaryIndex, List<FactorsPacket> factors, IPeriodCounter periodCounter) {
         this.cededPremiumFixed = cededPremiumFixed;
         this.riPremiumSplit = riPremiumSplit;
         periodAttachmentPoint = new ThresholdStore(attachmentPoint);
         periodLimit = new ThresholdStore(limit);
+        this.boundaryIndex = boundaryIndex;
+        if (boundaryIndex != null && !(boundaryIndex.getType().equals(StopLossBoundaryIndexType.NONE))) {
+            List<Factors> filterFactors = IndexUtils.filterFactors(factors, boundaryIndex.getIndex());
+            double factor = IndexUtils.aggregateFactor(filterFactors, periodCounter.getCurrentPeriodStart());
+            ((StopLossIndexedBoundaryIndexStrategy) boundaryIndex).getIndexedValues().applicableIndex(this, factor);
+        }
     }
 
     @Override
@@ -68,6 +80,14 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
     // todo(sku): try to call this function only if isStartCoverPeriod
     public void initCededPremiumAllocation(List<ClaimCashflowPacket> cededClaims, List<UnderwritingInfoPacket> grossUnderwritingInfos) {
         riPremiumSplit.initSegmentShares(cededClaims, grossUnderwritingInfos);
+    }
+
+    public void multiplyLimitBy(double factor) {
+        periodLimit = new ThresholdStore(periodLimit.threshold() * factor);
+    }
+
+    public void multiplyAttachmentPoint(double factor) {
+        periodAttachmentPoint = new ThresholdStore(periodLimit.threshold() * factor);
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {

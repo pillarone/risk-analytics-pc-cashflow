@@ -8,6 +8,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
 import org.pillarone.riskanalytics.core.simulation.TestPeriodScopeUtilities
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IIndexMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IPayoutPatternMarker
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.utils.math.distribution.DistributionModifier
@@ -85,7 +86,7 @@ class ClaimsGeneratorSeverityIndexTests extends GroovyTestCase {
         return new PayoutPattern(name: patternName)
     }
 
-    static FactorsPacket getFactorsPacket(List<DateTime> dates, List<Double> factors, ISeverityIndexMarker origin) {
+    static FactorsPacket getFactorsPacket(List<DateTime> dates, List<Double> factors, IIndexMarker origin) {
         FactorsPacket factorsPacket = new FactorsPacket()
         for (int i = 0; i < dates.size(); i++) {
             factorsPacket.add(dates[i], factors[i])

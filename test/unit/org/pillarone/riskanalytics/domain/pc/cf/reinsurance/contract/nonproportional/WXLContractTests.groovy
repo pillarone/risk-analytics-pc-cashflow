@@ -1,5 +1,12 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional
 
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorSeverityIndexTests
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.BaseDateMode
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexMode
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ReinsuranceContractIndex
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ReinsuranceContractIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
@@ -17,6 +24,8 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.XLBoundaryIndexApplication
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.XLBoundaryIndexType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.stabilization.StabilizationStrategyType
 import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
@@ -423,6 +432,148 @@ class WXLContractTests extends GroovyTestCase {
         assertEquals 'P4 ceded premium variable', 0, wxl.outUnderwritingInfoCeded[0].commissionVariable, EPSILON
     }
 
+    void testLimitBoundaryIndexApplied() {
+        ReinsuranceContractIndex index = new ReinsuranceContractIndex(name: 'market')
+        ReinsuranceContract wxl = getWXLContract(20, 20, 100, 0, 100, [0.2d], date20110101)
+        wxl.parmCoveredPeriod = PeriodStrategyType.getStrategy(PeriodStrategyType.MONTHS, [
+            startCover: new DateTime(date20110101), numberOfMonths: 24])
+        wxl.parmContractStrategy.boundaryIndex = XLBoundaryIndexType.getStrategy(XLBoundaryIndexType.INDEXED,
+            [index: new ConstrainedMultiDimensionalParameter(
+                [[index.name], [IndexMode.CONTINUOUS.toString()], [BaseDateMode.DATE_OF_LOSS.toString()], [new DateTime()]],
+                ["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints(ReinsuranceContractIndexSelectionTableConstraints.IDENTIFIER)),
+             indexedValues: XLBoundaryIndexApplication.LIMIT_AGGREGATE_LIMIT])
+        wxl.parmContractStrategy.boundaryIndex.index.comboBoxValues.put(0, ['market': index])
+        PeriodScope periodScope = wxl.iterationScope.periodScope
+        IPeriodCounter periodCounter = periodScope.periodCounter
+
+        List<GrossClaimRoot> claimRoots = [new GrossClaimRoot(-50, ClaimType.SINGLE,
+            date20110418, date20110418, annualPayoutPattern, annualReportingPatternInclFirst)]
+        addClaimCashflowOfCurrentPeriod(wxl, claimRoots, periodCounter, false)
+        UnderwritingInfoPacket uw120 = new UnderwritingInfoPacket(premiumWritten: 120, premiumPaid: 100,
+            exposure: new ExposureInfo(periodScope));
+        wxl.inUnderwritingInfo.add(uw120)
+
+        FactorsPacket indexFactorsPacket = ClaimsGeneratorSeverityIndexTests.getFactorsPacket(
+            [ClaimsGeneratorSeverityIndexTests.date20100101, ClaimsGeneratorSeverityIndexTests.date20100701,
+             ClaimsGeneratorSeverityIndexTests.date20110101, ClaimsGeneratorSeverityIndexTests.date20120101,
+             ClaimsGeneratorSeverityIndexTests.date20130101, ClaimsGeneratorSeverityIndexTests.date20140101],
+            [1, 1.02, 1.03, 1.06, 1.07, 1.1], index)
+        wxl.inFactors.add(indexFactorsPacket)
+
+        wxl.doCalculation()
+        assertEquals 20.6, wxl.outClaimsCeded[0].ultimate()
+
+        claimRoots << new GrossClaimRoot(-50, ClaimType.SINGLE,
+            date20120101, date20120101, annualPayoutPattern, annualReportingPatternInclFirst)
+
+        wxl.reset()
+        wxl.iterationScope.periodScope.prepareNextPeriod()
+        addClaimCashflowOfCurrentPeriod(wxl, claimRoots, periodCounter, false)
+        wxl.inFactors.add(indexFactorsPacket)
+        wxl.doCalculation()
+        assertEqualsOnList "2012, ultimate", [21.2, 20.6], wxl.outClaimsCeded*.developedUltimate()
+        assertEqualsOnList "2012, reported", [0, 10.0], wxl.outClaimsCeded*.reportedCumulatedIndexed
+        assertEqualsOnList "2012, paid", [0, 0], wxl.outClaimsCeded*.paidCumulatedIndexed
+
+        wxl.reset()
+        wxl.iterationScope.periodScope.prepareNextPeriod()
+        addClaimCashflowOfCurrentPeriod(wxl, claimRoots, periodCounter, false)
+        wxl.inFactors.add(indexFactorsPacket)
+        wxl.doCalculation()
+        assertEqualsOnList "2013, ultimate", [21.2, 20.6], wxl.outClaimsCeded*.developedUltimate()
+        assertEqualsOnList "2013, reported", [10, 20], wxl.outClaimsCeded*.reportedCumulatedIndexed
+        assertEqualsOnList "2013, paid", [0, 15], wxl.outClaimsCeded*.paidCumulatedIndexed
+
+        wxl.reset()
+        wxl.iterationScope.periodScope.prepareNextPeriod()
+        addClaimCashflowOfCurrentPeriod(wxl, claimRoots, periodCounter, false)
+        wxl.inFactors.add(indexFactorsPacket)
+        wxl.doCalculation()
+        assertEqualsOnList "2013, ultimate", [21.2, 20.6], wxl.outClaimsCeded*.developedUltimate()
+        assertEqualsOnList "2013, reported", [20, 20.6], wxl.outClaimsCeded*.reportedCumulatedIndexed
+        assertEqualsOnList "2013, paid", [15, 20.6], wxl.outClaimsCeded*.paidCumulatedIndexed
+
+        wxl.reset()
+        wxl.iterationScope.periodScope.prepareNextPeriod()
+        addClaimCashflowOfCurrentPeriod(wxl, claimRoots, periodCounter, false)
+        wxl.inFactors.add(indexFactorsPacket)
+        wxl.doCalculation()
+        assertEqualsOnList "2013, ultimate", [21.2, 20.6], wxl.outClaimsCeded*.developedUltimate()
+        assertEqualsOnList "2013, reported", [21.2, 20.6], wxl.outClaimsCeded*.reportedCumulatedIndexed
+        assertEqualsOnList "2013, paid", [21.2, 20.6], wxl.outClaimsCeded*.paidCumulatedIndexed
+    }
+
+    void testAttachmentPointBoundaryIndexApplied() {
+        ReinsuranceContractIndex index = new ReinsuranceContractIndex(name: 'market')
+        ReinsuranceContract wxl = getWXLContract(20, 20, 100, 0, 100, [0.2d], date20110101)
+        wxl.parmCoveredPeriod = PeriodStrategyType.getStrategy(PeriodStrategyType.MONTHS, [
+            startCover: new DateTime(date20110101), numberOfMonths: 24])
+        wxl.parmContractStrategy.boundaryIndex = XLBoundaryIndexType.getStrategy(XLBoundaryIndexType.INDEXED,
+            [index: new ConstrainedMultiDimensionalParameter(
+                [[index.name], [IndexMode.CONTINUOUS.toString()], [BaseDateMode.DATE_OF_LOSS.toString()], [new DateTime()]],
+                ["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints(ReinsuranceContractIndexSelectionTableConstraints.IDENTIFIER)),
+             indexedValues: XLBoundaryIndexApplication.ATTACHMENT_POINT])
+        wxl.parmContractStrategy.boundaryIndex.index.comboBoxValues.put(0, ['market': index])
+        PeriodScope periodScope = wxl.iterationScope.periodScope
+        IPeriodCounter periodCounter = periodScope.periodCounter
+
+        List<GrossClaimRoot> claimRoots = [new GrossClaimRoot(-50, ClaimType.SINGLE,
+            date20110418, date20110418, annualPayoutPattern, annualReportingPatternInclFirst)]
+        addClaimCashflowOfCurrentPeriod(wxl, claimRoots, periodCounter, false)
+        UnderwritingInfoPacket uw120 = new UnderwritingInfoPacket(premiumWritten: 120, premiumPaid: 100,
+            exposure: new ExposureInfo(periodScope));
+        wxl.inUnderwritingInfo.add(uw120)
+
+        FactorsPacket indexFactorsPacket = ClaimsGeneratorSeverityIndexTests.getFactorsPacket(
+            [ClaimsGeneratorSeverityIndexTests.date20100101, ClaimsGeneratorSeverityIndexTests.date20100701,
+             ClaimsGeneratorSeverityIndexTests.date20110101, ClaimsGeneratorSeverityIndexTests.date20120101,
+             ClaimsGeneratorSeverityIndexTests.date20130101, ClaimsGeneratorSeverityIndexTests.date20140101],
+            [1, 1.02, 1.03, 1.06, 1.07, 1.1], index)
+        wxl.inFactors.add(indexFactorsPacket)
+
+        wxl.doCalculation()
+        assertEquals 20, wxl.outClaimsCeded[0].ultimate()
+
+        claimRoots << new GrossClaimRoot(-50, ClaimType.SINGLE,
+            date20120101, date20120101, annualPayoutPattern, annualReportingPatternInclFirst)
+
+        wxl.reset()
+        wxl.iterationScope.periodScope.prepareNextPeriod()
+        addClaimCashflowOfCurrentPeriod(wxl, claimRoots, periodCounter, false)
+        wxl.inFactors.add(indexFactorsPacket)
+        wxl.doCalculation()
+        assertEqualsOnList "2012, ultimate", [20, 20], wxl.outClaimsCeded*.developedUltimate()
+        assertEqualsOnList "2012, reported", [0, 9.4], wxl.outClaimsCeded*.reportedCumulatedIndexed
+        assertEqualsOnList "2012, paid", [0, 0], wxl.outClaimsCeded*.paidCumulatedIndexed
+
+        wxl.reset()
+        wxl.iterationScope.periodScope.prepareNextPeriod()
+        addClaimCashflowOfCurrentPeriod(wxl, claimRoots, periodCounter, false)
+        wxl.inFactors.add(indexFactorsPacket)
+        wxl.doCalculation()
+        assertEqualsOnList "2013, ultimate", [20, 20], wxl.outClaimsCeded*.developedUltimate()
+        assertEqualsOnList "2013, reported", [8.8, 19.4], wxl.outClaimsCeded*.reportedCumulatedIndexed
+        assertEqualsOnList "2013, paid", [0.0, 14.4], wxl.outClaimsCeded*.paidCumulatedIndexed
+
+        wxl.reset()
+        wxl.iterationScope.periodScope.prepareNextPeriod()
+        addClaimCashflowOfCurrentPeriod(wxl, claimRoots, periodCounter, false)
+        wxl.inFactors.add(indexFactorsPacket)
+        wxl.doCalculation()
+        assertEqualsOnList "2013, ultimate", [20, 20], wxl.outClaimsCeded*.developedUltimate()
+        assertEqualsOnList "2013, reported", [18.8, 20.0], wxl.outClaimsCeded*.reportedCumulatedIndexed
+        assertEqualsOnList "2013, paid", [13.8, 20.0], wxl.outClaimsCeded*.paidCumulatedIndexed
+
+        wxl.reset()
+        wxl.iterationScope.periodScope.prepareNextPeriod()
+        addClaimCashflowOfCurrentPeriod(wxl, claimRoots, periodCounter, false)
+        wxl.inFactors.add(indexFactorsPacket)
+        wxl.doCalculation()
+        assertEqualsOnList "2013, ultimate", [20, 20], wxl.outClaimsCeded*.developedUltimate()
+        assertEqualsOnList "2013, reported", [20, 20], wxl.outClaimsCeded*.reportedCumulatedIndexed
+        assertEqualsOnList "2013, paid", [20, 20], wxl.outClaimsCeded*.paidCumulatedIndexed
+    }
+
     private GrossClaimRoot getBaseClaim(double ultimate) {
         GrossClaimRoot claimRoot = new GrossClaimRoot(ultimate, ClaimType.SINGLE,
                 date20110418, date20110418, annualPayoutPattern2, annualFastReportingPattern)
@@ -434,6 +585,15 @@ class WXLContractTests extends GroovyTestCase {
         for (GrossClaimRoot baseClaim : baseClaims) {
             List<ClaimCashflowPacket> claims = baseClaim.getClaimCashflowPackets(periodCounter)
             wxl.inClaims.addAll(claims)
+        }
+    }
+
+    private void assertEqualsOnList(String message, List<Number> expected, List<Number> actual, Double epsilon = 1E-8) {
+        for (int i = 0; i < expected.size(); i++) {
+            if (Math.abs(expected[i] - actual[i]) > epsilon) {
+                failNotEquals(message, expected, actual)
+                return
+            }
         }
     }
 
