@@ -1,16 +1,25 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional
 
 import org.joda.time.Period
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.simulation.ContinuousPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.TestVoidModel
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.pillarone.riskanalytics.core.simulation.engine.SimulationScope
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorSeverityIndexTests
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.BaseDateMode
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexMode
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ReinsuranceContractIndex
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ReinsuranceContractIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
 import org.joda.time.DateTime
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
 import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
-
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.SurplusBoundaryIndexApplication
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.SurplusBoundaryIndexType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.WXLContractTests
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.CommissionStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.CoverAttributeStrategyType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.FilterStrategyType
@@ -29,6 +38,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 
 /**
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
@@ -36,32 +46,11 @@ import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
 class SurplusContractTests extends GroovyTestCase {
 
     DateTime date20110101 = new DateTime(2011,1,1,0,0,0,0)
+    DateTime date20120101 = new DateTime(2012,1,1,0,0,0,0)
     PatternPacket trivialReportingPattern = new PatternPacket.TrivialPattern(IReportingPatternMarker.class);
     PatternPacket trivialPayoutPattern = new PatternPacket.TrivialPattern(IPayoutPatternMarker.class);
     PatternPacket annualReportingPattern = PatternPacketTests.getPattern([0, 12, 24, 36, 48], [0.3d, 0.6d, 0.8d, 0.98d, 1.0d])
     PatternPacket annualPayoutPattern = PatternPacketTests.getPattern([0, 12, 24, 36, 48], [0d, 0.4d, 0.7d, 0.85d, 1.0d])
-
-    static ReinsuranceContract getContract0() {
-        return new ReinsuranceContract(
-                parmContractStrategy: ReinsuranceContractType.getStrategy(
-                        ReinsuranceContractType.SURPLUS,
-                        ["retention": 100,
-                         "lines": 5,
-                         "defaultCededLossShare": 0d,
-                         "coveredByReinsurer": 1d]),
-                i: getTestSimulationScope())
-    }
-
-    static ReinsuranceContract getContract1() {
-        return new ReinsuranceContract(
-                parmContractStrategy: ReinsuranceContractType.getStrategy(
-                    ReinsuranceContractType.SURPLUS,
-                    ["retention": 100,
-                     "lines": 5,
-                     "coveredByReinsurer": 1d,
-                     "defaultCededLossShare": 0.5]),
-                simulationScope: getTestSimulationScope())
-    }
 
     static ReinsuranceContract getContract(double retention, double lines, double defaultCededLossShare, DateTime beginOfCover) {
         IterationScope iterationScope = TestIterationScopeUtilities.getIterationScope(beginOfCover, 3)
@@ -128,8 +117,9 @@ class SurplusContractTests extends GroovyTestCase {
     }
 
     List<ClaimCashflowPacket> getClaim(double ultimate, ClaimType claimType, IPeriodCounter periodCounter,
-                                       PatternPacket payoutPattern, PatternPacket reportingPattern, UnderwritingInfoPacket uwInfo) {
-        ClaimRoot claimRoot = new ClaimRoot(ultimate, claimType, date20110101, date20110101)
+                                       PatternPacket payoutPattern, PatternPacket reportingPattern,
+                                       UnderwritingInfoPacket uwInfo, DateTime date = date20110101) {
+        ClaimRoot claimRoot = new ClaimRoot(ultimate, claimType, date, date)
         claimRoot = claimRoot.withExposure(uwInfo?.exposure)
         GrossClaimRoot grossClaimRoot = new GrossClaimRoot(claimRoot, payoutPattern, reportingPattern)
         List<ClaimCashflowPacket> claims = grossClaimRoot.getClaimCashflowPackets(periodCounter)
@@ -238,5 +228,44 @@ class SurplusContractTests extends GroovyTestCase {
         assertEquals "premium written 0", -0d * contract.inUnderwritingInfo[0].premiumWritten, contract.outUnderwritingInfoCeded[0].premiumWritten, 0
         assertEquals "premium written 1", -0.5 * contract.inUnderwritingInfo[1].premiumWritten, contract.outUnderwritingInfoCeded[1].premiumWritten
         assertEquals "premium written 2", -0.8 * contract.inUnderwritingInfo[2].premiumWritten, contract.outUnderwritingInfoCeded[2].premiumWritten
+    }
+
+    void testRetentionBoundaryIndexApplied() {
+        ReinsuranceContractIndex index = new ReinsuranceContractIndex(name: 'market')
+        ReinsuranceContract contract = getContract(20, 5, 0, date20110101)
+        contract.parmCoveredPeriod = PeriodStrategyType.getStrategy(PeriodStrategyType.MONTHS, [
+            startCover: new DateTime(date20110101), numberOfMonths: 24])
+        contract.parmContractStrategy.boundaryIndex = SurplusBoundaryIndexType.getStrategy(SurplusBoundaryIndexType.INDEXED,
+            [index: new ConstrainedMultiDimensionalParameter(
+                [[index.name], [IndexMode.CONTINUOUS.toString()], [BaseDateMode.DATE_OF_LOSS.toString()], [new DateTime()]],
+                ["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints(ReinsuranceContractIndexSelectionTableConstraints.IDENTIFIER)),
+             indexedValues: SurplusBoundaryIndexApplication.RETENTION])
+        contract.parmContractStrategy.boundaryIndex.index.comboBoxValues.put(0, ['market': index])
+        PeriodScope periodScope = contract.iterationScope.periodScope
+        IPeriodCounter periodCounter = periodScope.periodCounter
+
+        List<UnderwritingInfoPacket> exposures = getUnderwritingInfos()
+        contract.inClaims.addAll(getClaim(-20d, ClaimType.SINGLE, periodCounter, trivialPayoutPattern, trivialReportingPattern, exposures[0]))
+        contract.inClaims.addAll(getClaim(-30d, ClaimType.SINGLE, periodCounter, trivialPayoutPattern, trivialReportingPattern, exposures[1]))
+        contract.inClaims.addAll(getClaim(-60d, ClaimType.SINGLE, periodCounter, trivialPayoutPattern, trivialReportingPattern, exposures[2]))
+
+
+        FactorsPacket indexFactorsPacket = ClaimsGeneratorSeverityIndexTests.getFactorsPacket(
+            [ClaimsGeneratorSeverityIndexTests.date20100101, ClaimsGeneratorSeverityIndexTests.date20100701,
+             ClaimsGeneratorSeverityIndexTests.date20110101, ClaimsGeneratorSeverityIndexTests.date20120101],
+            [1, 1.02, 1.5, 2], index)
+        contract.inFactors.add(indexFactorsPacket)
+
+        contract.doCalculation()
+        assertEquals "2011, ultimates", [12.5, 22.5, 18], contract.outClaimsCeded*.ultimate()
+
+        contract.reset()
+        contract.iterationScope.periodScope.prepareNextPeriod()
+        contract.inClaims.addAll(getClaim(-20d, ClaimType.SINGLE, periodCounter, trivialPayoutPattern, trivialReportingPattern, exposures[0], date20120101))
+        contract.inClaims.addAll(getClaim(-30d, ClaimType.SINGLE, periodCounter, trivialPayoutPattern, trivialReportingPattern, exposures[1], date20120101))
+        contract.inClaims.addAll(getClaim(-60d, ClaimType.SINGLE, periodCounter, trivialPayoutPattern, trivialReportingPattern, exposures[2], date20120101))
+        contract.inFactors.add(indexFactorsPacket)
+        contract.doCalculation()
+        assertEquals "2012, ultimates", [10, 24, 24], contract.outClaimsCeded*.ultimate()
     }
 }

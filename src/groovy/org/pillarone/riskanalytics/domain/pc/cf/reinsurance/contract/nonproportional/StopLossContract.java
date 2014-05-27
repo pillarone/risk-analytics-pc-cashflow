@@ -29,7 +29,6 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
     private boolean isStartCoverPeriod = true;
 
     /** Strategy to allocate the ceded premium to the different lines of business  */
-    // todo: business object instead of parameter
     private IRIPremiumSplitStrategy riPremiumSplit;
 
     private ThresholdStore periodAttachmentPoint;
@@ -86,8 +85,12 @@ public class StopLossContract extends AbstractReinsuranceContract implements INo
         periodLimit = new ThresholdStore(periodLimit.threshold() * factor);
     }
 
+    public void multiplyCededPremiumBy(double factor) {
+        cededPremiumFixed *= factor;
+    }
+
     public void multiplyAttachmentPoint(double factor) {
-        periodAttachmentPoint = new ThresholdStore(periodLimit.threshold() * factor);
+        periodAttachmentPoint = new ThresholdStore(periodAttachmentPoint.threshold() * factor);
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {

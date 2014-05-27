@@ -14,6 +14,9 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.IReinsuranc
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.IRIPremiumSplitStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.IBoundaryIndexStrategy;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.StopLossBoundaryIndexApplication;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.StopLossBoundaryIndexType;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.StopLossIndexedBoundaryIndexStrategy;
 
 import java.util.*;
 
@@ -70,18 +73,29 @@ public class StopLossContractStrategy extends AbstractParameterObject implements
         double scaledLimit = limit;
         switch (stopLossContractBase) {
             case ABSOLUTE:
-                break;
+                return new ArrayList<IReinsuranceContract>(Arrays.asList(
+                    new StopLossContract(cededPremiumFixed, scaledAttachmentPoint, scaledLimit, premiumAllocation, boundaryIndex, factors, periodCounter)));
             case GNPI:
                 double gnpi = UnderwritingInfoUtils.sumPremiumWritten(underwritingInfoPackets);
                 cededPremiumFixed *= gnpi;
                 scaledAttachmentPoint *= gnpi;
                 scaledLimit *= gnpi;
-                break;
+                if (boundaryIndex.getType().equals(StopLossBoundaryIndexType.INDEXED)
+                    && ((StopLossIndexedBoundaryIndexStrategy) boundaryIndex).getIndexedValues().equals(StopLossBoundaryIndexApplication.ATTACHMENT_POINT_LIMIT_PREMIUM)) {
+                    Map<String, Object> params = new HashMap<String, Object>(2);
+                    params.put("index", boundaryIndex.getIndex());
+                    params.put("indexValues", StopLossBoundaryIndexApplication.ATTACHMENT_POINT_LIMIT);
+                    IBoundaryIndexStrategy boundaryIndexNoPremium = StopLossBoundaryIndexType.getStrategy(StopLossBoundaryIndexType.INDEXED, params);
+                    return new ArrayList<IReinsuranceContract>(Arrays.asList(
+                        new StopLossContract(cededPremiumFixed, scaledAttachmentPoint, scaledLimit, premiumAllocation, boundaryIndexNoPremium, factors, periodCounter)));
+                } else {
+                    return new ArrayList<IReinsuranceContract>(Arrays.asList(
+                        new StopLossContract(cededPremiumFixed, scaledAttachmentPoint, scaledLimit, premiumAllocation, boundaryIndex, factors, periodCounter)));
+                }
             default:
                 throw new NotImplementedException("StopLossBase " + stopLossContractBase.toString() + " not implemented.");
         }
-        return new ArrayList<IReinsuranceContract>(Arrays.asList(
-                new StopLossContract(cededPremiumFixed, scaledAttachmentPoint, scaledLimit, premiumAllocation, boundaryIndex, factors, periodCounter)));
+
     }
 
     public double getTermDeductible() {

@@ -6,7 +6,11 @@ import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.CededUnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoUtils;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.Factors;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.IndexUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ClaimStorage;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.*;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.ICommission;
 
 import java.util.List;
@@ -21,13 +25,21 @@ public class SurplusContract extends AbstractProportionalReinsuranceContract {
     private double lines;
     /** surplus share for claims without sum insured information */
     private double defaultCededLossShare;
+    private IBoundaryIndexStrategy boundaryIndex;
 
 
-    public SurplusContract(double retention, double lines, double defaultCededLossShare, ICommission commission) {
+    public SurplusContract(double retention, double lines, double defaultCededLossShare, ICommission commission,
+                           IBoundaryIndexStrategy boundaryIndex, List<FactorsPacket> factors, IPeriodCounter periodCounter) {
         this.retention = retention;
         this.lines = lines;
         this.defaultCededLossShare = defaultCededLossShare;
         this.commission = commission;
+        this.boundaryIndex = boundaryIndex;
+        if (boundaryIndex != null && !(boundaryIndex.getType().equals(SurplusBoundaryIndexType.NONE))) {
+            List<Factors> filterFactors = IndexUtils.filterFactors(factors, boundaryIndex.getIndex());
+            double factor = IndexUtils.aggregateFactor(filterFactors, periodCounter.getCurrentPeriodStart());
+            ((SurplusIndexedBoundaryIndexStrategy) boundaryIndex).getIndexedValues().applicableIndex(this, factor);
+        }
     }
 
     public ClaimCashflowPacket calculateClaimCeded(ClaimCashflowPacket grossClaim, ClaimStorage storage, IPeriodCounter periodCounter) {
@@ -62,6 +74,10 @@ public class SurplusContract extends AbstractProportionalReinsuranceContract {
             cededUwInfos.add(cededUnderwritingInfo);
             netUnderwritingInfos.add(grossUnderwritingInfo.getNet(cededUnderwritingInfo, true));
         }
+    }
+
+    public void multiplyRetentionBy(double factor) {
+        retention *= factor;
     }
 
 

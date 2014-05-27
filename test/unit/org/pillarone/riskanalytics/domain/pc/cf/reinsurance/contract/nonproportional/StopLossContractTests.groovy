@@ -1,7 +1,7 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional
 
 import org.joda.time.DateTime
-
+import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter
 import org.pillarone.riskanalytics.core.simulation.TestIterationScopeUtilities
 import org.pillarone.riskanalytics.core.simulation.engine.IterationScope
@@ -9,14 +9,21 @@ import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimCashflowPacket
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorSeverityIndexTests
 import org.pillarone.riskanalytics.domain.pc.cf.event.EventPacket
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureInfo
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ReinsuranceContractIndex
+import org.pillarone.riskanalytics.domain.pc.cf.indexing.ReinsuranceContractIndexSelectionTableConstraints
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacketTests
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContract
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.ReinsuranceContractType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.allocation.PremiumAllocationType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.StopLossBoundaryIndexApplication
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.StopLossBoundaryIndexType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.SurplusBoundaryIndexApplication
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.SurplusBoundaryIndexType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.cover.period.PeriodStrategyType
 import org.pillarone.riskanalytics.domain.utils.constraint.ReinsuranceContractBasedOn
 import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory
@@ -559,7 +566,7 @@ class StopLossContractTests extends GroovyTestCase {
      * claims occur in different periods, make sure both get the whole cover or more generally a new contract instance is applied
      */
     void testIndependenceOfContractsPerPeriod() {
-                ReinsuranceContract stopLoss = getStopLossContract(StopLossBase.ABSOLUTE, 2400, 800, 400, date20110101)
+        ReinsuranceContract stopLoss = getStopLossContract(StopLossBase.ABSOLUTE, 2400, 800, 400, date20110101)
         stopLoss.parmCoveredPeriod = PeriodStrategyType.getStrategy(PeriodStrategyType.MONTHS, [
                 startCover: new DateTime(date20110101), numberOfMonths: 24])
         PeriodScope periodScope = stopLoss.iterationScope.periodScope
@@ -634,6 +641,47 @@ class StopLossContractTests extends GroovyTestCase {
         assertEquals 'P2 ceded commission', 0, stopLoss.outUnderwritingInfoCeded[0].commission, EPSILON
         assertEquals 'P2 ceded commission fixed', 0, stopLoss.outUnderwritingInfoCeded[0].commissionFixed
         assertEquals 'P2 ceded commission variable', 0, stopLoss.outUnderwritingInfoCeded[0].commissionVariable, EPSILON
+    }
+
+    void testRetentionBoundaryIndexApplied() {
+        ReinsuranceContractIndex index = new ReinsuranceContractIndex(name: 'market')
+        ReinsuranceContract contract = getStopLossContract(StopLossBase.ABSOLUTE, 2400, 800, 400, date20110101)
+        contract.parmCoveredPeriod = PeriodStrategyType.getStrategy(PeriodStrategyType.MONTHS, [
+            startCover: new DateTime(date20110101), numberOfMonths: 24])
+        contract.parmContractStrategy.boundaryIndex = StopLossBoundaryIndexType.getStrategy(StopLossBoundaryIndexType.INDEXED,
+            [index: new ConstrainedMultiDimensionalParameter(
+                [[index.name], [IndexMode.CONTINUOUS.toString()], [BaseDateMode.DATE_OF_LOSS.toString()], [new DateTime()]],
+                ["Index","Index Mode","Base Date Mode","Date"], ConstraintsFactory.getConstraints(ReinsuranceContractIndexSelectionTableConstraints.IDENTIFIER)),
+             indexedValues: StopLossBoundaryIndexApplication.ATTACHMENT_POINT_LIMIT])
+        contract.parmContractStrategy.boundaryIndex.index.comboBoxValues.put(0, ['market': index])
+        PeriodScope periodScope = contract.iterationScope.periodScope
+        IPeriodCounter periodCounter = periodScope.periodCounter
+
+        List<GrossClaimRoot> claimRoots = [getBaseClaim(-3000d, date20110418, ClaimType.ATTRITIONAL),
+                                           getBaseClaim(-1000d, date20110418, ClaimType.SINGLE)]
+        UnderwritingInfoPacket uw120 = new UnderwritingInfoPacket(premiumWritten: 2000, premiumPaid: 2000,
+            numberOfPolicies: 100, exposure: new ExposureInfo(periodScope));
+        contract.inUnderwritingInfo.add(uw120)
+        addClaimCashflowOfCurrentPeriod(contract, claimRoots, null, periodCounter, true)
+
+        FactorsPacket indexFactorsPacket = ClaimsGeneratorSeverityIndexTests.getFactorsPacket(
+            [ClaimsGeneratorSeverityIndexTests.date20100101, ClaimsGeneratorSeverityIndexTests.date20100701,
+             ClaimsGeneratorSeverityIndexTests.date20110101, ClaimsGeneratorSeverityIndexTests.date20120101],
+            [1, 1.02, 1.5, 2], index)
+        contract.inFactors.add(indexFactorsPacket)
+
+        contract.doCalculation()
+        assertEquals "2011, ultimates", [300.0, 100.0], contract.outClaimsCeded*.ultimate()
+
+        contract.reset()
+        contract.iterationScope.periodScope.prepareNextPeriod()
+
+        claimRoots << getBaseClaim(-5000, date20120101, ClaimType.ATTRITIONAL)
+        addClaimCashflowOfCurrentPeriod(contract, claimRoots, null, periodCounter, true)
+
+        contract.inFactors.add(indexFactorsPacket)
+        contract.doCalculation()
+        assertEquals "2012, ultimates", [200.0, 0, 0], contract.outClaimsCeded*.ultimate()
     }
 
     private GrossClaimRoot getBaseClaim(double ultimate, EventPacket event) {

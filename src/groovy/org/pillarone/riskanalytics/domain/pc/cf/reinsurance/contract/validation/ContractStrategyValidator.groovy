@@ -4,6 +4,11 @@ import org.pillarone.riskanalytics.core.parameterization.validation.IParameteriz
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.pillarone.riskanalytics.core.parameterization.validation.AbstractParameterValidationService
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.IBoundaryIndexStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.StopLossBoundaryIndexApplication
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.StopLossBoundaryIndexType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.StopLossIndexedBoundaryIndexStrategy
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.StopLossBase
 import org.pillarone.riskanalytics.domain.utils.validation.ParameterValidationServiceImpl
 import org.pillarone.riskanalytics.core.parameterization.validation.ParameterValidation
 import org.pillarone.riskanalytics.core.simulation.item.parameter.ParameterHolder
@@ -18,13 +23,13 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
  *
  * @author stefan.kunz (at) intuitive-collaboration (dot) com
  */
-class XLStrategyValidator implements IParameterizationValidator {
+class ContractStrategyValidator implements IParameterizationValidator {
 
-    private static Log LOG = LogFactory.getLog(XLStrategyValidator)
+    private static Log LOG = LogFactory.getLog(ContractStrategyValidator)
 
     private AbstractParameterValidationService validationService
 
-    public XLStrategyValidator() {
+    public ContractStrategyValidator() {
         validationService = new ParameterValidationServiceImpl()
         registerConstraints()
     }
@@ -74,6 +79,17 @@ class XLStrategyValidator implements IParameterizationValidator {
         }
         validationService.register(ReinsuranceContractType.GOLDORAK) {Map type ->
             return correctAggregateLimit(type, 'cxlLimit', 'cxlAggregateLimit')
+        }
+        validationService.register(ReinsuranceContractType.STOPLOSS) {Map type ->
+            if (type['stopLossContractBase'].equals(StopLossBase.GNPI)) {
+                IBoundaryIndexStrategy boundaryIndex = type['boundaryIndex']
+                if (boundaryIndex instanceof StopLossIndexedBoundaryIndexStrategy) {
+                    if (boundaryIndex.getType().equals(StopLossBoundaryIndexType.INDEXED)
+                        && ((StopLossIndexedBoundaryIndexStrategy) boundaryIndex).getIndexedValues().equals(StopLossBoundaryIndexApplication.ATTACHMENT_POINT_LIMIT_PREMIUM)) {
+                        return [ValidationType.WARNING, "stoploss.gnpi.boundaryIndex.mismatch"]
+                    }
+                }
+            }
         }
     }
 

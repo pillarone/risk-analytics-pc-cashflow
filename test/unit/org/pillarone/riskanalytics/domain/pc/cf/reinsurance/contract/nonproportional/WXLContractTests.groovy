@@ -580,7 +580,7 @@ class WXLContractTests extends GroovyTestCase {
         return claimRoot
     }
 
-    private void addClaimCashflowOfCurrentPeriod(ReinsuranceContract wxl, List<GrossClaimRoot> baseClaims,
+    public static void addClaimCashflowOfCurrentPeriod(ReinsuranceContract wxl, List<GrossClaimRoot> baseClaims,
                                                  IPeriodCounter periodCounter, boolean firstPeriod) {
         for (GrossClaimRoot baseClaim : baseClaims) {
             List<ClaimCashflowPacket> claims = baseClaim.getClaimCashflowPackets(periodCounter)
@@ -588,7 +588,7 @@ class WXLContractTests extends GroovyTestCase {
         }
     }
 
-    private void assertEqualsOnList(String message, List<Number> expected, List<Number> actual, Double epsilon = 1E-8) {
+    public static void assertEqualsOnList(String message, List<Number> expected, List<Number> actual, Double epsilon = 1E-8) {
         for (int i = 0; i < expected.size(); i++) {
             if (Math.abs(expected[i] - actual[i]) > epsilon) {
                 failNotEquals(message, expected, actual)

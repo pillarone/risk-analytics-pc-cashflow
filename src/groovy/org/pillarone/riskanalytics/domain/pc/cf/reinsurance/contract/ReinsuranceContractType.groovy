@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.IBoundaryIndexStrategy
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.StopLossBoundaryIndexType
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.SurplusBoundaryIndexType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.XLBoundaryIndexType
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.limit.LimitStrategyType
 
@@ -53,7 +54,8 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
                     "limit": LimitStrategyType.getDefault(),
                     'commission': CommissionStrategyType.getNoCommission()])
     public static final ReinsuranceContractType SURPLUS = new ReinsuranceContractType("surplus", "SURPLUS",
-            ["retention": 0d, "lines": 0d, "defaultCededLossShare": 0d, 'commission': CommissionStrategyType.getNoCommission()])
+            ["retention": 0d, "lines": 0d, "defaultCededLossShare": 0d, 'commission': CommissionStrategyType.getNoCommission(),
+             "boundaryIndex": SurplusBoundaryIndexType.getDefault(),])
     public static final ReinsuranceContractType WXL = new ReinsuranceContractType("wxl", "WXL", [
             "attachmentPoint": 0d, "limit": 0d, "aggregateDeductible": 0d, "aggregateLimit": 0d,
             "boundaryIndex": XLBoundaryIndexType.getDefault(),
@@ -101,7 +103,8 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
             "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),])
     public static final ReinsuranceContractType STOPLOSS = new ReinsuranceContractType("stop loss", "STOPLOSS",
             ["stopLossContractBase": StopLossBase.ABSOLUTE, "attachmentPoint": 0d, "limit": 0d, "premium": 0d,
-                    "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:])])
+                    "riPremiumSplit": PremiumAllocationType.getStrategy(PremiumAllocationType.PREMIUM_SHARES, [:]),
+                    "boundaryIndex": StopLossBoundaryIndexType.getDefault()])
     public static final ReinsuranceContractType UNIFIEDADCLPT = new ReinsuranceContractType("unified ADC and LPT", "UNIFIEDADCLPT",
             ["cededShare": 0d, "contractBase": UnifiedADCLPTBase.ABSOLUTE, "attachmentPoint": 0d, "limit": 0d, "premium": 0d])
     public static final ReinsuranceContractType TRIVIAL = new ReinsuranceContractType("trivial", "TRIVIAL", [:])
@@ -248,7 +251,8 @@ class ReinsuranceContractType extends AbstractParameterObjectClassifier {
                         retention: (double) parameters[SurplusContractStrategy.RETENTION],
                         lines: (double) parameters[SurplusContractStrategy.LINES],
                         defaultCededLossShare: (double) parameters[SurplusContractStrategy.DEFAULTCEDEDLOSSSHARE],
-                        commission: (ICommissionStrategy) parameters[SurplusContractStrategy.COMMISSION])
+                        commission: (ICommissionStrategy) parameters[SurplusContractStrategy.COMMISSION],
+                        boundaryIndex: (IBoundaryIndexStrategy) parameters[SurplusContractStrategy.BOUNDARY_INDEX] ?: SurplusBoundaryIndexType.getDefault())
             case ReinsuranceContractType.TRIVIAL:
                 return new TrivialContractStrategy()
             default: throw new IllegalArgumentException("$type is not implemented")

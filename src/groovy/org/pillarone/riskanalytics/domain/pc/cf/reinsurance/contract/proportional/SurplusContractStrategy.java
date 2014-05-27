@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.indexing.FactorsPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.*;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation.IBoundaryIndexStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.IPeriodDependingThresholdStore;
 import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.commission.param.ICommissionStrategy;
 
@@ -26,6 +27,7 @@ public class SurplusContractStrategy extends AbstractParameterObject implements 
 
     private ICommissionStrategy commission;
 
+    private IBoundaryIndexStrategy boundaryIndex;
 
     public ReinsuranceContractType getType() {
         return ReinsuranceContractType.SURPLUS;
@@ -37,6 +39,7 @@ public class SurplusContractStrategy extends AbstractParameterObject implements 
         params.put(LINES, lines);
         params.put(DEFAULTCEDEDLOSSSHARE, defaultCededLossShare);
         params.put(COMMISSION, commission);
+        params.put(BOUNDARY_INDEX, boundaryIndex);
         return params;
     }
 
@@ -55,9 +58,10 @@ public class SurplusContractStrategy extends AbstractParameterObject implements 
      */
     public List<IReinsuranceContract> getContracts(IPeriodCounter periodCounter,
                                                    List<UnderwritingInfoPacket> underwritingInfoPackets, ExposureBase base,
-                                                   IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit, List<ClaimCashflowPacket> claims, List<FactorsPacket> factors) {
+                                                   IPeriodDependingThresholdStore termDeductible, IPeriodDependingThresholdStore termLimit,
+                                                   List<ClaimCashflowPacket> claims, List<FactorsPacket> factors) {
         return new ArrayList<IReinsuranceContract>(Arrays.asList(
-                new SurplusContract(retention, lines, defaultCededLossShare, commission.getCalculator(new DoubleValuePerPeriod()))));
+                new SurplusContract(retention, lines, defaultCededLossShare, commission.getCalculator(new DoubleValuePerPeriod()), boundaryIndex, factors, periodCounter)));
     }
 
     public double getTermDeductible() {
@@ -72,4 +76,5 @@ public class SurplusContractStrategy extends AbstractParameterObject implements 
     public static final String LINES = "lines";
     public static final String DEFAULTCEDEDLOSSSHARE = "defaultCededLossShare";
     public static final String COMMISSION = "commission";
+    public static final String BOUNDARY_INDEX = "boundaryIndex";
 }

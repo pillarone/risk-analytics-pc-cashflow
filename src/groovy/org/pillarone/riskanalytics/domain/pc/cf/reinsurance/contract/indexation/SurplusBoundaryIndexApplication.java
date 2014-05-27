@@ -1,6 +1,6 @@
 package org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.indexation;
 
-import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproportional.XLContract;
+import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.proportional.SurplusContract;
 
 /**
  * @author stefan (dot) kunz (at) intuitive-collaboration (dot) com
@@ -8,15 +8,14 @@ import org.pillarone.riskanalytics.domain.pc.cf.reinsurance.contract.nonproporti
 public enum SurplusBoundaryIndexApplication {
     NONE {
         @Override
-        public void applicableIndex(XLContract contract, double index) {
+        public void applicableIndex(SurplusContract contract, double index) {
         }
     }, RETENTION {
         @Override
-        public void applicableIndex(XLContract contract, double index) {
-            contract.multiplyLimitBy(index);
-            contract.multiplyAggregateLimitBy(index);
+        public void applicableIndex(SurplusContract contract, double index) {
+            contract.multiplyRetentionBy(index);
         }
     };
 
-    abstract public void applicableIndex(XLContract contract, double index);
+    abstract public void applicableIndex(SurplusContract contract, double index);
 }
