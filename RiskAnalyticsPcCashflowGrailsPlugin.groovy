@@ -47,7 +47,7 @@ import org.pillarone.riskanalytics.domain.utils.constraint.*
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "1.9.1"
+    def version = "1.9.2"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.3.2 > *"
     // the other plugins this plugin depends on
