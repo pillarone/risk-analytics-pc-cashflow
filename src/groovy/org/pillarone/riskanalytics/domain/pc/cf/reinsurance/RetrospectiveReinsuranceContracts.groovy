@@ -36,6 +36,7 @@ class RetrospectiveReinsuranceContracts extends DynamicComposedComponent {
     PacketList<ClaimCashflowPacket> outClaimsInward = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
     PacketList<UnderwritingInfoPacket> outUnderwritingInfoInward = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
+    PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket);
 
     private List contractsBasedOnGrossClaims = []
     /** contains the relations between reinsurance contracts covering legal entities */
@@ -53,13 +54,14 @@ class RetrospectiveReinsuranceContracts extends DynamicComposedComponent {
     @Override
     void wire() {
         if (noneTrivialContracts()) {
-            replicateInChannels this, 'inLegalEntityDefault'
-            replicateInChannels this, 'inClaims'
-            replicateInChannels this, 'inUnderwritingInfo'
-            replicateOutChannels this, 'outClaimsInward'
-            replicateOutChannels this, 'outUnderwritingInfoInward'
-            replicateOutChannels this, 'outUnderwritingInfoCeded'
-            replicateOutChannels this, 'outClaimsCeded'
+            replicateInChannels this, inLegalEntityDefault
+            replicateInChannels this, inClaims
+            replicateInChannels this, inUnderwritingInfo
+            replicateOutChannels this, outClaimsInward
+            replicateOutChannels this, outUnderwritingInfoInward
+            replicateOutChannels this, outUnderwritingInfoCeded
+            replicateOutChannels this, outClaimsCeded
+            replicateOutChannels this, outContractFinancials
         }
     }
 

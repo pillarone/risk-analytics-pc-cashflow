@@ -39,6 +39,7 @@ class RetroactiveReinsuranceContracts extends DynamicComposedComponent {
     PacketList<ClaimCashflowPacket> outClaimsInward = new PacketList<ClaimCashflowPacket>(ClaimCashflowPacket)
     PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
     PacketList<UnderwritingInfoPacket> outUnderwritingInfoInward = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
+    PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket)
     List<ClaimMerger> claimMergers = []
     List<UnderwritingInfoMerger> uwInfoMergers = []
 
@@ -58,6 +59,7 @@ class RetroactiveReinsuranceContracts extends DynamicComposedComponent {
             replicateInChannels this, inLegalEntityDefault
             replicateOutChannels this, outClaimsInward
             replicateOutChannels this, outUnderwritingInfoInward
+            replicateOutChannels this, outContractFinancials
             wireContractsBasedOnGross()
             wireContractsBaseOnNetContracts()
             wireContractsBaseOnCededContracts()

@@ -37,6 +37,7 @@ class Segments extends DynamicMultiPhaseComposedComponent {
     PacketList<UnderwritingInfoPacket> outUnderwritingInfoGross = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<UnderwritingInfoPacket> outUnderwritingInfoNet = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
+    PacketList<FinancialsPacket> outFinancials = new PacketList<FinancialsPacket>(FinancialsPacket);
 
     private static final String PHASE_GROSS = "Phase Gross";
     private static final String PHASE_NET = "Phase Net";
@@ -60,23 +61,24 @@ class Segments extends DynamicMultiPhaseComposedComponent {
 
     @Override
     void wire() {
-        replicateInChannels this, 'inClaims'
-        replicateInChannels this, 'inClaimsCeded'
-        replicateInChannels this, 'inUnderwritingInfo'
-        replicateInChannels this, 'inUnderwritingInfoCeded'
-        replicateInChannels this, 'inFactors'
+        replicateInChannels this, inClaims
+        replicateInChannels this, inClaimsCeded
+        replicateInChannels this, inUnderwritingInfo
+        replicateInChannels this, inUnderwritingInfoCeded
+        replicateInChannels this, inFactors
         if (isReceiverWired(inLegalEntityDefault)) {
-            replicateInChannels this, 'inLegalEntityDefault'
+            replicateInChannels this, inLegalEntityDefault
         }
-        replicateOutChannels this, 'outClaimsGross'
-        replicateOutChannels this, 'outClaimsNet'
-        replicateOutChannels this, 'outClaimsCeded'
-        replicateOutChannels this, 'outUnderwritingInfoGross'
-        replicateOutChannels this, 'outUnderwritingInfoNet'
-        replicateOutChannels this, 'outUnderwritingInfoCeded'
+        replicateOutChannels this, outClaimsGross
+        replicateOutChannels this, outClaimsNet
+        replicateOutChannels this, outClaimsCeded
+        replicateOutChannels this, outUnderwritingInfoGross
+        replicateOutChannels this, outUnderwritingInfoNet
+        replicateOutChannels this, outUnderwritingInfoCeded
+        replicateOutChannels this, outFinancials
         if (isSenderWired(outDiscountedValues)) {
-            replicateOutChannels this, 'outDiscountedValues'
-            replicateOutChannels this, 'outNetPresentValues'
+            replicateOutChannels this, outDiscountedValues
+            replicateOutChannels this, outNetPresentValues
         }
     }
 
@@ -96,5 +98,6 @@ class Segments extends DynamicMultiPhaseComposedComponent {
         setTransmitterPhaseOutput(outNetPresentValues, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoNet, PHASE_NET);
         setTransmitterPhaseOutput(outUnderwritingInfoCeded, PHASE_NET);
+        setTransmitterPhaseOutput(outFinancials, PHASE_NET)
     }
 }

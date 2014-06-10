@@ -43,6 +43,7 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
     PacketList<CededUnderwritingInfoPacket> outUnderwritingInfoCeded = new PacketList<CededUnderwritingInfoPacket>(CededUnderwritingInfoPacket)
     PacketList<UnderwritingInfoPacket> outUnderwritingInfoInward = new PacketList<UnderwritingInfoPacket>(UnderwritingInfoPacket)
     PacketList<CommissionPacket> outCommission = new PacketList<CommissionPacket>(CommissionPacket)
+    PacketList<ContractFinancialsPacket> outContractFinancials = new PacketList<ContractFinancialsPacket>(ContractFinancialsPacket)
     List<ClaimMerger> claimMergers = []
     List<UnderwritingInfoMerger> uwInfoMergers = []
 
@@ -63,6 +64,7 @@ class MatrixReinsuranceContracts extends DynamicComposedComponent {
             replicateInChannels this, inLegalEntityDefault
             replicateOutChannels this, outClaimsInward
             replicateOutChannels this, outUnderwritingInfoInward
+            replicateOutChannels this, outContractFinancials
             wireContractsBasedOnGross()
             wireContractsBaseOnNetContracts()
             wireContractsBaseOnCededContracts()
