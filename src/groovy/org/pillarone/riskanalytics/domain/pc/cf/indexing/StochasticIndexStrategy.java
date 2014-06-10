@@ -27,10 +27,12 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
 
     public static final String START_DATE = "startDate";
     public static final String DISTRIBUTION = "distribution";
+    public static final String SHIFT = "shift";
 
     private DateTime startDate;
     private DateTime lastDayOfPeriod;
     private RandomDistribution distribution;
+    private IDistributionShiftStrategy shift;
 
     private IRandomNumberGenerator indexGenerator;
     private int preparatoryPeriods;
@@ -44,9 +46,10 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
     private FactorsPacket factors;
 
     public Map getParameters() {
-        Map params = new HashMap(2);
+        Map params = new HashMap(3);
         params.put(START_DATE, startDate);
         params.put(DISTRIBUTION, distribution);
+        params.put(SHIFT, shift);
         return params;
     }
 
@@ -54,8 +57,8 @@ public class StochasticIndexStrategy extends AbstractParameterObject implements 
         lazyInitGenerator(periodScope);
         Double filteredSeverity = filterSeverity(origin, eventStreams);
         // note: indexGenerator.getDistribution() yields the unmodified distribution; hence this is only correct if there is no DistributionModifier
-        double factor = filteredSeverity == null ? previousPeriodFactor * (1 + indexGenerator.nextValue().doubleValue()) :
-                previousPeriodFactor * (1 + indexGenerator.getDistribution().inverseF(filteredSeverity));
+        double factor = filteredSeverity == null ? previousPeriodFactor * (1 + indexGenerator.nextValue().doubleValue() + shift.shift()) :
+                previousPeriodFactor * (1 + indexGenerator.getDistribution().inverseF(filteredSeverity) + shift.shift());
         previousPeriodFactor = factor;
         factors.add(lastDayOfPeriod.plusYears(periodScope.getCurrentPeriod()), factor);
         factors.origin = origin;
