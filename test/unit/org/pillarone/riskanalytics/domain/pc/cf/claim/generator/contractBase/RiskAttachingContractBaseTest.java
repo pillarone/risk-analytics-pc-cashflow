@@ -28,7 +28,7 @@ public class RiskAttachingContractBaseTest extends GroovyTestCase {
         GrossClaimRoot grossClaimRoot = new GrossClaimRoot(100d, ClaimType.AGGREGATED, start2010,
                 start2010, patternPacket, patternPacket,
 //                Check this date remains the same for each claim root that pops out the other side.
-                startDateForPatterns
+                startDateForPatterns, "0"
                 );
 
         Map map = new HashMap();

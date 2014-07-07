@@ -254,7 +254,7 @@ class QuotaShareLossParticipationContract2SpreadsheetTests extends SpreadsheetUn
             PatternPacket payoutPattern = new PatternPacket(IPayoutPatternMarker, cummulativeRatios, cummulativePeriods)
             claimsByOccurrenceYear[startOfUnderwritingPeriod.year] = new GrossClaimRoot(
                     new ClaimRoot(triangle.latestValue(startOfUnderwritingPeriod), ClaimType.ATTRITIONAL,
-                            startOfUnderwritingPeriod, startOfUnderwritingPeriod), payoutPattern)
+                            startOfUnderwritingPeriod, startOfUnderwritingPeriod, "0"), payoutPattern)
         }
         return claimsByOccurrenceYear
     }

@@ -92,7 +92,7 @@ class WXLContractTests extends GroovyTestCase {
         IPeriodCounter periodCounter = periodScope.periodCounter
 
         GrossClaimRoot claimRoot50 = new GrossClaimRoot(-50, ClaimType.SINGLE,
-                date20110418, date20110418, annualPayoutPattern, annualReportingPatternInclFirst)
+                date20110418, date20110418, annualPayoutPattern, annualReportingPatternInclFirst, "0")
         List<ClaimCashflowPacket> claims50 = claimRoot50.getClaimCashflowPackets(periodCounter)
         wxl.inClaims.addAll(claims50)
         UnderwritingInfoPacket uw120 = new UnderwritingInfoPacket(premiumWritten: 120, premiumPaid: 100,
@@ -576,7 +576,7 @@ class WXLContractTests extends GroovyTestCase {
 
     private GrossClaimRoot getBaseClaim(double ultimate) {
         GrossClaimRoot claimRoot = new GrossClaimRoot(ultimate, ClaimType.SINGLE,
-                date20110418, date20110418, annualPayoutPattern2, annualFastReportingPattern)
+                date20110418, date20110418, annualPayoutPattern2, annualFastReportingPattern, "0")
         return claimRoot
     }
 

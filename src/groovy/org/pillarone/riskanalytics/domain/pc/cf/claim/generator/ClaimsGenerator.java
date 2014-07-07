@@ -87,8 +87,9 @@ public class ClaimsGenerator extends Component implements IPerilMarker, ICorrela
             List uwFilterCriteria = (List) parmUnderwritingSegments.getValuesAsObjects(0, true);
             // a nominal ultimate is generated, therefore no factors are applied
             List<ClaimRoot> baseClaims = parmClaimsModel.calculateClaims(inUnderwritingInfo, uwFilterCriteria,
-                    inEventSeverities, this, periodScope);
-            baseClaims = parmClaimsModel.generateClaims(baseClaims, inUnderwritingInfo, severityFactors, uwFilterCriteria, inFactors, periodScope, inEventFrequencies, this);
+                    inEventSeverities, this, periodScope, getIdGenerator());
+            baseClaims = parmClaimsModel.generateClaims(baseClaims, inUnderwritingInfo, severityFactors, uwFilterCriteria,
+                inFactors, periodScope, inEventFrequencies, this, getIdGenerator());
             if (!baseClaims.isEmpty()) {
                 baseClaims = parmAssociateExposureInfo.getAllocatedClaims(baseClaims, UnderwritingInfoUtils.filterUnderwritingInfo(inUnderwritingInfo, uwFilterCriteria));
 

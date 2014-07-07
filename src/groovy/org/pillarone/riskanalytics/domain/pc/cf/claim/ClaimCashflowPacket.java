@@ -82,7 +82,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
      * Used for 'zero' claims
      */
     public ClaimCashflowPacket() {
-        this(new ClaimRoot(0, ClaimType.ATTRITIONAL, null, null));
+        this(new ClaimRoot(0, ClaimType.ATTRITIONAL, null, null, null));
     }
 
     // todo(sku): safer c'tor required, currently used for ultimate modelling
@@ -112,6 +112,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         this.reportedIncrementalIndexed = ultimate();
         this.reservesIndexed = 0;
         updateDate = baseClaim.getOccurrenceDate();
+        setPacketId(baseClaim.getPacketId());
         setDate(updateDate);
         initRiskBased();
     }
@@ -218,6 +219,7 @@ public class ClaimCashflowPacket extends MultiValuePacket {
     public ClaimCashflowPacket(IClaimRoot baseClaim, ClaimCashflowPacket grossCashflow, double paidIncremental, double cumulatedPaid, boolean setUltimate, final double ultimate) {
         this.baseClaim = baseClaim;
         this.keyClaim = grossCashflow.getBaseClaim();
+        setPacketId(baseClaim.getPacketId());
         if(setUltimate) {
             this.ultimate = baseClaim.getUltimate();
             this.nominalUltimate = this.ultimate;
@@ -516,30 +518,43 @@ public class ClaimCashflowPacket extends MultiValuePacket {
         return NON_TRIVIAL_PAYOUT_IBNR;
     }
 
+//    @Override
+//    public String toString() {
+//        String separator = ", ";
+//        StringBuilder result = new StringBuilder();
+//        result.append(ultimate);
+//        result.append(separator);
+//        result.append(reportedIncrementalIndexed);
+//        result.append(separator);
+//        result.append(paidIncrementalIndexed);
+//        result.append(separator);
+//        result.append(DateTimeUtilities.formatDate.print(updateDate));
+//        result.append(separator);
+//        result.append(baseClaim.getExposureStartDate());
+//        result.append(separator);
+//        result.append(baseClaim.getClaimType());
+//        if (peril() != null) {
+//            result.append(separator);
+//            result.append(((Component) peril()).getNormalizedName());
+//        }
+//        if (segment() != null) {
+//            result.append(separator);
+//            result.append(((Component) segment()).getNormalizedName());
+//        }
+//        return result.toString();
+//    }
+
+
     @Override
     public String toString() {
-        String separator = ", ";
-        StringBuilder result = new StringBuilder();
-        result.append(ultimate);
-        result.append(separator);
-        result.append(reportedIncrementalIndexed);
-        result.append(separator);
-        result.append(paidIncrementalIndexed);
-        result.append(separator);
-        result.append(DateTimeUtilities.formatDate.print(updateDate));
-        result.append(separator);
-        result.append(baseClaim.getExposureStartDate());
-        result.append(separator);
-        result.append(baseClaim.getClaimType());
-        if (peril() != null) {
-            result.append(separator);
-            result.append(((Component) peril()).getNormalizedName());
-        }
-        if (segment() != null) {
-            result.append(separator);
-            result.append(((Component) segment()).getNormalizedName());
-        }
-        return result.toString();
+        return "ClaimCashflowPacket{" +
+            "baseClaim=" + baseClaim.toString() +
+            ", keyClaim=" + keyClaim.toString() +
+            ", ultimate=" + ultimate +
+            ", paidIncrementalIndexed=" + paidIncrementalIndexed +
+            ", updateDate=" + updateDate +
+            ", updatePeriod=" + updatePeriod +
+            '}';
     }
 
     public final static String ULTIMATE = "ultimate";

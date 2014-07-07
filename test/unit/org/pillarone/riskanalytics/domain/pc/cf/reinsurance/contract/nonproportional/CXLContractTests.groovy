@@ -87,7 +87,7 @@ class CXLContractTests extends GroovyTestCase {
         IPeriodCounter periodCounter = periodScope.periodCounter
 
         GrossClaimRoot claimRoot50 = new GrossClaimRoot(-50, ClaimType.EVENT,
-                date20110418, date20110418, annualPayoutPattern, annualReportingPatternInclFirst, new EventPacket(date20110101))
+                date20110418, date20110418, annualPayoutPattern, annualReportingPatternInclFirst, new EventPacket(date20110101), "0")
         List<ClaimCashflowPacket> claims50 = claimRoot50.getClaimCashflowPackets(periodCounter)
         cxl.inClaims.addAll(claims50)
         UnderwritingInfoPacket uw120 = new UnderwritingInfoPacket(premiumWritten: 120, premiumPaid: 100,

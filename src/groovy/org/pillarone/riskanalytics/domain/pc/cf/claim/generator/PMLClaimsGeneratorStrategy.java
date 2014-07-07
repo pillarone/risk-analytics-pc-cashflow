@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstraintsFactory;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.parameterization.TableMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.core.util.GroovyUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
@@ -72,10 +73,11 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
     public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
                                           List<Factors> severityFactors, List uwInfosFilterCriteria,
                                           List<FactorsPacket> frequencyFactorsPackets, PeriodScope periodScope,
-                                          List<SystematicFrequencyPacket> systematicFrequencies, IPerilMarker filterCriteria) {
+                                          List<SystematicFrequencyPacket> systematicFrequencies,
+                                          IPerilMarker filterCriteria, IIdGenerator idGenerator) {
         setClaimsSizeGenerator(periodScope);
         setClaimNumberGenerator(periodScope);
-        return generateClaims(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, null, periodScope);
+        return generateClaims(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, null, periodScope, idGenerator);
     }
 
     @Override
@@ -164,7 +166,7 @@ public class PMLClaimsGeneratorStrategy extends AbstractSingleClaimsGeneratorStr
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            List<EventDependenceStream> eventStreams,
-                                           IPerilMarker filterCriteria, PeriodScope periodScope) {
+                                           IPerilMarker filterCriteria, PeriodScope periodScope, IIdGenerator idGenerator) {
         return new ArrayList<ClaimRoot>();
     }
 

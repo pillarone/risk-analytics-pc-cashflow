@@ -20,8 +20,8 @@ public final class ReserveRoot extends ClaimRoot {
 
     private Integer occurrencePeriod;
 
-    public ReserveRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate) {
-        super(ultimate, claimType, exposureStartDate, occurrenceDate);
+    public ReserveRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate, String packetId) {
+        super(ultimate, claimType, exposureStartDate, occurrenceDate, packetId);
     }
 
     /**

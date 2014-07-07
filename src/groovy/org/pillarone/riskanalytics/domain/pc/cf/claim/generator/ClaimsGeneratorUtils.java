@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
@@ -45,7 +46,7 @@ public class ClaimsGeneratorUtils {
     @Deprecated
     public static List<ClaimRoot> generateClaims(double severityScaleFactor, IRandomNumberGenerator claimSizeGenerator,
                                                  IRandomNumberGenerator dateGenerator, int claimNumber,
-                                                 ClaimType claimType, PeriodScope periodScope) {
+                                                 ClaimType claimType, PeriodScope periodScope, IIdGenerator idGenerator) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
         List<EventPacket> events = generateEventsOrNull(claimType, claimNumber, periodScope, dateGenerator);
         for (int i = 0; i < claimNumber; i++) {
@@ -55,7 +56,7 @@ public class ClaimsGeneratorUtils {
             DateTime exposureStartDate = periodScope.getPeriodCounter().getCurrentPeriodStart();
             EventPacket event = events == null ? null : events.get(i);
             baseClaims.add(new ClaimRoot((Double) claimSizeGenerator.nextValue() * -severityScaleFactor, claimType,
-                    exposureStartDate, occurrenceDate, event));
+                    exposureStartDate, occurrenceDate, idGenerator.nextValue(), event));
         }
         return baseClaims;
     }
@@ -64,7 +65,7 @@ public class ClaimsGeneratorUtils {
                                                  IRandomNumberGenerator claimSizeGenerator,
                                                  IRandomNumberGenerator dateGenerator, int claimNumber,
                                                  ClaimType claimType, PeriodScope periodScope,
-                                                 IReinsuranceContractBaseStrategy contractBase) {
+                                                 IReinsuranceContractBaseStrategy contractBase, IIdGenerator idGenerator) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
         List<EventPacket> events = generateEventsOrNull(claimType, claimNumber, periodScope, dateGenerator);
         for (int i = 0; i < claimNumber; i++) {
@@ -74,30 +75,30 @@ public class ClaimsGeneratorUtils {
             double ultimate = (Double) claimSizeGenerator.nextValue() * -severityScaleFactor;
             DateTime occurrenceDate = contractBase.occurrenceDate(exposureStartDate, dateGenerator, periodScope, event);
             double scaleFactor = IndexUtils.aggregateFactor(severityFactors, exposureStartDate, periodScope.getPeriodCounter(), exposureStartDate);
-            baseClaims.add(new ClaimRoot(ultimate * scaleFactor, claimType, exposureStartDate, occurrenceDate, event));
+            baseClaims.add(new ClaimRoot(ultimate * scaleFactor, claimType, exposureStartDate, occurrenceDate, idGenerator.nextValue(), event));
         }
         return baseClaims;
     }
 
     public static List<ClaimRoot> generateClaims(double severityScaleFactor, List<Factors> severityFactors,
                                                  RandomDistribution distribution, DistributionModified modifier,
-                                                 ClaimType claimType, PeriodScope periodScope) {
+                                                 ClaimType claimType, PeriodScope periodScope, IIdGenerator idGenerator) {
         return generateClaims(severityScaleFactor, severityFactors, distribution, modifier, claimType, periodScope,
-                new LossesOccurringContractBase());
+                new LossesOccurringContractBase(), idGenerator);
     }
 
     public static List<ClaimRoot> generateClaims(double severityScaleFactor, List<Factors> severityFactors,
                                                  RandomDistribution distribution, DistributionModified modifier, ClaimType claimType,
-                                                 PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase) {
+                                                 PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase, IIdGenerator idGenerator) {
         IRandomNumberGenerator claimSizeGenerator = RandomNumberGeneratorFactory.getGenerator(distribution, modifier);
         IRandomNumberGenerator dateGenerator = RandomNumberGeneratorFactory.getUniformGenerator();
         return generateClaims(severityScaleFactor, severityFactors, claimSizeGenerator, dateGenerator, 1, claimType,
-                periodScope, contractBase);
+                periodScope, contractBase, idGenerator);
     }
 
     public static List<ClaimRoot> calculateClaims(double severityScaleFactor, Distribution claimsSizeDistribution, ClaimType claimType,
                                                   PeriodScope periodScope, List<EventSeverity> eventSeverities,
-                                                  double shift) {
+                                                  double shift, IIdGenerator idGenerator) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
         for (EventSeverity eventSeverity : eventSeverities) {
             DateTime occurrenceDate = eventSeverity.getEvent().getDate();
@@ -105,7 +106,7 @@ public class ClaimsGeneratorUtils {
             DateTime exposureStartDate = periodScope.getPeriodCounter().getCurrentPeriodStart();
             EventPacket event = claimType.equals(ClaimType.EVENT) || claimType.equals(ClaimType.AGGREGATED_EVENT) ? eventSeverity.getEvent() : null;
             baseClaims.add(new ClaimRoot((claimsSizeDistribution.inverseF(eventSeverity.getValue()) + shift) * -severityScaleFactor, claimType,
-                    exposureStartDate, occurrenceDate, event));
+                    exposureStartDate, occurrenceDate, idGenerator.nextValue(), event));
         }
         return baseClaims;
     }

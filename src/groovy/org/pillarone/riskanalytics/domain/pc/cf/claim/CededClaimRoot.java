@@ -86,6 +86,11 @@ public class CededClaimRoot implements ICededRoot {
     }
 
     @Override
+    public String getPacketId() {
+        return grossClaim.getPacketId();
+    }
+
+    @Override
     public String toString() {
         return "Ceded{" +
                 "ultimate=" + ultimate +

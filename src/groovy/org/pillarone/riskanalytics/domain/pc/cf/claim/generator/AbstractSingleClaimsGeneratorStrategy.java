@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.LossesOccurringContractBase;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
@@ -30,21 +31,21 @@ abstract public class AbstractSingleClaimsGeneratorStrategy extends AbstractClai
 
     public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List<Factors> severityFacotrs,
                                           List uwInfosFilterCriteria, ExposureBase severityBase, FrequencyBase frequencyBase,
-                                          List<Factors> factors, PeriodScope periodScope) {
+                                          List<Factors> factors, PeriodScope periodScope, IIdGenerator idGenerator) {
         double frequencyScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, frequencyBase, uwInfosFilterCriteria);
         DateTime currentPeriodStartDate = periodScope.getCurrentPeriodStartDate();
         double indexFactor = IndexUtils.aggregateFactor(factors, currentPeriodStartDate, periodScope.getPeriodCounter(), currentPeriodStartDate);
         int numberOfClaims = claimNumberGenerator.nextValue(frequencyScalingFactor * indexFactor).intValue();
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return generateClaims(severityScalingFactor, severityFacotrs, numberOfClaims, periodScope, new LossesOccurringContractBase());
+        return generateClaims(severityScalingFactor, severityFacotrs, numberOfClaims, periodScope, new LossesOccurringContractBase(), idGenerator);
     }
 
     public List<ClaimRoot> generateClaims(List<UnderwritingInfoPacket> uwInfos, List<Factors> severityFacotrs, List uwInfosFilterCriteria,
-                                          ExposureBase severityBase, List<Factors> factors, PeriodScope periodScope) {
+                                          ExposureBase severityBase, List<Factors> factors, PeriodScope periodScope, IIdGenerator idGenerator) {
         int numberOfClaims = claimNumberGenerator.nextValue().intValue();
         numberOfClaims = calculateNumberOfClaimsWithAppliedIndices(numberOfClaims, periodScope, factors);
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return generateClaims(severityScalingFactor, severityFacotrs, numberOfClaims, periodScope, new LossesOccurringContractBase());
+        return generateClaims(severityScalingFactor, severityFacotrs, numberOfClaims, periodScope, new LossesOccurringContractBase(), idGenerator);
     }
 
     private int calculateNumberOfClaimsWithAppliedIndices(int numberOfClaims, PeriodScope periodScope, List<Factors> factors) {

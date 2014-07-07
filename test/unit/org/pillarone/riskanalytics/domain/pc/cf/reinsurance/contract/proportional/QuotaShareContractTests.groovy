@@ -110,7 +110,7 @@ class QuotaShareContractTests extends GroovyTestCase {
         IPeriodCounter periodCounter = periodScope.periodCounter
 
         GrossClaimRoot claimRoot800 = new GrossClaimRoot(-800, ClaimType.AGGREGATED,
-                date20110418, date20110418, annualPayoutPattern, annualReportingPatternInclFirst)
+                date20110418, date20110418, annualPayoutPattern, annualReportingPatternInclFirst, "0")
         List<ClaimCashflowPacket> claims800 = claimRoot800.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims800)
         UnderwritingInfoPacket uw1200 = new UnderwritingInfoPacket(premiumWritten: 1200, premiumPaid: 1000,

@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.LossesOccurringContractBase;
@@ -39,17 +40,17 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
 
     public List<ClaimRoot> generateClaim(List<UnderwritingInfoPacket> uwInfos, List<Factors> severityFactors,
                                          List uwInfosFilterCriteria, ExposureBase severityBase,
-                                         PeriodScope periodScope) {
+                                         PeriodScope periodScope, IIdGenerator idGenerator) {
         lazyInitClaimsSizeGenerator();
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return generateClaims(severityScalingFactor, severityFactors, 1, periodScope, new LossesOccurringContractBase());
+        return generateClaims(severityScalingFactor, severityFactors, 1, periodScope, new LossesOccurringContractBase(), idGenerator);
     }
 
     public List<ClaimRoot> generateClaims(double scaleFactor, List<Factors> severityFactors, int claimNumber, PeriodScope periodScope,
-                                          IReinsuranceContractBaseStrategy contractBase) {
+                                          IReinsuranceContractBaseStrategy contractBase, IIdGenerator idGenerator) {
         lazyInitClaimsSizeGenerator();
         return ClaimsGeneratorUtils.generateClaims(scaleFactor, severityFactors, claimSizeGenerator, dateGenerator, claimNumber,
-                claimType(), periodScope, contractBase);
+                claimType(), periodScope, contractBase, idGenerator);
     }
 
     /**
@@ -79,22 +80,24 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            ExposureBase severityBase, PeriodScope periodScope,
-                                           List<EventSeverity> eventSeverities) {
+                                           List<EventSeverity> eventSeverities, IIdGenerator idGenerator) {
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, severityBase, uwInfosFilterCriteria);
-        return calculateClaims(severityScalingFactor, periodScope, eventSeverities);
+        return calculateClaims(severityScalingFactor, periodScope, eventSeverities, idGenerator);
     }
 
-    public List<ClaimRoot> calculateDependantClaimsWithContractBase(DependancePacket dependancePacket, IPerilMarker filterCriteria, PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase, Double underwritingInfoScaleFactor, List<Factors> indexSeverityFactors) {
+    public List<ClaimRoot> calculateDependantClaimsWithContractBase(DependancePacket dependancePacket, IPerilMarker filterCriteria,
+            PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase, Double underwritingInfoScaleFactor,
+            List<Factors> indexSeverityFactors, IIdGenerator generator) {
         throw new SimulationException("Not implemented !");
     }
 
     public List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope,
-                                           List<EventSeverity> eventSeverities) {
+                                           List<EventSeverity> eventSeverities, IIdGenerator idGenerator) {
         return ClaimsGeneratorUtils.calculateClaims(scaleFactor, modifiedClaimsSizeDistribution, claimType(), periodScope,
-                eventSeverities, shift);
+                eventSeverities, shift, idGenerator);
     }
 
-    protected List<ClaimRoot> getClaims(List<Double> claimValues, PeriodScope periodScope) {
+    protected List<ClaimRoot> getClaims(List<Double> claimValues, PeriodScope periodScope, IIdGenerator generator) {
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
         List<EventPacket> events = ClaimsGeneratorUtils.generateEventsOrNull(claimType(), claimValues.size(), periodScope, dateGenerator);
         for (int i = 0; i < claimValues.size(); i++) {
@@ -103,7 +106,7 @@ abstract public class AbstractClaimsGeneratorStrategy extends AbstractParameterO
             // todo(sku): replace with information from underwriting
             DateTime exposureStartDate = periodScope.getCurrentPeriodStartDate();
             EventPacket event = events == null ? null : events.get(i);
-            baseClaims.add(new ClaimRoot(claimValues.get(i) * -1, claimType(), exposureStartDate, occurrenceDate, event));
+            baseClaims.add(new ClaimRoot(claimValues.get(i) * -1, claimType(), exposureStartDate, occurrenceDate, generator.nextValue(), event));
         }
         return baseClaims;
     }

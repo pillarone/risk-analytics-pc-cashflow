@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensi
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
@@ -92,12 +93,14 @@ public class SingleActualClaimsStrategy extends AbstractParameterObject implemen
     }
 
     public List<GrossClaimRoot> claimWithAdjustedPattern(PatternPacket originalPayoutPattern, PayoutPatternBase base,
-                                                         DateTime updateDate, DateTimeUtilities.Days360 days360, int currentPeriod, boolean sanityChecks) {
+                                                         DateTime updateDate, DateTimeUtilities.Days360 days360,
+                                                         int currentPeriod, boolean sanityChecks, IIdGenerator generator) {
         List<SingleHistoricClaim> historicClaimsOfCurrentPeriod = historicClaimsPerContractPeriod.get(currentPeriod);
         List<GrossClaimRoot> historicClaimsWithAdjustedPattern = new ArrayList<GrossClaimRoot>();
         if (historicClaimsOfCurrentPeriod != null) {
             for (SingleHistoricClaim historicClaim : historicClaimsOfCurrentPeriod) {
-                historicClaimsWithAdjustedPattern.add(historicClaim.claimWithAdjustedPattern(originalPayoutPattern, base, updateDate, days360, sanityChecks));
+                historicClaimsWithAdjustedPattern.add(historicClaim.claimWithAdjustedPattern(originalPayoutPattern, base,
+                    updateDate, days360, sanityChecks, generator.nextValue()));
             }
         }
         return historicClaimsWithAdjustedPattern;
@@ -123,7 +126,8 @@ public class SingleActualClaimsStrategy extends AbstractParameterObject implemen
         for (SingleHistoricClaim claim : singleHistoricClaim) {
             ClaimRoot claimRoot = baseClaims.get(0); // todo(sku): shouldn't we rather use an iterator
             if (claim.firstActualPaidDateOrNull() != null && claimRoot.getExposureStartDate().isAfter(claim.firstActualPaidDateOrNull())) {
-                ClaimRoot claimRoot1 = new ClaimRoot(claimRoot.getUltimate(), claimRoot.getClaimType(), claim.firstActualPaidDateOrNull(), claimRoot.getOccurrenceDate());
+                ClaimRoot claimRoot1 = new ClaimRoot(claimRoot.getUltimate(), claimRoot.getClaimType(),
+                    claim.firstActualPaidDateOrNull(), claimRoot.getOccurrenceDate(), claimRoot.getPacketId());
                 baseClaims.clear();
                 baseClaims.add(claimRoot1);
             }

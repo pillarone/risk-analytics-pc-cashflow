@@ -113,7 +113,7 @@ class QuotaShareEventLimitContractSpreadsheetTests extends SpreadsheetUnitTest {
             GrossClaimRoot baseClaim
             if (eventNumber == null || eventNumber == 0) {
                 baseClaim = new GrossClaimRoot(sign * claim.ultimate, ClaimType.AGGREGATED, inceptionDate,
-                    occurrenceDate, payoutPattern, reportingPattern)
+                    occurrenceDate, payoutPattern, reportingPattern, "0")
             }
             else {
                 EventPacket event = eventByNumber.get(eventNumber)
@@ -122,7 +122,7 @@ class QuotaShareEventLimitContractSpreadsheetTests extends SpreadsheetUnitTest {
                     eventByNumber.put(eventNumber, event)
                 }
                 baseClaim = new GrossClaimRoot(sign * claim.ultimate, ClaimType.AGGREGATED_EVENT, inceptionDate,
-                        occurrenceDate, payoutPattern, reportingPattern, event)
+                        occurrenceDate, payoutPattern, reportingPattern, event, "0")
             }
             int period = claim.period
             List<GrossClaimRoot> periodClaims = claimsByPeriod.get(period)

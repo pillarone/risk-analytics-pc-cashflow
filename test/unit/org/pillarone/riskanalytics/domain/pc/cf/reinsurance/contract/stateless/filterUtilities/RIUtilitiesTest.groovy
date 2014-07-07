@@ -37,11 +37,11 @@ class RIUtilitiesTest extends GroovyTestCase {
 
 
         PatternPacket packet = PatternPacketTests.getPattern([5i, 13i], [0.5d, 1d], false)
-        IClaimRoot keyClaim = new ClaimRoot(-100, ClaimType.SINGLE, start2010, start2010)
+        IClaimRoot keyClaim = new ClaimRoot(-100, ClaimType.SINGLE, start2010, start2010, "0")
         IClaimRoot grossClaimRoot = new GrossClaimRoot(keyClaim, packet)
 
         PatternPacket packet2 = PatternPacketTests.getPattern([11i, 23i, 35i], [0.2d, 0.5d, 1d], false)
-        IClaimRoot keyClaim2 = new ClaimRoot(-200, ClaimType.SINGLE, start2010, start2011)
+        IClaimRoot keyClaim2 = new ClaimRoot(-200, ClaimType.SINGLE, start2010, start2011, "1")
         IClaimRoot grossClaimRoot2 = new GrossClaimRoot(keyClaim2, packet2)
 
         claimCashflowPackets.addAll(grossClaimRoot.getClaimCashflowPackets(counter))

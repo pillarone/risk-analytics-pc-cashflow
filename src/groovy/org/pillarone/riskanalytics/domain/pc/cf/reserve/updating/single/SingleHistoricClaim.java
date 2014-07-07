@@ -119,15 +119,16 @@ public class SingleHistoricClaim {
     }
 
     public GrossClaimRoot claimWithAdjustedPattern(PatternPacket originalPayoutPattern,
-                                                   PayoutPatternBase base, DateTime updateDate, DateTimeUtilities.Days360 days360, boolean sanityChecks) {
+                                                   PayoutPatternBase base, DateTime updateDate,
+                                                   DateTimeUtilities.Days360 days360, boolean sanityChecks, String packetId) {
         double ultimate = lastReported;
 //        applyVolatility(ultimate);
         DateTime exposureStartDate = contractPeriodStartDate;
-        ClaimRoot claimRoot = new ClaimRoot(ultimate, ClaimType.SINGLE, exposureStartDate, occurrenceDate);
+        ClaimRoot claimRoot = new ClaimRoot(ultimate, ClaimType.SINGLE, exposureStartDate, occurrenceDate, packetId);
         DateTime baseDate = base.startDateForPayouts(claimRoot, contractPeriodStartDate, firstActualPaidDateOrNull());
         PatternPacket adjustedPayoutPattern = base.patternAccordingToPayoutBaseWithUpdates(originalPayoutPattern, claimRoot, claimCumulativePaidUpdates, updateDate,
                 days360, sanityChecks, contractPeriodStartDate,  firstActualPaidDateOrNull(), lastUpdateDate);
-        return new GrossClaimRoot(ultimate, ClaimType.SINGLE, exposureStartDate, occurrenceDate, adjustedPayoutPattern, null, baseDate);
+        return new GrossClaimRoot(ultimate, ClaimType.SINGLE, exposureStartDate, occurrenceDate, adjustedPayoutPattern, null, baseDate, claimRoot.getPacketId());
     }
 
     public void applyVolatility(IRandomNumberGenerator volatilityGenerator) {

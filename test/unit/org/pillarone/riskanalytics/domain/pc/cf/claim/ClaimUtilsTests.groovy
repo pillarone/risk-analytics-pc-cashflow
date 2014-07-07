@@ -193,7 +193,7 @@ class ClaimUtilsTests extends GroovyTestCase {
         DateTime date20110701 = new DateTime(2011,7,1,0,0,0,0)
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(-ultimate, claimType,
-                date20110418, date20110701, payoutPattern, reportingPattern)
+                date20110418, date20110701, payoutPattern, reportingPattern, "0")
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
         return claims
     }

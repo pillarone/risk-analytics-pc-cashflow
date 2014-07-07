@@ -149,23 +149,23 @@ class QuotaShareLossParticipationContractSpreadsheetTests extends SpreadsheetUni
         List<Period> cummulativePeriods = [Period.years(0), Period.years(1), Period.years(2), Period.years(3)]
         List<Double> cummulativeValues = [claimUY2012.CY2012 / claimUY2012.CY2015, claimUY2012.CY2013 / claimUY2012.CY2015, claimUY2012.CY2014 / claimUY2012.CY2015, 1d]
         PatternPacket payoutPattern = new PatternPacket(IPayoutPatternMarker, cummulativeValues, cummulativePeriods)
-        claimsByOccurrenceYear.put(2012, new GrossClaimRoot(new ClaimRoot(claimUY2012.CY2015, ClaimType.ATTRITIONAL, date, date), payoutPattern))
+        claimsByOccurrenceYear.put(2012, new GrossClaimRoot(new ClaimRoot(claimUY2012.CY2015, ClaimType.ATTRITIONAL, date, date, "0"), payoutPattern))
 
         date = date.plusYears(1)
         cummulativePeriods = [Period.years(0), Period.years(1), Period.years(2)]
         cummulativeValues = [claimUY2013.CY2013 / claimUY2013.CY2015, claimUY2013.CY2014 / claimUY2013.CY2015, 1d]
         payoutPattern = new PatternPacket(IPayoutPatternMarker, cummulativeValues, cummulativePeriods)
-        claimsByOccurrenceYear.put(2013, new GrossClaimRoot(new ClaimRoot(claimUY2013.CY2015, ClaimType.ATTRITIONAL, date, date), payoutPattern))
+        claimsByOccurrenceYear.put(2013, new GrossClaimRoot(new ClaimRoot(claimUY2013.CY2015, ClaimType.ATTRITIONAL, date, date, "1"), payoutPattern))
 
         date = date.plusYears(1)
         cummulativePeriods = [Period.years(0), Period.years(1), Period.years(2)]
         cummulativeValues = [claimUY2014.CY2014 / claimUY2014.CY2015, 1d]
         payoutPattern = new PatternPacket(IPayoutPatternMarker, cummulativeValues, cummulativePeriods)
-        claimsByOccurrenceYear.put(2014, new GrossClaimRoot(new ClaimRoot(claimUY2014.CY2015, ClaimType.ATTRITIONAL, date, date), payoutPattern))
+        claimsByOccurrenceYear.put(2014, new GrossClaimRoot(new ClaimRoot(claimUY2014.CY2015, ClaimType.ATTRITIONAL, date, date, "2"), payoutPattern))
 
         date = date.plusYears(1)
         payoutPattern = new PatternPacket.TrivialPattern(IPayoutPatternMarker)
-        claimsByOccurrenceYear.put(2015, new GrossClaimRoot(new ClaimRoot(claimUY2015.CY2015, ClaimType.ATTRITIONAL, date, date), payoutPattern))
+        claimsByOccurrenceYear.put(2015, new GrossClaimRoot(new ClaimRoot(claimUY2015.CY2015, ClaimType.ATTRITIONAL, date, date, "3"), payoutPattern))
 
         claimsByOccurrenceYear
     }

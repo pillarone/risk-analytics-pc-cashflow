@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
@@ -61,12 +62,13 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
                                           List<Factors> severityFactors,
                                           List uwInfosFilterCriteria, List<FactorsPacket> factorPackets,
                                           PeriodScope periodScope, List<SystematicFrequencyPacket> systematicFrequencies,
-                                          IPerilMarker filterCriteria) {
+                                          IPerilMarker filterCriteria, IIdGenerator idGenerator) {
         RandomFrequencyDistribution systematicFrequencyDistribution = ClaimsGeneratorUtils.extractFrequencyDistribution(systematicFrequencies, filterCriteria);
         setClaimNumberGenerator(FrequencyDistributionUtils.getIdiosyncraticDistribution(frequencyDistribution, systematicFrequencyDistribution),
                 frequencyModification);
         List<Factors> factors = IndexUtils.filterFactors(factorPackets, frequencyIndices);
-        baseClaims.addAll(generateClaims(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, frequencyBase, factors, periodScope));
+        baseClaims.addAll(generateClaims(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, frequencyBase,
+            factors, periodScope, idGenerator));
         return baseClaims;
     }
 
@@ -77,10 +79,10 @@ public class FrequencySeverityClaimsGeneratorStrategy extends AbstractSingleClai
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria,
-                                           PeriodScope periodScope) {
+                                           PeriodScope periodScope, IIdGenerator idGenerator) {
         setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
         List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(eventStreams, filterCriteria);
-        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, periodScope, eventSeverities);
+        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, periodScope, eventSeverities, idGenerator);
     }
 
     public ClaimType claimType() {

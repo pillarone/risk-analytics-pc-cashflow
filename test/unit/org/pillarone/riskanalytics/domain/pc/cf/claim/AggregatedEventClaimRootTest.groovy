@@ -15,7 +15,7 @@ class AggregatedEventClaimRootTest extends GroovyTestCase {
         IEvent anEvent = new EventPacket(new DateTime(2012, 1, 1, 1, 0, 0, 0))
         IEvent failEvent = new EventPacket(new DateTime(2012, 1, 1, 2, 0, 0, 0))
 
-        IClaimRoot claimRoot = new ClaimRoot(10d, ClaimType.AGGREGATED, null, null, anEvent)
+        IClaimRoot claimRoot = new ClaimRoot(10d, ClaimType.AGGREGATED, null, null, anEvent, "0")
         IClaimRoot claimRoot1 = new ClaimRoot(10d, ClaimType.AGGREGATED, null, null, anEvent)
         IClaimRoot claimRoot2 = new ClaimRoot(10d, ClaimType.AGGREGATED, null, null, anEvent)
         IClaimRoot failRoot = new ClaimRoot(10d, ClaimType.AGGREGATED, null, null, null)

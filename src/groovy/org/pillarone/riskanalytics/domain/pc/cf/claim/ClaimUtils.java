@@ -386,7 +386,7 @@ public class ClaimUtils {
         }
         else if (grossClaim == null) {
             DateTime occurrenceDate = cededClaim.getOccurrenceDate();
-            IClaimRoot baseClaim = new ClaimRoot(0, ClaimType.AGGREGATED, occurrenceDate, occurrenceDate);
+            IClaimRoot baseClaim = new ClaimRoot(0, ClaimType.AGGREGATED, occurrenceDate, occurrenceDate, grossClaim.getPacketId());
             return new ClaimCashflowPacket(baseClaim, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, occurrenceDate, cededClaim.getUpdatePeriod());
         }
         else {
@@ -402,7 +402,7 @@ public class ClaimUtils {
             return netClaim;
         } else if (grossClaim == null) {
             DateTime occurrenceDate = cededClaim.getOccurrenceDate();
-            IClaimRoot baseClaim = new ClaimRoot(0, ClaimType.AGGREGATED, occurrenceDate, occurrenceDate);
+            IClaimRoot baseClaim = new ClaimRoot(0, ClaimType.AGGREGATED, occurrenceDate, occurrenceDate, grossClaim.getPacketId());
             return new ClaimCashflowPacket(baseClaim, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, occurrenceDate, cededClaim.getUpdatePeriod());
         } else {
             boolean isProportionalContract = cededClaim.reinsuranceContract() != null && cededClaim.reinsuranceContract().isProportionalContract();
@@ -435,7 +435,7 @@ public class ClaimUtils {
     public static IClaimRoot getNetClaimRoot(ClaimCashflowPacket grossClaim, ClaimCashflowPacket cededClaim) {
         return new ClaimRoot(grossClaim.getNominalUltimate() + cededClaim.getNominalUltimate(),
                 grossClaim.getClaimType(), grossClaim.getBaseClaim().getExposureStartDate(),
-                grossClaim.getOccurrenceDate(), grossClaim.getEvent());
+                grossClaim.getOccurrenceDate(), grossClaim.getPacketId(), grossClaim.getEvent());
     }
 
     public static boolean notTrivialValues(ClaimCashflowPacket claim) {

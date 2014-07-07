@@ -10,7 +10,7 @@ import org.pillarone.riskanalytics.domain.pc.cf.segment.FinancialsPacket as FP
 
 class RiskAnalyticsPcCashflowGrailsPlugin {
     // the plugin version
-    def version = "1.9-SNAPSHOT"
+    def version = "1.9-2800-SNAPSHOT"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.2.1 > *"
     // the other plugins this plugin depends on

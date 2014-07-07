@@ -29,4 +29,5 @@ public interface IClaimRoot {
     public boolean hasIBNR();
 
     public IClaimRoot withScale(double scaleFactor);
+    public String getPacketId();
 }

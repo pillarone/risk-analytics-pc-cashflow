@@ -78,17 +78,17 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
 
         GrossClaimRoot claimRoot800 = new GrossClaimRoot(-800, ClaimType.AGGREGATED,
-                date20110418, date20110418, trivialPayoutPattern, trivialReportingPattern)
+                date20110418, date20110418, trivialPayoutPattern, trivialReportingPattern, "0")
         List<ClaimCashflowPacket> claims800 = claimRoot800.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims800)
 
         GrossClaimRoot claimRoot1000 = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
-                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
+                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern, "1")
         List<ClaimCashflowPacket> claims1000 = claimRoot1000.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims1000)
 
         GrossClaimRoot claimRoot1200 = new GrossClaimRoot(-1200, ClaimType.AGGREGATED,
-                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
+                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern, "2")
         List<ClaimCashflowPacket> claims1200 = claimRoot1200.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims1200)
 
@@ -458,7 +458,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
 
         GrossClaimRoot claimRoot800 = new GrossClaimRoot(-800, ClaimType.AGGREGATED,
-                date20110418, date20110418, annualPayoutPattern, annualReportingPatternInclFirst)
+                date20110418, date20110418, annualPayoutPattern, annualReportingPatternInclFirst, "0")
         List<ClaimCashflowPacket> claims800 = claimRoot800.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims800)
 
@@ -472,7 +472,7 @@ class QuotaShareContractAALTests extends GroovyTestCase {
         quotaShare20.iterationScope.periodScope.prepareNextPeriod()
         quotaShare20.inClaims.addAll(claimRoot800.getClaimCashflowPackets(periodCounter))
         GrossClaimRoot claimRoot1000 = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
-                date20120101, date20120101, annualPayoutPattern, annualReportingPatternInclFirst)
+                date20120101, date20120101, annualPayoutPattern, annualReportingPatternInclFirst, "1")
         List<ClaimCashflowPacket> claims1000 = claimRoot1000.getClaimCashflowPackets(periodCounter)
         quotaShare20.inClaims.addAll(claims1000)
         quotaShare20.doCalculation()

@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
@@ -37,14 +38,15 @@ public interface IClaimsGeneratorStrategy extends IParameterObject {
                                    List<Factors> severityFactors, List uwInfosFilterCriteria,
                                    List<FactorsPacket> frequencyFactorsPackets, PeriodScope periodScope,
                                    List<SystematicFrequencyPacket> systematicFrequencies,
-                                   IPerilMarker filterCriteria);
+                                   IPerilMarker filterCriteria, IIdGenerator idGenerator);
 
     List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                     List<EventDependenceStream> eventStreams,
-                                    IPerilMarker filterCriteria, PeriodScope periodScope);
+                                    IPerilMarker filterCriteria, PeriodScope periodScope, IIdGenerator idGenerator);
 
-    List<ClaimRoot> calculateDependantClaimsWithContractBase(DependancePacket dependancePacket,
-                                                             IPerilMarker filterCriteria, PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase, Double underwritingInfoScaleFactor, List<Factors> indexSeverityFactors);
+    List<ClaimRoot> calculateDependantClaimsWithContractBase(DependancePacket dependancePacket, IPerilMarker filterCriteria,
+             PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase, Double underwritingInfoScaleFactor,
+             List<Factors> indexSeverityFactors, IIdGenerator idGenerator);
 
     /**
      * Forces an implementation of claims generation reliant on a series of events. Usually called when a claims generator is not
@@ -54,7 +56,7 @@ public interface IClaimsGeneratorStrategy extends IParameterObject {
      * @param eventSeverities usually from copulae
      * @return list of dependant claim roots.
      */
-    List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope, List<EventSeverity> eventSeverities);
+    List<ClaimRoot> calculateClaims(double scaleFactor, PeriodScope periodScope, List<EventSeverity> eventSeverities, IIdGenerator idGenerator);
 
     /**
      * Forces an implementation of independent claim severities, often for standalone generators.
@@ -66,7 +68,7 @@ public interface IClaimsGeneratorStrategy extends IParameterObject {
      * @return list of independant claim roots.
      */
     List<ClaimRoot> generateClaims(double scaleFactor, List<Factors> severitiesFactors, int claimNumber,
-                                   PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase);
+                                   PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase, IIdGenerator idGenerator);
 
     ClaimType claimType();
 }

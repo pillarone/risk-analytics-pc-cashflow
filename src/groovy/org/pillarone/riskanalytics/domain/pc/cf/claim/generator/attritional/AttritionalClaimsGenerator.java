@@ -87,6 +87,9 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 checkCashflowClaims(claims, globalSanityChecks);
                 doCashflowChecks(claims, claimsAfterSplit, baseClaims);
                 setTechnicalProperties(claims);
+                for (ClaimCashflowPacket claim : claims) {
+                    LOG.error(claim.toString());
+                }
                 outClaims.addAll(claims);
             }
             else {
@@ -120,7 +123,7 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
             int currentPeriod = periodScope.getCurrentPeriod();
             for (ClaimRoot baseClaim : baseClaims) {
                 GrossClaimRoot grossClaimRoot = parmActualClaims.claimWithAdjustedPattern(baseClaim, currentPeriod,
-                        payoutPattern, periodScope, globalUpdateDate, US_DAYS_360, globalSanityChecks, base);
+                        payoutPattern, periodScope, globalUpdateDate, US_DAYS_360, globalSanityChecks, base, getIdGenerator());
                 grossClaimRoots.add(grossClaimRoot);
             }
         }

@@ -3,6 +3,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.single;
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObject;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
@@ -27,12 +28,13 @@ public interface ISingleUpdatingMethodologyStrategy extends IParameterObject {
      * @param days360
      * @param base
      * @param sanityChecks
+     * @param idGenerator
      * @return
      */
     GrossClaimAndRandomDraws updatingClaims(List<ClaimRoot> baseClaims, ISingleActualClaimsStrategy actualClaims,
                                             IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns,
                                             int contractPeriod, DateTimeUtilities.Days360 days360, PayoutPatternBase base,
-                                            PatternPacket payoutPattern, boolean sanityChecks);
+                                            PatternPacket payoutPattern, boolean sanityChecks, IIdGenerator idGenerator);
 
     public class GrossClaimAndRandomDraws {
         private final List<GrossClaimRoot> grossClaims;

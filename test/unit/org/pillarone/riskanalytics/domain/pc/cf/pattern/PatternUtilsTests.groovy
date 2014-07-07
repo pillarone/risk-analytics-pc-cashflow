@@ -129,7 +129,7 @@ class PatternUtilsTests extends GroovyTestCase {
         int periods = 7
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
         List<ClaimCashflowPacket> claims = []
-        GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate), adjustedPattern)
+        GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate, "0"), adjustedPattern)
         claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
         for (int period = 0; period < periods; period++) {
             periodCounter.next()
@@ -180,7 +180,7 @@ class PatternUtilsTests extends GroovyTestCase {
         int periods = 7
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
         List<ClaimCashflowPacket> claims = []
-        GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate), adjustedPattern)
+        GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate, "0"), adjustedPattern)
         claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
         for (int period = 0; period < periods; period++) {
             periodCounter.next()
@@ -225,7 +225,7 @@ class PatternUtilsTests extends GroovyTestCase {
         int periods = 7
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
         List<ClaimCashflowPacket> claims = []
-        GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate), adjustedPattern)
+        GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate, "0"), adjustedPattern)
         claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
         for (int period = 0; period < periods; period++) {
             periodCounter.next()
@@ -271,7 +271,7 @@ class PatternUtilsTests extends GroovyTestCase {
         int periods = 1
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(periodStartDate, periods);
         List<ClaimCashflowPacket> claims = []
-        GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate), adjustedPattern)
+        GrossClaimRoot claimRoot = new GrossClaimRoot(new ClaimRoot(15000, ClaimType.AGGREGATED, periodStartDate, periodStartDate, "0"), adjustedPattern)
         claims.addAll(claimRoot.getClaimCashflowPackets(periodCounter))
         for (int period = 0; period < periods; period++) {
             periodCounter.next()

@@ -98,13 +98,14 @@ public class FrequencySeverityClaimsModel extends Component {
         DependancePacket dependancePacket = ClaimUtils.checkForDependance(dependanceFilterCriteria, dependancePackets);
         if ( dependancePacket.isDependantGenerator(dependanceFilterCriteria) ) {
             double underwritingInfoScaleFactor = parmSeverityBase.factor(inUnderwritingInfo);
-            return claimsModel(period).calculateDependantClaimsWithContractBase(dependancePacket, dependanceFilterCriteria, periodScope, contractBase, underwritingInfoScaleFactor, severityFactors);
+            return claimsModel(period).calculateDependantClaimsWithContractBase(dependancePacket, dependanceFilterCriteria,
+                periodScope, contractBase, underwritingInfoScaleFactor, severityFactors, getIdGenerator());
         }
         else {
 //            return claimsModel(period).generateClaims(-scaleFactor, severityFactors, 1, periodScope, contractBase);
             List<ClaimRoot> baseClaims = Lists.newArrayList();
             baseClaims = claimsModel(period).generateClaims(baseClaims, inUnderwritingInfo, severityFactors, parmSeverityBase.filteredUnderwritingSegments(),
-                    new ArrayList<FactorsPacket>(), periodScope, inEventFrequencies, dependanceFilterCriteria);
+                    new ArrayList<FactorsPacket>(), periodScope, inEventFrequencies, dependanceFilterCriteria, getIdGenerator());
             List<ClaimRoot> baseClaimsCorrectedSign = new ArrayList<ClaimRoot>();
             for (ClaimRoot claim : baseClaims) {
                 baseClaimsCorrectedSign.add(new ClaimRoot(-claim.getUltimate(), claim));

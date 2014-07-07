@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedMultiDimensionalParameter;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorUtils;
@@ -43,12 +44,13 @@ abstract public class AbstractExternalValuesByIterationAndDateStrategy extends A
      * @param severityFactors
      * @param uwInfosFilterCriteria
      * @param periodScope
+     * @param idGenerator
      * @return
      */
     public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
                                           List<Factors> severityFactors, List uwInfosFilterCriteria,
                                           PeriodScope periodScope, ClaimType claimType, ExposureBase claimsSizeBase,
-                                          IRandomNumberGenerator dateGenerator, int iteration) {
+                                          IRandomNumberGenerator dateGenerator, int iteration, IIdGenerator idGenerator) {
         lazyInitializeDistributionMaps(periodScope);
         List<DateDouble> ultimates = internalValueByIteration.get(new IterationPeriod(iteration, periodScope.getCurrentPeriod()));
         int numberOfClaims = ultimates.size();
@@ -62,7 +64,7 @@ abstract public class AbstractExternalValuesByIterationAndDateStrategy extends A
             double ultimate = ultimates.get(i).value * -severityScalingFactor;
             DateTime occurrenceDate = ultimates.get(i).date;
             double scaleFactor = IndexUtils.aggregateFactor(severityFactors, exposureStartDate, periodScope.getPeriodCounter(), exposureStartDate);
-            baseClaims.add(new ClaimRoot(ultimate * scaleFactor, claimType, exposureStartDate, occurrenceDate, event));
+            baseClaims.add(new ClaimRoot(ultimate * scaleFactor, claimType, exposureStartDate, occurrenceDate, idGenerator.nextValue(), event));
         }
         return baseClaims;
     }

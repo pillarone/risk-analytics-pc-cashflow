@@ -138,7 +138,7 @@ public class RIUtilities {
 
         for (IClaimRoot claimRoot : claimRoots) {
 
-            IClaimRoot claimRoot1 = new ClaimRoot(0, ClaimType.ATTRITIONAL, null, new DateTime(1900, 1, 1, 1, 1, 1, 1));
+            IClaimRoot claimRoot1 = new ClaimRoot(0, ClaimType.ATTRITIONAL, null, new DateTime(1900, 1, 1, 1, 1, 1, 1), claimRoot.getPacketId());
             ClaimCashflowPacket latestPacket = new ClaimCashflowPacket(claimRoot1, claimRoot1);
 
             List<ClaimCashflowPacket> cashflowPackets = cashflowsByKey.get(claimRoot);

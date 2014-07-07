@@ -83,7 +83,7 @@ public class TermContractTestUtils {
         for (int i = 0; i < ultimates.size(); i++) {
             if (ultimates.get(i) != 0) {
                 claimRoots << new GrossClaimRoot(ultimates.get(i), ClaimType.ATTRITIONAL, occurrenceDate, occurrenceDate,
-                        payoutPattern, TermContractTestUtils.trivialReportingPattern)
+                        payoutPattern, TermContractTestUtils.trivialReportingPattern, "0")
             }
         }
         claimRoots

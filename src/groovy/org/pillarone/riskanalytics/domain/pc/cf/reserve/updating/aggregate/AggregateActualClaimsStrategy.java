@@ -7,6 +7,7 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.core.util.PacketUtils;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
@@ -100,7 +101,8 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
 //        Known payments before the exposure start date cannot be real. Invent a new root claim with a new exposure start date. THis is a rare case, in general
 //        this method should do nothing!
         if (aggregateHistoricClaim.firstActualPaidDateOrNull() != null && claimRoot.getExposureStartDate().isAfter(aggregateHistoricClaim.firstActualPaidDateOrNull())) {
-            ClaimRoot claimRoot1 = new ClaimRoot(claimRoot.getUltimate(), claimRoot.getClaimType(), aggregateHistoricClaim.firstActualPaidDateOrNull(), claimRoot.getOccurrenceDate());
+            ClaimRoot claimRoot1 = new ClaimRoot(claimRoot.getUltimate(), claimRoot.getClaimType(),
+                aggregateHistoricClaim.firstActualPaidDateOrNull(), claimRoot.getOccurrenceDate(), claimRoot.getPacketId());
             baseClaims.clear();
             baseClaims.add(claimRoot1);
         }
@@ -122,7 +124,7 @@ public class AggregateActualClaimsStrategy extends AbstractParameterObject imple
      */
     public GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
                                                    PeriodScope periodScope, DateTime updateDate, DateTimeUtilities.Days360 days360,
-                                                   boolean sanityChecks, PayoutPatternBase base) {
+                                                   boolean sanityChecks, PayoutPatternBase base, IIdGenerator generator) {
 //        If the update date is the start of the first period this is an inception model, simply proceed without updating effects.
         final DateTime startDateForPatterns = base.startDateForPayouts(claimRoot, periodScope.getCurrentPeriodStartDate(), null);
         if (updateDate.equals(periodScope.getPeriodCounter().startOfFirstPeriod())) {

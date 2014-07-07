@@ -32,13 +32,13 @@ class ClaimPacketAggregatorTests extends GroovyTestCase {
     /** one update per claim and period */
     void testUsage() {
         GrossClaimRoot claimRoot0101 = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110101, date20110101, annualPayoutPattern, annualReportingPattern)
+                date20110101, date20110101, annualPayoutPattern, annualReportingPattern, "0")
         claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter)
         GrossClaimRoot claimRoot0418 = new GrossClaimRoot(800, ClaimType.AGGREGATED,
-                date20110101, date20110101, annualPayoutPattern, annualReportingPattern)
+                date20110101, date20110101, annualPayoutPattern, annualReportingPattern, "0")
         claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter)
         GrossClaimRoot claimRoot0701 = new GrossClaimRoot(350, ClaimType.AGGREGATED,
-                date20110101, date20110101, annualPayoutPattern, annualReportingPattern)
+                date20110101, date20110101, annualPayoutPattern, annualReportingPattern, "0")
         claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter)
         ClaimCashflowPacket aggregateClaim = aggregator.aggregate(claims)
 
@@ -124,13 +124,13 @@ class ClaimPacketAggregatorTests extends GroovyTestCase {
     /** two/two/one updates per claim and period */
     void testMultipleUpdatePerPeriod() {
         GrossClaimRoot claimRoot0101 = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110101, date20110101, payoutPattern, reportingPattern)
+                date20110101, date20110101, payoutPattern, reportingPattern, "0")
         claims.addAll claimRoot0101.getClaimCashflowPackets(periodCounter)
         GrossClaimRoot claimRoot0418 = new GrossClaimRoot(800, ClaimType.AGGREGATED,
-                date20110101, date20110101, payoutPattern, reportingPattern)
+                date20110101, date20110101, payoutPattern, reportingPattern, "0")
         claims.addAll claimRoot0418.getClaimCashflowPackets(periodCounter)
         GrossClaimRoot claimRoot0701 = new GrossClaimRoot(350, ClaimType.AGGREGATED,
-                date20110101, date20110101, payoutPattern, reportingPattern)
+                date20110101, date20110101, payoutPattern, reportingPattern, "0")
         claims.addAll claimRoot0701.getClaimCashflowPackets(periodCounter)
         ClaimCashflowPacket aggregateClaim = aggregator.aggregate(claims)
 

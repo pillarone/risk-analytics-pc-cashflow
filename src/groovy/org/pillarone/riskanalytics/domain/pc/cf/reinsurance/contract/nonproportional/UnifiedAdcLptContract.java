@@ -80,7 +80,7 @@ public class UnifiedAdcLptContract extends AbstractReinsuranceContract implement
             double ibnr = cumulativeUltimateCeded - cumulativeReportedCeded;
             if (aggregateCumulativeCededReserveClaim == null) {
                 DateTime occurrenceDate = grossClaims.get(0).getUpdateDate().withDayOfYear(1);
-                IClaimRoot keyClaim = new ClaimRoot(cumulativeUltimateCeded, ClaimType.AGGREGATED_RESERVES, occurrenceDate, occurrenceDate);
+                IClaimRoot keyClaim = new ClaimRoot(cumulativeUltimateCeded, ClaimType.AGGREGATED_RESERVES, occurrenceDate, occurrenceDate, grossClaims.get(0).getPacketId());
                 double changeInReserves = reserves;
                 double changeInIBNR = cumulativeUltimateCeded - cumulativeReportedCeded;
                 int updatePeriod = grossClaims.get(0).getUpdatePeriod();

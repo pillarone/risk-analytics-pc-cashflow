@@ -2,8 +2,8 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
-import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
@@ -57,18 +57,21 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
     public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims,  List<UnderwritingInfoPacket> uwInfos,
                                           List<Factors> severityFactors, List uwInfosFilterCriteria,
                                           List<FactorsPacket> frequencyFactorsPackets, PeriodScope periodScope,
-                                          List<SystematicFrequencyPacket> systematicFrequencies, IPerilMarker filterCriteria) {
+                                          List<SystematicFrequencyPacket> systematicFrequencies,
+                                          IPerilMarker filterCriteria, IIdGenerator idGenerator) {
         if (baseClaims.size() == 1) {
             return baseClaims;
         }
 //        if(frequencyFactorsPackets.size() > 0 ) {
 //            throw new SimulationException("Recieved frequency indexing factors in Attritional claims generator. This makes no sense. Please contact development. Got " + frequencyFactorsPackets.size()  + " packets");
 //        }
-            return generateClaim(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, periodScope);
+            return generateClaim(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, periodScope, idGenerator);
         }
 
     @Override
-    public List<ClaimRoot> calculateDependantClaimsWithContractBase(DependancePacket dependancePacket, IPerilMarker filterCriteria, PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase, Double underwritingInfoScaleFactor, List<Factors> indexSeverityFactors) {
+    public List<ClaimRoot> calculateDependantClaimsWithContractBase(DependancePacket dependancePacket,
+            IPerilMarker filterCriteria, PeriodScope periodScope, IReinsuranceContractBaseStrategy contractBase,
+            Double underwritingInfoScaleFactor, List<Factors> indexSeverityFactors, IIdGenerator idGenerator) {
         MarginalAndEvent marginalAndEvent = dependancePacket.getMarginal(filterCriteria, periodScope);
         List<ClaimRoot> baseClaims = new ArrayList<ClaimRoot>();
         DateTime exposureStartDate = contractBase.exposureStartDate(periodScope, getDateGenerator() );
@@ -76,16 +79,16 @@ public class AttritionalClaimsGeneratorStrategy extends AbstractClaimsGeneratorS
         DateTime occurrenceDate = contractBase.occurrenceDate(exposureStartDate, dateGenerator, periodScope, null);
         setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
         double claimValue = (getModifiedClaimsSizeDistribution().inverseF(marginalAndEvent.getMarginalProbability()) + shift) * - underwritingInfoScaleFactor * scaleFactor;
-        baseClaims.add(new ClaimRoot( claimValue, claimType(), exposureStartDate, occurrenceDate));
+        baseClaims.add(new ClaimRoot( claimValue, claimType(), exposureStartDate, occurrenceDate, idGenerator.nextValue()));
         return baseClaims;
     }
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria,
-                                           PeriodScope periodScope) {
+                                           PeriodScope periodScope, IIdGenerator idGenerator) {
         setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
         List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(eventStreams, filterCriteria);
-        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, periodScope, eventSeverities);
+        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, periodScope, eventSeverities, idGenerator);
     }
 
     public ClaimType claimType() {

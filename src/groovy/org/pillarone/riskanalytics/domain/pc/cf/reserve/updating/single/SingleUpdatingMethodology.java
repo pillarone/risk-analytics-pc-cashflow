@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject
 import org.pillarone.riskanalytics.core.parameterization.ConstrainedString;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.IUpdatingPatternMarker;
@@ -48,12 +49,13 @@ public class SingleUpdatingMethodology extends AbstractParameterObject implement
      * @param days360
      * @param base
      * @param sanityChecks
+     * @param idGenerator
      * @return
      */
     public GrossClaimAndRandomDraws updatingClaims(List<ClaimRoot> baseClaims, ISingleActualClaimsStrategy actualClaims,
                                                    IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns,
                                                    int contractPeriod, DateTimeUtilities.Days360 days360, PayoutPatternBase base,
-                                                   PatternPacket payoutPattern, boolean sanityChecks) {
+                                                   PatternPacket payoutPattern, boolean sanityChecks, IIdGenerator idGenerator) {
         List<GrossClaimRoot> modifiedGeneratedAndActualClaims = new ArrayList<GrossClaimRoot>();
         PatternPacket updatePattern = PatternUtils.filterPattern(patterns, updatingPattern, IUpdatingPatternMarker.class);
         DateTime lastReportedDate = actualClaims.lastReportedDate(periodCounter, updateDate, base);
@@ -66,7 +68,7 @@ public class SingleUpdatingMethodology extends AbstractParameterObject implement
             modifiedGeneratedAndActualClaims.add(new GrossClaimRoot(ibnrClaim, adjustedPattern, startDateForPatterns));
         }
         int currentPeriod = periodCounter.belongsToPeriod(periodCounter.getCurrentPeriodStart());
-        modifiedGeneratedAndActualClaims.addAll(actualClaims.claimWithAdjustedPattern(payoutPattern, base, updateDate, days360, currentPeriod, sanityChecks));
+        modifiedGeneratedAndActualClaims.addAll(actualClaims.claimWithAdjustedPattern(payoutPattern, base, updateDate, days360, currentPeriod, sanityChecks, idGenerator));
         return new GrossClaimAndRandomDraws(modifiedGeneratedAndActualClaims, updatingResult);
     }
 

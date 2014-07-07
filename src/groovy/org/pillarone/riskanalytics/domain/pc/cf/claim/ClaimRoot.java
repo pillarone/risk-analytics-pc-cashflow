@@ -31,15 +31,18 @@ public class ClaimRoot implements IClaimRoot, Cloneable {
     /** counts the currently existing ClaimCashflowPacket referencing this instance */
     private int childCounter;
 
-    public ClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate) {
+    private String packetId;
+
+    public ClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate, String packetId) {
         this.ultimate = ultimate;
         this.claimType = claimType;
         this.exposureStartDate = exposureStartDate;
         this.occurrenceDate = occurrenceDate;
+        this.packetId = packetId;
     }
 
-    public ClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate, IEvent event){
-        this(ultimate, claimType, exposureStartDate, occurrenceDate);
+    public ClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate, String packetId, IEvent event){
+        this(ultimate, claimType, exposureStartDate, occurrenceDate, packetId);
         this.event = event;
     }
 
@@ -49,7 +52,8 @@ public class ClaimRoot implements IClaimRoot, Cloneable {
      * @param claimRoot
      */
     public ClaimRoot(double ultimate, IClaimRoot claimRoot) {
-        this(ultimate, claimRoot.getClaimType(), claimRoot.getExposureStartDate(), claimRoot.getOccurrenceDate(), claimRoot.getEvent());
+        this(ultimate, claimRoot.getClaimType(), claimRoot.getExposureStartDate(), claimRoot.getOccurrenceDate(),
+             claimRoot.getPacketId(), claimRoot.getEvent());
     }
 
     /**
@@ -158,6 +162,15 @@ public class ClaimRoot implements IClaimRoot, Cloneable {
 
     public final boolean hasIBNR() {
         return false;
+    }
+
+    @Override
+    public String getPacketId() {
+        return packetId;
+    }
+
+    public void setPacketId(String packetId) {
+        this.packetId = packetId;
     }
 
     @Override

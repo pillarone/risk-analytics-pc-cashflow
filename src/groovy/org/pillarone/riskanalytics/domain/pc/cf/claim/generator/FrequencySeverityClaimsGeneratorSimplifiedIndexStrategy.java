@@ -5,6 +5,7 @@ import org.pillarone.riskanalytics.core.parameterization.ComboBoxTableMultiDimen
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
@@ -63,13 +64,13 @@ public class FrequencySeverityClaimsGeneratorSimplifiedIndexStrategy extends Abs
                                           List<Factors> severityFactors,
                                           List uwInfosFilterCriteria, List<FactorsPacket> factorPackets,
                                           PeriodScope periodScope, List<SystematicFrequencyPacket> systematicFrequencies,
-                                          IPerilMarker filterCriteria) {
+                                          IPerilMarker filterCriteria, IIdGenerator idGenerator) {
         setClaimNumberGenerator(frequencyDistribution, frequencyModification);
         List<Factors> factors = IndexUtils.filterFactors(factorPackets, frequencyIndices, IndexMode.STEPWISE_PREVIOUS, BaseDateMode.START_OF_PROJECTION, null);
         if(frequencyBase != null) {
             throw new SimulationException("It appears you have initilaised the number of claims by frequency parameter. Please implement the correct logic here...");
         }
-        baseClaims.addAll(generateClaims(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, FrequencyBase.ABSOLUTE, factors, periodScope));
+        baseClaims.addAll(generateClaims(uwInfos, severityFactors, uwInfosFilterCriteria, claimsSizeBase, FrequencyBase.ABSOLUTE, factors, periodScope, idGenerator));
         return baseClaims;
     }
 
@@ -80,23 +81,24 @@ public class FrequencySeverityClaimsGeneratorSimplifiedIndexStrategy extends Abs
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria,
-                                           PeriodScope periodScope) {
+                                           PeriodScope periodScope, IIdGenerator idGenerator) {
         setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
         List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(eventStreams, filterCriteria);
-        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, periodScope, eventSeverities);
+        return calculateClaims(uwInfos, uwInfosFilterCriteria, claimsSizeBase, periodScope, eventSeverities, idGenerator);
     }
 
     @Override
-    public List<ClaimRoot> calculateDependantClaimsWithContractBase(final DependancePacket dependancePacket, final IPerilMarker filterCriteria,
-                                                                    final PeriodScope periodScope, final IReinsuranceContractBaseStrategy contractBase,
-                                                                    final Double underwritingInfoScaleFactor, final List<Factors> indexSeverityFactors) {
+    public List<ClaimRoot> calculateDependantClaimsWithContractBase(final DependancePacket dependancePacket,
+            final IPerilMarker filterCriteria, final PeriodScope periodScope, final IReinsuranceContractBaseStrategy contractBase,
+            final Double underwritingInfoScaleFactor, final List<Factors> indexSeverityFactors, IIdGenerator idGenerator) {
 
         MarginalAndEvent marginalAndEvent = dependancePacket.getMarginal(filterCriteria, periodScope);
         DateTime exposureStartDate = contractBase.exposureStartDate(periodScope, getDateGenerator() );
         //double scaleFactor = IndexUtils.aggregateFactor(indexSeverityFactors, exposureStartDate, periodScope.getPeriodCounter(), exposureStartDate);
         setClaimNumberGenerator(frequencyDistribution, frequencyModification);
         Number numberOfClaims = (getClaimNumberGenerator().getDistribution().inverseF(marginalAndEvent.getMarginalProbability()));
-        List<ClaimRoot> baseClaims = generateClaims(-underwritingInfoScaleFactor, indexSeverityFactors, numberOfClaims.intValue(), periodScope, new LossesOccurringContractBase());
+        List<ClaimRoot> baseClaims = generateClaims(-underwritingInfoScaleFactor, indexSeverityFactors, numberOfClaims.intValue(),
+            periodScope, new LossesOccurringContractBase(), idGenerator);
         return baseClaims;
     }
 

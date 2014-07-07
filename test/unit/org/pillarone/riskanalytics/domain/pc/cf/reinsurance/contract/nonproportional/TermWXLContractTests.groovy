@@ -242,14 +242,14 @@ class TermWXLContractTests extends GroovyTestCase {
 
     private GrossClaimRoot getBaseClaim(double ultimate) {
         GrossClaimRoot claimRoot = new GrossClaimRoot(ultimate, ClaimType.SINGLE,
-                date20110418, date20110418, annualPayoutPattern2, annualFastReportingPattern)
+                date20110418, date20110418, annualPayoutPattern2, annualFastReportingPattern, "0")
         return claimRoot
     }
 
     private GrossClaimRoot getBaseClaim(double ultimate, DateTime occurenceDate,
                                         PatternPacket payoutPattern, PatternPacket reportingPattern) {
         GrossClaimRoot claimRoot = new GrossClaimRoot(ultimate, ClaimType.SINGLE,
-                occurenceDate, occurenceDate, payoutPattern, reportingPattern)
+                occurenceDate, occurenceDate, payoutPattern, reportingPattern, "0")
         return claimRoot
     }
 

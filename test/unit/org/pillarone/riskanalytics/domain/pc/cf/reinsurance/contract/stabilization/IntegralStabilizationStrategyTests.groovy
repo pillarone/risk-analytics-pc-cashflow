@@ -40,7 +40,7 @@ class IntegralStabilizationStrategyTests extends GroovyTestCase {
         superImposedInflation = new SeverityIndex(name : 'superImposedInflation')
         periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
         claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110406, date20110406, payoutPattern, reportingPattern)
+                date20110406, date20110406, payoutPattern, reportingPattern, "0")
     }
 
     void testUsage() {

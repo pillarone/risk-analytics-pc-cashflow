@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.UnderwritingInfoPacket;
@@ -35,10 +36,10 @@ public class OccurrenceAttritionalClaimsGeneratorStrategy extends AttritionalCla
                                           List<Factors> severityFactors, List uwInfosFilterCriteria,
                                           List<FactorsPacket> frequencyFactorsPackets, PeriodScope periodScope,
                                           List<SystematicFrequencyPacket> systematicFrequencies,
-                                          IPerilMarker filterCriteria) {
+                                          IPerilMarker filterCriteria, IIdGenerator idGenerator) {
         setDateGenerator(occurrenceDateDistribution);
         return super.generateClaims(baseClaims, uwInfos, severityFactors, uwInfosFilterCriteria, frequencyFactorsPackets,
-                                    periodScope, systematicFrequencies, filterCriteria);
+                                    periodScope, systematicFrequencies, filterCriteria, idGenerator);
     }
 
 }

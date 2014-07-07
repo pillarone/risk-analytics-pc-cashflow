@@ -67,7 +67,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
+                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern, "0")
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
 
         assertEquals "one claim only", 1, claims.size()
@@ -89,7 +89,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110418, date20110701, annualReportingPatternInclFirst, trivialReportingPattern)
+                date20110418, date20110701, annualReportingPatternInclFirst, trivialReportingPattern, "0")
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
 
         int period = 0
@@ -188,7 +188,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110418, date20110701, annualPayoutPattern, annualReportingPattern)
+                date20110418, date20110701, annualPayoutPattern, annualReportingPattern, "0")
 
         int period = 0
         int claimNumber = 0
@@ -284,7 +284,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110418, date20110701, annualPayoutPattern, annualReportingPatternInclFirst)
+                date20110418, date20110701, annualPayoutPattern, annualReportingPatternInclFirst, "0")
 
         int period = 0
         int claimNumber = 0
@@ -379,7 +379,7 @@ class ClaimCashflowPacketTests extends GroovyTestCase {
 
         DateTime occurrenceDate = date20110701
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110418, occurrenceDate, payoutPattern, reportingPattern)
+                date20110418, occurrenceDate, payoutPattern, reportingPattern, "0")
         FactorsPacket factorsPacket = new FactorsPacket()
         factorsPacket.add(date20110101, 1.0)
         factorsPacket.add(occurrenceDate.plus(payoutPattern.getCumulativePeriod(0)), 1.05)

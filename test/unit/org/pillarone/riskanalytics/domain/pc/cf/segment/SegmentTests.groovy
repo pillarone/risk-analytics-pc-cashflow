@@ -276,7 +276,7 @@ class SegmentTests extends GroovyTestCase {
                                                       DateTime occurrenceDate, DateTime updateDate,
                                                       boolean hasUltimate = false, PeriodScope periodScope, IComponentMarker marker) {
         if (baseClaim == null) {
-            baseClaim = new GrossClaimRoot(ultimate, ClaimType.ATTRITIONAL, null, occurrenceDate, null, null)
+            baseClaim = new GrossClaimRoot(ultimate, ClaimType.ATTRITIONAL, null, occurrenceDate, null, null, "0")
         }
         ClaimCashflowPacket claim = new ClaimCashflowPacket(baseClaim, ultimate, ultimate, incrementalPaid, incrementalPaid,
                 ultimate - incrementalPaid, 0, 0, null, updateDate, periodScope.getPeriodCounter())

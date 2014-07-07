@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.*;
@@ -36,7 +37,7 @@ public class NoUpdatingMethodology extends AbstractParameterObject implements IS
     public GrossClaimAndRandomDraws updatingClaims(List<ClaimRoot> baseClaims, ISingleActualClaimsStrategy actualClaims,
                                                    IPeriodCounter periodCounter, DateTime updateDate, List<PatternPacket> patterns,
                                                    int contractPeriod, DateTimeUtilities.Days360 days360, PayoutPatternBase base,
-                                                   PatternPacket payoutPattern, boolean sanityChecks) {
+                                                   PatternPacket payoutPattern, boolean sanityChecks, IIdGenerator idGenerator) {
         if(updateDate.isAfter(periodCounter.startOfFirstPeriod())) {
             throw new IllegalArgumentException("The update date is " + DateTimeUtilities.formatDate.print(updateDate)
                     + " and the start of the simulation is "

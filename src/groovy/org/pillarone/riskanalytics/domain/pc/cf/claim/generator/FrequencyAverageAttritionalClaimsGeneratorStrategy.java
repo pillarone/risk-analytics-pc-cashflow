@@ -2,6 +2,7 @@ package org.pillarone.riskanalytics.domain.pc.cf.claim.generator;
 
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
@@ -49,7 +50,7 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
     public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
                                           List<Factors> severityFactors, List uwInfosFilterCriteria, List<FactorsPacket> frequencyFactorsPackets,
                                           PeriodScope periodScope, List<SystematicFrequencyPacket> systematicFrequencies,
-                                          IPerilMarker filterCriteria) {
+                                          IPerilMarker filterCriteria, IIdGenerator idGenerator) {
 
         double severityScalingFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, claimsSizeBase, uwInfosFilterCriteria);
         double frequencyFactor = UnderwritingInfoUtils.scalingFactor(uwInfos, frequencyBase, uwInfosFilterCriteria);
@@ -68,7 +69,7 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
         List<Double> claimValues = new ArrayList<Double>();
         claimValues.add(claimValue);
         List<ClaimRoot> indexedClaims = new ArrayList<ClaimRoot>();
-        for (ClaimRoot claim : getClaims(claimValues, periodScope)) {
+        for (ClaimRoot claim : getClaims(claimValues, periodScope, idGenerator)) {
             double scaledUltimate = claim.getUltimate() * IndexUtils.aggregateFactor(severityFactors,
                     claim.getOccurrenceDate(), periodScope.getPeriodCounter(), claim.getExposureStartDate());
             indexedClaims.add(new ClaimRoot(scaledUltimate, claim));
@@ -79,7 +80,7 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
     @Override
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            List<EventDependenceStream> eventStreams, IPerilMarker filterCriteria,
-                                           PeriodScope periodScope) {
+                                           PeriodScope periodScope, IIdGenerator idGenerator) {
         setModifiedDistribution(claimsSizeDistribution, claimsSizeModification);
         List<EventSeverity> eventSeverities = ClaimsGeneratorUtils.filterEventSeverities(eventStreams, filterCriteria);
         List<Double> severities = ClaimsGeneratorUtils.extractSeverities(eventSeverities);
@@ -90,7 +91,7 @@ public class FrequencyAverageAttritionalClaimsGeneratorStrategy extends Attritio
         }
         List<Double> claimValues = new ArrayList<Double>();
         claimValues.add(claimValue * severityScalingFactor);
-        return getClaims(claimValues, periodScope);
+        return getClaims(claimValues, periodScope, idGenerator);
     }
 
 }

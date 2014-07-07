@@ -686,7 +686,7 @@ class StopLossContractTests extends GroovyTestCase {
 
     private GrossClaimRoot getBaseClaim(double ultimate, EventPacket event) {
         GrossClaimRoot claimRoot = new GrossClaimRoot(ultimate, ClaimType.EVENT,
-                event.getDate(), event.getDate(), annualPayoutPattern2, annualFastReportingPattern, event)
+                event.getDate(), event.getDate(), annualPayoutPattern2, annualFastReportingPattern, event, "0")
         return claimRoot
     }
 

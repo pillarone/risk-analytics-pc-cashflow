@@ -108,7 +108,7 @@ class ReinsuranceContractTests extends GroovyTestCase {
         IPeriodCounter periodCounter = quotaShare20.iterationScope.periodScope.periodCounter
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(-1000, ClaimType.AGGREGATED,
-                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
+                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern, "0")
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
 
         quotaShare20.inClaims.addAll(claims)

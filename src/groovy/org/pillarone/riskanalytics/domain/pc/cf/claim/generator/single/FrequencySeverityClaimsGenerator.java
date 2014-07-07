@@ -87,7 +87,7 @@ public class FrequencySeverityClaimsGenerator extends AbstractClaimsGenerator {
                     PatternPacket payoutPattern = PatternUtils.filterPattern(inPatterns, parmPayoutPattern, IPayoutPatternMarker.class);
                     ISingleUpdatingMethodologyStrategy.GrossClaimAndRandomDraws updatingResult = parmUpdatingMethodology.updatingClaims(baseClaims, parmActualClaims,
                             periodCounter, globalUpdateDate, inPatterns, periodScope.getCurrentPeriod(), US_DAYS_360,
-                            parmPayoutPatternBase, payoutPattern, globalSanityChecks);
+                            parmPayoutPatternBase, payoutPattern, globalSanityChecks, null);
                     randomDrawInfo(updatingResult);
                     runoffFactors = new ArrayList<Factors>();
                     storeClaimsWhichOccurInFuturePeriods(updatingResult.getGrossClaims(), periodStore);

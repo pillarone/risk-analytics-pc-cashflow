@@ -6,6 +6,7 @@ import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassif
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
 import org.pillarone.riskanalytics.core.simulation.SimulationException;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
@@ -35,7 +36,7 @@ public class NoAggregateActualClaimsStrategy extends AbstractParameterObject imp
 
     public GrossClaimRoot claimWithAdjustedPattern(ClaimRoot claimRoot, int contractPeriod, PatternPacket payoutPattern,
                                                    PeriodScope periodScope, DateTime updateDate, DateTimeUtilities.Days360 days360,
-                                                   boolean sanityChecks, PayoutPatternBase payoutPatternBase) {
+                                                   boolean sanityChecks, PayoutPatternBase payoutPatternBase, IIdGenerator generator) {
         if(!periodScope.getPeriodCounter().startOfFirstPeriod().equals(updateDate)) {
             throw new SimulationException("Non-inception model must have an actual claims strategy");
         }

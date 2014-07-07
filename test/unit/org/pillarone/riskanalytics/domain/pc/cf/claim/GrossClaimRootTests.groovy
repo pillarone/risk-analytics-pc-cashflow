@@ -23,11 +23,11 @@ class GrossClaimRootTests extends GroovyTestCase {
 
     void testHasSynchronizedPatterns() {
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110418, date20110701, payoutPattern, annualReportingPattern)
+                date20110418, date20110701, payoutPattern, annualReportingPattern, "0")
         assertFalse 'different patterns', claimRoot.hasSynchronizedPatterns()
 
         claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110418, date20110701, payoutPattern, payoutPattern)
+                date20110418, date20110701, payoutPattern, payoutPattern, "0")
         assertTrue 'same pattern (same instance)', claimRoot.hasSynchronizedPatterns()
     }
 
@@ -35,7 +35,7 @@ class GrossClaimRootTests extends GroovyTestCase {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110418, date20110701, annualPayoutPattern, annualReportingPattern)
+                date20110418, date20110701, annualPayoutPattern, annualReportingPattern, "0")
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
     }
 }

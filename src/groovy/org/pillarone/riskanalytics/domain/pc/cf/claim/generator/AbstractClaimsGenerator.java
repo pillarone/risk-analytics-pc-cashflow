@@ -112,7 +112,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
             int currentPeriod = periodScope.getCurrentPeriod();
             for (ClaimRoot baseClaim : baseClaims) {
                 GrossClaimRoot grossClaimRoot = parmActualClaims.claimWithAdjustedPattern(baseClaim, currentPeriod,
-                        payoutPattern, periodScope, globalUpdateDate, US_DAYS_360, globalSanityChecks, base);
+                        payoutPattern, periodScope, globalUpdateDate, US_DAYS_360, globalSanityChecks, base, getIdGenerator());
                 grossClaimRoots.add(grossClaimRoot);
             }
         }
@@ -226,7 +226,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
      * @param claimType
      * @return list with claims per period
      */
-    private static ListMultimap<Integer, ClaimRoot> loadPresetClaims(ConstrainedMultiDimensionalParameter presetClaims,
+    private ListMultimap<Integer, ClaimRoot> loadPresetClaims(ConstrainedMultiDimensionalParameter presetClaims,
                                                                      PeriodScope periodScope, ClaimType claimType) {
         ListMultimap<Integer, ClaimRoot> presetClaimsByPeriod = ArrayListMultimap.create();
         int columnIndexPeriod = presetClaims.getColumnIndex(REAL_PERIOD);
@@ -239,7 +239,7 @@ abstract public class AbstractClaimsGenerator extends MultiPhaseComposedComponen
             if (period >= 0) {
                 double fractionOfPeriod = periodWithDate - period;
                 DateTime occurrenceDate = DateTimeUtilities.getDate(periodScope, period, fractionOfPeriod);
-                ClaimRoot claim = new ClaimRoot(claimValue, claimType, occurrenceDate, occurrenceDate);
+                ClaimRoot claim = new ClaimRoot(claimValue, claimType, occurrenceDate, occurrenceDate, getIdGenerator().nextValue());
                 presetClaimsByPeriod.put(period, claim);
             } else {
                 // ignore preset claim data outside the period scope

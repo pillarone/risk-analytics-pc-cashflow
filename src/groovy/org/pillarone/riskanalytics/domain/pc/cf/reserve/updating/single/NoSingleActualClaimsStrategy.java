@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.pillarone.riskanalytics.core.parameterization.AbstractParameterObject;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.IPeriodCounter;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.GrossClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.pattern.PatternPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.reserve.updating.aggregate.PayoutPatternBase;
@@ -30,7 +31,8 @@ public class NoSingleActualClaimsStrategy extends AbstractParameterObject implem
     }
 
     public List<GrossClaimRoot> claimWithAdjustedPattern(PatternPacket originalPayoutPattern, PayoutPatternBase base,
-                                                         DateTime updateDate, DateTimeUtilities.Days360 days360, int currentPeriod, boolean sanityChecks) {
+                                                         DateTime updateDate, DateTimeUtilities.Days360 days360,
+                                                         int currentPeriod, boolean sanityChecks, IIdGenerator idGenerator) {
         return Collections.emptyList();
     }
 

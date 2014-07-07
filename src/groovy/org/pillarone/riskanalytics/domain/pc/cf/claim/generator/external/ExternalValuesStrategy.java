@@ -4,12 +4,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pillarone.riskanalytics.core.parameterization.IParameterObjectClassifier;
 import org.pillarone.riskanalytics.core.simulation.engine.PeriodScope;
+import org.pillarone.riskanalytics.core.simulation.engine.id.IIdGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimRoot;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.ClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.FrequencySeverityClaimType;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.AbstractSingleClaimsGeneratorStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGenerator;
 import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.ClaimsGeneratorType;
+import org.pillarone.riskanalytics.domain.pc.cf.claim.generator.contractBase.IReinsuranceContractBaseStrategy;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.EventDependenceStream;
 import org.pillarone.riskanalytics.domain.pc.cf.dependency.SystematicFrequencyPacket;
 import org.pillarone.riskanalytics.domain.pc.cf.exposure.ExposureBase;
@@ -64,10 +66,11 @@ public class ExternalValuesStrategy extends AbstractSingleClaimsGeneratorStrateg
     public List<ClaimRoot> generateClaims(List<ClaimRoot> baseClaims, List<UnderwritingInfoPacket> uwInfos,
                                           List<Factors> severityFactors, List uwInfosFilterCriteria,
                                           List<FactorsPacket> frequencyFactorsPackets, PeriodScope periodScope,
-                                          List<SystematicFrequencyPacket> systematicFrequencies, IPerilMarker filterCriteria) {
+                                          List<SystematicFrequencyPacket> systematicFrequencies,
+                                          IPerilMarker filterCriteria, IIdGenerator idGenerator) {
         int iteration = ((ClaimsGenerator) filterCriteria).getIterationScope().getCurrentIteration();
         return values.generateClaims(baseClaims, uwInfos, severityFactors, uwInfosFilterCriteria, periodScope, claimType(),
-            claimsSizeBase, dateGenerator, iteration);
+            claimsSizeBase, dateGenerator, iteration, null);
     }
 
     @Override
@@ -77,7 +80,7 @@ public class ExternalValuesStrategy extends AbstractSingleClaimsGeneratorStrateg
 
     public List<ClaimRoot> calculateClaims(List<UnderwritingInfoPacket> uwInfos, List uwInfosFilterCriteria,
                                            List<EventDependenceStream> eventStreams,
-                                           IPerilMarker filterCriteria, PeriodScope periodScope) {
+                                           IPerilMarker filterCriteria, PeriodScope periodScope, IIdGenerator idGenerator) {
         return new ArrayList<ClaimRoot>();
     }
 

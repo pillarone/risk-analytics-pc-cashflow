@@ -56,7 +56,7 @@ class NoStabilizationStrategyTests extends GroovyTestCase {
         IPeriodCounter periodCounter = TestPeriodCounterUtilities.getLimitedContinuousPeriodCounter(date20110101, 5)
 
         GrossClaimRoot claimRoot = new GrossClaimRoot(1000, ClaimType.AGGREGATED,
-                date20110406, date20110406, payoutPattern, reportingPattern)
+                date20110406, date20110406, payoutPattern, reportingPattern, "0")
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter, factors, true)
         assertEquals "#claims 2011", 2, claims.size()
         assertEquals "claim reported, incremental @06.04.2011", 740.3846153846154, claims[0].reportedIncrementalIndexed

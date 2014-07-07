@@ -150,7 +150,7 @@ class ClaimMerger extends Component {
             }
             else if (!grossClaim && cededClaim) {
                 DateTime occurrenceDate = cededClaim.getOccurrenceDate();
-                baseClaim = new ClaimRoot(0, cededClaim.getClaimType(), occurrenceDate, occurrenceDate);
+                baseClaim = new ClaimRoot(0, cededClaim.getClaimType(), occurrenceDate, occurrenceDate, cededClaim.packetId);
             }
             else if (grossClaim && !cededClaim) {
                 baseClaim = grossClaim.baseClaim

@@ -525,7 +525,7 @@ class MatrixReinsuranceContractsTests extends GroovyTestCase {
 
     private List<ClaimCashflowPacket> getClaims(IPeriodCounter periodCounter, List<IComponentMarker> markers, double ultimate, ClaimType claimType = ClaimType.AGGREGATED) {
         GrossClaimRoot claimRoot = new GrossClaimRoot(-ultimate, claimType,
-                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern)
+                date20110418, date20110701, trivialPayoutPattern, trivialReportingPattern, "0")
         List<ClaimCashflowPacket> claims = claimRoot.getClaimCashflowPackets(periodCounter)
         markers.each { claims*.setMarker(it) }
         return claims

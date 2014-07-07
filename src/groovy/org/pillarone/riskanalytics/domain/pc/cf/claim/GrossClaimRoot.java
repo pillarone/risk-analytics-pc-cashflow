@@ -109,7 +109,8 @@ public final class GrossClaimRoot implements IClaimRoot {
      */
     public GrossClaimRoot(GrossClaimRoot claimRoot, double ultimate, DateTime occurrenceDate, DateTime startDateForPatterns){
         this(
-                new ClaimRoot(ultimate, claimRoot.getClaimType(), claimRoot.getExposureStartDate(), occurrenceDate, claimRoot.getEvent()) ,
+                new ClaimRoot(ultimate, claimRoot.getClaimType(), claimRoot.getExposureStartDate(), occurrenceDate,
+                    claimRoot.getPacketId(), claimRoot.getEvent()) ,
                 claimRoot.payoutPattern,
                 claimRoot.reportingPattern,
                 startDateForPatterns
@@ -117,18 +118,19 @@ public final class GrossClaimRoot implements IClaimRoot {
     }
 
     public GrossClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate,
-                          PatternPacket payoutPattern, PatternPacket reportingPattern) {
+                          PatternPacket payoutPattern, PatternPacket reportingPattern, String packetId) {
         this(
-                new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate),
+                new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate, packetId),
                 payoutPattern,
                 reportingPattern
         );
     }
 
     public GrossClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate,
-                          PatternPacket payoutPattern, PatternPacket reportingPattern, DateTime startDateForPatterns) {
+                          PatternPacket payoutPattern, PatternPacket reportingPattern, DateTime startDateForPatterns,
+                          String packetId) {
         this(
-                new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate),
+                new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate, packetId),
                 payoutPattern,
                 reportingPattern,
                 startDateForPatterns
@@ -136,9 +138,9 @@ public final class GrossClaimRoot implements IClaimRoot {
     }
 
     public GrossClaimRoot(double ultimate, ClaimType claimType, DateTime exposureStartDate, DateTime occurrenceDate,
-                          PatternPacket payoutPattern, PatternPacket reportingPattern, EventPacket event) {
+                          PatternPacket payoutPattern, PatternPacket reportingPattern, EventPacket event, String packetId) {
         this(
-                new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate, event),
+                new ClaimRoot(ultimate, claimType, exposureStartDate, occurrenceDate, packetId, event),
                 payoutPattern,
                 reportingPattern
         );
@@ -490,6 +492,15 @@ public final class GrossClaimRoot implements IClaimRoot {
 
     public DateTime getStartDateForPatterns() {
         return startDateForPatterns;
+    }
+
+    @Override
+    public String getPacketId() {
+        return claimRoot.getPacketId();
+    }
+
+    public void setPacketId(String packetId) {
+        claimRoot.setPacketId(packetId);
     }
 
     @Override

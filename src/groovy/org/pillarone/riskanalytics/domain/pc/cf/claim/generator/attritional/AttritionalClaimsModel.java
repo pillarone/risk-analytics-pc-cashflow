@@ -67,10 +67,11 @@ public class AttritionalClaimsModel extends Component implements IPeriodDependin
         double underwritingScaleFactor = - parmSeverityBase.factor(inUnderwritingInfo);
         DependancePacket dependancePacket = ClaimUtils.checkForDependance(filterCriteria, dependancePacketList);
         if ( dependancePacket.isDependantGenerator(filterCriteria) ) {
-            return claimsModel(period).calculateDependantClaimsWithContractBase(dependancePacket,filterCriteria, periodScope, contractBase, underwritingScaleFactor, severityFactors);
+            return claimsModel(period).calculateDependantClaimsWithContractBase(dependancePacket,filterCriteria, periodScope,
+                contractBase, underwritingScaleFactor, severityFactors, getIdGenerator());
         }
         else {
-            return claimsModel(period).generateClaims(underwritingScaleFactor, severityFactors, 1, periodScope, contractBase);
+            return claimsModel(period).generateClaims(underwritingScaleFactor, severityFactors, 1, periodScope, contractBase, getIdGenerator());
         }
     }
 

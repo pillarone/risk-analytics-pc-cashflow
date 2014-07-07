@@ -94,6 +94,11 @@ public class AggregatedEventClaimRoot implements IClaimRoot {
     }
 
     @Override
+    public String getPacketId() {
+        return (grossClaims.size() > 0) ? grossClaims.iterator().next().getPacketId() : "";
+    }
+
+    @Override
     public String toString() {
         return "CededClaimRoot{" +
                 "ultimate=" + getUltimate() +
