@@ -87,9 +87,6 @@ public class AttritionalClaimsGenerator extends AbstractClaimsGenerator {
                 checkCashflowClaims(claims, globalSanityChecks);
                 doCashflowChecks(claims, claimsAfterSplit, baseClaims);
                 setTechnicalProperties(claims);
-                for (ClaimCashflowPacket claim : claims) {
-                    LOG.error(claim.toString());
-                }
                 outClaims.addAll(claims);
             }
             else {
