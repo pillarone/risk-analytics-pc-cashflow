@@ -15,7 +15,7 @@ class ReinsuranceContractBaseType extends AbstractParameterObjectClassifier {
     public static final ReinsuranceContractBaseType LOSSESOCCURRING = new ReinsuranceContractBaseType(
             'losses occuring', 'LOSSESOCCURRING', [:])
     public static final ReinsuranceContractBaseType LOSSESOCCURRING_NO_SPLIT = new ReinsuranceContractBaseType(
-            'losses occuring - no split', 'LOSSESOCCURRING', [:])
+            'losses occuring - no split', 'LOSSESOCCURRING_NO_SPLIT', [:])
     public static final ReinsuranceContractBaseType RISKATTACHING = new ReinsuranceContractBaseType(
             'risk attaching', 'RISKATTACHING', [underlyingContractLength: 12])
 
